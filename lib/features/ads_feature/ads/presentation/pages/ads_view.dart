@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -11,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.da
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
@@ -24,7 +24,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_floating_action_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -105,7 +104,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       userType = 'user';
       print('user');
     }
-    print(_tabController.index);
+    print('userType index ${_tabController.index}');
+    print('userType hasAuction ${widget.params.subCategory.hasAuction}');
     return CustomScaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(30),
@@ -164,6 +164,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                             subCategoryId: widget.params.subCategory.id,
                             filter: 'female',
                           );
+                          userType = 'female';
                         } else {
                           controller.loadAdsData(
                             subCategoryId: widget.params.subCategory.id,
@@ -171,6 +172,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                 ? 'rent'
                                 : 'user',
                           );
+                          userType = widget.params.subCategory.hasAuction == true
+                              ? 'rent'
+                              : 'user';
                         }
                       } else {
                         if (widget.params.mainCategory.nameEn == 'Dating') {
@@ -178,6 +182,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                             subCategoryId: widget.params.subCategory.id,
                             filter: 'male',
                           );
+                          userType ='male';
                         } else {
                           controller.loadAdsData(
                             subCategoryId: widget.params.subCategory.id,
@@ -185,22 +190,27 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                 ? 'sale'
                                 : 'provider',
                           );
+                          userType = widget.params.subCategory.hasAuction == true
+                              ? 'sale'
+                              : 'provider';
                         }
                       }
                     },
                     tabs: [
                       Tab(
-                          text: widget.params.mainCategory.nameEn == 'Dating'
-                              ? LocaleKeys.maleUser.localize
-                              : widget.params.subCategory.hasAuction == true
-                                  ? LocaleKeys.sale.localize
-                                  : LocaleKeys.provider.localize),
+                        text: widget.params.mainCategory.nameEn == 'Dating'
+                            ? LocaleKeys.maleUser.localize
+                            : widget.params.subCategory.hasAuction == true
+                                ? LocaleKeys.sale.localize
+                                : LocaleKeys.provider.localize,
+                      ),
                       Tab(
-                          text: widget.params.mainCategory.nameEn == 'Dating'
-                              ? LocaleKeys.femaleUser.localize
-                              : widget.params.subCategory.hasAuction == true
-                                  ? LocaleKeys.rent.localize
-                                  : LocaleKeys.user.localize),
+                        text: widget.params.mainCategory.nameEn == 'Dating'
+                            ? LocaleKeys.femaleUser.localize
+                            : widget.params.subCategory.hasAuction == true
+                                ? LocaleKeys.rent.localize
+                                : LocaleKeys.user.localize,
+                      ),
                     ],
                   ),
 
@@ -273,8 +283,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                 }
               },
               iconSize: 18,
-              icon: Icons.add,
-              text: LocaleKeys.addAde.localize,
+              // icon: Icons.add,
+              text: '${LocaleKeys.addAde.localize} +',
             )
           : null,
     );

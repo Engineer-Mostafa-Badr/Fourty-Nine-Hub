@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -16,6 +17,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -29,10 +31,11 @@ import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
 
 class AcceptRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const AcceptRideOfferScreen({
     super.key,
+    required this.type,
   });
 
   @override
@@ -51,7 +54,10 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientAcceptedTrips();
+      if (widget.type == 'ride')
+        context.read<ClientTripsCubit>().getClientAcceptedTrips();
+      if (widget.type == 'shipping')
+        context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
     }
   }
 
@@ -108,11 +114,7 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
           builder: (context, state) {
             return state.isLoading
-                ? Center(
-                    child: CustomCircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+                ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
                         child: Label(
@@ -129,9 +131,10 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                                 .isEmpty
                         ? Center(
                             child: Label(
-                                text: LocaleKeys.youDontHaveAcceptedOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                                text:
+                                    LocaleKeys.youDontHaveAcceptedOffer.localize
+                                // , style: TextStyle(color: Colors.red, fontSize: 18)
+                                ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -171,14 +174,57 @@ class ClientAcceptWidget extends StatelessWidget {
 
   const ClientAcceptWidget({super.key, this.modeType = 'truk', this.offers});
 
+  // Helper method to convert digits based on locale
+  String _formatNumber(String input, BuildContext context) {
+    if (Localizations.localeOf(context).languageCode != 'ar') {
+      return input;
+    }
+
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String output = input;
+    for (int i = 0; i < english.length; i++) {
+      output = output.replaceAll(english[i], arabic[i]);
+    }
+    return output;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
     DateTime dateTime = DateTime.parse(
-        offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-    String formattedTime =
-        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
+      offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z',
+    );
+
+    // Format date with Arabic digits if needed
+    final formattedDate = isArabic
+        ? _formatNumber(
+            "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+            context)
+        : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+
+    // Format time with Arabic digits if needed
+    final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final period = dateTime.hour < 12 ? 'AM' : 'PM';
+    final formattedTime =
+        "${_formatNumber(hour.toString(), context)} ${isArabic ? (period == 'AM' ? 'ص' : 'م') : period}";
+
+    // Format rating count and average
+    final ratingCount = _formatNumber(
+        offers?.driverDetails?.rating?.count?.toString() ?? '0', context);
+    final ratingAverage = _formatNumber(
+        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1),
+        context);
+
+    // Format passengers count
+    final passengersCount = _formatNumber(
+        (offers?.tripDetails?.passengers ?? 0).toString(), context);
+
+    // Format price
+    final price =
+        _formatNumber("${offers?.tripDetails?.price ?? 300}", context);
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -203,18 +249,17 @@ class ClientAcceptWidget extends StatelessWidget {
                         ),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: offers?.driverDetails?.picture == null ||
-                            offers!.driverDetails!.picture!.isEmpty
+                                offers!.driverDetails!.picture!.isEmpty
                             ? Image.asset(
-                          Assets.maleImagePlaceholder,
-                          fit: BoxFit.cover,
-                        )
+                                Assets.maleImagePlaceholder,
+                                fit: BoxFit.cover,
+                              )
                             : ImageFromInternet(
-                          fit: BoxFit.cover,
-                          image: offers!.driverDetails!.picture!,
-                        ),
+                                fit: BoxFit.cover,
+                                image: offers!.driverDetails!.picture!,
+                              ),
                       ),
                     ),
-
                     Positioned(
                         top: 0,
                         right: 0,
@@ -231,20 +276,21 @@ class ClientAcceptWidget extends StatelessWidget {
                                       width: 8, height: 8),
                                   const Sizer(width: 4),
                                   Label(
-                                      text: offers?.driverDetails?.rating?.count
-                                              .toString() ??
-                                          '0',
+                                      text:
+                                          "${offers?.driverDetails?.rating?.count ?? 0}",
                                       style: Styles.smallText(
                                           color: AppColors.PRIMARY_COLOR))
                                 ]))))
                   ],
                 ),
                 Label(
-                    text: offers?.driverDetails?.firstName ?? '',
-                    style: Styles.mediumText()),
+                  text: offers?.driverDetails?.firstName ?? '',
+                  style: Styles.mediumText(),
+                ),
                 Label(
-                    text: '(${offers?.driverDetails?.rating?.average ?? 0})',
-                    style: Styles.smallText())
+                  text: '(${offers?.driverDetails?.rating?.average ?? 0})',
+                  style: Styles.smallText(),
+                )
               ])),
           const Sizer(width: 32),
           Expanded(
@@ -298,7 +344,8 @@ class ClientAcceptWidget extends StatelessWidget {
                               ],
                             ),
                             Label(
-                                text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+                                text:
+                                    '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
                                 style: Styles.mediumText())
                           ],
                         ),

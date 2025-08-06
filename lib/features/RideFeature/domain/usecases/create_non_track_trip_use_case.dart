@@ -1,10 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/repositories/shipping_repository.dart';
-
 import '../../../../core/abstract/use_case.dart';
 import '../../../../core/error/failure.dart';
-import '../../data/models/create_loading_trip_model.dart';
-import '../entities/create_loading_trip_entity.dart';
 import '../entities/create_no_track_trip_entity.dart';
 import '../repositories/ride_repository.dart';
 
@@ -29,6 +25,7 @@ class CreateNonTrackTripParams {
   final num passengers;
   final bool isPremium;
   final String description;
+  final String desc;
 
 
   CreateNonTrackTripParams({
@@ -41,10 +38,12 @@ class CreateNonTrackTripParams {
     required this.passengers,
     required this.isPremium,
     required this.description,
+    required this.desc,
 
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    var json = {
     'subcategoryId': subcategoryId,
     'fromTitle': fromTitle,
     'toTitle': toTitle,
@@ -54,6 +53,10 @@ class CreateNonTrackTripParams {
     'passengers': passengers,
     'isPremium': isPremium,
     'description': description,
+    'desc': desc,
   };
+    json.removeWhere((key, value) => value == '');
+    return json;
+  }
 }
 

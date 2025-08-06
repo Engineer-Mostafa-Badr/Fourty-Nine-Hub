@@ -24,6 +24,7 @@ class MakeNonTrackingRequestTripUsecaseParam {
     this.passengers,
     this.isPremium,
     this.description,
+    this.desc,
   });
 
   String? subcategoryId;
@@ -35,8 +36,10 @@ class MakeNonTrackingRequestTripUsecaseParam {
   int? passengers;
   bool? isPremium;
   String? description;
+  String? desc;
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    var json = {
         "subcategoryId": subcategoryId ?? "",
         "fromTitle": fromTitle ?? "",
         "toTitle": toTitle ?? "",
@@ -46,5 +49,9 @@ class MakeNonTrackingRequestTripUsecaseParam {
         "passengers": passengers ?? 0,
         "isPremium": isPremium ?? false,
         "description": description ?? "",
+        "desc": description ?? "",
       };
+    json.removeWhere((key, value) => value == '');
+    return json;
+  }
 }

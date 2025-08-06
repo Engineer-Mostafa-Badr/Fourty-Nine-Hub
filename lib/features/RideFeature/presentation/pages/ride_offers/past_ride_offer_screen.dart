@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/ride_non_socket_details_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
@@ -17,6 +18,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -29,13 +31,14 @@ import '../../../domain/entities/get_client_past_trips_entity.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
+import '../loading_dashboard/loading_dashboard_details_screen.dart';
 import '../ride_details_screen.dart';
 
 class PastRideOfferScreen extends StatefulWidget {
-  // final bool isTruk;
+  final String type;
 
   const PastRideOfferScreen({
-    super.key,
+    super.key,required this.type,
   });
 
   @override
@@ -47,14 +50,17 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
 
   @override
   void initState() {
-    super.initState();
+    // if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+    // if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
     _scrollController = ScrollController()..addListener(_onScroll);
+    super.initState();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientPastTrips();
+      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientPastTrips();
+      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientPastShippingTrips();
     }
   }
 
@@ -64,7 +70,6 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,20 +107,14 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
           builder: (context, state) {
             return state.isLoading
-                ? Center(
-                    child: CustomCircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+                ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
                         child: Label(
                             text: LocaleKeys.errorHappen.localize,
                             style: const TextStyle(color: Colors.red)),
                       )
-                    : context
-                                    .read<ClientTripsCubit>()
-                                    .clientPastTripsData ==
+                    : context.read<ClientTripsCubit>().clientPastTripsData ==
                                 null ||
                             context
                                 .read<ClientTripsCubit>()
@@ -124,8 +123,7 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                         ? Center(
                             child: Label(
                                 text: LocaleKeys.youDontHavePastOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -139,12 +137,15 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                                         .isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
-                                physics: BouncingScrollPhysics(), // Shows default Android glow (wave effect)
-                                    itemBuilder: (context, index) =>
-                                        ClientPastWidget(
-                                          offers: context.read<ClientTripsCubit>()
-                                              .clientPastTripsData?[index],
-                                        ),
+                                    physics: BouncingScrollPhysics(),
+                                    // Shows default Android glow (wave effect)
+                                    itemBuilder: (context, index) {
+                                      return ClientPastWidget(
+                                          offers: context
+                                              .read<ClientTripsCubit>()
+                                              .clientPastTripsData[index],
+                                        );
+                                    },
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 5),
                                     itemCount: context
@@ -159,91 +160,160 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
     );
   }
 }
-
 class ClientPastWidget extends StatelessWidget {
   final ClientPastTripEntity? offers;
 
-  const ClientPastWidget({super.key,  this.offers});
+  const ClientPastWidget({super.key, this.offers});
+
+  // Helper method to convert digits based on locale
+  String _formatNumber(String input, BuildContext context) {
+    if (Localizations.localeOf(context).languageCode != 'ar') {
+      return input;
+    }
+
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String output = input;
+    for (int i = 0; i < english.length; i++) {
+      output = output.replaceAll(english[i], arabic[i]);
+    }
+    return output;
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.parse(
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final dateTime = DateTime.parse(
         offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-    String formattedTime =
-        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
+
+    // Format date with Arabic digits if needed
+    final formattedDate = isArabic
+        ? _formatNumber(
+        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+        context)
+        : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+
+    // Format time with Arabic digits if needed
+    final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final period = dateTime.hour < 12 ? 'AM' : 'PM';
+    final formattedTime =
+        "${_formatNumber(hour.toString(), context)} ${isArabic ? (period == 'AM' ? 'ص' : 'م') : period}";
+
+    // Format price with Arabic digits if needed
+    final priceText = _formatNumber(
+        "${offers?.tripDetails?.price?.toInt() ?? 300}", context);
     return ClickableWidget(
-      onTap: (){
-        // Navigator.push(context, MaterialPageRoute(builder: (context)=> RideDetailsScreen()));
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RideNonSocketDetailsScreen(
+              tripEntity: offers!,
+            ),
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-            color:
-                context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-            borderRadius: BorderRadius.circular(20)),
+          color: context.isDarkMode
+              ? AppColors.PRIMARY_COLOR
+              : AppColors.cF5F5F5,
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-                flex: 2,
-                child: Column(children: [
+            ClickableWidget(
+              onTap: () {
+                context.push(
+                  Routes.allDriverRatingScreen,
+                  extra:offers?.driverDetails?.userId,
+                );
+              },
+              child: Column(
+                children: [
                   Stack(
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
-                          width: 50,
-                          height: 50,
+                          width: 75,
+                          height: 75,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: offers?.yourDetails?.pictureUrl == null ||
-                              offers!.yourDetails!.pictureUrl!.isEmpty
+                          child: offers?.driverDetails?.pictureUrl == null ||
+                              offers!.driverDetails!.pictureUrl!.isEmpty
                               ? Image.asset(
                             Assets.maleImagePlaceholder,
                             fit: BoxFit.cover,
                           )
                               : ImageFromInternet(
                             fit: BoxFit.cover,
-                            image: offers!.yourDetails!.pictureUrl!,
+                            image: offers!.driverDetails!.pictureUrl!,
                           ),
                         ),
                       ),
-
                       Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.cF5F5F5,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4.0),
-                                  child: Row(children: [
-                                    SvgPicture.asset(Assets.star2,
-                                        width: 8, height: 8),
-                                    const Sizer(width: 4),
-                                    Label(
-                                        text: offers?.yourDetails?.rating?.count
-                                                .toString() ??
-                                            '0',
-                                        style: Styles.smallText(
-                                            color: AppColors.PRIMARY_COLOR))
-                                  ]))))
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.grey,
+                            // color: AppColors.cF5F5F5,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.star2,
+                                  width: 8,
+                                  height: 8,
+                                ),
+                                const Sizer(width: 4),
+                                Label(
+                                  text: _formatNumber(
+                                      offers?.driverDetails?.rating?.count
+                                          .toString() ??
+                                          '0',
+                                      context),
+                                  style: Styles.smallText(
+                                      color: AppColors.PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Label(
-                      text: offers?.yourDetails?.firstName ?? '',
+                    text: offers?.driverDetails?.firstName ?? '',
+                    style: Styles.mediumText(),
+                  ),
+                  Label(
+                      text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
                       style: Styles.mediumText()),
                   Label(
-                      text: '(${offers?.yourDetails?.rating?.average ?? 0})',
-                      style: Styles.smallText())
-                ])),
+                      text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
+                      offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
+                      style: Styles.mediumText()),
+                  Label(
+                    text: '(${_formatNumber(
+                        offers?.driverDetails?.rating?.average
+                            ?.toStringAsFixed(1) ??
+                            '0',
+                        context)})',
+                    style: Styles.smallText(),
+                  ),
+                ],
+              ),
+            ),
             const Sizer(width: 32),
             Expanded(
               flex: 8,
@@ -266,39 +336,51 @@ class ClientPastWidget extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     flex: 1,
-                                    child: Image.asset(Assets.rideFrom,
-                                        width: 24, height: 24),
+                                    child: Image.asset(
+                                      Assets.rideFrom,
+                                      width: 24,
+                                      height: 24,
+                                    ),
                                   ),
                                   Expanded(
-                                      flex: 8,
-                                      child: Label(
-                                          text: offers?.tripDetails?.location
-                                                  ?.fromTitle ??
-                                              'Cairo International Airport',
-                                          style: Styles.headerText()))
+                                    flex: 8,
+                                    child: Label(
+                                      text: offers?.tripDetails?.location
+                                          ?.fromTitle ??
+                                          'Cairo International Airport',
+                                      style: Styles.headerText(),
+                                    ),
+                                  ),
                                 ],
                               ),
                               Row(
                                 spacing: 5,
                                 children: [
                                   Expanded(
-                                      flex: 1,
-                                      child: Image.asset(Assets.rideTo,
-                                          width: 24, height: 24)),
+                                    flex: 1,
+                                    child: Image.asset(
+                                      Assets.rideTo,
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                  ),
                                   Expanded(
-                                      flex: 8,
-                                      child: Label(
-                                          text: offers?.tripDetails?.location
-                                                  ?.toTitle ??
-                                              'Cairo International Airport',
-                                          style: Styles.mediumText(
-                                              fontWeight: FontWeight.w300)))
+                                    flex: 8,
+                                    child: Label(
+                                      text: offers?.tripDetails?.location
+                                          ?.toTitle ??
+                                          'Cairo International Airport',
+                                      style: Styles.mediumText(
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                  ),
                                 ],
                               ),
                               Label(
-                                  text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
-
-                                  style: Styles.mediumText())
+                                text:
+                                '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                                style: Styles.mediumText(),
+                              ),
                             ],
                           ),
                         ),
@@ -312,55 +394,52 @@ class ClientPastWidget extends StatelessWidget {
                                 //     :
                                 ImageFromInternet(
                                     image:
-                                        offers!.tripDetails!.category!.picture!,
+                                        offers?.subCategory?.pictureUrl??'',
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
                                 Label(
                                     text: context.isArabic
                                         ? (offers
-                                                ?.tripDetails?.category?.nameAr ??
+                                                ?.subCategory?.nameAr ??
                                             '')
                                         : (offers
-                                                ?.tripDetails?.category?.nameEn ??
+                                                ?.subCategory?.nameEn ??
                                             ''),
                                     style: Styles.mediumText(fontSize: 25))
                               ],
                             )),
                       ],
                     ),
-                    // Label(
-                    //   text: modeType == 'truk'
-                    //       ? "${LocaleKeys.cargoDescription.tr()} : Car"
-                    //       : '${LocaleKeys.passenger.tr()} : ${offers?.tripDetails?.passengers ?? 0}',
-                    //   style: Styles.mediumText(fontSize: 32),
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${offers?.tripDetails?.price ?? 300}",
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.w700)),
+                          text: "${formatPrice(offers?.tripDetails?.price ?? 0, context)}",
+                          style: Styles.mediumText(fontWeight: FontWeight.w700),
+                        ),
                         const Sizer(width: 4),
                         Label(
-                            text: LocaleKeys.egp.tr(),
-                            style: Styles.mediumText(
-                                color: AppColors.SECONDARY_COLOR,
-                                fontWeight: FontWeight.w700))
+                          text: LocaleKeys.egp.tr(),
+                          style: Styles.mediumText(
+                            color: AppColors.SECONDARY_COLOR,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: formattedTime, //'10 AM',
+                          text: "${formatTimeOnly(offers?.tripDetails?.pickupTime, context)}",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: formattedDate, //'20/2/2025',
+                          text: "${formatPickupDate(offers?.tripDetails?.pickupTime, context)}",
+
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),

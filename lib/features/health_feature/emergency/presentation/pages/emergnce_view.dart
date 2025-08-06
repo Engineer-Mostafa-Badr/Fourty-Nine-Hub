@@ -22,8 +22,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
-class HealthEmergencyView extends StatelessWidget {
+class HealthEmergencyView extends StatefulWidget {
   const HealthEmergencyView({super.key});
+
+  @override
+  State<HealthEmergencyView> createState() => _HealthEmergencyViewState();
+}
+
+class _HealthEmergencyViewState extends State<HealthEmergencyView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final emergencyCubit = context.read<HealthEmergencyCubit>();
+      emergencyCubit.firstNameFocusNode.requestFocus();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

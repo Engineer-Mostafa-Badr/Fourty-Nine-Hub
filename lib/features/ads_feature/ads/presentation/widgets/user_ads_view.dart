@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../filter_ads/presentation/pages/filter_ads.dart';
 
 class UserAdsView extends StatelessWidget {
   const UserAdsView({
@@ -47,16 +48,21 @@ class UserAdsView extends StatelessWidget {
                           label: LocaleKeys.filter.localize,
                           icon: Icons.filter_alt_rounded,
                           style: Styles.headerText(
-                              color: AppColors.whiteColor,
+                              color: AppColors.getReversedTextColor(context),
                               fontWeight: FontWeight.w400),
+                          color: AppColors.getButtonPrimaryColor(context),
+                          textColor: AppColors.getReversedTextColor(context),
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
                             dynamic data = await context.push(Routes.FILTERADS,
-                                extra: CategorizationEntity(
-                                    mainCategory: params.mainCategory,
-                                    subCategory: params.subCategory));
+                                extra: FilterAdsParams(
+                                  categorization: CategorizationEntity(
+                                      mainCategory: params.mainCategory,
+                                      subCategory: params.subCategory),
+                                  userType: userType,
+                                ));
                             if (data != null) {
                               controller.loadFilterAdsData(
                                   model: data, filter: userType);
@@ -71,8 +77,10 @@ class UserAdsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.city.localize,
                           style: Styles.headerText(
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.whiteColor),
+                              color: AppColors.getReversedTextColor(context),
+                              fontWeight: FontWeight.w400),
+                          color: AppColors.getButtonPrimaryColor(context),
+                          textColor: AppColors.getReversedTextColor(context),
                           width: 170.h,
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),

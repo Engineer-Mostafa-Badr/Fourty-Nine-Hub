@@ -53,8 +53,13 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
 
   late Debouncer _debounce;
 
+  final FocusNode focusNode = FocusNode();
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
     _debounce = Debouncer();
     context
         .read<SubcategoriesCubit>()
@@ -71,6 +76,13 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       setState(() {});
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   List<SubCategoryEntity> subCategories = [];
@@ -218,7 +230,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
-          label:context.isArabic ? widget.mainCategory.name: widget.mainCategory.nameEn,
+          label: context.isArabic
+              ? widget.mainCategory.name
+              : widget.mainCategory.nameEn,
           textColor: Colors.white,
           iconColor: Colors.white,
           enableCustomAppBar: true,
@@ -252,7 +266,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                         colorFilter: ColorFilter.mode(
                           context.read<SubcategoriesCubit>().isSearchAdsOpen
                               ? const Color(0xffF33D49)
-                              : AppColors.PRIMARY_COLOR,
+                              : AppColors.getButtonPrimaryWhiteColor(context),
                           BlendMode.srcIn,
                         ),
                         // color: context.isDarkMode ? Colors.white : null,
@@ -349,6 +363,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           );
                     });
                   },
+                  focusNode: focusNode,
                 ),
               if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen)
                 Expanded(
@@ -405,7 +420,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                   child: PaginationView<SubCategoryEntity>(
                     build: (ScrollController scrollController,
                         List<SubCategoryEntity> data) {
-                      print("data.length${data.length}");
+                      print("data.length ${data.length}");
                       return GridView.builder(
                         padding: EdgeInsets.all(24.w),
                         itemCount: data.length,

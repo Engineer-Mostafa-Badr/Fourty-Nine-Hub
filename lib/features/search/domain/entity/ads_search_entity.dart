@@ -1,11 +1,14 @@
 import 'package:fourtyninehub/core/utils/duration_helper.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:intl/intl.dart';
+
+import '../../../ads_feature/ads/domain/entities/ads_address_entity.dart';
+import 'create_ad_search_entity.dart';
 
 class AdsSearchEntity {
   final String id;
   String? userId;
   final String subCategoryId;
+  // final AdsAddressEntity address;
   final String mainCategoryId;
   final String title;
   final String description;
@@ -36,7 +39,7 @@ class AdsSearchEntity {
   final bool isBlocked;
   final bool isRejected;
   bool? isFavorite;
-  List<CreateAdEntity> details;
+  List<CreateAdSearchEntity> details;
 
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
   Duration get restTimeDuration => DateTime.now().difference(createdAt);
@@ -47,6 +50,7 @@ class AdsSearchEntity {
   AdsSearchEntity({
     required this.id,
     this.userId,
+    // required this.address,
     required this.subCategoryId,
     required this.mainCategoryId,
     required this.title,

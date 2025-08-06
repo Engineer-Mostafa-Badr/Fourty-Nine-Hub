@@ -85,6 +85,7 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
       SearchParams params) async {
     final response =
         await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
+    print('==> response $response');
     return response.fold(
       (failure) => Left(failure),
       (response) => Right((response['data'] as List)

@@ -7,20 +7,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../loading_dashboard/loading_dashboard_details_screen.dart';
 
 class AvailableNonSocketWidget extends StatelessWidget {
   final String modeType;
@@ -73,68 +78,75 @@ class AvailableNonSocketWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-                flex: 2,
-                child: Column(children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration:
-                            const BoxDecoration(shape: BoxShape.circle),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: offers?.clientDetails?.profilePictureUrl ==
-                                null ||
-                                offers!
-                                    .clientDetails!.profilePictureUrl!.isEmpty
-                                ? Image.asset(
-                              Assets.maleImagePlaceholder,
-                              fit: BoxFit.cover,
-                            )
-                                : ImageFromInternet(
-                              image:  offers!
-                                  .clientDetails!.profilePictureUrl!,
-                            )
-                        ),
+            ClickableWidget(
+              onTap: () {
+                context.push(
+                  Routes.allClientRatingScreen,
+                extra:offers?.clientDetails?.id,
+                );
+              },
+              child: Column(children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration:
+                          const BoxDecoration(shape: BoxShape.circle),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: offers?.clientDetails?.profilePictureUrl ==
+                              null ||
+                              offers!
+                                  .clientDetails!.profilePictureUrl!.isEmpty
+                              ? Image.asset(
+                            Assets.maleImagePlaceholder,
+                            fit: BoxFit.cover,
+                          )
+                              : ImageFromInternet(
+                            image:  offers!
+                                .clientDetails!.profilePictureUrl!,
+                          )
                       ),
-                      Positioned(
-                          top: 0,
-                          right: -5,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.cF5F5F5,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                                  child: Row(children: [
-                                    SvgPicture.asset(Assets.star2,
-                                        width: 8, height: 8),
-                                    const Sizer(width: 4),
-                                    Label(
-                                        text: offers
-                                            ?.clientDetails?.rating?.count
-                                            .toString() ??
-                                            '0',
-                                        style: Styles.smallText(
-                                          color: AppColors.PRIMARY_COLOR
-                                        ))
-                                  ]))))
-                    ],
-                  ),
-                  Label(
-                      text: offers?.clientDetails?.firstName ?? '',
-                      style: Styles.mediumText()),
-                  // Label(
-                  //     text:
-                  //     '(${offers?.clientDetails?.rating?.average ?? 0})',
-                  //     style: Styles.smallText())
-                ])),
+                    ),
+                    Positioned(
+                        top: 0,
+                        right: -5,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.cF5F5F5,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Row(children: [
+                                  SvgPicture.asset(Assets.star2,
+                                      width: 8, height: 8),
+                                  const Sizer(width: 4),
+                                  Label(
+                                      text: formatPrice(offers
+                                          ?.clientDetails?.rating?.count
+                                          ?.toDouble() ??
+                                          0, context),
+                                      style: Styles.smallText(
+                                        color: AppColors.PRIMARY_COLOR
+                                      ))
+                                ])))),
+                    const VerifiedWidget(),
+                  ],
+                ),
+                Label(
+                    text: offers?.clientDetails?.firstName ?? '',
+                    style: Styles.mediumText()),
+                // Label(
+                //     text:
+                //     '(${offers?.clientDetails?.rating?.average ?? 0})',
+                //     style: Styles.smallText())
+              ]),
+            ),
             const Sizer(width: 32),
             Expanded(
               flex: 8,
@@ -185,7 +197,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                 ],
                               ),
                               Label(
-                                  text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+                                  text: '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
                                   style: Styles.mediumText())
                             ],
                           ),
@@ -222,7 +234,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${offers?.tripDetails?.price ?? 300}",
+                            text: "${formatPrice(offers?.tripDetails?.price ?? 0, context)}",
                             style:
                             Styles.mediumText(fontWeight: FontWeight.w700)),
                         const Sizer(width: 4),
@@ -237,13 +249,13 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: formattedTime, //'10 AM',
+                          text: "${formatTimeOnly(offers?.tripDetails?.pickupTime, context)}",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: formattedDate, //'20/2/2025',
+                          text: "${formatPickupDate(offers?.tripDetails?.pickupTime, context)}",
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
@@ -264,7 +276,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Label(
-                                      text: "${LocaleKeys.Accept.tr()} ${offers?.tripDetails?.price ?? 0}",
+                                      text: "${LocaleKeys.Accept.tr()} ${formatPrice(offers?.tripDetails?.price ?? 0, context)} ${LocaleKeys.egp.localize}",
                                       style:
                                           Styles.mediumText(
                                             color:  Colors.white,

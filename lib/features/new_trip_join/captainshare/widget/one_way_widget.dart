@@ -1,25 +1,53 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/time_utils.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/map_view_details.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
+// import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-
+import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
+  final bool? hasAcceptButton;
   final String? requestType;
+  final MyBookingEntity? model;
+  final Function? onCancelBooking;
+  final Function? onJoin;
+  final Function? onAccept;
 
   const OneWayWidget({
     super.key,
     this.statusDriver,
+    this.model,
     this.cancelButton,
+    this.hasAcceptButton,
+    this.onAccept,
     this.requestType,
+    this.onCancelBooking,
+    this.onJoin,
   });
 
   @override
@@ -27,135 +55,293 @@ class OneWayWidget extends StatefulWidget {
 }
 
 class _OneWayWidgetState extends State<OneWayWidget> {
-  bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
-  ExpandableController _expandableController=ExpandableController();
+  bool _showContainer = false;
+  ExpandableController _expandableController = ExpandableController();
+
+  // Timer related variables
+  Timer? _timer;
+  Duration _remainingTime = Duration.zero;
+  bool _showTimer = false;
 
   @override
   void initState() {
     super.initState();
     _expandableController = ExpandableController(initialExpanded: false);
+    if(widget.model?.status=='pending')_setupTimer();
   }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _setupTimer() {
+    if (widget.model?.createdAt != null) {
+      try {
+        DateTime createdAt = DateTime.parse(widget.model!.createdAt!);
+        DateTime now = DateTime.now();
+
+        // Check if it's the same day
+        bool isSameDay = createdAt.year == now.year &&
+            createdAt.month == now.month &&
+            createdAt.day == now.day;
+
+        if (isSameDay) {
+          Duration elapsed = now.difference(createdAt);
+          Duration oneHour = const Duration(hours: 1);
+
+          // Check if less than 1 hour has passed
+          if (elapsed < oneHour) {
+            _remainingTime = oneHour - elapsed;
+            _showTimer = true;
+
+            // Start the countdown timer
+            _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+              setState(() {
+                if (_remainingTime.inSeconds > 0) {
+                  _remainingTime = _remainingTime - const Duration(seconds: 1);
+                } else {
+                  _timer?.cancel();
+                  _showTimer = false;
+                  _onTimerFinished();
+                }
+              });
+            });
+          }
+        }
+      } catch (e) {
+        print('Error parsing createdAt: $e');
+      }
+    }
+  }
+
+  // This method will be called when timer finishes
+  void _onTimerFinished() {
+    // Add your logic here when timer finishes
+    print('Timer finished! Add your custom logic here.');
+    // You can add any functionality you need here
+  }
+
+  String _formatRemainingTime(Duration duration) {
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  String getBookingStatus(String status) {
+    switch (status) {
+      case 'pending':
+        return context.isArabic?'انتظار':'Pending';
+      case 'accepted':
+        return LocaleKeys.accepted.localize;
+      case 'expired':
+        return LocaleKeys.expired.localize;
+      case 'cancelled':
+        return context.isArabic ? 'تم الغاء' : 'Canceled';
+      case 'done':
+        return LocaleKeys.done.localize;
+      default:
+        return LocaleKeys.pending.localize;
+    }
+  }
+
+  String getPassengerDescription(List<dynamic> options, bool isArabic) {
+    bool hasLadyDriver = options.contains('LADY_DRIVER');
+    bool hasLadyPassenger = options.contains('LADY_PASSENGER');
+
+    if (hasLadyPassenger && hasLadyDriver) {
+      return isArabic ? 'سيدات' : 'Ladies';
+    } else if (hasLadyPassenger || hasLadyDriver) {
+      return isArabic ? 'راكبات' : 'Lady passengers';
+    } else {
+      return isArabic ? 'أي راكب' : 'Any passenger';
+    }
+  }
+
+  bool isComfort(List<dynamic> options) {
+    return options.contains('COMFORT');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-            ),
+    bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id)||((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id));
+    return GestureDetector(
+      // onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color:
+            context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // محتوى الكونتينر الأساسي
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      LocaleKeys.normal.localize,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getRedColor(context),
-                      ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // محتوى الكونتينر الأساسي
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    getPassengerDescription(
+                        widget.model?.features ?? [], context.isArabic),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getRedColor(context),
                     ),
-                    RichText(
-                      text: TextSpan(
-                        text: "50 ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: AppColors.getTextColor(context),
-                        ),
-                        children: [
-                          TextSpan(
-                            text: context.isArabic ? "ج.م" : "EGP",
-                            style: TextStyle(
-                              color: AppColors.getRedColor(context),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                Padding(
-                  padding: EdgeInsets.only(top: 12.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  Column(
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            LocaleKeys.booked.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          SvgPicture.asset(Assets.bookedMan),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            LocaleKeys.free.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          SvgPicture.asset(
-                            Assets.freeIcon,
+                      RichText(
+                        text: TextSpan(
+                          text: "${widget.model?.pricePerSeat} ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                             color: AppColors.getTextColor(context),
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 13),
-                            child: Text(
-                              LocaleKeys.free.localize,
+                          children: [
+                            TextSpan(
+                              text: context.isArabic ? "ج.م" : "EGP",
                               style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
+                                color: AppColors.getRedColor(context),
+                                fontSize: 12,
                               ),
                             ),
-                          ),
-                          SizedBox(height: 8.h),
-                          SvgPicture.asset(
-                            Assets.freeIcon,
-                            color: AppColors.getTextColor(context),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            LocaleKeys.seat.localize,
+                      Text(
+                        context.isArabic?'لكل مقعد':'Per Seat',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getRedColor(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              Padding(
+                padding: EdgeInsets.only(top: 12.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          LocaleKeys.booked.localize,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        if (!(myRoute))
+                          SvgPicture.asset(Assets.bookedMan),
+                        if (myRoute)
+                          CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                UserCubit.to.state.data?.profilePicture ??
+                                    UIConst.profilePlaceHolder),
+                          ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          ((widget.model?.availableSeats ?? 0) >= 2)
+                              ? LocaleKeys.free.localize
+                              : LocaleKeys.booked.localize,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        if (((widget.model?.availableSeats ?? 0) >= 2))
+                          ClickableWidget(
+                            onTap: () {
+                              if (widget.onJoin != null) {
+                                widget.onJoin!();
+                              }
+                            },
+                            child: SvgPicture.asset(
+                              Assets.freeIcon,
+                              color: AppColors.getTextColor(context),
+                            ),
+                          ),
+                        if (((widget.model?.availableSeats ?? 0) < 2))
+                          CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                UIConst.profilePlaceHolder),
+                          ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 13),
+                          child: Text(
+                            ((widget.model?.availableSeats ?? 0) >= 1)
+                                ? LocaleKeys.free.localize
+                                : LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.PRIMARY_COLOR,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 15.h, left: 8.h),
+                        ),
+                        SizedBox(height: 8.h),
+                        if (((widget.model?.availableSeats ?? 0) >= 1))
+                          ClickableWidget(
+                            onTap: () {
+                              if (widget.onJoin != null) {
+                                widget.onJoin!();
+                              }
+                            },
+                            child: SvgPicture.asset(
+                              Assets.freeIcon,
+                              color: AppColors.getTextColor(context),
+                            ),
+                          ),
+                        if (((widget.model?.availableSeats ?? 0) < 1))
+                          CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                UIConst.profilePlaceHolder),
+                          ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          '',
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.h, left: 8.h),
+                          child: SizedBox(
+                            width: 55.w,
                             child: Text(
-                              widget.statusDriver ?? "",
+                              getBookingStatus(widget.statusDriver ?? ""),
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
@@ -165,64 +351,72 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: [
-                      Icon(Icons.circle,
-                          color: AppColors.getRedColor(context), size: 12),
-                      Expanded(
-                        child: Divider(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          thickness: 2,
-                        ),
-                      ),
-                      const Icon(Icons.circle, color: Colors.green, size: 12),
-                      Expanded(
-                        child: Divider(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          thickness: 2,
-                        ),
-                      ),
-                      const Icon(Icons.circle, color: Colors.green, size: 12),
-                      Expanded(
-                        child: Divider(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          thickness: 2,
-                        ),
-                      ),
-                      const Icon(Icons.circle, color: Colors.blue, size: 12),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.transparent,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green,
-                        radius: 10,
-                        child: CircleAvatar(
-                            backgroundColor: AppColors.getFillColor(context),
-                            radius: 5),
+                    Icon(Icons.circle,
+                        color: AppColors.getRedColor(context), size: 12),
+                    Expanded(
+                      child: Divider(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        thickness: 2,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
+                    Icon(Icons.circle, color:((widget.model?.availableSeats ?? 0) <= 1)?Colors.red: Colors.green, size: 12),
+                    Expanded(
+                      child: Divider(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        thickness: 2,
+                      ),
+                    ),
+                    Icon(Icons.circle, color: ((widget.model?.availableSeats ?? 0) < 1)?Colors.red:Colors.green, size: 12),
+                    Expanded(
+                      child: Divider(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        thickness: 2,
+                      ),
+                    ),
+                    const Icon(Icons.circle, color: Colors.blue, size: 12),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                  height: 200.h, child: _buildTopMap(context, widget.model)),
+              const SizedBox(height: 8),
+
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: Colors.transparent,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.green,
+                      radius: 10,
+                      child: CircleAvatar(
+                          backgroundColor: AppColors.getFillColor(context),
+                          radius: 5),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      widget.model?.startLocation?.address ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       style: TextStyle(
                         color: context.isDarkMode
                             ? Colors.white
@@ -231,25 +425,29 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.transparent,
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: Colors.transparent,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.blue,
+                      radius: 10,
                       child: CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 10,
-                        child: CircleAvatar(
-                            backgroundColor: AppColors.getFillColor(context),
-                            radius: 5),
-                      ),
+                          backgroundColor: AppColors.getFillColor(context),
+                          radius: 5),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      widget.model?.targetLocation?.address ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       style: TextStyle(
                         color: context.isDarkMode
                             ? Colors.white
@@ -258,113 +456,181 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                  ],
-                ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _expandableController.toggle();
-                      });
-                    },
-                    child: SvgPicture.asset(
-                      Assets.redFrame,
-                      width: 50,
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  // Show timer if conditions are met, otherwise show time ago
+                  _showTimer
+                      ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.orange),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          size: 16,
+                          color: Colors.orange,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          _formatRemainingTime(_remainingTime),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : Text(
+                    TimeUtils.formatTimeAgo(
+                        widget.model?.createdAt ?? DateTime.now().toString(),
+                        context.isArabic),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                ExpandablePanel(
-                  controller: _expandableController,
-                  theme: const ExpandableThemeData(
-                    hasIcon: false,
-                    tapBodyToCollapse: false,
-                    tapHeaderToExpand: false,
-                  ),
-                  header: const SizedBox(),
-                  collapsed: const SizedBox(),
-                  expanded: const AddressWidget(),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      context.isArabic ? "منذ 10 د" : '10 mins ago',
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      isComfort(widget.model?.features ?? [])
+                          ? LocaleKeys.comfort.localize
+                          : (context.isArabic ? 'غير مريح' : 'Uncomfortable'),
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 24.sp,
                         color: context.isDarkMode
                             ? Colors.white
                             : AppColors.PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        widget.requestType ?? "",
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                          fontWeight: FontWeight.w700,
+                  ),
+                  const SizedBox(width: 5),
+                  widget.cancelButton == true
+                      ? GestureDetector(
+                    onTap: () {
+                      if (widget.onCancelBooking != null) {
+                        widget.onCancelBooking!();
+                      }
+                    },
+                    child: Container(
+                      width: 120.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.SECONDARY_COLOR_DARK,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Center(
+                        child: Text(
+                          LocaleKeys.cancel.localize,
+                          style: TextStyle(
+                            fontSize: 22.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    widget.cancelButton == true
-                        ? GestureDetector(
-                            child: Container(
-                              width: 120.w,
-                              height: 50.h,
-                              decoration: BoxDecoration(
-                                color: AppColors.SECONDARY_COLOR_DARK,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  LocaleKeys.cancel.localize,
-                                  style: TextStyle(
-                                    fontSize: 22.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              ],
-            ),
+                  )
+                      : const SizedBox(),
+                ],
+              ),
+              SizedBox(height: 8),
+              if(widget.hasAcceptButton==true)AppButton(
+                  width: context.screenWidth ,
+                  label: context.isArabic ? 'قبول' : 'Accept',
+                  backColor: AppColors.PRIMARY_COLOR,
+                  onPressed: () {
+                    if(widget.onAccept!=null){
+                      widget.onAccept!();
+                    }
+                    // cubit
+                  }),
+            ],
           ),
         ),
-        // Positioned(
-        //   bottom: 9,
-        //   left: 270.h,
-        //   child: GestureDetector(
-        //     onTap: () {
-        //       setState(() {
-        //         _showContainer = !_showContainer; // تغيير حالة الـ Container
-        //       });
-        //     },
-        //     child: SvgPicture.asset(
-        //       Assets.frameIcon,
-        //       width: 50,
-        //     ),
-        //   ),
-        // ),
-        // if (_showContainer)
-        //   const Positioned(
-        //     top: 0,
-        //     bottom: 80,
-        //     // تحديد المكان اللي هيظهر فيه الـ Container
-        //     left: 0,
-        //     right: 0,
-        //     child: AddressWidget(),
-        //   ),
-      ],
+      ),
     );
+  }
+
+  final MapController _mapController = MapController();
+
+  Widget _buildTopMap(BuildContext context, MyBookingEntity? model) {
+    List<gmap.LatLng> routePoints = [];
+    List<dynamic> polyLine = model?.polyLine ?? [];
+
+    List<List<double>> parsedPolyline = polyLine
+        .map<List<double>>((item) =>
+        (item as List).map((e) => (e as num).toDouble()).toList())
+        .toList();
+    routePoints =
+        _convertPolylineToLatLng(parsedPolyline);
+
+
+
+    List<BookingClientEntity> clients = model?.clients ?? [];
+    if (clients.isNotEmpty) {
+      clients.removeWhere((e) => e.id == model?.creatorId);
+    }
+
+    List<gmap.LatLng> convertClientsToLatLng(List<BookingClientEntity> clients) {
+      return clients.map((client) {
+        final coords = client.location.location;
+        return gmap.LatLng(coords[1], coords[0]); // [latitude, longitude]
+      }).toList();
+    }
+
+    log("clients ${clients.length}");
+
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text(context.isArabic?'تفاصيل الرحلة':'Route Details')),
+              body: MapViewDetails(
+                startLocation: gmap.LatLng(model?.startLocation?.location[1],
+                    model?.startLocation?.location[0]),
+                targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
+                    model?.targetLocation?.location[0]),
+                polylinePoints:routePoints,
+                clientLocations: convertClientsToLatLng(clients),
+              ),
+            ),
+          ),
+        );
+      },
+      child: AbsorbPointer(
+        absorbing: true,
+        child: CustomGoogleMap(
+          startLocation:model?.startLocation==null?null: gmap.LatLng(model?.startLocation?.location[1],
+              model?.startLocation?.location[0]),
+          targetLocation: model?.targetLocation==null?null:gmap.LatLng(model?.targetLocation?.location[1],
+              model?.targetLocation?.location[0]),
+            polylinePoints:routePoints,
+          clientLocations: convertClientsToLatLng(clients),
+        ),
+      ),
+    );
+  }
+
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
 }
 
@@ -394,38 +660,26 @@ class AddressWidget extends StatelessWidget {
                 children: [
                   TextAddressWidget(
                     color: Colors.green,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
                   TextAddressWidget(
                     color: Colors.black,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
                   TextAddressWidget(
                     color: Colors.black,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                   SizedBox(height: 12.h),
                   TextAddressWidget(
                     color: Colors.blue,
-                    address:
-                        context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
                   ),
                 ],
               ),
             ),
-            // Positioned(
-            //   bottom: -1,
-            //   right: 5,
-            //   left: 2,
-            //   child: SvgPicture.asset(
-            //     Assets.redFrame,
-            //   ),
-            // ),
           ],
         ),
       ),

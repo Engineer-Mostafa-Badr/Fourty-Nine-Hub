@@ -10,8 +10,9 @@ import '../../../../RideFeature/presentation/pages/osm_search_and_pick.dart';
 class PriceAndSeatWidget extends StatefulWidget {
   const PriceAndSeatWidget({
     super.key,
+    this.price
   });
-
+  final num? price;
 
   @override
   State<PriceAndSeatWidget> createState() => _PriceAndSeatWidgetState();
@@ -35,10 +36,11 @@ class _PriceAndSeatWidgetState extends State<PriceAndSeatWidget> {
         const SizedBox(width: 20),
         RichText(
           text: TextSpan(
-            text: "60 ",
-            style: const TextStyle(
+            text: widget.price!=null? "${widget.price?.toInt()} ":" ",
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              color: context.isDarkMode?Colors.white:Colors.black,
             ),
             children: [
               TextSpan(

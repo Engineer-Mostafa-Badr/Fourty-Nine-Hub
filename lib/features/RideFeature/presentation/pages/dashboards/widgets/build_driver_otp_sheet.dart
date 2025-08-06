@@ -10,28 +10,36 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BuildDriverOtpSheet extends StatefulWidget {
-  const BuildDriverOtpSheet({super.key, required this.onPressed, this.activeTrip, this.remainingTime, required this.onSafety, required this.onFinalizeTrip, this.onTick});
+  const BuildDriverOtpSheet({super.key, required this.onPressed,required this.onCancelTrip,required this.params,required this.onReport, this.activeTrip, this.remainingTime, required this.onSafety, required this.onFinalizeTrip, this.onTick});
   final Function(String) onPressed;
   final RunningTripEntity? activeTrip;
   final VoidCallback onSafety;
   final Function onFinalizeTrip;
   final Function(Duration)? onTick;
   final DateTime? remainingTime;
+  final VoidCallback onReport;
+  final RideModeParams params;
+  final Function(CancelTripByRiderUseCaseParams params) onCancelTrip;
 
   @override
   State<BuildDriverOtpSheet> createState() => _BuildDriverOtpSheetState();
@@ -59,11 +67,11 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
   Duration _remainingTime = Duration.zero;
   Timer? _timer;
   DateTime? _savedDateTime;
-  bool _isFinished = false;
+  bool _isFinished = true;
   @override
   void initState() {
     super.initState();
-    _loadSavedDateTime();
+    // _loadSavedDateTime();
   }
 
   @override
@@ -79,20 +87,64 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
     }
   }
 
+  Future<void> openGoogleMapsWithDirections({
+    required double startLat,
+    required double startLng,
+    required double targetLat,
+    required double targetLng,
+  }) async {
+    final googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$targetLat,$targetLng&travelmode=driving';
+
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch Google Maps';
+    }
+  }
+
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       final now = DateTime.now();
-      if (_savedDateTime!.isAfter(now)) {
-        setState(() {
-          _remainingTime = _savedDateTime!.difference(now);
-          _isFinished = false;
-        });
-      } else {
-        _timer?.cancel();
+
+      // Fetch latest saved time every second
+      final prefs = await SharedPreferences.getInstance();
+      final savedTimeString = prefs.getString('remaining_time');
+
+      if (savedTimeString == null) {
+        timer.cancel();
         setState(() {
           _remainingTime = Duration.zero;
           _isFinished = true;
         });
+        return;
+      }
+
+      final latestSavedTime = DateTime.tryParse(savedTimeString);
+
+      if (latestSavedTime == null) return;
+
+      // If time has changed externally, restart the timer
+      if (_savedDateTime == null || _savedDateTime!.toIso8601String() != latestSavedTime.toIso8601String()) {
+        _savedDateTime = latestSavedTime;
+        timer.cancel(); // Stop current timer
+        _startTimer();  // Start a new one with updated time
+        return;
+      }
+
+      // Normal countdown logic
+      if (_savedDateTime!.isAfter(now)) {
+        setState(() {
+          _remainingTime = _savedDateTime!.difference(now);
+          _isFinished = false; // Reset finished state when new valid time is found
+        });
+      } else {
+        // Instead of just canceling, keep checking for new saved time
+        setState(() {
+          _remainingTime = Duration.zero;
+          _isFinished = true;
+        });
+        // Don't cancel the timer here - keep it running to detect new saved times
       }
     });
   }
@@ -131,15 +183,27 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                   children: [
                     ActionButtonsWidget(
                       driverImageUrl: widget.activeTrip?.clientPicture??'',
-                      driverRating: 12.2,
+                      driverRating: (widget.activeTrip?.clientRaiting??0).toDouble(),
                       driverName: widget.activeTrip?.clientName??'',
-                      onContactDriver: () {
-                        context.push(Routes.ratingDriverScreen);
-                      },
                       onSafety: widget.onSafety,
                       is_show_message: true,
-                      onMessage: () {
-                        context.push(Routes.completeRideScreen);
+                      onMessage: () async {
+                        BottomSheetHelper.startChatAndNavigate(
+                          context: context,
+                          otherUserId: widget.activeTrip?.clientId??'',
+                          categoryId: widget.activeTrip?.subCategoryId??'',
+                        );
+                      },
+                      onContactDriver: () {
+                        BottomSheetHelper.showCallOptionsBottomSheet(
+                            context: context,
+                            senderId: widget.activeTrip?.driverId ?? '',
+                            senderFirstName: UserCubit.to.state.data?.firstName ?? '',
+                            senderLastName: UserCubit.to.state.data?.lastName ?? '',
+                            receiverId: widget.activeTrip?.clientId ?? '',
+                            receiverName: widget.activeTrip?.clientName ?? '',
+                            phoneNumber: '01145152315'
+                        );
                       },
                     ),
 
@@ -152,10 +216,10 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                        Expanded(
                          child: Text(
                            context.isArabic ? "الوقت المتبقي" : "Remaining Time",
-                           style: const TextStyle(
+                           style: TextStyle(
                              fontSize: FontSize.s16,
                              fontWeight: FontWeight.bold,
-                             color: AppColors.PRIMARY_COLOR,
+                             color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                            ),
                          ),
                        ),
@@ -164,7 +228,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                              style: TextStyle(
                                fontSize: FontSize.s16,
                                fontWeight: FontWeight.bold,
-                               color: AppColors.PRIMARY_COLOR,
+                               color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                              ),
                            )
                      ],
@@ -177,10 +241,10 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       children: [
                         Text(
                           context.isArabic ? "اختر أدناه :" : "Choose below :",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: FontSize.s16,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                           ),
                         ),
                         SizedBox(
@@ -251,21 +315,24 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       ],
                     ),
 
-                    Container(
-                      width: double.infinity,
-                      height: 45,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.PRIMARY_COLOR)
-                      ),
-                      child: Text(
-                        context.isArabic ? "تقرير العميل" : "Report Client",
-                        style: const TextStyle(
-                          fontSize: FontSize.s16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR,
+                    GestureDetector(
+                      onTap: ()=>widget.onReport(),
+                      child: Container(
+                        width: double.infinity,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.PRIMARY_COLOR)
+                        ),
+                        child: Text(
+                          context.isArabic ? "تقرير العميل" : "Report Client",
+                          style: TextStyle(
+                            fontSize: FontSize.s16,
+                            fontWeight: FontWeight.bold,
+                            color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR_DARK,
+                          ),
                         ),
                       ),
                     ),
@@ -276,10 +343,10 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       alignment: AlignmentDirectional.topStart,
                       child: Text(
                         context.isArabic ? "رحلتك الحالية" : "Your Current Ride",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     ),
@@ -287,22 +354,22 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       height: 10,
                     ),
                     LocationInfoWidget(
-                      from: widget.activeTrip?.startLocation?.title??'',
-                      to: widget.activeTrip?.targetLocation?.title??'',
+                      from: widget.activeTrip?.from??'',
+                      to: widget.activeTrip?.to??'',
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     Text(
                       context.isArabic ? "أدخل رمز التحقيق" : "Enter OTP Code",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: FontSize.s16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                       ),
                     ),
                     Text(
-                      context.isArabic ? "سوف تحصل على الرمز من العميل" : "You will git it from the client",
+                      context.isArabic ? "سوف تحصل على الرمز من العميل" : "You will get it from the client",
                       style: const TextStyle(
                         fontSize: FontSize.s12,
                         fontWeight: FontWeight.bold,
@@ -352,21 +419,29 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            height: 45,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColors.PRIMARY_COLOR,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: AppColors.PRIMARY_COLOR)
+                          child: GestureDetector(
+                            onTap: ()=>openGoogleMapsWithDirections(
+                              startLat: widget.activeTrip?.startCoordinates?[1]??0.0,
+                              startLng: widget.activeTrip?.startCoordinates?[0]??0.0,
+                              targetLat: widget.activeTrip?.targetCoordinates?[1]??0.0,
+                              targetLng: widget.activeTrip?.targetCoordinates?[0]??0.0,
                             ),
-                            child: Text(
-                              context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
-                              style: const TextStyle(
-                                fontSize: FontSize.s16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.whiteColor,
+                            child: Container(
+                              width: double.infinity,
+                              height: 45,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: AppColors.PRIMARY_COLOR,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: AppColors.PRIMARY_COLOR)
+                              ),
+                              child: Text(
+                                context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
+                                style: const TextStyle(
+                                  fontSize: FontSize.s16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whiteColor,
+                                ),
                               ),
                             ),
                           ),
@@ -407,18 +482,18 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       child: Container(
                         height: 40,
                         decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                             borderRadius: BorderRadius.circular(12)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.info_outline,
-                                color: Colors.black54),
+                                color:context.isDarkMode?AppColors.whiteColor: Colors.black54),
                             SizedBox(width: 5),
                             Text(
                               "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${widget.activeTrip?.duration??''} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}.",
                               style: TextStyle(
-                                  color: Colors.black54, fontSize: 14),
+                                  color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                             ),
                           ],
                         ),
@@ -452,22 +527,24 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                                   _isChangedMindReason = false;
                                   _isOtherReason = !_isOtherReason;
                                 });
-                              });
+                              },
+                              onCancelTrip: (CancelTripByRiderUseCaseParams params)=>widget.onCancelTrip(params)
+                          );
                         },
                       child: Container(
                         width: double.infinity,
                         height: 45,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           LocaleKeys.cancelTheRide.localize,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: FontSize.s16,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.SECONDARY_COLOR,
+                            color: context.isDarkMode?AppColors.whiteColor:AppColors.SECONDARY_COLOR,
                           ),
                         ),
                       ),
@@ -490,6 +567,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
     required Function onSelectOtherReason,
     required Function onSelectChangedMindReason,
     required Function onSelectClientNotShownReason,
+    required Function(CancelTripByRiderUseCaseParams params) onCancelTrip,
   }) {
     showCustomDialogTrip(
         context,
@@ -524,18 +602,18 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                       border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "لم يظهر العميل" : "The client did not show up",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -549,18 +627,18 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                       border: state.isChangedMindReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "لقد قمت بتغيير رأيي" : "I changed my mind",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color:context.isDarkMode?AppColors.whiteColor: Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -573,15 +651,25 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                   },
                   child: Container(
                     height: 40,
-                    decoration: BoxDecoration(color: state.isOtherReason == true ? Colors.transparent : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                      color: state.isOtherReason == true
+                          ? context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : Colors.transparent
+                          : context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: state.isOtherReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color:context.isDarkMode?AppColors.whiteColor: Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "أخري" : "Other",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -621,19 +709,10 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                         width: context.screenWidth / 3.4,
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () {
+                        onPressed: () async {
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
-                            cubit.cancelDriverTrip(
-                              context: context,
-                              tripId: widget.activeTrip?.tripId??'',
-                              note: state.isOtherReason == true
-                                  ? cubit.reasonController.text
-                                  : state.isClientNotShownReason == true
-                                  ? 'client-no-show'
-                                  : state.isChangedMindReason == true
-                                  ? 'change-my-mind'
-                                  : '',
+                            onCancelTrip(CancelTripByRiderUseCaseParams(
                               reasonId: state.isOtherReason == true
                                   ? '6693d4723aa4a25077cdbc7b'
                                   : state.isClientNotShownReason == true
@@ -641,7 +720,15 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                                   : state.isChangedMindReason == true
                                   ? '665ef7118e67e46ce6498fef'
                                   : '',
-                            );
+                              note: state.isOtherReason == true
+                                  ? cubit.reasonController.text
+                                  : state.isClientNotShownReason == true
+                                  ? 'client-no-show'
+                                  : state.isChangedMindReason == true
+                                  ? 'change-my-mind'
+                                  : '',
+                              tripId: widget.activeTrip?.tripId ?? '',
+                            ));
                           } else {
                             showErrorMessage(context, context.isArabic ? "يرجى تحديد سبب" : 'Please select a reason');
                           }
@@ -675,9 +762,9 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
             const SizedBox(height: 12),
             Text(
               context.isArabic?'سوف تكمل الرحلة':'You will complete the trip',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: AppColors.PRIMARY_COLOR,
+                color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                 fontWeight: FontWeight.bold,
               ),
             ),

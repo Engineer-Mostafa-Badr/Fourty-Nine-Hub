@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -17,6 +18,8 @@ import '../../../theme/cubit/states.dart';
 import '../../dynamic/sizer.dart';
 import '../buttons/default_button.dart';
 import '../labels/label.dart';
+import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
 
 class ChooseLangScreen extends StatefulWidget {
   const ChooseLangScreen({super.key});
@@ -152,6 +155,9 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                     fontSize: 32.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
                                 onPressed: () {
+                                  ManageVibration.vibrate();
+                                  HapticFeedback.lightImpact();
+                                  HapticFeedback.vibrate();
                                   changeLang(
                                       locale: Locales.english,
                                       context: context);
@@ -159,7 +165,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  // context.go(Routes.onBoardingScreen);
+                                  context.go(Routes.onBoardingScreen);
                                 },
                               ),
                             ),

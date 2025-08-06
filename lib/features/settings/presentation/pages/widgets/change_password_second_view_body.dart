@@ -32,12 +32,18 @@ class _ChangePasswordSecondViewBodyState
   late TextEditingController oldPasswordController;
   late TextEditingController newPasswordController;
   late TextEditingController confirmPasswordController;
+  final FocusNode oldPasswordFocusNode = FocusNode();
+  final FocusNode newPasswordFocusNode = FocusNode();
+  final FocusNode confirmPasswordFocusNode = FocusNode();
 
   @override
   void initState() {
     oldPasswordController = TextEditingController();
     newPasswordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      oldPasswordFocusNode.requestFocus();
+    });
     super.initState();
   }
 
@@ -85,12 +91,6 @@ class _ChangePasswordSecondViewBodyState
                 // Navigator.pop(context);
                 context.pushReplacement(Routes.HOME);
               });
-            context
-                .read<NotificationSocketIoCubit>()
-                .notificationListener(languageCode: 'en');
-            context
-                .read<NotificationSocketIoCubit>()
-                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
           }
           if (state is ConfirmPasswordNotMache) {
             showErrorMessage(
@@ -118,6 +118,8 @@ class _ChangePasswordSecondViewBodyState
                         context.isArabic ? 'كلمة مرور قديمة' : 'Old Password',
                     controller: forgotPasswordCubit.odlPasswordController,
                     hint: context.isArabic ? 'كلمة مرور قديمة' : 'Old Password',
+                    focusNodeCurrent: oldPasswordFocusNode,
+                    focusNodeNext: newPasswordFocusNode,
                   ),
                   const SizedBox(
                     height: 8,
@@ -126,6 +128,8 @@ class _ChangePasswordSecondViewBodyState
                     label: LocaleKeys.newPassword.localize,
                     controller: forgotPasswordCubit.newPasswordController,
                     hint: LocaleKeys.newPassword.localize,
+                    focusNodeCurrent: newPasswordFocusNode,
+                    focusNodeNext: confirmPasswordFocusNode,
                   ),
                   const SizedBox(
                     height: 8,
@@ -135,6 +139,9 @@ class _ChangePasswordSecondViewBodyState
                     controller:
                         forgotPasswordCubit.confirmNewPasswordController,
                     hint: LocaleKeys.confirmNewPassword.localize,
+                    focusNodeCurrent: confirmPasswordFocusNode,
+                    focusNodeNext: null,
+                    textInputAction: TextInputAction.done,
                   ),
                   const SizedBox(
                     height: 16,

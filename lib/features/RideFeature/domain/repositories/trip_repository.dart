@@ -8,24 +8,37 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/su
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import '../../data/models/loading/get_loading_accepted_model.dart';
+import '../entities/create_no_track_trip_entity.dart';
+import '../entities/dashboards/create_non_track_offer_entity.dart';
 import '../entities/dashboards/driver_settings_entity.dart';
 import '../entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import '../entities/dashboards/settings_dashboard_entity.dart';
 import '../entities/dashboards/trips_response_entity.dart';
+import '../entities/loading/get_loading_avaliable_entity.dart';
+import '../entities/loading/get_loading_history_entity.dart';
+import '../entities/loading/settings_driver_loading_entity.dart';
+import '../usecases/client_trips/update_client_rate_non_socket_use_case.dart';
 import '../usecases/dashboards/add_rate_with_driver_use_case.dart';
 import '../usecases/dashboards/create_driver_rating_usecase.dart';
 import '../usecases/dashboards/create_new_offer_dashboard_usecase.dart';
+import '../usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../usecases/dashboards/get_available_ride_trips_use_case.dart';
+import '../usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
+import '../usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../usecases/get_client_pending_untracked_trips_use_case.dart';
 
@@ -51,11 +64,14 @@ abstract class TripRepository {
    Future<Either<Failure, RunningTripEntity>> getRunningTrip();
    Future<Either<Failure, bool>> goingToClient(String id);
    Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams id);
+   Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
    Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
    Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
+   Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
+   Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
@@ -63,9 +79,28 @@ abstract class TripRepository {
    void listenToClientComing(Function(String tripId) params);
    void listenToEndTrip(Function(String tripId) params);
    void listenToRemoveUntrackedTrip(Function(String tripId) params);
+   void listenToRemoveLoading(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
    void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
+   void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
+   void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
+   void listenToCancelRoute(Function(ListenToCancelRouteParams params) params);
+   void listenToUpdateRoute(Function(MyBookingEntity route) params);
+   void listenToAcceptRoute(Function(MyBookingEntity route) params);
+   void listenToNewRoute(Function(MyBookingEntity newBooking) params);
+   void listenToDriverTheOnWay(Function(MyBookingEntity newBooking) params);
+   void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
+   void listenToJoinAvailableRoutes(Function(bool isJoined) params);
+   void listenToLeaveAvailableRoutes(Function(String routeId) params);
+   Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);
+   Future<Either<Failure, List<GetLoadingAvailableEntity>>> getAvailableNonSocketLoading(ClientPendingTripParams params);
+   Future<Either<Failure, List<GetLoadingHistoryEntity>>> getHistoryNonSocketLoading(ClientPendingTripParams params);
+   Future<Either<Failure, CreateNonTrackOfferEntity>> createOfferLoading(CreateNonTrackOfferParams params);
+   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params);
+   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params);
+   Future<Either<Failure, DriverSettingLoadingEntity >> getDriverLoadingSettings();
+   Future<Either<Failure, CreateNonTrackOfferEntity >> updateDriverLoadingSettings(UpdateDriverSettingsLoadingParams params);
 
 
 }

@@ -109,13 +109,7 @@ class _LoginViewState extends State<LoginView> {
               state.userTokensEntity.accessToken);
           await CacheManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
-          context
-              .read<NotificationSocketIoCubit>()
-              .notificationListener(languageCode: 'en');
-          context
-              .read<NotificationSocketIoCubit>()
-              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
-
+        
           serviceLocator<UserCubit>()
             ..setLogin(true)
             ..attachToken()
@@ -140,82 +134,7 @@ class _LoginViewState extends State<LoginView> {
                         ? state.giftMessageEntity.ar
                         : state.giftMessageEntity.en,
                   );
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => CompleteRegisterScreen(
-                  //       giftMessageEntity: context.isArabic
-                  //           ? state.giftMessageEntity.ar
-                  //           : state.giftMessageEntity.en,
-                  //     ),
-                  //   ),
-                  //       (route) => false,
-                  // );
-                  /* showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0.r),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                LocaleKeys.congratulations.localize,
-                                style: Styles.headerText(
-                                  color: AppColors.SECONDARY_COLOR,
-                                ),
-                              ),
-                              const Sizer(),
-                              Text(
-                                context.isArabic
-                                    ? state.giftMessageEntity.ar
-                                    : state.giftMessageEntity.en,
-                                textAlign: TextAlign.center,
-                                style: Styles.mediumText(),
-                              ),
-                              SizedBox(height: 40.h),
-                              SizedBox(
-                                height: 40,
-                                width: double.infinity,
-                                child: Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            AppColors.SECONDARY_COLOR,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0.r),
-                                        ),
-                                      ),
-                                      child: Label(
-                                        text: LocaleKeys.close.localize,
-                                        style: Styles.mediumText(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );*/
+
                 }
               });
             });
@@ -237,7 +156,7 @@ class _LoginViewState extends State<LoginView> {
                 extra: loginCubit.emailTextController.text,
               );
               // Call the resendOTP method from VerifyOtpCubit
-              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text);
+              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text,true);
             }
             showErrorMessage(
               context,
@@ -270,12 +189,7 @@ class _LoginViewState extends State<LoginView> {
                 // Navigator.pop(context);
                 context.pushReplacement(Routes.HOME);
               });
-            context
-                .read<NotificationSocketIoCubit>()
-                .notificationListener(languageCode: 'en');
-            context
-                .read<NotificationSocketIoCubit>()
-                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
@@ -444,7 +358,16 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = true;
+  final FocusNode emailFocusNode = FocusNode();
 
+  @override
+  void initState() {
+    super.initState();
+    // Request focus after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      emailFocusNode.requestFocus();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final loginCubit = BlocProvider.of<LoginCubit>(context);
@@ -452,6 +375,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       children: [
         EmailOrPhoneTextFormField(
+          autofillHints: const [AutofillHints.email],
           currentController: loginCubit.emailTextController,
           borderColor: Colors.black,
           hint:
@@ -463,6 +387,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               color: AppColors.GREY_DARK_COLOR,
             ),
           ),
+          currentFocusNode: emailFocusNode, // <-- Use this
           isRequired: true,
         ),
         const Sizer(),
@@ -595,7 +520,16 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
+  final FocusNode nameFocusNode = FocusNode();
 
+  @override
+  void initState() {
+    super.initState();
+    // Request focus after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      nameFocusNode.requestFocus();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -610,6 +544,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 DefaultTextFormField(
+                  currentFocusNode: nameFocusNode,
+
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController: registerCubit.userNameController,

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +17,6 @@ import '../../../res/style/const.dart';
 import '../../../service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../main.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class CallWithNotificationHelper {
   final FcmNotificationHelper _notificationHelper;
@@ -97,18 +95,45 @@ class CallWithNotificationHelper {
         (_) => _showIncomingCallUI(callData),
       );
     });
-  }
-
-  void _handleIncomingCallAction(Map<String, dynamic> data) {
+  }  void _handleIncomingCallAction(Map<String, dynamic> data) {
+    print('📞 _handleIncomingCallAction called with action: ${data['action']}');
+    print('📞 Full notification data: $data');
+    
     if (data['action'] == CallActions.callEnded.name) {
-      if (context != null &&
-          context!.read<CallCubit>().state is HasCall &&
-          (context!.read<CallCubit>().state as HasCall).callData.channel ==
-              data['channel']) {
-        print(
-            '====================++++++++++++++++notification +++++++++++++++++====================');
-        context!.read<CallCubit>().endCall();
+      print('📞 Processing callEnded notification');
+      print('📞 Context is null: ${context == null}');
+      
+      if (context != null) {
+        final currentState = context!.read<CallCubit>().state;
+        print('📞 Current CallCubit state: $currentState');
+        print('📞 State is HasCall: ${currentState is HasCall}');
+        
+        // Check if we have a matching room ID from the notification
+        final notificationRoomId = data['zego_room_id'];
+        print('📞 Notification room ID: $notificationRoomId');
+        
+        if (currentState is HasCall) {
+          final currentRoomId = currentState.callData.zegoRoomId;
+          print('📞 Current room ID: $currentRoomId');
+          print('📞 Room IDs match: ${currentRoomId == notificationRoomId}');
+          
+          if (currentRoomId == notificationRoomId) {
+            print('📞 ✅ Room ID matches - ending call');
+            context!.read<CallCubit>().endCall();
+          } else {
+            print('📞 ❌ Room ID mismatch - not ending call');
+          }
+        } else {
+          print('📞 ❌ Current state is not HasCall');
+          
+          // Check SharedPreferences for ongoing call data
+          _checkAndForceEndCall(notificationRoomId);
+        }
+      } else {
+        print('📞 ❌ Context is null - not ending call');
       }
+      
+      print('📞 Stopping CallKit');
       _callKitHelper.stopCalling();
     } else if (data['action'] == CallActions.receiverDeclinedCall.name) {
       if (context != null) {
@@ -342,5 +367,41 @@ class CallWithNotificationHelper {
         ),
       );
     });
+  }  void _checkAndForceEndCall(String? notificationRoomId) async {
+    print('📞 Checking SharedPreferences for ongoing call data');
+    
+    try {
+      final prefs = serviceLocator<SharedPreferences>();
+      final callDataString = prefs.getString('call_data');
+      
+      if (callDataString != null) {
+        print('📞 Found call data in SharedPreferences');
+        final callDataMap = json.decode(callDataString);
+        final storedRoomId = callDataMap['zego_room_id'];
+        
+        print('📞 Stored room ID: $storedRoomId');
+        print('📞 Notification room ID: $notificationRoomId');
+        
+        if (storedRoomId == notificationRoomId) {
+          print('📞 ✅ Room IDs match - forcing call end cleanup');
+          
+          // Remove call data from preferences
+          await prefs.remove('call_data');
+          print('📞 Removed call_data from SharedPreferences');
+          
+          // Force call the endCall method to ensure proper cleanup
+          if (context != null) {
+            print('📞 Force calling endCall() for cleanup');
+            context!.read<CallCubit>().endCall();
+          }
+        } else {
+          print('📞 Room IDs do not match - no action needed');
+        }
+      } else {
+        print('📞 No call data found in SharedPreferences');
+      }
+    } catch (e) {
+      print('📞 Error checking SharedPreferences: $e');
+    }
   }
 }

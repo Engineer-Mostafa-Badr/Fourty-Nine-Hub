@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -24,7 +23,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/searsh_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -32,6 +30,9 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/constants/registration_status.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'favorite_ads.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -51,6 +52,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   bool isFirstSearchListenerCall = true;
 
   final AdsManager _adsManager = AdsManager();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   bool get wantKeepAlive => true;
@@ -58,16 +60,19 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   @override
   void initState() {
     _adsManager.preloadAds();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     context.read<RestaurantsCubit>().loadData();
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().fetchRestaurants();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().fetchRestaurants();
+    // }
   }
 
   @override
@@ -99,9 +104,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             });
           }
         },
-
         child: state.isLoading
-            ? const Center(child: CustomCircularProgressIndicator())
+            ? const Center(child: CustomLoadingSearchWidget())
             : _buildLoggedInView(state),
       ),
     );
@@ -115,6 +119,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           const MealBanner(),
           _buildRegisterRestaurantPrompt(state),
           _buildSearchAndExpiredRequests(),
+          const Sizer(),
           if (_showSearch)
             BlocProvider(
               create: (context) => SearchRestaurantsCubit(
@@ -125,13 +130,14 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               )..loadData(),
               child: SearchRestaurantView(
                 onClose: () => setState(() => _showSearch = false),
+                focusNode: _focusNode,
               ),
             ),
           if (_showExpire)
             BlocProvider(
               key: ValueKey("expired-${DateTime.now().millisecondsSinceEpoch}"),
-              create: (context) =>
-                  serviceLocator<RestaurantsCubit>()..loadInitialExpiredOrders(),
+              create: (context) => serviceLocator<RestaurantsCubit>()
+                ..loadInitialExpiredOrders(),
               child: RestaurantExpiredRequestsScreen(
                 key: ValueKey(
                     "expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
@@ -142,16 +148,17 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             BlocProvider(
               key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
               create: (context) =>
-              serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
+                  serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
               child: RestaurantRequestLogsScreen(
-                key: ValueKey("log-screen-${DateTime.now().millisecondsSinceEpoch}"),
+                key: ValueKey(
+                    "log-screen-${DateTime.now().millisecondsSinceEpoch}"),
                 onClose: () => setState(() => _showLog = false),
               ),
             ),
           if (_showFavAds)
             BlocProvider(
               create: (context) =>
-              serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
+                  serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
               child: RestaurantFavAdsScreen(
                 onClose: () => setState(() {
                   context.read<RestaurantsCubit>().loadInitialData();
@@ -189,7 +196,49 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                               const PropertyCardShimmer(),
                         )
                       : context.read<RestaurantsCubit>().restaurants.isNotEmpty
-                          ? ListView.separated(
+                          ? SizedBox(
+                              height: MediaQuery.sizeOf(context).height * .7,
+                              child: OlxPaginationWidget(
+                                scrollController: _scrollController,
+                                itemsPerPage: 2,
+                                loadPage: (page) async {},
+                                banners: bannersList,
+                                items: List.generate(
+                                  context
+                                      .read<RestaurantsCubit>()
+                                      .restaurants
+                                      .length,
+                                  (index) {
+                                    // final request = controller.reqLogs[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: SubCategoriesRestaurantCard(
+                                        item: context
+                                            .read<RestaurantsCubit>()
+                                            .restaurants[index],
+                                        mealId: '',
+                                        favouriteRestaurant: (String id) async {
+                                          var result = await context
+                                              .read<RestaurantsCubit>()
+                                              .toggleFavoriteRestaurant(id);
+                                          if (result == true) {
+                                            context
+                                                    .read<RestaurantsCubit>()
+                                                    .restaurants[index]
+                                                    .isFavorite =
+                                                !context
+                                                    .read<RestaurantsCubit>()
+                                                    .restaurants[index]
+                                                    .isFavorite!;
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                          /*ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: context
@@ -230,21 +279,21 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                     ],
                                   );
                                 },
-                              )
-                            : Center(
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 40.h),
-                                  child: CustomEmptyWidget(
-                                    label:context.isArabic
-                                        ? "لا توجد مطاعم متوفرة."
-                                        : "No Restaurants Found.",
-                                  ),
+                              )*/
+                          : Center(
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 40.h),
+                                child: CustomEmptyWidget(
+                                  label: context.isArabic
+                                      ? "لا توجد مطاعم متوفرة."
+                                      : "No Restaurants Found.",
                                 ),
-                              )
-                  ],
-                ),
-              )
-          ],
+                              ),
+                            )
+                ],
+              ),
+            )
+        ],
       ),
     );
   }
@@ -362,27 +411,29 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               ],
             ),
 
-            // ElevatedButton(
-            //   onPressed: (){},
-            //   // padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            //   child: Text(
-            //     LocaleKeys.serveClientsByClickRegister.tr(),
-            //     style: Styles.mediumText(color: Colors.red),
-            //   ),
-            // ),
-          ),
+              // ElevatedButton(
+              //   onPressed: (){},
+              //   // padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              //   child: Text(
+              //     LocaleKeys.serveClientsByClickRegister.tr(),
+              //     style: Styles.mediumText(color: Colors.red),
+              //   ),
+              // ),
+            ),
           if (state.isResturant?.approved != null)
             state.isResturant?.approved == true
                 ? const SizedBox()
-                : context.read<UserCubit>().isLoggedIn ? Label(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: AppColors.PRIMARY_COLOR_DARK,
-                    ),
-                    textAlign: TextAlign.end,
-                    text: LocaleKeys.waitingApproval.localize,
-                  ) : SizedBox.shrink(),
+                : context.read<UserCubit>().isLoggedIn
+                    ? Label(
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: AppColors.PRIMARY_COLOR_DARK,
+                        ),
+                        textAlign: TextAlign.end,
+                        text: LocaleKeys.waitingApproval.localize,
+                      )
+                    : SizedBox.shrink(),
         ],
       ),
     );
@@ -390,8 +441,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   Widget _buildSearchAndExpiredRequests() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5,),
-      child:SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 5,
+      ),
+      child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -416,9 +469,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       // context.push(Routes.LOGIN);
                     }
                   },
-                  child:Icon(
-                      _showSearch ?Icons.search_off_rounded : Icons.search,
-                    color:_showSearch ?AppColors.getRedColor(context):AppColors.getTextColor(context)),
+                  child: Icon(
+                      _showSearch ? Icons.search_off_rounded : Icons.search,
+                      color: _showSearch
+                          ? AppColors.getRedColor(context)
+                          : AppColors.getTextColor(context)),
                 ),
                 const Sizer(),
                 GestureDetector(
@@ -427,7 +482,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     },
                     child: Icon(
                       Icons.shopping_cart,
-                      color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR ,
+                      color: context.isDarkMode
+                          ? AppColors.whiteColor
+                          : AppColors.PRIMARY_COLOR,
                     )),
               ],
             ),
@@ -440,8 +497,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       _showSearch = false;
                       _showLog = false;
                       _showExpire = false;
-                     }else if(!_showFavAds){
-                      context.read<RestaurantsCubit>().loadInitialRestaurantsData('');
+                    } else if (!_showFavAds) {
+                      context
+                          .read<RestaurantsCubit>()
+                          .loadInitialRestaurantsData('');
                     }
                   });
                 } else {
@@ -452,24 +511,25 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               },
               child: Container(
                 padding: EdgeInsets.all(6),
-                width:210.w,
+                width: 210.w,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        color: _showFavAds
-                            ? AppColors.getRedColor(context)
-                            : AppColors.getButtonPrimaryColor(context)),
+                    // border: Border.all(
+                    //     color: _showFavAds
+                    //         ? AppColors.getRedColor(context)
+                    //         : AppColors.getButtonPrimaryColor(context)),
                     borderRadius: BorderRadius.circular(15),
                     color: _showFavAds
                         ? AppColors.getButtonPrimaryColor(context)
                         : AppColors.getFillColor(context)),
                 child: Label(
-                  text: context.isArabic?'مفضلة':'Favourites',
+                  text: context.isArabic ? 'مفضلة' : 'Favourites',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color:
-                      _showFavAds ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context)),
+                      color: _showFavAds
+                          ? AppColors.getReversedTextColor(context)
+                          : AppColors.getTextColor(context)),
                 ),
               ),
             ),
@@ -480,6 +540,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   children: [
                     GestureDetector(
                       onTap: () {
+                        print(context
+                            .read<RestaurantsCubit>()
+                            .state
+                            .logsEntity
+                            ?.length);
                         if (context.read<UserCubit>().isLoggedIn) {
                           setState(() {
                             _showLog = !_showLog;
@@ -497,38 +562,43 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       },
                       child: Container(
                         padding: const EdgeInsets.all(6),
-                        width:210.w,
+                        width: 210.w,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _showLog
-                                ? AppColors.getRedColor(context)
-                                : AppColors.getButtonPrimaryColor(context),
-                          ),
+                          // border: Border.all(
+                          //   color: _showLog
+                          //       ? AppColors.getRedColor(context)
+                          //       : AppColors.getButtonPrimaryColor(context),
+                          // ),
                           borderRadius: BorderRadius.circular(15),
                           color: _showLog
-                              ?AppColors.getButtonPrimaryColor(context)
+                              ? AppColors.getButtonPrimaryColor(context)
                               : AppColors.getFillColor(context),
                         ),
                         child: Label(
-                          text: context.isArabic?'سجل طلبات':'requestLog',
+                          text: context.isArabic ? 'سجل طلبات' : 'Request Log',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: _showLog
                                 ? AppColors.getReversedTextColor(context)
-                                :AppColors.getTextColor(context),
+                                : AppColors.getTextColor(context),
                           ),
                         ),
                       ),
                     ),
                     Visibility(
-                      visible:context.read<RestaurantsCubit>().state.reqCount?.count!=0,
-                      child: PositionedDirectional(
-                        top: -10,
-                        start: -6,
+                      visible: context
+                              .read<RestaurantsCubit>()
+                              .state
+                              .reqCount
+                              ?.count !=
+                          0,
+                      child: Positioned(
+                        top: -8,
+                        right: -6,
                         child: Container(
-                          padding: const EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: AppColors.getRedColor(context),
                             shape: BoxShape.circle,
@@ -539,10 +609,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                           ),
                           child: Center(
                             child: Text(
-                              '${context.isArabic?numAr(context.read<RestaurantsCubit>().state.reqCount?.count??0):context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
+                              '${context.read<RestaurantsCubit>().state.reqCount?.count ?? 0}'
+                                  .toArabicNumbers(context),
                               style: TextStyle(
-                                color:AppColors.getReversedTextColor(context),
-                                fontSize: 10,
+                                color: AppColors.getReversedTextColor(context),
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
@@ -575,25 +646,26 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   }
                 },
                 child: Container(
-                  width:210.w,
+                  width: 210.w,
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                      border: Border.all(
-                          color: _showExpire
-                              ? AppColors.getRedColor(context)
-                              :AppColors.getButtonPrimaryColor(context)),
+                      // border: Border.all(
+                      //     color: _showExpire
+                      //         ? AppColors.getRedColor(context)
+                      //         :AppColors.getButtonPrimaryColor(context)),
                       borderRadius: BorderRadius.circular(15),
                       color: _showExpire
                           ? AppColors.getButtonPrimaryColor(context)
                           : AppColors.getFillColor(context)),
                   child: Label(
-                    text: context.isArabic?'منتهية':'Expired',
+                    text: context.isArabic ? 'منتهية' : 'Expired',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color:
-                            _showExpire ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context)),
+                        color: _showExpire
+                            ? AppColors.getReversedTextColor(context)
+                            : AppColors.getTextColor(context)),
                   ),
                 ),
               ),
@@ -764,11 +836,17 @@ class CustomApproveMealButton extends StatelessWidget {
           const Sizer(),
           Text(
             status == RegistrationStatus.rejected.status
-                ? context.isArabic?'مرفوض':"rejected"
+                ? context.isArabic
+                    ? 'مرفوض'
+                    : "rejected"
                 : status == RegistrationStatus.pending.status
-                    ? context.isArabic?'انتظار الموافقة':"waiting for approval"
+                    ? context.isArabic
+                        ? 'انتظار الموافقة'
+                        : "waiting for approval"
                     : status == RegistrationStatus.initial.status
-                        ? context.isArabic?'قيد الانتظار':"Pending"
+                        ? context.isArabic
+                            ? 'قيد الانتظار'
+                            : "Pending"
                         : '',
             style: TextStyle(color: AppColors.getRedColor(context)),
           )

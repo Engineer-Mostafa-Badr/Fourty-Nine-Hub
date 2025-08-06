@@ -62,10 +62,10 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  // Future<Either<Failure, AddCommentResponse>> addComment(
-  //     AddReelCommentParams params) {
-  //   return _reelsRemoteDataSource.addComment(params);
-  // }
+  Future<Either<Failure, AddCommentResponse>> addComment(
+      AddReelCommentParams params) {
+    return _reelsRemoteDataSource.addComment(params);
+  }
 
   @override
   Future<Either<Failure, AddCommentResponse>> addReply(

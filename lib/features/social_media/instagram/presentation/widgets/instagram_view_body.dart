@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/follower_cubit.dart';
@@ -25,6 +26,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../core/widget/olx_pagination/banner.dart';
+
 class InstagramViewBody extends StatefulWidget {
   const InstagramViewBody({super.key});
 
@@ -36,7 +39,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
   bool _isLoading = false;
 
   // للتحكم بالتمرير
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
   final VideoControllerManager _videoManager = VideoControllerManager();
 
   // للتتبع آخر موضع تمرير
@@ -68,14 +71,14 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
 
     //   _lastScrollPosition = _scrollController.position.pixels;
     // });
-    _scrollController.addListener(() {
+    /* _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 200 &&
           !_isLoading &&
           context.read<PostsInstagramCubit>().state.hasMorePosts) {
         context.read<PostsInstagramCubit>().loadPosts(context);
       }
-    });
+    });*/
     // _scrollController.addListener(
     //   () {
     //     if (_scrollController.position.pixels >=
@@ -124,7 +127,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
   @override
   void dispose() {
     _videoManager.disposeAll();
-    _scrollController.dispose();
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -147,24 +150,72 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
           );
         }
 
-        return CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: _buildTabBar(context),
+        return Column(
+          // controller: _scrollController,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTabBar(context),
+            SizedBox(
+              height: 16,
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 82,
-                child: ChatStories(),
+            SizedBox(
+              height: 82,
+              child: ChatStories(),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: OlxPaginationWidget(
+                scrollController: ScrollController(),
+                itemsPerPage: 10,
+                items: List.generate(
+                    state.posts.length + (state.hasMorePosts ? 1 : 0), (index) {
+                  // 1. عنصر التحميل الإضافي (عند نهاية القائمة)
+                  if (index == state.posts.length) {
+                    return _isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CustomLoading(),
+                          )
+                        : const SizedBox();
+                  }
+
+                  // 2. عرض "مقاطع مقترحة" كل 4 منشورات (حتى 5 مرات)
+                  if ((index + 1) % 4 == 0 && index ~/ 4 < 5) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: _buildSuggestedReels(context),
+                    );
+                  }
+
+                  // 3. عرض "متابعات مقترحة" كل 6 منشورات (حتى 3 مرات)
+                  if ((index + 1) % 6 == 0 && index ~/ 6 < 3) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: _buildSuggestedFollowers(context),
+                    );
+                  }
+
+                  // 4. المنشور العادي
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: PostInstagramWidget(
+                      key: ValueKey('post_${state.posts[index].id}'),
+                      posts: state.posts,
+                      currentIndex: index,
+                      instagramPostEntity: state.posts[index],
+                    ),
+                  );
+                }),
+                banners: bannersList,
+                loadPage: context.read<PostsInstagramCubit>().state.hasMorePosts
+                    ? (page) =>
+                        context.read<PostsInstagramCubit>().loadPosts(context)
+                    : (page) async {},
               ),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 16,
-              ),
-            ),
-            SliverList.separated(
+            /* SliverList.separated(
               itemCount: state.posts.length + (state.hasMorePosts ? 1 : 0),
               separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
@@ -196,7 +247,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                   instagramPostEntity: state.posts[index],
                 );
               },
-            ),
+            ),*/
             // SliverList.separated(
             //   itemCount: state.posts.length + (state.hasMorePosts ? 1 : 0),
             //   separatorBuilder: (context, index) => const SizedBox(

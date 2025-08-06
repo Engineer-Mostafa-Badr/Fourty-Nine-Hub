@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
@@ -28,7 +29,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class MarriageCallMessageButtons extends StatefulWidget {
   const MarriageCallMessageButtons({
@@ -43,6 +43,7 @@ class MarriageCallMessageButtons extends StatefulWidget {
     this.clientId,
     this.startPadding = 0,
   });
+
   final String otherUserId;
   final String? clientId;
   final String subcategoryId;
@@ -72,7 +73,7 @@ class _MarriageCallMessageButtonsState
           return SizedBox(
             height: 30,
             child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
@@ -81,15 +82,15 @@ class _MarriageCallMessageButtonsState
                   child: InkWell(
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-                      return pleaseLoginDialog(context);
-              // context.push(Routes.LOGIN);
-          }
+                            return pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : snap.data == true
                             ? () {
                                 showModalBottomSheet(
                                   backgroundColor: context.isDarkMode
                                       ? AppColors.DARK_BLUE_COLOR
-                                          .withOpacity(0.95)
+                                          .withValues(alpha: 0.95)
                                       : AppColors.LIGHT_COLOR,
                                   context: context,
                                   shape: const RoundedRectangleBorder(
@@ -110,106 +111,113 @@ class _MarriageCallMessageButtonsState
                                         duration:
                                             const Duration(milliseconds: 50),
                                         child: Container(
-                                          height: 150.h,
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 10.h,
-                                            horizontal: 10,
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                          padding: EdgeInsets.all(16),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
-                                              Expanded(
-                                                flex: 3,
-                                                child: AvaialbleTripsButton(
-                                                  title: context.isArabic
-                                                      ? "خدمة الاتصال"
-                                                      : "Service Call",
-                                                  color:
-                                                      AppColors.SECONDARY_COLOR,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 5),
-                                                  onTap: () {
-                                                    context.pop();
-                                                    LaunchURLHelper().call(
-                                                        phone: widget.phone);
-                                                  },
+                                              SizedBox(
+                                                height: 24,
+                                                width: 24,
+                                                child: IconButton(
+                                                  iconSize: 20,
+                                                  padding: EdgeInsets.zero,
+                                                  style: IconButton.styleFrom(
+                                                    backgroundColor: const Color(0xffD9D9D9),
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.black,
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context),
                                                 ),
                                               ),
-                                              const Sizer(width: 5),
-                                              Expanded(
-                                                flex: 3,
-                                                child: AvaialbleTripsButton(
-                                                  title: context.isArabic
-                                                      ? "اتصال مميز"
-                                                      : "Premium Call",
-                                                  color:
-                                                      AppColors.SECONDARY_COLOR,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 5),
-                                                  onTap: () async {
-                                                    context.pop();
-                                                    if (await Permission
-                                                                .microphone
-                                                                .request() !=
-                                                            PermissionStatus
-                                                                .granted ||
-                                                        await Permission.camera
-                                                                .request() !=
-                                                            PermissionStatus
-                                                                .granted) {
-                                                      await Permission
-                                                          .microphone
-                                                          .request();
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              AvaialbleTripsButton(
+                                                title: context.isArabic
+                                                    ? "اتصال عادى"
+                                                    : "Regular Call",
+                                                radius: 12,
+                                                color:
+                                                    AppColors.getButtonPrimaryColor(context),
+
+                                                onTap: () {
+                                                  context.pop();
+                                                  LaunchURLHelper().call(
+                                                      phone: widget.phone);
+                                                },
+                                              ),
+                                              const Sizer(width: 16),
+                                              AvaialbleTripsButton(
+                                                title: context.isArabic
+                                                    ? "اتصال مجاني"
+                                                    : "Free Call",
+                                                radius: 12,
+                                                color:
+                                                    AppColors.grey300,
+
+                                                onTap: () async {
+                                                  context.pop();
+                                                  if (await Permission
+                                                              .microphone
+                                                              .request() !=
+                                                          PermissionStatus
+                                                              .granted ||
                                                       await Permission.camera
-                                                          .request();
-                                                    }
-                                                    print(
-                                                        'sender data is ${widget.otherUserId}, ${widget.senderName}, ${widget.senderImage}, ');
-                                                    final fcmToken =
-                                                        await serviceLocator<
-                                                                FcmNotificationHelper>()
-                                                            .getFcmUserToken();
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                SendWhatsappCallScreen(
-                                                                  callType:
-                                                                      CallType
-                                                                          .audio,
-                                                                  receiver: UserModel(
-                                                                      id: widget
-                                                                          .otherUserId,
-                                                                      firstName:
-                                                                          widget.senderName ??
-                                                                              '',
-                                                                      lastName:
-                                                                          '',
-                                                                      firebaseToken:
-                                                                          "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
-                                                                      // chat.fcmToken
-                                                                      ),
-                                                                  sender:
-                                                                      UserModel(
+                                                              .request() !=
+                                                          PermissionStatus
+                                                              .granted) {
+                                                    await Permission
+                                                        .microphone
+                                                        .request();
+                                                    await Permission.camera
+                                                        .request();
+                                                  }
+                                                  print(
+                                                      'sender data is ${widget.otherUserId}, ${widget.senderName}, ${widget.senderImage}, ');
+                                                  final fcmToken =
+                                                      await serviceLocator<
+                                                              FcmNotificationHelper>()
+                                                          .getFcmUserToken();
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              SendWhatsappCallScreen(
+                                                                isRealCall:
+                                                                    true,
+                                                                callType:
+                                                                    CallType
+                                                                        .audio,
+                                                                receiver: UserModel(
                                                                     id: widget
                                                                         .otherUserId,
                                                                     firstName:
                                                                         widget.senderName ??
                                                                             '',
                                                                     lastName:
-                                                                        widget.senderName ??
-                                                                            '',
+                                                                        '',
                                                                     firebaseToken:
-                                                                        fcmToken,
-                                                                  ),
-                                                                )));
-                                                  },
-                                                ),
+                                                                        "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
+                                                                    // chat.fcmToken
+                                                                    ),
+                                                                sender:
+                                                                    UserModel(
+                                                                  id: widget
+                                                                      .otherUserId,
+                                                                  firstName:
+                                                                      widget.senderName ??
+                                                                          '',
+                                                                  lastName:
+                                                                      widget.senderName ??
+                                                                          '',
+                                                                  firebaseToken:
+                                                                      fcmToken,
+                                                                ),
+                                                              )));
+                                                },
                                               )
                                             ],
                                           ),
@@ -229,9 +237,13 @@ class _MarriageCallMessageButtonsState
                               context.read<UserCubit>().isLoggedIn)
                           ? Assets.phoneIconRed
                           : Assets.phoneIcon,
-                      color:!(snap.data == true &&
-                          context.read<UserCubit>().isLoggedIn)?
-                      context.isDarkMode ? Colors.white : null: null,height: 37.h,
+                      color: !(snap.data == true &&
+                              context.read<UserCubit>().isLoggedIn)
+                          ? context.isDarkMode
+                              ? Colors.white
+                              : null
+                          : null,
+                      height: 37.h,
                       // color: (snap.data == true &&
                       //         context.read<UserCubit>().isLoggedIn)
                       //     ? AppColors.PRIMARY_COLOR
@@ -247,9 +259,9 @@ class _MarriageCallMessageButtonsState
                   //         : AppColors.DARK_GRAY_COLOR,
                   onTap: !context.read<UserCubit>().isLoggedIn
                       ? () {
-          return pleaseLoginDialog(context);
-          // context.push(Routes.LOGIN);
-          }
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : snap.data == true
                           ? () async {
                               ChatEntity? chat = await context
@@ -280,9 +292,13 @@ class _MarriageCallMessageButtonsState
                     (snap.data == true && context.read<UserCubit>().isLoggedIn)
                         ? Assets.mailIconRed
                         : Assets.mailIcon,
-                    color:!(snap.data == true &&
-                        context.read<UserCubit>().isLoggedIn)?
-                    context.isDarkMode ? Colors.white : null: null,height: 30.h,
+                    color: !(snap.data == true &&
+                            context.read<UserCubit>().isLoggedIn)
+                        ? context.isDarkMode
+                            ? Colors.white
+                            : null
+                        : null,
+                    height: 30.h,
                   ),
                 ),
                 if (widget.hasReport == true) ...[
@@ -290,9 +306,9 @@ class _MarriageCallMessageButtonsState
                     // color: AppColors.SECONDARY_COLOR,
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-          return pleaseLoginDialog(context);
-          // context.push(Routes.LOGIN);
-          }
+                            return pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : () {
                             bottomSheet(
                                 context: context,
@@ -305,7 +321,7 @@ class _MarriageCallMessageButtonsState
                     child: Icon(
                       Icons.report,
                       color: AppColors.SECONDARY_COLOR_DARK2,
-                      size:50.h,
+                      size: 40.h,
                     ),
                   ),
                 ]

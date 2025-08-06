@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/full_screen_widget.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -181,7 +182,9 @@ class _ReelsWidgetState extends State<ReelsWidget>
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              VideoPlayer(widget.controller),
+              VideoPlayer(
+                widget.controller,
+              ),
               buildPlayPauseIcon(),
               Positioned.fill(
                 bottom: MediaQuery.of(context).size.height * 0.0,
@@ -201,7 +204,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       ),
                       GestureDetector(
                           onTap: () {
-                            if (!serviceLocator<UserCubit>().isLoggedIn) { return pleaseLoginDialog(context);
+                            if (!serviceLocator<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
                               // context.push(Routes.LOGIN);
                             } else {
                               _showGiftBottomSheet(context);
@@ -233,12 +237,54 @@ class _ReelsWidgetState extends State<ReelsWidget>
                 ),
               ),
               Positioned(
-                bottom: 20,
-                left: 10,
-                right: 10,
-                child: CustomProgressBar(
-                  videoPlayerController: widget.controller,
-                ),
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.black,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // if (reel.audio.audioName.isNotEmpty)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 30,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  reel.audio.audioName.isNotEmpty
+                                      ? reel.audio.audioName
+                                      : "No audio",
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_back_ios,
+                                  color: Colors.white70,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: 5),
+                        CustomProgressBar(
+                          videoPlayerController: widget.controller,
+                        ),
+                      ],
+                    ),
+                  )),
+              Positioned(
+                bottom: MediaQuery.of(context).size.height * 0.5,
+                left: MediaQuery.of(context).size.width * 0.4,
+                right: MediaQuery.of(context).size.width * 0.4,
+                child: FullScreenWidget(),
               ),
             ],
           ),

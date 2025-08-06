@@ -1,6 +1,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_non_track_trip_use_case.dart';
 
 import '../../../../core/error/failure.dart';
@@ -33,7 +34,7 @@ class ShippingRepositoryImplementation extends ShippingRepository {
   }
 
   @override
-  Future<Either<Failure, CreateLoadingTripEntity>> createLoadingTrip(CreateLoadingTripModel params) async {
+  Future<Either<Failure, bool>> createLoadingTrip(CreateLoadingTripParams params) async {
     return await shippingRemoteDataSource.createLoadingTrip(params);
 
   }

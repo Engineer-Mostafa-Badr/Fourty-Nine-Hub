@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
 import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
 import 'package:fourtyninehub/features/call/widgets/screen_lock_manager.dart';
 import 'package:fourtyninehub/features/call/widgets/ui_fake_call.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
 class WhatsAppCallScreen extends StatefulWidget {
@@ -37,12 +38,25 @@ class _WhatsAppCallScreenState extends State<WhatsAppCallScreen>
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addObserver(this);
     _callCubit = context.read<CallCubit>();
-    _callCubit.checkIfThereIsCall();
+    _initializeZegoEngine();
 
-    super.initState();
     _enableKeepScreenOn();
+  }
+
+  Future<void> _initializeZegoEngine() async {
+    try {
+      print('Initializing ZegoCloud engine...');
+      // Use the centralized engine initialization
+      await CallCubit.initializeZegoEngine();
+      await Future.delayed(const Duration(milliseconds: 100));
+      _callCubit.checkIfThereIsCall();
+    } catch (e) {
+      print('Error initializing ZegoCloud engine: $e');
+      _callCubit.checkIfThereIsCall();
+    }
   }
 
   @override
@@ -138,6 +152,12 @@ class _WhatsAppCallScreenState extends State<WhatsAppCallScreen>
 
   @override
   void dispose() {
+    if (context.read<CallCubit>().state is HasCall) {
+      final state = context.read<CallCubit>().state as HasCall;
+      if (state.engine != null) {
+        state.engine!.registerEventHandler(RtcEngineEventHandler());
+      }
+    }
     _isDisposed = true; // Mark as disposed
     WidgetsBinding.instance.removeObserver(this);
     _disableKeepScreenOn();
@@ -158,24 +178,41 @@ class _WhatsAppCallScreenState extends State<WhatsAppCallScreen>
         }
         return BlocBuilder<CallCubit, CallState>(
           builder: (context, state) {
+            print("📞 DEBUG: WhatsAppCallScreen state change - ${state.runtimeType}");
+            
             if (state is HasCall) {
-              print("Building call UI for state: $state");
+              print("📞 DEBUG: Building call UI for HasCall state");
+              print("📞 DEBUG: Call details - Channel: ${state.callData.channelId}, isZegoCloud: ${state.isZegoCloud}");
+              print("📞 DEBUG: Room ID: ${state.callData.zegoRoomId}");
+              
               if (state.isZegoCloud) {
+                print("📞 DEBUG: Rendering ZegoCallPage");
                 return Positioned.fill(
                   child: ZegoCallPage(
                     callData: state.callData,
                   ),
                 );
               } else {
+                print("📞 DEBUG: Rendering VoiceCallingScreen (Agora)");
                 return Positioned.fill(
                     child: VoiceCallingScreen(callData: state.callData));
               }
             } else {
-              print("No active call, returning to previous screen");
+              print("📞 DEBUG: No active call detected - state is ${state.runtimeType}");
+              print("📞 DEBUG: Initiating navigation pop to return to previous screen");
+              
               // If there's no active call, pop back to previous screen
               WidgetsBinding.instance.addPostFrameCallback((_) {
+                print("📞 DEBUG: PostFrameCallback executing - checking navigation conditions");
+                print("📞 DEBUG: _isDisposed: $_isDisposed, Navigator.canPop: ${Navigator.canPop(context)}");
+                
                 if (!_isDisposed && Navigator.canPop(context)) {
+                  print("📞 DEBUG: ✅ Popping WhatsAppCallScreen - returning to previous screen");
                   Navigator.of(context).pop();
+                } else {
+                  print("📞 DEBUG: ❌ Cannot pop - either disposed or no route to pop");
+                  if (_isDisposed) print("📞 DEBUG: Screen is disposed");
+                  if (!Navigator.canPop(context)) print("📞 DEBUG: No route to pop");
                 }
               });
               return const SizedBox();
@@ -384,7 +421,7 @@ class _VoiceCallingScreenState extends State<VoiceCallingScreen> {
 
         // Bottom Buttons
         BuildBottomBtns(
-          currentContext: context,
+            currentContext: context,
             state: state,
             callData: widget.callData,
             onMorePressed: () {

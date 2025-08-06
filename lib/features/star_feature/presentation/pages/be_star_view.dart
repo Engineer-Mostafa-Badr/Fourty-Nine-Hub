@@ -28,6 +28,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controller/cubit/star_cubit.dart';
@@ -147,7 +148,7 @@ class _BeStarViewState extends State<BeStarView> {
           //   return const CustomNotLogged();
           // }
           if (state.status == StarStates.loading) {
-            return const CustomLoading();
+            return const CustomLoadingSearchWidget();
           }
 
           final sortedStars = List<StarEntity>.from(state.star ?? [])
@@ -162,422 +163,418 @@ class _BeStarViewState extends State<BeStarView> {
             _initializeVideoControllers(sortedStars);
           }
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: RefreshIndicator(
-              color: AppColors.getTextColor(context),
-              backgroundColor: AppColors.getFindFillColor(context),
-              onRefresh: () async =>
-                  context.read<StarCubit>().getAllTalent(refresh: true),
-              child: ListView(
-                controller: _controller,
-                children: [
-                  // ImageFromInternet(image: state.banner?.banner ?? ''),
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.sizeOf(context).height * 0.2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                      // image: DecorationImage(
-                      //   fit: BoxFit.fill,
-                      //   image: NetworkImage(state.banner?.banner ??''),
-                      // ),
-                    ),
-                    child: ImageFromInternet(
-                      image: state.banner?.banner ?? '',
-                      fit: BoxFit.fitWidth,
-                    ),
+          return RefreshIndicator(
+            color: AppColors.getTextColor(context),
+            backgroundColor: AppColors.getFindFillColor(context),
+            onRefresh: () async =>
+                context.read<StarCubit>().getAllTalent(refresh: true),
+            child: ListView(
+              controller: _controller,
+              children: [
+                // ImageFromInternet(image: state.banner?.banner ?? ''),
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.sizeOf(context).height * 0.2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    // image: DecorationImage(
+                    //   fit: BoxFit.fill,
+                    //   image: NetworkImage(state.banner?.banner ??''),
+                    // ),
                   ),
-                  const Sizer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        context.isArabic
-                            ? convertToArabicNumbers(
-                                state.banner?.titleAr ?? '',
-                              )
-                            : state.banner?.titleEn ?? '',
-                        textAlign: TextAlign.center,
-                        style: Styles.mediumText(
-                          fontSize: 30,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-
+                  child: ImageFromInternet(
+                    image: state.banner?.banner ?? '',
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+                const Sizer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      context.isArabic
+                          ? convertToArabicNumbers(
+                              state.banner?.titleAr ?? '',
+                            )
+                          : state.banner?.titleEn ?? '',
+                      textAlign: TextAlign.center,
+                      style: Styles.mediumText(
+                        fontSize: 30,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
                       ),
-                      InkWell(
-                        onTap: () {
-                          showAnimatedDialog(
-                            context,
-                            AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    children: [
-                                      InkWell(
-                                        onTap:(){
-                                          context.pop();
-                                        },
-                                        child: Image.asset(
-                                          Assets.close,
-                                          height: 24,
-                                          width: 24,
-                                        ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showAnimatedDialog(
+                          context,
+                          AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        context.pop();
+                                      },
+                                      child: Image.asset(
+                                        Assets.close,
+                                        height: 24,
+                                        width: 24,
                                       ),
-                                    ],
-                                  ),
-                                  const Sizer(),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
                                     ),
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Image.asset(
-                                      Assets.talentGIF,
-                                      width: MediaQuery.of(context).size.width * 0.8,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  ],
+                                ),
+                                const Sizer(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
-                                ],
-                              ),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Image.asset(
+                                    Assets.talentGIF,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          Assets.idea,
-                          height: 24,
-                          width: 24,
-                        ),
+                          ),
+                        );
+                      },
+                      child: SvgPicture.asset(
+                        Assets.idea,
+                        height: 24,
+                        width: 24,
                       ),
-                    ],
-                  ),
-                  const Sizer(),
-                  Text(
-                    context.isArabic
-                        ? convertToArabicNumbers(state.banner?.subTitleAr ?? '')
-                        : state.banner?.subTitleEn ?? '',
-                    textAlign: TextAlign.center,
-                    style: Styles.mediumText(
-                      fontSize: 28,
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR,
                     ),
+                  ],
+                ),
+                const Sizer(),
+                Text(
+                  context.isArabic
+                      ? convertToArabicNumbers(state.banner?.subTitleAr ?? '')
+                      : state.banner?.subTitleEn ?? '',
+                  textAlign: TextAlign.center,
+                  style: Styles.mediumText(
+                    fontSize: 28,
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
                   ),
-                  const Sizer(),
-                  Expanded(
-                      child: GetAllTalents(
-                    scrollController: _scrollController,
-                    isMyTalent: false,
-                  )),
-                  // ListView with shrinkWrap and no scrolling
-                  // ListView.separated(
-                  //     controller: _scrollController,
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     // Disable scrolling
-                  //     shrinkWrap: true,
-                  //     // Allow the ListView to take only the necessary height
-                  //     itemBuilder: (context, index) {
-                  //       // Insert ads after every 2 items
-                  //       // if ((index + 1) % 3 == 0) {
-                  //       //   return getAdIfNeeded(index, AdsManager());
-                  //       // }
-                  //       if (index > nativeAdStart &&
-                  //           index % adFrequency == adFrequency - 1) {
-                  //         return getAdIfNeeded(index, _adsManager);
-                  //       }
-                  //       if (index >= sortedStars.length) {
-                  //         return const Center(
-                  //             child: CustomCircularProgressIndicator());
-                  //       }
-                  //       if (index >= sortedStars.length) {
-                  //         return const Center(
-                  //             child: CustomCircularProgressIndicator());
-                  //       }
-                  //       final videoController = _videoControllers[index];
-                  //       //final star = sortedStars[index];
-                  //       // final videoController = _videoControllers[index];
-                  //       return Column(
-                  //         children: [
-                  //           buildHeaderInfo(sortedStars[index]),
-                  //           SizedBox(height: 10.h),
-                  //           if (videoController != null)
-                  //             videoController.value.isInitialized
-                  //                 ? GestureDetector(
-                  //                     onTap: () {
-                  //                       if (_isVideoEnded[index]) {
-                  //                         videoController
-                  //                             .seekTo(Duration.zero);
-                  //                         videoController.play();
-                  //                         setState(() {
-                  //                           _isVideoEnded[index] = false;
-                  //                         });
-                  //                       } else {
-                  //                         videoController.value.isPlaying
-                  //                             ? videoController.pause()
-                  //                             : videoController.play();
-                  //                       }
-                  //                     },
-                  //                     child: AspectRatio(
-                  //                       aspectRatio: 1,
-                  //                       child: Stack(
-                  //                         children: [
-                  //                           VideoPlayer(videoController),
-                  //                           Padding(
-                  //                             padding: EdgeInsets.all(16.w),
-                  //                             child: Row(
-                  //                               children: [
-                  //                                 Row(
-                  //                                   mainAxisAlignment:
-                  //                                       MainAxisAlignment.end,
-                  //                                   children: [
-                  //                                     const Icon(
-                  //                                       Icons.remove_red_eye,
-                  //                                       color: AppColors
-                  //                                           .AUTH_CONTAINER_COLOR,
-                  //                                     ),
-                  //                                     Sizer(width: 10.w),
-                  //                                     Label(
-                  //                                         text:
-                  //                                             '${sortedStars[index].totalViews}',
-                  //                                         color: AppColors
-                  //                                             .AUTH_CONTAINER_COLOR),
-                  //                                   ],
-                  //                                 ),
-                  //                                 const Spacer(),
-                  //                                 Label(
-                  //                                     color: AppColors
-                  //                                         .AUTH_CONTAINER_COLOR,
-                  //                                     text:
-                  //                                         '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}'),
-                  //                               ],
-                  //                             ),
-                  //                           ),
-                  //                         ],
-                  //                       ),
-                  //                     ),
-                  //                   )
-                  //                 : const CustomCircularProgressIndicator()
-                  //           else
-                  //             Stack(
-                  //               children: [
-                  //                 GridView.builder(
-                  //                   shrinkWrap: true,
-                  //                   physics:
-                  //                       const NeverScrollableScrollPhysics(),
-                  //                   gridDelegate:
-                  //                       SliverGridDelegateWithFixedCrossAxisCount(
-                  //                     crossAxisCount: state.star![index]
-                  //                                 .mediaUrl.length ==
-                  //                             1
-                  //                         ? 1
-                  //                         : 2,
-                  //                   ),
-                  //                   itemCount:
-                  //                       state.star![index].mediaUrl.length < 4
-                  //                           ? state
-                  //                               .star![index].mediaUrl.length
-                  //                           : 4,
-                  //                   itemBuilder: (context, mediaIndex) {
-                  //                     if (mediaIndex >=
-                  //                         state
-                  //                             .star![index].mediaUrl.length) {
-                  //                       // Skip rendering for out-of-bounds mediaIndex
-                  //                       return const SizedBox.shrink();
-                  //                     }
-                  //                     return GestureDetector(
-                  //                       onTap: () {
-                  //                         if (mediaIndex != 3 ||
-                  //                             (mediaIndex == 3 &&
-                  //                                 state.star![index].mediaUrl
-                  //                                         .length ==
-                  //                                     4)) {
-                  //                           showDialog(
-                  //                             context: context,
-                  //                             builder: (context) =>
-                  //                                 ImageDetails(
-                  //                               image: state
-                  //                                   .star![index]
-                  //                                   .mediaUrl[mediaIndex]
-                  //                                   .mediaKey,
-                  //                               function: () {},
-                  //                             ),
-                  //                           );
-                  //                         } else {
-                  //                           showDialog(
-                  //                             context: context,
-                  //                             builder: (context) => allImage(
-                  //                               () {},
-                  //                               state.star![index].mediaUrl
-                  //                                   .length,
-                  //                               state
-                  //                                   .star![index]
-                  //                                   .mediaUrl[mediaIndex]
-                  //                                   .mediaKey,
-                  //                             ),
-                  //                           );
-                  //                         }
-                  //                       },
-                  //                       child: Stack(
-                  //                         children: [
-                  //                           Container(
-                  // margin:
-                  //     const EdgeInsetsDirectional
-                  //         .only(
-                  //         end: 10, bottom: 10),
-                  // padding:
-                  //     const EdgeInsets.all(10),
-                  //                             decoration: BoxDecoration(
-                  //                               borderRadius:
-                  //                                   BorderRadius.circular(15),
-                  //                               image: DecorationImage(
-                  //                                 fit: BoxFit.fill,
-                  //                                 image: NetworkImage(state
-                  //                                     .star![index]
-                  //                                     .mediaUrl[mediaIndex]
-                  //                                     .mediaKey),
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           if (mediaIndex == 3 &&
-                  //                               state.star![index].mediaUrl
-                  //                                       .length >
-                  //                                   4)
-                  //                             Container(
-                  //                               // margin:
-                  //                               //     const EdgeInsetsDirectional
-                  //                               //         .only(
-                  //                               //         end: 10, bottom: 10),
-                  //                               alignment: Alignment.center,
-                  //                               decoration: BoxDecoration(
-                  //                                 borderRadius:
-                  //                                     BorderRadius.circular(
-                  //                                         15),
-                  //                                 color: Colors.black
-                  //                                     .withOpacity(0.5),
-                  //                               ),
-                  //                               child: Center(
-                  //                                 child: Label(
-                  //                                   text:
-                  //                                       "+${state.star![index].mediaUrl.length - 4}",
-                  //                                   style: Styles.headerText(
-                  //                                       color: Colors.white),
-                  //                                 ),
-                  //                               ),
-                  //                             ),
-                  //                         ],
-                  //                       ),
-                  //                     );
-                  //                   },
-                  //                 ),
-                  //                 Padding(
-                  //                   padding: EdgeInsets.all(8.w),
-                  //                   child: Row(
-                  //                     children: [
-                  //                       Row(
-                  //                         mainAxisAlignment:
-                  //                             MainAxisAlignment.end,
-                  //                         children: [
-                  //                           const Icon(
-                  //                             Icons.remove_red_eye,
-                  //                             color: AppColors
-                  //                                 .AUTH_CONTAINER_COLOR,
-                  //                           ),
-                  //                           Sizer(width: 10.w),
-                  //                           Text(
-                  //                             '${sortedStars[index].totalViews}',
-                  //                             style: Styles.mediumText(
-                  //                               color: AppColors
-                  //                                   .AUTH_CONTAINER_COLOR,
-                  //                             ).copyWith(
-                  //                               shadows: [
-                  //                                 Shadow(
-                  //                                   offset: const Offset(
-                  //                                       2.0, 2.0),
-                  //                                   // Position of the shadow
-                  //                                   blurRadius: 3.0,
-                  //                                   // Blur radius of the shadow
-                  //                                   color: Colors.white
-                  //                                       .withOpacity(
-                  //                                           0.5), // Shadow color
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                           ),
-                  //                         ],
-                  //                       ),
-                  //                       const Spacer(),
-                  //                       Text(
-                  //                         '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}',
-                  //                         style: Styles.mediumText(
-                  //                           color: AppColors
-                  //                               .AUTH_CONTAINER_COLOR,
-                  //                         ).copyWith(
-                  //                           shadows: [
-                  //                             Shadow(
-                  //                               offset:
-                  //                                   const Offset(1.0, 1.0),
-                  //                               blurRadius: 3.0,
-                  //                               color: Colors.white
-                  //                                   .withOpacity(0.5),
-                  //                             ),
-                  //                           ],
-                  //                         ),
-                  //                       ),
-                  //                     ],
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           const Sizer(),
-                  //           Align(
-                  //             alignment: AlignmentDirectional.topStart,
-                  //             child: Text(
-                  //               sortedStars[index].description,
-                  //               style: Styles.mediumText(),
-                  //               textAlign: TextAlign.start,
-                  //               maxLines: showMore ? 100 : 2,
-                  //             ),
-                  //           ),
-                  //           InkWell(
-                  //             onTap: () {
-                  //               setState(() {
-                  //                 showMore = !showMore;
-                  //               });
-                  //             },
-                  //             child: Row(
-                  //               mainAxisAlignment: MainAxisAlignment.center,
-                  //               children: [
-                  //                 Icon(showMore
-                  //                     ? Icons.arrow_drop_down_rounded
-                  //                     : Icons.arrow_drop_up_rounded),
-                  //                 Label(
-                  //                   text: showMore
-                  //                       ? LocaleKeys.showLess.localize
-                  //                       : LocaleKeys.showMore.localize,
-                  //                   style: Styles.smallText(
-                  //                       color:
-                  //                           Theme.of(context).primaryColor),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           const Sizer(),
-                  //         ],
-                  //       );
-                  //     },
-                  //     separatorBuilder: (context, index) => Divider(
-                  //           height: 40.h,
-                  //           color: AppColors.GREY_NORMAL_COLOR,
-                  //         ),
-                  //     itemCount: sortedStars.length // Add extra items for ads
-                  // itemCount: sortedStars.length,
-                  //     ),
-                ],
-              ),
+                ),
+                const Sizer(),
+                GetAllTalents(
+                  scrollController: _scrollController,
+                  isMyTalent: false,
+                ),
+                // ListView with shrinkWrap and no scrolling
+                // ListView.separated(
+                //     controller: _scrollController,
+                //     physics: const NeverScrollableScrollPhysics(),
+                //     // Disable scrolling
+                //     shrinkWrap: true,
+                //     // Allow the ListView to take only the necessary height
+                //     itemBuilder: (context, index) {
+                //       // Insert ads after every 2 items
+                //       // if ((index + 1) % 3 == 0) {
+                //       //   return getAdIfNeeded(index, AdsManager());
+                //       // }
+                //       if (index > nativeAdStart &&
+                //           index % adFrequency == adFrequency - 1) {
+                //         return getAdIfNeeded(index, _adsManager);
+                //       }
+                //       if (index >= sortedStars.length) {
+                //         return const Center(
+                //             child: CustomCircularProgressIndicator());
+                //       }
+                //       if (index >= sortedStars.length) {
+                //         return const Center(
+                //             child: CustomCircularProgressIndicator());
+                //       }
+                //       final videoController = _videoControllers[index];
+                //       //final star = sortedStars[index];
+                //       // final videoController = _videoControllers[index];
+                //       return Column(
+                //         children: [
+                //           buildHeaderInfo(sortedStars[index]),
+                //           SizedBox(height: 10.h),
+                //           if (videoController != null)
+                //             videoController.value.isInitialized
+                //                 ? GestureDetector(
+                //                     onTap: () {
+                //                       if (_isVideoEnded[index]) {
+                //                         videoController
+                //                             .seekTo(Duration.zero);
+                //                         videoController.play();
+                //                         setState(() {
+                //                           _isVideoEnded[index] = false;
+                //                         });
+                //                       } else {
+                //                         videoController.value.isPlaying
+                //                             ? videoController.pause()
+                //                             : videoController.play();
+                //                       }
+                //                     },
+                //                     child: AspectRatio(
+                //                       aspectRatio: 1,
+                //                       child: Stack(
+                //                         children: [
+                //                           VideoPlayer(videoController),
+                //                           Padding(
+                //                             padding: EdgeInsets.all(16.w),
+                //                             child: Row(
+                //                               children: [
+                //                                 Row(
+                //                                   mainAxisAlignment:
+                //                                       MainAxisAlignment.end,
+                //                                   children: [
+                //                                     const Icon(
+                //                                       Icons.remove_red_eye,
+                //                                       color: AppColors
+                //                                           .AUTH_CONTAINER_COLOR,
+                //                                     ),
+                //                                     Sizer(width: 10.w),
+                //                                     Label(
+                //                                         text:
+                //                                             '${sortedStars[index].totalViews}',
+                //                                         color: AppColors
+                //                                             .AUTH_CONTAINER_COLOR),
+                //                                   ],
+                //                                 ),
+                //                                 const Spacer(),
+                //                                 Label(
+                //                                     color: AppColors
+                //                                         .AUTH_CONTAINER_COLOR,
+                //                                     text:
+                //                                         '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}'),
+                //                               ],
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ),
+                //                   )
+                //                 : const CustomCircularProgressIndicator()
+                //           else
+                //             Stack(
+                //               children: [
+                //                 GridView.builder(
+                //                   shrinkWrap: true,
+                //                   physics:
+                //                       const NeverScrollableScrollPhysics(),
+                //                   gridDelegate:
+                //                       SliverGridDelegateWithFixedCrossAxisCount(
+                //                     crossAxisCount: state.star![index]
+                //                                 .mediaUrl.length ==
+                //                             1
+                //                         ? 1
+                //                         : 2,
+                //                   ),
+                //                   itemCount:
+                //                       state.star![index].mediaUrl.length < 4
+                //                           ? state
+                //                               .star![index].mediaUrl.length
+                //                           : 4,
+                //                   itemBuilder: (context, mediaIndex) {
+                //                     if (mediaIndex >=
+                //                         state
+                //                             .star![index].mediaUrl.length) {
+                //                       // Skip rendering for out-of-bounds mediaIndex
+                //                       return const SizedBox.shrink();
+                //                     }
+                //                     return GestureDetector(
+                //                       onTap: () {
+                //                         if (mediaIndex != 3 ||
+                //                             (mediaIndex == 3 &&
+                //                                 state.star![index].mediaUrl
+                //                                         .length ==
+                //                                     4)) {
+                //                           showDialog(
+                //                             context: context,
+                //                             builder: (context) =>
+                //                                 ImageDetails(
+                //                               image: state
+                //                                   .star![index]
+                //                                   .mediaUrl[mediaIndex]
+                //                                   .mediaKey,
+                //                               function: () {},
+                //                             ),
+                //                           );
+                //                         } else {
+                //                           showDialog(
+                //                             context: context,
+                //                             builder: (context) => allImage(
+                //                               () {},
+                //                               state.star![index].mediaUrl
+                //                                   .length,
+                //                               state
+                //                                   .star![index]
+                //                                   .mediaUrl[mediaIndex]
+                //                                   .mediaKey,
+                //                             ),
+                //                           );
+                //                         }
+                //                       },
+                //                       child: Stack(
+                //                         children: [
+                //                           Container(
+                // margin:
+                //     const EdgeInsetsDirectional
+                //         .only(
+                //         end: 10, bottom: 10),
+                // padding:
+                //     const EdgeInsets.all(10),
+                //                             decoration: BoxDecoration(
+                //                               borderRadius:
+                //                                   BorderRadius.circular(15),
+                //                               image: DecorationImage(
+                //                                 fit: BoxFit.fill,
+                //                                 image: NetworkImage(state
+                //                                     .star![index]
+                //                                     .mediaUrl[mediaIndex]
+                //                                     .mediaKey),
+                //                               ),
+                //                             ),
+                //                           ),
+                //                           if (mediaIndex == 3 &&
+                //                               state.star![index].mediaUrl
+                //                                       .length >
+                //                                   4)
+                //                             Container(
+                //                               // margin:
+                //                               //     const EdgeInsetsDirectional
+                //                               //         .only(
+                //                               //         end: 10, bottom: 10),
+                //                               alignment: Alignment.center,
+                //                               decoration: BoxDecoration(
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(
+                //                                         15),
+                //                                 color: Colors.black
+                //                                     .withOpacity(0.5),
+                //                               ),
+                //                               child: Center(
+                //                                 child: Label(
+                //                                   text:
+                //                                       "+${state.star![index].mediaUrl.length - 4}",
+                //                                   style: Styles.headerText(
+                //                                       color: Colors.white),
+                //                                 ),
+                //                               ),
+                //                             ),
+                //                         ],
+                //                       ),
+                //                     );
+                //                   },
+                //                 ),
+                //                 Padding(
+                //                   padding: EdgeInsets.all(8.w),
+                //                   child: Row(
+                //                     children: [
+                //                       Row(
+                //                         mainAxisAlignment:
+                //                             MainAxisAlignment.end,
+                //                         children: [
+                //                           const Icon(
+                //                             Icons.remove_red_eye,
+                //                             color: AppColors
+                //                                 .AUTH_CONTAINER_COLOR,
+                //                           ),
+                //                           Sizer(width: 10.w),
+                //                           Text(
+                //                             '${sortedStars[index].totalViews}',
+                //                             style: Styles.mediumText(
+                //                               color: AppColors
+                //                                   .AUTH_CONTAINER_COLOR,
+                //                             ).copyWith(
+                //                               shadows: [
+                //                                 Shadow(
+                //                                   offset: const Offset(
+                //                                       2.0, 2.0),
+                //                                   // Position of the shadow
+                //                                   blurRadius: 3.0,
+                //                                   // Blur radius of the shadow
+                //                                   color: Colors.white
+                //                                       .withOpacity(
+                //                                           0.5), // Shadow color
+                //                                 ),
+                //                               ],
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       const Spacer(),
+                //                       Text(
+                //                         '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}',
+                //                         style: Styles.mediumText(
+                //                           color: AppColors
+                //                               .AUTH_CONTAINER_COLOR,
+                //                         ).copyWith(
+                //                           shadows: [
+                //                             Shadow(
+                //                               offset:
+                //                                   const Offset(1.0, 1.0),
+                //                               blurRadius: 3.0,
+                //                               color: Colors.white
+                //                                   .withOpacity(0.5),
+                //                             ),
+                //                           ],
+                //                         ),
+                //                       ),
+                //                     ],
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           const Sizer(),
+                //           Align(
+                //             alignment: AlignmentDirectional.topStart,
+                //             child: Text(
+                //               sortedStars[index].description,
+                //               style: Styles.mediumText(),
+                //               textAlign: TextAlign.start,
+                //               maxLines: showMore ? 100 : 2,
+                //             ),
+                //           ),
+                //           InkWell(
+                //             onTap: () {
+                //               setState(() {
+                //                 showMore = !showMore;
+                //               });
+                //             },
+                //             child: Row(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 Icon(showMore
+                //                     ? Icons.arrow_drop_down_rounded
+                //                     : Icons.arrow_drop_up_rounded),
+                //                 Label(
+                //                   text: showMore
+                //                       ? LocaleKeys.showLess.localize
+                //                       : LocaleKeys.showMore.localize,
+                //                   style: Styles.smallText(
+                //                       color:
+                //                           Theme.of(context).primaryColor),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //           const Sizer(),
+                //         ],
+                //       );
+                //     },
+                //     separatorBuilder: (context, index) => Divider(
+                //           height: 40.h,
+                //           color: AppColors.GREY_NORMAL_COLOR,
+                //         ),
+                //     itemCount: sortedStars.length // Add extra items for ads
+                // itemCount: sortedStars.length,
+                //     ),
+              ],
             ),
           );
         },

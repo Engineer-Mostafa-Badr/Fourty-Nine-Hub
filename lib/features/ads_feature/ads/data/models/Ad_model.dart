@@ -52,7 +52,7 @@ class AdModel extends AdEntity {
     }
     // } catch (e) {}
     return AdModel(
-      id: json['_id'] ?? '',
+      id: json['adId']??json['_id'] ?? '',
       title: json['title'] ?? '',
       description: json['desc'] ?? json['description'],
       images: images,
@@ -73,6 +73,7 @@ class AdModel extends AdEntity {
       statistics: json['statistics'] == null
           ? null
           : AdStatisticsModel.fromJson(json['statistics']),
+      // TODO: add the address model
       address: AdsAddressModel.fromJson(json['address']),
       user: user,
       details: json['props'] == null

@@ -11,6 +11,10 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+
 class AdsSearchView extends StatefulWidget {
   const AdsSearchView({
     super.key,
@@ -51,7 +55,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
       if (state.isLoadingAds) {
-        return const CustomLoading();
+        return const CustomLoadingSearchWidget();
       }
       if (controller.initalSearchAds) {
         return Column(
@@ -92,7 +96,42 @@ class _AdsSearchViewState extends State<AdsSearchView> {
           ),
         );
       }
-      return ListView.separated(
+      return OlxPaginationWidget(
+        scrollController: _scrollController,
+        itemsPerPage: 2,
+        loadPage: (page) async {
+          if (_scrollController.position.userScrollDirection ==
+              ScrollDirection.reverse) {
+            widget.isFloatingButtonVisible(false);
+          } else {
+            widget.isFloatingButtonVisible(true);
+          }
+        },
+        banners: bannersList,
+        items: List.generate(
+          controller.searchAdsList.length,
+          (i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: MyAdCard(
+              item: controller.searchAdsList[i],
+              showSubCategory: true,
+              onFav: (id) async {
+                bool result = await context
+                    .read<AdvertisementCubit>()
+                    .favouriteAd(controller.searchAdsList[i].id);
+                return result;
+              },
+              onRemoveFav: (id) async {
+                bool result = await context
+                    .read<AdvertisementCubit>()
+                    .unFavouriteAd(controller.searchAdsList[i].id);
+                return result;
+              },
+            ),
+          ),
+        ),
+      );
+      /*return ListView.separated(
         padding: const EdgeInsets.all(16),
         shrinkWrap: true,
         controller: _scrollController,
@@ -115,7 +154,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         ),
         separatorBuilder: (BuildContext context, int index) =>
             const SizedBox(height: 16),
-      );
+      );*/
     });
   }
 }

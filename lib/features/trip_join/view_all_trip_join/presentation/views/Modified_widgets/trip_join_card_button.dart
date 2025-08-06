@@ -41,10 +41,12 @@ class TripJoinCardButton extends StatelessWidget {
                 ? Icon(icon, color: Colors.white, size: 20)
                 : const SizedBox(),
             const Sizer(width: 5),
-            Text(
-              title,
-              style: Styles.headerText(color: context.isDarkMode?Colors.black:Colors.white, fontSize: 30),
-              textAlign: TextAlign.center,
+            Expanded(
+              child: Text(
+                title,
+                style: Styles.headerText(color: context.isDarkMode?Colors.black:Colors.white, fontSize: 30),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),

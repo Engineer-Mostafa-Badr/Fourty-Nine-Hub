@@ -8,7 +8,7 @@ class ClientOfferTripEntity {
   final num? newOfferPrice;
   final DriverDetailsEntity? driverDetails;
   final TripDetailsEntity? tripDetails;
-  final bool isFromSocket; // <-- Add this
+  final bool isFromSocket;
   ClientOfferTripEntity({
     this.id,
     this.status,
@@ -17,7 +17,7 @@ class ClientOfferTripEntity {
     this.newOfferPrice,
     this.driverDetails,
     this.tripDetails,
-    this.isFromSocket = false, // <-- Default to false
+    this.isFromSocket = false,
   });
 }
 
@@ -25,13 +25,33 @@ class DriverDetailsEntity {
   final String? firstName;
   final String? pictureUrl;
   final RatingEntity? rating;
+  final VehicleDetailsEntity? vehicleDetails;
 
   DriverDetailsEntity({
     this.firstName,
     this.pictureUrl,
     this.rating,
+    this.vehicleDetails,
   });
 }
+class VehicleDetailsEntity {
+  final String? brandAr;
+  final String? brandEn;
+  final String? modelAr;
+  final String? modelEn;
+  final String? color;
+  final int? year;
+
+  VehicleDetailsEntity({
+    this.brandAr,
+    this.brandEn,
+    this.modelAr,
+    this.modelEn,
+    this.color,
+    this.year,
+  });
+}
+
 
 class RatingEntity {
   final double? average;
@@ -46,14 +66,14 @@ class RatingEntity {
 class TripDetailsEntity {
   final String? id;
   final int? passengers;
-  final String? data;
+  final String? date;
   final LocationEntity? location;
   final SubcategoryEntity? subcategory;
 
   TripDetailsEntity({
     this.id,
     this.passengers,
-    this.data,
+    this.date,
     this.location,
     this.subcategory,
   });

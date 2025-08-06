@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +9,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -23,12 +26,17 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 class BuildDriverCompleteTripSheet extends StatefulWidget {
   const BuildDriverCompleteTripSheet(
-      {super.key, required this.onPressed, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.tripId});
+      {super.key, required this.onPressed,required this.onSafety,required this.onCancelTrip,required this.params,required this.onReport, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
   final Function(String) onPressed;
   final Function onStartRecord;
   final Function onStopRecord;
   final Function onCompleteRide;
+  final Function(String price) onCompleteRideWithPrice;
   final String tripId;
+  final VoidCallback onSafety;
+  final VoidCallback onReport;
+  final RideModeParams params;
+  final Function(CancelTripByRiderUseCaseParams params) onCancelTrip;
 
   @override
   State<BuildDriverCompleteTripSheet> createState() => _BuildDriverCompleteTripSheetState();
@@ -37,11 +45,15 @@ class BuildDriverCompleteTripSheet extends StatefulWidget {
 class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSheet> {
   bool _isRecording = false;
   bool _isComplete = false;
+  bool _isCompleteWithPrice = false;
   bool _isOtherReason = false;
   bool _isChangedMindReason = false;
   bool _isClientNotShownReason = false;
+  final TextEditingController _controller = TextEditingController();
 
   TextEditingController otherController = TextEditingController();
+
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -61,240 +73,333 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
             controller: scrollController,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Baseline(
-                          baseline: 10.h,
-                          baselineType: TextBaseline.alphabetic,
-                          child: Container(
-                            width: double.infinity,
-                            height: 45,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              context.isArabic ? "تقرير العميل" : "Report Client",
-                              style: const TextStyle(
-                                fontSize: FontSize.s16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.PRIMARY_COLOR_DARK,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Baseline(
+                            baseline: 10.h,
+                            baselineType: TextBaseline.alphabetic,
+                            child: GestureDetector(
+                              onTap: ()=>widget.onReport(),
+                              child: Container(
+                                width: double.infinity,
+                                height: 45,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  context.isArabic ? "تقرير العميل" : "Report Client",
+                                  style: TextStyle(
+                                    fontSize: FontSize.s16,
+                                    fontWeight: FontWeight.bold,
+                                    color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR_DARK,
+                                  ),
+                                ),
                               ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        _buildActionCircle(
+                          icon: Icons.security,
+                          label: LocaleKeys.safety.localize,
+                          onTap: () {
+                            widget.onSafety();
+                            },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    // PaymentInfoWidget(price: price),
+                    //
+                    LocationInfoWidget(
+                      hasTitle: !_isComplete,
+                      from: 'أول العاشر من رمضان',
+                      to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                    ),
+                    const SizedBox(height: 10),
+                    if (!_isComplete) ...[
+                      Container(
+                        width: double.infinity,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                        child: Text(
+                          context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
+                          style: const TextStyle(
+                            fontSize: FontSize.s16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
+                            SizedBox(width: 5),
+                            Text(
+                              "Travel time: ~14 min. Distance: 6.58 Km.",
+                              style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ClickableWidget(
+                        onTap: () {
+                          if (_isRecording) {
+                            setState(() {
+                              _isRecording = false;
+                              widget.onStopRecord();
+                            });
+                          } else {
+                            setState(() {
+                              _isRecording = true;
+                              widget.onStartRecord();
+                            });
+                          }
+                        },
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(color: _isRecording ? context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
+                          padding: EdgeInsets.all(20.w),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                Assets.rideRecord,
+                                color: _isRecording ? null : context.isDarkMode?AppColors.whiteColor:Colors.black,
+                              ),
+                              SizedBox(width: 30.w),
+                              if (!_isRecording) Text(context.isArabic?'تسجيل صوتي':'Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform()),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Text(context.isArabic?'اخر تسجيل صوتي فقط سيم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
+
+                      const SizedBox(height: 12),
+                      ClickableWidget(
+                        onTap: () {
+                          setState(() {
+                            _isComplete = true;
+                          });
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                          child: Text(
+                            context.isArabic ? "انهاء الرحلة" : "Complete Ride",
+                            style: const TextStyle(
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ClickableWidget(
+                        onTap: () {
+                          setState(() {
+                            _isComplete = true;
+                            _isCompleteWithPrice = true;
+                          });
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                          child: Text(
+                            context.isArabic ? "انهاء الرحلة مع المبلغ المتبقي" : "Complete Ride With Remaining Price",
+                            style: const TextStyle(
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ClickableWidget(
+                        onTap: () {
+                          showCancelTripDialog(
+                              context: context,
+                              isChangedMindReason: _isChangedMindReason,
+                              onSelectChangedMindReason: () {
+                                setState(() {
+                                  _isClientNotShownReason = false;
+                                  _isChangedMindReason = !_isChangedMindReason;
+                                  _isOtherReason = false;
+                                });
+                              },
+                              isClientNotShownReason: _isClientNotShownReason,
+                              onSelectClientNotShownReason: () {
+                                setState(() {
+                                  _isClientNotShownReason = !_isClientNotShownReason;
+                                  _isChangedMindReason = false;
+                                  _isOtherReason = false;
+                                });
+                              },
+                              isOtherReason: _isOtherReason,
+                              onSelectOtherReason: () {
+                                setState(() {
+                                  _isClientNotShownReason = false;
+                                  _isChangedMindReason = false;
+                                  _isOtherReason = !_isOtherReason;
+                                });
+                              },
+                              onCancelTrip: (CancelTripByRiderUseCaseParams params)=>widget.onCancelTrip(params)
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            LocaleKeys.cancelTheRide.localize,
+                            style: TextStyle(
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.bold,
+                              color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR_DARK,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (_isComplete) ...[
+                      if(_isCompleteWithPrice)TextFormField(
+                        controller: _controller,
+                        autofocus: true,
+                        cursorColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                        cursorHeight: 50,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            if (newValue.text.isEmpty) return newValue;
+                            if (newValue.text == '0') return newValue;
+                            if (newValue.text.startsWith('0')) {
+                              return oldValue;
+                            }
+                            return newValue;
+                          }),
+                        ],
+
+                        style:  TextStyle(
+                          color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 40,
+                        ),
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          hintText: context.isArabic ? 'ج.م' : 'EGP',
+                          hintStyle:  const TextStyle(
+                            color:  Color(0xff96979B),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 40,
+                          ),
+                          fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                          filled: true,
+                          border: const UnderlineInputBorder(),
+                          focusedBorder: const UnderlineInputBorder(),
+                          enabledBorder: const UnderlineInputBorder(),
+                          errorBorder: const UnderlineInputBorder(),
+                          disabledBorder: const UnderlineInputBorder(),
+                          focusedErrorBorder: const UnderlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return context.isArabic
+                                ? 'يرجى إدخال مبلغ'
+                                : 'Please enter an amount';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      ClickableWidget(
+                        onTap: () {
+                          if(_isCompleteWithPrice==true){
+                            if(formKey.currentState!.validate()){
+                              widget.onCompleteRideWithPrice(_controller.text);
+                            }
+                          }else{
+                            widget.onCompleteRide();
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                          child: Text(
+                            context.isArabic ? "نعم" : "Yes",
+                            style: const TextStyle(
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.whiteColor,
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(
-                        width: 8,
+                        height: 10,
                       ),
-                      _buildActionCircle(
-                        icon: Icons.security,
-                        label: LocaleKeys.safety.localize,
+                      ClickableWidget(
                         onTap: () {
-                          context.push(Routes.ratingClientScreen);
+                          setState(() {
+                            _isComplete = false;
+                            _isCompleteWithPrice = false;
+                          });
                         },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // PaymentInfoWidget(price: price),
-                  //
-                  LocationInfoWidget(
-                    hasTitle: !_isComplete,
-                    from: 'أول العاشر من رمضان',
-                    to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
-                  ),
-                  const SizedBox(height: 10),
-                  if (!_isComplete) ...[
-                    Container(
-                      width: double.infinity,
-                      height: 45,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
-                      child: Text(
-                        context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
-                        style: const TextStyle(
-                          fontSize: FontSize.s16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.whiteColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      height: 40,
-                      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.info_outline, color: Colors.black54),
-                          SizedBox(width: 5),
-                          Text(
-                            "Travel time: ~14 min. Distance: 6.58 Km.",
-                            style: TextStyle(color: Colors.black54, fontSize: 14),
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    ClickableWidget(
-                      onTap: () {
-                        if (_isRecording) {
-                          setState(() {
-                            _isRecording = false;
-                            widget.onStopRecord();
-                          });
-                        } else {
-                          setState(() {
-                            _isRecording = true;
-                            widget.onStartRecord();
-                          });
-                        }
-                      },
-                      child: Container(
-                        height: 40,
-                        decoration: BoxDecoration(color: _isRecording ? Colors.grey[100] : Colors.transparent, borderRadius: BorderRadius.circular(12)),
-                        padding: EdgeInsets.all(20.w),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              Assets.rideRecord,
-                              color: _isRecording ? null : Colors.black,
+                          child: Text(
+                            context.isArabic ? "لا" : "No",
+                            style: TextStyle(
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.bold,
+                              color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                             ),
-                            SizedBox(width: 30.w),
-                            if (!_isRecording) Text(context.isArabic?'تسجيل صوتي':'Record', style: TextStyle(fontSize: FontSize.s14, fontWeight: FontWeight.bold)) else Expanded(child: _buildWaveform()),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Text(context.isArabic?'اخر تسجيل صوتي فقط سيم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
-
-                    const SizedBox(height: 12),
-                    ClickableWidget(
-                      onTap: () {
-                        setState(() {
-                          _isComplete = true;
-                        });
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
-                        child: Text(
-                          context.isArabic ? "انهاء الرحلة" : "Complete Ride",
-                          style: const TextStyle(
-                            fontSize: FontSize.s16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.whiteColor,
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    ClickableWidget(
-                      onTap: () {
-                        showCancelTripDialog(
-                            context: context,
-                            isChangedMindReason: _isChangedMindReason,
-                            onSelectChangedMindReason: () {
-                              setState(() {
-                                _isClientNotShownReason = false;
-                                _isChangedMindReason = !_isChangedMindReason;
-                                _isOtherReason = false;
-                              });
-                            },
-                            isClientNotShownReason: _isClientNotShownReason,
-                            onSelectClientNotShownReason: () {
-                              setState(() {
-                                _isClientNotShownReason = !_isClientNotShownReason;
-                                _isChangedMindReason = false;
-                                _isOtherReason = false;
-                              });
-                            },
-                            isOtherReason: _isOtherReason,
-                            onSelectOtherReason: () {
-                              setState(() {
-                                _isClientNotShownReason = false;
-                                _isChangedMindReason = false;
-                                _isOtherReason = !_isOtherReason;
-                              });
-                            });
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          LocaleKeys.cancelTheRide.localize,
-                          style: const TextStyle(
-                            fontSize: FontSize.s16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.PRIMARY_COLOR_DARK,
-                          ),
-                        ),
-                      ),
-                    ),
+                    ]
                   ],
-                  if (_isComplete) ...[
-                    ClickableWidget(
-                      onTap: () {
-                        widget.onCompleteRide();
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
-                        child: Text(
-                          context.isArabic ? "نعم" : "Yes",
-                          style: const TextStyle(
-                            fontSize: FontSize.s16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.whiteColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ClickableWidget(
-                      onTap: () {
-                        setState(() {
-                          _isComplete = false;
-                        });
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          context.isArabic ? "لا" : "No",
-                          style: const TextStyle(
-                            fontSize: FontSize.s16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.PRIMARY_COLOR,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]
-                ],
+                ),
               ),
             ),
           ),
@@ -313,7 +418,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
           height: height,
           margin: EdgeInsets.symmetric(horizontal: 1),
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: context.isDarkMode?AppColors.whiteColor:Colors.black,
             borderRadius: BorderRadius.circular(2),
           ),
         );
@@ -362,6 +467,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
     required Function onSelectOtherReason,
     required Function onSelectChangedMindReason,
     required Function onSelectClientNotShownReason,
+    required Function(CancelTripByRiderUseCaseParams params) onCancelTrip,
   }) {
     showCustomDialogTrip(
         context,
@@ -396,18 +502,18 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                       border: state.isClientNotShownReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "لم يظهر العميل" : "The client did not show up",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -421,18 +527,18 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                       border: state.isChangedMindReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "لقد قمت بتغيير رأيي" : "I changed my mind",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -445,15 +551,25 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                   },
                   child: Container(
                     height: 40,
-                    decoration: BoxDecoration(color: state.isOtherReason == true ? Colors.transparent : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                      color: state.isOtherReason == true
+                          ? context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : Colors.transparent
+                          : context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: state.isOtherReason == true ? Border.all(color: AppColors.SECONDARY_COLOR_DARK2) : null,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.black54),
+                        Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                         SizedBox(width: 5),
                         Text(
                           context.isArabic ? "أخري" : "Other",
-                          style: TextStyle(color: Colors.black54, fontSize: 14),
+                          style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                         ),
                       ],
                     ),
@@ -493,27 +609,26 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                         width: context.screenWidth / 3.4,
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
-                        onPressed: () {
+                        onPressed: () async {
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
-                            cubit.cancelDriverTrip(
-                              context: context,
-                              tripId: widget.tripId,
-                              note: state.isOtherReason == true
-                                  ? cubit.reasonController.text
-                                  : state.isClientNotShownReason == true
-                                      ? 'client-no-show'
-                                      : state.isChangedMindReason == true
-                                          ? 'change-my-mind'
-                                          : '',
+                            onCancelTrip(CancelTripByRiderUseCaseParams(
                               reasonId: state.isOtherReason == true
                                   ? '6693d4723aa4a25077cdbc7b'
                                   : state.isClientNotShownReason == true
-                                      ? '665eec12ce3725d6bc6f40ca'
-                                      : state.isChangedMindReason == true
-                                          ? '665ef7118e67e46ce6498fef'
-                                          : '',
-                            );
+                                  ? '665eec12ce3725d6bc6f40ca'
+                                  : state.isChangedMindReason == true
+                                  ? '665ef7118e67e46ce6498fef'
+                                  : '',
+                              note: state.isOtherReason == true
+                                  ? cubit.reasonController.text
+                                  : state.isClientNotShownReason == true
+                                  ? 'client-no-show'
+                                  : state.isChangedMindReason == true
+                                  ? 'change-my-mind'
+                                  : '',
+                              tripId: widget.tripId ,
+                            ));
                           } else {
                             showErrorMessage(context, context.isArabic ? "يرجى تحديد سبب" : 'Please select a reason');
                           }

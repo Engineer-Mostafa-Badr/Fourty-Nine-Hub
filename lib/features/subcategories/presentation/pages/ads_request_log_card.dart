@@ -6,16 +6,17 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/requests_log_by_main_category_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 
 class AdsRequestLogCard extends StatefulWidget {
   final RequestsLogByMainCategoryEntity requestLog;
+
   const AdsRequestLogCard({
     super.key,
     required this.requestLog,
@@ -31,9 +32,7 @@ class _AdsRequestLogCardState extends State<AdsRequestLogCard> {
     return Container(
       margin: EdgeInsets.all(32.w),
       decoration: BoxDecoration(
-        color: context.isDarkMode
-            ? AppColors.GREY_DARK_COLOR
-            : AppColors.whiteColor,
+        color: AppColors.getFillColor(context),
         border: Border.all(
             color: context.isDarkMode
                 ? AppColors.LIGHT_COLOR
@@ -109,12 +108,18 @@ class _AdsRequestLogCardState extends State<AdsRequestLogCard> {
               children: [
                 Row(
                   children: [
-                    ImageFromInternet(
-                      image: widget.requestLog.profilePictureUrl,
-                      width: 40,
+                    Container(
                       height: 40,
-                      isCircle: true,
-                      isMale: widget.requestLog.gender == 'male',
+                      width: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.asset(
+                        widget.requestLog.gender == 'male'
+                            ? Assets.maleImagePlaceholder
+                            : Assets.femaleImagePlacehlder,
+                      ),
                     ),
                     SizedBox(
                       width: 16.w,
@@ -132,7 +137,7 @@ class _AdsRequestLogCardState extends State<AdsRequestLogCard> {
                   ],
                 ),
                 SizedBox(
-                  height: 8.h,
+                  height: 16,
                 ),
                 Align(
                   alignment: AlignmentDirectional.centerStart,
@@ -173,14 +178,25 @@ class _AdsRequestLogCardState extends State<AdsRequestLogCard> {
             thickness: 1,
             height: 0,
           ),
-          CallMessageButtons(
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24),
+            child: MarriageCallMessageButtons(
+              otherUserId: widget.requestLog.userId,
+              subcategoryId: widget.requestLog.subCategoryId,
+              phone: widget.requestLog.phone,
+              id: UserCubit.to.state.data?.id ?? '',
+              hasReport: true,
+            ),
+          ),
+          /*CallMessageButtons(
             otherUserId: widget.requestLog.userId,
             subcategoryId: widget.requestLog.subCategoryId,
             phone: widget.requestLog.phone,
             id: UserCubit.to.state.data?.id ?? '',
             hasReport: true,
             flex: 1,
-          )
+          )*/
         ],
       ),
     );

@@ -52,12 +52,6 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               state.userTokensEntity.accessToken);
           await CacheManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
-          context
-              .read<NotificationSocketIoCubit>()
-              .notificationListener(languageCode: 'en');
-          context
-              .read<NotificationSocketIoCubit>()
-              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
 
           serviceLocator<UserCubit>()
             ..setLogin(true)

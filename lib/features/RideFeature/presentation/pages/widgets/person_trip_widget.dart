@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class PersonTripWidget extends StatelessWidget {
-  final String image;
-  final String name;
+  final String ?image;
+  final String? name;
   final String? rate;
 
   const PersonTripWidget({
@@ -21,23 +22,37 @@ class PersonTripWidget extends StatelessWidget {
       child: Column(
         children: [
           Stack(
+            clipBehavior: Clip.none,
             children: [
+              (image != 'null' && image != null)?
               ClipOval(
                 child: Container(
-                  width: 50,
-                  height: 50,
+                  width: 45,
+                  height: 45,
+                  color: Colors.grey[300],
+                  child: Image.network(
+                    image!,
+                    fit: BoxFit.scaleDown,
+                    width: 45,
+                    height: 45,
+                  ),
+                ),
+              ): ClipOval(
+                child: Container(
+                  width: 45,
+                  height: 45,
                   color: Colors.grey[300],
                   child: Image.asset(
-                    image,
+                    Assets.maleImagePlaceholder,
                     fit: BoxFit.scaleDown,
-                    width: 50,
-                    height: 50,
+                    width: 45,
+                    height: 45,
                   ),
                 ),
               ),
               if (rate != 'null' && rate != null) PositionedDirectional(
-                top: -3,
-                end: -3,
+                top: -5,
+                end: -6,
                 child: Container(
                   alignment: Alignment.center,
                   width: 40,
@@ -72,12 +87,13 @@ class PersonTripWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
+          if(name != 'null' && name != null)
           SizedBox(
             width: 70,
             child: Text(
-              name,
+              name!,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: AppColors.black,
               ),

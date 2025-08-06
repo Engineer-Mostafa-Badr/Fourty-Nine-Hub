@@ -70,44 +70,44 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                       Sizer(
                         height: 70.sp,
                       ),
-                      Label(
-                        text: LocaleKeys.name.localize,
-                        style: Styles.mediumText(fontSize: 65.sp),
-                      ),
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Form(
-                          key: formKey,
-                          child: TextFormField(
-                            maxLines: null,
-                            controller: nameTextController,
-                            onChanged: (v) {
-                              setState(() {});
-                            },
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return LocaleKeys.nameRequired.localize;
-                              }
-                              return null;
-                            },
-                            style: Styles.mediumText(),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10.w),
-                              border: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.PRIMARY_COLOR)),
-                              enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.PRIMARY_COLOR)),
-                              focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.PRIMARY_COLOR)),
-                              hintText:
-                                  '${LocaleKeys.typeYourName.localize} ....',
-                              hintStyle: Styles.mediumText(),
-                            ),
-                          )),
+                      // Label(
+                      //   text: LocaleKeys.name.localize,
+                      //   style: Styles.mediumText(fontSize: 65.sp),
+                      // ),
+                      // SizedBox(
+                      //   height: 5.h,
+                      // ),
+                      // Form(
+                      //     key: formKey,
+                      //     child: TextFormField(
+                      //       maxLines: null,
+                      //       controller: nameTextController,
+                      //       onChanged: (v) {
+                      //         setState(() {});
+                      //       },
+                      //       validator: (v) {
+                      //         if (v!.isEmpty) {
+                      //           return LocaleKeys.nameRequired.localize;
+                      //         }
+                      //         return null;
+                      //       },
+                      //       style: Styles.mediumText(),
+                      //       decoration: InputDecoration(
+                      //         contentPadding: EdgeInsets.all(10.w),
+                      //         border: const OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: AppColors.PRIMARY_COLOR)),
+                      //         enabledBorder: const OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: AppColors.PRIMARY_COLOR)),
+                      //         focusedBorder: const OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: AppColors.PRIMARY_COLOR)),
+                      //         hintText:
+                      //             '${LocaleKeys.typeYourName.localize} ....',
+                      //         hintStyle: Styles.mediumText(),
+                      //       ),
+                      //     )),
                       Sizer(
                         height: 50.h,
                       ),
@@ -179,7 +179,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         height: 40.h,
                       ),
                       _buildButton(onTap: () async {
-                        if (formKey.currentState!.validate()) {
+                        // if (formKey.currentState!.validate()) {
                           if (state.personalPhoto == null) {
                             showErrorMessage(context, "Select Personal Photo");
                           } else if (state.frontId == null) {
@@ -193,15 +193,18 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                             mediaIds.add(state.backId!.mediaId);
 
                             await controller.onRequestVerification(
-                                params: TwitterDocumentationParams(
-                                    mediaIds: mediaIds,
-                                    name: nameTextController.text));
+                              params: TwitterDocumentationParams(
+                                idImageFront: state.frontId!.mediaId,
+                                idImageBack: state.backId!.mediaId,
+                                personalImage: state.personalPhoto!.mediaId,
+                              ),
+                            );
 
                             showSuccessMessage(context,
                                 LocaleKeys.documentSuccessfully.localize);
                             context.pop();
                           }
-                        }
+                        // }
                         // onSendRequest();
                       }),
                     ],

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CustomImagePickerHealth extends StatelessWidget {
   const CustomImagePickerHealth({
@@ -27,7 +28,7 @@ class CustomImagePickerHealth extends StatelessWidget {
         width: 105,
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: const Color(0xFFD9D9D9),
+          color:  AppColors.getFindFillColor(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -40,6 +41,7 @@ class CustomImagePickerHealth extends StatelessWidget {
             : Center(
           child: SvgPicture.asset(
             Assets.image2Icon,
+            color: AppColors.getTextColor(context),
           ),
         ),
       ),

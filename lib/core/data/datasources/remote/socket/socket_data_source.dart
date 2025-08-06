@@ -64,16 +64,26 @@ abstract class SocketIOListeners {
   static const String sendPoint = 'Stream:SendPoint';
   static const String rideSendOffer = 'RIDE:UPDATED_OFFER';
   static const String updateTripAutoAccept = 'RIDE:UPDATED_TRIP_AUTO_ACCEPT';
+  static const String partialPaymentDriver = 'RIDE:TRIP-PARTIAL-PAYMENT';
   static const String updateTripPrice = 'RIDE:UPDATED_TRIP_PRICE';
   static const String acceptDriverOffer = 'RIDE:ACCEPTED_OFFER_FROM_CLIENT';
   static const String newAvailableTrip = 'REID:NEW_AVAILABLE_TRIP';
   static const String removeTrip = 'REMOVE_TRIP_FROM_LIST';
   static const String endTrip = 'Ride:endTrip';
   static const String listenToClientComing = 'RIDE:CLIENT_ABROACH_DRIVER';
+  static const String listenToCancelRoute = 'CAPTAIN-SHARE:ROUTE-CANCELLED';
+  static const String listenToUpdateRoute = 'captain-share:update-available-route';
+  static const String listenToAcceptRoute = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
+  static const String listenToDriverTheOnWay = 'CAPTAIN_SHARE:DRIVER_ON_THE_WAY';
+  static const String listenToNewRoute = 'captain-share:new-route-available';
+  static const String listenToNewRouteDriver = 'captain-share:new-available-trip';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
+  static const String removeLoading = 'LOADING:REMOVE_TRIP';
+  static const String newLoadingTrip = 'LOADING:NEW_TRIP';
   static const String acceptUntrackedTripOffer = 'RIDE:ACCEPT_UNTRACKED_TRIP_OFFER_BY_CLIENT';
   static const String rideUpdateUntrackedTrip = 'RIDE:NON_TRACKING_TRIPS_UPDATED';
   static const String rideUpdateOfferUntrackedClientTrip = 'RIDE:NON_TRACKING_OFFERS_UPDATE';
+  static const String rideUpdateOfferShippingClientTrip = 'LOADING:NEW_TRIP_OFFER_UPDATED';
 }
 
 abstract class SocketIOEvents {
@@ -92,6 +102,9 @@ abstract class SocketIOEvents {
   static const String sendPoint = 'Stream:SendPoint';
   static const String updateDriverLocation = 'ride:UPDATE_DRIVER_LOCATION';
   static const String watchingTrips = 'RIDE:UPDATE_VIEWER_TRIP';
+  static const String joinAvailableRoutes = 'CAPTAIN-SHARE:JOIN-AVAILABLE-ROUTES';
+  static const String leaveAvailableRoutes = 'CAPTAIN-SHARE:JOIN-AVAILABLE-ROUTES';
+
 }
 
 //

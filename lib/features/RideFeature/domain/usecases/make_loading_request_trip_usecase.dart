@@ -22,7 +22,7 @@ class MakeLoadingRequestTripUsecaseParam {
     this.date,
     this.phone,
     this.isPremium,
-    this.description,
+    this.desc,
   });
 
   String? subcategoryId;
@@ -32,7 +32,7 @@ class MakeLoadingRequestTripUsecaseParam {
   DateTime? date;
   String? phone;
   bool? isPremium;
-  String? description;
+  String? desc;
 
   Map<String, dynamic> toJson() => {
         "categoryId": subcategoryId ?? "",
@@ -42,6 +42,6 @@ class MakeLoadingRequestTripUsecaseParam {
         "time": date?.toIso8601String(),
         "phone": phone ?? "",
         "isPremium": isPremium ?? false,
-        "desc": description ?? "",
+        "desc": desc ?? "",
       };
 }

@@ -15,8 +15,12 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/pages/f
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+
 class FaceBookView extends StatefulWidget {
   const FaceBookView({super.key, required this.scrollController});
+
   final ScrollController scrollController;
 
   @override
@@ -52,8 +56,9 @@ class _FaceBookViewState extends State<FaceBookView>
       }
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
-      return RefreshIndicator(backgroundColor: AppColors.getFillColor(context),
-        color:AppColors.getTextColor(context) ,
+      return RefreshIndicator(
+        backgroundColor: AppColors.getFillColor(context),
+        color: AppColors.getTextColor(context),
         onRefresh: () async {
           controller.loadData();
           context.read<StoryCubit>()
@@ -118,7 +123,8 @@ class _FaceBookViewState extends State<FaceBookView>
                               );
                             }),
                         if (controller.isLoadingFaceMore)
-                          const Center(child: CustomCircularProgressIndicator()),
+                          const Center(
+                              child: CustomCircularProgressIndicator()),
                       ],
                     ),
             ]),

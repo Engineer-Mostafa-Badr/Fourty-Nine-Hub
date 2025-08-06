@@ -1,4 +1,5 @@
 import 'package:auto_scroll_text/auto_scroll_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,9 +100,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
   }
 
   void _setupScrollController() {
@@ -125,9 +123,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     // super.initState();
   }
 
@@ -138,6 +133,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     super.dispose();
   }
 
+  int currentIndex = 0;
+
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -147,7 +144,83 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   List<Widget> getMainCategoryWidgets(
           MainCategoriesCubit controller, MainCategoriesState state) =>
       [
-        MainCategoriesListView(controller: controller, state: state),
+        // MainCategoriesListView(
+        //   controller: controller,
+        //   state: state,
+        //   isScrollingDown: _isScrollingDown,
+        // ),
+        Builder(builder: (context) {
+          List<Widget> items = List.generate(
+            state.customPage?.length ?? 0,
+            (index) {
+              final category = state.customPage![index];
+
+              return InkWell(
+                onTap: () {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  HandleCashback.setCount('mainCategoriesCount', context);
+                  print('category.id ${category.id}');
+                  print('category $category');
+                  if (category.id == '62c8b5b09332225799fe335e') {
+                    context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
+                  } else {
+                    context.push(
+                      Routes.CustomPageSubCategoriesView,
+                      extra: CustomPageSubCategoriesParams(
+                          mainCategory: category, isCustomPage: true),
+                    );
+                  }
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2),
+                  child: HomeMainCategoryBanner(
+                    category: category,
+                    onFavorite: () async {
+                      final result = await controller
+                          .toggleFavoriteMedicalService(category.id);
+                      print("result $result");
+                      return result;
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+          return SliverToBoxAdapter(
+            child: CarouselSlider(
+              options: CarouselOptions(
+                height: MediaQuery.of(context).size.height * (0.6),
+                autoPlay: true,
+                enlargeCenterPage: false,
+                enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                viewportFraction: 1 / 6,
+                enableInfiniteScroll: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                scrollDirection: Axis.vertical,
+                onPageChanged: (index, reason) {
+                  print('Scrolled to index $index'); // <-- Here you can detect
+                  print(
+                      'Scrolled to currentIndex $currentIndex'); // <-- Here you can detect scroll
+
+                  // Trigger something when scrolling forward
+                  if (index > currentIndex) {
+                    print('User scrolled forward');
+                    _isScrollingDown = false;
+                  } else {
+                    print('User scrolled backward');
+                    _isScrollingDown = true;
+                  }
+                  setState(() => currentIndex = index);
+                },
+              ),
+              items: items.map((item) {
+                return item;
+              }).toList(),
+            ),
+          );
+        }),
         SliverToBoxAdapter(
             child: MainCategoriesGrideViewSection(
                 controller: controller, state: state)),
@@ -155,6 +228,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           child: BlocProvider(
             create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
             child: Builder(builder: (context) {
+              print(
+                  '==> mainCategories ${context.read<MainCategoriesTapsCubit>().mainCategories}');
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(
@@ -199,387 +274,163 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   @override
   Widget build(BuildContext context) {
     print("objectUser${UserCubit.to.state.data?.id}");
-    return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
-      listener: (context, state) {
-        if (state is NotificationSocketIoNewNotification) {
-          // pr('new notfication is recieved by the bloc listner');
-          // pr(state.notificationEntity);
-          notificationSnackBar(
-              context: context,
-              notificationEntity: state.notificationEntity,
-              isAppNotification: state.notificationEntity.filterType == 'app');
-        } else if (state is NotificationSocketIoFailed) {
-          // pr('Failed to recieve the new notfication ');
-          // pr(state.message);
-        }
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        bottomNavigationBar: widget.noNavBar
-            ? null
-            : BottomNavigator(
-                scrollController: scrollController,
-                isScrollingDown: _isScrollingDown,
-                mainCategory: 1,
-                index: 2,
+    return Scaffold(
+      key: _scaffoldKey,
+      bottomNavigationBar: widget.noNavBar || _isScrollingDown
+          ? null
+          : BottomNavigator(
+              scrollController: scrollController,
+              isScrollingDown: _isScrollingDown,
+              mainCategory: 1,
+              index: 2,
+            ),
+      floatingActionButton: _isScrollingDown || widget.noNavBar
+          ? null
+          : const FloatingButton(
+              changeView: 1,
+              icon: Icons.person,
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      drawer: const DrawerWidget(),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            controller: scrollController,
+            slivers: [
+              SliverToBoxAdapter(
+                child: context.read<UserCubit>().isLoggedIn
+                    ? const WalletWidget()
+                    : const SizedBox.shrink(),
               ),
-        floatingActionButton: _isScrollingDown || widget.noNavBar
-            ? null
-            : const FloatingButton(
-                changeView: 1,
-                icon: Icons.person,
+              // SliverToBoxAdapter(child: _buildStarWidget()),
+              const SliverToBoxAdapter(child: Sizer()),
+              SliverToBoxAdapter(
+                child: ScrollableTextWithAnimation(
+                  textDirection:
+                      context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                ),
               ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        drawer: const DrawerWidget(),
-        body: Stack(
-          children: [
-            CustomScrollView(
-              controller: scrollController,
-              // padding: EdgeInsets.symmetric(horizontal: 20.w),
-              slivers: [
-                // const SliverToBoxAdapter(child: AddBanner()),
-                //wallet
-                SliverToBoxAdapter(
-                  child: context.read<UserCubit>().isLoggedIn
-                      ? const WalletWidget()
-                      : const SizedBox.shrink(),
+              const SliverToBoxAdapter(child: Sizer()),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: const GridBlocksWidget(),
                 ),
-                // SliverToBoxAdapter(child: _buildStarWidget()),
-                const SliverToBoxAdapter(child: Sizer()),
-                SliverToBoxAdapter(
-                  child: ScrollableTextWithAnimation(
-                    textDirection: context.isArabic
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                  ),
+              ),
+              const SliverToBoxAdapter(child: Sizer()),
+              SliverToBoxAdapter(
+                child: CustomAnimatedText(
+                  text: LocaleKeys.youCanDeActivatePage.localize,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const CustomDeActivateDialog();
+                      },
+                    );
+                  },
                 ),
-                const SliverToBoxAdapter(child: Sizer()),
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: const EdgeInsets.symmetric(horizontal: 10),
-                //     child: Row(children: [
-                //       const Sizer(width: 8),
-                //       Expanded(
-                //         child: _buildStarWidget(
-                //           onTap: () {
-                //             AdInterstitialTop.loadIntersitialAd();
-                //             AdInterstitialTop.showInterstitialAd();
-                //             context.push(Routes.RIDE_HOME);
-                //           },
-                //           shadowColor: Color(0xff8000FF),
-                //           image: Assets.car2Image,
-                //           title: LocaleKeys.ride.localize,
-                //         ),
-                //       ),
-                //       const Sizer(width: 32),
-                //       Expanded(
-                //         child: _buildStarWidget(
-                //           onTap: () {
-                //             AdInterstitialTop.loadIntersitialAd();
-                //             AdInterstitialTop.showInterstitialAd();
-                //             context.push(Routes.VISITA);
-                //           },
-                //           shadowColor: Color(0xff4997D0),
-                //           image: Assets.doctorImage,
-                //           title: LocaleKeys.health.localize,
-                //         ),
-                //       ),
-                //       const Sizer(width: 32),
-                //       Expanded(
-                //         child: _buildStarWidget(
-                //           onTap: () {
-                //             AdInterstitialTop.loadIntersitialAd();
-                //             AdInterstitialTop.showInterstitialAd();
-                //             HandleCashback.setCount('beAStarCount', context);
-                //             context.push(Routes.FOOD);
-                //           },
-                //           shadowColor: Color(0xffFF7F00),
-                //           image: Assets.mealImage,
-                //           title: LocaleKeys.meal.localize,
-                //         ),
-                //       ),
-                //       const Sizer(width: 8),
-                //     ]),
-                //   ),
-                // ),
-                // const SliverToBoxAdapter(child: Sizer()),
-                // const SliverToBoxAdapter(child: Sizer()),
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: const EdgeInsets.symmetric(horizontal: 10),
-                //     child: Row(
-                //       children: [
-                //         const Sizer(width: 8),
-                //         Expanded(child: _pickMeAndComeWithUWidget()),
-                //         const Sizer(width: 32),
-                //         Expanded(
-                //           child: _buildStarWidget(
-                //             onTap: () {
-                //               AdInterstitialTop.loadIntersitialAd();
-                //               AdInterstitialTop.showInterstitialAd();
-                //               HandleCashback.setCount('beAStarCount', context);
-                //               context.push(Routes.BE_STAR);
-                //             },
-                //             shadowColor:
-                //                 AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                //             image: Assets.tube1,
-                //             title: LocaleKeys.tube.localize,
-                //           ),
-                //         ),
-                //         const Sizer(width: 32),
-                //         Expanded(
-                //           child: _buildStarWidget(
-                //             onTap: () {
-                //               AdInterstitialTop.loadIntersitialAd();
-                //               AdInterstitialTop.showInterstitialAd();
-                //               context.push(Routes.MARRIAGESUBCATEGORIES);
-                //             },
-                //             shadowColor: const Color(0xffFFC0CB),
-                //             image: Assets.marriage,
-                //             title: LocaleKeys.marriage.localize,
-                //           ),
-                //         ),
-                //         const Sizer(width: 8),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: const GridBlocksWidget(),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: Sizer()),
-                SliverToBoxAdapter(
-                  child: CustomAnimatedText(
-                    text: LocaleKeys.youCanDeActivatePage.localize,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const CustomDeActivateDialog();
-                        },
-                      );
-                    },
-                  ),
-                ),
-                // SliverToBoxAdapter(child: _buildTenPercentWidget()),
-                const SliverToBoxAdapter(child: Sizer()),
-                // _buildMainCategoriesViews(),
-                // const Sizer(),
-                //main cats
-                BlocProvider(
-                  create: (BuildContext context) =>
-                      serviceLocator<MainCategoriesCubit>()
-                        ..getMainCategoryCustomPage(),
-                  child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                    builder: (context, state) {
-                      final controller = context.read<MainCategoriesCubit>();
-                      if (state.status == StateStatus.loading) {
-                        if (CacheManager.getInt(
-                                    CacheManager.selectedCategoryView) ==
-                                1 ||
-                            CacheManager.getInt(
-                                    CacheManager.selectedCategoryView) ==
-                                3) {
-                          return SliverPadding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return Shimmer.fromColors(
-                                    baseColor: Colors.grey[100]!,
-                                    highlightColor: Colors.white24,
-                                    child: Container(
-                                      height: 200,
-                                      width: double.infinity,
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 10.w),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                childCount: 10,
-                              ),
+              ),
+              // SliverToBoxAdapter(child: _buildTenPercentWidget()),
+              const SliverToBoxAdapter(child: Sizer()),
+              // _buildMainCategoriesViews(),
+              // const Sizer(),
+              //main cats
+              BlocProvider(
+                create: (BuildContext context) =>
+                    serviceLocator<MainCategoriesCubit>()
+                      ..getMainCategoryCustomPage(),
+                child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                  builder: (context, state) {
+                    final controller = context.read<MainCategoriesCubit>();
+                    if (state.status == StateStatus.loading) {
+                      if (CacheManager.getInt(
+                                  CacheManager.selectedCategoryView) ==
+                              1 ||
+                          CacheManager.getInt(
+                                  CacheManager.selectedCategoryView) ==
+                              3) {
+                        return SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          sliver: SliverGrid(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
                             ),
-                          );
-                        }
-                        if (CacheManager.getInt(
-                                CacheManager.selectedCategoryView) ==
-                            2) {
-                          return SliverToBoxAdapter(
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey[100]!,
-                              highlightColor: Colors.white24,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Container(
-                                  height: 400,
-                                  width: double.infinity,
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.AUTH_CONTAINER_COLOR,
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    border: Border.all(color: Colors.grey),
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[100]!,
+                                  highlightColor: Colors.white24,
+                                  child: Container(
+                                    height: 200,
+                                    width: double.infinity,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(20.r),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
                                   ),
+                                );
+                              },
+                              childCount: 10,
+                            ),
+                          ),
+                        );
+                      }
+                      if (CacheManager.getInt(
+                              CacheManager.selectedCategoryView) ==
+                          2) {
+                        return SliverToBoxAdapter(
+                          child: Shimmer.fromColors(
+                            baseColor: Colors.grey[100]!,
+                            highlightColor: Colors.white24,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Container(
+                                height: 400,
+                                width: double.infinity,
+                                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  border: Border.all(color: Colors.grey),
                                 ),
                               ),
                             ),
-                          );
-                        } else {
-                          return const MainCategoriesShimmerLoading();
-                        }
-                      }
-                      if (state.customPage != null) {
-                        return getMainCategoryWidgets(controller, state)[
-                            CacheManager.getInt(
-                                    CacheManager.selectedCategoryView) ??
-                                0];
+                          ),
+                        );
                       } else {
-                        return const SliverToBoxAdapter(
-                            child: SizedBox.shrink());
+                        return const MainCategoriesShimmerLoading();
                       }
-                    },
-                  ),
+                    }
+                    print('==> state.customPage ${state.customPage}');
+                    print(
+                        '==> selectedCategoryView ${CacheManager.getInt(CacheManager.selectedCategoryView)}');
+                    if (state.customPage != null) {
+                      return getMainCategoryWidgets(controller, state)[
+                          CacheManager.getInt(
+                                  CacheManager.selectedCategoryView) ??
+                              0];
+                    } else {
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());
+                    }
+                  },
                 ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  _pickMeAndComeWithUWidget() {
-    return _buildRideSubCategoryItem(
-      title: context.isArabic ? 'جاي معاك' : 'Trip Join',
-      // image: '',
-
-      route: Routes.AVAILABLE_TRIPS,
-      onTab: () {
-        AdInterstitialTop.loadIntersitialAd();
-        AdInterstitialTop.showInterstitialAd();
-        return HandleCashback.setCount('tripJoinCount', context);
-      },
-      // isFavorite: state.data![1].isFavorite,
-      // numberOfAds: state.data![1].numberOfAds?.toInt(),
-    );
-  }
-
-  Widget _buildStarWidget({
-    void Function()? onTap,
-    required Color shadowColor,
-    required String title,
-    required String image,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        // height: kToolbarHeight * 2.h,
-        height: 64,
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(40.r),
-          image: DecorationImage(
-            image: AssetImage(image),
-            fit: BoxFit.fill,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: shadowColor,
-              spreadRadius: 5,
-              blurRadius: 5,
-              offset: const Offset(1, 1),
-            )
-          ],
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Image.asset(
-            //   image,
-            //   fit: BoxFit.fill,
-            //   // width: double.infinity,
-            //   // height: double.infinity,
-            // ),
-            Container(
-              color: Colors.black38,
-            ),
-            Label(
-              text: title,
-              style: Styles.mediumText(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 45,
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
+      // ),
     );
-    // return SizedBox(
-    //   height: kToolbarHeight * 2.h,
-    //   width: double.infinity,
-    //   child: GestureDetector(
-    //     onTap: () {
-    //       AdInterstitialTop.loadIntersitialAd();
-    //       AdInterstitialTop.showInterstitialAd();
-    //       HandleCashback.setCount('beAStarCount', context);
-    //       context.push(Routes.BE_STAR);
-    //     },
-    //     child: Container(
-    //       height: kToolbarHeight * 2.h,
-    //       decoration: BoxDecoration(
-    //         color: Theme
-    //             .of(context)
-    //             .scaffoldBackgroundColor,
-    //         borderRadius: BorderRadius.circular(40.r),
-    //         boxShadow: [
-    //           BoxShadow(
-    //             color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-    //             spreadRadius: 5,
-    //             blurRadius: 5,
-    //             offset: const Offset(1, 1),
-    //           )
-    //         ],
-    //         image: DecorationImage(
-    //             image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-    //       ),
-    //       child: Center(
-    //         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    //           Label(
-    //             text: LocaleKeys.tube.localize,
-    //             style: Styles.mediumText(
-    //               color: Colors.white,
-    //               fontWeight: FontWeight.bold,
-    //               fontSize: 45,
-    //             ),
-    //           )
-    //         ]),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   Widget itemAuctionAndInstallmentWidget(
@@ -634,162 +485,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       ),
     );
   }
-
-  Widget _buildRideSubCategoryItem(
-      {required String title, String? route, required Function() onTab}) {
-    return InkWell(
-      // onTap: () => context.push(Routes.ADS, extra: service.value()),
-      onTap: () {
-        onTab();
-        route != null ? context.push(route) : null;
-      },
-      child: Container(
-        height: 64,
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(40.r),
-          image: DecorationImage(
-            image: AssetImage(Assets.joinTrip),
-            fit: BoxFit.fill,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
-              spreadRadius: 5,
-              blurRadius: 5,
-              offset: const Offset(1, 1),
-            )
-          ],
-          // image: DecorationImage(
-          //     image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Image.asset(
-            //   Assets.joinTrip,
-            //   fit: BoxFit.fill,
-            //   width: double.infinity,
-            // ),
-            Container(
-              color: Colors.black38,
-            ),
-            Label(
-              text: title,
-              style: Styles.mediumText(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 45,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTenPercentWidget() {
-    return SizedBox(
-      height: kToolbarHeight * .9.h,
-      width: double.infinity,
-      child: Row(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AppButton(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      label: LocaleKeys.billCashback.localize,
-                      style: Styles.mediumText(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      icon: Icons.star,
-                      iconSize: 50.h,
-                      onPressed: () {
-                        HandleCashback.setCount('tenPercentCount', context);
-                        context.push(Routes.TenPercent);
-                      }),
-                ),
-                Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 0,
-                    left: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 15,
-                    right: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    ))
-              ],
-            ),
-          ),
-          // const Sizer(),
-          // Expanded(
-          //   child: Stack(
-          //     children: [
-          //       Positioned.fill(
-          //         child: AppButton(
-          //             color: AppColors.AUTH_CONTAINER_COLOR,
-          //             label: LocaleKeys.marriage.localize,
-          //             style: Styles.mediumText(
-          //               color: AppColors.AUTH_CONTAINER_COLOR,
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //             icon: Icons.star,
-          //             iconSize: 50.h,
-          //             onPressed: () {
-          //               //HandleCashback.setCount('tenPercentCount',context);
-          //               context.push(Routes.Married);
-          //             }),
-          //       ),
-          //       Positioned(
-          //           bottom: 5,
-          //           left: 5,
-          //           child: Icon(
-          //             Icons.star,
-          //             size: 20.h,
-          //             color: AppColors.ACCENT_COLOR,
-          //           )),
-          //       Positioned(
-          //           top: 0,
-          //           left: 10,
-          //           child: Icon(
-          //             Icons.star,
-          //             size: 20.h,
-          //             color: AppColors.ACCENT_COLOR,
-          //           )),
-          //       Positioned(
-          //           top: 15,
-          //           right: 10,
-          //           child: Icon(
-          //             Icons.star,
-          //             size: 20.h,
-          //             color: AppColors.ACCENT_COLOR,
-          //           ))
-          //     ],
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
 }
 
 class CustomDeActivateDialog extends StatelessWidget {
@@ -806,7 +501,8 @@ class CustomDeActivateDialog extends StatelessWidget {
         child: Text(
           LocaleKeys.deActivateCustomPage.localize,
           style: Styles.headerText(
-              color: Theme.of(context).textTheme.bodyMedium?.color),
+            color: AppColors.SECONDARY_COLOR,
+          ),
         ),
       ),
       content: Column(
@@ -814,76 +510,77 @@ class CustomDeActivateDialog extends StatelessWidget {
         children: [
           Text(
             LocaleKeys.areYouSureToDeActivate.localize,
+            style: Styles.mediumText(
+                color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
           Sizer(
             height: 16,
           ),
-          Row(children: [
-            Expanded(
-              child: CustomElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(LocaleKeys.cancel.localize,
-                    style: Styles.smallText(color: AppColors.whiteColor)),
-              ),
-            ),
-            Sizer(),
-            Expanded(
-              child: CustomElevatedButton(
-                onPressed: () async {
-                  // await context.read<CustomPageCubit>().updateActivate(false);
-                  // // Restart.restartApp();
-                  // Phoenix.rebirth(context);
-                  showAnimatedDialog(
-                    context,
-                    AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Label(
-                              text: LocaleKeys.restartToApply.localize,
-                              style: Styles.headerText(
-                                  fontWeight: FontWeight.w400)),
-                          const Sizer(),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AppButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  label: LocaleKeys.cancel.localize,
-                                ),
-                              ),
-                              const Sizer(
-                                width: 16,
-                              ),
-                              Expanded(
-                                child: AppButton(
-                                  backColor: AppColors.PRIMARY_COLOR,
-                                  onPressed: () {
-                                    context
-                                        .read<CustomPageCubit>()
-                                        .updateActivate(true);
-                                    Restart.restartApp();
-                                  },
-                                  label: LocaleKeys.restart.localize,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  LocaleKeys.yes.localize,
-                  style: Styles.smallText(color: AppColors.whiteColor),
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  onPressed: () => Navigator.pop(context),
+                  label: LocaleKeys.cancel.localize,
                 ),
               ),
-            ),
-          ])
+              Sizer(),
+              Expanded(
+                child: AppButton(
+                  onPressed: () async {
+                    // await context.read<CustomPageCubit>().updateActivate(false);
+                    // // Restart.restartApp();
+                    // Phoenix.rebirth(context);
+                    showAnimatedDialog(
+                      context,
+                      AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Label(
+                                text: LocaleKeys.restartToApply.localize,
+                                style: Styles.headerText(
+                                    fontWeight: FontWeight.w400)),
+                            const Sizer(),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    label: LocaleKeys.cancel.localize,
+                                  ),
+                                ),
+                                const Sizer(
+                                  width: 16,
+                                ),
+                                Expanded(
+                                  child: AppButton(
+                                    backColor: AppColors.PRIMARY_COLOR,
+                                    onPressed: () {
+                                      context
+                                          .read<CustomPageCubit>()
+                                          .updateActivate(false);
+                                      Restart.restartApp();
+                                    },
+                                    label: LocaleKeys.restart.localize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  backColor: AppColors.PRIMARY_COLOR,
+                  label: LocaleKeys.yes.localize,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -964,9 +661,9 @@ class MainCategoriesShimmerLoading extends StatelessWidget {
           children: List.generate(
             6,
             (index) => Padding(
-              padding: EdgeInsets.only(bottom: 15.h),
+              padding: EdgeInsets.symmetric(vertical: 8),
               child: Container(
-                height: MediaQuery.of(context).size.height * .15.h,
+                height: MediaQuery.of(context).size.height * .1,
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 10.w),
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -984,64 +681,95 @@ class MainCategoriesShimmerLoading extends StatelessWidget {
   }
 }
 
-class MainCategoriesListView extends StatelessWidget {
-  const MainCategoriesListView({
+/*class MainCategoriesListView extends StatefulWidget {
+  MainCategoriesListView({
     super.key,
     required this.controller,
     required this.state,
+    this.isScrollingDown,
   });
 
   final MainCategoriesState state;
   final MainCategoriesCubit controller;
+  bool? isScrollingDown;
+
+  @override
+  State<MainCategoriesListView> createState() => _MainCategoriesListViewState();
+}
+
+class _MainCategoriesListViewState extends State<MainCategoriesListView> {
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final isLastItem = index == (state.customPage?.length ?? 0) * 2 - 1;
+    List<Widget> items = List.generate(
+      widget.state.customPage?.length ?? 0,
+      (index) {
+        final category = widget.state.customPage![index];
 
-          if (index.isOdd) {
-            return const Sizer(); // separator
-          }
-
-          final realIndex = index ~/ 2;
-          final category = state.customPage![realIndex];
-
-          return InkWell(
-            onTap: () {
-              AdInterstitialTop.loadIntersitialAd();
-              AdInterstitialTop.showInterstitialAd();
-              HandleCashback.setCount('mainCategoriesCount', context);
-              print('category.id ${category.id}');
-              print('category $category');
-              if (category.id == '62c8b5b09332225799fe335e') {
-                context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
-              } else {
-                context.push(
-                  Routes.CustomPageSubCategoriesView,
-                  extra: CustomPageSubCategoriesParams(
-                      mainCategory: category, isCustomPage: true),
-                );
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: MainCategoryBanner(
-                category: category,
-                onFavorite: () async {
-                  final result = await controller
-                      .toggleFavoriteMedicalService(category.id);
-                  print("result $result");
-                  return result;
-                },
-              ),
+        return InkWell(
+          onTap: () {
+            AdInterstitialTop.loadIntersitialAd();
+            AdInterstitialTop.showInterstitialAd();
+            HandleCashback.setCount('mainCategoriesCount', context);
+            print('category.id ${category.id}');
+            print('category $category');
+            if (category.id == '62c8b5b09332225799fe335e') {
+              context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
+            } else {
+              context.push(
+                Routes.CustomPageSubCategoriesView,
+                extra: CustomPageSubCategoriesParams(
+                    mainCategory: category, isCustomPage: true),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2),
+            child: HomeMainCategoryBanner(
+              category: category,
+              onFavorite: () async {
+                final result = await widget.controller
+                    .toggleFavoriteMedicalService(category.id);
+                print("result $result");
+                return result;
+              },
             ),
-          );
-        },
-        childCount:
-            (state.customPage?.length ?? 0) * 2 - 1, // account for separators
+          ),
+        );
+      },
+    );
+    return SliverToBoxAdapter(
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: MediaQuery.of(context).size.height * (0.6),
+          autoPlay: true,
+          enlargeCenterPage: false,
+          enlargeStrategy: CenterPageEnlargeStrategy.scale,
+          viewportFraction: 1 / 6,
+          enableInfiniteScroll: true,
+          autoPlayInterval: const Duration(seconds: 3),
+          scrollDirection: Axis.vertical,
+          onPageChanged: (index, reason) {
+            print('Scrolled to index $index'); // <-- Here you can detect
+            print(
+                'Scrolled to currentIndex $currentIndex'); // <-- Here you can detect scroll
+
+            // Trigger something when scrolling forward
+            if (index > currentIndex) {
+              print('User scrolled forward');
+              _isScrollingDown = false;
+            } else {
+              print('User scrolled backward');
+              _isScrollingDown = true;
+            }
+            setState(() => currentIndex = index);
+          },
+        ),
+        items: items.map((item) {
+          return item;
+        }).toList(),
       ),
     );
   }
-}
+}*/

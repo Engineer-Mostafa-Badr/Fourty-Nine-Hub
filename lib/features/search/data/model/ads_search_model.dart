@@ -1,5 +1,7 @@
-import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/create_ad_model.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
+
+import '../../../ads_feature/ads/data/models/ads_address_model.dart';
+import 'create_ad_search_model.dart';
 
 class AdsSearchModel extends AdsSearchEntity {
   AdsSearchModel({
@@ -37,9 +39,27 @@ class AdsSearchModel extends AdsSearchEntity {
     required super.isRejected,
     super.isFavorite,
     required super.details,
+    // required super.address,
   });
 
   factory AdsSearchModel.fromJson(Map<String, dynamic> json) {
+    bool count = true;
+    if(count){
+      print('==> ads subCategoryId ${json['subCategoryId']} ${json['subCategoryId'].runtimeType}');
+      print('==> ads mainCategoryId ${json['mainCategoryId']} ${json['mainCategoryId'].runtimeType}');
+      print('==> ads title ${json['title']} ${json['title'].runtimeType}');
+      print('==> ads desc ${json['desc']} ${json['desc'].runtimeType}');
+      print('==> ads images ${json['images']} ${json['images'].runtimeType}');
+      print('==> ads isActive ${json['isActive']} ${json['isActive'].runtimeType}');
+      print('==> ads countryCode ${json['countryCode']} ${json['countryCode'].runtimeType}');
+      print('==> ads subscriptionType ${json['subscriptionType']} ${json['subscriptionType'].runtimeType}');
+      print('==> ads status ${json['status']} ${json['status'].runtimeType}');
+      print('==> ads searchText ${json['searchText']} ${json['searchText'].runtimeType}');
+      print('==> ads phone ${json['phone']} ${json['phone'].runtimeType}');
+      print('==> ads type ${json['type']} ${json['type'].runtimeType}');
+      print('==> ads type ${json['type']} ${json['type'].runtimeType}');
+      count = false;
+    }
     return AdsSearchModel(
         id: json['_id'] ?? '',
         userId: json['userId']?['_id'] ?? '',
@@ -88,10 +108,20 @@ class AdsSearchModel extends AdsSearchEntity {
         isBlocked: json['isBlocked'] ?? false,
         isRejected: json['isRejected'] ?? false,
         isFavorite: json['isFavorite'] ?? false,
+        // address: json['address']['government']['governorate_name_ar'] != null
+        //     ? AdsAddressModel.fromJson(json['address'])
+        //     : AdsAddressModel(
+        //         governmentAr: 'governmentAr',
+        //         governmentEn: 'governmentEn',
+        //         cityAr: 'cityAr',
+        //         cityEn: 'cityEn',
+        //         addressAr: 'addressAr',
+        //         addressEn: 'addressEn',
+        //         coordinates: [0.0, 0.1]),
         details: json['propsPivot'] == null
             ? []
             : (json['propsPivot'] as List)
-                .map((e) => CreateAdModel.fromJson(e))
+                .map((e) => CreateAdSearchModel.fromJson(e))
                 .toList());
   }
 }

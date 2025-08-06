@@ -12,4 +12,9 @@ class Constants {
   static String rideSpecialDriver = 'ride_special_driver';
   static String rideNotSpecialDriver = 'ride_not_special_driver';
   static String loaderRegister = 'loaderRegister';
+  static const String refuseTrips = 'refuse_models';
+
+
+  static const String vibrationKey = 'vibration_key';
+
 }

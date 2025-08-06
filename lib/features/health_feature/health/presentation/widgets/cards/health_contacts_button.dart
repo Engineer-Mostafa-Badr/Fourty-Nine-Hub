@@ -81,6 +81,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                         : AppColors.GREY_DARK_COLOR,
                   ),
                   onPressed: () => JoinTripBottomSheet(
+                    phone: widget.phone,
                     context,
                     topButtonColor: AppColors.getButtonPrimaryColor(context),
                     topButtonTitle: LocaleKeys.freeCall.localize,

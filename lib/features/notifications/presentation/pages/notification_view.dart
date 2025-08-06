@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -32,137 +31,112 @@ class NotificationView extends StatefulWidget {
   State<NotificationView> createState() => _NotificationViewState();
 }
 
+int index = 0;
+List<String> titles = [
+  LocaleKeys.fourtyNineNotifications.localize,
+  LocaleKeys.socialNotifications.localize,
+  LocaleKeys.serviceNoifications.localize,
+  LocaleKeys.responseStatus.localize,
+];
 
 class _NotificationViewState extends State<NotificationView> {
-  int index = 0;
   @override
   Widget build(BuildContext context) {
-    final _ = context.locale;/// بيجبر الwidgets تعمل rebuild لما اللغة تتغير (setState لما اللغه تتغير)
-  List<String> titles = [
-    LocaleKeys.fourtyNineNotifications,
-    LocaleKeys.socialNotifications,
-    LocaleKeys.serviceNoifications,
-    LocaleKeys.responseStatus,
-  ];
     // serviceLocator<FirebaseHelper>().getToken();
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<NotificationSeenCubit>(
-          create: (context) => NotificationSeenCubit(
-            notificationSeenUseCase: serviceLocator(),
-          ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<NotificationSeenCubit, NotificationSeenState>(
+          listener: (context, state) {
+            if (state is NotificationSeenFailed) {
+              showErrorMessage(context, state.message);
+            }
+          },
         ),
-        BlocProvider<AllNotficationsSeenCubit>(
-          create: (context) => AllNotficationsSeenCubit(
-            allNotificationSeenUseCase: serviceLocator(),
-          ),
+        BlocListener<AllNotficationsSeenCubit, AllNotficationsSeenState>(
+          listener: (context, state) {
+            if (state is AllNotficationsSeenFailed) {
+              showErrorMessage(context, state.message);
+            }
+          },
         ),
-        BlocProvider<DeleteNotificationCubit>(
-          create: (context) => DeleteNotificationCubit(
-            deleteNotificationUseCase: serviceLocator(),
-          ),
+        BlocListener<DeleteNotificationCubit, DeleteNotificationState>(
+          listener: (context, state) {
+            if (state is DeleteNotificationFailed) {
+              showErrorMessage(context, state.message);
+            }
+          },
         ),
-        BlocProvider<DeleteAllNotificationsCubit>(
-          create: (context) => DeleteAllNotificationsCubit(
-            deleteAllNotificationsUseCase: serviceLocator(),
-          ),
+        BlocListener<DeleteAllNotificationsCubit, DeleteAllNotificationsState>(
+          listener: (context, state) {
+            if (state is DeleteAllNotificationsFailed) {
+              showErrorMessage(context, state.message);
+            }
+          },
         ),
       ],
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<NotificationSeenCubit, NotificationSeenState>(
-            listener: (context, state) {
-              if (state is NotificationSeenFailed) {
-                showErrorMessage(context, state.message);
-              }
-            },
-          ),
-          BlocListener<AllNotficationsSeenCubit, AllNotficationsSeenState>(
-            listener: (context, state) {
-              if (state is AllNotficationsSeenFailed) {
-                showErrorMessage(context, state.message);
-              }
-            },
-          ),
-          BlocListener<DeleteNotificationCubit, DeleteNotificationState>(
-            listener: (context, state) {
-              if (state is DeleteNotificationFailed) {
-                showErrorMessage(context, state.message);
-              }
-            },
-          ),
-          BlocListener<DeleteAllNotificationsCubit,
-              DeleteAllNotificationsState>(
-            listener: (context, state) {
-              if (state is DeleteAllNotificationsFailed) {
-                showErrorMessage(context, state.message);
-              }
-            },
-          ),
-        ],
-        child: DefaultTabController(
-          length: 4,
-          child: CustomScaffold(
-              appBar: const PreferredSize(
-                preferredSize: Size.fromHeight(30),
-                child: HomeAppbar(
-                  color: Colors.red,
-                  inNotifications: true,
-                  isWithBackArrow: true,
-                ),
+      child: DefaultTabController(
+        length: 4,
+        child: CustomScaffold(
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(30),
+              child: HomeAppbar(
+                color: Colors.red,
+                inNotifications: true,
+                isWithBackArrow: true,
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                      text: titles[index].localize,
-                      style: Styles.headerText(),
-                    ),
-                    const Sizer(),
-                    TabBar(
-                      onTap: (value) {
-                        setState(() {index = value;});
-                      },
-                      tabs: const [
-                        AppIconBuilder(),
-                        SocialIconBuilder(),
-                        ServicesIconBuilder(),
-                        StatusIconBuilder(),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Label(
+                    text: titles[index],
+                    style: Styles.headerText(),
+                  ),
+                  const Sizer(),
+                  TabBar(
+                    onTap: (value) {
+                      index = value;
+                      setState(() {});
+                    },
+                    tabs: const [
+                      AppIconBuilder(),
+                      SocialIconBuilder(),
+                      ServicesIconBuilder(),
+                      StatusIconBuilder(),
+                    ],
+                    // indicatorColor: Theme.of(context).primaryColor,
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        GestureDetector(
+                          onHorizontalDragStart: (_) {},
+                          onHorizontalDragEnd: (_) {},
+                          child: const AppNotificationBuilder(),
+                        ),
+                        GestureDetector(
+                          onHorizontalDragStart: (_) {},
+                          onHorizontalDragEnd: (_) {},
+                          child: const SocialNotificationBuilder(),
+                        ),
+                        GestureDetector(
+                          onHorizontalDragStart: (_) {},
+                          onHorizontalDragEnd: (_) {},
+                          child: const ServicesNotificationBuilder(),
+                        ),
+                        GestureDetector(
+                          onHorizontalDragStart: (_) {},
+                          onHorizontalDragEnd: (_) {},
+                          child: const ResponseStatusBuilder(),
+                        ),
                       ],
-                      // indicatorColor: Theme.of(context).primaryColor,
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          GestureDetector(
-                            onHorizontalDragStart: (_) {},
-                            onHorizontalDragEnd: (_) {},
-                            child: const AppNotificationBuilder(),
-                          ),
-                          GestureDetector(
-                            onHorizontalDragStart: (_) {},
-                            onHorizontalDragEnd: (_) {},
-                            child: const SocialNotificationBuilder(),
-                          ),
-                          GestureDetector(
-                            onHorizontalDragStart: (_) {},
-                            onHorizontalDragEnd: (_) {},
-                            child: const ServicesNotificationBuilder(),
-                          ),
-                          GestureDetector(
-                            onHorizontalDragStart: (_) {},
-                            onHorizontalDragEnd: (_) {},
-                            child: const ResponseStatusBuilder(),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )),
-        ),
+                  )
+                ],
+              ),
+            )),
       ),
     );
   }

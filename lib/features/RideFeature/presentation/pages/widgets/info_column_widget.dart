@@ -7,13 +7,13 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class PriceColumn extends StatelessWidget {
-  final String title;
+  final String startAddressTitle;
   final String date;
   final String price;
 
   const PriceColumn({
     super.key,
-    required this.title,
+    required this.startAddressTitle,
     required this.date,
     required this.price,
   });
@@ -26,7 +26,7 @@ class PriceColumn extends StatelessWidget {
         ConstrainedBox(
           constraints:  BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.4),
           child: Label(
-            text: title,
+            text: startAddressTitle,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 18,
@@ -104,28 +104,38 @@ class PriceColumnNonSocket extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Row(
-          spacing: 4,
-          children: [
-            Label(
-              text: price,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                // color: AppColors.PRIMARY_COLOR,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Text(
+                price,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            Label(
-                text: LocaleKeys.egp.tr(),
+              const SizedBox(width: 4),
+              Text(
+                LocaleKeys.egp.tr(),
                 style: Styles.mediumText(
-                    color: AppColors.SECONDARY_COLOR,
-                    fontWeight: FontWeight.w700)),
-            Label(
-                text: "- ${status}",
+                  color: AppColors.SECONDARY_COLOR,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                "- $status",
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.w700))
-          ],
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
+
+
+
 
       ],
     );

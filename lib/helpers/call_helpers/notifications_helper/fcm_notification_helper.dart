@@ -1,32 +1,35 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
-import '../../../main.dart';
+import 'package:toastification/toastification.dart';
 import '../call_helper/call_with_notification_helper.dart';
 import 'send_notification_params.dart';
 import '../../../service_locator/service_locator.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import '../../../firebase_options.dart';
+import 'package:fourtyninehub/main.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import '../../../features/notifications/presentation/widgets/notification_snackbar.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:snacknload/snacknload.dart';
 
 abstract class FcmNotificationHelper {
-  Future<void> setup();
+  Future<void> setup(BuildContext context);
 
   Future<Either<Exception, String>> getFcmToken();
-
   Future<String> getFcmUserToken();
-
   Future onFcmTokenChanges();
 
   Future<Either<Exception, void>> subscribeTopic(String topic);
@@ -80,7 +83,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future onFcmTokenChanges() async {
     try {
       _firebaseMessaging.onTokenRefresh.listen((token) {
-        debugPrint('+++++ FCM Token +++++++++ $token');
+        log('+++++ FCM Token +++++++++ $token');
 
         /// TODO: send token to server
       });
@@ -93,7 +96,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future<Either<Exception, void>> subscribeTopic(String topic) async {
     try {
       await _firebaseMessaging.subscribeToTopic(topic);
-      debugPrint('+++++ FCM Topic +++++++++ $topic');
+      log('+++++ FCM Topic +++++++++ $topic');
       return const Right(null);
     } catch (e) {
       return Left(Exception('Unable to subscribe to topic $topic'));
@@ -101,7 +104,8 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   }
 
   @override
-  Future<void> setup() async {
+  Future<void> setup(BuildContext context) async {
+    log('+++++ FCM setup Message +++++++++');
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -113,17 +117,15 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      debugPrint('+++++ FCM Message +++++++++ ${message.data}');
-      await _handleNotification(message);
+      log('+++++ FCM Message +++++++++ ${message.data}');
+      await _handleNotification(message,context:context);
     });
 
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) async {
+      (RemoteMessage message) {
         /// TODO: handle on message open app
-        debugPrint('+++++ FCM Message +++++++++ ${message.data}');
-        await _handleNotification(message);
       },
     );
   }
@@ -137,10 +139,11 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future<Either<Exception, void>> sendNotification(
       SendNotificationParams params) async {
     try {
+      print('++++++++++++++notification sent++ ${params.toMap()}');
       final token = await _generateAccessKey();
       print('Access token inside sendNotification $token');
       if (token == null) {
-        debugPrint('++++++++++++++notification sent++ no data');
+        log('++++++++++++++notification sent++ no data');
 
         return Left(Exception('Unable to send notification'));
       }
@@ -172,11 +175,16 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 }
 
 Future<String?> _generateAccessKey() async {
+  print("++++++++++++++_generateAccessKey+++++++++++++");
   final jsonString =
       await rootBundle.loadString('assets/keys/service_account_key.json');
+  print("++++++++++++++jsonString+++++++++++++ $jsonString");
   final serviceAccount = ServiceAccountCredentials.fromJson(jsonString);
+  print("++++++++++++++serviceAccount+++++++++++++ $serviceAccount");
   final scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+  print("++++++++++++++scopes+++++++++++++ $scopes");
   final authClient = await clientViaServiceAccount(serviceAccount, scopes);
+  print("++++++++++++++authClient+++++++++++++ $authClient");
   final accessToken = authClient.credentials.accessToken;
   print('Access token is ${accessToken.data}');
   return accessToken.data;
@@ -188,17 +196,14 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    // await DI.execute();
+    await DI.execute();
   }
 
-  await _handleNotificationOnBackground(message);
+  await _handleNotification(message);
 }
 
-Future<void> _handleNotification(RemoteMessage message) async {
-  debugPrint('++++++++++++++notification received (data): ${message.data}');
-  debugPrint('++++++++++++++notification received (title): ${message.notification?.title ?? 'No title'}');
-  debugPrint('++++++++++++++notification received (body): ${message.notification?.body ?? 'No body'}');
-
+Future<void> _handleNotification(RemoteMessage message, {BuildContext? context}) async {
+  log('++++++++++++++notification received++ ${message.data}');
 
   try {
     // Using Future.delayed to ensure the app is more stable when accessing Provider
@@ -206,52 +211,80 @@ Future<void> _handleNotification(RemoteMessage message) async {
 
     //TODO Get Context to show SnackBar
     final overlayContext = navigatorKey.currentContext!;
-    showTopSnackBar(
-      Overlay.of(overlayContext),
-      GestureDetector(
-        onTap: () {
-          overlayContext.push(message.data['path'] ?? '');
-        },
-        child: CustomSnackBar.error(
-          message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
-          maxLines: 3,
+
+    if(context!=null){
+      AudioPlayer player = AudioPlayer();
+      player.play(AssetSource("audio/notification.mp3"));
+      toastification.show(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(message.notification?.title ?? 'Notification Title',
+              style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(message.notification?.body ??'Notification body',
+              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w400
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
-      ),
-    );
+        autoCloseDuration: const Duration(seconds: 5),
+        progressBarTheme: ProgressIndicatorThemeData(
+            color: AppColors.SECONDARY_COLOR
+        ),
+        primaryColor: AppColors.SECONDARY_COLOR,
+        backgroundColor: Theme.of(context).dialogBackgroundColor,
+        callbacks: ToastificationCallbacks(
+          onTap: (toastItem) {
+            print('Toast ${toastItem.id} tapped');
+            context.pushNamed(message.data['path'] ?? '');
+          },
+        ),
+        showProgressBar: true,
 
+      );
+    }else{
+      showTopSnackBar(
+        Overlay.of(overlayContext),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(overlayContext).pushNamed(message.data['path'] ?? '');
+          },
+          child: CustomSnackBar.error(
+            message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+            maxLines: 3,
+          ),
+        ),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await DI.execute();
+    }
+    
     if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+      print('+++++ CallWithNotificationHelper +++++++++');
       serviceLocator<CallWithNotificationHelper>()
           .handleIncomingCallNotification(message.data);
     } else {
-      debugPrint('Warning: CallWithNotificationHelper not registered in serviceLocator');
+      log('Warning: CallWithNotificationHelper not registered in serviceLocator');
     }
   } catch (e, stackTrace) {
     // Prevent app crashes by handling the exception
-    debugPrint('Error handling notification: $e');
-    debugPrint('Stack trace: $stackTrace');
-  }
-
-  // TODO: Handle other notification types
-}
-Future<void> _handleNotificationOnBackground(RemoteMessage message) async {
-  debugPrint('++++++++++++++notification received (data): ${message.data}');
-  debugPrint('++++++++++++++notification received (title): ${message.notification?.title ?? 'No title'}');
-  debugPrint('++++++++++++++notification received (body): ${message.notification?.body ?? 'No body'}');
-
-
-  try {
-    // Using Future.delayed to ensure the app is more stable when accessing Provider
-    await Future.delayed(const Duration(milliseconds: 300));
-    if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-      serviceLocator<CallWithNotificationHelper>()
-          .handleIncomingCallNotification(message.data);
-    } else {
-      debugPrint('Warning: CallWithNotificationHelper not registered in serviceLocator');
-    }
-  } catch (e, stackTrace) {
-    // Prevent app crashes by handling the exception
-    debugPrint('Error handling notification: $e');
-    debugPrint('Stack trace: $stackTrace');
+    log('Error handling notification: $e');
+    log('Stack trace: $stackTrace');
   }
 
   // TODO: Handle other notification types

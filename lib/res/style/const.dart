@@ -46,6 +46,10 @@ class UIConst {
   static const String addTripJoinCategoryId = '62ea00e269ea29c91dfc390c';
 
   static const int callOfflineCheckDuration = 10;
-  static const int callRingingDuration = 60;
+  static const int callRingingDuration = 20;
   static const String agoraAppId = '';
+  static const int zegoAppId =
+      1567369579;
+  static const String zegoAppSign =
+      'aaeaf629a7a8e67ae6f6337a3501befc96a2e2f82adaecc7d5dd9d0e981856de';
 }

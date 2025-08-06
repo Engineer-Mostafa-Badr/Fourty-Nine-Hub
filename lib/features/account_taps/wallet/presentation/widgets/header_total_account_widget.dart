@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -67,13 +66,14 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                   ),
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: FormatNumbers().formatNumberByComma(
-                        balance,
-                        isArabic: context.isArabic,
+                      text: FormatNumbers().formatNumber(
+                        balance.toInt,
+                        useArabicNumerals: context.isArabic,
+                        // isArabic: context.isArabic,
                       ),
                       style: Styles.headerText(
                         color: Colors.white,

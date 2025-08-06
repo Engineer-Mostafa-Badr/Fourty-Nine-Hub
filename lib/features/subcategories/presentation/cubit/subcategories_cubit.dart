@@ -377,6 +377,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   bool hasMoreMyFavouriteAds = true;
   int currentMyFavouriteAdsPage = 1;
   List<AdEntity> myFavouriteAds = [];
+
   loadMyFavouriteAds({
     required String id,
   }) async {
@@ -397,6 +398,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   bool hasMoreMyAds = true;
   int currentMyAdsPage = 1;
   List<AdEntity> myAds = [];
+
   loadMyAds({
     required String id,
   }) async {
@@ -458,6 +460,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) {
+        print("==> myFavouriteAds ${data.length} : ${data.first.isFavourite}");
         myFavouriteAds.addAll(data);
         if (data.length < pageSize) {
           hasMoreMyFavouriteAds = false;
@@ -514,11 +517,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required FilterModel model,
     required String filter,
   }) async {
-    state.copyWith(status: SubcategoriesStates.loadingAds);
-
     print("objectasdsad");
     if (!hasMoreData || isLoadingMore) return;
-
+    state.copyWith(status: SubcategoriesStates.loadingAds);
     isLoadingMore = true;
 
     print("object");
@@ -601,6 +602,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   bool hasMoreRequestsLog = true;
   int currentRequestsLogPage = 1;
   List<RequestsLogByMainCategoryEntity> requestsLog = [];
+
   loadRequestsLog({
     required String id,
   }) async {
@@ -652,10 +654,12 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   bool hasMoreRequestsLogByMainCategory = true;
   int currentRequestsLogByMainCategoryPage = 1;
   List<RequestsLogByMainCategoryEntity> requestsLogByMainCategory = [];
+
   loadRequestsLogByMainCategory({
     required String mainCategoryId,
   }) async {
     print("Gettinghiii");
+    requestsLogByMainCategory.clear();
     isLoadingRequestsLogByMainCategory = true;
     currentRequestsLogByMainCategoryPage = 1;
     hasMoreRequestsLogByMainCategory = true;

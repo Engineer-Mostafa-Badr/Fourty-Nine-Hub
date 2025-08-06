@@ -17,6 +17,7 @@ import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../../data/models/Ad_model.dart';
 import '../../domain/usecases/get_ads_usecase.dart';
 import '../../domain/usecases/get_my_ad_by_id_usecase.dart';
+import '../../domain/usecases/view_ad_usecase.dart';
 
 part 'ads_state.dart';
 
@@ -32,6 +33,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final MakeAdRequestUsecase _makeAdRequestUsecase;
   final MakeAdPremiumRequestUsecase _makeAdPremiumRequestUsecase;
   final GetMyAdByIdUseCase _getMyAdByIdUseCase;
+  final ViewAdUseCase _viewAdUseCase;
 
   AdvertisementCubit(
     this._getAdsUseCase,
@@ -44,7 +46,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     this._filterAdUseCase,
     this._makeAdRequestUsecase,
     this._makeAdPremiumRequestUsecase,
-    this._getMyAdByIdUseCase,
+    this._getMyAdByIdUseCase, this._viewAdUseCase,
   ) : super(AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -219,7 +221,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   bool isLoadingAdsMore = false;
   bool hasMoreAdsData = true;
   int adsPage = 1;
-  int pageSize = 10;
+  int pageSize = 2;
   Future<void> getAds(
       {required String subCategoryId, required String filter}) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
@@ -227,18 +229,18 @@ class AdvertisementCubit extends Cubit<AdsState> {
     print(isLoadingAdsMore);
     if (!hasMoreAdsData || isLoadingAdsMore) return;
     isLoadingAdsMore = true;
-    emit(state.copyWith(status: AdsStates.loading));
+    // emit(state.copyWith(status: AdsStates.loading));
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId,
         filter: filter,
         page: adsPage,
-        limit: 10,
+        limit: 3,
         userId: userId));
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
       ads.addAll(data);
-      if (data.length < pageSize) {
+      if (data.length < 3) {
         hasMoreAdsData = false;
       } else {
         adsPage++;
@@ -331,6 +333,14 @@ class AdvertisementCubit extends Cubit<AdsState> {
       emit(state.copyWith(status: AdsStates.success));
     });
     return result;
+  }
+
+  adViewToAds(String id) async {
+    final response = await _viewAdUseCase(id);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: AdsStates.error)),
+        (data) => emit(state.copyWith(status: AdsStates.success)));
   }
 
   Future<bool> unFavouriteAd(String id) async {

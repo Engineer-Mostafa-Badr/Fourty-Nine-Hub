@@ -18,7 +18,7 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
       id: json['id'],
       status: json['status'],
       price: (json['price'] as num?),
-      newOfferPrice: (json['newOfferPrice'] as num?),
+      newOfferPrice: json['newOfferPrice']!=null?(json['newOfferPrice'] as num?):json['newPrice']!=null?(json['newPrice'] as num?):0,
       passengers: json['passengers']?.toInt(),
 
       driverDetails: json['driverDetails'] != null
@@ -36,6 +36,7 @@ class DriverDetailsModel extends DriverDetailsEntity {
     super.firstName,
     super.pictureUrl,
     super.rating,
+    super.vehicleDetails,
   });
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +46,30 @@ class DriverDetailsModel extends DriverDetailsEntity {
       rating: json['rating'] != null
           ? RatingModel.fromJson(json['rating'])
           : null,
+      vehicleDetails: json['vehicleDetails'] != null
+          ? VehicleDetailsModel.fromJson(json['vehicleDetails'])
+          : null,
+    );
+  }
+}
+class VehicleDetailsModel extends VehicleDetailsEntity {
+  VehicleDetailsModel({
+    super.brandAr,
+    super.brandEn,
+    super.modelAr,
+    super.modelEn,
+    super.color,
+    super.year,
+  });
+
+  factory VehicleDetailsModel.fromJson(Map<String, dynamic> json) {
+    return VehicleDetailsModel(
+      brandAr: json['brandAr'],
+      brandEn: json['brandEn'],
+      modelAr: json['modelAr'],
+      modelEn: json['modelEn'],
+      color: json['color'],
+      year: json['year'],
     );
   }
 }
@@ -64,7 +89,7 @@ class TripDetailsModel extends TripDetailsEntity {
   TripDetailsModel({
     super.id,
     super.passengers,
-    super.data,
+    super.date,
     super.location,
     super.subcategory,
   });
@@ -73,7 +98,7 @@ class TripDetailsModel extends TripDetailsEntity {
     return TripDetailsModel(
       id: json['id'],
       passengers: json['passengers'],
-      data: json['data'],
+      date: json['date'],
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -41,6 +42,7 @@ class _ScrollableTextWithAnimationState
               : ClickableWidget(
                   onTap: () {
                     if (cubit.state.question?.enableAnswers == true) {
+                      ManageVibration.vibrate();
                       showAnimatedDialog(
                           context,
                           AlertDialog(
@@ -223,7 +225,7 @@ class _ScrollableTextWithAnimationState
                                       .question
                                       ?.enableAnswers ==
                                   true
-                              ? AppColors.SECONDARY_COLOR
+                              ? AppColors.PRIMARY_COLOR
                               : (context.isDarkMode
                                   ? Colors.white
                                   : AppColors.PRIMARY_COLOR)),

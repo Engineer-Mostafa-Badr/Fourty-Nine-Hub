@@ -1,46 +1,29 @@
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
-import 'package:fourtyninehub/features/search/presentation/pages/widget/build_item_post_search.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-
-
-
 
 class PostsSearchView extends StatefulWidget {
   const PostsSearchView({Key? key}) : super(key: key);
-
 
   @override
   State<PostsSearchView> createState() => _PostsSearchViewState();
 }
 
 class _PostsSearchViewState extends State<PostsSearchView> {
-  late final ScrollController _scrollController;
+  // late final ScrollController _scrollController;
   late final SearchCubit _cubit;
   static const _scrollThreshold = 200.0;
 
@@ -48,10 +31,10 @@ class _PostsSearchViewState extends State<PostsSearchView> {
   void initState() {
     super.initState();
     _cubit = context.read<SearchCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    // _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  void _onScroll() async {
+  /* void _onScroll() async {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
     if (current >= max - _scrollThreshold &&
@@ -66,21 +49,20 @@ class _PostsSearchViewState extends State<PostsSearchView> {
       );
       _cubit.getPaginatedPostsSearch(params: params);
     }
-  }
+  }*/
 
-  @override
+/*  @override
   void dispose() {
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-
         final posts = _cubit.postsSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
           return CustomEmptyWidget(
@@ -89,7 +71,10 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         }
         // Handle loading state
         if (state.status == SearchStates.loading) {
-          return const Center(child: CustomCircularProgressIndicator());
+          return const Center(
+            // child: CustomCircularProgressIndicator(),
+            child: CustomLoadingSearchWidget(),
+          );
         }
 
         // Handle success state
@@ -100,16 +85,64 @@ class _PostsSearchViewState extends State<PostsSearchView> {
               label: LocaleKeys.noResultsFound.localize,
             );
           }
-          return ListView.builder(
+          print("${posts.length}");
+          print("${posts.first}");
+          print("${posts.first.content}");
+          print("${posts.first.name}");
+          print(posts.first.user.firstName);
+          print("${posts.first.id}");
+          return OlxPaginationWidget(
+            scrollController: ScrollController(),
+            itemsPerPage: 2,
+            loadPage: (page) async {
+              {
+                final prefs = await SharedPreferences.getInstance();
+                final filter = prefs.getString('filter') ?? '';
+                final params = SearchParams(
+                  search: _cubit.searchController.text.trim(),
+                  filter: filter,
+                  params: PaginationParams(page: _cubit.postsSearchPage),
+                );
+                _cubit.getPaginatedPostsSearch(params: params);
+              }
+            },
+            banners: bannersList,
+            items: List.generate(
+              posts.length,
+              (index) {
+                return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return NormalPostScreen(
+                      postEntity: posts[index],
+                    );
+                  },
+                );
+
+                return ListTile(
+                  title: Text(posts[index].user.firstName),
+                );
+              },
+            ),
+          );
+          /*return ListView.builder(
             controller: _scrollController, // Add this line
             itemCount: posts.length,
             itemBuilder: (context, index) {
+              return BlocConsumer<SocialPostsCubit, SocialPostsState>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  return NormalPostScreen(
+                    postEntity: posts[index],
+                  );
+                },
+              );
+
               return ListTile(
                 title: Text(posts[index].user.firstName),
               );
             },
-          );
-
+          );*/
         }
 
         // Handle error state
@@ -123,12 +156,8 @@ class _PostsSearchViewState extends State<PostsSearchView> {
         return const Center(child: Text('Something went wrong.'));
       },
     );
-
-
   }
 }
-
-
 
 /*
     return Padding(

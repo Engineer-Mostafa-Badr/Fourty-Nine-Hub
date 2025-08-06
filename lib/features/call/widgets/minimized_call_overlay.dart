@@ -122,14 +122,20 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
     super.initState();
     print("MinimizedCallOverlay initializing");
 
-    // Don't start a new timer, just ensure the existing one is running
-    if (!_timerService.isRunning) {
-      print("Starting timer in minimized overlay (was not running)");
-      _timerService.startTimer();
-    } else {
-      print(
-          "Timer already running in minimized overlay: ${_timerService.formatDuration(_timerService.duration.value)}");
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final sendCallState = context.read<SendCallCubit>().state;
+        final callState = context.read<CallCubit>().state;
+
+        if ((sendCallState is CallConnected ||
+            (callState is HasCall && callState.isCallConnected))) {
+          if (!_timerService.isRunning) {
+            print("Starting timer in MinimizedCallOverlay - call is connected");
+            _timerService.startTimer();
+          }
+        }
+      }
+    });
 
     // enableFloatingWhileMinimizedViaSystem();
     // Set up early background configuration right at initialization
@@ -446,9 +452,9 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                 },
                 onDoubleTap: () {
                   // End call on double tap
-                  if (sendCallState is CallConnected) {
-                    context.read<CallCubit>().endCall();
-                  }
+                  // if (sendCallState is CallConnected) {
+                  //   context.read<CallCubit>().endCall();
+                  // }
                 },
                 onTap: () {
                   // Don't stop the timer when returning to call screen

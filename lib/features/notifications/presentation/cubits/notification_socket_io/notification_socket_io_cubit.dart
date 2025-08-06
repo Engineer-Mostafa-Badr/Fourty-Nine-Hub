@@ -1,95 +1,95 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
-import 'package:fourtyninehub/features/notifications/domain/usecases/notificaiton_listener_usecase.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+// import 'package:fourtyninehub/features/notifications/domain/usecases/notificaiton_listener_usecase.dart';
+// import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+// import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+// import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 
-part 'notification_socket_io_state.dart';
+// part 'notification_socket_io_state.dart';
 
-class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
-  BuildContext context;
-  NotificationListenerUseCase notificationListenerUseCase;
-  NotificationSocketIoCubit({
-    required this.context,
-    required this.notificationListenerUseCase,
-  }) : super(NotificationSocketIoInitial());
+// class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
+//   BuildContext context;
+//   NotificationListenerUseCase notificationListenerUseCase;
+//   NotificationSocketIoCubit({
+//     required this.context,
+//     required this.notificationListenerUseCase,
+//   }) : super(NotificationSocketIoInitial());
 
-  Future<void> notificationListener({required String languageCode}) async {
-    final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
-    final getSocialNotificationsCubit =
-        context.read<GetSocialNotificationsCubit>();
-    final getServicesNotificationsCubit =
-        context.read<GetServicesNotificationsCubit>();
+//   Future<void> notificationListener({required String languageCode}) async {
+//     final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
+//     final getSocialNotificationsCubit =
+//         context.read<GetSocialNotificationsCubit>();
+//     final getServicesNotificationsCubit =
+//         context.read<GetServicesNotificationsCubit>();
 
-    notificationListenerUseCase.call(
-      notificationCallback: (Map<String, dynamic> data) async {
-        String? type = data['filterType'];
-        if (type == null) {
-          emit(NotificationSocketIoFailed(
-              'Notfication Type is not Provided From the Server'));
-          return;
-        }
-        if (type == 'app') {
-          print("shehab app notification");
-          getAppNotificationsCubit.notifications = [];
-          getAppNotificationsCubit.page = 1;
-          await getAppNotificationsCubit.getAppNotifications(
-              languageCode: languageCode);
-          if (getAppNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(
-                getAppNotificationsCubit.notifications.first));
-          }
-          return;
-        }
-        if (type == 'social') {
-          print("shehab social notification");
-          getSocialNotificationsCubit.notifications = [];
-          getSocialNotificationsCubit.page = 1;
-          await getSocialNotificationsCubit.getSocialNotifications(
-              languageCode: languageCode);
-          if (getSocialNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(
-                getSocialNotificationsCubit.notifications.first));
-          }
-          return;
-        }
-        if (type == 'services') {
-          print("shehab service notification");
-          getServicesNotificationsCubit.notifications = [];
-          getServicesNotificationsCubit.page = 1;
-          await getServicesNotificationsCubit.getServicesNotifications(
-              languageCode: languageCode);
-          if (getServicesNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(
-                getServicesNotificationsCubit.notifications.first));
-          }
-          return;
-        }
-      },
-    );
-  }
+//     notificationListenerUseCase.call(
+//       notificationCallback: (Map<String, dynamic> data) async {
+//         String? type = data['filterType'];
+//         if (type == null) {
+//           emit(NotificationSocketIoFailed(
+//               'Notfication Type is not Provided From the Server'));
+//           return;
+//         }
+//         if (type == 'app') {
+//           print("shehab app notification");
+//           getAppNotificationsCubit.notifications = [];
+//           getAppNotificationsCubit.page = 1;
+//           await getAppNotificationsCubit.getAppNotifications(
+//               languageCode: languageCode);
+//           if (getAppNotificationsCubit.notifications.isNotEmpty) {
+//             emit(NotificationSocketIoNewNotification(
+//                 getAppNotificationsCubit.notifications.first));
+//           }
+//           return;
+//         }
+//         if (type == 'social') {
+//           print("shehab social notification");
+//           getSocialNotificationsCubit.notifications = [];
+//           getSocialNotificationsCubit.page = 1;
+//           await getSocialNotificationsCubit.getSocialNotifications(
+//               languageCode: languageCode);
+//           if (getSocialNotificationsCubit.notifications.isNotEmpty) {
+//             emit(NotificationSocketIoNewNotification(
+//                 getSocialNotificationsCubit.notifications.first));
+//           }
+//           return;
+//         }
+//         if (type == 'services') {
+//           print("shehab service notification");
+//           getServicesNotificationsCubit.notifications = [];
+//           getServicesNotificationsCubit.page = 1;
+//           await getServicesNotificationsCubit.getServicesNotifications(
+//               languageCode: languageCode);
+//           if (getServicesNotificationsCubit.notifications.isNotEmpty) {
+//             emit(NotificationSocketIoNewNotification(
+//                 getServicesNotificationsCubit.notifications.first));
+//           }
+//           return;
+//         }
+//       },
+//     );
+//   }
 
-  Future<void> clearAllNotificationsAndRefeatchAfterLogin({
-    required String languageCode,
-  }) async {
-    final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
-    final getSocialNotificationsCubit =
-        context.read<GetSocialNotificationsCubit>();
-    final getServicesNotificationsCubit =
-        context.read<GetServicesNotificationsCubit>();
-    getAppNotificationsCubit.notifications = [];
-    getAppNotificationsCubit.page = 1;
-    getSocialNotificationsCubit.notifications = [];
-    getSocialNotificationsCubit.page = 1;
-    getServicesNotificationsCubit.notifications = [];
-    getServicesNotificationsCubit.page = 1;
-    await getAppNotificationsCubit.getAppNotifications(
-        languageCode: languageCode);
-    await getSocialNotificationsCubit.getSocialNotifications(
-        languageCode: languageCode);
-    await getServicesNotificationsCubit.getServicesNotifications(
-        languageCode: languageCode);
-  }
-}
+//   Future<void> clearAllNotificationsAndRefeatchAfterLogin({
+//     required String languageCode,
+//   }) async {
+//     final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
+//     final getSocialNotificationsCubit =
+//         context.read<GetSocialNotificationsCubit>();
+//     final getServicesNotificationsCubit =
+//         context.read<GetServicesNotificationsCubit>();
+//     getAppNotificationsCubit.notifications = [];
+//     getAppNotificationsCubit.page = 1;
+//     getSocialNotificationsCubit.notifications = [];
+//     getSocialNotificationsCubit.page = 1;
+//     getServicesNotificationsCubit.notifications = [];
+//     getServicesNotificationsCubit.page = 1;
+//     await getAppNotificationsCubit.getAppNotifications(
+//         languageCode: languageCode);
+//     await getSocialNotificationsCubit.getSocialNotifications(
+//         languageCode: languageCode);
+//     await getServicesNotificationsCubit.getServicesNotifications(
+//         languageCode: languageCode);
+//   }
+// }

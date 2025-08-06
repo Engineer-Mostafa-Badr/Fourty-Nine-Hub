@@ -119,23 +119,23 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
               },
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final width = constraints.maxWidth - 24; // Adjust for padding
-                  final thumbSize = _isDragging ? 16.0 : 10.0;
+                  final width = constraints.maxWidth - 26; // Adjust for padding
+                  final thumbSize = _isDragging ? 8.0 : 5.0;
                   final thumbPos = (playedPart * width) -
                       (thumbSize / 2) +
                       2; // Adjust for margin
 
                   return Container(
                     height: 10,
-                    margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                    // margin: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         // Background
                         Container(
-                          height: 2,
+                          height: 1.2,
                           decoration: BoxDecoration(
-                            color: Colors.grey[700],
+                            color: Colors.grey[800]?.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -144,7 +144,7 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                           child: Container(
                             height: 2,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Colors.white70.withOpacity(0.4),
                               borderRadius: BorderRadius.circular(2),
                             ),
                           ),
@@ -156,8 +156,8 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                             duration: const Duration(milliseconds: 100),
                             width: thumbSize,
                             height: thumbSize,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
+                            decoration:  BoxDecoration(
+                              color: Colors.white70,
                               shape: BoxShape.circle,
                             ),
                           ),

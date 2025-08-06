@@ -12,6 +12,9 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+
 class UserAds extends StatefulWidget {
   const UserAds({
     super.key,
@@ -19,6 +22,7 @@ class UserAds extends StatefulWidget {
     required this.userType,
     required this.onScrollChanged,
   });
+
   final AdsViewParams params;
   final String userType;
   final Function(bool) onScrollChanged;
@@ -38,6 +42,7 @@ class _UserAdsState extends State<UserAds> {
   //   // super.initState();
   // }
   final AdsManager _adsManager = AdsManager();
+
   // @override
   // void initState() {
   //   _adsManager.preloadAds();
@@ -45,6 +50,7 @@ class _UserAdsState extends State<UserAds> {
   // }
   late ScrollController _scrollController;
   late AdvertisementCubit _cubit;
+
   @override
   void initState() {
     super.initState();
@@ -61,22 +67,22 @@ class _UserAdsState extends State<UserAds> {
     } else {
       widget.onScrollChanged(true);
     }
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      if (widget.params.mainCategory.nameEn == 'Dating') {
-        context.read<AdvertisementCubit>().getAds(
-              subCategoryId: widget.params.subCategory.id,
-              filter: 'male',
-            );
-      } else {
-        context.read<AdvertisementCubit>().getAds(
-              subCategoryId: widget.params.subCategory.id,
-              filter: widget.params.subCategory.hasAuction == true
-                  ? 'sale'
-                  : 'provider',
-            );
-      }
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   if (widget.params.mainCategory.nameEn == 'Dating') {
+    //     context.read<AdvertisementCubit>().getAds(
+    //           subCategoryId: widget.params.subCategory.id,
+    //           filter: 'male',
+    //         );
+    //   } else {
+    //     context.read<AdvertisementCubit>().getAds(
+    //           subCategoryId: widget.params.subCategory.id,
+    //           filter: widget.params.subCategory.hasAuction == true
+    //               ? 'sale'
+    //               : 'provider',
+    //         );
+    //   }
+    // }
   }
 
   @override
@@ -102,8 +108,51 @@ class _UserAdsState extends State<UserAds> {
         ),
       );
     }
-    return ListView.separated(
-      controller: _scrollController,
+    return OlxPaginationWidget(
+      scrollController: _scrollController,
+      itemsPerPage: 3,
+      loadPage: (page) {
+        print('sale ${widget.params.subCategory.hasAuction}');
+        if (widget.params.mainCategory.nameEn == 'Dating') {
+          return context.read<AdvertisementCubit>().getAds(
+                subCategoryId: widget.params.subCategory.id,
+                filter: 'male',
+              );
+        } else {
+          return context.read<AdvertisementCubit>().getAds(
+                subCategoryId: widget.params.subCategory.id,
+                filter: widget.params.subCategory.hasAuction == true
+                    ? 'sale'
+                    : 'user',
+              );
+        }
+      },
+      banners: bannersList,
+      items: List.generate(
+        context.read<AdvertisementCubit>().ads.length,
+        (index) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+          child: MyAdCard(
+            item: context.read<AdvertisementCubit>().ads[index],
+            onFav: (id) async {
+              bool result = await context
+                  .read<AdvertisementCubit>()
+                  .favouriteAd(context.read<AdvertisementCubit>().ads[index].id);
+              return result;
+            },
+            onRemoveFav: (id) async {
+              bool result = await context
+                  .read<AdvertisementCubit>()
+                  .unFavouriteAd(
+                      context.read<AdvertisementCubit>().ads[index].id);
+              return result;
+            },
+          ),
+        ),
+      ),
+    );
+    /*return ListView.separated(
+      // controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: context.read<AdvertisementCubit>().ads.length +
@@ -130,10 +179,22 @@ class _UserAdsState extends State<UserAds> {
         }
         return MyAdCard(
           item: context.read<AdvertisementCubit>().ads[index],
-          onFav: (id) {},
-          onRemoveFav: (id) {},
+          onFav: (id) async {
+            bool result = await context
+                .read<AdvertisementCubit>()
+                .favouriteAd(context.read<AdvertisementCubit>().ads[index].id);
+            return result;
+          },
+          onRemoveFav: (id) async {
+            bool result = await context
+                .read<AdvertisementCubit>()
+                .unFavouriteAd(
+                    context.read<AdvertisementCubit>().ads[index].id);
+            return result;
+          },
         );
-        return Column(
+        */
+    /*return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
@@ -156,8 +217,9 @@ class _UserAdsState extends State<UserAds> {
               },
             ),
           ],
-        );
+        );*/
+    /*
       },
-    );
+    );*/
   }
 }

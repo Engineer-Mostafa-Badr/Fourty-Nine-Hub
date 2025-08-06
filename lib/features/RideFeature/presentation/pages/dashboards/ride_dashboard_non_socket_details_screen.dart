@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/enums/support_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
@@ -50,16 +51,20 @@ class _RideDashboardNonSocketDetailsScreenState
   var form = GlobalKey<FormState>();
   bool isLoading = false;
   String? pdfPath;
+  double? currentTripRating;
 
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
-        clientId: 'widget.tripEntity.clientDetails?.id??''',
-        // clientId: 'widget.tripEntity.clientDetails?.id??''',
-        driverId: 'widget.tripEntity.driverDetails?.id??''',
+        clientId: widget.tripEntity.clientDetails?.id??'',
+        driverId: widget.tripEntity.driverDetails?.id??'',
         tripId: widget.tripEntity.tripDetails?.id??'',
-        tripType: 'notSpecial',
+        tripType: 'nonTracking',
         userType: 'driver'
     ));
+    currentTripRating = widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble();
+    // currentTripRating = widget.tripEntity.clientDetails?.rating?.average?.toDouble();
+
+    // tripEntity.tripDetails?.yourRateClient?.rate
     super.initState();
   }
 
@@ -261,17 +266,13 @@ class _RideDashboardNonSocketDetailsScreenState
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Label(
-                                      text: formattedDate, //'20/2/2025',
+                                      text: formatTimeOnly(widget.tripEntity.tripDetails?.pickupTime, context), //'20/2/2025',
                                       style: Styles.mediumText(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                    Text("-", style: Styles.mediumText(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 50.sp
-                                    ),),
                                     Label(
-                                      text: formattedTime, //'10 AM',
+                                      text: formatPickupDate(widget.tripEntity.tripDetails?.pickupTime, context), //'20/2/2025',
                                       style: Styles.mediumText(
                                         fontWeight: FontWeight.w700,
                                       ),
@@ -279,7 +280,7 @@ class _RideDashboardNonSocketDetailsScreenState
                                   ],
                                 ),
                                 Label(
-                                    text: "${widget.tripEntity.tripDetails!.price} ${LocaleKeys.egp.tr()}",
+                                    text: "${formatPrice(widget.tripEntity.tripDetails!.price!, context)} ${LocaleKeys.egp.tr()}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w700, fontSize: 16)),
                               ]),
@@ -300,8 +301,7 @@ class _RideDashboardNonSocketDetailsScreenState
                   ),
                   // if (widget.tripEntity.modeType != 'ride')
                     Label(
-                        text: "${LocaleKeys.passenger.tr()} : ${widget.tripEntity.tripDetails?.passengers ?? 0}"
-                          ,
+                        text: "${LocaleKeys.passenger.tr()} : ${formatPrice(widget.tripEntity.tripDetails?.passengers ?? 0, context)}",
                         style: const TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 16)),
                    Row(
@@ -335,7 +335,7 @@ class _RideDashboardNonSocketDetailsScreenState
                         ),
                       ),
                        Label(
-                        text: formattedTime,
+                         text: formatTimeOnly(widget.tripEntity.tripDetails?.pickupTime, context),
                         style: TextStyle(
                             color: AppColors.c5A5A5A,
                             fontSize: 14,
@@ -364,7 +364,7 @@ class _RideDashboardNonSocketDetailsScreenState
                         ),
                       ),
                        Label(
-                        text: formattedTimePickUp,
+                        text: formatTimeOnly(widget.tripEntity.tripDetails?.pickupTime, context),
                         style: TextStyle(
                             color: AppColors.c5A5A5A,
                             fontSize: 14,
@@ -377,15 +377,20 @@ class _RideDashboardNonSocketDetailsScreenState
                   RideDetailsRatingNonSocketWidget(
                     // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
                     // rate: 1,
-                    rate: widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble() ?? 0.0,
+                    rate: currentTripRating ?? 0.0,
                     title: LocaleKeys.youRateClient.tr(),
                     tripId: widget.tripEntity.tripDetails?.id ?? '',
                     cubit: context.read<DashboardsCubit>(),
+                    onRatingUpdated: (newRating) {
+                      setState(() {
+                        currentTripRating = newRating;
+                      });
+                    },
                   ),
                   RideDetailsRatingNonSocketWidget(
                     // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
                     // rate: 2,
-                    rate: widget.tripEntity.tripDetails?.yourRateClient?.rate?.toDouble() ?? 0.0,
+                    rate: widget.tripEntity.tripDetails?.clientRateYou?.rate?.toDouble() ?? 0.0,
                     title: LocaleKeys.clientRateYou.tr(),
                     tripId: widget.tripEntity.tripDetails?.id ?? '',
                     cubit: context.read<DashboardsCubit>(),
@@ -430,7 +435,7 @@ class _RideDashboardNonSocketDetailsScreenState
                             onPressed: () {
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
-                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'');
+                                  cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'', userType: 'driver',tripType: 'nonTracking');
                                 }
                               }
                             },

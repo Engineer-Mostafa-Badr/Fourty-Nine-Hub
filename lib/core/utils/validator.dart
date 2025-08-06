@@ -113,7 +113,7 @@ String? validatorEmail(String? email) {
 }
 
 String? validatorPhone(String? phone) {
-  final phoneRegex = RegExp(r'^\+?\d{7,15}$');
+  final phoneRegex = RegExp(r'^\+?\d{11}$');
   if (phone == null || phone.isEmpty) {
     return LocaleKeys.required.localize;
   } else if (!phoneRegex.hasMatch(phone) && phone.length != 11) {
@@ -122,8 +122,21 @@ String? validatorPhone(String? phone) {
   return null;
 }
 
+String? validateEgyptianPhone(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'رقم الهاتف مطلوب';
+  }
+
+  final RegExp phoneRegex = RegExp(r'^(01[0125])[0-9]{8}$');
+  if (!phoneRegex.hasMatch(value)) {
+    return 'رقم الهاتف غير صالح';
+  }
+
+  return null; // valid
+}
+
 String? validatorEmailOrPhone(String? emailOrPhone) {
-  final phoneRegex = RegExp(r'^\+?\d{7,15}$');
+  final phoneRegex = RegExp(r'^\+?\d{11}$');
   final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
   if (emailOrPhone == null || emailOrPhone.isEmpty) {
     return LocaleKeys.required.localize;

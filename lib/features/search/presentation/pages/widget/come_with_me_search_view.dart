@@ -47,7 +47,7 @@ class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       final prefs = await SharedPreferences.getInstance();
-      String? filter = prefs.getString('filter');
+      String filter = prefs.getString('filter')??'';
       SearchParams searchParams = SearchParams(
           filter: filter,
           params: widget.params.params,

@@ -17,10 +17,8 @@ class TripJoinFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Positioned.directional(
-      bottom: 10,
-      end: 10,
-      textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 0.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

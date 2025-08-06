@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -14,22 +15,22 @@ class FacebookReels extends StatefulWidget {
 
 class _FacebookReelsState extends State<FacebookReels> {
   final ScrollController _scrollController = ScrollController();
-  int _currentIndex = -1;
+  final int _currentIndex = -1;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.BG_GRAY_COLOR,
-        border: Border(bottom: BorderSide(color: AppColors.BG_GRAY_COLOR, width: 6)),
+      decoration: BoxDecoration(
+        color: AppColors.getFindFillColor(context),
+        border: Border(bottom: BorderSide(color: AppColors.getFindFillColor(context), width: 6)),
       ),
-      padding: const EdgeInsetsDirectional.only(start: 10, bottom: 16, top: 12),
+      padding: const EdgeInsetsDirectional.only(start: 10, bottom: 16, top: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Reels',
+            context.isArabic?'ريلز':'Reels',
             style: Styles.headerText(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),

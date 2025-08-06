@@ -31,10 +31,12 @@ class _RequestWithdrawalBottomSheetWalletState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AnimationController _animationController;
   late Animation<Color?> _colorAnimation;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -50,6 +52,9 @@ class _RequestWithdrawalBottomSheetWalletState
       begin: Colors.transparent,
       end: Colors.red,
     ).animate(_animationController);
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _focusNode.requestFocus());
   }
 
   void _submitWithdrawal() async {
@@ -81,6 +86,7 @@ class _RequestWithdrawalBottomSheetWalletState
   void dispose() {
     _amountController.dispose();
     _animationController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -161,6 +167,7 @@ class _RequestWithdrawalBottomSheetWalletState
                 controller: _amountController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                focusNode: _focusNode,
                 decoration: InputDecoration(
                   hintText: LocaleKeys.enterWithdrawalAmount.localize,
                   border: const OutlineInputBorder(),

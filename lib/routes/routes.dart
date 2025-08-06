@@ -15,8 +15,13 @@ abstract class Routes {
   static const RIDEACTIVITY = '/RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       '/RIDEOPENSTREETMAPSEARCHANDPICK';
+  static const GoogleMapsSearchAndPick =
+      '/GoogleMapsSearchAndPick';
   static const RIDERUNNINGTRIPS = '/RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = '/RIDEEXPIREDTRIPS';
+  static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
+  static const RIDEDETAILSTRIPS = '/RIDEDETAILSTRIPS';
+  static const TripReceiptScreen = '/TripReceiptScreen';
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
@@ -56,6 +61,9 @@ abstract class Routes {
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
+  static const AllLocationScreen = '/AllLocationScreen';
+  static const TiktokOptionScreen = '/TiktokOptionScreen';
+
   static const TWITTER = '/Social/Twitter';
   static const TWITTERPOSTDETAILS = '/Social/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
@@ -257,6 +265,7 @@ abstract class Routes {
   static const safetyRideScreen = '/SafetyRideScreen';
   static const rideFindingScreen = '/RideFindingScreen';
   static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
+  static const routeDetailsScreen = '/RouteDetailsScreen';
   static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
   static const supportRideScreen = '/SupportRideScreen';
   static const supportClientDetailsScreen = '/SupportClientDetailsScreen';
@@ -294,6 +303,10 @@ abstract class Routes {
   static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
   static const followersScreen = '/FollowersScreen';
   static const rideOffer = '/RiderOffer';
+  static const allDriverRatingScreen = '/allDriverRatingScreen';
+  static const allClientRatingScreen = '/allClientRatingScreen';
+  static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
+
 }
 
 abstract class Paths {
@@ -312,8 +325,13 @@ abstract class Paths {
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       'RIDEOPENSTREETMAPSEARCHANDPICK';
+  static const GoogleMapsSearchAndPick =
+      'GoogleMapsSearchAndPick';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
+  static const RIDEHISTORYTRIPS = 'RIDEHISTORYTRIPS';
+  static const RIDEDETAILSTRIPS = 'RIDEDETAILSTRIPS';
+  static const TripReceiptScreen = 'TripReceiptScreen';
   static const UploadRiderImages = 'UploadRiderImages';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const SEARCH = 'Search';
@@ -365,6 +383,8 @@ abstract class Paths {
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
+  static const TiktokOptionScreen = 'TiktokOptionScreen';
+  static const AllLocationScreen = 'AllLocationScreen';
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
@@ -538,7 +558,9 @@ abstract class Paths {
   static const safetyRideScreen = 'SafetyRideScreen';
   static const rideFindingScreen = 'RideFindingScreen';
   static const RideStatusScreen = 'RideStatusScreen';
+  static const loadingDashboardDetailsScreen = 'LoadingDashboardDetailsScreen';
   static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
+  static const routeDetailsScreen = 'RouteDetailsScreen';
   static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
   static const supportRideScreen = 'SupportRideScreen';
   static const supportClientDetailsScreen = 'SupportClientDetailsScreen';
@@ -549,6 +571,7 @@ abstract class Paths {
   static const newRideModeScreen = 'NewRideModeScreen';
   static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
   static const rideOffer = 'RiderOffer';
+  static const allDriverRatingScreen = 'allDriverRatingScreen';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';
@@ -575,4 +598,6 @@ abstract class Paths {
   static const SINGLEPOSTINSTAGRAM = 'SinglePostInstagram';
   static const FOLLOWREQUESTSINSTAGRAM = 'FollowRequestsInstagram';
   static const followersScreen = 'FollowersScreen';
+  static const allClientRatingScreen = 'allClientRatingScreen';
+
 }

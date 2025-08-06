@@ -14,6 +14,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../domain/use_case/fetch_search_use_case.dart';
 
@@ -78,7 +79,10 @@ class _ReelSearchViewState extends State<ReelSearchView> {
             );
           }
           if (state.status == SearchStates.loading) {
-            return const Center(child: CupertinoActivityIndicator());
+            return const Center(
+              child: CustomLoadingSearchWidget(),
+              //  CupertinoActivityIndicator(),
+            );
           }
 
           if (reels.isEmpty) {
@@ -96,7 +100,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
           return GridView.builder(
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -118,7 +122,6 @@ class _ReelSearchViewState extends State<ReelSearchView> {
     );
   }
 }
-
 
 class VideoGridItem extends StatefulWidget {
   final ReelsSearchEntity videoUrl;

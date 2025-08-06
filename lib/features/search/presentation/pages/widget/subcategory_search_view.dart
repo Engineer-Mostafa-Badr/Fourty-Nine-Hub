@@ -21,6 +21,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -105,7 +106,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CustomCircularProgressIndicator());
+          return const Center(child: CustomLoadingSearchWidget());
         }
 
         // No results
@@ -116,25 +117,61 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         }
 
         // List view with loader at bottom
-        return ListView.builder(
+        return GridView.builder(
           controller: _scrollController,
           physics: _cubit.searchController.text.trim().isEmpty
               ? const NeverScrollableScrollPhysics()
               : const AlwaysScrollableScrollPhysics(),
-
+          gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: .65,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+          ),
           itemCount: _cubit.subCategoriesSearch.length +
               (_cubit.isLoadingSubCategoriesSearchMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index >= _cubit.subCategoriesSearch.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CustomCircularProgressIndicator()),
+                child: Center(child: CustomLoadingSearchWidget()),
               );
             }
             final subCategory = _cubit.subCategoriesSearch[index];
-            return ListTile(
-              title: Text(subCategory.nameEn),
+            return SubCategoryCard(
+              mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+              item: subCategory,
+              onFav: () async {
+                // var result = await controller
+                //     .toggleSubCategoryToFavorites(data[index].id);
+                // return result;
+              },
             );
+            /*return GridView.builder(
+              padding: EdgeInsets.all(24.w),
+              itemCount: _cubit.subCategoriesSearch.length,
+              // controller: this.scrollController,
+              gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: .65,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+              ),
+              itemBuilder: (context, index) => SubCategoryCard(
+                mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+                item: _cubit.subCategoriesSearch[index],
+                onFav: () async {
+                  // var result = await controller
+                  //     .toggleSubCategoryToFavorites(data[index].id);
+                  // return result;
+                },
+              ),
+            );*/
+            // return ListTile(
+            //   title: Text(subCategory.nameEn),
+            // );
           },
         );
 

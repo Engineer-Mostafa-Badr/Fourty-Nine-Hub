@@ -19,7 +19,8 @@ import 'accept_ride_offer_screen.dart';
 import 'offer_ride_offer_screen.dart';
 
 class MainTabsRideOffer extends StatefulWidget {
-  const MainTabsRideOffer({super.key});
+  const MainTabsRideOffer({super.key, this.type = 'ride'});
+  final String? type;
 
   @override
   State<MainTabsRideOffer> createState() => _MainTabsRideOfferState();
@@ -40,25 +41,14 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
   @override
   void initState() {
     super.initState();
+    selectedTap = widget.type ?? 'ride';
+    if (widget.type == 'ride')
+      context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+    if (widget.type == 'ride')
+      context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
+    if (widget.type == 'shipping')
+      context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
     _tabController = TabController(length: _tabTitles.length, vsync: this);
-  }
-
-  void _loadInitialClientPendingTrips() {
-    print("✅ loadInitialClientPendingTrips called");
-    context.read<ClientTripsCubit>()..loadInitialClientAcceptedTrips();
-  }
-  void _loadInitialClientOfferTrips() {
-    print("✅ loadInitialClientOfferTrips called");
-    context.read<ClientTripsCubit>()..loadInitialClientOfferTrips();
-  }
-  void _loadInitialClientPastTrips() {
-    print("✅ loadInitialClientPastTrips called");
-    context.read<ClientTripsCubit>()..loadInitialClientPastTrips();
-  }
-
-  void _loadInitialClientAcceptedTrips() {
-    print("✅ loadInitialClientAcceptedTrips called");
-    context.read<ClientTripsCubit>()..loadInitialClientAcceptedTrips();
   }
 
   @override
@@ -72,7 +62,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          context.isArabic?'وضع المستخدم':'User Mode',
+          context.isArabic ? 'وضع المستخدم' : 'User Mode',
           style: Styles.headerText(),
         ),
         elevation: 0,
@@ -86,7 +76,6 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
         //   child: ,
         // ),
       ),
-
       body: Column(
         children: [
           Padding(
@@ -98,24 +87,93 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                     radius: 15,
                     label: LocaleKeys.ride.tr(),
                     onPressed: () {
-                      setState(() {
-                        selectedTap='ride';
-                      });
+                      if (selectedTap != 'ride') {
+                        setState(() {
+                          selectedTap = 'ride';
+                        });
+
+                        if (_tabController.index == 2) {
+                          // if (widget.type == 'ride')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPendingTrips();
+                          // if (widget.type == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+                        }
+                        if (_tabController.index == 1) {
+                          // if (selectedTap == 'ride')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientAcceptedTrips();
+                          // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
+                        }
+                        if (_tabController.index == 0) {
+                          // if (selectedTap == 'ride')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientOfferTrips();
+                          // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+                        }
+                        if (_tabController.index == 3) {
+                          print("object");
+                          // if (selectedTap == 'ride')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPastTrips();
+                          // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
+                        }
+                      }
                     },
-                    backColor: selectedTap=='ride'?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                    backColor: selectedTap == 'ride'
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.PRIMARY_COLOR,
                   ),
                 ),
                 Sizer(),
                 Expanded(
                   child: AppButton(
+                    color: AppColors.whiteColor,
+                    // color: selectedTap=='shipping'?AppColors.whiteColor:AppColors.whiteColor,
                     radius: 15,
-                    label: context.isArabic?'تحميله':'Shipping',
+                    label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {
-                      setState(() {
-                        selectedTap='shipping';
-                      });
+                      if (selectedTap != 'shipping') {
+                        setState(() {
+                          selectedTap = 'shipping';
+                        });
+                        if (_tabController.index == 2) {
+                          // if (selectedTap == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+                          // if (selectedTap == 'shipping')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPendingShippingTrips();
+                        }
+                        if (_tabController.index == 1) {
+                          // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+                          // if (selectedTap == 'shipping')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientAcceptedShippingTrips();
+                        }
+                        if (_tabController.index == 0) {
+                          // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+                          // if (selectedTap == 'shipping')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientOfferShippingTrips();
+                        }
+                        if (_tabController.index == 3) {
+                          print("object");
+                          // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+                          // if (selectedTap == 'shipping')
+                          context
+                              .read<ClientTripsCubit>()
+                              .loadInitialClientPastShippingTrips();
+                        }
+                      }
                     },
-                    backColor: selectedTap=='shipping'?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
+                    backColor: selectedTap == 'shipping'
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.PRIMARY_COLOR,
                   ),
                 ),
               ],
@@ -127,11 +185,19 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
             child: TabBarView(
               controller: _tabController,
               physics: const NeverScrollableScrollPhysics(),
-              children: const [
-                OfferRideOfferScreen(),
-                AcceptRideOfferScreen(),
-                PendingRideOfferScreen(),
-                PastRideOfferScreen(),
+              children: [
+                OfferRideOfferScreen(
+                  type: selectedTap,
+                ),
+                AcceptRideOfferScreen(
+                  type: selectedTap,
+                ),
+                PendingRideOfferScreen(
+                  type: selectedTap,
+                ),
+                PastRideOfferScreen(
+                  type: selectedTap,
+                ),
               ],
             ),
           ),
@@ -153,28 +219,62 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
         // No underline
         labelPadding: EdgeInsets.zero,
         onTap: (index) {
+          if (index == 2) {
+            // loadInitialClientAcceptedShippingTrips
+            if (selectedTap == 'ride')
+              context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+            if (selectedTap == 'shipping')
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientPendingShippingTrips();
+          }
           if (index == 1) {
-            _loadInitialClientPendingTrips();
+            print("object1");
+            if (selectedTap == 'ride')
+              context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+            if (selectedTap == 'shipping')
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientAcceptedShippingTrips();
           }
           if (index == 0) {
-            _loadInitialClientOfferTrips();
-          }
-          if (index == 2) {
-            _loadInitialClientAcceptedTrips();
+            if (selectedTap == 'ride')
+              context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+            if (selectedTap == 'shipping')
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientOfferShippingTrips();
           }
           if (index == 3) {
-            _loadInitialClientPastTrips();
+            print("object");
+            if (selectedTap == 'ride')
+              context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+            if (selectedTap == 'shipping')
+              context
+                  .read<ClientTripsCubit>()
+                  .loadInitialClientPastShippingTrips();
           }
+
+          // if (index == 0) {
+          //   _loadInitialClientOfferTrips();
+          // }
+          // if (index == 2) {
+          //   _loadInitialClientAcceptedTrips();
+          // }
+          // if (index == 3) {
+          //   _loadInitialClientPastTrips();
+          // }
           setState(() {});
         },
         tabs: List.generate(_tabTitles.length, (index) {
           final isSelected = _tabController.index == index;
           return Padding(
-            padding: const EdgeInsetsDirectional.only(end: 16),
+            padding: const EdgeInsetsDirectional.only(end: 8),
             child: Tab(
               child: Container(
                 width: 200.w,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.PRIMARY_COLOR
@@ -196,6 +296,4 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
       ),
     );
   }
-
-
 }

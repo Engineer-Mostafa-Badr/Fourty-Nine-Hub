@@ -5,5 +5,10 @@ class CategorizationEntity {
   final MainCategoryEntity mainCategory;
   final SubCategoryEntity subCategory;
   final bool? fromMarriage;
-  CategorizationEntity({required this.mainCategory, required this.subCategory,this.fromMarriage=false});
+
+  CategorizationEntity({
+    required this.mainCategory,
+    required this.subCategory,
+    this.fromMarriage = false,
+  });
 }

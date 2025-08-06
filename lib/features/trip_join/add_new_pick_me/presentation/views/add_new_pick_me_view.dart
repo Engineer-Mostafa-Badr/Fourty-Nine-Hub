@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
@@ -46,6 +47,11 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
   String? currentAddress;
   String? toAddress;
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<AddNewPickMeTripCubit>().loadInitialCarBrandLoading();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,10 +140,10 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                     }),
               ),
               const Sizer(),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: TripJoinBottomSection(),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 8.0),
+              //   child: TripJoinBottomSection(),
+              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h,),
                 child: const PremiumAndRequestWidget(),

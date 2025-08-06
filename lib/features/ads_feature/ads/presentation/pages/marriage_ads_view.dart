@@ -29,6 +29,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class MarriageSubCategoriesView extends StatefulWidget {
@@ -61,17 +62,19 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent) {
-      context.read<SubcategoriesCubit>().filterAds(
-          model: context.read<SubcategoriesCubit>().state.filterModel!,
-          filter: '');
-    }
-    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent) {
+    //   context.read<SubcategoriesCubit>().filterAds(
+    //       model: context.read<SubcategoriesCubit>().state.filterModel!,
+    //       filter: '');
+    // }
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
       if (_isFabVisible) {
         setState(() => _isFabVisible = false);
       }
-    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
       if (!_isFabVisible) {
         setState(() => _isFabVisible = true);
       }
@@ -131,39 +134,41 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
           duration: const Duration(milliseconds: 300),
           offset: _isFabVisible ? Offset.zero : const Offset(0, 2),
           child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: _isFabVisible ? 1 : 0,
-            child:state.isLoading?null: CustomFloatingButtonAds(
-              title:
-              "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr??''}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn??''}"}",
-              onPressed: () {
-                if (AuthHelper().isLoggedIn()) {
-                  context.push(
-                    Routes.CREATEAD,
-                    extra: CategorizationEntity(
-                      mainCategory: state.mainCategory!,
-                      // mainCategory: widget.mainCategory,
-                      subCategory: state.subCategories![state.subCategories
-                          ?.indexWhere(
-                              (element) => element.isSelected == true) ??
-                          0],
-                      fromMarriage: true,
-                    ),
-                  );
-                } else {
-                  return pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
-                }
-              },
-            )
-          ),
+              duration: const Duration(milliseconds: 300),
+              opacity: _isFabVisible ? 1 : 0,
+              child: state.isLoading
+                  ? null
+                  : CustomFloatingButtonAds(
+                      title:
+                          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? ''}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}"}",
+                      onPressed: () {
+                        if (AuthHelper().isLoggedIn()) {
+                          context.push(
+                            Routes.CREATEAD,
+                            extra: CategorizationEntity(
+                              mainCategory: state.mainCategory!,
+                              // mainCategory: widget.mainCategory,
+                              subCategory: state.subCategories![
+                                  state.subCategories?.indexWhere((element) =>
+                                          element.isSelected == true) ??
+                                      0],
+                              fromMarriage: true,
+                            ),
+                          );
+                        } else {
+                          return pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
+                      },
+                    )),
         ),
-
-        body: state.isLoading?CustomLoading():MarriageAdsViewBody(
-          controller: controller,
-          state: state,
-          scrollController: _scrollController,
-        ),
+        body: state.isLoading
+            ? CustomLoadingSearchWidget()
+            : MarriageAdsViewBody(
+                controller: controller,
+                state: state,
+                scrollController: _scrollController,
+              ),
       );
       // if (widget.inGridView) {
       //   return Scaffold(

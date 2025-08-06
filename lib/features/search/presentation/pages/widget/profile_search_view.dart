@@ -11,17 +11,19 @@ import 'package:fourtyninehub/features/search/presentation/controller/cubit/sear
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-
-
 
 class ProfileSearchView extends StatefulWidget {
   const ProfileSearchView({Key? key}) : super(key: key);
@@ -29,6 +31,7 @@ class ProfileSearchView extends StatefulWidget {
   @override
   State<ProfileSearchView> createState() => _ProfileSearchViewState();
 }
+
 class _ProfileSearchViewState extends State<ProfileSearchView> {
   late final ScrollController _scrollController;
   late final SearchCubit _cubit;
@@ -48,7 +51,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
         !_cubit.isLoadingUsersSearchMore &&
         _cubit.hasMoreUsersSearchData) {
       final prefs = await SharedPreferences.getInstance();
-      final filter = prefs.getString('filter') ?? '';
+      final filter = prefs.getString('filter') ?? 'users';
       final params = SearchParams(
         search: _cubit.searchController.text.trim(),
         filter: filter,
@@ -72,7 +75,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
       child: BlocBuilder<SearchCubit, SearchState>(
         buildWhen: (prev, curr) =>
-        prev.userSearch != curr.userSearch || prev.status != curr.status,
+            prev.userSearch != curr.userSearch || prev.status != curr.status,
         builder: (context, state) {
           // If no search has been initiated, show "No Data"
           if (_cubit.searchController.text.trim().isEmpty) {
@@ -82,12 +85,84 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
           }
 
           // Loading during search
-          if (state.status == SearchStates.loading ) {
-            return const Center(child: CustomCircularProgressIndicator());
+          if (state.status == SearchStates.loading) {
+            return Center(
+              // child: CustomCircularProgressIndicator(
+              // ),
+              child: CustomLoadingSearchWidget(),
+            );
           }
-
+          return OlxPaginationWidget(
+            scrollController: ScrollController(),
+            itemsPerPage: 10,
+            loadPage: (page) async {
+              {
+                final prefs = await SharedPreferences.getInstance();
+                final filter = prefs.getString('filter') ?? 'users';
+                final params = SearchParams(
+                  search: _cubit.searchController.text.trim(),
+                  filter: filter,
+                  params: PaginationParams(page: _cubit.usersSearchPage),
+                );
+                _cubit.getPaginatedUserSearch(params: params);
+              }
+            },
+            banners: bannersList,
+            items: List.generate(
+              _cubit.usersSearch.length +
+                  (_cubit.isLoadingUsersSearchMore ? 1 : 0),
+              (index) {
+                if (index >= _cubit.usersSearch.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(child: CustomCircularProgressIndicator()),
+                  );
+                }
+                final user = _cubit.usersSearch[index];
+                return InkWell(
+                  onTap: () {
+                    context.push(Routes.OTHERSACCOUNT, extra: user.id);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      spacing: 8,
+                      children: [
+                        ImageFromInternet(
+                          image: user.image!,
+                          height: 65,
+                          width: 65,
+                          isCircle: true,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${user.firstName} ${user.lastName}',
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 1.h),
+                              Text(
+                                '@${user.username}',
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
           // Display list + loader at bottom
-          return ListView.builder(
+          /*return ListView.builder(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: _cubit.usersSearch.length + (_cubit.isLoadingUsersSearchMore ? 1 : 0),
@@ -139,13 +214,9 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
                 ),
               );
             },
-          );
+          );*/
         },
       ),
     );
   }
 }
-
-
-
-

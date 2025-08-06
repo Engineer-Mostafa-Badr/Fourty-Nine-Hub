@@ -13,14 +13,20 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_ca
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+
 class FavouriteAdsView extends StatefulWidget {
   const FavouriteAdsView({
     super.key,
     required this.id,
     required this.isFloatingButtonVisible,
   });
+
   final String id;
   final void Function(bool) isFloatingButtonVisible;
+
   @override
   State<FavouriteAdsView> createState() => _FavouriteAdsViewState();
 }
@@ -39,10 +45,10 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
+    // }
 
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
@@ -58,7 +64,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
         builder: (context, state) {
       final controller = context.read<SubcategoriesCubit>();
       if (controller.isLoadingMyFavouriteAds == true) {
-        return const CustomLoading();
+        return const CustomLoadingSearchWidget();
       }
       if (controller.myFavouriteAds.isEmpty) {
         return Center(
@@ -74,7 +80,43 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
           ),
         );
       }
-      return ListView.separated(
+      return OlxPaginationWidget(
+        scrollController: _scrollController,
+        itemsPerPage: 2,
+        loadPage: (page) =>
+            context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
+        banners: bannersList,
+        items: List.generate(
+            controller.myFavouriteAds.length,
+            (i) => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: MyAdCard(
+                    item: controller.myFavouriteAds[i],
+                    showSubCategory: true,
+                    onFav: (id) async {
+                      bool result = await context
+                          .read<AdvertisementCubit>()
+                          .unFavouriteAd(controller.myFavouriteAds[i].id);
+                      controller.myFavouriteAds
+                          .remove(controller.myFavouriteAds[i]);
+                      setState(() {});
+                      return result;
+                      // bool result = await context
+                      //     .read<AdvertisementCubit>()
+                      //     .favouriteAd(controller.myFavouriteAds[i].id);
+                      // return result;
+                    },
+                    onRemoveFav: (id) async {
+                      bool result = await context
+                          .read<AdvertisementCubit>()
+                          .favouriteAd(controller.myFavouriteAds[i].id);
+                      return result;
+                    },
+                  ),
+                )),
+      );
+      /* return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         shrinkWrap: true,
         controller: _scrollController,
@@ -98,11 +140,12 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
           onRemoveFav: (id) async {
             bool result = await context
                 .read<AdvertisementCubit>()
-                .unFavouriteAd(controller.myFavouriteAds[i].id);
+                .favouriteAd(controller.myFavouriteAds[i].id);
             return result;
           },
+
         ),
-      );
+      );*/
     });
   }
 }

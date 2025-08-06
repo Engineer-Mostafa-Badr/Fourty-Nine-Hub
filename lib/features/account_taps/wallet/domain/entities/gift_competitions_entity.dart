@@ -16,16 +16,16 @@ class GiftCompetitionEntity {
   });
 
   final String? id;
-  final int? withdrawLimit;
+  final num? withdrawLimit;
   final num? pricePerRequest;
-  final int? maxRequests;
+  final num? maxRequests;
   final String? nameEn;
   final String? descriptionEn;
   final String? nameAr;
   final String? descriptionAr;
   final String? descriptionGiftWalletEn;
   final String? descriptionGiftWalletAr;
-  final int? countOfRequest;
+  final num? countOfRequest;
   final String? amount;
   final bool? awaitApproval;
 }

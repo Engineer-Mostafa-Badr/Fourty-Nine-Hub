@@ -10,9 +10,12 @@ class StarEntity {
   final bool isApproved;
   final num totalViews;
   final num averageRating;
+  final bool haveStories;
+  final int storyCount;
 
   DateTime? createdAt;
   String? createAt;
+
   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
@@ -26,6 +29,8 @@ class StarEntity {
     required this.isApproved,
     required this.totalViews,
     required this.averageRating,
+    required this.haveStories,
+    required this.storyCount,
     this.createdAt,
     this.createAt,
   });
@@ -38,8 +43,8 @@ class MediaUrlEntity {
   final String? mediaType;
 
   MediaUrlEntity({
-    required this.id, 
-    required this.mediaKey, 
+    required this.id,
+    required this.mediaKey,
     this.duration,
     this.mediaType,
   });

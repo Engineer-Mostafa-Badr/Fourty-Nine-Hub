@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -14,7 +15,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
@@ -46,6 +49,7 @@ class CreateAdView extends StatefulWidget {
 }
 
 class _CreateAdViewState extends State<CreateAdView> {
+  final FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     context.read<CreateAdCubit>().loadData(
@@ -53,7 +57,16 @@ class _CreateAdViewState extends State<CreateAdView> {
             ? widget.categorization.mainCategory.id
             : widget.categorization.subCategory.id,
         fromMarriage: widget.categorization.fromMarriage ?? false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   final RegExp _phonePattern = RegExp(
@@ -65,6 +78,8 @@ class _CreateAdViewState extends State<CreateAdView> {
 
   @override
   Widget build(BuildContext context) {
+    var phoneController = TextEditingController();
+    var priceController = TextEditingController();
     return BlocConsumer<CreateAdCubit, CreateAdState>(
         listener: (context, state) {
       if (state.isError) {
@@ -252,11 +267,14 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return LocaleKeys.required.localize;
                           }
                           if (_phonePattern.hasMatch(value)) {
-                            return context.isArabic?'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود':'Phone numbers are not allowed. Please remove any phone number pattern.';
+                            return context.isArabic
+                                ? 'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود'
+                                : 'Phone numbers are not allowed. Please remove any phone number pattern.';
                           }
 
                           return null;
                         },
+                        focusNode: _focusNode,
                       ),
                       // TextFormField(
                       //   maxLines: null,
@@ -325,7 +343,27 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //     style: Styles.mediumText(fontSize: 32),
                       //   ),
                       // ),
-                      CreateAdTextFormField(
+                      PickUpTextFormField(
+                        controller: phoneController,
+                        onChanged: (v) => controller.phone = v,
+                        fillColor: AppColors.getFillColor(context),
+                        textColor: AppColors.getTextColor(context),
+                        hintText: LocaleKeys.phoneNumber.localize,
+                        fieldType: FieldType.phone,
+                        validator: (value) => validatorPhone(value),
+                        // validator: (value) {
+                        //   if ((value == null || value.isEmpty)) {
+                        //     return LocaleKeys.required.localize;
+                        //   }
+                        //   if (!_phonePattern.hasMatch(value)) {
+                        //     return LocaleKeys.invalidPhoneNumber.localize;
+                        //   }
+                        //
+                        //   return null;
+                        // },
+                        // controller: controller,
+                      ),
+                      /*CreateAdTextFormField(
                         hintText: LocaleKeys.phone.localize,
                         onChanged: (v) => controller.phone = v,
                         keyboardType: TextInputType.phone,
@@ -339,7 +377,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             return null;
                           }
                         },
-                      ),
+                      ),*/
                       const Sizer(
                         height: 10,
                       ),
@@ -369,7 +407,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               style: Styles.mediumText(
                                 fontSize: 32,
                                 height: 1.60,
-                                color: Colors.black,
+                                color: AppColors.getTextColor(context),
                               ),
                             ), // Change to city.nameAr for Arabic
                           );
@@ -443,7 +481,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 10,
                       ),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CustomCircularProgressIndicator())
+                          ? const Center(
+                              child: CustomCircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -482,7 +521,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                                             style: Styles.mediumText(
                                               fontSize: 32,
                                               height: 1.60,
-                                              color: Colors.black,
+                                              color: AppColors.getTextColor(
+                                                  context),
                                             ),
                                           ),
                                         );
@@ -573,7 +613,35 @@ class _CreateAdViewState extends State<CreateAdView> {
                         //     style: Styles.mediumText(fontSize: 32),
                         //   ),
                         // ),
-                        CreateAdTextFormField(
+                        PickUpTextFormField(
+                          controller: priceController,
+                          onChanged: (v) => controller.price = v,
+                          fillColor: AppColors.getFillColor(context),
+                          textColor: AppColors.getTextColor(context),
+                          hintText: state.isPrice == true
+                              ? LocaleKeys.price.localize
+                              : LocaleKeys.salary.localize,
+                          fieldType: FieldType.number,
+                          validator: (value) {
+                            if ((value == null || value.isEmpty)) {
+                              return LocaleKeys.required.localize;
+                            } else {
+                              return null;
+                            }
+                          },
+                          // validator: (value) {
+                          //   if ((value == null || value.isEmpty)) {
+                          //     return LocaleKeys.required.localize;
+                          //   }
+                          //   if (!_phonePattern.hasMatch(value)) {
+                          //     return LocaleKeys.invalidPhoneNumber.localize;
+                          //   }
+                          //
+                          //   return null;
+                          // },
+                          // controller: controller,
+                        ),
+                        /* CreateAdTextFormField(
                           onChanged: (v) => controller.price = v,
                           hintText: state.isPrice == true
                               ? LocaleKeys.price.localize
@@ -589,7 +657,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               return null;
                             }
                           },
-                        ),
+                        ),*/
                         // TextFormField(
                         //   maxLines: 1,
                         //   keyboardType: TextInputType.number,
@@ -620,6 +688,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           final property = state.adProperties![index];
+
                           return AdDynamicInputWidget(
                             property: property,
                             onChanged: (SelectionEntity v) =>
@@ -627,6 +696,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                             onTextChanged: (String v) =>
                                 controller.onTextChanged(v: v, index: index),
                             selectedProp: '',
+                            textInputAction: property.nameEn == 'family name' ||
+                                    property.nameAr == 'اسم العائلة'
+                                ? TextInputAction.done
+                                : TextInputAction.next,
                           );
                         },
                         // separatorBuilder: (context, index) => const Sizer(),
@@ -637,7 +710,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                         height: 16,
                       ),
                       state.isLoadingCreateAd
-                          ? const Center(child: CustomCircularProgressIndicator())
+                          ? const Center(
+                              child: CustomCircularProgressIndicator())
                           : Row(
                               children: [
                                 Expanded(

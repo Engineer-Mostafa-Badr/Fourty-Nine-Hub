@@ -6,6 +6,10 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marr
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+
 class MarriageRequest extends StatelessWidget {
   const MarriageRequest({
     super.key,
@@ -20,6 +24,43 @@ class MarriageRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return OlxPaginationWidget(
+      scrollController: _scrollController,
+      itemsPerPage: 2,
+      loadPage: (page) {
+        print('==> page ${page}');
+        print('==> filterModel ${state.filterModel}');
+        return controller.filterAds(
+            model: state.filterModel ?? FilterModel(), filter: '');
+      },
+      banners: bannersList,
+      items: List.generate(
+        state.adsRequestsLog!.length,
+            (index) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MarriageRequestListViewItem(
+                marriageAds: state.adsRequestsLog![index],
+                state: state,
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 10.0),
+                child: Label(
+                  text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
+                  style: Styles.headerText(
+                    fontSize: 28,
+                    color: const Color(0xFFFF3308),
+                    height: 1.57,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(

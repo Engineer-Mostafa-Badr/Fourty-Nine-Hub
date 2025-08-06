@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -16,12 +17,19 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
-class FilterAdsView extends StatefulWidget {
+class FilterAdsParams {
   final CategorizationEntity categorization;
+  final String userType;
+  FilterAdsParams({required this.categorization, required this.userType});
+}
 
-  const FilterAdsView({super.key, required this.categorization});
+class FilterAdsView extends StatefulWidget {
+  final FilterAdsParams filterAdsParams;
+
+  const FilterAdsView({super.key, required this.filterAdsParams});
 
   @override
   State<FilterAdsView> createState() => _FilterAdsViewState();
@@ -31,11 +39,35 @@ class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
     context.read<CreateAdCubit>().loadData(
-        subCategoryId: widget.categorization.fromMarriage == false
-            ? widget.categorization.mainCategory.id
-            : widget.categorization.subCategory.id,
-        fromMarriage: widget.categorization.fromMarriage ?? false);
+        subCategoryId:
+            widget.filterAdsParams.categorization.fromMarriage == false
+                ? widget.filterAdsParams.categorization.mainCategory.id
+                : widget.filterAdsParams.categorization.subCategory.id,
+        fromMarriage:
+            widget.filterAdsParams.categorization.fromMarriage ?? false);
     super.initState();
+  }
+
+  String _convertToArabicDigits(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String output = input;
+    for (int i = 0; i < english.length; i++) {
+      output = output.replaceAll(english[i], arabic[i]);
+    }
+    return output;
+  }
+
+  String _convertToEnglishDigits(String input) {
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+    String output = input;
+    for (int i = 0; i < arabic.length; i++) {
+      output = output.replaceAll(arabic[i], english[i]);
+    }
+    return output;
   }
 
   @override
@@ -64,7 +96,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
               builder: (context, state) {
             if (state.isLoading) {
               return const Center(
-                child: CustomCircularProgressIndicator(),
+                child: CustomLoadingSearchWidget(),
               );
             }
             return Padding(
@@ -79,7 +111,8 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                   // padding: const EdgeInsets.all(16.0),
                   children: [
                     CustomHeaderForm(
-                      categorization: widget.categorization,
+                      categorization: widget.filterAdsParams.categorization,
+                      isCreateAd: false,
                     ),
                     const SizedBox(
                       height: 16,
@@ -99,17 +132,24 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                       itemBuilder: (context, index) {
                         final property = state.filterAdProperties![index];
                         return FilterAdDynamicInputWidget(
-                          property: property,
-                          onChanged: (SelectionEntity v) =>
-                              controller.onChanged(v: v, index: index),
-                          onTextChanged: (String v, bool from, String type) =>
+                            property: property,
+                            onChanged: (SelectionEntity v) =>
+                                controller.onChanged(v: v, index: index),
+                            onTextChanged: (String v, bool from, String type) {
+                              // if (context.isArabic) {
+                              //   final englishValue = _convertToEnglishDigits(v);
+                              //   final arabicValue = _convertToArabicDigits(englishValue);
+                              //   v = arabicValue;
+                              // }
+                              print('arabicValue $v');
+
                               controller.onTextChanged(
                                   v: v,
                                   index: index,
                                   isNumber: property.type == 'number',
                                   from: from,
-                                  type: type),
-                        );
+                                  type: type);
+                            });
                       },
                       // separatorBuilder: (context, index) => const Sizer(),
                     ),
@@ -119,14 +159,15 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     ClickableWidget(
                         onTap: () {
                           controller.filterAds(
-                              categorize: widget.categorization,
+                              categorize: widget.filterAdsParams.categorization,
+                              userType: widget.filterAdsParams.userType,
                               context: context);
                         },
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(10),
                           decoration: ShapeDecoration(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: AppColors.getButtonPrimaryColor(context),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -145,7 +186,8 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                           // ),
                           child: Label(
                             text: LocaleKeys.filter.localize,
-                            style: Styles.headerText(color: Colors.white),
+                            style: Styles.headerText(
+                                color: AppColors.getReversedTextColor(context)),
                           ),
                         )),
                   ],

@@ -52,7 +52,6 @@ class DashboardsState
   final List<AvailableRideTripEntity>? availableRideTrips;
   final String? tripStatus;
   final String? lastStatus;
-  final RunningTripEntity? activeTrip;
   final bool? isChangedMindReason;
   final bool? isOtherReason;
   final bool? isClientNotShownReason;
@@ -79,13 +78,20 @@ class DashboardsState
   final XFile? vehicleFrontPicture;
   final XFile? vehicleBackPicture;
   final XFile? personalTechnicalExaminationPicture;
+  final List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket;
+  final List<GetLoadingAvailableEntity >? loadingAvailableNonSocket;
+  final List<GetLoadingHistoryEntity>? loadingHistoryNonSocket;
   final List<GovernorateEntity>? govs;
   final GovernorateEntity? selectedGov;
-
+  final Duration? recordPosition;
+  final PlayerState? playerState;
+  final Duration? recordDuration;
+  final DriverSettingLoadingEntity? driverSettingLoadingEntity;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
       this.settings,
+      this.recordPosition,
       this.currentIndex=0,
       this.status = DashboardsStates.initState,
       this.availableTrips,
@@ -96,7 +102,6 @@ class DashboardsState
       this.tripStatus,
       this.remainingTime,
       this.lastStatus,
-      this.activeTrip,
       this.supportDetails,
       this.supportStatus,
       this.emergencyContacts,
@@ -121,6 +126,12 @@ class DashboardsState
         this.personalTechnicalExaminationPicture,
         this.selectedGov,
         this.govs,
+        this.playerState,
+        this.recordDuration,
+        this.loadingAcceptedNonSocket,
+        this.loadingAvailableNonSocket,
+        this.loadingHistoryNonSocket,
+        this.driverSettingLoadingEntity,
       });
   DashboardsState copyWith(
       {DashboardsStates? status,
@@ -133,7 +144,6 @@ class DashboardsState
         String? tripStatus,
         DateTime? remainingTime,
         String? lastStatus,
-        RunningTripEntity? activeTrip,
         bool? isChangedMindReason,
         bool? isOtherReason,
         bool? isClientNotShownReason,
@@ -162,6 +172,15 @@ class DashboardsState
         XFile? vehicleFrontPicture,
          XFile? vehicleBackPicture,
         XFile? personalTechnicalExaminationPicture,
+        Duration? recordPosition,
+        Duration? recordDuration,
+        PlayerState? playerState,
+
+        List<GetLoadingAcceptedEntity>? loadingAcceptedNonSocket,
+        List<GetLoadingAvailableEntity>? loadingAvailableNonSocket,
+        List<GetLoadingHistoryEntity>? loadingHistoryNonSocket,
+
+        DriverSettingLoadingEntity? driverSettingLoadingEntity,
       }) {
     return DashboardsState(
       status: status ?? this.status,
@@ -174,7 +193,6 @@ class DashboardsState
       availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
       acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
       pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,
-      activeTrip: activeTrip ?? this.activeTrip,
       tripStatus: tripStatus ?? this.tripStatus,
       lastStatus: lastStatus ?? this.lastStatus,
       isChangedMindReason: isChangedMindReason ?? this.isChangedMindReason,
@@ -202,6 +220,13 @@ class DashboardsState
       personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
       govs: govs ?? this.govs,
       selectedGov: selectedGov ?? this.selectedGov,
+      recordPosition: recordPosition ?? this.recordPosition,
+      recordDuration: recordDuration ?? this.recordDuration,
+      playerState: playerState ?? this.playerState,
+      loadingAcceptedNonSocket: loadingAcceptedNonSocket ?? this.loadingAcceptedNonSocket,
+      loadingAvailableNonSocket: loadingAvailableNonSocket ?? this.loadingAvailableNonSocket,
+      loadingHistoryNonSocket: loadingHistoryNonSocket ?? this.loadingHistoryNonSocket,
+      driverSettingLoadingEntity: driverSettingLoadingEntity ?? this.driverSettingLoadingEntity,
     );
   }
 

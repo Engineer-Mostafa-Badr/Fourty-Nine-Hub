@@ -178,6 +178,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
       width: 80,
       child: Stack(
         clipBehavior: Clip.none,
+        alignment: Alignment.center,
         children: List.generate(
           tripViewers.length > 3 ? 3 : tripViewers.length,
               (index) {
@@ -185,7 +186,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
             return Positioned(
               left: index * 14.0,
               child: CircleAvatar(
-                radius: 20,
+                radius: 16,
                 backgroundImage: NetworkImage(viewer.driverImage),
               ),
             );

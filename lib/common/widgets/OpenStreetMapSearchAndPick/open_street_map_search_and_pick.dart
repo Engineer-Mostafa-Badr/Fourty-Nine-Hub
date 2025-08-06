@@ -45,8 +45,7 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
     this.buttonColor = Colors.blue,
     this.locationPinIconColor = Colors.blue,
     this.locationPinText = 'Location',
-    this.locationPinTextStyle = const TextStyle(
-        fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+    required this.locationPinTextStyle,
     this.hintText = 'Search Location',
     this.buttonTextStyle = const TextStyle(
         fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
@@ -519,8 +518,8 @@ class _OpenStreetMapSearchAndPickState
                                           context.isArabic
                                               ? "الموقع غير مدعوم"
                                               : "Location not supported",
-                                          style: const TextStyle(
-                                              color: AppColors.PRIMARY_COLOR),
+                                          style:  TextStyle(
+                                              color: context.isDarkMode? Colors.white :  AppColors.PRIMARY_COLOR),
                                         ),
                                         content: Text(
                                           context.isArabic
@@ -583,8 +582,8 @@ class _OpenStreetMapSearchAndPickState
                                             context.isArabic
                                                 ? "المسافة صغيرة جداً"
                                                 : "Distance too short",
-                                            style: const TextStyle(
-                                                color: AppColors.PRIMARY_COLOR),
+                                            style:  TextStyle(
+                                                color: context.isDarkMode? Colors.white :  AppColors.PRIMARY_COLOR),
                                           ),
                                           content: Text(context.isArabic
                                               ? "أقل مسافة متاحة هي ${widget.minAllowedDistanceKm} كيلومتر."

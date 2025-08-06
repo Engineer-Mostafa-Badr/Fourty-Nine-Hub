@@ -52,8 +52,8 @@ class RequestTripUseCaseParams {
     "toTitle": toTitle,
     "distance": distance.toInt(),
     "duration": duration,
-    "startLocation": startLocation,
-    "targetLocation": targetLocation,
+    "startLocation": [startLocation[1],startLocation[0]],
+    "targetLocation": [targetLocation[1],targetLocation[0]],
     if (wayPointOne != null) "wayPointOne": wayPointOne,
     if (wayPointTwo != null) "wayPointTwo": wayPointTwo,
     if (wayPointOneTitle != null) "wayPointOneTitle": wayPointOneTitle,
@@ -67,6 +67,10 @@ class RequestTripUseCaseParams {
     "isPremium" : isPremium,
     "polyline" : polyline,
     "riderPhone": phoneNumber,
+    "clientCurrentLocation": {
+      "latitude": startLocation[1],
+      "longitude": startLocation[0],
+    }
   };
 
 }

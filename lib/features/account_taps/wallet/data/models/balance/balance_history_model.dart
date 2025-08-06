@@ -1,18 +1,20 @@
 import '../../../domain/entities/balance/balance_history_entity.dart';
 
 class BalanceHistoryModel extends BalanceHistoryEntity {
-  BalanceHistoryModel(
-      {required super.id,
-      required super.userId,
-      required super.subCategoryId,
-      required super.taxPrice,
-      required super.transactionAmount,
-      required super.transactionPurpose,
-      required super.internalPayment,
-      required super.currency,
-      required super.isPaid,
-      required super.status,
-      required super.createdAt});
+  BalanceHistoryModel({
+    required super.id,
+    required super.userId,
+    required super.subCategoryId,
+    required super.taxPrice,
+    required super.transactionAmount,
+    required super.transactionPurpose,
+    required super.internalPayment,
+    required super.currency,
+    required super.isPaid,
+    required super.received,
+    required super.status,
+    required super.createdAt,
+  });
 
   factory BalanceHistoryModel.fromJson(Map<String, dynamic> json) {
     return BalanceHistoryModel(
@@ -25,6 +27,7 @@ class BalanceHistoryModel extends BalanceHistoryEntity {
       internalPayment: json['internalPayment'] ?? '',
       currency: json['currency'] ?? '',
       isPaid: json['isPaid'] ?? false,
+      received: json['received'] ?? false,
       status: json['status'] ?? '',
       createdAt: json['createdAt'] ?? '',
     );

@@ -6,8 +6,13 @@ class RunningTripModel extends RunningTripEntity {
   RunningTripModel({
     required super.tripId,
     required super.status,
-    super.startLocation,
-    super.targetLocation,
+    required super.from,
+    required super.to,
+    required super.startCoordinates,
+    required super.targetCoordinates,
+    required super.wayPointOneTitle,
+    required super.wayPointTwoTitle,
+    required super.clientRaiting,
     super.wayPointOne,
     super.wayPointTwo,
     required super.polyline,
@@ -22,6 +27,7 @@ class RunningTripModel extends RunningTripEntity {
     required super.distance,
     required super.clientId,
     required super.driverId,
+    required super.price,
   });
 
   factory RunningTripModel.fromJson(Map<String, dynamic> json) {
@@ -34,10 +40,12 @@ class RunningTripModel extends RunningTripEntity {
 
     if (location['polyline'] != null) {
       if (location['polyline'] is String) {
+        // Decode the encoded polyline string
         PolylinePoints polylinePoints = PolylinePoints();
         List<PointLatLng> decoded = polylinePoints.decodePolyline(location['polyline']);
-        parsedPolyline = decoded.map((e) => [e.longitude, e.latitude]).toList();
+        parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
       } else if (location['polyline'] is List) {
+        // Use the list directly
         parsedPolyline = (location['polyline'] as List)
             .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
             .toList();
@@ -50,11 +58,18 @@ class RunningTripModel extends RunningTripEntity {
       duration: tripDetails['duration'] ?? 0,
       distance: tripDetails['distance'] ?? 0,
       status: tripDetails['status'] ?? '',
-      startLocation:location['start'] == null ? null : TripLocationModel.fromJson(location['start']),
-      targetLocation: location['target'] == null ? null : TripLocationModel.fromJson(location['target']),
-      wayPointOne:location['wayPointOne'] == null ? null : TripLocationModel.fromJson(location['wayPointOne']),
-      wayPointTwo: location['wayPointTwo'] == null ? null : TripLocationModel.fromJson(location['wayPointTwo']),
+      price: tripDetails['price'] ?? 0,
+
+      from: location['start']?['title'],
+      to: location['target']?['title'],
+      wayPointOneTitle: location['wayPointOne']?['title'],
+      wayPointTwoTitle: location['wayPointTwo']?['title'],
+      startCoordinates: [location["start"]?['latitude'] ?? 0.0, location["start"]?['longitude'] ?? 0.0],
+      targetCoordinates: [location["target"]?['latitude'] ?? 0.0, location["target"]?['longitude'] ?? 0.0],
+      wayPointOne: [location["wayPointOne"]?['latitude'] ?? 0.0, location["wayPointOne"]?['longitude'] ?? 0.0],
+      wayPointTwo: [location["wayPointTwo"]?['latitude'] ?? 0.0, location["wayPointTwo"]?['longitude'] ?? 0.0],
       polyline: parsedPolyline,
+
       subCategoryId: subCategory['id'] ?? 0,
       subCategoryNameAr: subCategory['nameAr'] ?? '',
       subCategoryNameEn: subCategory['nameEn'] ?? '',
@@ -63,6 +78,7 @@ class RunningTripModel extends RunningTripEntity {
       clientId: clientDetails['id'] ?? '',
       clientGender: clientDetails['gender'] ?? '',
       clientPicture: clientDetails['profilePicture'] ?? '',
+      clientRaiting: clientDetails['rating']!=null?clientDetails['rating']['average'] ?? 0:0,
     );
   }
 

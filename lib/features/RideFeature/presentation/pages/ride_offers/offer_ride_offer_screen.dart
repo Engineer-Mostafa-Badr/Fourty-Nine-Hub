@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -13,9 +15,11 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -23,11 +27,13 @@ import '../../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../dashboards/widgets/client_offers_widget.dart';
+import '../loading_dashboard/loading_dashboard_details_screen.dart';
 
 class OfferRideOfferScreen extends StatefulWidget {
+  final String type;
 
   const OfferRideOfferScreen({
-    super.key,
+    super.key,required this.type,
   });
 
   @override
@@ -41,22 +47,27 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   @override
   void initState() {
     super.initState();
+    if(widget.type=='shipping') {
+      // context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+    context.read<ClientTripsCubit>().listenToUpdateOfferTripShipping();
+    }
+    if(widget.type=='ride') {
+      // context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+    context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
+    }
     _scrollController = ScrollController()..addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final dashboardCubit = context.read<ClientTripsCubit>();
       // if (!dashboardCubit.isClosed) {
-      dashboardCubit.listenToUpdateOfferTripNonSocket();
       // // dashboardCubit.getAvailableNonSocketTrips(),
       // dashboardCubit.listenToRemoveUntrackedTrip(),
       // dashboardCubit.listenToNewTripNonSocket()
       // // }
-    });
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ClientTripsCubit>().getClientOfferTrips();
+      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientOfferTrips();
+      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientOfferShippingTrips();
     }
   }
 
@@ -101,39 +112,41 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
           builder: (context, state) {
             return state.isLoading
-                ? Center(
-                    child: CustomCircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+                ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
                         child: Label(
                             text: LocaleKeys.errorHappen.localize,
                             style: const TextStyle(color: Colors.red)),
                       )
-                    : state.clientOfferTripData.isEmpty
+                    : context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
                         ?  Center(
                             child: Label(
                                 text: LocaleKeys.youDontHaveAvailableOffer.localize,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 18)),
+                                // style:
+                                //     TextStyle(color: Colors.red, fontSize: 18)
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: state.clientOfferTripData!.isEmpty
+                            child: context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
                                     itemBuilder: (context, index) =>
                                         ClientOfferWidget(
-                                          offers: state
-                                              .clientOfferTripData?[index],
+                                          offers: context.read<ClientTripsCubit>().clientOfferTripsData[index],
+                                          modeType: widget.type,
+                                          onRefuseOffer: (String id){
+                                            // context.read<ClientTripsCubit>().refuseClientShippingTrip(id,context);
+                                            setState(() {
+
+                                            });
+                                          },
                                         ),
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 5),
                                     itemCount:
-                                        state.clientOfferTripData!.length ??
-                                            0),
+                                    context.read<ClientTripsCubit>().clientOfferTripsData.length),
                           );
           },
         ),
@@ -145,79 +158,144 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
 class ClientOfferWidget extends StatelessWidget {
   final String modeType;
   final ClientOfferTripEntity? offers;
+  final Function(String id) onRefuseOffer;
 
-  const ClientOfferWidget({super.key, this.modeType = 'truk', this.offers});
+  const ClientOfferWidget({super.key,required this.modeType, this.offers,required this.onRefuseOffer});
+
+  // Helper method to convert digits based on locale
+  String _formatNumber(String input, BuildContext context) {
+    if (Localizations.localeOf(context).languageCode != 'ar') {
+      return input;
+    }
+
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String output = input;
+    for (int i = 0; i < english.length; i++) {
+      output = output.replaceAll(english[i], arabic[i]);
+    }
+    return output;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
     DateTime dateTime = DateTime.parse(
-        offers?.tripDetails?.data ?? '2025-03-11T21:50:21.998Z');
-    String formattedDate =
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-    String formattedTime =
-        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
+        offers?.tripDetails?.date ?? '2025-03-11T21:50:21.998Z');
+
+    // Format date with Arabic digits if needed
+    final formattedDate = isArabic
+        ? _formatNumber(
+        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+        context)
+        : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+
+    // Format time with Arabic digits if needed
+    final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final period = dateTime.hour < 12 ? 'AM' : 'PM';
+    final formattedTime =
+        "${_formatNumber(hour.toString(), context)} ${isArabic ? (period == 'AM' ? 'ص' : 'م') : period}";
+
+    // Format rating count and average
+    final ratingCount = _formatNumber(
+        offers?.driverDetails?.rating?.count?.toString() ?? '0', context);
+    final ratingAverage = _formatNumber(
+        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1), context);
+
+    // Format passengers count
+    final passengersCount = _formatNumber(
+        (offers?.tripDetails?.passengers ?? 0).toString(), context);
+
+    // Format price (handle socket price if applicable)
+    final price = offers?.isFromSocket == true
+        ? offers?.newOfferPrice ?? offers?.price ?? 300
+        : offers?.price ?? 300;
+    final priceText = _formatNumber(price.toString(), context);
+
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final avatarSize = screenWidth * 0.2; // 20% of screen width, tweak as needed
+    final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
+    final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
+
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-          color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5, borderRadius: BorderRadius.circular(20)),
+          color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
+          borderRadius: BorderRadius.circular(20)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-              flex: 2,
-              child: Column(children: [
-                Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+          ClickableWidget(
+            onTap: () {
+              context.push(
+                Routes.allDriverRatingScreen,
+                extra:offers?.id,
+              );
+            },
+            child: Column(children: [
+              Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: Container(
+                        // width: 75,
+                        // height: 75,
+                        width: avatarSize,
+                        height: avatarSize,
+                        decoration:
+                        const BoxDecoration(shape: BoxShape.circle),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: offers?.driverDetails?.pictureUrl == null ||
+                            offers!.driverDetails!.pictureUrl!.isEmpty
+                            ? Image.asset(
+                          Assets.maleImagePlaceholder,
+                          fit: BoxFit.cover,
+                        )
+                            : ImageFromInternet(
+                          image: offers!.driverDetails!.pictureUrl!,
+                        )),
+                  ),
+                  PositionedDirectional(
+                      top: badgeTopOffset,
+                      end: badgeEndOffset,
                       child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration:
-                              const BoxDecoration(shape: BoxShape.circle),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: offers?.driverDetails?.pictureUrl == null ||
-                                  offers!.driverDetails!.pictureUrl!.isEmpty
-                              ? Image.asset(
-                                  Assets.maleImagePlaceholder,
-                                  fit: BoxFit.cover,
-                                )
-                              : ImageFromInternet(
-                                  image: offers!.driverDetails!.pictureUrl!,
-                                )),
-                    ),
-                    Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.cF5F5F5,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Row(children: [
-                                  SvgPicture.asset(Assets.star2,
-                                      width: 8, height: 8),
-                                  const Sizer(width: 4),
-                                  Label(
-                                      text: offers?.driverDetails?.rating?.count
-                                              .toString() ??
-                                          '0',
-                                      style: Styles.smallText(
-                                          color: AppColors.PRIMARY_COLOR
-                                      ))
-                                ]))))
-                  ],
-                ),
-                Label(
-                    text: offers?.driverDetails?.firstName ?? '',
-                    style: Styles.mediumText()),
-                Label(
-                    text: '(${offers?.driverDetails?.rating?.average ?? 0})',
-                    style: Styles.smallText())
-              ])),
+                          decoration: BoxDecoration(
+                            color: AppColors.grey,
+                            // color: AppColors.cF5F5F5,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Row(children: [
+                                SvgPicture.asset(Assets.star2,
+                                    width: 8, height: 8),
+                                const Sizer(width: 4),
+                                Label(
+                                    text: ratingCount,
+                                    style: Styles.smallText(
+                                        color: AppColors.PRIMARY_COLOR))
+                              ]))))
+                ],
+              ),
+              Label(
+                  text: offers?.driverDetails?.firstName ?? '',
+                  style: Styles.mediumText()),
+              Label(
+                  text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
+                  style: Styles.mediumText()),
+              Label(
+                  text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
+                  offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
+                  style: Styles.mediumText()),
+              Label(
+                  text: '($ratingAverage)',
+                  style: Styles.smallText())
+            ]),
+          ),
           const Sizer(width: 32),
           Expanded(
             flex: 8,
@@ -247,7 +325,7 @@ class ClientOfferWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                         text: offers?.tripDetails?.location
-                                                ?.fromTitle ??
+                                            ?.fromTitle ??
                                             'Cairo International Airport',
                                         style: Styles.headerText()))
                               ],
@@ -263,14 +341,16 @@ class ClientOfferWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                         text: offers?.tripDetails?.location
-                                                ?.toTitle ??
+                                            ?.toTitle ??
                                             'Cairo International Airport',
                                         style: Styles.mediumText(
                                             fontWeight: FontWeight.w300)))
                               ],
                             ),
+                            if(modeType =='ride')
                             Label(
-                                text: '${LocaleKeys.passenger.localize}  ${offers?.tripDetails?.passengers ?? 0}',
+                                text:
+                                '${LocaleKeys.passenger.localize}  $passengersCount',
                                 style: Styles.mediumText())
                           ],
                         ),
@@ -279,47 +359,32 @@ class ClientOfferWidget extends StatelessWidget {
                           flex: 3,
                           child: Column(
                             children: [
-                              // offers?.category?.picture != null
-                              //     ? Image.asset(Assets.rideIcon,
-                              //     width: 40, height: 40, fit: BoxFit.cover)
-                              //     :
                               ImageFromInternet(
                                   image:
-                                      offers!.tripDetails!.subcategory!.pictureUrl!,
+                                  offers!.tripDetails!.subcategory!.pictureUrl!,
                                   width: 40,
                                   height: 40,
                                   fit: BoxFit.contain),
                               Label(
-                                  text: context.isArabic
+                                  text: isArabic
                                       ? (offers
-                                              ?.tripDetails?.subcategory?.nameAr ??
-                                          '')
+                                      ?.tripDetails?.subcategory?.nameAr ??
+                                      '')
                                       : (offers
-                                              ?.tripDetails?.subcategory?.nameEn ??
-                                          ''),
+                                      ?.tripDetails?.subcategory?.nameEn ??
+                                      ''),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
                     ],
                   ),
-                  // Label(
-                  //   text: modeType == 'truk'
-                  //       ? "${LocaleKeys.cargoDescription.tr()} : Car"
-                  //       : '${LocaleKeys.passenger.tr()} : ${offers?.tripDetails?.passengers ?? 0}',
-                  //   style: Styles.mediumText(fontSize: 32),
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      // Label(
-                      //     text: "${offers?.price ?? 300}",
-                      //     style:
-                      //         Styles.mediumText(fontWeight: FontWeight.w700)),
                       Label(
-                        text: "${offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.price ?? 300 : offers?.price ?? 300}",
+                        text: "${formatPrice(offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.newOfferPrice ?? 300 : offers?.newOfferPrice ?? 300, context)}",
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
-
                       const Sizer(width: 4),
                       Label(
                           text: LocaleKeys.egp.tr(),
@@ -332,13 +397,13 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: formattedTime, //'10 AM',
+                        text: "${formatTimeOnly(offers?.tripDetails?.date,context)}",
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Label(
-                        text: formattedDate, //'20/2/2025',
+                        text: "${formatPickupDate(offers?.tripDetails?.date, context)}",
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
@@ -354,7 +419,8 @@ class ClientOfferWidget extends StatelessWidget {
                             radius: 15,
                             label: LocaleKeys.Accept.tr(),
                             onPressed: () {
-                              context.read<ClientTripsCubit>().acceptClientTrip(offers?.id ?? "");
+                              modeType=='ride'?context.read<ClientTripsCubit>().acceptClientTrip(offers?.id ?? ""):context.read<ClientTripsCubit>().acceptClientShippingTrip(offers?.id ?? "");
+                              onRefuseOffer(offers?.id??"");
                             },
                             backColor: AppColors.PRIMARY_COLOR
                         ),
@@ -367,8 +433,9 @@ class ClientOfferWidget extends StatelessWidget {
                             label: LocaleKeys.refuse.tr(),
                             style: Styles.mediumText(
                                 color: Colors.white, fontSize: 23),
-                            onPressed: () {
-                              context.read<ClientTripsCubit>().refuseClientTrip(offers?.id ?? "");
+                            onPressed: () async{
+                              modeType=='ride'?await context.read<ClientTripsCubit>().refuseClientTrip(offers?.id ?? ""):await context.read<ClientTripsCubit>().refuseClientShippingTrip(offers?.id ?? "",context);
+                                onRefuseOffer(offers?.id??"");
 
                             },
                             backColor: AppColors.SECONDARY_COLOR_DARK2

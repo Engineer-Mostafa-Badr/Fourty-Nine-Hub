@@ -17,10 +17,13 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 
 class BuildSafetySheet extends StatefulWidget {
-  const BuildSafetySheet({super.key, this.onGoingToClient, required this.params, this.onClose});
+  const BuildSafetySheet({super.key, this.onGoingToClient, required this.params, this.onClose, required this.supportRideScreen, required this.emergencyContactsScreen, required this.rideFindingScreen});
   final GestureTapCallback? onGoingToClient;
   final SupportRideParams params;
   final GestureTapCallback? onClose;
+  final VoidCallback supportRideScreen;
+  final VoidCallback emergencyContactsScreen;
+  final VoidCallback rideFindingScreen;
 
   @override
   State<BuildSafetySheet> createState() => _BuildSafetySheetState();
@@ -97,19 +100,13 @@ class _BuildSafetySheetState extends State<BuildSafetySheet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildFeatureButton(Assets.supportIcon, LocaleKeys.support.localize, () {
-                          context.push(Routes.supportRideScreen, extra: widget.params);
-                        }, context),
-                        _buildFeatureButton(Assets.emergencyContactsIcon, LocaleKeys.emergencyContacts.localize, () {
-                          context.push(Routes.emergencyContactsScreen);
-                        }, context),
+                        _buildFeatureButton(Assets.supportIcon, LocaleKeys.support.localize, widget.supportRideScreen, context),
+                        _buildFeatureButton(Assets.emergencyContactsIcon, LocaleKeys.emergencyContacts.localize, widget.emergencyContactsScreen, context),
                       ],
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
-                      onPressed: () {
-                        context.push(Routes.rideFindingScreen);
-                      },
+                      onPressed: widget.rideFindingScreen,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,

@@ -7,10 +7,10 @@ class RatingEntity {
 }
 
 class DriverRatingEntity {
-  final num count;
-  final num average;
+  num? count;
+  num? average;
 
-  DriverRatingEntity({required this.count,required this.average});
+  DriverRatingEntity({ this.count, this.average});
 }
 class RatingEntityy {
   final String? id;

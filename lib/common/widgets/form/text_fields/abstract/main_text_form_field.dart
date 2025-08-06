@@ -48,6 +48,8 @@ abstract class MainTextFormField extends StatefulWidget {
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
   final Widget? labelWidget;
+  final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
 
   const MainTextFormField({
     super.key,
@@ -87,6 +89,8 @@ abstract class MainTextFormField extends StatefulWidget {
     this.prefixIcon,
     this.onTap,
     this.onEditComplete,
+    this.autofillHints,
+    this.textInputAction,
   });
 
   @override
@@ -100,7 +104,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
   Widget build(BuildContext context) {
     Widget textFieldWidget = TextFormField(
         onTap: widget.onTap ??
-                () {
+            () {
               var selection = widget.currentController.selection;
               var length = widget.currentController.text.length;
               var isLast = selection ==
@@ -110,6 +114,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
                     TextSelection.fromPosition(TextPosition(offset: length));
               }
             },
+        autofillHints: widget.autofillHints,
         onEditingComplete: widget.onEditComplete,
         cursorColor: widget.cursorColor,
         textDirection: _currentDir,
@@ -123,12 +128,14 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style: widget.style ?? Styles.mediumText(
-            color:
-            context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
+        style: widget.style ??
+            Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
-        widget.expanded ? const TextAlignVertical(y: -0.8) : null,
+            widget.expanded ? const TextAlignVertical(y: -0.8) : null,
         obscureText: widget.obscureText ?? false,
         minLines: widget.minLines,
         decoration: InputDecoration(
@@ -138,28 +145,29 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
                   : cardDarkColor(context)),
           filled: true,
           contentPadding:
-          widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
-          hintStyle: widget.hintStyle ?? TextStyle(
-              color:
-              context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
+          hintStyle: widget.hintStyle ??
+              TextStyle(
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefix: widget.prefix,
           label: widget.labelWidget,
           prefixIcon: widget.prefixIcon,
           constraints: widget.constraints,
           prefixIconColor: AppColors.QUANTITY_COLOR,
-
           enabledBorder: OutlineInputBorder(
             borderRadius:
-            const BorderRadius.all(Radius.circular(UIConst.radius)),
+                const BorderRadius.all(Radius.circular(UIConst.radius)),
             borderSide: BorderSide(
                 color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius:
-            const BorderRadius.all(Radius.circular((UIConst.radius))),
+                const BorderRadius.all(Radius.circular((UIConst.radius))),
             borderSide: BorderSide(
                 color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
           ),
@@ -181,13 +189,12 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           border: InputBorder.none,
           disabledBorder: OutlineInputBorder(
             borderRadius:
-            const BorderRadius.all(Radius.circular(UIConst.radius)),
+                const BorderRadius.all(Radius.circular(UIConst.radius)),
             borderSide: BorderSide(
                 color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
           ),
         ),
         validator: widget.validator,
-
         onChanged: (text) {
           if (widget.isAuthentcation) {
             if (CacheServiceImpl().isLogin() ?? false) {
@@ -212,7 +219,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             (widget.onChanged ?? (_) {})(text);
           }
         },
-
+        textInputAction: widget.textInputAction ?? TextInputAction.next,
         onFieldSubmitted: (String value) {
           FocusScope.of(context).requestFocus(widget.nextFocusNode);
         });

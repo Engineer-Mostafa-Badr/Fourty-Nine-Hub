@@ -62,10 +62,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     var result = await getGovernoratesUseCase(const NoParams());
 
     result.fold(
-      (failure) => emit(
-          state.copyWith(getGovernmentStatus: EditProfileStates.error, failure: failure)),
+      (failure) => emit(state.copyWith(
+          getGovernmentStatus: EditProfileStates.error, failure: failure)),
       (governorates) => emit(state.copyWith(
-          getGovernmentStatus: EditProfileStates.success, governorates: governorates)),
+          getGovernmentStatus: EditProfileStates.success,
+          governorates: governorates)),
     );
   }
 
@@ -85,5 +86,49 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   initGender(String gender) {
     emit(state.copyWith(
         isMale: gender == 'male' || gender.isEmpty ? true : false));
+  }
+
+
+  void selectGovernorate(int governorateId) {
+    final governorates = state.governorates ?? [];
+    final governorate = governorates.firstWhere(
+      (gov) => gov.id == governorateId,
+      orElse: () => governorates.first,
+    );
+
+    emit(state.copyWith(selectedCity: governorate.nameAr));
+  }
+
+  // method للحصول على المحافظة المختارة
+  GovernorateEntity? getSelectedGovernorate() {
+    final governorates = state.governorates ?? [];
+    if (governorates.isEmpty || state.selectedCity == null) return null;
+
+    try {
+      return governorates.firstWhere(
+        (gov) => gov.nameAr == state.selectedCity ||
+                gov.nameEn == state.selectedCity,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // method آمنة للحصول على المحافظة بالـ index
+  GovernorateEntity? getGovernorateByIndex(int index) {
+    final governorates = state.governorates ?? [];
+    if (index < 0 || index >= governorates.length) return null;
+    return governorates[index];
+  }
+
+  // method للحصول على index المحافظة بطريقة آمنة
+  int getGovernorateIndex(int governorateId) {
+    final governorates = state.governorates ?? [];
+    for (int i = 0; i < governorates.length; i++) {
+      if (governorates[i].id == governorateId) {
+        return i;
+      }
+    }
+    return -1; // لم يتم العثور عليها
   }
 }

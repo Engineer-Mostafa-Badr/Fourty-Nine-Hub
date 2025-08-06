@@ -15,9 +15,23 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 
-class DoctorSubcategoryFilterView extends StatelessWidget {
+class DoctorSubcategoryFilterView extends StatefulWidget {
   const DoctorSubcategoryFilterView({super.key, required this.type});
   final String type;
+
+  @override
+  State<DoctorSubcategoryFilterView> createState() => _DoctorSubcategoryFilterViewState();
+}
+
+class _DoctorSubcategoryFilterViewState extends State<DoctorSubcategoryFilterView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final doctorSubcategoryFilter = context.read<DoctorSubcategoryFilterCubit>();
+      doctorSubcategoryFilter.searchFocusNode.requestFocus();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final doctorSubcategoryFilter =
@@ -38,16 +52,19 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Label(text: LocaleKeys.governorate.localize ,style: Styles.headerText(fontWeight: FontWeight.w600),),
+            Label(
+              text: LocaleKeys.speciality.localize,
+              style: Styles.headerText(fontWeight: FontWeight.w600),
+            ),
             Sizer(),
             DefaultTextFormField(
               hintColor: Theme.of(context).scaffoldBackgroundColor,
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
               currentController: doctorSubcategoryFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.search,
-                color: AppColors.QUANTITY_COLOR,
+                color: AppColors.getTextColor(context),
               ),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
@@ -55,7 +72,7 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
               height: 30.h,
             ),
             DoctorsSubcategoriesFilterList(
-              type: type,
+              type: widget.type,
             )
           ],
         ),

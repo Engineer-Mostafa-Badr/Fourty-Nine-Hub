@@ -31,6 +31,7 @@ import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_kit_helper.d
 import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
+import 'package:fourtyninehub/service_locator/captain_share_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/competition_service_locator.dart';
@@ -63,6 +64,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:zego_express_engine/zego_express_engine.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
@@ -81,6 +83,7 @@ import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
 import 'live_service_locator.dart';
 import 'meeting_service_locator.dart';
+import 'new_trip_join_service_location.dart';
 import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
@@ -101,28 +104,9 @@ class DI {
     _callFeatureInjector();
     // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
-    serviceLocator.registerLazySingleton(() => PreloadBloc());
-    serviceLocator.registerLazySingleton<ReelsCubit>(
-      () => ReelsCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        //  serviceLocator(),
-      ),
-    );
 
     await Firebase.initializeApp(
-      name: "49-App",
+    name: "49-App",
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
@@ -183,6 +167,9 @@ class DI {
             )
         ]),
     );
+
+    
+
     //for gifts
     serviceLocator.registerLazySingleton(() => GiftsCubit(serviceLocator()));
 
@@ -316,7 +303,8 @@ class DI {
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
-    //Notification
+    //captain share service locator
+    CaptainShareServiceLocator.execute(serviceLocator: serviceLocator);
     // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
@@ -380,6 +368,7 @@ class DI {
     FollowServiceLocator.execute(serviceLocator: serviceLocator);
     TinderServiceLocator.execute(serviceLocator: serviceLocator);
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
+    NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

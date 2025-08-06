@@ -57,8 +57,17 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
       {required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db");
+    // final response = await _apiConsumer.get(
+    //     "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db");
+    final uri = Uri.parse(EndPoints.getTwitterFeedPosts).replace(
+      queryParameters: {
+        'page': params.page.toString(),
+        'limit': params.limit.toString(),
+        'subCategory': '66a3583454e6e337915514db',
+      },
+    );
+
+    final response = await _apiConsumer.get(uri.toString());
 
     return response.fold((l) {
       return Left(l);
@@ -208,7 +217,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, bool>> requestDocument(
       {required TwitterDocumentationParams params}) async {
-    final response = await _apiConsumer.post(EndPoints.documentRequest,
+    final response = await _apiConsumer.post(EndPoints.userVerification,
         data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }

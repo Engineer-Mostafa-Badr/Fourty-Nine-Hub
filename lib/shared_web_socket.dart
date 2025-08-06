@@ -1,22 +1,26 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/helpers/web_socket/websocket_isolate_manager.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SharedWebSocket {
   static IO.Socket? socket;
   static const String _url = 'https://49backend.com';
-  // static const String _url = 'https://d649-41-239-166-175.ngrok-free.app';
+  // static const String _url = 'https://2d41-2a09-bac1-2240-10-00-3b7-42.ngrok-free.app';
 
   static bool _isConnecting = false;
+  static Completer<void>? _connectionCompleter;
 
-  static void connect({required String token}) async {
+  static Future<void> connect({required String token}) async {
     if (_isConnecting || (socket != null && socket!.connected)) {
       log("Socket is already connecting or connected, skipping...");
       return;
     }
 
     _isConnecting = true;
+    _connectionCompleter = Completer<void>();
 
     if (token == await CacheManager.getAccessToken()) {
       log("Token from connect socket matches cached token: $token");
@@ -30,7 +34,6 @@ class SharedWebSocket {
         'transports': ['websocket'],
         'autoConnect': true,
         'extraHeaders': {'Authorization': token},
-
       },
     );
     socket!.connect();
@@ -41,12 +44,27 @@ class SharedWebSocket {
       log("Socket connect called, connected: ${socket?.connected}");
       log("Socket connect called, ID: ${socket?.id}");
       _isConnecting = false;
+      if (!_connectionCompleter!.isCompleted) {
+        _connectionCompleter!.complete();
+      }
     });
 
     socket!.onError((error) {
       log("Socket connection error: $error");
       _isConnecting = false;
+      if (!_connectionCompleter!.isCompleted) {
+        _connectionCompleter!.completeError(error);
+      }
     });
+
+    // Add timeout to prevent hanging
+    return _connectionCompleter!.future.timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        _isConnecting = false;
+        throw TimeoutException('WebSocket connection timed out');
+      },
+    );
   }
 
   static void disconnect() {
@@ -66,5 +84,13 @@ class SharedWebSocket {
     } else {
       log("Socket disconnect called, but no active socket to disconnect.");
     }
+  }
+  
+  static void dispose() {
+    disconnect();
+    if (WebSocketIsolateManager.instance != null) {
+      WebSocketIsolateManager.instance.dispose();
+    }
+    log("WebSocket resources disposed successfully.");
   }
 }

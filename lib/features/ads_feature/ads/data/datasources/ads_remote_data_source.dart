@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
@@ -28,8 +27,11 @@ abstract class AdsRemoteDataSource {
       {required RequestParams params});
 
   Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params);
+
   Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(
       GetMyAdByIdParams params);
+
+  Future<Either<Failure, bool>> viewAd({required String params});
 }
 
 class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
@@ -132,5 +134,13 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
         (data) => Right((data['data']['ads'] as List)
             .map((e) => AdModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> viewAd({required String params}) async {
+    final response = await _apiConsumer.get(
+      EndPoints.viewAd(params),
+    );
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

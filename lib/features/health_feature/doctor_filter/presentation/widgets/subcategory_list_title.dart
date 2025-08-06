@@ -42,7 +42,7 @@ class SubcategoryListTitle extends StatelessWidget {
         width: 750.w,
         height: 140.h,
         decoration: BoxDecoration(
-          color: AppColors.BG_GRAY_COLOR,
+          color: AppColors.getFindFillColor(context),
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(width: 1),
         ),

@@ -33,6 +33,7 @@ class StarCubit extends Cubit<StarState> {
 
   List<StarEntity> star = [];
   List<StarWinnerEntity> winner = [];
+
   // List<AzkarDetailsEntity> azkarDetails = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
@@ -49,79 +50,83 @@ class StarCubit extends Cubit<StarState> {
 
   List<StarEntity> allTalents = [];
   bool loadAllTalents = false;
+
   Future loadAllTalentsData() async {
-    loadAllTalents=true;
+    loadAllTalents = true;
     allTalents.clear();
     allTalentsPage = 1;
     hasMoreAllTalentsData = true;
     emit(state.copyWith(status: StarStates.loading));
     await getAllTalents();
-    await Future.wait([
-      getAllTalents(),
-      fetchBanner()
-    ]);
-    loadAllTalents=false;
+    await Future.wait([getAllTalents(), fetchBanner()]);
+    loadAllTalents = false;
     emit(state.copyWith(status: StarStates.success));
   }
+
   bool isLoadingAllTalentsMore = false;
   bool hasMoreAllTalentsData = true;
   int allTalentsPage = 1;
+
   Future<void> getAllTalents() async {
     print(hasMoreAllTalentsData);
     print(isLoadingAllTalentsMore);
+    print('getAllTalents ==>');
     if (!hasMoreAllTalentsData || isLoadingAllTalentsMore) return;
     isLoadingAllTalentsMore = true;
     emit(state.copyWith(status: StarStates.loading));
     final response = await _allStarUseCase(
       StarPaginationParams(page: currentPage, limit: pageSize),
     );
-    response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StarStates.error)),
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: StarStates.error)),
             (data) async {
-          allTalents.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreAllTalentsData = false;
-          } else {
-            allTalentsPage++;
-          }
-          isLoadingAllTalentsMore = false;
-          emit(state.copyWith(status: StarStates.initial));
-        });
+      allTalents.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreAllTalentsData = false;
+      } else {
+        allTalentsPage++;
+      }
+      isLoadingAllTalentsMore = false;
+      emit(state.copyWith(status: StarStates.initial));
+    });
   }
 
   List<StarEntity> myTalents = [];
   bool loadMyTalents = false;
+
   Future loadMyTalentsData() async {
-    loadMyTalents=true;
+    loadMyTalents = true;
     myTalents.clear();
     myTalentsPage = 1;
     hasMoreMyTalentsData = true;
     emit(state.copyWith(status: StarStates.loading));
     await getMyTalents();
-    loadMyTalents=false;
+    loadMyTalents = false;
     emit(state.copyWith(status: StarStates.success));
   }
+
   bool isLoadingMyTalentsMore = false;
   bool hasMoreMyTalentsData = true;
   int myTalentsPage = 1;
+
   Future<void> getMyTalents() async {
     if (!hasMoreMyTalentsData || isLoadingMyTalentsMore) return;
     isLoadingMyTalentsMore = true;
     emit(state.copyWith(status: StarStates.loading));
     final response = await _fetchMylStarUseCase.call(const NoParams());
 
-    response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StarStates.error)),
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: StarStates.error)),
             (data) async {
-          myTalents.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreMyTalentsData = false;
-          } else {
-            myTalentsPage++;
-          }
-          isLoadingMyTalentsMore = false;
-          emit(state.copyWith(status: StarStates.success));
-        });
+      myTalents.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreMyTalentsData = false;
+      } else {
+        myTalentsPage++;
+      }
+      isLoadingMyTalentsMore = false;
+      emit(state.copyWith(status: StarStates.success));
+    });
   }
 
   void loadInitialDataWinner() async {
@@ -133,6 +138,7 @@ class StarCubit extends Cubit<StarState> {
   }
 
   Future<void> getAllTalent({bool refresh = false}) async {
+    print('getAllTalent ==>');
     if (refresh) {
       star.clear();
       currentPage = 1;
@@ -290,7 +296,7 @@ class StarCubit extends Cubit<StarState> {
 
   List<String>? selectedVideo;
 
-  uploadVideo({bool isGallery = true,required BuildContext context}) async {
+  uploadVideo({bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadVideo(
@@ -310,7 +316,8 @@ class StarCubit extends Cubit<StarState> {
               video: video,
               // backColor: '#FFFFFFFF',
               status: StarStates.success));
-        }, context: context);
+        },
+        context: context);
     print("length${state.video?.length}");
   }
 

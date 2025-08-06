@@ -23,6 +23,7 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
   void loadInitialData(String id, String search) async {
     adRequests.clear();
     currentPage = 1;
+    isLoadingMore = false;
     hasMoreData = true;
     await fetchAdRequests(id, search);
   }

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/validator.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
-import '../../../../../routes/routes.dart';
 
 class RequestButton extends StatelessWidget {
   const RequestButton({
@@ -62,9 +61,10 @@ class RequestButton extends StatelessWidget {
             : () {
                 if (!dontPop) context.pop();
                 showModalBottomSheet(
-                  backgroundColor: context.isDarkMode
-                      ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
-                      : AppColors.LIGHT_COLOR,
+                  // backgroundColor: context.isDarkMode
+                  //     ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
+                  //     : AppColors.LIGHT_COLOR,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   context: context,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -119,7 +119,7 @@ class RequestButton extends StatelessWidget {
         child: Container(
           height: 38,
           decoration: ShapeDecoration(
-            color: const Color(0xFF0B1035),
+            color: AppColors.getButtonPrimaryColor(context),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -128,7 +128,7 @@ class RequestButton extends StatelessWidget {
             child: Label(
               text: LocaleKeys.request.localize,
               style: Styles.headerText(
-                color: Colors.white,
+                color: AppColors.getReversedTextColor(context),
                 height: 1.6,
                 fontWeight: FontWeight.w500,
               ),
@@ -291,8 +291,8 @@ class RequestButton extends StatelessWidget {
   }
 }
 
-class RequestNumberBottomSheet extends StatelessWidget {
-  const RequestNumberBottomSheet({
+class RequestNumberBottomSheet extends StatefulWidget {
+  RequestNumberBottomSheet({
     super.key,
     // required this.controller,
     // required this.adId,
@@ -310,6 +310,36 @@ class RequestNumberBottomSheet extends StatelessWidget {
   final void Function(String)? onChanged;
   final TextEditingController textController;
   final bool isLoading;
+
+  @override
+  State<RequestNumberBottomSheet> createState() =>
+      _RequestNumberBottomSheetState();
+}
+
+class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
+  final RegExp _phonePattern =
+      RegExp(r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'
+          r'\d{10}|'
+          r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'
+          r'\+\d{10,}');
+
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.textController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -336,6 +366,7 @@ class RequestNumberBottomSheet extends StatelessWidget {
 
             InkWell(
               onTap: () {
+                focusNode.unfocus();
                 context.pop();
               },
               child: Container(
@@ -355,19 +386,48 @@ class RequestNumberBottomSheet extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
+            // Container(
+            //   constraints: BoxConstraints(maxHeight: 180.h),
+            //   child: Form(
+            //     child: NewPhoneNumberTextFormField(
+            //       style: TextStyle(
+            //         color: AppColors.getTextColor(context),
+            //       ),
+            //       currentController: textController,
+            //       isRequired: true,
+            //       maxLength: 11,
+            //       hintColor: AppColors.getTextColor(context),
+            //       onChanged: onChanged,
+            //       // controller: controller,
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 24,
+            // ),
             Container(
               constraints: BoxConstraints(maxHeight: 180.h),
               child: Form(
-                key: formKey,
-                child: NewPhoneNumberTextFormField(
-                  style: TextStyle(
-                    color: AppColors.getTextColor(context),
-                  ),
-                  currentController: textController,
-                  isRequired: true,
-                  maxLength: 11,
-                  hintColor: AppColors.getTextColor(context),
-                  onChanged: onChanged,
+                key: widget.formKey,
+                child: PickUpTextFormField(
+                  controller: widget.textController,
+                  focusNode: focusNode,
+                  onChanged: widget.onChanged,
+                  fillColor: AppColors.getFillColor(context),
+                  textColor: AppColors.getTextColor(context),
+                  hintText: LocaleKeys.phoneNumber.localize,
+                  fieldType: FieldType.phone,
+                  validator: (value) => validatorPhone(value),
+                  // validator: (value) {
+                  //   if ((value == null || value.isEmpty)) {
+                  //     return LocaleKeys.required.localize;
+                  //   }
+                  //   if (!_phonePattern.hasMatch(value)) {
+                  //     return LocaleKeys.invalidPhoneNumber.localize;
+                  //   }
+                  //
+                  //   return null;
+                  // },
                   // controller: controller,
                 ),
               ),
@@ -375,10 +435,10 @@ class RequestNumberBottomSheet extends StatelessWidget {
             const SizedBox(
               height: 24,
             ),
-            isLoading
+            widget.isLoading
                 ? const CustomLoading()
                 : InkWell(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: Container(
                       // width: 100,
                       // height: 40,

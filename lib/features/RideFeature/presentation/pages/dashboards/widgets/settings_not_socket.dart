@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -18,6 +19,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
+import '../../../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
@@ -39,24 +41,113 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
   void initState() {
     super.initState();
+    // enableSound =  widget.settings?.enableNotificationSound ?? false;
+    _initializeSettings();
 
   }
+  late bool enableSound;
+  late bool isReady;
 
+  late bool originalEnableSound;
+  late bool originalIsReady;
+  void _initializeSettings() {
+    enableSound = widget.settings?.isVoiceCommentAlertsEnabled ?? false;
+    isReady = widget.settings?.isReady ?? false;
+
+    originalEnableSound = enableSound;
+    originalIsReady = isReady;
+  }
+  @override
+  void didUpdateWidget(covariant SettingsNotSocket oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Update state if new settings come from API
+    if (widget.settings != oldWidget.settings && widget.settings != null) {
+      setState(() {
+        _initializeSettings();
+      });
+    }
+  }
+  void submitChanges() {
+    final params = UpdateDriverSettingsParams(
+      isReady: isReady,
+      isVoiceCommentAlertsEnabled: enableSound,
+    );
+
+    context.read<DashboardsCubit>().updateDriverSettings(
+       params,
+       context,
+    );
+
+    // Update original values
+    setState(() {
+      originalEnableSound = enableSound;
+      originalIsReady = isReady;
+    });
+  }
+  bool hasChanges() {
+    return enableSound != originalEnableSound || isReady != originalIsReady;
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
       child: ListView(
         children: [
+          // switchWidget(
+          //     title: LocaleKeys.ready.tr(),
+          //     subText: widget.settings?.isReady != null  ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+          //     valuee: widget.settings?.isReady,
+          //     onChanged: (value) {
+          //       setState(() {
+          //         context.read<DashboardsCubit>().updateDriverSettings(value,context);
+          //       });
+          //     }),
+          //
+          // switchWidget(
+          //     title: context.isArabic?'اشعارات صوتية':'Voice notify',
+          //     subText: enableSound ? context.isArabic?'تفعيل':'Enabled' : context.isArabic?'تعطيل':'Disabled', //'Disable',
+          //     valuee: enableSound,
+          //     onChanged: (value) {
+          //       setState(() {
+          //         enableSound = value;
+          //       });
+          //     }),
           switchWidget(
-              title: LocaleKeys.ready.tr(),
-              subText: widget.settings?.isReady != null  ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
-              valuee: widget.settings?.isReady,
-              onChanged: (value) {
-                setState(() {
-                  context.read<DashboardsCubit>().updateDriverSettings(value);
-                });
-              }),
+            title: LocaleKeys.ready.tr(),
+            subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+            valuee: isReady,
+            onChanged: (value) {
+              setState(() {
+                isReady = value;
+              });
+            },
+          ),
+          switchWidget(
+            title: context.isArabic ? 'اشعارات صوتية' : 'Voice notify',
+            subText: enableSound
+                ? (context.isArabic ? 'تفعيل' : 'Enabled')
+                : (context.isArabic ? 'تعطيل' : 'Disabled'),
+            valuee: enableSound,
+            onChanged: (value) {
+              setState(() {
+                enableSound = value;
+              });
+            },
+          ),
+          if (hasChanges())
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: AppButton(
+                backColor: context.isDarkMode
+                    ? AppColors.PRIMARY_COLOR_DARK
+                    : AppColors.PRIMARY_COLOR,
+                color: AppColors.LIGHT_COLOR,
+                onPressed: submitChanges,
+                label: context.isArabic ? 'تحديث' : 'Update',
+              ),
+            ),
+
           Padding(
             padding: const EdgeInsetsDirectional.all(8),
             child: Row(
@@ -79,9 +170,9 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                Text(widget.settings?.rating?.average == null ? "" :widget.settings?.rating?.average.toString() ?? '2.5',
+                Text(formatPrice(widget.settings?.rating?.average == null ? 0 :widget.settings?.rating?.average?.toDouble() ?? 2.5, context),
                     style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w700))
+                        fontSize: 16, fontWeight: FontWeight.w700))
               ],
             ),
           ),
@@ -93,9 +184,9 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 Text(LocaleKeys.totalProfit.tr(), //'Total Profit',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text('${widget.settings?.profit ?? '0'} ${LocaleKeys.egp.tr()}',
+                Text('${formatPrice(widget.settings?.profit ?? 0,context)} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w500))
+                        fontSize: 16, fontWeight: FontWeight.w500))
               ],
             ),
           ),
@@ -107,7 +198,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500)),
-                Text(widget.settings?.countTrips.toString() ?? '', //'38',
+                Text(formatPrice(widget.settings?.countTrips?.toDouble() ?? 0,context), //'38',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500))
               ],
@@ -140,7 +231,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 title: LocaleKeys.carLicense.tr(), exdIn: 6),
           ),
 
-          if(widget.settings?.isCriminalRecordEnabled == true)
+          // if(widget.settings?.isCriminalRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
@@ -150,7 +241,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
           ),
-          if(widget.settings?.isVehicleRecordEnabled == true)
+          // if(widget.settings?.isVehicleRecordEnabled == true)
             ClickableWidget(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
@@ -160,7 +251,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.technicalExamination.tr(), exdIn: 6),
           ),
-          if(widget.settings?.isDrugAnalysisRecordEnabled == true)
+          // if(widget.settings?.isDrugAnalysisRecordEnabled == true)
 
             ClickableWidget(
             onTap: () async {
