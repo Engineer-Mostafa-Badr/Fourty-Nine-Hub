@@ -1,31 +1,68 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../core/error/failure.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
+
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../domain/entities/create_post_request_entity.dart';
 import '../../../domain/entities/location_instagram_entity.dart';
 import '../../../domain/entities/user_tag_entity.dart';
 import '../../../domain/usecases/create_post_request_use_case.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:photo_manager/photo_manager.dart';
-
 import '../../../domain/usecases/post_confirm_webhook_use_case.dart';
 
 part 'create_post_instagram_state.dart';
 
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
+  final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
+
+  final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
+  // Future<File?>? selectedImage;
+  List<CteatePostTypeInstagram> postTypes = CteatePostTypeInstagram.postTypes;
+
   CreatePostInstagramCubit(
       this.createPostInstagramUseCase, this.postConfirmWebhookUseCase)
       : super(const CreatePostInstagramState());
 
-  final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
-  final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
+  // Future<void> _uploadMedia() async {
+  //   final result = await UploadFile().uploadImage(
+  //     subCategoryId: "66b6167938e6690c102ffa9c",
+  //     onUploaded: (media) {
+  //       emit(state.copyWith(
+  //           uploadedImage: File(media.file.path),
+  //           uploadStatus: StateStatus.success,
+  //           imageMediaId: media.mediaId));
+  //     },
+  //     context: context,
+  //   );
+  //   if (result != null) {
+  //   } else {
+  //     emit(state.copyWith(uploadStatus: StateStatus.error));
+  //   }
+  // }
 
-  // Future<File?>? selectedImage;
-  List<CteatePostTypeInstagram> postTypes = CteatePostTypeInstagram.postTypes;
+  void addLocation(LocationInstagramEntity location) {
+    emit(state.copyWith(
+      location: location,
+    ));
+  }
+
+  void addUserTag(UserTagEntity user) {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag);
+
+    final alreadyExists = updatedTags.any((u) => u.id == user.id);
+
+    if (!alreadyExists) {
+      updatedTags.add(user);
+      emit(state.copyWith(usersTag: updatedTags));
+    }
+  }
 
   // void nextPage(BuildContext context) {
   //   log('nextPage ------------------------------------------------------------');
@@ -46,50 +83,106 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     emit(state.copyWith(isImageCover: !state.isImageCover));
   }
 
-  void onTapGalleryReel({
-    required AssetEntity itemOfGallery,
-  }) {
-    List<AssetEntity> selectedGalleryReels =
-        List.from(state.selectedGalleryReels);
-    if (state.multiSelectGalleryReel) {
-      if (state.selectedGalleryReels.contains(itemOfGallery)) {
-        selectedGalleryReels.remove(itemOfGallery);
-        emit(state.copyWith(
-          selectedGalleryReels: selectedGalleryReels,
-          // isVideoInitialized: false,
-        ));
-      } else {
-        selectedGalleryReels.add(itemOfGallery);
-        emit(state.copyWith(
-          selectedGalleryReels: selectedGalleryReels,
-          // isVideoInitialized: false,
-        ));
-      }
-    } else {
-      selectedGalleryReels = [itemOfGallery];
-      emit(state.copyWith(
-        selectedGalleryReels: selectedGalleryReels,
-        // isVideoInitialized: false,
-      ));
+  void changeMultiSelectGalleryPost() {
+    emit(state.copyWith(multiSelectGalleryPost: !state.multiSelectGalleryPost));
+  }
+
+  void changeMultiSelectGalleryReel() {
+    emit(state.copyWith(multiSelectGalleryReel: !state.multiSelectGalleryReel));
+  }
+
+  // void onTapImage(index) {
+  //   if (state.multiSelect) {
+  //     // selectedMeda.add(images[index]);
+  //     if (state.selectedMeda.contains(state.images[index])) {
+  //       state.selectedMeda.remove(state.images[index]);
+  //     } else {
+  //       state.selectedMeda.add(state.images[index]);
+  //     }
+  //     List<Future<File?>> selectedImages = state.selectedImages;
+  //     if (selectedImages.contains(state.images[index].file)) {
+  //       selectedImages.remove(state.images[index].file);
+  //     } else {
+  //       selectedImages.add(state.images[index].file);
+  //     }
+  //     emit(state.copyWith(
+  //       selectedImages: selectedImages,
+  //     ));
+  //     // selectedImage = widget.images[index].file;
+  //   } else {
+  //      List<Future<File?>> selectedImages = state.selectedImages;
+  //     if (selectedImages.contains(state.images[index].file)) {
+  //       selectedImages.remove(state.images[index].file);
+  //     } else {
+  //       selectedImages.add(state.images[index].file);
+  //     }
+  //     emit(state.copyWith(selectedImages: selectedImages));
+  //     // selectedImage = widget.images[index].file;
+  //   }
+  // }
+
+  void changePostType(int index) {
+    emit(state.copyWith(postTypeSelectedIndex: index));
+  }
+
+  Future<void> createPost({required String caption}) async {
+    List<AssetEntity> uploadMedia = [];
+    if (state.selectedGalleryPost.isNotEmpty) {
+      uploadMedia.addAll(state.selectedGalleryPost);
+    } else if (state.selectedGalleryReels.isNotEmpty) {
+      uploadMedia.addAll(state.selectedGalleryReels);
     }
+    await createRequestPost(
+      CreatePostRequestInstagramParams(
+        content: caption,
+        media: await Future.wait(
+          uploadMedia.map((AssetEntity e) async {
+            final num size = await _getAssetFileSize(e);
+            return MediaCreatePostInstagramParams(
+              itemId: (uploadMedia.indexOf(e) + 1).toString(),
+              type: e.mimeType ?? '',
+              size: size,
+            );
+          }).toList(),
+        ),
+      ),
+      await Future.wait(
+        uploadMedia.map((AssetEntity e) async {
+          final file = await e.file;
+          return file?.path ?? '';
+        }).toList(),
+      ),
+    );
+  }
 
-    // // تحرير الموارد من المشغل السابق إن وجد
-    // await controller?.dispose();
-
-    // // الحصول على ملف الفيديو
-    // final file = await video.file;
-    // if (file == null) return;
-
-    // // إنشاء مشغل فيديو جديد
-    // controller = VideoPlayerController.file(file)
-    //   ..initialize().then((_) {
-    //     if (context.mounted) {
-    //       emit(state.copyWith(
-    //         isVideoInitialized: true,
-    //       ));
-    //       controller?.play();
-    //     }
-    //   });
+  Future<List<CreatePostRequestEntity>> createRequestPost(
+      CreatePostRequestInstagramParams params, List<String> path) async {
+    final result = await createPostInstagramUseCase.call(params);
+    result.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.failure,
+            failure: failure,
+          ),
+        );
+        return [];
+      },
+      (data) async {
+        List<String> mediaIds = [];
+        for (int i = 0; i < data.length; i++) {
+          await uploadMedia(signedUrl: data[i].signedUrl, path: path[i]);
+          mediaIds.add(data[i].mediaHolderId);
+        }
+        await postConfirmWebhook(mediaIds: mediaIds);
+        return data;
+      },
+    );
+    return [];
   }
 
   Future<void> fetchVideos(BuildContext context) async {
@@ -146,328 +239,6 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
         // });
       }
     }
-  }
-
-  Future<int> _getAssetFileSize(AssetEntity entity) async {
-    File? file = await entity.file;
-    if (file != null) {
-      return await file.length();
-    }
-    return 0;
-  }
-
-  Future<void> createPost({required String caption}) async {
-    List<AssetEntity> uploadMedia=[];
-    if(state.selectedGalleryPost.isNotEmpty){
-      uploadMedia.addAll(state.selectedGalleryPost);
-    }else if(state.selectedGalleryReels.isNotEmpty){
-      uploadMedia.addAll(state.selectedGalleryReels);
-    }
-    await createRequestPost(
-      CreatePostRequestInstagramParams(
-        content: caption,
-        media: await Future.wait(
-          uploadMedia.map((AssetEntity e) async {
-            final num size = await _getAssetFileSize(e);
-            return MediaCreatePostInstagramParams(
-              itemId: (uploadMedia.indexOf(e)+1).toString(),
-              type: e.mimeType ?? '',
-              size: size,
-            );
-          }).toList(),
-        ),
-      ),
-      await Future.wait(
-        uploadMedia.map((AssetEntity e) async {
-          final file = await e.file;
-          return file?.path ?? '';
-        }).toList(),
-      ),
-    );
-  }
-
-  Future<List<CreatePostRequestEntity>> createRequestPost(
-      CreatePostRequestInstagramParams params, List<String> path) async {
-    final result = await createPostInstagramUseCase.call(params);
-    result.fold(
-      (failure) {
-        emit(
-          state.copyWith(
-            status: CreatePostInstagramStates.failure,
-            failure: failure,
-          ),
-        );
-        return [];
-      },
-      (data) async {
-        List<String> mediaIds = [];
-        for (int i = 0; i < data.length; i++) {
-          await uploadMedia(signedUrl: data[i].signedUrl, path: path[i]);
-          mediaIds.add(data[i].mediaHolderId);
-        }
-        await postConfirmWebhook(mediaIds: mediaIds);
-        return data;
-      },
-    );
-    return [];
-  }
-
-  Future<void> uploadMedia({
-    required String signedUrl,
-    required String path,
-  }) async {
-    final dio = Dio();
-    final file = File(path);
-
-    try {
-      final response = await dio.put(
-        signedUrl,
-        data: file.openRead(), // stream the file
-        options: Options(
-          headers: {
-            HttpHeaders.contentLengthHeader: await file.length(),
-            // required
-            HttpHeaders.contentTypeHeader: 'application/octet-stream',
-            // or the actual MIME type
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        print('Upload successful');
-      } else {
-        print('Upload failed: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Upload error: $e');
-    }
-  }
-
-  Future<void> postConfirmWebhook({required List<String> mediaIds}) async {
-    final result = await postConfirmWebhookUseCase.call(
-      PostConfirmWebhookParams(
-        mediaIds: mediaIds,
-      ),
-    );
-    result.fold(
-      (failure) {
-        emit(
-          state.copyWith(
-            status: CreatePostInstagramStates.failure,
-            failure: failure,
-          ),
-        );
-        return [];
-      },
-      (data) {
-        return data;
-      },
-    );
-  }
-
-  // Future<void> _uploadMedia() async {
-  //   final result = await UploadFile().uploadImage(
-  //     subCategoryId: "66b6167938e6690c102ffa9c",
-  //     onUploaded: (media) {
-  //       emit(state.copyWith(
-  //           uploadedImage: File(media.file.path),
-  //           uploadStatus: StateStatus.success,
-  //           imageMediaId: media.mediaId));
-  //     },
-  //     context: context,
-  //   );
-  //   if (result != null) {
-  //   } else {
-  //     emit(state.copyWith(uploadStatus: StateStatus.error));
-  //   }
-  // }
-
-  void addLocation(LocationInstagramEntity location) {
-    emit(state.copyWith(
-      location: location,
-    ));
-  }
-
-  void removeLocation() {
-    emit(state.copyWith(
-      location: null,
-    ));
-  }
-
-  void addUserTag(UserTagEntity user) {
-    final updatedTags = List<UserTagEntity>.from(state.usersTag);
-
-    final alreadyExists = updatedTags.any((u) => u.id == user.id);
-
-    if (!alreadyExists) {
-      updatedTags.add(user);
-      emit(state.copyWith(usersTag: updatedTags));
-    }
-  }
-
-  void removeUserTag(UserTagEntity user) {
-    final updatedTags = List<UserTagEntity>.from(state.usersTag)
-      ..removeWhere((u) => u.id == user.id);
-    emit(state.copyWith(usersTag: updatedTags));
-  }
-
-  void removeAllUserTag() {
-    final updatedTags = List<UserTagEntity>.from(state.usersTag)..clear();
-    emit(state.copyWith(usersTag: updatedTags));
-  }
-
-  Future<void> pickImage() async {
-    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (pickedImage != null) {
-      final File futureFile = await Future.value(File(pickedImage.path));
-      // final List<AssetEntity> selectedImages =
-      //     List<AssetEntity>.from(state.selectedGalleryPost);
-      // final AssetEntity assetEntity = await AssetEntity.fromFile(futureFile);
-      final AssetEntity assetEntity =
-          await PhotoManager.editor.saveImageWithPath(
-        futureFile.path,
-        title: 'Image_${DateTime.now().millisecondsSinceEpoch}',
-      );
-      final List<AssetEntity> selectedImages =
-          List<AssetEntity>.from(state.selectedGalleryPost)..add(assetEntity);
-      // final List<File> selectedImages = state.selectedGalleryPost;
-      // selectedImages.add(futureFile);
-      emit(state.copyWith(selectedGalleryPost: selectedImages));
-      // selectedImage =
-      //     futureFile; // تعيين الصورة في selectedImage
-    }
-  }
-
-  void changeMultiSelectGalleryPost() {
-    emit(state.copyWith(multiSelectGalleryPost: !state.multiSelectGalleryPost));
-  }
-
-  void changeMultiSelectGalleryReel() {
-    emit(state.copyWith(multiSelectGalleryReel: !state.multiSelectGalleryReel));
-  }
-
-  void onTapGalleryPost({
-    required AssetEntity itemOfGallery,
-  }) {
-    List<AssetEntity> selectedGalleryPosts =
-        List.from(state.selectedGalleryPost);
-
-    if (state.multiSelectGalleryPost) {
-      if (state.selectedGalleryPost.contains(itemOfGallery)) {
-        selectedGalleryPosts.remove(itemOfGallery);
-        emit(state.copyWith(selectedGalleryPost: selectedGalleryPosts));
-      } else {
-        selectedGalleryPosts.add(itemOfGallery);
-        emit(state.copyWith(selectedGalleryPost: selectedGalleryPosts));
-      }
-      // // تعديل selectedMeda
-      // List<AssetEntity> newSelectedGalleryPost =
-      //     List<AssetEntity>.from(state.selectedGalleryPost);
-      // if (newSelectedGalleryPost.contains(state.selectedGalleryPost[index])) {
-      //   newSelectedGalleryPost.remove(state.selectedGalleryPost[index]);
-      // } else {
-      //   newSelectedGalleryPost.add(state.selectedGalleryPost[index]);
-      // }
-      // // // تعديل selectedImages
-      // // List<AssetEntity> newSelectedImages = state.selectedGalleryPost;
-      // // // List<Future<File?>>.from(state.selectedImages);
-      // // if (newSelectedImages.contains(state.selectedGalleryPost[index])) {
-      // //   newSelectedImages.remove(state.images[index]);
-      // // } else {
-      // //   newSelectedImages.add(state.images[index]);
-      // // }
-      // emit(state.copyWith(
-      //   selectedGalleryPost: newSelectedGalleryPost,
-      //   // selectedMeda: newSelectedMeda,
-      // ));
-    } else {
-      selectedGalleryPosts = [itemOfGallery];
-      emit(state.copyWith(selectedGalleryPost: selectedGalleryPosts));
-      // // تعديل selectedImages فقط في حالة عدم تفعيل الاختيار المتعدد
-      // List<AssetEntity> newSelectedImages = [state.galleryPost[index]];
-      // // List<Future<File?>>.from(state.selectedImages)
-      // //   ..add(state.images[index].file);
-      // // if (newSelectedImages.contains(state.images[index].file)) {
-      // //   newSelectedImages.remove(state.images[index].file);
-      // // } else {
-      // //   newSelectedImages.add(state.images[index].file);
-      // // }
-      // emit(
-      //   state.copyWith(
-      //     selectedGalleryPost: newSelectedImages,
-      //   ),
-      // );
-    }
-    //   if (state.multiSelect) {
-    //     // تعديل selectedMeda
-    //     List<File> newSelectedMeda = List<File>.from(state.selectedMeda);
-    //     if (newSelectedMeda.contains(state.images[index])) {
-    //       newSelectedMeda.remove(state.images[index]);
-    //     } else {
-    //       newSelectedMeda.add(state.images[index]);
-    //     }
-    //     // تعديل selectedImages
-    //     List<File> newSelectedImages = state.selectedImages;
-    //     // List<Future<File?>>.from(state.selectedImages);
-    //     if (newSelectedImages.contains(state.images[index])) {
-    //       newSelectedImages.remove(state.images[index]);
-    //     } else {
-    //       newSelectedImages.add(state.images[index]);
-    //     }
-    //     emit(state.copyWith(
-    //       selectedImages: newSelectedImages,
-    //       selectedMeda: newSelectedMeda,
-    //     ));
-    //   } else {
-    //     // تعديل selectedImages فقط في حالة عدم تفعيل الاختيار المتعدد
-    //     List<File> newSelectedImages = [state.images[index]];
-    //     // List<Future<File?>>.from(state.selectedImages)
-    //     //   ..add(state.images[index].file);
-    //     // if (newSelectedImages.contains(state.images[index].file)) {
-    //     //   newSelectedImages.remove(state.images[index].file);
-    //     // } else {
-    //     //   newSelectedImages.add(state.images[index].file);
-    //     // }
-    //     emit(
-    //       state.copyWith(
-    //         selectedImages: newSelectedImages,
-    //       ),
-    //     );
-    //   }
-  }
-
-  // void onTapImage(index) {
-  //   if (state.multiSelect) {
-  //     // selectedMeda.add(images[index]);
-  //     if (state.selectedMeda.contains(state.images[index])) {
-  //       state.selectedMeda.remove(state.images[index]);
-  //     } else {
-  //       state.selectedMeda.add(state.images[index]);
-  //     }
-  //     List<Future<File?>> selectedImages = state.selectedImages;
-  //     if (selectedImages.contains(state.images[index].file)) {
-  //       selectedImages.remove(state.images[index].file);
-  //     } else {
-  //       selectedImages.add(state.images[index].file);
-  //     }
-  //     emit(state.copyWith(
-  //       selectedImages: selectedImages,
-  //     ));
-  //     // selectedImage = widget.images[index].file;
-  //   } else {
-  //      List<Future<File?>> selectedImages = state.selectedImages;
-  //     if (selectedImages.contains(state.images[index].file)) {
-  //       selectedImages.remove(state.images[index].file);
-  //     } else {
-  //       selectedImages.add(state.images[index].file);
-  //     }
-  //     emit(state.copyWith(selectedImages: selectedImages));
-  //     // selectedImage = widget.images[index].file;
-  //   }
-  // }
-
-  void changePostType(int index) {
-    emit(state.copyWith(postTypeSelectedIndex: index));
   }
 
   // final List<Widget> _mediaList = [];
@@ -570,34 +341,254 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     }
   }
 
-  // Future<void> loadImages2(context) async {
-  //   emit(state.copyWith(status: CreatePostInstagramStates.loading));
-  //   final hasPermission = await _requestPermission();
-  //   if (hasPermission) {
-  //     final List<AssetEntity> initialImages = await _fetchAllImages(0, 80);
-  //
-  //     // selectedImage = images.first.file;
-  //     emit(state.copyWith(
-  //       status: CreatePostInstagramStates.initial,
-  //       isPermissionGranted: true,
-  //       currentPage: 0,
-  //       hasMoreImages: initialImages.length == 80,
-  //       images: initialImages,
-  //     ));
-  //   } else {
-  //     // ScaffoldMessenger.of(context).showSnackBar(
-  //     //   const SnackBar(content: Text('Permission denied!')),
-  //     // );
-  //     emit(state.copyWith(
-  //       status: CreatePostInstagramStates.initial,
-  //       isPermissionGranted: false,
-  //     ));
-  //   }
-  // }
+  // دالة لتحميل المزيد من الصور عند الحاجة (للاستدعاء عند التمرير لأسفل)
+  Future<void> loadMoreImages() async {
+    if (!state.hasMoreImages) return;
 
-  Future<bool> _requestPermission() async {
-    final PermissionState result = await PhotoManager.requestPermissionExtend();
-    return result.isAuth; // تحقق من أن الإذن مُعطى
+    final nextPage = state.currentPage + 1;
+    final newGalleryPost = await _fetchImagesPage(nextPage, 60);
+
+    if (newGalleryPost.isNotEmpty) {
+      emit(state.copyWith(
+        galleryPost: [...state.galleryPost, ...newGalleryPost],
+        currentPage: nextPage,
+        hasMoreImages: newGalleryPost.length == 60,
+      ));
+    } else {
+      emit(state.copyWith(hasMoreImages: false));
+    }
+  }
+
+  void onTapGalleryPost({
+    required AssetEntity itemOfGallery,
+  }) {
+    List<AssetEntity> selectedGalleryPosts =
+        List.from(state.selectedGalleryPost);
+
+    if (state.multiSelectGalleryPost) {
+      if (state.selectedGalleryPost.contains(itemOfGallery)) {
+        selectedGalleryPosts.remove(itemOfGallery);
+        emit(state.copyWith(selectedGalleryPost: selectedGalleryPosts));
+      } else {
+        selectedGalleryPosts.add(itemOfGallery);
+        emit(state.copyWith(selectedGalleryPost: selectedGalleryPosts));
+      }
+      // // تعديل selectedMeda
+      // List<AssetEntity> newSelectedGalleryPost =
+      //     List<AssetEntity>.from(state.selectedGalleryPost);
+      // if (newSelectedGalleryPost.contains(state.selectedGalleryPost[index])) {
+      //   newSelectedGalleryPost.remove(state.selectedGalleryPost[index]);
+      // } else {
+      //   newSelectedGalleryPost.add(state.selectedGalleryPost[index]);
+      // }
+      // // // تعديل selectedImages
+      // // List<AssetEntity> newSelectedImages = state.selectedGalleryPost;
+      // // // List<Future<File?>>.from(state.selectedImages);
+      // // if (newSelectedImages.contains(state.selectedGalleryPost[index])) {
+      // //   newSelectedImages.remove(state.images[index]);
+      // // } else {
+      // //   newSelectedImages.add(state.images[index]);
+      // // }
+      // emit(state.copyWith(
+      //   selectedGalleryPost: newSelectedGalleryPost,
+      //   // selectedMeda: newSelectedMeda,
+      // ));
+    } else {
+      selectedGalleryPosts = [itemOfGallery];
+      emit(state.copyWith(selectedGalleryPost: selectedGalleryPosts));
+      // // تعديل selectedImages فقط في حالة عدم تفعيل الاختيار المتعدد
+      // List<AssetEntity> newSelectedImages = [state.galleryPost[index]];
+      // // List<Future<File?>>.from(state.selectedImages)
+      // //   ..add(state.images[index].file);
+      // // if (newSelectedImages.contains(state.images[index].file)) {
+      // //   newSelectedImages.remove(state.images[index].file);
+      // // } else {
+      // //   newSelectedImages.add(state.images[index].file);
+      // // }
+      // emit(
+      //   state.copyWith(
+      //     selectedGalleryPost: newSelectedImages,
+      //   ),
+      // );
+    }
+    //   if (state.multiSelect) {
+    //     // تعديل selectedMeda
+    //     List<File> newSelectedMeda = List<File>.from(state.selectedMeda);
+    //     if (newSelectedMeda.contains(state.images[index])) {
+    //       newSelectedMeda.remove(state.images[index]);
+    //     } else {
+    //       newSelectedMeda.add(state.images[index]);
+    //     }
+    //     // تعديل selectedImages
+    //     List<File> newSelectedImages = state.selectedImages;
+    //     // List<Future<File?>>.from(state.selectedImages);
+    //     if (newSelectedImages.contains(state.images[index])) {
+    //       newSelectedImages.remove(state.images[index]);
+    //     } else {
+    //       newSelectedImages.add(state.images[index]);
+    //     }
+    //     emit(state.copyWith(
+    //       selectedImages: newSelectedImages,
+    //       selectedMeda: newSelectedMeda,
+    //     ));
+    //   } else {
+    //     // تعديل selectedImages فقط في حالة عدم تفعيل الاختيار المتعدد
+    //     List<File> newSelectedImages = [state.images[index]];
+    //     // List<Future<File?>>.from(state.selectedImages)
+    //     //   ..add(state.images[index].file);
+    //     // if (newSelectedImages.contains(state.images[index].file)) {
+    //     //   newSelectedImages.remove(state.images[index].file);
+    //     // } else {
+    //     //   newSelectedImages.add(state.images[index].file);
+    //     // }
+    //     emit(
+    //       state.copyWith(
+    //         selectedImages: newSelectedImages,
+    //       ),
+    //     );
+    //   }
+  }
+
+  void onTapGalleryReel({
+    required AssetEntity itemOfGallery,
+  }) {
+    List<AssetEntity> selectedGalleryReels =
+        List.from(state.selectedGalleryReels);
+    if (state.multiSelectGalleryReel) {
+      if (state.selectedGalleryReels.contains(itemOfGallery)) {
+        selectedGalleryReels.remove(itemOfGallery);
+        emit(state.copyWith(
+          selectedGalleryReels: selectedGalleryReels,
+          // isVideoInitialized: false,
+        ));
+      } else {
+        selectedGalleryReels.add(itemOfGallery);
+        emit(state.copyWith(
+          selectedGalleryReels: selectedGalleryReels,
+          // isVideoInitialized: false,
+        ));
+      }
+    } else {
+      selectedGalleryReels = [itemOfGallery];
+      emit(state.copyWith(
+        selectedGalleryReels: selectedGalleryReels,
+        // isVideoInitialized: false,
+      ));
+    }
+
+    // // تحرير الموارد من المشغل السابق إن وجد
+    // await controller?.dispose();
+
+    // // الحصول على ملف الفيديو
+    // final file = await video.file;
+    // if (file == null) return;
+
+    // // إنشاء مشغل فيديو جديد
+    // controller = VideoPlayerController.file(file)
+    //   ..initialize().then((_) {
+    //     if (context.mounted) {
+    //       emit(state.copyWith(
+    //         isVideoInitialized: true,
+    //       ));
+    //       controller?.play();
+    //     }
+    //   });
+  }
+
+  Future<void> pickImage() async {
+    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      final File futureFile = await Future.value(File(pickedImage.path));
+      // final List<AssetEntity> selectedImages =
+      //     List<AssetEntity>.from(state.selectedGalleryPost);
+      // final AssetEntity assetEntity = await AssetEntity.fromFile(futureFile);
+      final AssetEntity assetEntity =
+          await PhotoManager.editor.saveImageWithPath(
+        futureFile.path,
+        title: 'Image_${DateTime.now().millisecondsSinceEpoch}',
+      );
+      final List<AssetEntity> selectedImages =
+          List<AssetEntity>.from(state.selectedGalleryPost)..add(assetEntity);
+      // final List<File> selectedImages = state.selectedGalleryPost;
+      // selectedImages.add(futureFile);
+      emit(state.copyWith(selectedGalleryPost: selectedImages));
+      // selectedImage =
+      //     futureFile; // تعيين الصورة في selectedImage
+    }
+  }
+
+  Future<void> postConfirmWebhook({required List<String> mediaIds}) async {
+    final result = await postConfirmWebhookUseCase.call(
+      PostConfirmWebhookParams(
+        mediaIds: mediaIds,
+      ),
+    );
+    result.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.failure,
+            failure: failure,
+          ),
+        );
+        return [];
+      },
+      (data) {
+        return data;
+      },
+    );
+  }
+
+  void removeAllUserTag() {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag)..clear();
+    emit(state.copyWith(usersTag: updatedTags));
+  }
+
+  void removeLocation() {
+    emit(state.copyWith(
+      location: null,
+    ));
+  }
+
+  void removeUserTag(UserTagEntity user) {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag)
+      ..removeWhere((u) => u.id == user.id);
+    emit(state.copyWith(usersTag: updatedTags));
+  }
+
+  Future<void> uploadMedia({
+    required String signedUrl,
+    required String path,
+  }) async {
+    final dio = Dio();
+    final file = File(path);
+
+    try {
+      final response = await dio.put(
+        signedUrl,
+        data: file.openRead(), // stream the file
+        options: Options(
+          headers: {
+            HttpHeaders.contentLengthHeader: await file.length(),
+            // required
+            HttpHeaders.contentTypeHeader: 'application/octet-stream',
+            // or the actual MIME type
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print('Upload successful');
+      } else {
+        print('Upload failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Upload error: $e');
+    }
   }
 
   Future<List<AssetEntity>> _fetchAllImages(int page, int pageSize) async {
@@ -633,7 +624,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     // return [];
   }
 
-// تحميل صفحة محددة من الصور
+  // تحميل صفحة محددة من الصور
   Future<List<AssetEntity>> _fetchImagesPage(int page, int pageSize) async {
     List<AssetEntity> assets = [];
     List<AssetPathEntity> album = await PhotoManager.getAssetPathList(
@@ -650,9 +641,9 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     //     assets.add(asset);
     //     // _file = path[0];
     //   }
-      // if (asset.type == AssetType.image) {
-      //
-      // }
+    // if (asset.type == AssetType.image) {
+    //
+    // }
     // }
     return assets;
     // final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
@@ -667,36 +658,46 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     // return [];
   }
 
-  // دالة لتحميل المزيد من الصور عند الحاجة (للاستدعاء عند التمرير لأسفل)
-  Future<void> loadMoreImages() async {
-    if (!state.hasMoreImages) return;
-
-    final nextPage = state.currentPage + 1;
-    final newGalleryPost = await _fetchImagesPage(nextPage, 60);
-
-    if (newGalleryPost.isNotEmpty) {
-      emit(state.copyWith(
-        galleryPost: [...state.galleryPost, ...newGalleryPost],
-        currentPage: nextPage,
-        hasMoreImages: newGalleryPost.length == 60,
-      ));
-    } else {
-      emit(state.copyWith(hasMoreImages: false));
+  Future<int> _getAssetFileSize(AssetEntity entity) async {
+    File? file = await entity.file;
+    if (file != null) {
+      return await file.length();
     }
+    return 0;
+  }
+
+  // Future<void> loadImages2(context) async {
+  //   emit(state.copyWith(status: CreatePostInstagramStates.loading));
+  //   final hasPermission = await _requestPermission();
+  //   if (hasPermission) {
+  //     final List<AssetEntity> initialImages = await _fetchAllImages(0, 80);
+  //
+  //     // selectedImage = images.first.file;
+  //     emit(state.copyWith(
+  //       status: CreatePostInstagramStates.initial,
+  //       isPermissionGranted: true,
+  //       currentPage: 0,
+  //       hasMoreImages: initialImages.length == 80,
+  //       images: initialImages,
+  //     ));
+  //   } else {
+  //     // ScaffoldMessenger.of(context).showSnackBar(
+  //     //   const SnackBar(content: Text('Permission denied!')),
+  //     // );
+  //     emit(state.copyWith(
+  //       status: CreatePostInstagramStates.initial,
+  //       isPermissionGranted: false,
+  //     ));
+  //   }
+  // }
+
+  Future<bool> _requestPermission() async {
+    final PermissionState result = await PhotoManager.requestPermissionExtend();
+    return result.isAuth; // تحقق من أن الإذن مُعطى
   }
 }
 
 class CteatePostTypeInstagram {
-  final PostType postType;
-  final String title;
-  final int index;
-
-  const CteatePostTypeInstagram({
-    required this.postType,
-    required this.title,
-    required this.index,
-  });
-
   static List<CteatePostTypeInstagram> postTypes = [
     CteatePostTypeInstagram(
       postType: PostType.post,
@@ -714,6 +715,16 @@ class CteatePostTypeInstagram {
       index: 2,
     ),
   ];
+  final PostType postType;
+  final String title;
+
+  final int index;
+
+  const CteatePostTypeInstagram({
+    required this.postType,
+    required this.title,
+    required this.index,
+  });
 }
 
 enum PostType {

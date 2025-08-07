@@ -3,7 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'accept_trip_for_driver_state.dart';
 
 class AcceptTripForDriverCubit extends Cubit<AcceptTripForDriverState> {
@@ -22,6 +24,10 @@ class AcceptTripForDriverCubit extends Cubit<AcceptTripForDriverState> {
 
       response.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           print("EROOOOOR FAilure \n");
           emit(AcceptTripForDriverFailure(
               errorMessage: "You cannot accept this trip"));

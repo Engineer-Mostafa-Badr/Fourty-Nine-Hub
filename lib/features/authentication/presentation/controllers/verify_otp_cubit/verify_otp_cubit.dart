@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/gift_message_entity.dart';
@@ -51,7 +53,13 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
         await _verifyOTPUseCase(VerifyOTPParams(email: email, otp: otp));
     emit(
       result.fold(
-        (failure) => VerifyOtpError(failure),
+        (failure)  {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        return   VerifyOtpError(failure);
+        },
         (data) {
           _attachToken(data.userTokensEntity);
           _saveTokens(data.userTokensEntity);

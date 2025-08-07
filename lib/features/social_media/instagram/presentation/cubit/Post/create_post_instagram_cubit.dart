@@ -5,7 +5,9 @@ import '../../../data/models/media_post_request_model.dart';
 import '../../../data/repositories/instagram_repository.dart';
 import 'post_instagram_state.dart';
 import 'package:path/path.dart' as path;
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class CreatePostInstagramCubit extends Cubit<PostInstagramState> {
   final InstagramRepository repository;
   CreatePostInstagramCubit({required this.repository})
@@ -22,6 +24,10 @@ class CreatePostInstagramCubit extends Cubit<PostInstagramState> {
     var response = await repository.createPost(content: content, media: media);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailurePostInstagramState(failure: l));
       },
       (r) {

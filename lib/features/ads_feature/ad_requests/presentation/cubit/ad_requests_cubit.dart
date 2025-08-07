@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/requests_log_by_main_category_entity.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
-import '../../../../../core/error/failure.dart';
 import '../../domain/usecases/get_ad_requests_usecase.dart';
 
 part 'ad_requests_state.dart';
@@ -20,14 +22,6 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
 
   AdRequestsCubit(this._getAdRequestsUseCase) : super(const AdRequestsState());
 
-  void loadInitialData(String id, String search) async {
-    adRequests.clear();
-    currentPage = 1;
-    isLoadingMore = false;
-    hasMoreData = true;
-    await fetchAdRequests(id, search);
-  }
-
   Future<void> fetchAdRequests(String id, String search) async {
     if (!hasMoreData || isLoadingMore) return;
 
@@ -40,8 +34,13 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
     );
 
     response.fold(
-      (failure) => emit(
-          state.copyWith(failure: failure, status: AdRequestsStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: AdRequestsStates.error));
+      },
       (data) {
         adRequests.addAll(data);
 
@@ -55,5 +54,13 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
         emit(state.copyWith(status: AdRequestsStates.success));
       },
     );
+  }
+
+  void loadInitialData(String id, String search) async {
+    adRequests.clear();
+    currentPage = 1;
+    isLoadingMore = false;
+    hasMoreData = true;
+    await fetchAdRequests(id, search);
   }
 }

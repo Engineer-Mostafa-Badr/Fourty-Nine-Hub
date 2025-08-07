@@ -7,6 +7,9 @@ import '../../../domain/usecases/get_instagram_profile_use_case.dart';
 import '../../../domain/usecases/get_instagram_reels_specific_user_use_case.dart';
 import '../../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import '../../../domain/usecases/post_follow_user_instagram_use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../domain/usecases/unfollow_user_instagram_use_case.dart';
 part 'profile_instagram_state.dart';
@@ -46,6 +49,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             profileStatus: LoadingStatus.failure, profileFailure: f));
       },
@@ -100,6 +107,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             reelsStatus: LoadingStatus.failure, reelsFailure: f));
       },
@@ -153,6 +164,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             suggestFollowStatus: LoadingStatus.failure,
             suggestFollowFailure: f));
@@ -209,6 +224,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
         },
@@ -224,7 +243,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
         await _unFollowUserInstagramUC(PostFollowUserInstagramParams(userId: userId));
 
     res.fold(
-      (f) {
+      (f) {var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
         },

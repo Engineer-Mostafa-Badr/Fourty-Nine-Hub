@@ -3,7 +3,9 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../data/models/gift_model.dart';
 import '../../domain/use_case/get_gifts_use_case.dart';
 import 'gift_state.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../../core/utils/shared_pref.dart';
 
 class GiftsCubit extends Cubit<GiftsState> {
@@ -49,6 +51,10 @@ class GiftsCubit extends Cubit<GiftsState> {
     );
     GiftsData? responseData;
     response.fold((failure) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
       throw Exception("Failed to fetch gifts");
     }, (data) async {
       responseData = data.data;

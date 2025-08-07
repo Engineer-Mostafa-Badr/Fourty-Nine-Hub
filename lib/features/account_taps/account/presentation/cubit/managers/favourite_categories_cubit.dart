@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favo
 import '../../../../../fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
 import '../../../data/models/favouite_category_model/favouite_category_model.dart';
 import '../../../domain/usecases/get_favourite_categories_usecase.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'favourite_categories_state.dart';
 
@@ -29,10 +31,16 @@ class FavouriteCategoryCubit extends Cubit<FavouriteCategoryState> {
     log(result.toString(), name: "kljjjjjjjjjjjjjjjjjjjjjjjjj");
     emit(
       result.fold(
-        (failure) => state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ),
+        (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          return state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          );
+        },
         (data) => state.copyWith(
           status: StateStatus.success,
           data: data,

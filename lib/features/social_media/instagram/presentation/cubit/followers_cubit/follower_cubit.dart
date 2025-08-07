@@ -4,6 +4,9 @@ import '../../../domain/entities/followers_entity.dart';
 import '../../../domain/usecases/get_all_followers_use_case.dart';
 import '../../../domain/usecases/get_all_following_use_case.dart';
 import 'followers_state.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class FollowCubit extends Cubit<FollowState> {
   final GetAllFollowersUseCase _allFollowersUseCase;
@@ -57,6 +60,10 @@ class FollowCubit extends Cubit<FollowState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         isLoadingMore = false;
         emit(state.copyWith(failure: failure, status: FollowStates.error));
       },

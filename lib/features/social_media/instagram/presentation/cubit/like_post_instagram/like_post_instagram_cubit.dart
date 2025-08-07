@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/instagram_post_entity.dart';
 import '../../../domain/usecases/like_post_instagram_use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'like_post_instagram_state.dart';
 
@@ -37,7 +40,12 @@ class LikePostInstagramCubit extends Cubit<LikePostInstagramState> {
     );
 
     result.fold(
-      (l) => emit(state.copyWith(status: LikePostInstagramStatus.failure)),
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+         emit(state.copyWith(status: LikePostInstagramStatus.failure));},
       (likeStatus) {
         final List<InstagramPostEntity> updatedPosts = List.from(state.posts!);
         InstagramPostEntity currentPostEntity = updatedPosts[currentPost];

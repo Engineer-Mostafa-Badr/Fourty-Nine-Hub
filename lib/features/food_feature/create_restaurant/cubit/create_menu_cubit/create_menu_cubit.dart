@@ -5,7 +5,9 @@ import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../restaurants_list/data/models/restaurant_mneu_model.dart';
 import '../create_resturant_cubit.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'create_menu_state.dart';
 
 class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
@@ -29,6 +31,10 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
     return response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         // return Left(failure);
       },
       (data) {

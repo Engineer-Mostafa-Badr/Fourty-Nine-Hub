@@ -36,6 +36,8 @@ import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
   static UserCubit to = AppPages
@@ -133,6 +135,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     guestResult.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         // فحص التوكن العادي
         attachToken();
       },
@@ -170,10 +176,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     ));
 
     result.fold(
-      (failure) => emit(state.copyWith(
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
         status: StateStatus.error,
         failure: failure,
-      )),
+      ));},
       (tokens) async {
         // حفظ التوكنز
         await CacheManager.saveAccessToken(tokens.accessToken);
@@ -231,7 +242,13 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await repository.getGuestData();
 
     return result.fold(
-      (failure) => null,
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        return null;
+      },
       (data) => data?[key] as T?,
     );
   }
@@ -291,6 +308,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     emit(
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           return state.copyWith(
             status: StateStatus.error,
             failure: failure,

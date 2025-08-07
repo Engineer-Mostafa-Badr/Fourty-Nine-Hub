@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
@@ -20,6 +21,7 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favo
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
 import '../../../../create_doctor/domain/entities/governorate_entity.dart';
@@ -48,23 +50,6 @@ class HealthCubit extends Cubit<HealthState> {
   final GetBookingUseCase _getBookingUseCase;
   final GetMostBookingUseCase _getMostBookingUseCase;
 
-  HealthCubit(
-      this._getUserUpcomingAppointmentsUseCase,
-      this._healthShare,
-      this._getHealthSubcategoriesUseCase,
-      this._getMedicalServicesUseCase,
-      this._toggleFavoriteSubcategoryUseCase,
-      this._isDoctorUseCase,
-      this._getMainCategoryDetailsUseCase,
-      this._getGovernoratesUseCase,
-      this._isDoctorApprovalUsecase,
-      this._toggleFavoriteCategoryUseCase,
-      this._deleteFavoriteCategoryUseCase,
-      this._cancelAppointmentUseCase,
-      this._getBookingUseCase,
-      this._getMostBookingUseCase)
-      : super(const HealthState());
-
   final List<HealthBookingFilterModel> services = [
     HealthBookingFilterModel(
         route: Routes.FILTERDOCTORSUBCATEGORY,
@@ -83,46 +68,61 @@ class HealthCubit extends Cubit<HealthState> {
         image: Assets.emergency,
         route: Routes.VISITAEMERGENCY),
   ];
+
   final userId = UserCubit.to.state.data?.id;
-  void loadData() async {
-    print("UseeeeeeertId$userId");
-    emit(state.copyWith(status: HealthStates.loading));
-    await _getMainCategoryDetails();
-    await _isDoctor();
-    await _isDoctorApproval();
-    await getSubCategories();
-    await getServices();
-    await getMyBookings();
-    await getGovernorates();
-  }
+  String? token;
+  int currentPage = 1;
 
-  Future<void> _getMainCategoryDetails() async {
-    final response =
-        await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
-    response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: HealthStates.error)),
-      (data) => emit(state.copyWith(mainCategory: data)),
-    );
-  }
+  int historyPage = 1;
 
-  Future<void> getMyBookings() async {
-    final response =
-        await _getUserUpcomingAppointmentsUseCase.call(userId ?? '');
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(
-            state.copyWith(status: HealthStates.initState, myBookings: data)));
-  }
+  bool hasMoreCurrent = true;
+
+  bool hasMoreHistory = true;
+
+  // Separate lists for different types
+  List<BookingEntity> currentBookings = [];
+
+  List<BookingEntity> historyBookings = [];
+
+  bool isLoading = false;
+
+  String currentType = 'current'; // Track current active type
+
+  List<MostBookingEntity> mostBooking = [];
+
+  int mostBookingPage = 1;
+
+  bool hasMoreMost = true;
+
+  bool isLoadingMoreMost = true;
+
+  HealthCubit(
+      this._getUserUpcomingAppointmentsUseCase,
+      this._healthShare,
+      this._getHealthSubcategoriesUseCase,
+      this._getMedicalServicesUseCase,
+      this._toggleFavoriteSubcategoryUseCase,
+      this._isDoctorUseCase,
+      this._getMainCategoryDetailsUseCase,
+      this._getGovernoratesUseCase,
+      this._isDoctorApprovalUsecase,
+      this._toggleFavoriteCategoryUseCase,
+      this._deleteFavoriteCategoryUseCase,
+      this._cancelAppointmentUseCase,
+      this._getBookingUseCase,
+      this._getMostBookingUseCase)
+      : super(const HealthState());
 
   Future<bool> cancelAppointment(String id) async {
     bool result = false;
     final response = await _cancelAppointmentUseCase.call(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
       List<BookedAppointmentEntity>? newBookings = state.myBookings;
       newBookings?.removeWhere((element) => element.id == id);
       result = data;
@@ -131,144 +131,16 @@ class HealthCubit extends Cubit<HealthState> {
     return result;
   }
 
-  Future<void> _isDoctor() async {
-    final response = await _isDoctorUseCase.call(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(isDoctor: data)));
-  }
-
-  Future<void> _isDoctorApproval() async {
-    final response = await _isDoctorApprovalUsecase.call(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(isApproved: data)));
-  }
-
-  Future<void> getServices() async {
-    final response = await _getMedicalServicesUseCase.call(userId ?? '');
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(
-            status: HealthStates.initState, medicalServices: data)));
-  }
-
-  Future<void> getSubCategories({bool reload = false}) async {
-    // if (_healthShare.subCategories.isEmpty || reload) {
-    final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) {
-      _healthShare.subCategories = data;
-      emit(state.copyWith(status: HealthStates.initState, subCategories: data));
-    });
-    // } else {
-    //   emit(state.copyWith(subCategories: _healthShare.subCategories));
-    // }
-  }
-
-  Future<void> getGovernorates() async {
-    // if (_healthShare.subCategories.isEmpty || reload) {
-    final response = await _getGovernoratesUseCase.call(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) {
-      _healthShare.governorates = data;
-      emit(state.copyWith(status: HealthStates.initState, governorates: data));
-    });
-    // } else {
-    //   emit(state.copyWith(subCategories: _healthShare.subCategories));
-    // }
-  }
-
-  // Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
-  //   final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
-  //   response.fold(
-  //       (failure) =>
-  //           emit(state.copyWith(failure: failure, status: HealthStates.error)),
-  //       (data) {
-  //     return getSubCategories(reload: true);
-  //   });
-  // }
-  Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
-    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
-    response.fold((failure) => emit(state.copyWith(status: HealthStates.error)),
-        (data) {
-      List<HealthSubcategoryEntity> newSubCategories =
-          state.subCategories ?? [];
-      newSubCategories
-          .firstWhere((element) => element.id == subcategoryId)
-          .isFavorite = !(newSubCategories
-              .firstWhere((element) => element.id == subcategoryId)
-              .isFavorite ??
-          false);
-      // getSubCategories(reload: true);
-      emit(state.copyWith(subCategories: newSubCategories));
-    });
-  }
-
-  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
-    await _ensureTokenInitialized();
-    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
-    bool result = false;
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) {
-      List<HealthSubcategoryEntity> newMedicalServices =
-          state.medicalServices ?? [];
-      newMedicalServices
-          .firstWhere((element) => element.id == subcategoryId)
-          .isFavorite = !(newMedicalServices
-              .firstWhere((element) => element.id == subcategoryId)
-              .isFavorite ??
-          false);
-      emit(state.copyWith(medicalServices: newMedicalServices));
-    });
-    return result;
-  }
-
-  Future<bool> toggleFavoriteCategory(String subcategoryId) async {
-    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
-    bool result = false;
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) {
-      // MainCategoryEntity mainCategoryEntity;
-      //   mainCategoryEntity = state.mainCategory!;
-      //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-      // emit(state.copyWith(mainCategory: mainCategoryEntity));
-      // result = state.mainCategory!.isFavorite!;
-      // print("Salama ${data}");
-      MainCategoryEntity newMainCategory = state.mainCategory!;
-      newMainCategory.isFavorite = !(state.mainCategory?.isFavorite ?? false);
-      emit(state.copyWith(mainCategory: newMainCategory));
-      // _getMainCategoryDetails();
-
-      // return getServices();
-    });
-    return result;
-  }
-
-  String? token;
-
-  Future<void> _ensureTokenInitialized() async {
-    token ??= await CacheManager.getAccessToken();
-  }
-
   Future<bool> deleteMedicalService(String subcategoryId) async {
     final response = await _deleteFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
       MainCategoryEntity mainCategoryEntity;
       mainCategoryEntity = state.mainCategory!;
       mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
@@ -278,37 +150,6 @@ class HealthCubit extends Cubit<HealthState> {
       return getServices();
     });
     return result;
-  }
-
-  int currentPage = 1;
-  int historyPage = 1;
-  bool hasMoreCurrent = true;
-  bool hasMoreHistory = true;
-
-  // Separate lists for different types
-  List<BookingEntity> currentBookings = [];
-  List<BookingEntity> historyBookings = [];
-
-  bool isLoading = false;
-  String currentType = 'current'; // Track current active type
-
-  Future<void> loadInitialBooking(String type) async {
-    currentType = type;
-    emit(state.copyWith(status: HealthStates.loading));
-
-    // Reset the appropriate list and pagination
-    if (type == 'current') {
-      currentBookings.clear();
-      currentPage = 1;
-      hasMoreCurrent = true;
-    } else {
-      historyBookings.clear();
-      historyPage = 1;
-      hasMoreHistory = true;
-    }
-
-    await getBookings(type);
-    emit(state.copyWith(status: HealthStates.success));
   }
 
   Future<void> getBookings(String type) async {
@@ -359,26 +200,22 @@ class HealthCubit extends Cubit<HealthState> {
     );
   }
 
-  // Call this when user switches between current/history tabs
-  void switchBookingType(String type) {
-    if (currentType == type) return;
-    loadInitialBooking(type);
-  }
-
-  List<MostBookingEntity> mostBooking = [];
-
-  int mostBookingPage = 1;
-  bool hasMoreMost = true;
-  bool isLoadingMoreMost = true;
-
-  void loadInitialMostBooking() async {
-    emit(state.copyWith(status: HealthStates.loading));
-
-    currentBookings.clear();
-    mostBookingPage = 1;
-    hasMoreMost = true;
-    await getMostBookings();
-    emit(state.copyWith(status: HealthStates.success));
+  Future<void> getGovernorates() async {
+    // if (_healthShare.subCategories.isEmpty || reload) {
+    final response = await _getGovernoratesUseCase.call(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
+      _healthShare.governorates = data;
+      emit(state.copyWith(status: HealthStates.initState, governorates: data));
+    });
+    // } else {
+    //   emit(state.copyWith(subCategories: _healthShare.subCategories));
+    // }
   }
 
   Future<void> getMostBookings() async {
@@ -393,6 +230,10 @@ class HealthCubit extends Cubit<HealthState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         isLoading = false;
         emit(state.copyWith(
           failure: failure,
@@ -427,6 +268,220 @@ class HealthCubit extends Cubit<HealthState> {
       //   ));
       // },
     );
+  }
+
+  Future<void> getMyBookings() async {
+    final response =
+        await _getUserUpcomingAppointmentsUseCase.call(userId ?? '');
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    },
+        (data) => emit(
+            state.copyWith(status: HealthStates.initState, myBookings: data)));
+  }
+
+  Future<void> getServices() async {
+    final response = await _getMedicalServicesUseCase.call(userId ?? '');
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    },
+        (data) => emit(state.copyWith(
+            status: HealthStates.initState, medicalServices: data)));
+  }
+
+  Future<void> getSubCategories({bool reload = false}) async {
+    // if (_healthShare.subCategories.isEmpty || reload) {
+    final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
+      _healthShare.subCategories = data;
+      emit(state.copyWith(status: HealthStates.initState, subCategories: data));
+    });
+    // } else {
+    //   emit(state.copyWith(subCategories: _healthShare.subCategories));
+    // }
+  }
+
+  void loadData() async {
+    print("UseeeeeeertId$userId");
+    emit(state.copyWith(status: HealthStates.loading));
+    await _getMainCategoryDetails();
+    await _isDoctor();
+    await _isDoctorApproval();
+    await getSubCategories();
+    await getServices();
+    await getMyBookings();
+    await getGovernorates();
+  }
+
+  Future<void> loadInitialBooking(String type) async {
+    currentType = type;
+    emit(state.copyWith(status: HealthStates.loading));
+
+    // Reset the appropriate list and pagination
+    if (type == 'current') {
+      currentBookings.clear();
+      currentPage = 1;
+      hasMoreCurrent = true;
+    } else {
+      historyBookings.clear();
+      historyPage = 1;
+      hasMoreHistory = true;
+    }
+
+    await getBookings(type);
+    emit(state.copyWith(status: HealthStates.success));
+  }
+
+  void loadInitialMostBooking() async {
+    emit(state.copyWith(status: HealthStates.loading));
+
+    currentBookings.clear();
+    mostBookingPage = 1;
+    hasMoreMost = true;
+    await getMostBookings();
+    emit(state.copyWith(status: HealthStates.success));
+  }
+
+  // Call this when user switches between current/history tabs
+  void switchBookingType(String type) {
+    if (currentType == type) return;
+    loadInitialBooking(type);
+  }
+
+  Future<bool> toggleFavoriteCategory(String subcategoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
+      // MainCategoryEntity mainCategoryEntity;
+      //   mainCategoryEntity = state.mainCategory!;
+      //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+      // emit(state.copyWith(mainCategory: mainCategoryEntity));
+      // result = state.mainCategory!.isFavorite!;
+      // print("Salama ${data}");
+      MainCategoryEntity newMainCategory = state.mainCategory!;
+      newMainCategory.isFavorite = !(state.mainCategory?.isFavorite ?? false);
+      emit(state.copyWith(mainCategory: newMainCategory));
+      // _getMainCategoryDetails();
+
+      // return getServices();
+    });
+    return result;
+  }
+
+  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+    await _ensureTokenInitialized();
+    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
+      List<HealthSubcategoryEntity> newMedicalServices =
+          state.medicalServices ?? [];
+      newMedicalServices
+          .firstWhere((element) => element.id == subcategoryId)
+          .isFavorite = !(newMedicalServices
+              .firstWhere((element) => element.id == subcategoryId)
+              .isFavorite ??
+          false);
+      emit(state.copyWith(medicalServices: newMedicalServices));
+    });
+    return result;
+  }
+
+  // Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
+  //   final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+  //   response.fold(
+  //       (failure) =>
+  //           emit(state.copyWith(failure: failure, status: HealthStates.error)),
+  //       (data) {
+  //     return getSubCategories(reload: true);
+  //   });
+  // }
+  Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
+    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) {
+      List<HealthSubcategoryEntity> newSubCategories =
+          state.subCategories ?? [];
+      newSubCategories
+          .firstWhere((element) => element.id == subcategoryId)
+          .isFavorite = !(newSubCategories
+              .firstWhere((element) => element.id == subcategoryId)
+              .isFavorite ??
+          false);
+      // getSubCategories(reload: true);
+      emit(state.copyWith(subCategories: newSubCategories));
+    });
+  }
+
+  Future<void> _ensureTokenInitialized() async {
+    token ??= await CacheManager.getAccessToken();
+  }
+
+  Future<void> _getMainCategoryDetails() async {
+    final response =
+        await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: HealthStates.error));
+      },
+      (data) => emit(state.copyWith(mainCategory: data)),
+    );
+  }
+
+  Future<void> _isDoctor() async {
+    final response = await _isDoctorUseCase.call(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) => emit(state.copyWith(isDoctor: data)));
+  }
+
+  Future<void> _isDoctorApproval() async {
+    final response = await _isDoctorApprovalUsecase.call(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: HealthStates.error));
+    }, (data) => emit(state.copyWith(isApproved: data)));
   }
 
   // Future<void> getMostBookings() async {

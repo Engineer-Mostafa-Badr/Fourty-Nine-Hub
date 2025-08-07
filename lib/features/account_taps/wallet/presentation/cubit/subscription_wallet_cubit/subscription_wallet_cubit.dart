@@ -2,6 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 import '../../../domain/usecases/delete_subscription_use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'subscription_wallet_state.dart';
 
@@ -18,6 +21,10 @@ class SubscriptionWalletCubit extends Cubit<SubscriptionWalletState> {
 
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(SubscriptionWalletFailure(message: l.toString()));
       },
       (r) {

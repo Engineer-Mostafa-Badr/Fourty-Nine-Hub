@@ -6,7 +6,9 @@ import '../../data/models/register_request_model.dart';
 import '../../data/repositories/shipping_repository.dart';
 import 'shipping_cubit.dart';
 import 'shipping_state.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class UpdateDriverCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;
   UpdateDriverCubit({required this.repository}) : super(ShippingInitial());
@@ -25,6 +27,10 @@ class UpdateDriverCubit extends Cubit<ShippingState> {
     var response = await repository.updateDriver(data);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {

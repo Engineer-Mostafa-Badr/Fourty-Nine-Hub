@@ -1,21 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../../../core/abstract/use_case.dart';
 import '../../../../core/utils/shared_pref.dart';
-import '../../domain/entity/activate_entity.dart';
-import '../../domain/use_case/fetch_activate_use_case.dart';
-import '../../domain/use_case/fetch_social_page_use_case.dart';
-import '../../domain/use_case/update_activate_use_case.dart';
-import '../../domain/use_case/update_social_page_use_case.dart';
-
 import '../../data/model/update_custom_page_categorise_model.dart';
+import '../../domain/entity/activate_entity.dart';
 import '../../domain/entity/custom_page_categories_entity.dart';
 import '../../domain/entity/custom_page_sub_categories_entity.dart';
+import '../../domain/use_case/fetch_activate_use_case.dart';
 import '../../domain/use_case/fetch_favourite_cat_use_case.dart';
 import '../../domain/use_case/fetch_navigate_bar_use_case.dart';
 import '../../domain/use_case/fetch_navigator_sub_cat_use_case.dart';
+import '../../domain/use_case/fetch_social_page_use_case.dart';
 import '../../domain/use_case/fetch_sub_tab_use_case.dart';
+import '../../domain/use_case/update_activate_use_case.dart';
 import '../../domain/use_case/update_favourite_cat_use_case.dart';
 import '../../domain/use_case/update_navigate_bar_use_case.dart';
+import '../../domain/use_case/update_social_page_use_case.dart';
 import '../../domain/use_case/update_sub_tab_use_case.dart';
 import 'custom_page_states.dart';
 
@@ -32,6 +35,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
   final FetchActivateUseCase _fetchActivateUseCase;
   final UpdateActivateUseCase _updateActivateUseCase;
 
+  int editPageCurrentIndex = 0;
   CustomPageCubit(
     this._fetchSocialPageUseCase,
     this._updateSocialPageUseCase,
@@ -45,72 +49,31 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     this._updateActivateUseCase,
     this._customPageSubCategoriesUseCase,
   ) : super(CustomPageState());
-  int editPageCurrentIndex = 0;
 
-  // void loadData() async {
-  //   await fetchCustomPageWallet();
-  //   await checkRequestWithdrawCustomPage();
-  //   // await fetchCustomPageHistory();
+  // Future<void> updateFavouriteCat(
+  //     List<UpdateCustomPageCategoriesModel> updateData) async {
+  //   print("state.updateData ${state.updateData}");
+  //   final response = await _updateFavouriteCatUseCase.call(updateData);
+  //   response.fold((l) {
+  //     emit(state.copyWith(failure: l, status: CustomPageStates.error));
+  //   }, (data) {
+  //     emit(state.copyWith(status: CustomPageStates.uploadSubCatSuccess));
+  //   });
   // }
 
-  // Social Page //////////////////////////////////////////////
-
-  Future<void> fetchSocialPage() async {
-    final response = await _fetchSocialPageUseCase.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(social: data, status: CustomPageStates.success));
-    });
-  }
-
-  Future<void> updateSocialPage(SocialPageParams params) async {
-    final response = await _updateSocialPageUseCase.call(params);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(status: CustomPageStates.success));
-    });
-  }
-
-  // SubTab ////////////////////////////////////////////////////
-
-  Future<void> fetchSubTab() async {
-    final response = await _fetchSubTabUseCase.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(subTab: data, status: CustomPageStates.success));
-    });
-  }
-
-  Future<void> updateSubTab(SubTabParams params) async {
-    final response = await _updateSubTabUseCase.call(params);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(status: CustomPageStates.success));
-    });
-  }
-
-  // Navigate To ///////////////////////////////////////////////
-
-  Future<void> fetchNavigateBar() async {
-    final response = await _fetchNavigateBarUseCase.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(navigateBar: data, status: CustomPageStates.success));
-    });
-  }
-
-  Future<void> updateNavigateBar(NavigateBarParams params) async {
-    final response = await _updateNavigateBarUseCase.call(params);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(status: CustomPageStates.success));
-    });
+  // Activate ///////////////////////////////////////////////
+  //
+  Future<void> fetchActivate() async {
+    bool? active = await CacheManager.getActivation();
+    // final response = await _fetchActivateUseCase.call(const NoParams());
+    // response.fold((l) {
+    //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    // }, (data) {
+    emit(state.copyWith(
+        activate:
+            ActivateEntity(id: '', userId: '', customPage: active ?? false),
+        status: CustomPageStates.success));
+    // });
   }
 
   // Favourite Category ///////////////////////////////////////////////
@@ -142,6 +105,9 @@ class CustomPageCubit extends Cubit<CustomPageState> {
 
     final response = await _customPageCategoriesUseCase.call(refresh);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: CustomPageStates.error));
     }, (data) {
       List<CustomPageCategoriesEntity> favourite = [];
@@ -222,6 +188,67 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       ));
       print("🟢 State Updated: ${state.updateData}");
     });
+  }
+
+  // Navigate To ///////////////////////////////////////////////
+
+  Future<void> fetchNavigateBar() async {
+    final response = await _fetchNavigateBarUseCase.call(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(navigateBar: data, status: CustomPageStates.success));
+    });
+  }
+
+  // void loadData() async {
+  //   await fetchCustomPageWallet();
+  //   await checkRequestWithdrawCustomPage();
+  //   // await fetchCustomPageHistory();
+  // }
+
+  // Social Page //////////////////////////////////////////////
+
+  Future<void> fetchSocialPage() async {
+    final response = await _fetchSocialPageUseCase.call(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(social: data, status: CustomPageStates.success));
+    });
+  }
+
+  // SubTab ////////////////////////////////////////////////////
+
+  Future<void> fetchSubTab() async {
+    final response = await _fetchSubTabUseCase.call(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(subTab: data, status: CustomPageStates.success));
+    });
+  }
+
+  //
+  Future<void> updateActivate(bool params) async {
+    // bool? active = await CacheManager.getActivation();
+    CacheManager.updateActive((params));
+    // final response = await _updateActivateUseCase.call(params);
+    // response.fold((l) {
+    //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    // }, (data) {
+    //   emit(state.copyWith(status: CustomPageStates.updateSuccess));
+    //   fetchActivate();
+    // });
   }
 
   void updateCategoryModel(
@@ -387,42 +414,39 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     });
   }
 
-  // Future<void> updateFavouriteCat(
-  //     List<UpdateCustomPageCategoriesModel> updateData) async {
-  //   print("state.updateData ${state.updateData}");
-  //   final response = await _updateFavouriteCatUseCase.call(updateData);
-  //   response.fold((l) {
-  //     emit(state.copyWith(failure: l, status: CustomPageStates.error));
-  //   }, (data) {
-  //     emit(state.copyWith(status: CustomPageStates.uploadSubCatSuccess));
-  //   });
-  // }
-
-  // Activate ///////////////////////////////////////////////
-  //
-  Future<void> fetchActivate() async {
-    bool? active = await CacheManager.getActivation();
-    // final response = await _fetchActivateUseCase.call(const NoParams());
-    // response.fold((l) {
-    //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    // }, (data) {
-    emit(state.copyWith(
-        activate:
-            ActivateEntity(id: '', userId: '', customPage: active ?? false),
-        status: CustomPageStates.success));
-    // });
+  Future<void> updateNavigateBar(NavigateBarParams params) async {
+    final response = await _updateNavigateBarUseCase.call(params);
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CustomPageStates.success));
+    });
   }
 
-  //
-  Future<void> updateActivate(bool params) async {
-    // bool? active = await CacheManager.getActivation();
-    CacheManager.updateActive((params));
-    // final response = await _updateActivateUseCase.call(params);
-    // response.fold((l) {
-    //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    // }, (data) {
-    //   emit(state.copyWith(status: CustomPageStates.updateSuccess));
-    //   fetchActivate();
-    // });
+  Future<void> updateSocialPage(SocialPageParams params) async {
+    final response = await _updateSocialPageUseCase.call(params);
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CustomPageStates.success));
+    });
+  }
+
+  Future<void> updateSubTab(SubTabParams params) async {
+    final response = await _updateSubTabUseCase.call(params);
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CustomPageStates.success));
+    });
   }
 }

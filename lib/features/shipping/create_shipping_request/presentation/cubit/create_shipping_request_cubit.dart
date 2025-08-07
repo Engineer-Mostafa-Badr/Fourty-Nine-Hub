@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../core/error/failure.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../ride/RideRequest/data/models/address_search_params_model.dart';
 import '../../../../ride/RideRequest/data/models/car_type_model.dart';
@@ -37,14 +39,54 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
       this._getShippingSubCategoriesUseCase)
       : super(const CreateShippingRequestState());
 
-  void loadData() async {
-    await getSubCategories();
+  void addNormalRequest({required BuildContext context}) {
+    context.push(Routes.TRIPDETAILS);
   }
 
-// ---- get subcategories
+// change subCategory selection
+  void changeSubCategorySelection({
+    required SubCategoryModel item,
+  }) =>
+      emit(state.copyWith(subCategory: item));
+
+  Future<void> getExpectedPrice() async {
+    final from = state.fromAddress!;
+    final to = state.toAddress!;
+
+    final response = await _getShippingExpectedPriceUseCase.call(
+        ExpectedPriceParams(
+            subCategoryId: state.subCategory?.id ?? '',
+            fromLat: from.lat,
+            fromLng: from.lng,
+            toLat: to.lat,
+            toLng: to.lng));
+
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(
+          status: CreateShippingRequestStates.error,
+          errorMessage: 'Unable to get expected price',
+          failure: failure));
+    },
+        (response) => emit(state.copyWith(
+            status: CreateShippingRequestStates.loading,
+            minimumPrice: response.price.toDouble(),
+            offerPrice: response.price.toDouble(),
+            distance: response.distance,
+            time: response.duration)));
+  }
+
+  // ---- get subcategories
   Future<void> getSubCategories() async {
     final subCategories = await _getShippingSubCategoriesUseCase.call('');
     subCategories.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(
         failure: failure,
         status: CreateShippingRequestStates.error,
@@ -57,17 +99,10 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
     });
   }
 
-  void selectPickUpLocation({required AddressSearchParamsEntity item}) {
-    fromAddressTextController.text = item.address;
-    emit(state.copyWith(
-        status: CreateShippingRequestStates.loading, fromAddress: item));
+  void loadData() async {
+    await getSubCategories();
   }
 
-  // change subCategory selection
-  void changeSubCategorySelection({
-    required SubCategoryModel item,
-  }) =>
-      emit(state.copyWith(subCategory: item));
 // search via google for near by addresses with string key
   Future<void> loadNearByPlaces({required String key}) async {
     emit(state.copyWith(status: CreateShippingRequestStates.loading));
@@ -77,6 +112,10 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
         final result = await _getNearByPlacesUseCase
             .call(AddressSearchParamsModel(address: key, lat: 0, lng: 0));
         result.fold((failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(state.copyWith(status: CreateShippingRequestStates.error));
         }, (nearByPlaces) {
           emit(state.copyWith(
@@ -91,7 +130,13 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
     }
   }
 
-// select pickup and drop off points manually
+  void selectPickUpLocation({required AddressSearchParamsEntity item}) {
+    fromAddressTextController.text = item.address;
+    emit(state.copyWith(
+        status: CreateShippingRequestStates.loading, fromAddress: item));
+  }
+
+  // select pickup and drop off points manually
   void selectPlace(
       {required GoogleSearchResultModel item,
       required BuildContext context}) async {
@@ -115,34 +160,5 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
               lng: item.geometry!.location!.lng!)));
       await getExpectedPrice();
     }
-  }
-
-  Future<void> getExpectedPrice() async {
-    final from = state.fromAddress!;
-    final to = state.toAddress!;
-
-    final response = await _getShippingExpectedPriceUseCase.call(
-        ExpectedPriceParams(
-            subCategoryId: state.subCategory?.id ?? '',
-            fromLat: from.lat,
-            fromLng: from.lng,
-            toLat: to.lat,
-            toLng: to.lng));
-
-    response.fold(
-        (failure) => emit(state.copyWith(
-            status: CreateShippingRequestStates.error,
-            errorMessage: 'Unable to get expected price',
-            failure: failure)),
-        (response) => emit(state.copyWith(
-            status: CreateShippingRequestStates.loading,
-            minimumPrice: response.price.toDouble(),
-            offerPrice: response.price.toDouble(),
-            distance: response.distance,
-            time: response.duration)));
-  }
-
-  void addNormalRequest({required BuildContext context}) {
-    context.push(Routes.TRIPDETAILS);
   }
 }

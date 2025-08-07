@@ -15,6 +15,9 @@ import '../../../../health_feature/health/domain/usecases/get_health_subcategori
 import '../../../../health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'create_resturant_state.dart';
 
@@ -52,7 +55,13 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     if (_shareCubit.subCategories.isEmpty) {
       final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
       response.fold(
-          (failure) => emit(CreateResturantError("Can't Load Specialities")),
+          (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+            emit(CreateResturantError("Can't Load Specialities"));
+          },
           (data) {
         _shareCubit.subCategories = data;
         emit(CreateResturantSubCategoriesLoaded(data));
@@ -66,7 +75,13 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     if (_shareCubit.governorates.isEmpty) {
       final response = await _getGovernoratesUseCase.call(const NoParams());
       response.fold(
-          (failure) => emit(CreateResturantError("Can't Load Governorates")),
+          (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+            emit(CreateResturantError("Can't Load Governorates"));
+          },
           (data) {
         _shareCubit.governorates = data;
         emit(CreateResturantGovernoratesLoaded(data));
@@ -81,7 +96,13 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     final response = await _getCitiesUseCase.call(governorateId);
 
     response.fold(
-      (failure) => emit(CreateResturantError("Can't Load Cities")),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(CreateResturantError("Can't Load Cities"));
+      },
       (data) => emit(CreateResturantCitiesLoaded(data)),
     );
   }

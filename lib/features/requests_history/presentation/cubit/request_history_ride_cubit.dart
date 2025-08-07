@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/request_history_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class RequestHistoryRideCubit extends Cubit<RiderState> {
   final ApiConsumer apiConsumer;
@@ -17,6 +19,10 @@ class RequestHistoryRideCubit extends Cubit<RiderState> {
       print("ride response== $response\n");
       response.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(FailureRiderState(failure: failure));
         },
         (data) {

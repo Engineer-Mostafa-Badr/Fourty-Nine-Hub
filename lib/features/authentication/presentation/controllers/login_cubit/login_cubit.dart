@@ -540,6 +540,10 @@ class LoginCubit extends Cubit<LoginState> {
       result.fold(
         (failure) {
           log('LoginCubit: Backend social login failed: $failure');
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(SocialAuthState(
             status: AuthStatus.authenticateError,
             error: failure,

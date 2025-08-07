@@ -3,15 +3,22 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../../core/extensions/context_extension.dart';
-import '../../../../../core/messages/messages.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../../../fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../data/models/near_by_model.dart';
 import '../../domain/use_case/add_favourite_category_use_case.dart';
 import '../../domain/use_case/chech_user_nearby_use_case.dart';
 import '../../domain/use_case/delete_tinder_picture_use_case.dart';
@@ -24,12 +31,6 @@ import '../../domain/use_case/get_tinder_profile_use_case.dart';
 import '../../domain/use_case/get_user_data_use_case.dart';
 import '../../domain/use_case/send_geft_use_case.dart';
 import '../../domain/use_case/upload_tinder_picture_use_case.dart';
-import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
-import '../../../../../service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
-import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {
@@ -66,32 +67,179 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       this._deleteTinderPictureUseCase)
       : super(TinderViewState());
 
-  // Future<void> fetchUserData() async{
-  //   if (!isClosed){
-  //     emit(state.copyWith(userDataState: TinderStates.initial));
-  //     var response = await _getUserDataUseCase.call(GetUsersParams(gender: gender, page: page, limit: 20,));
-  //   }
-  // }
-  Future<void> fetchUserData({required String gender, required bool isLoggedIn, String userId = ""}) async {
-    final response = await _getUserDataUseCase(
-      GetUsersParams(gender: gender, page: 1, limit: 100, isLoggedIn: isLoggedIn, userId: userId),
-    );
+  Future<void> addFavoriteCategory({required String categoryId}) async {
+    if (!isClosed) {
+      emit(state.copyWith(addCategoryModelState: TinderStates.initial));
+      final response = await _addTinderFavouriteCategoryUseCase(categoryId);
+      response.fold((l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+      }, (r) {
+        emit(state.copyWith(addCategoryModelState: TinderStates.success));
+      });
+    }
+    // final isSuccess = await tinderRepository.addFavoriteCategory(categoryId!);
+    // if (isSuccess) {
+    //   emit(state.copyWith(addCategoryModelState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(addCategoryModelState: TinderStates.failure));
+    // }
+  }
+
+  Future<void> checkUserNearby({
+    required String cardUserId,
+  }) async {
+    emit(state.copyWith(isUserNearbyState: TinderStates.initial));
+
+    final response = await _checkUserNearbyUseCase(cardUserId);
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(
+          isUserNearbyState: TinderStates.failure,
+          isUserNearby: NearByModel()));
+    }, (r) {
+      emit(state.copyWith(
+          isUserNearby: r, isUserNearbyState: TinderStates.success));
+    });
+    // final nearByModel = await tinderRepository.checkUserNearby(cardUserId);
+    // if (nearByModel != null) {
+    //   emit(state.copyWith(
+    //       isUserNearby: nearByModel, isUserNearbyState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(
+    //       isUserNearbyState: TinderStates.failure,
+    //       isUserNearby: NearByModel()));
+    // }
+  }
+
+  Future<void> deletePicture(String id) async {
+    final response = await _deleteTinderPictureUseCase(id);
     if (isClosed) return;
     response.fold(
       (failure) {
-        print('Failure : $failure');
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         if (!isClosed) {
           emit(state.copyWith(failure: failure, status: TinderStates.failure));
         }
       },
       (data) {
         if (!isClosed) {
-          emit(state.copyWith(userData0: data, status: TinderStates.success));
+          emit(state.copyWith(status: TinderStates.success));
         }
-        print('object_________________________________');
-        print('data $data');
       },
     );
+  }
+
+  Future<void> fetchFavorites() async {
+    if (!isClosed) {
+      emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
+      final response = await _getTinderFavouritesUseCase(const NoParams());
+      response.fold((l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+      }, (r) {
+        emit(state.copyWith(
+            getFavCategoryListState: TinderStates.success,
+            getFavCategoryList: r));
+      });
+    }
+
+    Future<void> fetchFavoritesCategory() async {
+      emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
+      final response =
+          await _getTinderFavouritesCategoryUseCase(const NoParams());
+      response.fold((l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+      }, (r) {
+        emit(state.copyWith(
+            getFavCategoryListState: TinderStates.success,
+            FavoriteCategoryList: r));
+      });
+    }
+    // emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
+    // final apiResponse = await tinderRepository.fetchFavoritesCategory();
+    // if (apiResponse != null) {
+    //   emit(state.copyWith(
+    //       getFavCategoryListState: TinderStates.success,
+    //       FavoriteCategoryList: apiResponse));
+    // } else {
+    //   emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+    // }
+  }
+
+  Future<void> fetchGifts() async {
+    emit(state.copyWith(
+      giftsState: TinderStates.initial,
+    ));
+    final response = await _fetchGiftsUseCase(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(giftsState: TinderStates.success));
+    }, (r) {
+      emit(state.copyWith(
+          gifts: r.data?.gifts, giftsState: TinderStates.success));
+    });
+    // emit(state.copyWith(giftsState: TinderStates.initial));
+    // final giftData = await tinderRepository.fetchGifts();
+    // log("${giftData}dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    // if (giftData != null) {
+    //   emit(state.copyWith(gifts: giftData, giftsState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(giftsState: TinderStates.failure));
+    // }
+  }
+
+  Future<bool> fetchLastSeen({
+    required String userId,
+  }) async {
+    bool result = false;
+    emit(state.copyWith(
+      lastSeenModelState: TinderStates.initial,
+    ));
+    final response = await _fetchLastSeenUseCase(userId);
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(lastSeenModelState: TinderStates.failure));
+    }, (r) {
+      result = true;
+      emit(state.copyWith(
+          lastSeenModel: r, lastSeenModelState: TinderStates.success));
+    });
+
+    // emit(state.copyWith(
+    //   lastSeenModelState: TinderStates.initial,
+    // ));
+    //
+    // final lastSeenModel = await tinderRepository.fetchLastSeen(userId);
+    // if (lastSeenModel != null) {
+    //   emit(state.copyWith(
+    //       lastSeenModel: lastSeenModel,
+    //       lastSeenModelState: TinderStates.success));
+    //   return true;
+    //   // print(lastSeenModel.data!.status.toString() +
+    //   //     "sssssssssssssssssssssssssssssssss");
+    // } else {
+    //   print("sssssssssssssssssssssssssssssssss");
+    //   emit(state.copyWith(lastSeenModelState: TinderStates.failure));
+    //   return result;
+    // }
+    return result;
   }
 
   Future<void> fetchMainCategoryById(BuildContext context, String id) async {
@@ -102,6 +250,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       final mainCategoryResponse = await getMainCategoryDetailsUseCase(id);
 
       mainCategoryResponse.fold((l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
         log('there is a failure ${getFailureMessage(l, context)}');
 
         emit(state.copyWith(
@@ -129,6 +280,73 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     // } else {
     //   emit(state.copyWith(mainCategoryResponseState: DataState.failure));
     // }
+  }
+
+  Future<void> fetchSubCategoryData() async {
+    if (!isClosed) {
+      emit(state.copyWith(subCategoryDataState: TinderStates.loading));
+
+      final response = await _fetchSubCategoryDataUseCase(const NoParams());
+      response.fold((l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(subCategoryDataState: TinderStates.failure));
+      }, (r) {
+        emit(state.copyWith(subCategoryData: r, status: TinderStates.success));
+      });
+    }
+
+    // emit(state.copyWith(subCategoryDataState: TinderStates.initial));
+    // final subCategoryData = await tinderRepository.fetchSubCategoryData();
+    // if (subCategoryData != null) {
+    //   // fetchMainCategoryById('62c8b5b09332225799fe335e');
+    //   emit(state.copyWith(
+    //       subCategoryData: subCategoryData,
+    //       subCategoryDataState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(subCategoryDataState: TinderStates.failure));
+    // }
+  }
+
+  // Future<void> fetchUserData() async{
+  //   if (!isClosed){
+  //     emit(state.copyWith(userDataState: TinderStates.initial));
+  //     var response = await _getUserDataUseCase.call(GetUsersParams(gender: gender, page: page, limit: 20,));
+  //   }
+  // }
+  Future<void> fetchUserData(
+      {required String gender,
+      required bool isLoggedIn,
+      String userId = ""}) async {
+    final response = await _getUserDataUseCase(
+      GetUsersParams(
+          gender: gender,
+          page: 1,
+          limit: 100,
+          isLoggedIn: isLoggedIn,
+          userId: userId),
+    );
+    if (isClosed) return;
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        print('Failure : $failure');
+        if (!isClosed) {
+          emit(state.copyWith(failure: failure, status: TinderStates.failure));
+        }
+      },
+      (data) {
+        if (!isClosed) {
+          emit(state.copyWith(userData0: data, status: TinderStates.success));
+        }
+        print('object_________________________________');
+        print('data $data');
+      },
+    );
   }
 
   // Future<bool> startNormalChat({
@@ -172,6 +390,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     // log('main categoty response ${response?.data.mainCategory.nameEn}');
 
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(profileUserState: TinderStates.failure));
     }, (r) {
       emit(state.copyWith(
@@ -179,94 +400,25 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     });
   }
 
-  Future<void> fetchFavorites() async {
-    if (!isClosed) {
-      emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
-      final response = await _getTinderFavouritesUseCase(const NoParams());
-      response.fold((l) {
-        emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-      }, (r) {
-        emit(state.copyWith(
-            getFavCategoryListState: TinderStates.success,
-            getFavCategoryList: r));
-      });
+  void nextStory() {
+    if (state.currentStoryIndex! <
+        state.userData![state.currentIndex!].pictures.length - 1) {
+      emit(state.copyWith(currentStoryIndex: state.currentStoryIndex! + 1));
     }
-
-    Future<void> fetchFavoritesCategory() async {
-      emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
-      final response =
-          await _getTinderFavouritesCategoryUseCase(const NoParams());
-      response.fold((l) {
-        emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-      }, (r) {
-        emit(state.copyWith(
-            getFavCategoryListState: TinderStates.success,
-            FavoriteCategoryList: r));
-      });
-    }
-    // emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
-    // final apiResponse = await tinderRepository.fetchFavoritesCategory();
-    // if (apiResponse != null) {
-    //   emit(state.copyWith(
-    //       getFavCategoryListState: TinderStates.success,
-    //       FavoriteCategoryList: apiResponse));
-    // } else {
-    //   emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-    // }
   }
 
-  Future<void> addFavoriteCategory({required String categoryId}) async {
-    if (!isClosed) {
-      emit(state.copyWith(addCategoryModelState: TinderStates.initial));
-      final response = await _addTinderFavouriteCategoryUseCase(categoryId);
-      response.fold((l) {
-        emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-      }, (r) {
-        emit(state.copyWith(addCategoryModelState: TinderStates.success));
-      });
+  void previousStory() {
+    if (state.currentStoryIndex! > 0) {
+      emit(state.copyWith(currentStoryIndex: state.currentStoryIndex! - 1));
     }
-    // final isSuccess = await tinderRepository.addFavoriteCategory(categoryId!);
-    // if (isSuccess) {
-    //   emit(state.copyWith(addCategoryModelState: TinderStates.success));
-    // } else {
-    //   emit(state.copyWith(addCategoryModelState: TinderStates.failure));
-    // }
   }
 
-  Future<bool> fetchLastSeen({
-    required String userId,
-  }) async {
-    bool result = false;
-    emit(state.copyWith(
-      lastSeenModelState: TinderStates.initial,
-    ));
-    final response = await _fetchLastSeenUseCase(userId);
-    response.fold((l) {
-      emit(state.copyWith(lastSeenModelState: TinderStates.failure));
-    }, (r) {
-      result = true;
-      emit(state.copyWith(
-          lastSeenModel: r, lastSeenModelState: TinderStates.success));
-    });
+  void resetPan() {
+    emit(state.copyWith(position: Offset.zero, rotation: 0));
+  }
 
-    // emit(state.copyWith(
-    //   lastSeenModelState: TinderStates.initial,
-    // ));
-    //
-    // final lastSeenModel = await tinderRepository.fetchLastSeen(userId);
-    // if (lastSeenModel != null) {
-    //   emit(state.copyWith(
-    //       lastSeenModel: lastSeenModel,
-    //       lastSeenModelState: TinderStates.success));
-    //   return true;
-    //   // print(lastSeenModel.data!.status.toString() +
-    //   //     "sssssssssssssssssssssssssssssssss");
-    // } else {
-    //   print("sssssssssssssssssssssssssssssssss");
-    //   emit(state.copyWith(lastSeenModelState: TinderStates.failure));
-    //   return result;
-    // }
-    return result;
+  void resetStoryIndex() {
+    emit(state.copyWith(currentStoryIndex: 0));
   }
 
   Future<dynamic> sendGift({
@@ -283,14 +435,16 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       receiverId: receiverId,
     ));
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       Failure failure = l;
       if (getStatusCode(failure, context) == 400) {
         if (Navigator.canPop(context)) {
           context.pop();
         }
         serviceLocator<SubscriptionController>()
-            .showActiveSubscriptionAmounts(
-            walletType: WalletTypes.balance);
+            .showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
       }
       // if(getStatusCode(failure,context) == 400){
       //   context.pop();
@@ -326,148 +480,45 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     });
   }
 
-  Future<void> fetchGifts() async {
-    emit(state.copyWith(
-      giftsState: TinderStates.initial,
-    ));
-    final response = await _fetchGiftsUseCase(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(giftsState: TinderStates.success));
-    }, (r) {
-      emit(state.copyWith(
-          gifts: r.data?.gifts, giftsState: TinderStates.success));
-    });
-    // emit(state.copyWith(giftsState: TinderStates.initial));
-    // final giftData = await tinderRepository.fetchGifts();
-    // log("${giftData}dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    // if (giftData != null) {
-    //   emit(state.copyWith(gifts: giftData, giftsState: TinderStates.success));
-    // } else {
-    //   emit(state.copyWith(giftsState: TinderStates.failure));
-    // }
-  }
-
-  Future<void> checkUserNearby({
-    required String cardUserId,
-  }) async {
-    emit(state.copyWith(isUserNearbyState: TinderStates.initial));
-
-    final response = await _checkUserNearbyUseCase(cardUserId);
-    response.fold((l) {
-      emit(state.copyWith(
-          isUserNearbyState: TinderStates.failure,
-          isUserNearby: NearByModel()));
-    }, (r) {
-      emit(state.copyWith(
-          isUserNearby: r, isUserNearbyState: TinderStates.success));
-    });
-    // final nearByModel = await tinderRepository.checkUserNearby(cardUserId);
-    // if (nearByModel != null) {
-    //   emit(state.copyWith(
-    //       isUserNearby: nearByModel, isUserNearbyState: TinderStates.success));
-    // } else {
-    //   emit(state.copyWith(
-    //       isUserNearbyState: TinderStates.failure,
-    //       isUserNearby: NearByModel()));
-    // }
-  }
-
-  Future<void> fetchSubCategoryData() async {
-    if (!isClosed) {
-      emit(state.copyWith(subCategoryDataState: TinderStates.loading));
-
-      final response = await _fetchSubCategoryDataUseCase(const NoParams());
-      response.fold((l) {
-        emit(state.copyWith(subCategoryDataState: TinderStates.failure));
-      }, (r) {
-        emit(state.copyWith(subCategoryData: r, status: TinderStates.success));
-      });
-    }
-
-    // emit(state.copyWith(subCategoryDataState: TinderStates.initial));
-    // final subCategoryData = await tinderRepository.fetchSubCategoryData();
-    // if (subCategoryData != null) {
-    //   // fetchMainCategoryById('62c8b5b09332225799fe335e');
-    //   emit(state.copyWith(
-    //       subCategoryData: subCategoryData,
-    //       subCategoryDataState: TinderStates.success));
-    // } else {
-    //   emit(state.copyWith(subCategoryDataState: TinderStates.failure));
-    // }
-  }
-
-  // Future<void> fetchUserData({
-  //   required String gender,
-  // }) async {
-  //   emit(state.copyWith(userDataState: DataState.initial, userData: []));
-  //   final userData = await tinderRepository.fetchUserData(gender);
-  //   if (userData != null) {
-  //     log(userData.first.email.toString() +
-  //         '000000000000000000000000000000000000000');
-  //     emit(
-  //         state.copyWith(userData: userData, userDataState: DataState.success));
-  //   } else {
-  //     emit(state.copyWith(userDataState: DataState.failure, userData: []));
-  //   }
-  // }
-
-  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
-    final UploadFile upload = UploadFile();
-    print('=======>data Hiii');
-    UploadFileEntity? image;
-    await upload.uploadImage(
-        isGallery: isGallery,
-        subCategoryId: '66a3583454e6e337915514db',
-        onUploaded: (UploadFileEntity data) async {
-          image = data;
-          final response = await serviceLocator<ApiConsumer>().put(
-            '/users/profile-picture',
-            data: {'profilePictureId': data.mediaId},
-          );
-          return response.fold(
-            (failure) {
-              print('=======>data Fal}');
-
-              return Left(failure);
-            },
-            (data) {
-              emit(state.copyWith(newImage: image));
-              UserCubit.to.getUser();
-              uploadPictures(
-                  pictures: AddImagesParams(media: [state.newImage!.mediaId]));
-              print("newImage====>${state.newImage?.mediaId}");
-              return const Right(true);
-            },
-          );
-        }, context: context);
-  }
-
-  Future<void> uploadPictures({
-    required AddImagesParams pictures,
-  }) async {
-    final response = await _uploadTinderPictureUseCase(pictures);
-    if (isClosed) return;
-    response.fold(
-      (failure) {
-        print('Failure : $failure');
-        if (!isClosed) {
-          emit(state.copyWith(failure: failure, status: TinderStates.failure));
-        }
-      },
-      (data) {
-        if (!isClosed) {
-          emit(state.copyWith(status: TinderStates.success));
-        }
-        print('object_________________________________');
-        print('data $data');
-      },
-    );
-  }
-
   void setUploading(bool isUploading) {
     emit(TinderViewState(
         isUploading: isUploading, profileUserData: state.profileUserData));
   }
+
+  void swipeAway() {
+    emit(state.copyWith(
+      position: Offset(state.position!.dx * 50, state.position!.dy * 50),
+    ));
+    Future.delayed(const Duration(milliseconds: 300), () {
+      emit(state.copyWith(
+        currentIndex: (state.currentIndex! + 1) % state.userData!.length,
+        currentStoryIndex: 0,
+        position: Offset.zero,
+        rotation: 0,
+      ));
+    });
+  }
+
+  Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
+    final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: TinderStates.failure));
+    }, (data) {
+      result = data;
+      emit(state.copyWith(status: TinderStates.success));
+    });
+    return result;
+  }
+
+  void updateCurrentIndex(int newIndex) {
+    emit(state.copyWith(currentIndex: newIndex));
+  }
+
   // Future<void> uploadPictures({
   //   required AddImagesParams pictures,
   // }) async {
@@ -485,63 +536,69 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(position: position, rotation: rotation));
   }
 
-  void resetPan() {
-    emit(state.copyWith(position: Offset.zero, rotation: 0));
+  // Future<void> fetchUserData({
+  //   required String gender,
+  // }) async {
+  //   emit(state.copyWith(userDataState: DataState.initial, userData: []));
+  //   final userData = await tinderRepository.fetchUserData(gender);
+  //   if (userData != null) {
+  //     log(userData.first.email.toString() +
+  //         '000000000000000000000000000000000000000');
+  //     emit(
+  //         state.copyWith(userData: userData, userDataState: DataState.success));
+  //   } else {
+  //     emit(state.copyWith(userDataState: DataState.failure, userData: []));
+  //   }
+  // }
+
+  uploadPhoto({bool isGallery = true, required BuildContext context}) async {
+    final UploadFile upload = UploadFile();
+    print('=======>data Hiii');
+    UploadFileEntity? image;
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) async {
+          image = data;
+          final response = await serviceLocator<ApiConsumer>().put(
+            '/users/profile-picture',
+            data: {'profilePictureId': data.mediaId},
+          );
+          return response.fold(
+            (failure) {
+              var currentContext =
+                  AppPages.router.configuration.navigatorKey.currentContext!;
+              showErrorMessage(
+                  currentContext, getFailureMessage(failure, currentContext));
+              print('=======>data Fal}');
+
+              return Left(failure);
+            },
+            (data) {
+              emit(state.copyWith(newImage: image));
+              UserCubit.to.getUser();
+              uploadPictures(
+                  pictures: AddImagesParams(media: [state.newImage!.mediaId]));
+              print("newImage====>${state.newImage?.mediaId}");
+              return const Right(true);
+            },
+          );
+        },
+        context: context);
   }
 
-  void swipeAway() {
-    emit(state.copyWith(
-      position: Offset(state.position!.dx * 50, state.position!.dy * 50),
-    ));
-    Future.delayed(const Duration(milliseconds: 300), () {
-      emit(state.copyWith(
-        currentIndex: (state.currentIndex! + 1) % state.userData!.length,
-        currentStoryIndex: 0,
-        position: Offset.zero,
-        rotation: 0,
-      ));
-    });
-  }
-
-  void nextStory() {
-    if (state.currentStoryIndex! <
-        state.userData![state.currentIndex!].pictures.length - 1) {
-      emit(state.copyWith(currentStoryIndex: state.currentStoryIndex! + 1));
-    }
-  }
-
-  void previousStory() {
-    if (state.currentStoryIndex! > 0) {
-      emit(state.copyWith(currentStoryIndex: state.currentStoryIndex! - 1));
-    }
-  }
-
-  void updateCurrentIndex(int newIndex) {
-    emit(state.copyWith(currentIndex: newIndex));
-  }
-
-  void resetStoryIndex() {
-    emit(state.copyWith(currentStoryIndex: 0));
-  }
-
-  Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
-    final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
-    bool result = false;
-    response.fold(
-        (failure) => emit(
-            state.copyWith(failure: failure, status: TinderStates.failure)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: TinderStates.success));
-    });
-    return result;
-  }
-
-  Future<void> deletePicture(String id) async {
-    final response = await _deleteTinderPictureUseCase(id);
+  Future<void> uploadPictures({
+    required AddImagesParams pictures,
+  }) async {
+    final response = await _uploadTinderPictureUseCase(pictures);
     if (isClosed) return;
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        print('Failure : $failure');
         if (!isClosed) {
           emit(state.copyWith(failure: failure, status: TinderStates.failure));
         }
@@ -550,6 +607,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         if (!isClosed) {
           emit(state.copyWith(status: TinderStates.success));
         }
+        print('object_________________________________');
+        print('data $data');
       },
     );
   }

@@ -6,7 +6,9 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/create_live_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../tinder/data/models/gift_model.dart';
@@ -22,7 +24,13 @@ extension TiktokControllerExtension on StreamCubit {
     emit(state.copyWith(status: StreamsStates.loading));
     var result = await getAllTopicsUseCase(const NoParams());
     result.fold(
-        (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
+        (l){ 
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+          
+           emit(state.copyWith(status: StreamsStates.failure, failure: l));},
         (r) {
       topics = r;
       emit(state.copyWith(status: StreamsStates.success));
@@ -115,7 +123,13 @@ extension TiktokControllerExtension on StreamCubit {
       goals: goalParamsList,
     ));
     result.fold(
-        (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
+        (l){ 
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+          
+           emit(state.copyWith(status: StreamsStates.failure, failure: l));},
         (r) {
       success = true;
       print("objectakldnlka");
@@ -148,6 +162,10 @@ extension TiktokControllerExtension on StreamCubit {
       value.fold((l) {
         // CliLogger.error('there is an error ${l.toString()}',
         //     level: CliLoggerLevel.two);
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(state.copyWith(
           status: StreamsStates.failure,
         ));
@@ -177,7 +195,13 @@ extension TiktokControllerExtension on StreamCubit {
     emit(state.copyWith(status: StreamsStates.loading));
     var result = await endLiveUseCase(MeetingParams(id: streamId));
     result.fold(
-        (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
+        (l){ 
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+          
+           emit(state.copyWith(status: StreamsStates.failure, failure: l));},
         (r) {
       emit(state.copyWith(status: StreamsStates.success));
     });

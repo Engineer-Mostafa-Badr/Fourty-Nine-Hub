@@ -1,11 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/abstract/use_case.dart';
-import '../../domain/useCase/delete_account_use_case.dart';
-import 'settings_state.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
+import '../../../../core/abstract/use_case.dart';
 import '../../domain/entities/disable_entity.dart';
+import '../../domain/useCase/delete_account_use_case.dart';
 import '../../domain/useCase/disable_account_use_case.dart';
 import '../../domain/useCase/enable_account_use_case.dart';
+import 'settings_state.dart';
 
 class SettingCubit extends Cubit<SettingState> {
   final DeleteAccountUseCase _deleteAccountUseCase;
@@ -18,11 +21,14 @@ class SettingCubit extends Cubit<SettingState> {
     this._enableAccountUseCase,
   ) : super(SettingState(able: DisableEntity(isDisabled: false)));
 
-
   Future<void> deleteAccount() async {
     final response = await _deleteAccountUseCase.call(const NoParams());
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
       (data) {
@@ -35,6 +41,10 @@ class SettingCubit extends Cubit<SettingState> {
     final response = await _disableAccountUseCase.call(const NoParams());
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
       (data) {
@@ -48,6 +58,10 @@ class SettingCubit extends Cubit<SettingState> {
     final response = await _enableAccountUseCase.call(const NoParams());
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
       (data) {

@@ -2,6 +2,9 @@ import 'package:bloc/bloc.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/user_tag_entity.dart';
 import '../../../domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'tag_users_state.dart';
 
@@ -42,6 +45,10 @@ class TagUsersCubit extends Cubit<TagUsersState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: TagUsersStates.error));
       },
       (data) {

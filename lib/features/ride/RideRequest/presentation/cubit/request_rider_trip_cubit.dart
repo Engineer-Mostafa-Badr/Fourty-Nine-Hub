@@ -5,7 +5,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_requ
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class RequestRiderTripCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   SuccessRequestTripModel? trip;
@@ -14,6 +16,10 @@ class RequestRiderTripCubit extends Cubit<RiderState> {
     var response = await repository.request(model: model);
     response.fold(
       (error) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(error, currentContext));
         emit(FailureRiderState(failure: error));
       },
       (data) {

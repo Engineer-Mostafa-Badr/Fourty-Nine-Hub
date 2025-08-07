@@ -10,6 +10,10 @@ import '../shared/fourty_nine_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../../../subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 part 'main_categories_taps_state.dart';
 
 class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
@@ -59,7 +63,13 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
       ),
     );
     result.fold(
-        (l) => emit(state.copyWith(status: StateStatus.error, failure: l)),
+        (l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+          emit(state.copyWith(status: StateStatus.error, failure: l));
+        },
         (r) {
       _paginationParams.page++;
       subCategories.addAll(r);
@@ -85,8 +95,13 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
     final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
     bool result = false;
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(failure: failure, status: StateStatus.error));
+        },
         (data) {
       result = data;
       emit(state.copyWith(status: StateStatus.success));

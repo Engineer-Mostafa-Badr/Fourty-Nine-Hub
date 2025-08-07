@@ -3,7 +3,9 @@ import 'package:dartz/dartz.dart'; // For Either
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'get_currency_state.dart';
 
 class GetCurrencyCubit extends Cubit<GetCurrencyState> {
@@ -21,7 +23,13 @@ class GetCurrencyCubit extends Cubit<GetCurrencyState> {
           await apiConsumer.get(EndPoints.getCurrencyCarPool);
 
       response.fold(
-        (failure) => emit(GetCurrencyFailure(_mapFailureToMessage(failure))),
+        (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(GetCurrencyFailure(_mapFailureToMessage(failure)));
+        },
         (data) {
           if (data['status']) {
             currnecyEn = data['data']["currencyEn"];

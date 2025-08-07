@@ -2,7 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_ride_model/driver_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class GetDriverRideCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   GetDriverRideCubit({required this.repository}) : super(RiderInitial());
@@ -11,7 +13,12 @@ class GetDriverRideCubit extends Cubit<RiderState> {
     emit(LoadingRiderState());
     var response = await repository.getRideDriver();
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) {
         DriverRideModel model = DriverRideModel.fromJson(r['data']);
         emit(SuccessGetDriverRideState(model: model));

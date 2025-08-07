@@ -12,7 +12,9 @@ import '../../domain/usecases/get_club_voice_use_case.dart';
 import '../../domain/usecases/leave_club_voice_use_case.dart';
 import '../../domain/usecases/search_club_voice_use_case.dart';
 import 'club_voice_state.dart'; // Assuming this is the file where your state classes are defined
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class ClubVoiceCubit extends Cubit<ClubVoiceState> {
   final AddClubVoiceUseCase addClubVoiceUseCase;
   final GetClubVoiceUseCase getClubVoiceUseCase;
@@ -35,6 +37,10 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
     if (!isClosed) {
       await addClubVoiceUseCase(AddRoomParams(subject: subject)).then((value) {
         value.fold((l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
           emit(state.copyWith(requestState: ZegoRequestState.failure));
         }, (r) {
           emit(state.copyWith(
@@ -110,6 +116,10 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
     getClubVoiceUseCase(PaginationParams(page: page, limit: pageSize))
         .then((value) {
       value.fold((l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         // CliLogger.error('there is an error ${l.toString()}',
         //     level: CliLoggerLevel.two);
         emit(state.copyWith(

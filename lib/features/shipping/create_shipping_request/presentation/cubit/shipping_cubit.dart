@@ -30,6 +30,9 @@ import '../../../../../service_locator/service_locator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class ShippingCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;
@@ -48,6 +51,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     var response = await repository.getBannerData();
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log(l.toString(), name: "FailureBanner");
         emit(FailureShippingState(failure: l));
       },
@@ -256,7 +263,12 @@ class ShippingCubit extends Cubit<ShippingState> {
               size: await getFileSize(model.idImageInFront!))),
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         log(r.toString(),
             name: "lllllllllllllllllllllllllllllllllllllllllllllll");
@@ -296,6 +308,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log('llllllllllllllja;sdlkfja;slkdjf;aslkdjf;alskdjfa;slkdjf $l');
       },
       (r) async {
@@ -341,7 +357,12 @@ class ShippingCubit extends Cubit<ShippingState> {
               size: await getFileSize(model.drivingImageInFront!))),
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         log(r.toString(),
             name: "lllllllllllllllllllllllllllllllllllllllllllllll");
@@ -374,7 +395,12 @@ class ShippingCubit extends Cubit<ShippingState> {
               size: await getFileSize(model.licenseImageInFront!))),
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         log(r.toString(),
             name: "lllllllllllllllllllllllllllllllllllllllllllllll");
@@ -441,6 +467,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     //     name:` "suuuuuuuuuuuuuuuuuuuuuuccccccccccccccccccessssssssssssssssss");
     resposne.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log(l.toString(), name: "failuerRequest");
       },
       (r) {
@@ -465,6 +495,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
     response.fold(
       (l) async {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         // log("faiuerDriverResiget");
         // emit(FailureShippingState(failure: l));
         // log("successDriverResiget");
@@ -501,6 +535,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     var response = await repository.deleteDriver();
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {
