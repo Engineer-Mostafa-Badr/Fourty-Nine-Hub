@@ -6,16 +6,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../../../carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import '../../../../ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
-import 'bottom_sheet/custom_bottom_sheet.dart';
 import 'custom_ride_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MapSection extends StatefulWidget {
   const MapSection({super.key});
@@ -68,6 +66,7 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
+      ManageVibration.vibrate();
               if(context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.rideModeScreen, extra: const RideModeParams(modeType: 'truk'));
               }else {
@@ -83,6 +82,7 @@ class _MapSectionState extends State<MapSection> {
               //               radius: 15,
               //               label: LocaleKeys.ride.tr(),
               //               onPressed: () {
+      ManageVibration.vibrate();
               //                 context.push(Routes.welcomeRideRegister);
               //               },
               //               backColor: AppColors.PRIMARY_COLOR,
@@ -91,6 +91,7 @@ class _MapSectionState extends State<MapSection> {
               //               radius: 15,
               //               label: LocaleKeys.shipping.tr(),
               //               onPressed: () {},
+      ManageVibration.vibrate();
               //               backColor: AppColors.PRIMARY_COLOR,
               //               width: double.infinity),
               //         ],

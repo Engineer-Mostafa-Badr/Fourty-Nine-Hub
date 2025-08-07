@@ -5,10 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_card_request.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -20,12 +18,11 @@ import '../../../../../../core/utils/format_numbers.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../routes/routes.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../image_text_row.dart';
-import '../top_card_request.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomReserveRideBottomSheet extends StatefulWidget {
   final RideCubit rideCubit;
@@ -114,6 +111,7 @@ class _CustomReserveRideBottomSheetState
                                               0)) {
                                         return GestureDetector(
                                           onTap: () {
+      ManageVibration.vibrate();
                                             setState(() {
 
                                               if(context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null){
@@ -187,6 +185,7 @@ class _CustomReserveRideBottomSheetState
                                           : AppColors.PRIMARY_COLOR,
                                       label: LocaleKeys.confirm.localize,
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         if (widget.isPremium) {
                                           bool isSubscribed = await context
                                               .read<RideCubit>()
@@ -494,6 +493,7 @@ class _CustomReserveRideBottomSheetState
 
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           selectedContainerIndex = index;
         });

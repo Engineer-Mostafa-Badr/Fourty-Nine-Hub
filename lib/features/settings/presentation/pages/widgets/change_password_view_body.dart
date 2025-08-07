@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
 
 
 import '../../../../../common/widgets/form/text_fields/email_text_form_field.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ChangePasswordViewBody extends StatefulWidget {
   const ChangePasswordViewBody({super.key});
@@ -61,6 +62,7 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                   child: CustomFloatingActionButton(
                     text: LocaleKeys.sendOTP.localize,
                     onPressed: () {
+      ManageVibration.vibrate();
                       forgotPasswordCubit.sendForgetPasswordOTP(context);
                     },
                   ),

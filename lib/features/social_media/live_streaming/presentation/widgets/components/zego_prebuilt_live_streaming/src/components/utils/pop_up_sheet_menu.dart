@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/inner_text.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveStreamingPopUpSheetMenu extends StatefulWidget {
@@ -72,6 +73,7 @@ class _ZegoLiveStreamingPopUpSheetMenuState
   Widget popUpItemWidget(int index, ZegoLiveStreamingPopupItem popupItem) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         ZegoLoggerService.logInfo(
           '[pop-up sheet] click ${popupItem.text}',
           tag: 'live-streaming',

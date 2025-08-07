@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -12,6 +10,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/widgets/check_divider_widget.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/widgets/transfer_list_tile_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -61,6 +60,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
           label: LocaleKeys.transactionSuccessful.localize,
           leading: IconButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
             icon: const Icon(Icons.arrow_back),

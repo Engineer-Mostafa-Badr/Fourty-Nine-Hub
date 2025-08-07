@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../cubits/trip_join_view/trip_join_view_cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class PickDateAndTimeWidget extends StatefulWidget {
   const PickDateAndTimeWidget({
@@ -43,6 +44,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
                   ),
                   InkWell(
                     onTap: () async {
+      ManageVibration.vibrate();
                       date = await showDatePicker(
                         context: context,
                         firstDate: DateTime.now().subtract(
@@ -81,6 +83,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
         ),
         InkWell(
           onTap: () async {
+      ManageVibration.vibrate();
             time = await showTimePicker(
               context: context,
               initialTime: const TimeOfDay(hour: 0, minute: 0),

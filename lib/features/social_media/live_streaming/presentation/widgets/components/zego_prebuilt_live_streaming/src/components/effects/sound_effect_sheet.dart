@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Package imports:
 
@@ -106,6 +107,7 @@ class _ZegoLiveStreamingSoundEffectSheetState
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(
                 context,
                 rootNavigator: widget.rootNavigator,
@@ -177,6 +179,7 @@ class _ZegoLiveStreamingSoundEffectSheetState
               ),
               iconText: voiceChangerTypeText(effect),
               onPressed: () {
+      ManageVibration.vibrate();
                 ZegoUIKit().setVoiceChangerType(effect.key);
               },
             ),
@@ -213,6 +216,7 @@ class _ZegoLiveStreamingSoundEffectSheetState
               ),
               iconText: reverbTypeText(effect),
               onPressed: () {
+      ManageVibration.vibrate();
                 ZegoUIKit().setReverbType(effect.key);
               },
             ),

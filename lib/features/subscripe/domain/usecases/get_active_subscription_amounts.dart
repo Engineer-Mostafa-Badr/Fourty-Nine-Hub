@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
-import 'package:fourtyninehub/features/subscripe/domain/repositories/subscription_plans_repo.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../entities/subscription_amount_entity.dart';
+import '../repositories/subscription_plans_repo.dart';
 
 class GetActiveSubscriptionAmountsUseCase
     extends UseCase<List<SubscriptionAmountEntity>, NoParams> {

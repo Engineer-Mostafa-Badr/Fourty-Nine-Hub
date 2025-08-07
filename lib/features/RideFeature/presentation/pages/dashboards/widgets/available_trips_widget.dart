@@ -11,9 +11,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'edit_price_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AvailableTripsWidget extends StatelessWidget {
   final bool isWithAnotherPrice;
@@ -115,7 +115,10 @@ class AvailableTripsWidget extends StatelessWidget {
                         height: 30,
                         radius: 15,
                         label: LocaleKeys.Accept.tr(),
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         backColor: AppColors.PRIMARY_COLOR,
                       ),
                     ),
@@ -131,6 +134,7 @@ class AvailableTripsWidget extends StatelessWidget {
                             color: Colors.white,
                             fontSize: tripEntity.isAutoAccept==false ? 23 : 28),
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (tripEntity.isAutoAccept==false) {
                             showModalBottomSheet(
                               backgroundColor: AppColors.whiteColor,
@@ -177,6 +181,7 @@ class AvailableTripsWidget extends StatelessWidget {
                                         backColor:
                                             AppColors.SECONDARY_COLOR_DARK2,
                                         onPressed: () {
+      ManageVibration.vibrate();
                                           Navigator.of(context).pop();
                                         }),
                                     const SizedBox(height: 16),

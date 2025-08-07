@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class InvestmentItem extends StatelessWidget {
   const InvestmentItem({
@@ -66,7 +67,10 @@ class InvestmentItem extends StatelessWidget {
                       : Colors.white,
                   fontSize: 32,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  
+      ManageVibration.vibrate();
+                },
                 backColor: Colors.green,
                 padding: 24,
               )

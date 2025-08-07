@@ -14,21 +14,17 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
 import '../cubit/create_company_ad_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreatePostCompanyParams {
   final bool text;
@@ -101,6 +97,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     label: context.isArabic ? 'إلغاء' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -109,6 +106,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     label: context.isArabic ? 'متابعة' : 'Continue',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       showLoadingDialog(context);
                       await context
@@ -166,6 +164,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                               padding: const EdgeInsets.all(10.0),
                               child: GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   if(formKey.currentState!.validate()){
                                     if(state.files==null||(state.files?.isEmpty??false)){
                                       showErrorMessage(context, context.isArabic?'الصورة مطلوبة':'Image is required');
@@ -200,6 +199,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                 _buildMediaCard(photo),
                               GestureDetector(
                                 onTap: () async {
+      ManageVibration.vibrate();
                                   await controller.uploadPhoto(
                                       hasLoading: false,
                                       isGallery: true,
@@ -306,6 +306,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           itemBuilder: (context, index) => ClickableWidget(
             // Handle image interactions
             onTap: () {
+      ManageVibration.vibrate();
               if (index != 3 || (index == 3 && state.files!.length == 4)) {
                 List<XFile> files = state.files??[];
                 Navigator.push(
@@ -388,6 +389,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     top: 5,
                     child: ClickableWidget(
                       onTap: () {
+      ManageVibration.vibrate();
                         controller.removePhoto(state.files?[index], state.mediaIds?[index]);
                       },
                       child: const Icon(

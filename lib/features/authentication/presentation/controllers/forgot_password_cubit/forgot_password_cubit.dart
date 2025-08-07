@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../routes/routes.dart';
@@ -12,7 +11,8 @@ import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/send_forget_password_otp_use_case.dart';
 import '../../../domain/use_cases/send_forget_password_question_use_case.dart';
 import '../../../domain/use_cases/verify_questions_use_case.dart';
-import '../user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'forgot_password_state.dart';
 
@@ -51,7 +51,12 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
       result.fold(
-        (failure) => emit(ForgotPasswordSendOTPFailure(failure)),
+        (failure)  {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(ForgotPasswordSendOTPFailure(failure));},
         (questions) {
           context.pushNamed(Routes.VERIFICATION, extra: questions);
           emit(ForgotPasswordSendOTPSuccess());
@@ -64,7 +69,12 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
       result.fold(
-        (failure) => emit(ForgotPasswordSendOTPFailure(failure)),
+        (failure)  {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(ForgotPasswordSendOTPFailure(failure));},
         (_) {
           print('is email');
           context.pushNamed(
@@ -90,7 +100,12 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       ),
     );
     result.fold(
-      (failure) => emit(ChangePasswordFailure(failure)),
+      (failure)  {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(ChangePasswordFailure(failure));},
       (userToken) async {
         log("Token logout ${await CacheManager.getAccessToken()}");
         log("Token userToken access ${userToken.accessToken}");
@@ -125,7 +140,12 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       ),
     );
     result.fold(
-      (failure) => emit(VerifyQuestionsFailure(failure)),
+      (failure)  {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(VerifyQuestionsFailure(failure));},
       (_) {
         context.pushNamed(Routes.CREATENEWFORGOTPASSWORD,
             extra: {"userId": userId, "email": null});

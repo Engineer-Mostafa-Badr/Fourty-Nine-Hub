@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+import '../../../../../res/style/const.dart';
 
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/enums/club_house_layout_mode_enum.dart';
@@ -13,6 +13,7 @@ import '../../../../../secrets/controller/secrets_cubit.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import 'components/custom_extended_button.dart';
 import 'components/media_player.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ZegoAudioRoomWidget extends StatefulWidget {
   final bool isHost;
@@ -367,6 +368,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
     return [
       GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           Navigator.of(context).pop();
 
           ZegoUIKit().removeUserFromRoom(
@@ -382,6 +384,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
       ),
       GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           Navigator.of(context).pop();
 
           ZegoUIKitPrebuiltLiveAudioRoomController()
@@ -399,6 +402,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
       ),
       GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           Navigator.of(context).pop();
 
           ZegoUIKitPrebuiltLiveAudioRoomController()
@@ -416,6 +420,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
       ),
       GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           Navigator.of(context).pop();
         },
         child: Text(

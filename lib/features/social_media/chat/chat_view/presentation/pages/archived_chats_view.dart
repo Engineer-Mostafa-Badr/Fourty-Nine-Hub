@@ -9,10 +9,10 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/end_to_end_Encrypted_widget.dart';
@@ -62,6 +62,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
               leadingWidth: 26,
               leading: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.pop(true);
                 },
                 icon: Icon(
@@ -79,6 +80,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                         children: [
                           IconButton(
                             onPressed: () async {
+      ManageVibration.vibrate();
                               await context
                                   .read<ChatsCubit>()
                                   .pinAndUnpinChat();
@@ -90,6 +92,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                           ),
                           IconButton(
                             onPressed: () async {
+      ManageVibration.vibrate();
                               await context.read<ChatsCubit>().deleteChat();
                             },
                             icon: Icon(
@@ -101,6 +104,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                           ),
                           IconButton(
                             onPressed: () async {
+      ManageVibration.vibrate();
                               await context.read<ChatsCubit>().changeMuteChat();
                             },
                             icon: Icon(
@@ -112,6 +116,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                           ),
                           IconButton(
                             onPressed: () async {
+      ManageVibration.vibrate();
                               await context
                                   .read<ChatsCubit>()
                                   .changeArchiveChat(isArchivedTab: true);
@@ -181,6 +186,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                         : AppColors.PRIMARY_COLOR_DARK,
                                     // Set "Undo" text color to gray
                                     onPressed: () async {
+      ManageVibration.vibrate();
                                       await context
                                           .read<ChatsCubit>()
                                           .changeArchiveChat(
@@ -304,6 +310,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                 : AppColors.PRIMARY_COLOR_DARK,
                                             // Set "Undo" text color to gray
                                             onPressed: () async {
+      ManageVibration.vibrate();
                                               await context
                                                   .read<ChatsCubit>()
                                                   .lockChats(isLockedTap: true);

@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ZegoLayoutPIPSmallItemList extends StatefulWidget {
   const ZegoLayoutPIPSmallItemList({
@@ -172,6 +173,7 @@ class _ZegoLayoutPIPSmallItemListState
             height: designedSize.height,
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 widget.onTap(targetUser);
               },
               child: AbsorbPointer(

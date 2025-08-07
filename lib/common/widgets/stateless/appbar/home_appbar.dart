@@ -10,8 +10,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,6 +60,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
+  Size get preferredSize => Size.fromHeight(toolbarHeight ?? 30);
+
+  @override
   Widget build(BuildContext context) {
     // context.read<UserCubit>().getUnreadedChatsCounter();
     bool isCurrentRoute(BuildContext context, String targetRoute) {
@@ -68,6 +71,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
+      scrolledUnderElevation: 0,
       bottom: bottom,
       leading: isHaveLeading
           ? InkWell(
@@ -77,6 +81,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 height: 25,
               ),
               onTap: () {
+                ManageVibration.vibrate();
                 HandleCashback.setCount('drawerCount', context);
                 Scaffold.of(context).openDrawer();
               },
@@ -91,6 +96,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isShowLogo)
             InkWell(
               onTap: () async {
+                ManageVibration.vibrate();
                 bool isCustomPage = await CacheManager.getActivation() ?? false;
                 if (isCustomPage) {
                   if (!isCurrentRoute(context, Routes.PAGEPREVIEW)) {
@@ -129,7 +135,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             if (showLanguage)
               Expanded(
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                    },
                     child: Label(text: 'Register', style: Styles.mediumText())),
               ),
           //put lang
@@ -139,8 +147,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: TextAppButton(
                   label: LocaleKeys.lang.localize,
-                  style: Styles.headerText(color: AppColors.getRedColor(context)),
+                  style:
+                      Styles.headerText(color: AppColors.getRedColor(context)),
                   onPressed: () {
+                    ManageVibration.vibrate();
                     HandleCashback.setCount('langCount', context);
                     // if (context.locale == Locales.arabic) {
                     if (LocaleKeys.lang.localize == 'En') {
@@ -150,7 +160,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     }
                     Future.delayed(const Duration(seconds: 1)).then((_) {
                       // ignore: use_build_context_synchronously
-                     
                     });
                   })),
           SizedBox(
@@ -159,6 +168,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           InkWell(
             borderRadius: BorderRadius.circular(40.r),
             onTap: () {
+              ManageVibration.vibrate();
               context.push(Routes.SEARCH);
             },
             child: Icon(
@@ -174,7 +184,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (showLanguage)
             Expanded(
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                  },
                   child: Label(
                       text: LocaleKeys.register.localize,
                       style: Styles.mediumText())),
@@ -184,6 +196,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           inChat ??
               InkWell(
                 onTap: () async {
+                  ManageVibration.vibrate();
                   if (!context.read<UserCubit>().isLoggedIn) {
                     return pleaseLoginDialog(context);
                   }
@@ -246,7 +259,4 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
       // automaticallyImplyLeading: false,
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight ?? 30);
 }

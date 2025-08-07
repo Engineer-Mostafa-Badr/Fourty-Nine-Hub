@@ -15,8 +15,9 @@ import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import '../controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+
+import '../../../../core/loading/custom_loading.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 
 class PickedData {
   final String address;
@@ -491,7 +492,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                   ),
                 ),
 
-                if (_isLoading) const Center(child: CircularProgressIndicator()),
+                if (_isLoading) const Center(child: CustomLoading(searchLoading: true)),
 
                 // Set Location Button
                 Positioned(

@@ -4,14 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
 import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 
@@ -25,28 +26,6 @@ class QuraanView extends StatefulWidget {
 class _QuraanViewState extends State<QuraanView> {
   late ScrollController _scrollController;
   late QuranCubit _cubit;
-  @override
-  void initState() {
-    super.initState();
-    _cubit = context.read<QuranCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData();
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchQuranSurah();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -64,6 +43,7 @@ class _QuraanViewState extends State<QuraanView> {
                 Icons.arrow_forward,
               ),
               onPressed: () {
+                ManageVibration.vibrate();
                 Navigator.of(context).pop(); // Pop the current screen
               },
             ),
@@ -79,32 +59,38 @@ class _QuraanViewState extends State<QuraanView> {
             }
             return Padding(
               padding: EdgeInsets.all(12.w),
-              child: ListView.separated(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  if (index == _cubit.quran.length) {
-                    return const Center(child: CustomCircularProgressIndicator());
-                  }
-                  return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => QuranViewPage(
-                              surahId: state.quranSurah![index].surahNo,
-                              pageNumber: 0,
-                              surahName: state.quranSurah![index].surahNameAr,
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: AppColors.SECONDARY_COLOR,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    if (index == _cubit.quran.length) {
+                      return const Center(
+                          child: CustomCircularProgressIndicator());
+                    }
+                    return InkWell(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QuranViewPage(
+                                surahId: state.quranSurah![index].surahNo,
+                                pageNumber: 0,
+                                surahName: state.quranSurah![index].surahNameAr,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: buildItem(context, state.quranSurah![index]));
-                },
-                separatorBuilder: (context, index) => const Divider(
-                  color: AppColors.GREY_NORMAL_COLOR,
+                          );
+                        },
+                        child: buildItem(context, state.quranSurah![index]));
+                  },
+                  separatorBuilder: (context, index) => const Divider(
+                    color: AppColors.GREY_NORMAL_COLOR,
+                  ),
+                  itemCount: state.quranSurah?.length ?? 0,
                 ),
-                itemCount: state.quranSurah?.length ?? 0,
               ),
             );
           },
@@ -175,4 +161,26 @@ class _QuraanViewState extends State<QuraanView> {
           ),
         ],
       );
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<QuranCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadInitialData();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchQuranSurah();
+    }
+  }
 }

@@ -2,19 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../models/expired_requests_model.dart';
+import '../models/is_restaurant_model.dart';
+import '../models/restaurant_2_model.dart';
+import '../../domain/usecases/create_restaurant.dart';
+import '../../domain/usecases/getsubcategory_restaurants_usecase.dart';
+import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../../../../res/assets/jsons.dart';
-import '../../domain/entities/food_ads_entity.dart';
 import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
@@ -24,7 +23,6 @@ import '../../domain/entities/user_order_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
 import '../../domain/usecases/set_request_log_seen_use_case.dart';
-import '../models/food_ads_model.dart';
 import '../models/food_category_model.dart';
 import '../models/log_count_model.dart';
 import '../models/logs_model.dart';
@@ -312,7 +310,7 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
 
   @override
   Future<Either<Failure, RequestLogCountEntity>> getReqCount() async{
-    final url = "${EndPoints.getReqLogCount}";
+    final url = EndPoints.getReqLogCount;
 
     final response = await _apiConsumer.get(url,);
 

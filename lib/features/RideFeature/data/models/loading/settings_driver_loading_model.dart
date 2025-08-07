@@ -2,26 +2,16 @@ import '../../../domain/entities/loading/settings_driver_loading_entity.dart';
 
 class DriverSettingLoadingModel extends DriverSettingLoadingEntity {
   DriverSettingLoadingModel({
-    String? id,
-    String? userId,
-    bool? isReady,
-    int? profit,
-    int? countTrips,
-    bool? isVoiceCommentAlertsEnabled,
-    RatingEntity? rating,
-    SubcategoryEntity? subcategory,
-    DocumentationsEntity? documentations,
-  }) : super(
-    id: id,
-    userId: userId,
-    isReady: isReady,
-    profit: profit,
-    countTrips: countTrips,
-    isVoiceCommentAlertsEnabled: isVoiceCommentAlertsEnabled,
-    rating: rating,
-    subcategory: subcategory,
-    documentations: documentations,
-  );
+    super.id,
+    super.userId,
+    super.isReady,
+    super.profit,
+    super.countTrips,
+    super.isVoiceCommentAlertsEnabled,
+    super.rating,
+    super.subcategory,
+    super.documentations,
+  });
 
   factory DriverSettingLoadingModel.fromJson(Map<String, dynamic> json) {
     return DriverSettingLoadingModel(

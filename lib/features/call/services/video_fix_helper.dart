@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
-import 'package:fourtyninehub/core/utils/logging_service.dart';
+import '../../../core/utils/logging_service.dart';
 
 /// Helper class to fix video issues with ZegoCloud
 class VideoFixHelper {

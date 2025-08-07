@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -133,7 +133,7 @@ class _LoveButtonState extends State<LoveButton>
           ),
           const SizedBox(height: 4),
           MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
             child: Text(
               widget.count,
               style: widget.countTextStyle ??

@@ -2,19 +2,19 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/full_screen_widget.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../data/models/new_reels_model.dart';
+import 'animated_heart_wiidget.dart';
+import 'custom_progress_bar.dart';
+import 'unified_widget_view.dart';
+import '../full_screen_widget.dart';
+import '../../../../tinder/data/shared/shared.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../pages/profile_buttom_sheet.dart';
 import '../../pages/reel_actions.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({

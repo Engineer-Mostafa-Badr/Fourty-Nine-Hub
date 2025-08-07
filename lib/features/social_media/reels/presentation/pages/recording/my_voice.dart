@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart'
@@ -22,6 +22,7 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
@@ -258,7 +259,7 @@ class MyVoiceVideoRecordingScreenState
     //   return false;
     // }
 
-    void _navigateToPlaybackScreen() {
+    void navigateToPlaybackScreen() {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -268,14 +269,14 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    void _switchCamera() {
+    void switchCamera() {
       setState(() {
         isFrontCamera = !isFrontCamera;
       });
       _initializeCameraController(cameras[isFrontCamera ? 1 : 0]);
     }
 
-    void _showErrorDialog(String message) {
+    void showErrorDialog(String message) {
       showAnimatedDialog(
         context,
         AlertDialog(
@@ -366,7 +367,7 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildCameraPreview() {
+    Widget buildCameraPreview() {
       return SizedBox(
         height: double.infinity,
         child: Stack(
@@ -403,6 +404,7 @@ class MyVoiceVideoRecordingScreenState
                   const Spacer(),
                   IconButton(
                       onPressed: () {
+      ManageVibration.vibrate();
                         Navigator.pop(context);
                       },
                       icon: Icon(
@@ -417,7 +419,7 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildTimerPopup() {
+    Widget buildTimerPopup() {
       return Positioned(
         top: 40,
         left: 0,
@@ -440,7 +442,7 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildControls() {
+    Widget buildControls() {
       return Align(
         alignment: Alignment.bottomCenter,
         child: Column(
@@ -463,6 +465,7 @@ class MyVoiceVideoRecordingScreenState
                       ],
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<ReelsCubit>()
                           .pickMediaFromGallery(context)
@@ -518,9 +521,9 @@ class MyVoiceVideoRecordingScreenState
       );
     }
 
-    Widget _buildSwitchCameraButton(double width) {
+    Widget buildSwitchCameraButton(double width) {
       return IconButton(
-        onPressed: _switchCamera,
+        onPressed: switchCamera,
         icon: Icon(
           Icons.flip_camera_android,
           semanticLabel: LocaleKeys.controls_switch_camera.tr(),
@@ -538,6 +541,7 @@ class MyVoiceVideoRecordingScreenState
       _flashAnimationController.dispose();
       super.dispose();
     }
+    return null;
   }
 
   @override

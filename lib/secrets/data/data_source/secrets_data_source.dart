@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/secrets/domain/entities/secrets.dart';
+import '../../../core/abstract/use_case.dart';
+import '../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../core/data/datasources/remote/api/end_points.dart';
+import '../../domain/entities/secrets.dart';
 
 import '../../../core/error/failure.dart';
 import '../models/secrets_model.dart';

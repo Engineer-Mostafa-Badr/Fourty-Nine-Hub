@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/settings/presentation/pages/widgets/label_and_text_form_field.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'label_and_text_form_field.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -17,7 +17,7 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import '../../../../notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ChangePasswordSecondViewBody extends StatefulWidget {
   const ChangePasswordSecondViewBody({super.key});
@@ -156,6 +156,7 @@ class _ChangePasswordSecondViewBodyState
                         return CustomFloatingActionButton(
                           text: LocaleKeys.confirm.localize,
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (forgotPasswordCubit.odlPasswordController.text.isEmpty ||
                                 forgotPasswordCubit
                                     .newPasswordController.text.isEmpty ||

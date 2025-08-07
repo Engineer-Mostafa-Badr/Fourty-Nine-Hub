@@ -4,11 +4,9 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
@@ -20,14 +18,12 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 // import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
@@ -55,7 +51,7 @@ class OneWayWidget extends StatefulWidget {
 }
 
 class _OneWayWidgetState extends State<OneWayWidget> {
-  bool _showContainer = false;
+  final bool _showContainer = false;
   ExpandableController _expandableController = ExpandableController();
 
   // Timer related variables
@@ -269,6 +265,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         if (((widget.model?.availableSeats ?? 0) >= 2))
                           ClickableWidget(
                             onTap: () {
+      ManageVibration.vibrate();
                               if (widget.onJoin != null) {
                                 widget.onJoin!();
                               }
@@ -305,6 +302,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         if (((widget.model?.availableSeats ?? 0) >= 1))
                           ClickableWidget(
                             onTap: () {
+      ManageVibration.vibrate();
                               if (widget.onJoin != null) {
                                 widget.onJoin!();
                               }
@@ -505,7 +503,10 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    },
                     child: Text(
                       isComfort(widget.model?.features ?? [])
                           ? LocaleKeys.comfort.localize
@@ -523,6 +524,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   widget.cancelButton == true
                       ? GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       if (widget.onCancelBooking != null) {
                         widget.onCancelBooking!();
                       }
@@ -555,6 +557,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   label: context.isArabic ? 'قبول' : 'Accept',
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+      ManageVibration.vibrate();
                     if(widget.onAccept!=null){
                       widget.onAccept!();
                     }
@@ -598,6 +601,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
     return GestureDetector(
       onTap: (){
+      ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(

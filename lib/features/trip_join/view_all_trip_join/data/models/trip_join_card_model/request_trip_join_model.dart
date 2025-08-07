@@ -1,37 +1,22 @@
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/request_trip_join_entity.dart';
+import '../../../domain/entities/request_trip_join_entity.dart';
 
 class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
   GetRequestTripJoinModel({
-    String? id,
-    String? userId,
-    String? firstName,
-    double? pricePerSeat,
-    String? startDate,
-    String? createdAt,
-    bool? isPremium,
-    bool? isRead,
-    String? gender,
-    int? totalPassengers,
-    int? views,
-    String? phoneNumber,
-    IsButtonEnabledModel? isButtonEnabled,
-    LocationModel? location,
-  }) : super(
-    id: id,
-    userId: userId,
-    firstName: firstName,
-    pricePerSeat: pricePerSeat,
-    startDate: startDate,
-    createdAt: createdAt,
-    isPremium: isPremium,
-    isRead: isRead,
-    gender: gender,
-    totalPassengers: totalPassengers,
-    views: views,
-    phoneNumber: phoneNumber,
-    isButtonEnabled: isButtonEnabled,
-    location: location,
-  );
+    super.id,
+    super.userId,
+    super.firstName,
+    super.pricePerSeat,
+    super.startDate,
+    super.createdAt,
+    super.isPremium,
+    super.isRead,
+    super.gender,
+    super.totalPassengers,
+    super.views,
+    super.phoneNumber,
+    IsButtonEnabledModel? super.isButtonEnabled,
+    LocationModel? super.location,
+  });
 
   factory GetRequestTripJoinModel.fromJson(Map<String, dynamic> json) {
     return GetRequestTripJoinModel(
@@ -58,7 +43,7 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
 }
 
 class IsButtonEnabledModel extends IsButtonEnabledEntity {
-  IsButtonEnabledModel({bool? state}) : super(state: state);
+  IsButtonEnabledModel({super.state});
 
   factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
     return IsButtonEnabledModel(
@@ -84,8 +69,7 @@ class LocationModel extends LocationEntity {
 }
 
 class AddressModel extends AddressEntity {
-  AddressModel({String? address, List<double>? coordinates})
-      : super(address: address, coordinates: coordinates);
+  AddressModel({super.address, super.coordinates});
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(

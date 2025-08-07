@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Function to open Google Maps with a polyline, start, and end points
 Future<void> openGoogleMapsWithRoute(
@@ -35,6 +36,7 @@ class TestPolyLineWithGoogleMap extends StatelessWidget {
     return Center(
       child: ElevatedButton(
         onPressed: () async {
+      ManageVibration.vibrate();
           await openGoogleMapsWithRoute(
               startLocation, endLocation, polylineString);
         },

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorDashboardPopupMenuButton extends StatelessWidget {
   const DoctorDashboardPopupMenuButton(
@@ -21,24 +22,28 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
           ),
           PopupMenuItem(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.DOCTORREVIEWS, extra: '');
             },
             child: Text(LocaleKeys.reviews.localize),
           ),
           PopupMenuItem(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.DOCTORSTATISTICS, extra: earnedMoney);
             },
             child: Text(LocaleKeys.history.localize),
           ),
           PopupMenuItem(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
             },
             child: Text(LocaleKeys.emergencyRequests.localize),
           ),
           PopupMenuItem(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.ALLAPPOINTMENTS);
             },
             child: Text(LocaleKeys.allAppointments.localize),

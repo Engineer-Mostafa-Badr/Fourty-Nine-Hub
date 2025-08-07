@@ -8,12 +8,12 @@ import 'package:fourtyninehub/features/health_feature/health/data/models/filter_
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthBookingTypeCard extends StatelessWidget {
   final HealthBookingFilterModel bookingFilterModel;
@@ -23,6 +23,7 @@ class HealthBookingTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
+      ManageVibration.vibrate();
         if (context.read<UserCubit>().isLoggedIn) {
           serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
               bookingFilterModel.bookingType;

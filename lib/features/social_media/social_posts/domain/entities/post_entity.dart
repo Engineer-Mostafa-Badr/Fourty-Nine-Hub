@@ -1,11 +1,11 @@
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/life_event_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+import '../../../create_post/domain/entities/activity_entity.dart';
+import '../../../create_post/domain/entities/feeling_entity.dart';
+import '../../../instagram/domain/entities/instagram_post_entity.dart';
+import '../../data/models/location_model.dart';
+import 'audio_entity.dart';
+import 'life_event_post_entity.dart';
+import 'main_post_entity.dart';
+import '../../../twitter/data/models/twitter_user_model.dart';
 
 import '../../../../../res/assets/assets.dart';
 

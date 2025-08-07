@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Package imports:
 
@@ -53,6 +54,7 @@ class _ZegoLiveStreamingMinimizingButtonState
 
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         if (ZegoUIKitPrebuiltLiveStreamingController().minimize.isMinimizing) {
           ZegoLoggerService.logInfo(
             'is minimizing, ignore',

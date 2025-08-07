@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../core/extensions/context_extension.dart';
 
 class IconAndTextWidget extends StatelessWidget {
   final String name;

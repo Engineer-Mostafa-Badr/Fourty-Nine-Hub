@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/food_feature/food_cart/domain/entities/master_entity.dart';
+import 'master_entity.dart';
 
 import 'cart_item_entity.dart';
 

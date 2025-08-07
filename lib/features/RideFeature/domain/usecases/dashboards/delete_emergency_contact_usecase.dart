@@ -3,7 +3,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/em
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
-import '../../entities/dashboards/trips_response_entity.dart';
 import '../../repositories/trip_repository.dart';
 
 class DeleteEmergencyContactUseCase extends UseCase<bool, EmergencyContactEntity> {

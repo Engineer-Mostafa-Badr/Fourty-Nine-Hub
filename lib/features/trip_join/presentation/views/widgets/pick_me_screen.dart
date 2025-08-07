@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/test_screen.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import 'test_screen.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../res/assets/assets.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class PickMeScreen extends StatelessWidget {
   const PickMeScreen({super.key});
@@ -45,6 +46,7 @@ class PickMeScreen extends StatelessWidget {
                 color:  AppColors.LIGHT_COLOR,
               ),
               label: "Join Now!", onPressed: (){
+      ManageVibration.vibrate();
               Navigator.push(context, MaterialPageRoute(builder: (context)=> TestScreen1()));
           })
         ],
@@ -54,7 +56,7 @@ class PickMeScreen extends StatelessWidget {
 }
 class BulletPoint extends StatelessWidget {
   final String text;
-  BulletPoint({required this.text});
+  const BulletPoint({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

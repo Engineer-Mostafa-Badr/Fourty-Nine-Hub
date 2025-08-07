@@ -5,8 +5,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class ClientCancelTripDialog extends StatelessWidget {
-  const ClientCancelTripDialog({Key? key}) : super(key: key);
+  const ClientCancelTripDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class ClientCancelTripDialog extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16.0,right: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(

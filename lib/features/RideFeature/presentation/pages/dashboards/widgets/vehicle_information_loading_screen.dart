@@ -10,14 +10,13 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../Register/widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class VehicleInformationLoadingScreen extends StatelessWidget {
@@ -91,6 +90,7 @@ class VehicleInformationLoadingScreen extends StatelessWidget {
                                   (index) => UploadFileWidget(
                                     title: uploadFilesTitles[index],
                                     onTap: () {
+      ManageVibration.vibrate();
                                       if (index == 0) {
                                         cubit.onUploadVehiclePicture(context);
                                       } else if (index == 1) {
@@ -141,6 +141,7 @@ class VehicleInformationLoadingScreen extends StatelessWidget {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         if(context.read<DashboardsCubit>().driverLicenseFormKey.currentState!.validate()) {
                           print("object");

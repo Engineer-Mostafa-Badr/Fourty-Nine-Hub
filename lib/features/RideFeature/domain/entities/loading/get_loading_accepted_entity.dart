@@ -2,9 +2,9 @@ import 'package:fourtyninehub/features/RideFeature/data/models/loading/get_loadi
 
 class GetLoadingAcceptedModel extends GetLoadingAcceptedEntity {
   GetLoadingAcceptedModel({
-    TripDetailsEntity? tripDetails,
-    ClientEntity? client,
-  }) : super(tripDetails: tripDetails, client: client);
+    super.tripDetails,
+    super.client,
+  });
 
   factory GetLoadingAcceptedModel.fromJson(Map<String, dynamic> json) {
     final trip = json['tripDetails'];
@@ -19,26 +19,16 @@ class GetLoadingAcceptedModel extends GetLoadingAcceptedEntity {
 
 class TripDetailsModel extends TripDetailsEntity {
   TripDetailsModel({
-    String? id,
-    String? status,
-    bool? isPremium,
-    num? price,
-    String? date,
-    String? cargoDescription,
-    String? createdAt,
-    LocationEntity? location,
-    CategoryEntity? category,
-  }) : super(
-    id: id,
-    status: status,
-    isPremium: isPremium,
-    price: price,
-    date: date,
-    cargoDescription: cargoDescription,
-    createdAt: createdAt,
-    location: location,
-    category: category,
-  );
+    super.id,
+    super.status,
+    super.isPremium,
+    super.price,
+    super.date,
+    super.cargoDescription,
+    super.createdAt,
+    super.location,
+    super.category,
+  });
 
   factory TripDetailsModel.fromJson(Map<String, dynamic> json) {
     return TripDetailsModel(
@@ -60,8 +50,7 @@ class TripDetailsModel extends TripDetailsEntity {
 }
 
 class LocationModel extends LocationEntity {
-  LocationModel({String? fromTitle, String? toTitle})
-      : super(fromTitle: fromTitle, toTitle: toTitle);
+  LocationModel({super.fromTitle, super.toTitle});
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
@@ -72,8 +61,7 @@ class LocationModel extends LocationEntity {
 }
 
 class CategoryModel extends CategoryEntity {
-  CategoryModel({String? id, String? nameAr, String? nameEn, String? picture})
-      : super(id: id, nameAr: nameAr, nameEn: nameEn, picture: picture);
+  CategoryModel({super.id, super.nameAr, super.nameEn, super.picture});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
@@ -87,18 +75,12 @@ class CategoryModel extends CategoryEntity {
 
 class ClientModel extends ClientEntity {
   ClientModel({
-    String? id,
-    String? firstName,
-    String? gender,
-    String? profilePictureKey,
-    RatingEntity? rating,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    gender: gender,
-    profilePictureKey: profilePictureKey,
-    rating: rating,
-  );
+    super.id,
+    super.firstName,
+    super.gender,
+    super.profilePictureKey,
+    super.rating,
+  });
 
   factory ClientModel.fromJson(Map<String, dynamic> json) {
     return ClientModel(
@@ -114,8 +96,7 @@ class ClientModel extends ClientEntity {
 }
 
 class RatingModel extends RatingEntity {
-  RatingModel({num? averageRating, int? count})
-      : super(averageRating: averageRating, count: count);
+  RatingModel({super.averageRating, super.count});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(

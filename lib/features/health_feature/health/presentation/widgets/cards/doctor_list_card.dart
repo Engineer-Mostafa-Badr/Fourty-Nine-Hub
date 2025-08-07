@@ -8,8 +8,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -23,6 +21,7 @@ import '../../../../../social_media/instagram/presentation/widgets/comment_widge
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../domain/entities/most_booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorsListView extends StatefulWidget {
   const DoctorsListView({super.key, this.onClose});
@@ -528,6 +527,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
             label: LocaleKeys.book.localize,
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
+      ManageVibration.vibrate();
               // context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
           ),
@@ -600,6 +600,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                 backColor: AppColors.PRIMARY_COLOR,
                                 color: AppColors.whiteColor,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   // _showFreeCallBottomSheet(context, item);
                                 },
@@ -609,6 +610,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                 backColor: AppColors.cD9D9D9,
                                 color: AppColors.black,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   _showRegularCallBottomSheet(
                                       context, item); // Open second
@@ -657,6 +659,7 @@ class CallMessageReportButtons extends StatelessWidget {
             icon: const Icon(Icons.report),
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
+      ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -784,6 +787,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       color: AppColors.whiteColor,
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         final enteredNumber = phoneController.text.trim();
                         if (isBookingForAnotherClient) {
                           if (enteredNumber.isEmpty) {

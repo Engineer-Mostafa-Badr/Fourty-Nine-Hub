@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/repo/view_all_pick_me_repo.dart';
+import '../../../../../core/error/failure.dart';
+import '../entities/pickme_entity.dart';
+import '../repo/view_all_pick_me_repo.dart';
 
 class ViewAllPickMeUseCase {
   final ViewAllPickMeRepo viewAllPickMeRepo;

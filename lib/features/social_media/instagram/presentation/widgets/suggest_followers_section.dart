@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/discover_people_profile_instagram_list_view_item.dart';
+import '../../domain/entities/data_suggest_follow_instagram_entity.dart';
+import 'discover_people_profile_instagram_list_view_item.dart';
 
 class SuggestFollowersSection extends StatelessWidget {
   const SuggestFollowersSection({super.key, required this.suggestions});

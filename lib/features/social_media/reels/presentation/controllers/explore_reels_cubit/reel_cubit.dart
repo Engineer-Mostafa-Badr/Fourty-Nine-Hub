@@ -3,36 +3,38 @@ import 'dart:developer';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_comments_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_explore_reels_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_followers_reels_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/like_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/save_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/media_preview.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../../../../../common/functions/global/upload_file.dart';
+import '../../../../../../common/models/public/pagination_params.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../data/data_sources/reels_remote_data_source.dart';
+import '../../../data/models/add_comments_model.dart';
+import '../../../data/models/get_comments_model.dart';
+import '../../../data/models/like_model.dart';
+import '../../../data/models/save_reel_model.dart';
+import '../../../data/models/share_reel_model.dart';
+import '../../../domain/use_case/add_reel_comment_use_case.dart';
+import '../../../domain/use_case/add_reel_reply_use_case.dart';
+import '../../../domain/use_case/create_advertisement_use_case.dart';
+import '../../../domain/use_case/create_reel_use_case.dart';
+import '../../../domain/use_case/get_comments_use_case.dart';
+import '../../../domain/use_case/get_explore_reels_use_case.dart';
+import '../../../domain/use_case/get_followers_reels_use_case.dart';
+import '../../../domain/use_case/like_reel_use_case.dart';
+import '../../../domain/use_case/reels_with_same_audia_use_case.dart';
+import '../../../domain/use_case/save_reel_use_case.dart';
+import '../../../domain/use_case/share_reel_use_case.dart';
+import '../../../domain/use_case/toggle_comment_like_use_case.dart';
+import '../../../domain/use_case/upload_reel_use_case.dart';
+import '../../../domain/use_case/upload_video_reel_use_case.dart';
+import '../../pages/recording/media_preview.dart';
+import '../../../../../../res/style/const.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import '../../../data/models/new_reels_model.dart';
 
 part 'reel_state.dart';
@@ -91,8 +93,12 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (failure){ 
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(reelViewErrorMessage: failure.toString()));},
       (data) => emit(state.copyWith(reelViewSuccess: true)),
     );
   }
@@ -106,6 +112,11 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+
         emit(state.copyWith(failure: failure, status: ReelsStates.error));
       },
       (data) {
@@ -126,6 +137,10 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         log("lskjdfskjdfksjdfksjdf error");
         emit(state.copyWith(failure: failure, status: ReelsStates.error));
       },
@@ -226,8 +241,12 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(reelViewErrorMessage: failure.toString()));},
       (data) {},
     );
   }
@@ -249,8 +268,12 @@ class ReelsCubit extends Cubit<ReelsState> {
         PaginationParams(page: currentReelPage, limit: reelPageSize));
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(reelViewErrorMessage: failure.toString()));},
       (data) {
         emit(state.copyWith(
           reels: [...state.globalReels, ...data.data.reels],
@@ -274,8 +297,12 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _getFollowingReelsUseCase(1);
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(reelViewErrorMessage: failure.toString()));},
       (data) {
         emit(state.copyWith(
           reelsForFollowing: [
@@ -295,8 +322,12 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _saveReelUseCase(reelId);
     String message = '';
     result.fold(
-      (failure) =>
-          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(reelViewErrorMessage: failure.toString()));},
       (data) {
         emit(state.copyWith(reelSaveResponse: data));
         message = data.message ?? '';
@@ -308,8 +339,12 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> shareReel(String reelId) async {
     final result = await _shareReelUseCase(reelId);
     result.fold(
-      (failure) =>
-          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(reelViewErrorMessage: failure.toString()));},
       (data) {
         emit(state.copyWith(reelShareResponse: data
             // Add any state update logic here if necessary
@@ -324,8 +359,12 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _likeReelUseCase(reelId);
     String message = '';
     result.fold(
-        (failure) => emit(state.copyWith(
-            isLikingReel: false, likeReelErrorMessage: 'errorLike')), (data) {
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(isLikingReel: false, likeReelErrorMessage: 'errorLike'));}, (data) {
       message = data.message;
       emit(state.copyWith(
           likeReelResponse: data,
@@ -341,6 +380,10 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _addCommentUseCase(
         AddReelCommentParams(comment: comment, reelId: reelId));
     result.fold((failure) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
       showErrorMessage(context, getFailureMessage(failure, context));
       emit(state.copyWith(
         isCommenting: false,
@@ -387,10 +430,12 @@ class ReelsCubit extends Cubit<ReelsState> {
         parentCommentId: parentCommentId,
         receiverComment: receiverComment));
     result.fold(
-        (failure) => emit(state.copyWith(
-              isReplyingComment: false,
-              commentErrorMessage: "An error occurred while adding the comment",
-            )), (AddCommentResponse addCommentResponse) {
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(isReplyingComment: false, commentErrorMessage: "An error occurred while adding the comment"));}, (AddCommentResponse addCommentResponse) {
       final newReply = CommentData(
         id: addCommentResponse.data.id,
         reelId: addCommentResponse.data.reelId,
@@ -479,6 +524,10 @@ class ReelsCubit extends Cubit<ReelsState> {
         reelId: reelId,
         pagingParams: PaginationParams(page: currentPage, limit: pageSize)));
     result.fold((failure) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
       isFetching = false;
       emit(state.copyWith(
           isFetchingComments: isFetching,
@@ -505,6 +554,10 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _toggleCommentLikeUseCase(
         isReply == true ? replyId ?? '' : commentId);
     result.fold((failure) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(
           isLikingComment: false,
           likeReelErrorMessage:
@@ -572,6 +625,10 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _reelsWithSameAudioUseCase(
         ReelsWithSameAudioParams(audioId: audioId));
     result.fold((failure) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(isLoading: false));
     }, (data) {
       final List<Reel> newReels = data.data?.reels ?? [];

@@ -1,19 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/reply_card.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../data/models/comment_model.dart';
+import '../../../domain/entities/comment_entity.dart';
+import '../../../domain/usecases/add_reply_usecase.dart';
+import '../../../domain/usecases/post_comment_usecase.dart';
+import '../../cubit/social_posts_cubit.dart';
+import 'reply_card.dart';
+import '../../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
@@ -21,6 +19,7 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class CommentReplies extends StatefulWidget {
   final List<CommentEntity> replies;
@@ -143,6 +142,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                         size: 20,
                         isCircle: true,
                         onPressed: () async {
+      ManageVibration.vibrate();
                           CommentEntity data = await widget.onAddReply(
                               ReplyOnCommentParams(
                                   postId: widget.postId,

@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_suggest_people.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_reels.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../cubit/social_posts_cubit.dart';
+import 'build_facebook_suggest_people.dart';
+import 'facebook_reels.dart';
+import 'normal_post_screen.dart';
+import '../posts/create_post_banner.dart';
+import '../../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../../stories/presentation/pages/facebook_stories.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
-import '../../../../../../core/widget/olx_pagination/banner.dart';
-import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class FaceBookView extends StatefulWidget {
   const FaceBookView({super.key, required this.scrollController});

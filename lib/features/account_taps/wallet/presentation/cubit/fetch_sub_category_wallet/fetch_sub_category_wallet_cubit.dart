@@ -3,18 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/sub_category_use_case.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 part 'fetch_sub_category_wallet_state.dart';
 
 class FetchSubCategoryWalletCubit extends Cubit<FetchSubCategoryWalletState> {
+  final SubCategoryUseCase _subCategoryUseCase;
   FetchSubCategoryWalletCubit(this._subCategoryUseCase)
       : super(FetchSubCategoryWalletInitial());
-  final SubCategoryUseCase _subCategoryUseCase;
 
   Future<void> fetchSubCategoryWallet({
     required PaginationParams paginationParams,
@@ -28,6 +30,9 @@ class FetchSubCategoryWalletCubit extends Cubit<FetchSubCategoryWalletState> {
       ),
     );
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(FetchSubCategoryWalletError(failure: l));
     }, (data) {
       emit(FetchSubCategoryWalletSuccess(subCategory: data));

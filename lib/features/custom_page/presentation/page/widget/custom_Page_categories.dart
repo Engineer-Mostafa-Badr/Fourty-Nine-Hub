@@ -1,19 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
+import '../../cubit/custom_page_cubit.dart';
+import '../../cubit/custom_page_states.dart';
+import '../../cubit/edit_page_cubit/edit_page_cubit.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
@@ -21,6 +20,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'navigator_subcategories_view.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FavouriteCategory extends StatefulWidget {
   const FavouriteCategory({super.key});
@@ -144,6 +144,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               context
                                   .read<CustomPageCubit>()
                                   .fetchFavouriteSubCat(
@@ -236,6 +237,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                     "🔵 BlocConsumer Rebuild! Current state: ${state.updateData}");
                 return CustomFloatingActionButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     print("🟠 FloatingActionButton Pressed!");
                     print(
                         "📊 Current state.updateData before press: ${state.updateData}");

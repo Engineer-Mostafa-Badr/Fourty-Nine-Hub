@@ -2,17 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_comment_reply_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_comment_reply_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_reply_card.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../data/models/twitter_comment_reply_model.dart';
+import '../../domain/entities/twitter_comment_reply_entity.dart';
+import '../../domain/entities/twitter_user_entity.dart';
+import '../../domain/usecases/comment_reply_usecase.dart';
+import '../../domain/usecases/post_comment_usecase.dart';
+import '../../domain/usecases/twitter_report_usecase.dart';
+import '../bloc/twitter_bloc.dart';
+import 'twitter_reply_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -22,6 +22,7 @@ import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TwitterCommentReplies extends StatefulWidget {
   final List<TwitterCommentReplyEntity> replies;
@@ -145,6 +146,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                         isCircle: true,
                         size: 20,
                         onPressed: () async {
+      ManageVibration.vibrate();
                           TwitterCommentReplyEntity data =
                               await widget.onAddReply(
                             TwitterCommentReplyParams(

@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../routes/routes.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../res/style/styles.dart';
@@ -16,6 +13,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import 'car_circle_widget.dart';
 import 'info_column_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class PastNonSocketTripsWidget extends StatefulWidget {
@@ -42,6 +40,7 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
 
         // context.push(Routes.rideDashboardDetailsScreen, extra: widget.tripEntity);
       },
@@ -63,8 +62,8 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
                 title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: "${formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context)}",
-                price: "${formatPrice(widget.tripEntity?.tripDetails?.price?.toInt() ?? 0.0, context)}",
+                date: formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context),
+                price: formatPrice(widget.tripEntity?.tripDetails?.price?.toInt() ?? 0.0, context),
               ),
             ),
 

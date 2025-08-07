@@ -5,30 +5,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -41,6 +33,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OtherAccountView extends StatefulWidget {
   OtherAccountView({super.key, payload}) {
@@ -317,6 +310,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadPhoto(
                                                 isGallery: true, context: context);
@@ -328,6 +322,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadPhoto(
                                                 isGallery: false, context: context);
@@ -351,6 +346,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
                                                 isGallery: true, context: context);
@@ -362,6 +358,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
                                                 isGallery: false, context: context);
@@ -380,6 +377,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: AppButton(
                                 label: LocaleKeys.editProfile.localize,
                                 onPressed: () async {
+      ManageVibration.vibrate();
                                   await context.push(Routes.EDITPROFILE);
                                   controller.getUserProfile(id: widget.userId);
                                 },
@@ -517,6 +515,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           state.newCover != null
                               ? InkWell(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     showDialog(
                                         context: context,
                                         builder: (context) =>
@@ -540,6 +539,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 )
                               : InkWell(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     showDialog(
                                         context: context,
                                         builder: (context) =>
@@ -579,6 +579,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           if (loginUser?.id == user.id)
                             InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 selectCoverImage();
                               },
                               child: Container(
@@ -631,6 +632,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         style: Styles.mediumText(
                                             color: AppColors.getTextColor(context), fontSize: 24),
                                         onPressed: () {
+      ManageVibration.vibrate();
                                           onFollow();
                                         }),
                                   ),
@@ -732,6 +734,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         state.newImage != null
                             ? InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
@@ -770,6 +773,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               )
                             : GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     context.read<UserCubit>().updateProfileView(
                                         isProfile: false,
@@ -806,6 +810,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             bottom: 10.h,
                             child: InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 selectImageGallary();
                               },
                               child: Container(

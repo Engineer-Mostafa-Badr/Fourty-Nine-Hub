@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/custom_show_dialog.dart';
+import '../cubit/custom_page_cubit.dart';
+import '../cubit/custom_page_states.dart';
+import 'widget/edit_page.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../core/widget/custom_switch_button.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
@@ -68,6 +68,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
+      ManageVibration.vibrate();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -83,6 +84,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.PAGEPREVIEW,
                         extra: state.activate?.customPage == true);
                   },
@@ -141,6 +143,7 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                       actions: [
                         AppButton(
                         onPressed: () {
+      ManageVibration.vibrate();
                           controller.updateActivate(v);
                           Restart.restartApp();
                         },
@@ -151,6 +154,7 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                         Sizer(),
                         AppButton(
                           onPressed: () {
+      ManageVibration.vibrate();
                             Navigator.pop(context);
                           },
                           label: LocaleKeys.cancel.localize,

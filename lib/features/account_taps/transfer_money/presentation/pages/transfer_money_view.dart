@@ -5,16 +5,16 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/debouncer.dart';
-import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/transfer_money_success.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/form/text_fields/search_text_form_field.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -24,7 +24,6 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/create_restaurant/views/widgets/mneu/name/price_text_form_field.dart';
 import '../../domain/entities/user_transfer_money_entity.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class TransferMoneyView extends StatefulWidget {
   const TransferMoneyView({super.key});
@@ -273,6 +272,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                         height: 44,
                         radius: 15,
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (formKey.currentState!.validate()) {
                             if (searchController.text.isEmpty) {
                               // If no user is selected or the user is not in the filtered list
@@ -384,6 +384,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                             style: Styles.headerText(),
                           ),
                           onTap: () {
+      ManageVibration.vibrate();
                             searchController.text = user.email;
                             context
                                 .read<TransferMoneyCubit>()

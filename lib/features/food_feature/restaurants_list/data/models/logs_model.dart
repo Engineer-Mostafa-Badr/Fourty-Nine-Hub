@@ -1,6 +1,5 @@
 import '../../domain/entities/logs_entity.dart';
 
-import '../../domain/entities/logs_entity.dart';
 
 class LogsRequestLogsModel extends LogsRequestLogsEntity {
   LogsRequestLogsModel({

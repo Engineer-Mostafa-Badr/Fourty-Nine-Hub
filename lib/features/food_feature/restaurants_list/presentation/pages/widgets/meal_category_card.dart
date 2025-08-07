@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/functions/helper/lang_helper.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../../common/widgets/stateless/images/square_image.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../domain/entities/food_category_entity.dart';
+import '../../cubit/restaurants_list_cubit.dart';
+import '../../../../../../res/style/styles.dart';
 import '../../../../../../common/theme/cubit/cubit.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class MealCategoryCard extends StatelessWidget {
   final FoodCategoryEntity? subCategory;
@@ -56,6 +57,7 @@ class MealCategoryCard extends StatelessWidget {
                               ? Theme.of(context).scaffoldBackgroundColor
                               : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context
                                 .read<RestaurantsCubit>()
                                 .toggleFavoriteSubcategory(

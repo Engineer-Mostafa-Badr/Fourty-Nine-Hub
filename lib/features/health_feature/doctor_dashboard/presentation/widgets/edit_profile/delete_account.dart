@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DeleteDoctorAccountCard extends StatelessWidget {
   const DeleteDoctorAccountCard({super.key});
@@ -18,6 +19,7 @@ class DeleteDoctorAccountCard extends StatelessWidget {
       icon: Icons.delete,
       iconColor: AppColors.SECONDARY_COLOR,
       onTap: () {
+      ManageVibration.vibrate();
         context.read<EditDoctorProfileCubit>().deleteAccount();
       },
     );

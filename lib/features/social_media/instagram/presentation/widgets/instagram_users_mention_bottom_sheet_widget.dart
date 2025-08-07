@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/follow_button_instagram.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'follow_button_instagram.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
   const InstagramUsersMentionBottomSheetWidget({
@@ -62,7 +63,10 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
                   trailing: FollowButtonInstagram(
                     isReel: false,
                     isFollow: false,
-                    onPressed: () {},
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    },
                   ),
                 );
               },

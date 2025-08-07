@@ -28,9 +28,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../res/assets/assets.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 class CallMessageButtons extends StatefulWidget {
   const CallMessageButtons(
@@ -134,6 +133,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                                       color:AppColors.SECONDARY_COLOR,
                                       padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
                                       onTap: (){
+                                        ManageVibration.vibrate();
                                         context.pop();
                                         LaunchURLHelper().call(phone: widget.phone);
                                       },),
@@ -146,6 +146,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                                       color:AppColors.SECONDARY_COLOR,
                                       padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
                                       onTap: () async {
+                                        ManageVibration.vibrate();
                                         context.pop();
                                         if (await Permission.microphone
                                             .request() !=

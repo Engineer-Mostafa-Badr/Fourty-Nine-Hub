@@ -32,7 +32,7 @@ class CustomCircularPercentIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: radius * 2,
       height: radius * 2,
       child: Stack(
@@ -150,10 +150,10 @@ class CircularProgressExample extends StatelessWidget {
   final String assetImage;
 
   const CircularProgressExample({
-    Key? key,
+    super.key,
     required this.progress,
     required this.assetImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

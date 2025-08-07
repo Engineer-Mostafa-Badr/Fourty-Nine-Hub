@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../data/models/new_reels_model.dart';

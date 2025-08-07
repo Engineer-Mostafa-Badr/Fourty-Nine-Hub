@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dash
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EmergencyContactsScreen extends StatefulWidget {
   const EmergencyContactsScreen({super.key});
@@ -66,6 +67,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             if ((state.emergencyContacts?.length ?? 0) < 1)
               buildEmergencyContactButton(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(cubit.firstFormKey.currentState!.validate()){
                       cubit.addEmergencyContacts(context: context, name: cubit.firstNameController.text, phoneNumber: cubit.firstPhoneController.text, index: 1);
                     }
@@ -90,6 +92,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             if ((state.emergencyContacts?.length ?? 0) < 2)
               buildEmergencyContactButton(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(cubit.secondFormKey.currentState!.validate()){
                       cubit.addEmergencyContacts(context: context, name: cubit.secondNameController.text, phoneNumber: cubit.secondPhoneController.text, index: 2);
                     }
@@ -113,6 +116,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             if ((state.emergencyContacts?.length ?? 0) < 3)
               buildEmergencyContactButton(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(cubit.thirdFormKey.currentState!.validate()){
                       cubit.addEmergencyContacts(context: context, name: cubit.thirdNameController.text, phoneNumber: cubit.thirdPhoneController.text, index: 3);
                     }
@@ -138,6 +142,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             if ((state.emergencyContacts?.length ?? 0) < 4)
               buildEmergencyContactButton(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(cubit.fourthFormKey.currentState!.validate()){
                       cubit.addEmergencyContacts(context: context, name: cubit.fourthNameController.text, phoneNumber: cubit.fourthPhoneController.text, index: 4);
                     }
@@ -161,6 +166,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             if ((state.emergencyContacts?.length ?? 0) < 5)
               buildEmergencyContactButton(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(cubit.fifthFormKey.currentState!.validate()){
                       cubit.addEmergencyContacts(context: context, name: cubit.fifthNameController.text, phoneNumber: cubit.fifthPhoneController.text, index: 5);
                     }
@@ -193,10 +199,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(LocaleKeys.name.localize, style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 6),
+                    // Text(LocaleKeys.name.localize, style: TextStyle(fontWeight: FontWeight.bold)),
+                    // SizedBox(height: 6),
                     CustomSupportTextField(
-                        hintText: LocaleKeys.name.localize,
+                        hintText:'',
+                        labelText: LocaleKeys.name.localize,
                         controller: nameController,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -211,10 +218,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(LocaleKeys.phone.localize, style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 6),
+                    // Text(LocaleKeys.phone.localize, style: TextStyle(fontWeight: FontWeight.bold)),
+                    // SizedBox(height: 6),
                     CustomSupportTextField(
-                        hintText: LocaleKeys.phone.localize,
+                        hintText:'',
+                        labelText: LocaleKeys.phone.localize,
                         keyboardType: TextInputType.phone,
                         controller: phoneController,
                         inputFormatters: [
@@ -326,7 +334,7 @@ class EmergencyContactItem extends StatelessWidget {
   final TextEditingController nameController = TextEditingController(text: "Ahmed mohammed");
   final TextEditingController phoneController = TextEditingController(text: "01578731541");
 
-  EmergencyContactItem({Key? key}) : super(key: key);
+  EmergencyContactItem({super.key});
 
   @override
   Widget build(BuildContext context) {

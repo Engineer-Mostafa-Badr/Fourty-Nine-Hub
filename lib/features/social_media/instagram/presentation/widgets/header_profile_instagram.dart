@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/value_and_title_header_profile_instagram.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/format_numbers.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import 'value_and_title_header_profile_instagram.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../stories/presentation/pages/create_story_screen.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../pages/followers_screen.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class HeaderProfileInstagram extends StatelessWidget {
   const HeaderProfileInstagram({super.key});
@@ -41,6 +39,7 @@ class HeaderProfileInstagram extends StatelessWidget {
                 end: 5,
                 child: InkWell(
                   onTap: () async {
+      ManageVibration.vibrate();
                     context.read<UserCubit>().isLoggedIn
                         ? await Navigator.push(
                             context,

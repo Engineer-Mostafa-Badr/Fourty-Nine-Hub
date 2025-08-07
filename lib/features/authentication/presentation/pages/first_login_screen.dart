@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
@@ -104,6 +104,7 @@ class FirstLoginScreen extends StatelessWidget {
                             ? AppColors.PRIMARY_COLOR
                             : AppColors.AUTH_CONTAINER_COLOR),
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.go(Routes.LOGIN);
                     },
                   ),
@@ -126,6 +127,7 @@ class FirstLoginScreen extends StatelessWidget {
                             ? AppColors.PRIMARY_COLOR
                             : AppColors.AUTH_CONTAINER_COLOR),
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.go(Routes.REGISTER);
                     },
                   ),

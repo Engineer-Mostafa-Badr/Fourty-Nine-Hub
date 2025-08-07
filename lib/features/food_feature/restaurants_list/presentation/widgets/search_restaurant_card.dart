@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../domain/entities/restaurant.dart';
+import 'Images_profile_for_restaurant.dart';
+import 'subcatigories_restaurant_card.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SearchRestaurantCard extends StatefulWidget {
   const SearchRestaurantCard({
@@ -23,6 +24,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
     final hasSubscription = widget.restaurant?.isPremium;
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         // context.pushNamed(Routes.RESTAURANTDETAILS,
         //     extra: widget.restaurant?.id);
         context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant);

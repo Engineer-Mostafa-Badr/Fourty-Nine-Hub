@@ -4,22 +4,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
   final String? voiceMediaId;
@@ -219,6 +216,7 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                 children: [
                   GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         _togglePlayPause();
                       },
                       child: VideoPlayer(_controller)),
@@ -258,7 +256,10 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                                     Styles.mediumText(color: Colors.white),
                                 minimumSize: Size(double.infinity, 60.h),
                                 padding: EdgeInsets.symmetric(vertical: 30.h)),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                             child: Text(
                               'Share',
                               style: Styles.mediumText(color: Colors.white),

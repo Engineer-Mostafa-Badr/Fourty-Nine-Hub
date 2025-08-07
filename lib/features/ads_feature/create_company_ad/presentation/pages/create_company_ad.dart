@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/corporate_ads.dart';
@@ -13,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
@@ -88,6 +87,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView>
                               right: 0,
                               child: InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     isShowExplainCompanyAd = !isShowExplainCompanyAd;
                                   });
@@ -137,6 +137,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView>
                               right: 0,
                               child: InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     isShowExplainPersonalAd = !isShowExplainPersonalAd;
                                     if (isShowExplainPersonalAd) {

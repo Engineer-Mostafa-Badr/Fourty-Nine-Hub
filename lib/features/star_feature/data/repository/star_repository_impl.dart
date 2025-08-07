@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/star_feature/data/data_source/star_remote_data_source.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/repository/star_repository.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../data_source/star_remote_data_source.dart';
+import '../../domain/entity/banner_talent_entity.dart';
+import '../../domain/entity/star_entity.dart';
+import '../../domain/entity/star_winner_entity.dart';
+import '../../domain/repository/star_repository.dart';
+import '../../domain/use_case/fetch_all_star_use_case.dart';
+import '../../domain/use_case/upload_my_star_use_case.dart';
 
 class StarRepositoryImpl extends StarRepository {
   final StarRemoteDataSource _remoteDataSource;

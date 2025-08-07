@@ -2,9 +2,9 @@ import '../../domain/entities/rate_response_entity.dart';
 
 class RateResponseModel extends RateResponseEntity {
   RateResponseModel({
-    required bool status,
-    String? data,
-  }) : super(status: status, data: data);
+    required super.status,
+    super.data,
+  });
 
   factory RateResponseModel.fromJson(Map<String, dynamic> json) {
     return RateResponseModel(

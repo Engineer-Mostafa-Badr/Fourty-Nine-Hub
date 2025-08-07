@@ -1,8 +1,8 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_shared_contacts_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/reply_message_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import 'message_shared_contacts_model.dart';
+import 'reply_message_model.dart';
+import '../../domain/entities/message_entity.dart';
+import '../../domain/entities/message_sender_entity.dart';
+import '../../../../../../res/style/const.dart';
 
 import 'message_media_model.dart';
 

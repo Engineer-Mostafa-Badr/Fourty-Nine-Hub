@@ -5,14 +5,15 @@ import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
-import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
-import 'package:fourtyninehub/features/call/widgets/screen_lock_manager.dart';
-import 'package:fourtyninehub/main.dart';
+import '../presentation/controller/call_controller/call_cubit.dart';
+import '../presentation/controller/call_controller/call_state.dart';
+import '../presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import '../presentation/controller/send_call_controller.dart/send_call_states.dart';
+import '../services/call_timer_service.dart';
+import 'screen_lock_manager.dart';
+import '../../../main.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
+import '../../../helpers/manage_vibration.dart';
 
 // Class to manage global call overlay display
 class CallOverlayManager {
@@ -41,7 +42,7 @@ class CallOverlayManager {
     // Ensure we have a valid context before inserting overlay
     final context = navigatorKey.currentContext;
     if (context != null) {
-      Overlay.of(context)?.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
       _isVisible = true;
       print("Call overlay successfully shown");
     } else {
@@ -62,7 +63,7 @@ class CallOverlayManager {
 
 // The actual call overlay widget
 class MinimizedCallOverlay extends StatefulWidget {
-  const MinimizedCallOverlay({Key? key}) : super(key: key);
+  const MinimizedCallOverlay({super.key});
 
   @override
   State<MinimizedCallOverlay> createState() => _MinimizedCallOverlayState();
@@ -457,6 +458,7 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                   // }
                 },
                 onTap: () {
+      ManageVibration.vibrate();
                   // Don't stop the timer when returning to call screen
                   print(
                       "Tapped on minimized overlay. Current timer: ${_timerService.formatDuration(_timerService.duration.value)}");
@@ -477,7 +479,7 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                 },
                 child: hasVideo
                     ? _buildVideoCallBubble(
-                        context, minimizeState, callState as HasCall)
+                        context, minimizeState, callState)
                     : _buildCallBubble(context, minimizeState),
               ),
             );
@@ -634,9 +636,9 @@ class CallAwareApp extends StatelessWidget {
   final Widget child;
 
   const CallAwareApp({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

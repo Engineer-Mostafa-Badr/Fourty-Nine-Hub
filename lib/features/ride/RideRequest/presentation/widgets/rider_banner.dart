@@ -11,11 +11,10 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RiderBanner extends StatefulWidget {
   const RiderBanner({
@@ -45,6 +44,7 @@ class _RiderBannerState extends State<RiderBanner> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         print(context.read<UserCubit>().isLoggedIn);
         if (context.read<UserCubit>().isLoggedIn) {
           showModalBottomSheet(

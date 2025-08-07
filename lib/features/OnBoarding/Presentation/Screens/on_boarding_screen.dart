@@ -16,8 +16,8 @@ import '../../../../common/theme/cubit/states.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../../../authentication/presentation/pages/first_login_screen.dart';
 import '../Controllers/on_boarding_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -115,6 +115,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         const Spacer(),
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             CacheManager.isShowOnboarding(true);
             context.go(Routes.HOME);
             // Navigator.push(
@@ -207,6 +208,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       child: AppButton(
         backColor: isDarkTheme ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
         onPressed: () {
+      ManageVibration.vibrate();
           _startAutoScroll(); // Reset timer on button press
           final index = state.currentIndex;
           if (index < cubit.images.length - 1) {

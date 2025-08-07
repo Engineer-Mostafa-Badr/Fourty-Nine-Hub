@@ -42,6 +42,11 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.wayPointTwo,
     required super.wayPointOneTitle,
     required super.wayPointTwoTitle,
+    required super.driverPolyline,
+    required super.driverStartLat,
+    required super.driverStartLng,
+    required super.driverTargetLat,
+    required super.driverTargetLng,
     required super.otp,
   });
 
@@ -58,6 +63,22 @@ class RideRequestTripModel extends RideRequestTripEntity {
       } else if (json['polyline'] is List) {
         // Use the list directly
         parsedPolyline = (json['polyline'] as List)
+            .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
+            .toList();
+      }
+    }
+
+    List<List<double>> driverPolyline = [];
+
+    if (json['driverLocation']?['polyline'] != null) {
+      if (json['driverLocation']?['polyline'] is String) {
+        // Decode the encoded polyline string
+        PolylinePoints driverPolylinePoints = PolylinePoints();
+        List<PointLatLng> decoded = driverPolylinePoints.decodePolyline(json['driverLocation']?['polyline']);
+        driverPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
+      } else if (json['driverLocation']?['polyline'] is List) {
+        // Use the list directly
+        driverPolyline = (json['driverLocation']?['polyline'] as List)
             .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
             .toList();
       }
@@ -103,7 +124,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
       driverId: json['driverDetails']?['driverId'],
       driverUserId: json['driverDetails']?['driverUserId'],
       driverFirstName: json['driverDetails']?['driverFirstName'],
-      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn'] as num?)?.toDouble() ?? 0.0,
+      driverIsArrivingIn: (json['driverDetails']?['driverIsArrivingIn']) != null ? DateTime.parse(json['driverDetails']!['driverIsArrivingIn']).toLocal() : null,
       driverPhoneNumber: json['driverDetails']?['driverPhoneNumber'] ?? '',
       driverProfilePicture: json['driverDetails']?['driverProfilePictureUrl'],
       driverRating: (json['driverDetails']?['rating']?['averageRating'] as num?)?.toDouble() ?? 0.0,
@@ -116,6 +137,11 @@ class RideRequestTripModel extends RideRequestTripEntity {
       vehiclePlateNumber: json['driverDetails']?['vehicleDetails']?['plateInfo'],
       vehiclePicture: (json['driverDetails']?['vehicleDetails']?['carPictureUrl'] as List<dynamic>?)?[0],
       polyline: parsedPolyline,
+      driverPolyline: driverPolyline,
+      driverStartLat: json['driverLocation']?['start']?['latitude'] ?? 0.0,
+      driverStartLng: json['driverLocation']?['start']?['longitude'] ?? 0.0,
+      driverTargetLat: json['driverLocation']?['target']?['latitude'] ?? 0.0,
+      driverTargetLng: json['driverLocation']?['target']?['longitude'] ?? 0.0,
     );
   }
 }

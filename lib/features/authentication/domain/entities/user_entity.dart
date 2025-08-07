@@ -25,15 +25,11 @@ class UserEntity extends Equatable {
   final bool? isDocument;
   final bool? isAccountVerified;
   final String? firebaseToken;
+  final bool isGuest;
+  final UserType userType;
 
   // final String? birthday;
   final DateTime? birthday;
-
-  String get fullName => '$firstName $lastName';
-
-  bool isMyAccount(String anotherId) {
-    return id == anotherId;
-  }
 
   const UserEntity({
     required this.id,
@@ -61,7 +57,28 @@ class UserEntity extends Equatable {
     this.gender,
     this.firebaseToken,
     this.birthday,
+    this.isGuest = false,
+    this.userType = UserType.authenticated,
   });
+
+  factory UserEntity.guest() {
+    return const UserEntity(
+      id: 'guest_user',
+      firstName: 'ضيف',
+      lastName: '',
+      email: null,
+      profilePicture: null,
+      profileCover: null,
+      friendsCount: 0,
+      followersCount: 0,
+      followingCount: 0,
+      wallet: 0,
+      isGuest: true,
+      userType: UserType.guest,
+    );
+  }
+
+  String get fullName => '$firstName $lastName';
 
   @override
   List<Object?> get props => [
@@ -79,5 +96,13 @@ class UserEntity extends Equatable {
         firebaseToken,
         birthday,
         isAccountVerified,
+        isGuest,
+        userType,
       ];
+
+  bool isMyAccount(String anotherId) {
+    return id == anotherId;
+  }
 }
+
+enum UserType { guest, authenticated, anonymous }

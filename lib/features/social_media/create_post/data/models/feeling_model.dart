@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import '../../domain/entities/feeling_entity.dart';
 
 class FeelingModel extends FeelingEntity {
   FeelingModel({required super.id, required super.name, required super.nameEn, required super.image});

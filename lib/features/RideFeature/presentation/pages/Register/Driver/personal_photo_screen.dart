@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -15,8 +14,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PersonalPhotoScreen extends StatelessWidget {
   const PersonalPhotoScreen({super.key, required this.params});
@@ -67,6 +66,7 @@ class PersonalPhotoScreen extends StatelessWidget {
                           UploadFileWidget(
                             title: LocaleKeys.personalPhoto.localize,
                             onTap: (){
+      ManageVibration.vibrate();
                               cubit.onUploadPersonalPicture(context);
 
                             },
@@ -110,6 +110,7 @@ class PersonalPhotoScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     print("object");
                     if(context.read<RideRegisterCubit>().state.personalPicture==null){
                       showErrorMessage(context, "Please select technical examination");

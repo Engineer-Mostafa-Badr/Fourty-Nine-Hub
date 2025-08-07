@@ -6,29 +6,21 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
-import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
-import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../../domain/entities/get_client_pending_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
-import '../dashboards/widgets/client_offers_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AcceptRideOfferScreen extends StatefulWidget {
   final String type;
@@ -54,10 +46,12 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      if (widget.type == 'ride')
+      if (widget.type == 'ride') {
         context.read<ClientTripsCubit>().getClientAcceptedTrips();
-      if (widget.type == 'shipping')
+      }
+      if (widget.type == 'shipping') {
         context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
+      }
     }
   }
 
@@ -122,10 +116,6 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                             style: const TextStyle(color: Colors.red)),
                       )
                     : context
-                                    .read<ClientTripsCubit>()
-                                    .clientAcceptedTripsData ==
-                                null ||
-                            context
                                 .read<ClientTripsCubit>()
                                 .clientAcceptedTripsData
                                 .isEmpty
@@ -139,10 +129,6 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: context
-                                            .read<ClientTripsCubit>()
-                                            .clientAcceptedTripsData ==
-                                        null ||
-                                    context
                                         .read<ClientTripsCubit>()
                                         .clientAcceptedTripsData
                                         .isEmpty
@@ -429,7 +415,10 @@ class ClientAcceptWidget extends StatelessWidget {
                                 ? AppColors.PRIMARY_COLOR_DARK
                                 : AppColors.PRIMARY_COLOR,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+
+      ManageVibration.vibrate();
+                          },
                         ),
                       ),
                       Expanded(
@@ -442,7 +431,10 @@ class ClientAcceptWidget extends StatelessWidget {
                                   ? AppColors.PRIMARY_COLOR_DARK
                                   : AppColors.PRIMARY_COLOR,
                             ),
-                            onPressed: () {}),
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            }),
                       ),
                       Expanded(
                         child: IconButton(
@@ -452,7 +444,10 @@ class ClientAcceptWidget extends StatelessWidget {
                             height: 25.h,
                             color: AppColors.PRIMARY_COLOR_DARK,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+
+      ManageVibration.vibrate();
+                          },
                         ),
                       )
                     ],

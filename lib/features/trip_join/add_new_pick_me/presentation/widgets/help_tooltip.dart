@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class HelpTooltip extends StatefulWidget {
   final String message;
   final double width;
 
   const HelpTooltip({
-    Key? key,
+    super.key,
     required this.message,
     this.width = 300,
-  }) : super(key: key);
+  });
 
   @override
   State<HelpTooltip> createState() => _HelpTooltipState();
@@ -78,6 +79,7 @@ class _HelpTooltipState extends State<HelpTooltip> {
       link: _layerLink,
       child: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           if (_isTooltipVisible) {
             _removeTooltip();
           } else {

@@ -17,14 +17,13 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards_entity.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class FawryPayment extends StatefulWidget {
   final String amountId;
@@ -114,6 +113,7 @@ class _FawryPaymentState extends State<FawryPayment> {
             Expanded(
               child: _paymentOptionButton(
                 onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _isCardSelected = !_isCardSelected;
                     _showQrCode = false;
@@ -132,6 +132,7 @@ class _FawryPaymentState extends State<FawryPayment> {
             Expanded(
               child: _paymentOptionButton(
                 onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _showQrCode = !_showQrCode;
                     _isCardSelected = false;
@@ -162,6 +163,7 @@ class _FawryPaymentState extends State<FawryPayment> {
             Expanded(
               child: _paymentOptionButton(
                 onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _showLink = !_showLink;
                     _isCardSelected = false;
@@ -187,6 +189,7 @@ class _FawryPaymentState extends State<FawryPayment> {
             Expanded(
               child: _paymentOptionButton(
                 onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _showNumber = !_showNumber;
                     _isCardSelected = false;
@@ -237,6 +240,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () async {
+      ManageVibration.vibrate();
                       // Show confirmation dialog
                       bool? confirm = await showAnimatedDialog(
                         context,
@@ -247,12 +251,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
+      ManageVibration.vibrate();
                                 Navigator.of(context).pop(true);
                               },
                               child: const Text('Delete'),
                             ),
                             TextButton(
                               onPressed: () {
+      ManageVibration.vibrate();
                                 Navigator.of(context).pop(false);
                               },
                               child: const Text('Cancel'),
@@ -270,12 +276,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                       //       actions: <Widget>[
                       //         TextButton(
                       //           onPressed: () {
+      ManageVibration.vibrate();
                       //             Navigator.of(context).pop(true);
                       //           },
                       //           child: const Text('Delete'),
                       //         ),
                       //         TextButton(
                       //           onPressed: () {
+      ManageVibration.vibrate();
                       //             Navigator.of(context).pop(false);
                       //           },
                       //           child: const Text('Cancel'),
@@ -354,6 +362,7 @@ class _FawryPaymentState extends State<FawryPayment> {
               backgroundColor: AppColors.PRIMARY_COLOR,
             ),
             onPressed: () {
+      ManageVibration.vibrate();
               if (paymentCubit.selectedCard != null) {
                 final card = paymentCubit.selectedCard!;
                 print("Selected Card Data:");
@@ -390,6 +399,7 @@ class _FawryPaymentState extends State<FawryPayment> {
               ? const Color(0xFFF4555F)
               : const Color(0xFFF33D49),
           onPressed: () {
+      ManageVibration.vibrate();
             setState(() {
               _isAddingNewCard = !_isAddingNewCard;
             });
@@ -662,6 +672,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                         ? const Color(0xFFCACFF4)
                         : AppColors.c0B1035,
                     onPressed: () {
+      ManageVibration.vibrate();
                       print("Ok");
                       _handlePayWithCard();
                     }),
@@ -684,6 +695,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                       ? const Color(0xFFCACFF4)
                       : AppColors.c0B1035,
                   onPressed: () async {
+      ManageVibration.vibrate();
                     print("Yes");
 
                     // Call the method to save the card token
@@ -713,12 +725,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
+      ManageVibration.vibrate();
                                 Navigator.of(context).pop(true);
                               },
                               child: const Text('Delete'),
                             ),
                             TextButton(
                               onPressed: () {
+      ManageVibration.vibrate();
                                 Navigator.of(context).pop(false);
                               },
                               child: const Text('Cancel'),
@@ -736,6 +750,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                       //       actions: <Widget>[
                       //         TextButton(
                       //           onPressed: () {
+      ManageVibration.vibrate();
                       //             Navigator.of(context).pop();
                       //           },
                       //           child: const Text('OK'),
@@ -760,6 +775,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
+      ManageVibration.vibrate();
                                 Navigator.of(context).pop();
                               },
                               child: const Text('OK'),
@@ -778,6 +794,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                       //       actions: <Widget>[
                       //         TextButton(
                       //           onPressed: () {
+      ManageVibration.vibrate();
                       //             Navigator.of(context).pop();
                       //           },
                       //           child: const Text('OK'),
@@ -808,6 +825,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                       ? const Color(0xffF45560)
                       : AppColors.SECONDARY_COLOR_DARK2,
                   onPressed: () {
+      ManageVibration.vibrate();
                     setState(() {
                       _isAddingNewCard = false;
                     });
@@ -854,6 +872,7 @@ class _FawryPaymentState extends State<FawryPayment> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 context.pushAndRemoveUntil(Routes.HOME, (route) => false);
                 // Navigator.of(context).pop();
               },
@@ -873,6 +892,7 @@ class _FawryPaymentState extends State<FawryPayment> {
       //       actions: <Widget>[
       //         TextButton(
       //           onPressed: () {
+      ManageVibration.vibrate();
       //             Navigator.of(context).pop();
       //           },
       //           child: const Text('OK'),
@@ -890,6 +910,7 @@ class _FawryPaymentState extends State<FawryPayment> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.of(context).pop();
               },
               child: const Text('OK'),
@@ -907,6 +928,7 @@ class _FawryPaymentState extends State<FawryPayment> {
       //       actions: <Widget>[
       //         TextButton(
       //           onPressed: () {
+      ManageVibration.vibrate();
       //             Navigator.of(context).pop();
       //           },
       //           child: const Text('OK'),
@@ -1069,6 +1091,7 @@ class _FawryPaymentState extends State<FawryPayment> {
         const SizedBox(height: 4),
         InkWell(
           onTap: () async {
+      ManageVibration.vibrate();
             final url = paymentData.link;
             if (url != null) {
               await launchUrl(Uri.parse(url));

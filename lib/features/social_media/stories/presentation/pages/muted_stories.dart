@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/more_stories.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../cubit/stories_cubit.dart';
+import 'more_stories.dart';
+import '../../../tinder/data/shared/shared.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class MutedStories extends StatefulWidget {
   const MutedStories({super.key});
@@ -91,6 +92,7 @@ class _MutedStoriesState extends State<MutedStories> {
 
                     return InkWell(
                       onTap: () async {
+      ManageVibration.vibrate();
                         await Navigator.push(
                           context,
                           MaterialPageRoute(

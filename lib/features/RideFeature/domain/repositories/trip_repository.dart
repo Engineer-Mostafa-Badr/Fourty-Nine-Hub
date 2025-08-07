@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/av
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
@@ -20,7 +19,6 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_c
 import '../../../../core/error/failure.dart';
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import '../../data/models/loading/get_loading_accepted_model.dart';
-import '../entities/create_no_track_trip_entity.dart';
 import '../entities/dashboards/create_non_track_offer_entity.dart';
 import '../entities/dashboards/driver_settings_entity.dart';
 import '../entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
@@ -62,12 +60,12 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params);
    Future<Either<Failure, bool>> acceptTrip(String params);
    Future<Either<Failure, RunningTripEntity>> getRunningTrip();
-   Future<Either<Failure, bool>> goingToClient(String id);
+   Future<Either<Failure, RunningTripEntity>> goingToClient(String id);
    Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> updateDriverRateClient(DriverRateClientParams id);
    Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
    Future<Either<Failure, bool>> emergencySupport(EmergencySupportParams params);
-   Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
+   Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
    Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);

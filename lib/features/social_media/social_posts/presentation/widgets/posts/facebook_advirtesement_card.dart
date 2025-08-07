@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/functions/global/upload_file.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../create_post/presentation/widgets/image_details.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../pages/show_post_images.dart';
+import '../facebook_widgets/image_from_internet.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookAdvertisementCard extends StatelessWidget {
   const FacebookAdvertisementCard({super.key, required this.post});
@@ -32,16 +33,17 @@ class FacebookAdvertisementCard extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                    crossAxisCount: post.images.length == 1 ? 1 : 2),
+                itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         if (index != 3 ||
-                            (index == 3 && post.images!.length == 4)) {
+                            (index == 3 && post.images.length == 4)) {
                           showDialog(
                               context: context,
                               builder: (context) => ImageDetailsScreen(
-                                    image: post.images![index],
+                                    image: post.images[index],
                                     fromPost: true,
                                     onRemoveImage: () {
                                       // controller
@@ -65,7 +67,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                       child: Stack(
                         children: [
                           ImageFromInternet(
-                            image: post.images?[index] ?? '',
+                            image: post.images[index] ?? '',
                             borderRadius: BorderRadius.circular(5),
                             defaultLogo: true,
                           ),
@@ -85,7 +87,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                           //     ),
                           //   ),
                           // ),
-                          if (index == 3 && post.images!.length > 4)
+                          if (index == 3 && post.images.length > 4)
                             Container(
                               margin: const EdgeInsetsDirectional.only(
                                   end: 10, bottom: 10),
@@ -97,7 +99,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Label(
-                                  text: "+${post.images!.length - 4}",
+                                  text: "+${post.images.length - 4}",
                                   style: Styles.headerText(
                                     color: Colors.white,
                                   ),
@@ -118,7 +120,10 @@ class FacebookAdvertisementCard extends StatelessWidget {
             height: 10.h,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             child: Container(
               width: double.infinity,
               alignment: Alignment.center,

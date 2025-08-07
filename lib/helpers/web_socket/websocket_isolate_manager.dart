@@ -198,7 +198,7 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
 
   IO.Socket? socket;
   final subscribedEvents = <String>{};
-  const String _url = 'https://49backend.com';
+  const String url = 'https://49backend.com';
 
   receivePort.listen((message) {
     final isolateMessage =
@@ -212,7 +212,7 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
         socket?.dispose();
 
         socket = IO.io(
-          _url,
+          url,
           {
             'transports': ['websocket'],
             'autoConnect': true,

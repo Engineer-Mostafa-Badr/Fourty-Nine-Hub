@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wi
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winners_gift_view_body.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class WinnersGiftView extends StatelessWidget {
   const WinnersGiftView({super.key});

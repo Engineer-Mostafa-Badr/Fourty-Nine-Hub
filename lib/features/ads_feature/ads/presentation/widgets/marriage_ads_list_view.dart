@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_list_view_item.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
@@ -32,7 +31,7 @@ class MarriageAdsListView extends StatelessWidget {
       scrollController: scrollController,
       itemsPerPage: 2,
       loadPage: (page) {
-        print('==> page ${page}');
+        print('==> page $page');
         print('==> filterModel ${state.filterModel}');
         return controller.filterAds(
             model: state.filterModel ?? FilterModel(), filter: '');

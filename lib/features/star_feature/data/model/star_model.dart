@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/star_feature/data/model/user_star_model.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
+import 'user_star_model.dart';
+import '../../domain/entity/star_entity.dart';
 
 class StarModel extends StarEntity {
   StarModel({

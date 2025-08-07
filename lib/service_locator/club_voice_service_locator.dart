@@ -1,8 +1,8 @@
-import 'package:fourtyninehub/features/social_media/club_house/data/datasource/club_voice_datasource.dart';
-import 'package:fourtyninehub/features/social_media/club_house/data/repositories/club_voice_repository_impl.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/repositories/club_voice_repository.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
+import '../features/social_media/club_house/data/datasource/club_voice_datasource.dart';
+import '../features/social_media/club_house/data/repositories/club_voice_repository_impl.dart';
+import '../features/social_media/club_house/domain/repositories/club_voice_repository.dart';
+import '../features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
+import '../features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/social_media/club_house/domain/usecases/end_club_voice_use_case.dart';

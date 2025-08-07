@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CommentInputFieldInsta extends StatefulWidget {
   final TextEditingController commentController;
@@ -71,6 +72,7 @@ class CommentInputFieldState extends State<CommentInputFieldInsta> {
                           ),
                           child: InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               widget.onAddComment();
                             },
                             child: Icon(

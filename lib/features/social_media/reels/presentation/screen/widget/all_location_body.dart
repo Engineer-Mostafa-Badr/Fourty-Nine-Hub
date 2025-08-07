@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/video_card_widget.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../widgets/video_card_widget.dart';
 
 import '../../../../../../res/assets/assets.dart';
 

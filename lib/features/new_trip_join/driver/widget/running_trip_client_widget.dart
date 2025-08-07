@@ -6,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/constants/constants.dart';
-import 'package:fourtyninehub/core/enums/route_client_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
@@ -19,6 +17,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RunningTripClientWidget extends StatefulWidget {
   const RunningTripClientWidget({
@@ -194,6 +193,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.read<CaptainShareDashboardCubit>().isGoingToClient) {
                     setState(() {
                       context.read<CaptainShareDashboardCubit>().isGoingToClient = false;
@@ -357,6 +357,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
         if (context.read<CaptainShareDashboardCubit>().showClientNotShown)
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               widget.onClientNotShown();
             },
             child: Container(

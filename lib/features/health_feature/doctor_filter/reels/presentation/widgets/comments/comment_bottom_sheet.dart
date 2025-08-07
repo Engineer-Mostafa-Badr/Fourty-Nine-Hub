@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/c
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
@@ -63,6 +64,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
+      ManageVibration.vibrate();
           FocusScope.of(context).unfocus();
         },
         child: Container(

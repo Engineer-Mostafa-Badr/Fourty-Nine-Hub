@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
+import '../../domain/entities/message_entity.dart';
+import '../../../chat_view/presentation/chat_cubit/chats_cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
 
 class MessageCard extends StatelessWidget {
   final MessageEntity messageEntity;

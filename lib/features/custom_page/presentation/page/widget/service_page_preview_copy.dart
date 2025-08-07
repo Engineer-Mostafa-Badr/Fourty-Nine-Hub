@@ -28,8 +28,6 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categ
 import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -45,6 +43,7 @@ import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key, this.noNavBar = false});
@@ -322,6 +321,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 child: CustomAnimatedText(
                   text: LocaleKeys.youCanDeActivatePage.localize,
                   onTap: () {
+      ManageVibration.vibrate();
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -528,6 +528,7 @@ class CustomDeActivateDialog extends StatelessWidget {
               Expanded(
                 child: AppButton(
                   onPressed: () async {
+                    ManageVibration.vibrate();
                     // await context.read<CustomPageCubit>().updateActivate(false);
                     // // Restart.restartApp();
                     // Phoenix.rebirth(context);
@@ -548,6 +549,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                                 Expanded(
                                   child: AppButton(
                                     onPressed: () {
+                                      ManageVibration.vibrate();
                                       Navigator.pop(context);
                                     },
                                     label: LocaleKeys.cancel.localize,
@@ -560,6 +562,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                                   child: AppButton(
                                     backColor: AppColors.PRIMARY_COLOR,
                                     onPressed: () {
+                                      ManageVibration.vibrate();
                                       context
                                           .read<CustomPageCubit>()
                                           .updateActivate(false);
@@ -709,6 +712,7 @@ class _MainCategoriesListViewState extends State<MainCategoriesListView> {
 
         return InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('mainCategoriesCount', context);

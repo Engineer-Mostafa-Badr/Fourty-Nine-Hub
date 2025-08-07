@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -27,12 +26,11 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
-import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
-import 'widgets/problem_and_client_details.dart';
 import 'widgets/ride_details_rating_widget.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideDashboardNonSocketDetailsScreen extends StatefulWidget {
   const RideDashboardNonSocketDetailsScreen({super.key, required this.tripEntity,});
@@ -53,6 +51,7 @@ class _RideDashboardNonSocketDetailsScreenState
   String? pdfPath;
   double? currentTripRating;
 
+  @override
   initState(){
     context.read<DashboardsCubit>().getEmergencyDetails(context, SupportRideParams(
         clientId: widget.tripEntity.clientDetails?.id??'',
@@ -164,7 +163,7 @@ class _RideDashboardNonSocketDetailsScreenState
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Text(context.isArabic?'تفاصيل العميل':'Client Details'),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: PDFView(
@@ -185,6 +184,7 @@ class _RideDashboardNonSocketDetailsScreenState
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -201,7 +201,7 @@ class _RideDashboardNonSocketDetailsScreenState
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(
-        widget.tripEntity?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+        widget.tripEntity.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
     String formattedDate =
         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
     // String formattedTime =
@@ -210,7 +210,7 @@ class _RideDashboardNonSocketDetailsScreenState
         "${(dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
 
     DateTime dateTimePickUp = DateTime.parse(
-        widget.tripEntity?.tripDetails?.pickupTime ?? '2025-03-11T21:50:21.998Z');
+        widget.tripEntity.tripDetails?.pickupTime ?? '2025-03-11T21:50:21.998Z');
     String formattedDatePickUp =
         "${dateTimePickUp.day.toString().padLeft(2, '0')}/${dateTimePickUp.month.toString().padLeft(2, '0')}/${dateTimePickUp.year}";
     // String formattedTimePickUp =
@@ -433,6 +433,7 @@ class _RideDashboardNonSocketDetailsScreenState
                           height: 50,
                           child: state.isLoadingSubmitRequest? const Center(child: CircularProgressIndicator()): ElevatedButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
                                   cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'', userType: 'driver',tripType: 'nonTracking');
@@ -496,6 +497,7 @@ class _RideDashboardNonSocketDetailsScreenState
                         const SizedBox(height: 30),
                         isLoading? const Center(child: CircularProgressIndicator()): ElevatedButton.icon(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             setState(() => isLoading = true);
                             final path = await _generatePdf(details:state.supportDetails,lat:31.2802705,lng: 31.6775629);
                             setState(() {

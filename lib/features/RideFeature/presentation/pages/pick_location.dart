@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -8,10 +7,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 
+import '../../../../core/loading/custom_loading.dart';
 import '../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AddressPickerWidget extends StatefulWidget {
   final ValueChanged<Map<String, dynamic>> onAddressSelected;
@@ -223,6 +223,7 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
                                 IconButton(
                                   icon: const Icon(Icons.add),
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     setState(() {
                                       _zoom += 1;
                                       _mapController.move(_mapCenter, _zoom);
@@ -232,6 +233,7 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
                                 IconButton(
                                   icon: const Icon(Icons.remove),
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     setState(() {
                                       _zoom -= 1;
                                       _mapController.move(_mapCenter, _zoom);
@@ -255,6 +257,7 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
                   AppButton(
                     backColor: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK :AppColors.PRIMARY_COLOR,
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (_coordinatesController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                            SnackBar(content: Text(LocaleKeys.selectALocation.localize)),
@@ -280,7 +283,7 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
             Container(
               color: Colors.black.withOpacity(0.5),
               child: const Center(
-                child: CustomCircularProgressIndicator(),
+                child: CustomLoading(),
               ),
             ),
         ],
@@ -414,5 +417,4 @@ class _AddressPickerWidgetState extends State<AddressPickerWidget> {
   //   );
   // }
 }
-
 

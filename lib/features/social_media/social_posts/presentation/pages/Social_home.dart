@@ -3,25 +3,24 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_global_facebook_body.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/states/basic_state.dart';
+import '../../../../authentication/domain/entities/user_entity.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../instagram/presentation/cubit/instagram_cubit.dart';
+import '../../../instagram/presentation/pages/instgram_view.dart';
+import '../widgets/facebook_widgets/build_facebook_body.dart';
+import '../widgets/facebook_widgets/build_global_facebook_body.dart';
+import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../twitter/presentation/pages/twitter_view.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
@@ -31,6 +30,7 @@ import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../widgets/posts/create_post_banner.dart';
+import '../../../../../helpers/manage_vibration.dart' as manageVibration;
 
 class SocialParams {
   final String userId;
@@ -213,6 +213,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
               : Assets.facebookAppBarIcon,
           label: context.isArabic ? 'فيس' : LocaleKeys.Face.localize,
         ),
+        if (widget.params?.hideAppBar == false)
         _buildTab(
           icon: context.isDarkMode
               ? Assets.instagramAppBarIconDark
@@ -250,6 +251,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 right: 0,
                 child: InkWell(
                   onTap: () {
+      manageVibration.ManageVibration.vibrate();
                     setState(() {
                       isShowExplain = !isShowExplain;
                     });
@@ -321,6 +323,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
     );
   }
 
+
+
   Widget _buildInstagramTab() {
     return MultiBlocProvider(
       providers: [
@@ -377,6 +381,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     final isSelected = index == 0;
     return GestureDetector(
       onTap: () {
+      manageVibration.ManageVibration.vibrate();
         if (index == 1) {
           context.read<UserCubit>().isLoggedIn
               ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)

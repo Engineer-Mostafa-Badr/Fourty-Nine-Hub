@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AllPickMeFloatingActionButton extends StatelessWidget {
   const AllPickMeFloatingActionButton({super.key});
@@ -20,6 +19,7 @@ class AllPickMeFloatingActionButton extends StatelessWidget {
         height: 56, // ارتفاع الزر الجديد
         child: RawMaterialButton(
           onPressed: () {
+      ManageVibration.vibrate();
             // context.read<UserCubit>().isLoggedIn
               //  ?
             context.push(Routes.AddNewPickMe);

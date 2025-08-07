@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/shared_pref.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
+import 'page_preview.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
-import 'edit_page.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ChooseCategoriesViwBody extends StatefulWidget {
   const ChooseCategoriesViwBody({super.key});
@@ -99,6 +99,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
       ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
+      ManageVibration.vibrate();
           CacheManager.setInt(CacheManager.selectedCategoryView, _selectedItem);
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(

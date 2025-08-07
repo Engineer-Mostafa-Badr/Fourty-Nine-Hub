@@ -1,28 +1,22 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/entities/emergency_entity.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/get_emergency_requests_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'emergency_requests_state.dart';
 
 class EmergencyRequestsCubit extends Cubit<EmergencyRequestsState> {
-  EmergencyRequestsCubit(this._getEmergencyRequestsUseCase)
-      : super(const EmergencyRequestsState());
   final GetEmergencyRequestsUseCase _getEmergencyRequestsUseCase;
-
   List<EmergencyEntity> emergencies = [];
+
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
-
-  void loadEmergencies(String subCategoryId) async {
-    emit(state.copyWith(status: EmergencyRequestsStates.loading));
-    emergencies.clear();
-    currentPage = 1;
-    hasMoreData = true;
-    await getEmergencies(subCategoryId);
-  }
+  EmergencyRequestsCubit(this._getEmergencyRequestsUseCase)
+      : super(const EmergencyRequestsState());
 
   getEmergencies(String subCategoryId) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -38,8 +32,14 @@ class EmergencyRequestsCubit extends Cubit<EmergencyRequestsState> {
     );
 
     response.fold(
-      (failure) => emit(state.copyWith(
-          failure: failure, status: EmergencyRequestsStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: EmergencyRequestsStates.error));
+      },
       (data) {
         emergencies.addAll(data);
 
@@ -53,5 +53,13 @@ class EmergencyRequestsCubit extends Cubit<EmergencyRequestsState> {
         emit(state.copyWith(status: EmergencyRequestsStates.success));
       },
     );
+  }
+
+  void loadEmergencies(String subCategoryId) async {
+    emit(state.copyWith(status: EmergencyRequestsStates.loading));
+    emergencies.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getEmergencies(subCategoryId);
   }
 }

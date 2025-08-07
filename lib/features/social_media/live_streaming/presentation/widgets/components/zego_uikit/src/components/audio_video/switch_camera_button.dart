@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// switch cameras
 class ZegoSwitchCameraButton extends StatefulWidget {
@@ -55,6 +56,7 @@ class _ZegoSwitchCameraButtonState extends State<ZegoSwitchCameraButton> {
       builder: (context, isFrontFacing, _) {
         return GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             final targetState = !isFrontFacing;
             ZegoUIKit().useFrontFacingCamera(targetState);
 

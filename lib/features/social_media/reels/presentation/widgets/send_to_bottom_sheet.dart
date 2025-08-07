@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/utils/hex_color_helper.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../res/assets/assets.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SendToBottomSheet extends StatefulWidget {
   const SendToBottomSheet({super.key});
@@ -39,6 +40,7 @@ class _SendToBottomSheetState extends State<SendToBottomSheet> {
               Spacer(),
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   context.pop();
                 },
                 child: const Icon(
@@ -297,6 +299,7 @@ class _MessageComposerBottomSheetState
           SizedBox(height: 16),
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               setState(() {
                 isChecked = !isChecked;
               });
@@ -338,7 +341,10 @@ class _MessageComposerBottomSheetState
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xffF33D49),
                 shape: RoundedRectangleBorder(

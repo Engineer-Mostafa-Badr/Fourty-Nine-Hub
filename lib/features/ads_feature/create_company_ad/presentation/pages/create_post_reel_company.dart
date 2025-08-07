@@ -15,10 +15,10 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/di
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreatePostReelCompany extends StatefulWidget {
   const CreatePostReelCompany({super.key, required this.totalPrice});
@@ -117,6 +117,7 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                     label: context.isArabic ? 'إلغاء' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -125,6 +126,7 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                     label: context.isArabic ? 'متابعة' : 'Continue',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       showLoadingDialog(context);
                       await context
@@ -164,6 +166,7 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                       padding: const EdgeInsets.all(10.0),
                       child: GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                             if(state.video==null||(state.video?.isEmpty??false)){
                               showErrorMessage(context, context.isArabic?'يرجى اختيار فيديو':'Please select a video');
                             }else{
@@ -191,6 +194,7 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                 ),
                 GestureDetector(
                   onTap: (){
+      ManageVibration.vibrate();
                     UploadFile().uploadVideo(subCategoryId: Constants.companyAdsSubCategory, onUploaded: (data) {
                       print("data.mediaId ${data.mediaId}");
                       print("data.file ${data.file}");
@@ -251,6 +255,7 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                             top: 15.h,
                             child: ClickableWidget(
                               onTap: (){
+      ManageVibration.vibrate();
                                 _removeVideo();
                                 context.read<CreateCompanyAdCubit>().onRemoveVideo();
                               },

@@ -17,7 +17,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/dashboards/support_details_entity.dart';
-import '../../../domain/entities/dashboards/trip_entity.dart';
 
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -27,6 +26,7 @@ import '../dashboards/widgets/ride_details_rating_widget.dart';
 import '../support_screen/support_ride_screen.dart';
 import '../support_screen/support_widget/custom_support_text_form_field.dart';
 import '../widgets/custom_color_circle_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class LoadingDashboardDetailsScreen extends StatefulWidget {
   final GetLoadingHistoryEntity tripEntity;
@@ -160,7 +160,7 @@ class _LoadingDashboardDetailsScreenState
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Text(context.isArabic ? 'تفاصيل العميل' : 'Client Details'),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: PDFView(
@@ -181,6 +181,7 @@ class _LoadingDashboardDetailsScreenState
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -434,6 +435,7 @@ class _LoadingDashboardDetailsScreenState
                               ? const Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     if (state.supportStatus ==
                                         RequestEmergencyStatus
                                             .noRequest.status) {
@@ -553,6 +555,7 @@ class _LoadingDashboardDetailsScreenState
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton.icon(
                                 onPressed: () async {
+      ManageVibration.vibrate();
                                   setState(() => isLoading = true);
                                   final path = await _generatePdf(
                                       details: state.supportDetails,

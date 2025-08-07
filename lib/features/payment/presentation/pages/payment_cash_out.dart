@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../cache_out_cubit/payment_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PaymobLink {
   final String amountId;
@@ -65,6 +66,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                           Expanded(
                             child: _buildCustomCard(
                               onTap: () async {
+      ManageVibration.vibrate();
                                 final cubit = context.read<PaymentCubit>();
                                 final url = cubit.state.paymobData?.data;
                                 if (url != null) {
@@ -158,6 +160,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
   }) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           _selectedPaymentMethod = title;
         });

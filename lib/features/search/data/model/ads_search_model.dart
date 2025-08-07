@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 
-import '../../../ads_feature/ads/data/models/ads_address_model.dart';
 import 'create_ad_search_model.dart';
 
 class AdsSearchModel extends AdsSearchEntity {

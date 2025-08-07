@@ -3,12 +3,9 @@ import '../../domain/entity/complete_order_entity.dart';
 
 class CompleteOrderModel extends CompleteOrderEntity {
   CompleteOrderModel({
-    required bool status,
-    required String message,
-  }) : super(
-    status: status,
-    message: message,
-  );
+    required super.status,
+    required super.message,
+  });
 
   factory CompleteOrderModel.fromJson(Map<String, dynamic> json) {
     return CompleteOrderModel(

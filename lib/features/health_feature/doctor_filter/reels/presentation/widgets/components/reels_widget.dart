@@ -11,14 +11,13 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/c
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/full_screen_widget.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../../../../social_media/reels/presentation/pages/reel_actions.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
@@ -204,6 +203,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       ),
                       GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             if (!serviceLocator<UserCubit>().isLoggedIn) {
                               return pleaseLoginDialog(context);
                               // context.push(Routes.LOGIN);

@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../installment_list/data/models/installment_plan_model.dart';
 import '../../domain/usecases/create_installment_usecase.dart';
 
@@ -33,12 +35,22 @@ class CreateInstallmentCubit extends Cubit<CreateInstallmentState> {
     }
   }
 
+  void removePlan({required int index}) {
+    List<InstallmentPlanModel> plans = state.plans ?? [];
+    plans.removeAt(index);
+
+    emit(state.copyWith(plans: plans));
+  }
+
   void saveInstallment() async {
     // bool success = true;
     Failure? failure;
     for (var item in state.plans ?? []) {
       final response = await _createInstallmentUseCase(item);
       response.fold((l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
         failure = l;
       }, (r) {});
     }
@@ -52,12 +64,5 @@ class CreateInstallmentCubit extends Cubit<CreateInstallmentState> {
         failure: failure,
       ));
     }
-  }
-
-  void removePlan({required int index}) {
-    List<InstallmentPlanModel> plans = state.plans ?? [];
-    plans.removeAt(index);
-
-    emit(state.copyWith(plans: plans));
   }
 }

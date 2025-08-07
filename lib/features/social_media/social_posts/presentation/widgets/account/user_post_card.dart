@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../common/functions/global/upload_file.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../create_post/presentation/widgets/image_details.dart';
+import '../../../domain/entities/main_post_entity.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../../domain/usecases/add_reply_usecase.dart';
+import '../../../domain/usecases/post_comment_usecase.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../../pages/post_details_page.dart';
+import '../../pages/show_post_images.dart';
+import '../facebook_widgets/build_reactions_buttons.dart';
+import '../facebook_widgets/image_from_internet.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
+import '../posts/build_with_users.dart';
+import '../../../../twitter/presentation/widgets/report_view.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -36,7 +36,8 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class UserPostCard extends StatefulWidget {
   final PostEntity post;
@@ -114,6 +115,7 @@ class _UserPostCardState extends State<UserPostCard> {
               images: myPost.images ?? []),
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               if (widget.post.isShared == true) {
                 bottomSheet(
                     context: context,
@@ -245,6 +247,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 const Spacer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (context.read<UserCubit>().isLoggedIn) {
                       widget.showPostComments(myPost.id);
                     } else {                                  return pleaseLoginDialog(context);
@@ -297,6 +300,7 @@ class _UserPostCardState extends State<UserPostCard> {
                           icon: FontAwesomeIcons.thumbsUp,
                           label: LocaleKeys.like.localize,
                           onTap: () {
+      ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               return widget.showPostComments(myPost.id);
                             } else {
@@ -312,6 +316,7 @@ class _UserPostCardState extends State<UserPostCard> {
                         icon: FontAwesomeIcons.message,
                         label: LocaleKeys.comment.localize,
                         onTap: () {
+      ManageVibration.vibrate();
                           if (context.read<UserCubit>().isLoggedIn) {
                             return widget.showPostComments(myPost.id);
                           } else {                                  return pleaseLoginDialog(context);
@@ -325,6 +330,7 @@ class _UserPostCardState extends State<UserPostCard> {
                       icon: FontAwesomeIcons.share,
                       label: LocaleKeys.share.localize,
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           var result = await controller.onShare(
                               postId: myPost.isShared == true
@@ -380,6 +386,7 @@ class _UserPostCardState extends State<UserPostCard> {
               title: LocaleKeys.deletePost.localize,
               subTitle: LocaleKeys.youWillDeletePost.localize,
               onTap: () {
+      ManageVibration.vibrate();
                 widget.deletePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
@@ -390,6 +397,7 @@ class _UserPostCardState extends State<UserPostCard> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
+      ManageVibration.vibrate();
                 widget.hidePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
@@ -408,6 +416,7 @@ class _UserPostCardState extends State<UserPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -436,6 +445,7 @@ class _UserPostCardState extends State<UserPostCard> {
             children: [
               InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (user?.id != post.user.id) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
@@ -454,6 +464,7 @@ class _UserPostCardState extends State<UserPostCard> {
                   children: [
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         if (user?.id != post.user.id) {
                           context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
@@ -472,6 +483,7 @@ class _UserPostCardState extends State<UserPostCard> {
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.w700),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 if (user?.id != post.user.id) {
                                   context.push(Routes.OTHERSACCOUNT,
                                       extra: post.user.id);
@@ -503,6 +515,7 @@ class _UserPostCardState extends State<UserPostCard> {
                   padding: EdgeInsets.all(16.w),
                   child: IconAppButton(
                     onPressed: () {
+      ManageVibration.vibrate();
                       bottomSheet(
                           context: context,
                           widget: ReportView(
@@ -521,6 +534,7 @@ class _UserPostCardState extends State<UserPostCard> {
                   child: IconAppButton(
                     icon: Icons.clear,
                     onPressed: () {
+      ManageVibration.vibrate();
                       bottomSheet(
                           context: context,
                           widget: _buildPostOptions(
@@ -560,6 +574,7 @@ class _UserPostCardState extends State<UserPostCard> {
       children: [
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             if (user?.id != post.user.id) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
@@ -577,6 +592,7 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 if (user?.id != post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
@@ -590,6 +606,7 @@ class _UserPostCardState extends State<UserPostCard> {
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w700),
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (user?.id != post.user.id) {
                           context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
@@ -680,6 +697,7 @@ class _UserPostCardState extends State<UserPostCard> {
                               highlightColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               onTap: () {
+      ManageVibration.vibrate();
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
                                   showDialog(
@@ -791,7 +809,7 @@ class _UserPostCardState extends State<UserPostCard> {
             ),
             const SizedBox(width: 10),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               spacing: 8.0, // Space between children
@@ -802,26 +820,28 @@ class _UserPostCardState extends State<UserPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                        "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style:
                         Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       showDialog(
                         context: context,
-                        builder: (_) => BuildWithUsers(users: post.users!),
+                        builder: (_) => BuildWithUsers(users: post.users),
                       );
                     },
                     child: Label(
-                      text: '+${post.users!.length - 1}',
+                      text: '+${post.users.length - 1}',
                       style: Styles.headerText(),
                     ),
                   ),

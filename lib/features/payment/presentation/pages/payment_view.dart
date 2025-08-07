@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -23,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PaymobLink {
   final String amountId;
@@ -78,6 +78,7 @@ class _PaymentViewState extends State<PaymentView> {
                       Expanded(
                         child: _buildCustomCard(
                           onTap: () async {
+      ManageVibration.vibrate();
                             final cubit = context.read<PaymentCubit>();
                             final url = cubit.state.paymobData?.data;
                             if (url != null) {
@@ -158,6 +159,7 @@ class _PaymentViewState extends State<PaymentView> {
   }) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           _selectedPaymentMethod = titleId;
         });
@@ -395,7 +397,10 @@ class _PaymentViewState extends State<PaymentView> {
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+
+      ManageVibration.vibrate();
+          },
           child: Label(
             text: "${widget.amount}",
             style: Styles.headerText(
@@ -450,6 +455,7 @@ class _PaymentViewState extends State<PaymentView> {
                         ),
                   label: LocaleKeys.uploadImage.localize,
                   onPressed: () async {
+      ManageVibration.vibrate();
                     await cubit.uploadProfileImage(context: context);
                   },
                 );
@@ -520,6 +526,7 @@ class _PaymentViewState extends State<PaymentView> {
                           borderRadius: BorderRadius.circular(20)),
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider $_selectedProviderId");

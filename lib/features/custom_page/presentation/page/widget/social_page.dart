@@ -7,17 +7,16 @@ import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../res/style/styles.dart';
 
@@ -73,42 +72,52 @@ class _SocialPageState extends State<SocialPage> {
                     subtitle: Text(LocaleKeys.socialDescription.localize),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: _items.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: Radio<int>(
-                            value: index,
-                            groupValue: _selectedItem,
-                            activeColor: AppColors.getButtonPrimaryWhiteColor(context),
-                            onChanged: (int? value) {
-                              setState(() {
-                                _selectedItem = value;
-                              });
-                            },
-                          ),
-                          title: Text(
-                            context.isArabic?convertToArabicNumbers(_items[index]):_items[index],
-                            style: Styles.mediumText(
-                              fontSize: 65.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Theme.of(context).primaryColor,
+                    child: GlowingOverscrollIndicator(
+                      axisDirection: AxisDirection.down,
+                      color: AppColors.SECONDARY_COLOR,
+                      child: ListView.builder(
+                        itemCount: _items.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            leading: Radio<int>(
+                              value: index,
+                              groupValue: _selectedItem,
+                              activeColor:
+                                  AppColors.getButtonPrimaryWhiteColor(context),
+                              onChanged: (int? value) {
+                                setState(() {
+                                  _selectedItem = value;
+                                });
+                              },
                             ),
-                          ),
-                          trailing:CircleAvatar(
-                            radius: 12,
-                            backgroundColor: AppColors.getButtonPrimaryWhiteColor(context),
-                            child: SvgPicture.asset(
-                              _images[index],
-                              height: 25.h,
-                              width: 25.w,
-                              color: context.isDarkMode?AppColors.PRIMARY_COLOR:null,
+                            title: Text(
+                              context.isArabic
+                                  ? convertToArabicNumbers(_items[index])
+                                  : _items[index],
+                              style: Styles.mediumText(
+                                fontSize: 65.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                          ),
-                          selected: _selectedItem == index,
-                          selectedTileColor: Colors.transparent,
-                        );
-                      },
+                            trailing: CircleAvatar(
+                              radius: 12,
+                              backgroundColor:
+                                  AppColors.getButtonPrimaryWhiteColor(context),
+                              child: SvgPicture.asset(
+                                _images[index],
+                                height: 25.h,
+                                width: 25.w,
+                                color: context.isDarkMode
+                                    ? AppColors.PRIMARY_COLOR
+                                    : null,
+                              ),
+                            ),
+                            selected: _selectedItem == index,
+                            selectedTileColor: Colors.transparent,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -133,27 +142,32 @@ class _SocialPageState extends State<SocialPage> {
             }
           },
           builder: (BuildContext context, Object? state) {
-            return CustomFloatingActionButton(onPressed: () {
-              bool face = _selectedItem == 0;
-              bool insta = _selectedItem == 1;
-              bool tweet = _selectedItem == 2;
+            return CustomFloatingActionButton(
+              onPressed: () {
+                ManageVibration.vibrate();
+                bool face = _selectedItem == 0;
+                bool insta = _selectedItem == 1;
+                bool tweet = _selectedItem == 2;
 
-              context.read<CustomPageCubit>().updateSocialPage(
-                SocialPageParams(
-                  face: face,
-                  insta: insta,
-                  tweet: tweet,
-                ),
-              );
+                context.read<CustomPageCubit>().updateSocialPage(
+                      SocialPageParams(
+                        face: face,
+                        insta: insta,
+                        tweet: tweet,
+                      ),
+                    );
 
-              print('Selected Item: ${_items[_selectedItem!]}');
-            },text: LocaleKeys.next.localize,);
+                print('Selected Item: ${_items[_selectedItem!]}');
+              },
+              text: LocaleKeys.next.localize,
+            );
             // return CustomElevatedButton(
             //   child: Text(
             //     LocaleKeys.next.localize,
             //     style: const TextStyle(color: AppColors.whiteColor),
             //   ),
             //   onPressed: () {
+            ManageVibration.vibrate();
             //     bool face = _selectedItem == 0;
             //     bool insta = _selectedItem == 1;
             //     bool tweet = _selectedItem == 2;

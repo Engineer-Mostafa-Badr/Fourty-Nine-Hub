@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/core/utils/time_utils.dart';
+import '../../../../../core/utils/time_utils.dart';
 
 class TwitterUserEntity {
   final String id;

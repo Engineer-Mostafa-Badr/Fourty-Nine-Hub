@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../cubit/create_resturant_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
-import '../../../../../res/style/styles.dart';
 
 class CreateRestaurantSubmitButton extends StatelessWidget {
   const CreateRestaurantSubmitButton({super.key});
@@ -18,6 +17,7 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
         Expanded(
           child: AppButton(
             onPressed: () async {
+      ManageVibration.vibrate();
               var res =
                   await context.read<CreateRestaurantCubit>().submit(context);
               // var res = await context

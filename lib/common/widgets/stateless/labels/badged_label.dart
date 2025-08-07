@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -51,6 +52,7 @@ class BadgedLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           if (onTap != null) {
             onTap!();
           }

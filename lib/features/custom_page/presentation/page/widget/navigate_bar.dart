@@ -19,6 +19,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/navigate_bar_entity.dart';
 import '../../../domain/use_case/update_navigate_bar_use_case.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NavigateBar extends StatefulWidget {
   const NavigateBar({super.key});
@@ -190,6 +191,7 @@ class _NavigateBarState extends State<NavigateBar> {
                 },
                 builder: (BuildContext context, Object? state) {
                   return CustomFloatingActionButton(onPressed:  () {
+      ManageVibration.vibrate();
                     final selectedCategories = _selectedItems.entries
                         .where((entry) => entry.value == true)
                         .map((entry) => entry.key)
@@ -226,6 +228,7 @@ class _NavigateBarState extends State<NavigateBar> {
                       style: const TextStyle(color: AppColors.whiteColor),
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       final selectedCategories = _selectedItems.entries
                           .where((entry) => entry.value == true)
                           .map((entry) => entry.key)

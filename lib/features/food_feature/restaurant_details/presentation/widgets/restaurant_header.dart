@@ -3,22 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/restaurant_details_cubit.dart';
+import '../../../restaurants_list/domain/entities/restaurant.dart';
+import '../../../restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantHeader extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
 
-  const RestaurantHeader({Key? key, required this.restaurant}) : super(key: key);
+  const RestaurantHeader({super.key, required this.restaurant});
 
   @override
   State<RestaurantHeader> createState() => _RestaurantHeaderState();
@@ -84,6 +85,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                             color: Colors.redAccent,
                           ),
                           onPressed: () async {
+      ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               final success = await context
                                   .read<RestaurantDetailsCubit>()
@@ -111,6 +113,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                               //       label: LocaleKeys.login.localize,
                               //       textColor: Colors.white,
                               //       onPressed: () {
+      ManageVibration.vibrate();
                               //         // context.push(Routes.LOGIN);
                               //       },
                               //     ),

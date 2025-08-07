@@ -13,6 +13,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../controllers/cubits/ride_states.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UpdateFareBottomSheetWidget extends StatefulWidget {
   UpdateFareBottomSheetWidget({
@@ -142,6 +143,7 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
                   width: double.infinity,
                   label: LocaleKeys.done.tr(),
                   onPressed: () {
+      ManageVibration.vibrate();
                     if (_formKey.currentState!.validate()) {
                       if (widget.selectedCategoryName.trim().toLowerCase() ==
                           "Captain".toLowerCase()) {
@@ -273,6 +275,7 @@ class FareBottomSheetWidget2 extends StatelessWidget {
                 width: double.infinity,
                 label: LocaleKeys.done.tr(),
                 onPressed: () {
+      ManageVibration.vibrate();
                   if (_formKey.currentState!.validate()) {
                     Navigator.pop(context);
                     BlocProvider.of<DashboardsCubit>(context)

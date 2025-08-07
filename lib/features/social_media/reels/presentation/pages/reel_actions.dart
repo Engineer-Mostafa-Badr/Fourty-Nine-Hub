@@ -1,22 +1,18 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/advanced_tik_tok_reactions_column.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/shop_now_button.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/sponsored_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../controllers/preload_cubit/preload_bloc.dart';
+import '../widgets/advanced_tik_tok_reactions_column.dart';
+import '../widgets/shop_now_button.dart';
+import '../widgets/sponsored_widget.dart';
+import '../../../social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -27,12 +23,9 @@ import '../../../tinder/data/shared/shared.dart';
 import '../../data/models/new_reels_model.dart';
 import '../widgets/caption_widget.dart';
 import '../widgets/components/unified_widget_view.dart';
-import '../widgets/full_screen_widget.dart';
-import '../widgets/song_bottom_sheet.dart';
-import '../widgets/song_widget.dart';
 import '../widgets/tag_widget.dart';
 import '../widgets/user_section.dart';
-import 'audio_screen.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ReelActions extends StatefulWidget {
   final Reel reel;
@@ -81,7 +74,6 @@ class _ReelActionsState extends State<ReelActions> {
                         children: [
                           
                           UserSection(reel: widget.reel),
-                         
                             const SizedBox(height: 12),
                           if (widget.reel.caption.isNotEmpty)
                             CaptionWidget(
@@ -92,6 +84,7 @@ class _ReelActionsState extends State<ReelActions> {
                           if (widget.reel.hashtags.isNotEmpty)
                             GestureDetector(
                               onTap: () {
+      ManageVibration.vibrate();
                                 context.push(Routes.TiktokOptionScreen);
                               },
                               child: const TagWidget(),
@@ -186,6 +179,7 @@ class _UserAvatarState extends State<_UserAvatar> {
       ),
       child: InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           if (!serviceLocator<UserCubit>().isLoggedIn) {
             context.read<PreloadBloc>().pauseTheVideo();
             context.push(Routes.LOGIN);
@@ -216,6 +210,7 @@ class _UserAvatarState extends State<_UserAvatar> {
                     bottom: -5,
                     child: GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           if (widget.reel.user.areFriends == true) {
                           } else {
@@ -291,6 +286,7 @@ class _UserInfoState extends State<_UserInfo> {
         children: [
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               if (!serviceLocator<UserCubit>().isLoggedIn) {
                 context.read<PreloadBloc>().pauseTheVideo();
                 context.push(Routes.LOGIN);
@@ -315,6 +311,7 @@ class _UserInfoState extends State<_UserInfo> {
                     ? Container()
                     : GestureDetector(
                         onTap: () async {
+      ManageVibration.vibrate();
                           if (context.read<UserCubit>().isLoggedIn) {
                             if (widget.reel.user.isFollowed == true) {
                               var result = await controller.unFollowRequest(

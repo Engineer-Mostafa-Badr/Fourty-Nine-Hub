@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_location_model.dart';
+import '../../../../../common/functions/helper/lang_helper.dart';
+import 'restaurant_location_model.dart';
 
 import '../../../../../res/style/const.dart';
 import '../../../../ride/RideRequest/data/models/driver_review_model.dart';

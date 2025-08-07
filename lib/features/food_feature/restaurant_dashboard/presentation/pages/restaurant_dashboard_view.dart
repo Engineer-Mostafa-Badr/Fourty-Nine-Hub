@@ -3,17 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_orders.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_statistics_view.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import 'restaurant_orders.dart';
+import '../widgets/restaurant_statistics_view.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -25,6 +25,7 @@ import '../../../../../routes/routes.dart';
 import '../../../edit_food/presentation/pages/edit_food_view.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
 import '../widgets/restaurant_photo_widget.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantDashboardView extends StatefulWidget {
   final String restaurantId;
@@ -264,7 +265,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                                   const SizedBox(height: 16),
                                   // Confirmation message
                                   Text(
-                                    '${LocaleKeys.areYouSureUpdate.localize}',
+                                    LocaleKeys.areYouSureUpdate.localize,
                                     // 'Are you sure you want to ${v ? 'activate' : 'deactivate'} your restaurant?',
                                     textAlign: TextAlign.center,
                                     style: Styles.mediumText(
@@ -281,6 +282,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                                       Expanded(
                                         child: AppButton(
                                           onPressed: () {
+      ManageVibration.vibrate();
                                             Navigator.pop(dialogContext); // Close dialog
                                           },
                                           label: LocaleKeys.cancel.localize,
@@ -296,6 +298,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                                         child: AppButton(
                                           backColor: AppColors.getButtonPrimaryColor(context),
                                           onPressed: () async {
+      ManageVibration.vibrate();
                                             Navigator.pop(dialogContext); // Close dialog
                                             await context
                                                 .read<RestaurantDashboardCubit>()
@@ -368,6 +371,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                   AppButton(
                     label: LocaleKeys.editFood.localize,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.push(Routes.EditFoodView,
                           extra: EditFoodParams(
                               restaurantId: widget.restaurantId ?? '',
@@ -395,6 +399,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                   AppButton(
                     label: LocaleKeys.deleteRegistration.localize,
                     onPressed: () {
+      ManageVibration.vibrate();
                       showConfirmationDialog(
                         context,
                         title: LocaleKeys.deleteRegistration.localize,
@@ -668,7 +673,7 @@ class CustomBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -685,6 +690,7 @@ class CustomBottomSheet extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontSize: 18),
               onPressed: () async {
+      ManageVibration.vibrate();
                 final Uri phoneUri = Uri(scheme: 'tel', path: phone);
                 if (await canLaunchUrl(phoneUri)) {
                   await launchUrl(phoneUri);
@@ -706,6 +712,7 @@ class CustomBottomSheet extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontSize: 18),
               onPressed: () {
+      ManageVibration.vibrate();
                 // You can implement another action for regular calls here
               },
             ),

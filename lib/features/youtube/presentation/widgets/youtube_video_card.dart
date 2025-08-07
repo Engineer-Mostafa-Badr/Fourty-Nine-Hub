@@ -10,6 +10,7 @@ import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class YoutubeVideoCard extends StatelessWidget {
   final bool isVertical;
@@ -89,6 +90,7 @@ class YoutubeVideoCard extends StatelessWidget {
               IconAppButton(
                   icon: Icons.more_vert,
                   onPressed: () {
+      ManageVibration.vibrate();
                     bottomSheet(
                       context: context,
                       widget: const Column(

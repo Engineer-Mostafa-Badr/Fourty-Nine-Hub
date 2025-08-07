@@ -4,11 +4,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 import 'font_manager.dart';
 import 'payment_info_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideFindingCard extends StatefulWidget {
   const RideFindingCard({super.key});
@@ -104,7 +103,7 @@ class _RideFindingCardState extends State<RideFindingCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset(Assets.automatic2AcceptIcon,color: context.isDarkMode?Colors.white:Colors.black,),
-               Expanded(child: Text(LocaleKeys.automaticallyAcceptTheNearest.localize +"$price EGP")),
+               Expanded(child: Text("${LocaleKeys.automaticallyAcceptTheNearest.localize}$price EGP")),
               Switch(
                 value: switchAcceptFirstDriver,
                 onChanged: (value) {
@@ -141,6 +140,7 @@ class _RideFindingCardState extends State<RideFindingCard> {
           const SizedBox(height: 16),
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               // context.push(Routes.supportRideScreen);
             },
             child: Container(

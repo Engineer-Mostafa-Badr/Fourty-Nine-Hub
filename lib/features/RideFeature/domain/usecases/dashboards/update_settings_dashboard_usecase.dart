@@ -15,6 +15,7 @@ class UpdateSettingsDashboardUsecase{
 class UpdateSettingsDashboardUsecaseParam {
     UpdateSettingsDashboardUsecaseParam({
         required this.isReady,
+        required this.isCaptainShare,
         required this.enableSound,
         required this.subscriptionPlan,
         required this.perKm,
@@ -23,6 +24,7 @@ class UpdateSettingsDashboardUsecaseParam {
     });
 
     final bool isReady;
+    final bool isCaptainShare;
     final bool enableSound;
     final String subscriptionPlan;
     final num perKm;
@@ -33,6 +35,7 @@ class UpdateSettingsDashboardUsecaseParam {
         return UpdateSettingsDashboardUsecaseParam(
             isReady: json["isReady"] ?? false,
             enableSound: json["isVoiceCommentAlertsEnabled"] ?? false,
+            isCaptainShare: json["isCaptainShareEnabled"] ?? false,
             subscriptionPlan: json["subscriptionPlan"] ?? "",
             perKm: json["pricingPerKm"] ?? 0,
             favoriteCity: json["favoriteCity"] ?? "",
@@ -42,6 +45,7 @@ class UpdateSettingsDashboardUsecaseParam {
 
     Map<String, dynamic> toJson() => {
         "isReady": isReady,
+        "isCaptainShareEnabled": isCaptainShare,
         'isVoiceCommentAlertsEnabled': enableSound,
         "subscriptionPlan": subscriptionPlan,
         "favoriteCity": favoriteCity,

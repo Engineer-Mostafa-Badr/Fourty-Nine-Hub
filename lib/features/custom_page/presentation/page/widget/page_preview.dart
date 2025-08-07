@@ -31,6 +31,7 @@ import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PagePreview extends StatefulWidget {
   const PagePreview({super.key, this.state, this.isButtonsVisible = false});
@@ -45,7 +46,7 @@ class PagePreview extends StatefulWidget {
 class _PagePreviewState extends State<PagePreview>
     with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _showButtons = true;
 
   @override
@@ -94,6 +95,7 @@ class _PagePreviewState extends State<PagePreview>
               leading: IconButton(
                 icon: const Icon(Icons.menu), // The menu icon
                 onPressed: () {
+      ManageVibration.vibrate();
                   HandleCashback.setCount('drawerCount', context);
                   _scaffoldKey.currentState?.openDrawer();
                 },
@@ -231,6 +233,7 @@ class _PagePreviewState extends State<PagePreview>
                               Expanded(
                                 child: CustomElevatedButton(
                                   onPressed: () async {
+      ManageVibration.vibrate();
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
@@ -252,6 +255,7 @@ class _PagePreviewState extends State<PagePreview>
                                                 Expanded(
                                                   child: AppButton(
                                                     onPressed: () {
+      ManageVibration.vibrate();
                                                       Navigator.pop(context);
                                                     },
                                                     label: LocaleKeys
@@ -270,6 +274,7 @@ class _PagePreviewState extends State<PagePreview>
                                                 Expanded(
                                                   child: AppButton(
                                                     onPressed: () {
+      ManageVibration.vibrate();
                                                       context
                                                           .read<
                                                               CustomPageCubit>()
@@ -311,6 +316,7 @@ class _PagePreviewState extends State<PagePreview>
                               Expanded(
                                 child: CustomElevatedButton(
                                   onPressed: () async {
+      ManageVibration.vibrate();
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
@@ -332,6 +338,7 @@ class _PagePreviewState extends State<PagePreview>
                                                 Expanded(
                                                   child: AppButton(
                                                     onPressed: () {
+      ManageVibration.vibrate();
                                                       Navigator.pop(context);
                                                     },
                                                     label: LocaleKeys
@@ -353,6 +360,7 @@ class _PagePreviewState extends State<PagePreview>
                                                         .getButtonPrimaryColor(
                                                             context),
                                                     onPressed: () {
+      ManageVibration.vibrate();
                                                       context
                                                           .read<
                                                               CustomPageCubit>()

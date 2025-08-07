@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/authentication/data/models/base_user_model.dart';
+import '../../../../authentication/data/models/base_user_model.dart';
 
 class ReelEntity extends Equatable {
   final String id;

@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import '../../../../../../common/functions/global/upload_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_google_maps.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../create_post/presentation/widgets/image_details.dart';
+import '../../../domain/entities/main_post_entity.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../../pages/show_post_images.dart';
+import '../facebook_widgets/facebook_google_maps.dart';
+import '../facebook_widgets/image_from_internet.dart';
+import 'build_with_users.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookGlobalPostCard extends StatefulWidget {
   final PostEntity post;
@@ -203,6 +200,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //               const Spacer(),
       //               ClickableWidget(
       //                 onTap: () {
+      ManageVibration.vibrate();
       //                   context.push(Routes.LOGIN);
       //                 },
       //                 child: Row(
@@ -233,6 +231,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                 Expanded(
       //                   child: ClickableWidget(
       //                     onTap: () {
+      ManageVibration.vibrate();
       //                       context.push(Routes.LOGIN);
       //                     },
       //                     child: Column(
@@ -258,6 +257,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       icon: FontAwesomeIcons.message,
       //                       label: LocaleKeys.comment.localize,
       //                       onTap: () {
+      ManageVibration.vibrate();
       //                         context.push(Routes.LOGIN);
       //                       }),
       //                 ),
@@ -266,6 +266,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       icon: FontAwesomeIcons.share,
       //                       label: LocaleKeys.share.localize,
       //                       onTap: () async {
+      ManageVibration.vibrate();
       //                         context.push(Routes.LOGIN);
       //                       }),
       //                 ),
@@ -318,6 +319,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //             const Spacer(),
       //             ClickableWidget(
       //               onTap: () {
+      ManageVibration.vibrate();
       //                 context.push(Routes.LOGIN);
       //               },
       //               child: Row(
@@ -356,6 +358,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       icon: FontAwesomeIcons.message,
       //                       label: LocaleKeys.comment.localize,
       //                       onTap: () {
+      ManageVibration.vibrate();
       //                         context.push(Routes.LOGIN);
       //                       }),
       //                 ),
@@ -364,6 +367,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                     icon: FontAwesomeIcons.share,
       //                     label: LocaleKeys.share.localize,
       //                     onTap: () async {
+      ManageVibration.vibrate();
       //                       context.push(Routes.LOGIN);
       //                     }),
       //               ),
@@ -406,6 +410,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -433,6 +438,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             ClickableWidget(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (widget.fromProfile == false &&
                       context.read<UserCubit>().isLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -463,6 +469,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 children: [
                   ClickableWidget(
                     onTap: () {
+      ManageVibration.vibrate();
                       if (widget.fromProfile == false &&
                           context.read<UserCubit>().isLoggedIn) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -476,8 +483,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextAppButton(
-                            label: post.user?.userName??'',
+                            label: post.user.userName??'',
                             onPressed: () {
+      ManageVibration.vibrate();
                               if (widget.fromProfile == false &&
                                   context.read<UserCubit>().isLoggedIn) {
                                 context.push(Routes.OTHERSACCOUNT,
@@ -514,6 +522,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             padding: const EdgeInsetsDirectional.only(start: 40.0),
             child: ClickableWidget(
               onTap: () {
+      ManageVibration.vibrate();
                 showDialog(
                     context: context,
                     builder: (_) => CustomScaffold(
@@ -549,6 +558,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       children: [
         ClickableWidget(
           onTap: () {
+      ManageVibration.vibrate();
             if (widget.fromProfile == false) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
@@ -566,6 +576,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             ClickableWidget(
               onTap: () {
+      ManageVibration.vibrate();
                 if (widget.fromProfile == false) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
@@ -577,6 +588,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       style: TextStyle(color: Theme.of(context).primaryColor),
                       label: post.user.firstName,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (widget.fromProfile == false) {
                           context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
@@ -653,6 +665,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                         itemCount: images.length < 4 ? images.length : 4,
                         itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
+      ManageVibration.vibrate();
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
                                   showDialog(
@@ -766,7 +779,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               width: 10,
             ),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Row(
               children: [
                 Label(
@@ -775,27 +788,29 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                        "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style:
                         Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                                  users: post.users!,
+                                  users: post.users,
                                 ));
                       },
                       child: Label(
-                        text: '+${post.users!.length - 1}',
+                        text: '+${post.users.length - 1}',
                         style: Styles.headerText(),
                       ))
               ],

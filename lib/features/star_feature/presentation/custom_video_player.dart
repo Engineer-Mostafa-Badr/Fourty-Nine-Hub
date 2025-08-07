@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 import '../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../main.dart';
 import '../../../res/style/app_colors.dart';
+import '../../../helpers/manage_vibration.dart';
 
 class CustomVideoPlayer extends StatefulWidget {
   const CustomVideoPlayer({
@@ -387,6 +388,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
               right: 10,
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   _toggleFullScreen('Full-screen button');
                 },
                 child: Container(
@@ -414,6 +416,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
               right: 50,
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   FloatingVideoManager.showFloatingPlayer(
                     context: context,
                     videoUrl: widget.videoUrl,
@@ -612,6 +615,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
             right: 10,
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 _toggleFullScreen('Full-screen button');
               },
               child: Container(
@@ -638,6 +642,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
             right: 50,
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 FloatingVideoManager.showFloatingPlayer(
                   context: context,
                   videoUrl: widget.videoUrl,
@@ -695,6 +700,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
           });
         },
         onTap: () {
+      ManageVibration.vibrate();
           setState(() {
             _showFloatingControls = !_showFloatingControls;
           });
@@ -796,6 +802,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                             icon: const Icon(Icons.fullscreen,
                                 color: Colors.white, size: 20),
                             onPressed: () {
+      ManageVibration.vibrate();
                               _toggleFullScreen('showFloatingControls');
                             },
                           ),
@@ -1112,6 +1119,7 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                               icon: const Icon(Icons.open_in_full,
                                   color: Colors.white, size: 20),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 FloatingVideoManager.closeFloatingPlayer();
                                 //TODO : Navigate to Original Screen
 

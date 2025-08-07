@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
-
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/gift_message_entity.dart';
@@ -80,7 +81,13 @@ class RegisterCubit extends Cubit<RegisterState> {
         );
         emit(
           result.fold(
-                (failure) => RegisterError(failure),
+                (failure)  {
+                  var currentContext =
+                  AppPages.router.configuration.navigatorKey.currentContext!;
+                  showErrorMessage(
+                      currentContext, getFailureMessage(failure, currentContext));
+                return RegisterError(failure);
+                },
                 (data) {
               print("data.isPhoneVerified ${data.isPhoneVerified}");
               print(

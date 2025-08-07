@@ -6,11 +6,11 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/rate_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorDetailsReviewsWidget extends StatelessWidget {
   const DoctorDetailsReviewsWidget({super.key, required this.doctorId});
@@ -54,6 +54,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                       AppButton(
                         label: LocaleKeys.viewAll.localize,
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.push(Routes.DOCTORREVIEWS, extra: doctorId);
                         },
                         style: Styles.headerText(color: Colors.white),

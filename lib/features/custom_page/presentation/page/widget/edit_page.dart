@@ -3,18 +3,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/choose_catgories_view_body.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/navigate_bar.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/social_page.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../cubit/edit_page_cubit/edit_page_cubit.dart';
+import 'choose_catgories_view_body.dart';
+import 'page_preview.dart';
+import 'social_page.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import 'custom_Page_categories.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -59,6 +60,7 @@ class _EditPageState extends State<EditPage> {
                 leading: Builder(builder: (context) {
                   return IconButton(
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (BlocProvider.of<EditPageCubit>(context).currentIndex >
                             0) {
                           BlocProvider.of<EditPageCubit>(context).changePage(
@@ -105,7 +107,10 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: () {
+        ManageVibration.vibrate();
+        onPressed?.call();
+      },
       style: ElevatedButton.styleFrom(
           backgroundColor: backgoundColor ?? AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(

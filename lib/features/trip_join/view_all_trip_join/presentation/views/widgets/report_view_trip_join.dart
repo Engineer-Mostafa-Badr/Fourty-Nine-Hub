@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/reports_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/enums/reports_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import '../../../../../social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../social_media/tinder/data/shared/shared.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ReportViewTripJoin extends StatefulWidget {
   const ReportViewTripJoin({
@@ -129,6 +130,7 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
       BuildContext context, ReportsEnum report, double screenWidth) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           selectedReport = report;
         });

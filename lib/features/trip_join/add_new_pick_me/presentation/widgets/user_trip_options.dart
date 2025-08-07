@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/widgets/publish_button_v3_user_trip.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/date_time_picker_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/distance_and_price_per_person_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/driver_phone_number_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/select_seat_and_repeat_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/total_price_v2.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import 'publish_button_v3_user_trip.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/date_time_picker_v2.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/distance_and_price_per_person_v2.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/driver_phone_number_v2.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/select_seat_and_repeat_v2.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/total_price_v2.dart';
 
 import '../../../../../res/style/app_colors.dart';
 

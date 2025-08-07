@@ -8,7 +8,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -16,7 +15,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:flutter/src/services/text_formatter.dart';
 
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -24,12 +22,12 @@ import '../../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../../helpers/subscription_method.dart';
-import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../domain/entities/most_booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MostBookingScreen extends StatefulWidget {
   const MostBookingScreen({super.key, this.onClose});
@@ -565,6 +563,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
             label: LocaleKeys.book.localize,
             color: AppColors.getRedColor(context),
             onPressed: () {
+      ManageVibration.vibrate();
               // context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
           ),
@@ -643,6 +642,7 @@ class CallMessageReportButtons extends StatelessWidget {
                             backColor: AppColors.getButtonPrimaryColor(context),
                             color: AppColors.getReversedTextColor(context),
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.pop(context); // Close first sheet
                               // _showFreeCallBottomSheet(context, item);
                             },
@@ -652,6 +652,7 @@ class CallMessageReportButtons extends StatelessWidget {
                             backColor: AppColors.cD9D9D9,
                             color: AppColors.black,
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.pop(context); // Close first sheet
                               _showRegularCallBottomSheet(
                                   context, item); // Open second
@@ -705,6 +706,7 @@ class CallMessageReportButtons extends StatelessWidget {
             ),
             color: AppColors.getRedColor(context),
             onPressed: () async {
+      ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -833,6 +835,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       color: AppColors.getReversedTextColor(context),
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         final enteredNumber = phoneController.text.trim();
                         if (isBookingForAnotherClient) {
                           if (enteredNumber.isEmpty) {

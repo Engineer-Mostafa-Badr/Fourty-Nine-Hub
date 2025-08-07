@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../internal/defines.dart';
 
@@ -35,6 +36,7 @@ class _ZegoLiveStreamingBeautyEffectResetButtonState
   Widget build(BuildContext context) {
     return ZegoTextIconButton(
       onPressed: () {
+      ManageVibration.vibrate();
         ZegoUIKit().resetBeautyEffect();
 
         widget.onPressed?.call();

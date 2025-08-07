@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
+import '../../data/models/gift_model.dart';
 
 class GiftsState {
   final List<GiftData> gifts;

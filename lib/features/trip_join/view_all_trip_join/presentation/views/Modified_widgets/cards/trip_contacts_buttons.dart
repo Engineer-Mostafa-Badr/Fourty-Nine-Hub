@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -18,9 +19,21 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+
+import '../../../../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ContactsTripButtons extends StatefulWidget {
+  final String otherUserId;
+
+  final String? clientId;
+  final String subcategoryId;
+  final String phone;
+  final String id;
+  final String? senderName;
+  final String? senderImage;
+  final bool? hasReport;
+  final bool? isPremium;
   const ContactsTripButtons(
       {super.key,
       required this.otherUserId,
@@ -33,16 +46,6 @@ class ContactsTripButtons extends StatefulWidget {
       this.isPremium = false, // ✅ Add this
 
       this.clientId});
-
-  final String otherUserId;
-  final String? clientId;
-  final String subcategoryId;
-  final String phone;
-  final String id;
-  final String? senderName;
-  final String? senderImage;
-  final bool? hasReport;
-  final bool? isPremium;
 
   @override
   State<ContactsTripButtons> createState() => _ContactsTripButtonsState();
@@ -76,8 +79,10 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                       : (context.isDarkMode ? AppColors.grey : Colors.black),
                 ),
                 onPressed: widget.isPremium!
-                    ? () => JoinTripBottomSheet(
-                  phone: widget.phone,
+                    ? () {
+                        ManageVibration.vibrate();
+                        JoinTripBottomSheet(
+                          phone: widget.phone,
                           context,
                           topButtonColor:
                               AppColors.getButtonPrimaryColor(context),
@@ -90,7 +95,8 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                           topTextColor:
                               context.isDarkMode ? Colors.black : Colors.white,
                           bottomTextColor: AppColors.getTextColor(context),
-                        )
+                        );
+                      }
                     : null,
               ),
               IconButton(
@@ -109,10 +115,14 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 onPressed: widget.isPremium!
                     ? (!context.read<UserCubit>().isLoggedIn
                         ? () {
+                            ManageVibration.vibrate();
+
                             return pleaseLoginDialog(context);
                           }
                         : (snap.data == true
                             ? () async {
+                                ManageVibration.vibrate();
+
                                 ChatEntity? chat = await context
                                     .read<UserCubit>()
                                     .createNormalChat(
@@ -129,6 +139,8 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                                 );
                               }
                             : () {
+                                ManageVibration.vibrate();
+
                                 SubscriptionMethod().subscribe(
                                   subscribeId: widget.subcategoryId,
                                   title: LocaleKeys.ads.localize,
@@ -146,10 +158,14 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 ),
                 onPressed: !context.read<UserCubit>().isLoggedIn
                     ? () {
+                        ManageVibration.vibrate();
+
                         return pleaseLoginDialog(context);
                         // context.push(Routes.LOGIN);
                       }
                     : () {
+                        ManageVibration.vibrate();
+
                         bottomSheet(
                             context: context,
                             widget: ReportView(

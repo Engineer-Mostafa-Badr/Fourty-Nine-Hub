@@ -2,11 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -16,12 +15,10 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pe
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RunningTripParams {
   final RideCubit rideCubit;
@@ -82,6 +79,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),
@@ -97,7 +95,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomLoading());
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else  {
@@ -109,7 +107,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
                     itemCount: (state.runningTrips?.length ?? 0) + (isFetching ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == state.runningTrips?.length) {
-                        return const Center(child: CustomCircularProgressIndicator());
+                        return const Center(child: CustomLoading());
                       }
                       final trip = state.runningTrips?[index];
                       if (trip == null) return const SizedBox.shrink();

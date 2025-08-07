@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/account_taps/wallet/data/models/pagination_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
+import '../../../../account_taps/wallet/data/models/pagination_model.dart';
+import '../../domain/entities/profile_instagram_data_entity.dart';
 
 class ProfileInstagramDataModel extends ProfileInstagramDataEntity {
   ProfileInstagramDataModel({

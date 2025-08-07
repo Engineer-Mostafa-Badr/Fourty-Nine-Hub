@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
@@ -77,7 +78,7 @@ class AvailableRideTripItem extends StatelessWidget {
                               start: -28.w,
                               child: Row(
                                 children: [
-                                  Container(
+                                  if((tripEntity.clientRatingAverage??0)>0)Container(
                                     // height: 32.h,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
@@ -90,7 +91,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                           baseline: 22.h,
                                           baselineType: TextBaseline.alphabetic,
 
-                                          child: Text('4.0',style: TextStyle(
+                                          child: Text(FormatNumbers().convertNumberToLocalizedString('${tripEntity.clientRatingAverage}', isArabic: context.isArabic),style: TextStyle(
                                             fontSize: FontSize.s14,
                                             color: context.isDarkMode?AppColors.black:AppColors.black
                                           ),),
@@ -184,7 +185,7 @@ class AvailableRideTripItem extends StatelessWidget {
                     text: TextSpan(
                       style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
                       children: <TextSpan>[
-                        TextSpan(text: '${(tripEntity.distance / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}',
+                        TextSpan(text: '${FormatNumbers().convertNumberToLocalizedString((tripEntity.distance / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}',
                             style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.black)
                         ),
                       ],
@@ -252,7 +253,7 @@ class AvailableRideTripItem extends StatelessWidget {
                             style: const TextStyle(color: AppColors.black),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '${LocaleKeys.Accept.tr()} ${(tripEntity.price??0).ceil()}  ',
+                                  text: '${LocaleKeys.Accept.tr()} ${FormatNumbers().convertNumberToLocalizedString((tripEntity.price??0).ceil().toString(), isArabic: context.isArabic)}  ',
                                   style: Styles.mediumText(
                                     color: Colors.white,
                                   )),
@@ -348,6 +349,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                             label: context.isArabic?'رجوع':'Back',
                                             backColor: AppColors.PRIMARY_COLOR,
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               Navigator.of(context).pop();
                                             }),
                                       ),
@@ -358,6 +360,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                             label: context.isArabic?'نعم':'Yes',
                                             backColor: AppColors.SECONDARY_COLOR_DARK2,
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               Navigator.of(context).pop();
                                               onRefuseTrip(tripEntity.id);
                                             }),

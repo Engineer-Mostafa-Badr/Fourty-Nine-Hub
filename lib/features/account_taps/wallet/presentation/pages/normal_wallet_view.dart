@@ -6,11 +6,14 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/date_time.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_state.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/subscription_widget.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -20,12 +23,10 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../payment/presentation/pages/payment_cash_out.dart';
-import '../../../../subscripe/presentation/widgets/amounts.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
 import '../widgets/wallet_card_widget.dart';
 import '../widgets/wallet_history_card.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class NormalWalletView extends StatefulWidget {
   const NormalWalletView({super.key});
@@ -40,28 +41,6 @@ class _NormalWalletViewState extends State<NormalWalletView> {
   late ScrollController _scrollController;
   late WalletCubit _cubit;
   @override
-  void initState() {
-    super.initState();
-    _cubit = context.read<WalletCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadData();
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchWalletHistory();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: PreferredSize(
@@ -74,6 +53,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
         margin: const EdgeInsets.all(10),
         child: MaterialButton(
           onPressed: () async {
+            ManageVibration.vibrate();
             context.push(Routes.TRANSFERMONEY);
           },
           color: AppColors.SECONDARY_COLOR,
@@ -141,10 +121,11 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                   backColor: Colors.green,
                   color: AppColors.AUTH_CONTAINER_COLOR,
                   onPressed: () {
+                    ManageVibration.vibrate();
                     // showActiveSubscriptionAmounts(walletType: subscribeParams.walletType);
                     // const SubscriptoinAmountsWidget(
-                      // amounts: 5,
-                      // walletType: WalletTypes.mainWallet,
+                    // amounts: 5,
+                    // walletType: WalletTypes.mainWallet,
                     // );
                     // Navigator.push(
                     //   context,
@@ -167,6 +148,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                         color: AppColors.AUTH_CONTAINER_COLOR,
                         backColor: AppColors.SECONDARY_COLOR,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -182,7 +164,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     : AppButton(
                         label: LocaleKeys.withdraw.localize,
                         backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
-                        onPressed: () {},
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                        },
                       ),
                 const Sizer(),
                 Label(
@@ -196,6 +180,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                 ),
                 InkWell(
                   onTap: () {
+                    ManageVibration.vibrate();
                     setState(() {
                       showMore = !showMore;
                     });
@@ -256,6 +241,28 @@ class _NormalWalletViewState extends State<NormalWalletView> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<WalletCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadData();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchWalletHistory();
+    }
+  }
   // Future<void> showActiveSubscriptionAmounts(
   //     {required WalletTypes walletType}) async {
   //   final response =
@@ -274,5 +281,4 @@ class _NormalWalletViewState extends State<NormalWalletView> {
   //     ),
   //   );
   // }
-
 }

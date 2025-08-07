@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../requests_history/data/models/trip_model.dart';
 import '../../data/models/cancel_reason_model.dart';
@@ -16,26 +18,34 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
   final GetCancelReasonUseCase _getCancelReasonUseCase;
   TripDetailsCubit(this._getTripDetailsUseCase, this._getCancelReasonUseCase)
       : super(TripDetailsInitial());
-  void loadData() async {
-    getTripDetails();
-    getCancelReasons();
+  void getCancelReasons() async {
+    final response = await _getCancelReasonUseCase.call(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: TripDetailsStates.error, failure: failure));
+    },
+        (response) => emit(state.copyWith(
+            cancelReasons: response, status: TripDetailsStates.initState)));
   }
 
   void getTripDetails() async {
     final response = await _getTripDetailsUseCase.call(0);
-    response.fold(
-        (failure) => emit(
-            state.copyWith(status: TripDetailsStates.error, failure: failure)),
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: TripDetailsStates.error, failure: failure));
+    },
         (response) => emit(state.copyWith(
             trip: response, status: TripDetailsStates.initState)));
   }
 
-  void getCancelReasons() async {
-    final response = await _getCancelReasonUseCase.call(const NoParams());
-    response.fold(
-        (failure) => emit(
-            state.copyWith(status: TripDetailsStates.error, failure: failure)),
-        (response) => emit(state.copyWith(
-            cancelReasons: response, status: TripDetailsStates.initState)));
+  void loadData() async {
+    getTripDetails();
+    getCancelReasons();
   }
 }

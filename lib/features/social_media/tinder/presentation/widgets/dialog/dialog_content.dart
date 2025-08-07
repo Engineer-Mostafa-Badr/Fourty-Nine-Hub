@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FindDialogContent extends StatelessWidget {
   const FindDialogContent({
@@ -56,6 +57,7 @@ class FindDialogContent extends StatelessWidget {
           const Sizer(height: 20),
           ElevatedButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
@@ -83,6 +85,7 @@ class FindDialogContent extends StatelessWidget {
           ),
           ClickableWidget(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(context).pop();
             },
             child: Text(

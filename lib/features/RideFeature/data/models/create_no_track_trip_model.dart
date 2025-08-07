@@ -3,12 +3,9 @@ import '../../domain/entities/create_no_track_trip_entity.dart';
 
 class CreateNonTrackTripModel extends CreateNonTrackTripEntity {
   CreateNonTrackTripModel({
-    required bool status,
-    required String message,
-  }) : super(
-    status: status,
-    message: message,
-  );
+    required super.status,
+    required super.message,
+  });
 
   factory CreateNonTrackTripModel.fromJson(Map<String, dynamic> json) {
     return CreateNonTrackTripModel(

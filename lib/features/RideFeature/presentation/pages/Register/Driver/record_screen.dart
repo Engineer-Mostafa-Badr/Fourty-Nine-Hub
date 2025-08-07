@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class VoiceNoteRecorder extends StatefulWidget {
   const VoiceNoteRecorder({super.key});
@@ -58,6 +59,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder> {
                 color: _isRecording ? Colors.red : Colors.blue,
               ),
               onPressed: () async {
+      ManageVibration.vibrate();
                 if (_isRecording) {
                   await context.read<RideCubit>().stopRecord(
                     context: context,

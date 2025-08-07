@@ -1,10 +1,15 @@
 import '../../domain/entities/media_privacy_entity.dart';
 
 class MediaPrivacyModel extends MediaPrivacyEntity {
+  @override
   String? userId;
+  @override
   String? showPosts;
+  @override
   String? showStories;
+  @override
   String? showReels;
+  @override
   String? writeComments;
 
   MediaPrivacyModel({

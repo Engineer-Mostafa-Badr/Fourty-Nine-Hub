@@ -6,9 +6,9 @@ import 'package:intl/intl.dart';
 import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 
 class BirthDatePicker extends StatefulWidget {
-  const BirthDatePicker({super.key, required this.controller});
-
   final TextEditingController controller;
+
+  const BirthDatePicker({super.key, required this.controller});
 
   @override
   _BirthDatePickerState createState() => _BirthDatePickerState();
@@ -17,7 +17,27 @@ class BirthDatePicker extends StatefulWidget {
 class _BirthDatePickerState extends State<BirthDatePicker> {
   DateTime? selectedDate;
   final DateFormat dateFormat =
-  DateFormat('dd/MM/yyyy'); // Formatting as 05/04/2001
+      DateFormat('dd/MM/yyyy'); // Formatting as 05/04/2001
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        DefaultTextFormField(
+          readOnly: true,
+          borderColor: Colors.black,
+          currentController: widget.controller,
+          hint: LocaleKeys.birthDate.localize,
+          prefixIcon: const Icon(Icons.calendar_today),
+          onTap: () => _selectDate(context),
+          validator: (s) {
+            return null;
+          },
+        ),
+      ],
+    );
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime initialDate = DateTime(2000); // Default year if none is selected
@@ -39,25 +59,5 @@ class _BirthDatePickerState extends State<BirthDatePicker> {
 
     widget.controller.text = dateFormat.format(selectedDate!);
     print("widget.controller.text${widget.controller.text}");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        DefaultTextFormField(
-          readOnly: true,
-          borderColor: Colors.black,
-          currentController: widget.controller,
-          hint: LocaleKeys.birthDate.localize,
-          prefixIcon: const Icon(Icons.calendar_today),
-          onTap: () => _selectDate(context),
-          validator: (s) {
-            return null;
-          },
-        ),
-      ],
-    );
   }
 }

@@ -2,22 +2,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/build_food_list.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../widgets/build_food_list.dart';
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../restaurant_details/presentation/widgets/restaurant_header.dart';
 import '../cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
   final GetAllRestaurantEntity restaurant;
@@ -138,6 +139,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
+                ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
                   context.push(Routes.FOODCART);
                 }else{
@@ -157,6 +159,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                   //       label: LocaleKeys.login.localize,
                   //       textColor: Colors.white,
                   //       onPressed: () {
+      ManageVibration.vibrate();
                   //        // context.push(Routes.LOGIN);
                   //       },
                   //     ),

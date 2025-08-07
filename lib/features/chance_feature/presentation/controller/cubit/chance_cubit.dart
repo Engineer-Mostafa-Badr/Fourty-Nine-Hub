@@ -9,7 +9,9 @@ import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_category.dart';
 import '../../../domain/use_case/add_chance_data.dart';
 import 'chance_states.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class ChanceCubit extends Cubit<ChanceState> {
   final FetchChanceUseCase _fetchChanceUseCase;
   final AddChanceUseCase _addChanceUseCase;
@@ -63,6 +65,10 @@ class ChanceCubit extends Cubit<ChanceState> {
     final response = await _addChanceUseCase(params);
     return response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         print('Error');
         print(failure.toString());
         emit(state.copyWith(failure: failure, status: ChanceStates.error));
@@ -81,6 +87,10 @@ class ChanceCubit extends Cubit<ChanceState> {
       ChanceRateParams(chanceRateParams: id),
     );
     response.fold((l) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
       emit(state.copyWith(rate: data, status: ChanceStates.success));
@@ -96,6 +106,10 @@ class ChanceCubit extends Cubit<ChanceState> {
       ),
     );
     response.fold((l) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
       category = data;
@@ -113,6 +127,10 @@ class ChanceCubit extends Cubit<ChanceState> {
       ),
     );
     response.fold((l) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
       category = data;

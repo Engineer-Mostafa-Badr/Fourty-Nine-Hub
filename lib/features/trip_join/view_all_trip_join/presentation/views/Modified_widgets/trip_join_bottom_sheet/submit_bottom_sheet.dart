@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
-import '../../../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 
 Future<dynamic> SubmitBottomSheet(context,
     {
@@ -95,6 +95,7 @@ Future<dynamic> SubmitBottomSheet(context,
                         const Sizer(),
                         ElevatedButton(
                           onPressed: () {
+      ManageVibration.vibrate();
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(

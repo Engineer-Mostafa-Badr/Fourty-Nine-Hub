@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/live_card.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../widgets/live_card.dart';
+import '../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../zoom/presentation/controller/stream_state.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 class VideoStreamTabBar extends StatefulWidget {
   const VideoStreamTabBar({super.key});

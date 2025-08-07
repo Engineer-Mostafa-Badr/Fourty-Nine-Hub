@@ -1,9 +1,9 @@
-import 'package:fourtyninehub/features/subscripe/data/datasources/subscribe_remote_datasource.dart';
-import 'package:fourtyninehub/features/subscripe/data/repositories/subscribtion_plans_repo_impl.dart';
-import 'package:fourtyninehub/features/subscripe/domain/usecases/check_if_user_subscribed_usecase.dart';
-import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
-import 'package:fourtyninehub/features/subscripe/domain/usecases/get_subscription_plans_usecase.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
+import '../features/subscripe/data/datasources/subscribe_remote_datasource.dart';
+import '../features/subscripe/data/repositories/subscribtion_plans_repo_impl.dart';
+import '../features/subscripe/domain/usecases/check_if_user_subscribed_usecase.dart';
+import '../features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
+import '../features/subscripe/domain/usecases/get_subscription_plans_usecase.dart';
+import '../features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/subscripe/domain/repositories/subscription_plans_repo.dart';

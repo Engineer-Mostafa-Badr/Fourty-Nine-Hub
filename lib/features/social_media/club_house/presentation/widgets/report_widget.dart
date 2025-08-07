@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../core/extensions/context_extension.dart';
 
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ReportWidget extends StatelessWidget {
   const ReportWidget({super.key});
@@ -174,7 +175,10 @@ class ReportWidget extends StatelessWidget {
               height: 5.h,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.PRIMARY_COLOR),
               child: const Text('إبلاغ'),

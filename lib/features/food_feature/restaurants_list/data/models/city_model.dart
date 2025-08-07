@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/city.dart';
+import '../../domain/entities/city.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'city_model.g.dart';

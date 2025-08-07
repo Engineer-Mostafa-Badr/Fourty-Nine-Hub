@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../../../../chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:intl/intl.dart';
 
 import 'message_card.dart';

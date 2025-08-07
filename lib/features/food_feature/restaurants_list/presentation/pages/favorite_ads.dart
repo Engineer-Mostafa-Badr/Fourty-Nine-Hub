@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_loading_search_widget.dart';
@@ -26,6 +24,7 @@ import '../../domain/entities/restaurant.dart';
 import '../cubit/restaurants_list_cubit.dart';
 import '../widgets/Images_profile_for_restaurant.dart';
 import '../widgets/subcatigories_restaurant_card.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantFavAdsScreen extends StatefulWidget {
   const RestaurantFavAdsScreen({super.key, this.onClose});
@@ -427,8 +426,10 @@ class FavoriteButtonAds extends StatelessWidget {
         color: AppColors.getRedColor(context),
       ),
       onPressed: () async {
+      ManageVibration.vibrate();
         await favouriteRestaurant(item.id!);
       },
     );
   }
 }
+

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CityListTitle extends StatelessWidget {
   final CityEntity city;
@@ -25,6 +26,7 @@ class CityListTitle extends StatelessWidget {
         style: Styles.headerText(fontWeight: FontWeight.w600),
       ),
       onTap: () {
+      ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
 
         context.push(Routes.VISITADOCTORLIST,

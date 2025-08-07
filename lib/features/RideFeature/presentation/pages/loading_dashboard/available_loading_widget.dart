@@ -11,9 +11,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -21,6 +19,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/loading/get_loading_avaliable_entity.dart';
 import '../../../domain/usecases/dashboards/create_non_track_offer_use_case.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 // Solution 1: Check if widget is mounted before using context
 class AvailableNonSocketLoadingWidget extends StatefulWidget {
   final GetLoadingAvailableEntity? offers;
@@ -148,7 +147,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                               ],
                             ),
                             Label(
-                                text: '${widget.offers?.tripDetails?.cargoDescription ?? ""}',
+                                text: widget.offers?.tripDetails?.cargoDescription ?? "",
                                 style: Styles.mediumText())
                           ],
                         ),
@@ -222,11 +221,12 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                             ),
                           ),
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (!mounted) return; // Check if widget is still mounted
 
                             final price = widget.offers?.tripDetails?.price ?? 0;
                             final tripId = widget.offers?.tripDetails?.id ?? '';
-                            print("XXQ ${tripId}");
+                            print("XXQ $tripId");
                             print("XXQ ${widget.offers?.tripDetails?.id}");
 
                             context.read<DashboardsCubit>().createLoadingOffer(
@@ -254,6 +254,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                             fontSize: 23,
                           ),
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (!mounted) return; // Check if widget is still mounted
                             _showOfferFareBottomSheet(context, widget.offers?.tripDetails?.id ?? '');
                           },
@@ -351,6 +352,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                   radius: 15,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+      ManageVibration.vibrate();
                     final enteredPrice = num.tryParse(offerPriceController.text) ?? 0;
 
                     // Close the bottom sheet first
@@ -457,6 +459,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                   radius: 15,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+      ManageVibration.vibrate();
                     final enteredPrice = num.tryParse(offerPriceController.text) ?? 0;
                     Navigator.pop(context);
 
@@ -487,5 +490,4 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
     );
   }
 }
-
 

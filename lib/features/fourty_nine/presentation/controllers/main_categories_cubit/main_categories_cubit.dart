@@ -1,11 +1,11 @@
 import 'dart:developer';
+
 // import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -77,87 +77,73 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._getQuestionUseCase,
     this._answerQuestionUseCase,
     this._getMainCategoryDetailsUseCase,
-    this.getSettingsDashboardUsecase, this.listenToNewTripUseCase, this.listenToAcceptOfferUseCase,
+    this.getSettingsDashboardUsecase,
+    this.listenToNewTripUseCase,
+    this.listenToAcceptOfferUseCase,
   ) : super(MainCategoriesState());
 
-  Future<void> loadDataCategory(BuildContext context) async {
-    print("loadDataCategory");
-    await loadData(context);
-    await getMainCategoryDetails();
-    // await getQuestion();
-    await getMainCategoryCustomPage();
+  Future<void> answerQuestion(
+      {required String id,
+      required String answer,
+      required BuildContext context}) async {
+    final response = await _answerQuestionUseCase(
+        AnswerQuestionParams(id: id, answer: answer));
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      context.pop();
+      showErrorMessage(context, getFailureMessage(failure, context));
+
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
+      context.pop();
+      showSuccessMessage(context, LocaleKeys.successSubmit.localize);
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
-  Future<void> getMainCategoryDetails() async {
-    // if (user != null) {
-    final response =
-        await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
-    response.fold((failure) => emit(state.copyWith(status: StateStatus.error)),
-        (data) {
+  Future<bool> anyCashBack() async {
+    final response = await _anyCashBackUseCase(const NoParams());
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
+    return result;
+  }
+
+  Future<void> emitDriverLocation(
+      {required double lat, required double long}) async {
+    final result = await updateSocketLocationUseCase(
+        UpdateSocketLocationParams(latitude: lat, longitude: long));
+    result.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) async {});
+  }
+
+  Future<void> getCurrency() async {
+    final response = await _currencyUseCase.call(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (data) {
       emit(state.copyWith(
-        marriageMainCategory: data,
+        currency: data,
       ));
     });
-    // }
-  }
-
-  initNotification(){
-    log("contextinitNotification");
-    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-    serviceLocator<FcmNotificationHelper>().setup(currentContext);
-  }
-
-  Future<void> loadData(BuildContext context) async {
-    print("loadData");
-    initNotification();
-
-    emit(state.copyWith(status: StateStatus.loading));
-    // await UserCubit.to.getUser();
-    // getWallet();
-    getCurrency();
-    getSettings(context);
-    if (_fourtyNineSharedData.mainCategories.isEmpty) {
-      final user = UserCubit.to.state.data?.id;
-      print('userId1$user');
-      print('userId1$user');
-      final result = await _getMainCategoriesUseCase(
-          MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
-      result.fold(
-        (failure) {
-          emit(state.copyWith(
-            failure: failure,
-            status: StateStatus.error,
-          ));
-          CliLogger.error(
-              'can\'t load main categories there is an error ${failure.toString()}');
-        },
-        (r) async {
-          _fourtyNineSharedData.mainCategories = r;
-          CliLogger.info('main categories loaded in loadData : ${r.length}');
-          // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
-          // emit(state.copyWith(status: StateStatus.loading));
-          emit(state.copyWith(status: StateStatus.success, data: r));
-        },
-      );
-    } else {
-      final user = UserCubit.to.state.data;
-      print('userId2${user?.id ?? ''}');
-      // emit(state.copyWith(status: StateStatus.loading));
-      final result = await _getMainCategoriesUseCase(
-          MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
-
-      result.fold(
-        (failure) => emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        )),
-        (r) {
-          // _fourtyNineSharedData.mainCategories = r;
-          // emit(state.copyWith(status: StateStatus.loading));
-          emit(state.copyWith(status: StateStatus.success, data: r));
-        },
-      );
-    }
   }
 
   Future<void> getMainCategoryCustomPage() async {
@@ -174,6 +160,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(state.copyWith(
             failure: failure,
             status: StateStatus.error,
@@ -197,10 +187,16 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
           MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
 
       result.fold(
-        (failure) => emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        )),
+        (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          ));
+        },
         (r) {
           _fourtyNineSharedData.mainCategories = r;
           // emit(state.copyWith(status: StateStatus.loading));
@@ -210,72 +206,66 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     }
   }
 
-  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
-    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
-    bool result = false;
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
+  Future<void> getMainCategoryDetails() async {
+    // if (user != null) {
+    final response =
+        await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: StateStatus.error));
+    }, (data) {
+      emit(state.copyWith(
+        marriageMainCategory: data,
+      ));
     });
-    return result;
+    // }
   }
 
   Future<void> getQuestion() async {
     final response = await _getQuestionUseCase(const NoParams());
-    response.fold(
-        (failure) {
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
       emit(state.copyWith(question: data, status: StateStatus.success));
     });
   }
 
-  Future<void> answerQuestion(
-      {required String id,
-      required String answer,
-      required BuildContext context}) async {
-    final response = await _answerQuestionUseCase(
-        AnswerQuestionParams(id: id, answer: answer));
-    response.fold((failure) {
-      context.pop();
-      showErrorMessage(context, getFailureMessage(failure, context));
+  Future<void> getSettings(BuildContext context) async {
+    final Either<Failure, SettingsDashboardEntityResponse> result =
+        await getSettingsDashboardUsecase(const NoParams());
+    result.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
 
-      emit(state.copyWith(failure: failure, status: StateStatus.error));
-    }, (data) {
-      context.pop();
-      showSuccessMessage(context, LocaleKeys.successSubmit.localize);
-      emit(state.copyWith(status: StateStatus.success));
-    });
-  }
-
-  Future<bool> anyCashBack() async {
-    final response = await _anyCashBackUseCase(const NoParams());
-    bool result = false;
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
-    return result;
-  }
-
-  Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
-    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
-    bool result = false;
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
-    return result;
+        emit(state.copyWith(status: StateStatus.error, failure: failure));
+      },
+      (settings) {
+        String lady = '62ea012a69ea29c91dfc3917';
+        bool isReady = isServiceAvailable(settings);
+        bool isDriverLady =
+            settings.data.categoryIds.any((element) => element.id == lady);
+        print("isDriverLady $isDriverLady");
+        if (isReady) {
+          updateDriverLocation();
+          listenToNewTrip(context, settings.data.enableNotificationSound);
+          listenToAcceptOffer(context);
+        }
+        emit(state.copyWith(
+            status: StateStatus.success,
+            setting: settings,
+            isDriverLady: isDriverLady));
+      },
+    );
   }
 
   Future<void> getWallet() async {
@@ -283,6 +273,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     print('getWallet getWallet');
     final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
       emit(state.copyWith(
@@ -292,39 +285,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
   }
 
-  Future<void> getCurrency() async {
-    final response = await _currencyUseCase.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: StateStatus.error));
-    }, (data) {
-      emit(state.copyWith(
-        currency: data,
-      ));
-    });
-  }
-
-  Future<void> getSettings(BuildContext context) async {
-
-
-    final Either<Failure, SettingsDashboardEntityResponse> result =
-    await getSettingsDashboardUsecase(const NoParams());
-    result.fold(
-          (failure) {
-
-        emit(state.copyWith(status: StateStatus.error, failure: failure));
-      },
-          (settings) {
-
-        bool isReady = isServiceAvailable(settings);
-        if(isReady){
-          updateDriverLocation();
-          listenToNewTrip(context,settings.data.enableNotificationSound);
-          listenToAcceptOffer(context);
-        }
-        emit(state.copyWith(
-            status: StateStatus.success,setting: settings));
-      },
-    );
+  initNotification() {
+    log("contextinitNotification");
+    final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    serviceLocator<FcmNotificationHelper>().setup(currentContext);
   }
 
   bool isServiceAvailable(SettingsDashboardEntityResponse data) {
@@ -337,19 +302,22 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     return false;
   }
 
-  Future<void> emitDriverLocation({required double lat,required double long}) async {
-    final result = await updateSocketLocationUseCase(
-        UpdateSocketLocationParams(latitude: lat, longitude: long)
-    );
-    result.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) async {
-        });
+  void listenToAcceptOffer(BuildContext context) {
+    CliLogger.info('Listen To Update Trip Auto Accept');
+    listenToAcceptOfferUseCase((trip) {
+      final currentLocation = GoRouter.of(context).state.path;
+      if ('$currentLocation' == Paths.rideModeScreen) {
+        return;
+      }
+      context.push(Routes.rideModeScreen,
+          extra: const RideModeParams(
+              modeType: 'ride', currentIndex: 1, isSocket: true));
+    });
   }
 
-  void listenToNewTrip(BuildContext context,bool enableSound) {
+  void listenToNewTrip(BuildContext context, bool enableSound) {
     final currentLocation = GoRouter.of(context).state.path;
-    if('$currentLocation' == Paths.rideModeScreen){
+    if ('$currentLocation' == Paths.rideModeScreen) {
       return;
     }
     CliLogger.info('Listen To New Trip123');
@@ -358,45 +326,132 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
     listenToNewTripUseCase((trip) async {
       CliLogger.info('Listen To New ss');
-      if(enableSound){
+      if (enableSound) {
         await Future.delayed(
           const Duration(seconds: 1),
-              () {
-            if(context.isArabic){
+          () {
+            if (context.isArabic) {
               player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
-            }else{
+            } else {
               player.play(AssetSource("audio/u_have_a_new_ride_en.mp3"));
             }
           },
         );
       }
       final currentLocation = GoRouter.of(context).state.path;
-      if('$currentLocation' == Paths.rideModeScreen){
+      if ('$currentLocation' == Paths.rideModeScreen) {
         return;
       }
       context.push(Routes.rideModeScreen,
           extra: const RideModeParams(
-              modeType: 'ride',
-              isSocket: true,currentIndex: 0));
+              modeType: 'ride', isSocket: true, currentIndex: 0));
     });
   }
 
-  void listenToAcceptOffer(BuildContext context) {
-    CliLogger.info('Listen To Update Trip Auto Accept');
-    listenToAcceptOfferUseCase((trip) {
-      final currentLocation = GoRouter.of(context).state.path;
-      if('$currentLocation' == Paths.rideModeScreen){
-        return;
-      }
-      context.push(Routes.rideModeScreen,
-          extra: const RideModeParams(
-              modeType: 'ride',
-              currentIndex: 1,
-              isSocket: true));
-    });
+  Future<void> loadData(BuildContext context) async {
+    print("loadData");
+    initNotification();
+
+    emit(state.copyWith(status: StateStatus.loading));
+    // await UserCubit.to.getUser();
+    // getWallet();
+    getCurrency();
+    getSettings(context);
+    if (_fourtyNineSharedData.mainCategories.isEmpty) {
+      final user = UserCubit.to.state.data?.id;
+      print('userId1$user');
+      print('userId1$user');
+      final result = await _getMainCategoriesUseCase(
+          MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
+      result.fold(
+        (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          ));
+          CliLogger.error(
+              'can\'t load main categories there is an error ${failure.toString()}');
+        },
+        (r) async {
+          _fourtyNineSharedData.mainCategories = r;
+          CliLogger.info('main categories loaded in loadData : ${r.length}');
+          // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
+          // emit(state.copyWith(status: StateStatus.loading));
+          emit(state.copyWith(status: StateStatus.success, data: r));
+        },
+      );
+    } else {
+      final user = UserCubit.to.state.data;
+      print('userId2${user?.id ?? ''}');
+      // emit(state.copyWith(status: StateStatus.loading));
+      final result = await _getMainCategoriesUseCase(
+          MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
+
+      result.fold(
+        (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          ));
+        },
+        (r) {
+          // _fourtyNineSharedData.mainCategories = r;
+          // emit(state.copyWith(status: StateStatus.loading));
+          emit(state.copyWith(status: StateStatus.success, data: r));
+        },
+      );
+    }
   }
 
-  updateDriverLocation(){
+  Future<void> loadDataCategory(BuildContext context) async {
+    print("loadDataCategory");
+    await loadData(context);
+    await getMainCategoryDetails();
+    // await getQuestion();
+    await getMainCategoryCustomPage();
+  }
+
+  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
+    return result;
+  }
+
+  Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
+    return result;
+  }
+
+  updateDriverLocation() {
     final locationService = LocationService();
 
     locationService.startLocationTracking();
@@ -413,7 +468,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       //     textColor: Colors.white,
       //     fontSize: 16.0
       // );
-      print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+      print(
+          'New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     });
   }
 }

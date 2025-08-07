@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/entities/winners_ten_percent_entity.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/usecases/get_winners_ten_percent_use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/winners_ten_percent_entity.dart';
+import '../../../domain/usecases/get_winners_ten_percent_use_case.dart';
 
 part 'winners_ten_percent_state.dart';
 

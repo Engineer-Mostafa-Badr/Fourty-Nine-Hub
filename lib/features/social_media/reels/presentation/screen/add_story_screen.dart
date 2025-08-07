@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AddStoryScreen extends StatelessWidget {
   const AddStoryScreen({super.key});
@@ -89,6 +90,7 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                                           children: [
                                             InkWell(
                                               onTap: () {
+      ManageVibration.vibrate();
                                                 Navigator.pop(context);
                                               },
                                               child: Padding(
@@ -98,6 +100,7 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                                                         vertical: 10),
                                                 child: GestureDetector(
                                                   onTap: () {
+      ManageVibration.vibrate();
                                                     context.pushReplacement(
                                                       Routes.UseSoundScreen,
                                                     );
@@ -124,6 +127,7 @@ class _AddStoryBodyState extends State<AddStoryBody> {
                                             ),
                                             InkWell(
                                               onTap: () {
+      ManageVibration.vibrate();
                                                 Navigator.pop(context);
                                               },
                                               child: Padding(

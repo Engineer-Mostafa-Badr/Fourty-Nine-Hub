@@ -7,15 +7,13 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../data/models/client/driver_all_rating_model.dart';
 import '../../../domain/entities/client/client_all_rating_entity.dart';
-import '../../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AllClientRatingScreen extends StatelessWidget {
   const AllClientRatingScreen({super.key});
@@ -69,7 +67,10 @@ class AllClientRatingScreen extends StatelessWidget {
                     width: double.infinity,
                     child: AppButton(
                       backColor: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
-                      onPressed: () {},
+                      onPressed: () {
+
+      ManageVibration.vibrate();
+                      },
                       label:LocaleKeys.trip.localize,
                     ),
                   ),
@@ -82,7 +83,7 @@ class AllClientRatingScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ...ratings.map((review) => ReviewCard(review: review)).toList(),
+                  ...ratings.map((review) => ReviewCard(review: review)),
                 ],
               ),
             );
@@ -100,7 +101,7 @@ class InfoTile extends StatelessWidget {
   final String label;
   final String value;
 
-  const InfoTile({required this.label, required this.value});
+  const InfoTile({super.key, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -204,4 +205,3 @@ class ReviewCard extends StatelessWidget {
     );
   }
 }
-

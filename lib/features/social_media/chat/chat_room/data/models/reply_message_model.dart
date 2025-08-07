@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/reply_message_entity.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../domain/entities/message_sender_entity.dart';
+import '../../domain/entities/reply_message_entity.dart';
+import '../../../../../../res/style/const.dart';
 
 import 'message_media_model.dart';
 

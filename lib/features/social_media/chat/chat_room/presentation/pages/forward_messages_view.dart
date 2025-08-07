@@ -20,6 +20,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ForwardMessagesViewParams {
   final ChatsCubit chatsCubit;
@@ -43,7 +44,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
     with TickerProviderStateMixin {
   bool isLoading = false;
   bool isStorySelected = false;
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
               ),
               leading: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 icon: const Icon(
@@ -223,6 +225,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                             right: 10,
                             child: FloatingActionButton(
                               onPressed: () async {
+      ManageVibration.vibrate();
                                 if (_messageController.text.isNotEmpty) {
                                   MessageEntity message = MessageEntity(
                                     id: '',
@@ -322,6 +325,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                               : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
                           // Highlight color on tap
                           onTap: () {
+      ManageVibration.vibrate();
                             // setState(() {
                             if (!state.chats![index].isSelected) {
                               context
@@ -619,6 +623,7 @@ class _StoryCardState extends State<StoryCard> {
           : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
       // Highlight color on tap
       onTap: () {
+      ManageVibration.vibrate();
         // setState(() {
         setState(() {
           if (!isStorySelected) {

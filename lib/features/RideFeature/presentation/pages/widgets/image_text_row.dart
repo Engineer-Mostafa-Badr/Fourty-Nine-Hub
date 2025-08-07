@@ -10,11 +10,11 @@ class ImageTextRow extends StatelessWidget {
   final double imageSize;
 
   const ImageTextRow({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.text,
     this.imageSize = 32.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

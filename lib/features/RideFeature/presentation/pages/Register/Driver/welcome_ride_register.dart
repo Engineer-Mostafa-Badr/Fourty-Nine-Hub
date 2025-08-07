@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -17,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/register_floating_action_button.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class WelcomeRideRegister extends StatefulWidget {
   const WelcomeRideRegister({super.key, required this.isShipping});
@@ -83,6 +81,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                                   var subCategory = list?[index];
                                   return  InkWell(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       if(widget.isShipping==true){
                                         cubit.onSelectShippingSubCategory(subCategory?.subCategoryId??'',context);
                                       }else{
@@ -127,6 +126,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
               ),
               RegisterNextRow(
                 onTap: () {
+      ManageVibration.vibrate();
                   if(widget.isShipping==true){
                     if(state.shippingSubCategories?.where((e)=>e.isSelected==true).toList().isEmpty??false){
                       showErrorMessage(context, context.isArabic?'يجب اختيار صنف واحد على الاقل':'Please select at least one category');

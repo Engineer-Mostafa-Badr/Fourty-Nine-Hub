@@ -30,6 +30,7 @@ class SharedScaffold extends StatelessWidget {
       drawer: const DrawerWidget(),
       body: body,
       appBar: PreferredSize(
+        
         preferredSize: const Size.fromHeight(30),
         child: HomeAppbar(
           isWithBackArrow: isWithBackArrow,

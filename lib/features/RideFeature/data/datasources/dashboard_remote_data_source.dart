@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/availa
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/energency_contact_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/running_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/support_details_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_auto_accept_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_price_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
@@ -17,8 +16,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/av
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
@@ -38,7 +35,6 @@ import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
 import '../../../food_feature/restaurants_list/data/models/rate_response_model.dart';
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
-import '../../domain/entities/create_no_track_trip_entity.dart';
 import '../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 import '../../domain/entities/dashboards/driver_settings_entity.dart';
 import '../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
@@ -59,7 +55,6 @@ import '../../domain/usecases/dashboards/loading/create_rate_with_driver_loading
 import '../../domain/usecases/dashboards/loading/update_driver_loading_settings_use_case.dart';
 import '../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../domain/usecases/get_client_pending_untracked_trips_use_case.dart';
-import '../models/create_no_track_trip_model.dart';
 import '../models/dashboards/create_non_track_offer_model.dart';
 import '../models/dashboards/driver_settings_model.dart';
 import '../models/dashboards/get_accepted_ride_non_socket_trip_model.dart';
@@ -83,13 +78,13 @@ abstract class TripRemoteDataSource {
 
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, RunningTripEntity>> getRunningTrip();
-  Future<Either<Failure, bool>> goingToClient(String id);
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id);
   Future<Either<Failure, bool>> arrivedToClient(ArrivedToClientEntity params);
   Future<Either<Failure, List<EmergencyContactEntity>>> getEmergencyContacts();
   Future<Either<Failure, EmergencyContactEntity>> addEmergencyContacts(EmergencyContactEntity params);
   Future<Either<Failure, EmergencyContactEntity>> editEmergencyContacts(EmergencyContactEntity params);
   Future<Either<Failure, bool>> deleteEmergencyContact(EmergencyContactEntity params);
-  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params);
+  Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTrip(StartDriverTripParams params);
   Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
   Future<Either<Failure, bool>> driverRateClient(DriverRateClientParams params);
@@ -592,14 +587,14 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> goingToClient(String id) async {
+  Future<Either<Failure, RunningTripEntity>> goingToClient(String id) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.goingToClient(id),
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']);
+        return Right(RunningTripModel.fromJson(data['data']['driverIsArrivingIn']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -620,12 +615,12 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> startDriverTrip(StartDriverTripParams params) async {
+  Future<Either<Failure, String>> startDriverTrip(StartDriverTripParams params) async {
     try {
       final response = await _apiConsumer.put(EndPoints.startDriverTrip(params.tripId), data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']);
+        return Right(data['data']['tripStartedAt']??'');
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -851,7 +846,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateUntrackedTrip, (data) {
         CliLogger.info(" New Trip Trip data :  $data");
         log(" New Trip Trip data :  $data");
-        print(" New Trip Trip data :  ${data}");
+        print(" New Trip Trip data :  $data");
         params(GetAvailableRideNonSocketTripModel.fromJson(data["tripsUpdated"]));
       });
     } catch (e) {
@@ -861,7 +856,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
 
   @override
   Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params) async{
-    final url = "${EndPoints.addRateToClientWithDriverNonSocket}";
+    final url = EndPoints.addRateToClientWithDriverNonSocket;
 
     final response = await _apiConsumer.post(url,data: params.toJson());
 
@@ -946,7 +941,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
 
   @override
   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateNonSocket(UpdateClientRateParams params) async{
-    final url = "${EndPoints.updateDriverRatingNonSocket}";
+    final url = EndPoints.updateDriverRatingNonSocket;
 
     final response = await _apiConsumer.put(url,data: params.toJson());
 
@@ -976,7 +971,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
 
   @override
   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverLoadingSettings(UpdateDriverSettingsLoadingParams params) async{
-    final url = "${EndPoints.updateDriverLoadingSettings}";
+    final url = EndPoints.updateDriverLoadingSettings;
 
     final response = await _apiConsumer.put(url,data: params.toJson());
 
@@ -1012,7 +1007,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.newLoadingTrip, (data) {
         CliLogger.info(" New Loading  data :  $data");
         log(" New Loading  data :  $data");
-        print(" New Loading  data :  ${data}");
+        print(" New Loading  data :  $data");
         params(GetLoadingAvailableModel.fromJson(data["tripsUpdated"]));
       });
     } catch (e) {
@@ -1022,7 +1017,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
 
   @override
   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params)async {
-    final url = "${EndPoints.updateDriverLoadingRatingNonSocket}";
+    final url = EndPoints.updateDriverLoadingRatingNonSocket;
 
     final response = await _apiConsumer.put(url,data: params.toJson());
 

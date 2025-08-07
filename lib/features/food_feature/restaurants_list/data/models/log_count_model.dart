@@ -1,7 +1,7 @@
 import '../../domain/entities/log_count_entity.dart';
 
 class RequestLogCountModel extends RequestLogCountEntity {
-  const RequestLogCountModel({required int count}) : super(count: count);
+  const RequestLogCountModel({required super.count});
 
   factory RequestLogCountModel.fromJson(Map<String, dynamic> json) {
     return RequestLogCountModel(

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../repositories/tinder_repository.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 
 class FetchSubCategoryDataUseCase
     extends UseCase<List<SubCategoryEntity>, NoParams> {

@@ -1,7 +1,7 @@
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../domain/entity/banner_talent_entity.dart';
+import '../../../domain/entity/star_entity.dart';
+import '../../../domain/entity/star_winner_entity.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 

@@ -14,6 +14,7 @@ import '../../../../../../../core/messages/messages.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SelectDropOffPoints extends StatefulWidget {
   const SelectDropOffPoints({super.key});
@@ -58,6 +59,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                   )),
                   InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       context.pop();
                     },
                     child: const CircleAvatar(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/auto_play_video_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/helpers/media_helper.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'auto_play_video_widget.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../helpers/media_helper.dart';
 
 class ImagePostWidget extends StatelessWidget {
   final InstagramPostEntity instagramPostEntity;

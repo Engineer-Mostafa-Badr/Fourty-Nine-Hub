@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/name_and_verified_mark.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/sub_title_header_post.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'instagram_users_mention_bottom_sheet_widget.dart';
+import 'name_and_verified_mark.dart';
+import 'sub_title_header_post.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
   const InstagramUserInfoWithMentionPostWidget({
@@ -40,6 +41,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               context.go(
                 Routes.INSTAGRAMPROFILE,
                 extra: userId,
@@ -94,6 +96,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.white,

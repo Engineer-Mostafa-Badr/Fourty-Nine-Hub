@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../../components/defines.dart';
 import '../seat/seat_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomHostLockSeatButton extends StatefulWidget {
@@ -35,6 +36,7 @@ class _ZegoLiveAudioRoomHostLockSeatButtonState
     final sizeBoxSize = widget.iconSize ?? Size(56.zR, 56.zR);
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         widget.seatManager.lockSeat(
           !widget.seatManager.isRoomSeatLockedNotifier.value,
         );

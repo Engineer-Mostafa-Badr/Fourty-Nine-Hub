@@ -9,6 +9,7 @@ import '../../../../../../../common/widgets/form/text_fields/form_text_field.dar
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideContactPhoneNumber extends StatelessWidget {
   final formState = GlobalKey<FormState>();
@@ -48,6 +49,7 @@ class RideContactPhoneNumber extends StatelessWidget {
               AppButton(
                   label: 'Done',
                   onPressed: () {
+      ManageVibration.vibrate();
                     if (formState.currentState!.validate()) {
                       if (onSubmit != null) {
                         onSubmit!();

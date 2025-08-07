@@ -6,11 +6,11 @@ class OtpInputWidget extends StatefulWidget {
   final ValueChanged<String>? onChanged;
 
   const OtpInputWidget({
-    Key? key,
+    super.key,
     this.length = 6,
     this.onCompleted,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<OtpInputWidget> createState() => _OtpInputWidgetState();

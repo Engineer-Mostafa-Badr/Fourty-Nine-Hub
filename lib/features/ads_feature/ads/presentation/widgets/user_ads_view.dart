@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -13,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/user
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -56,6 +55,7 @@ class UserAdsView extends StatelessWidget {
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
+      ManageVibration.vibrate();
                             dynamic data = await context.push(Routes.FILTERADS,
                                 extra: FilterAdsParams(
                                   categorization: CategorizationEntity(
@@ -86,6 +86,7 @@ class UserAdsView extends StatelessWidget {
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
+      ManageVibration.vibrate();
                             dynamic data = await context.push(
                                 Routes.GOVERNORATEFILTERADS,
                                 extra: CategorizationEntity(

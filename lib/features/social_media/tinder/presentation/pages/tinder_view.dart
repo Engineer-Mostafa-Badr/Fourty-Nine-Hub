@@ -5,19 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../widgets/tinder_card_stack.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TinderView extends StatelessWidget {
   const TinderView({super.key});
@@ -136,6 +137,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
               ),
               IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   // setState(() {
                   //   isMaleSelected = !isMaleSelected!; // Toggle the state
                   //   final tinderCubit = context.read<TinderViewCubit>();
@@ -183,7 +185,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
         controller: _scrollController,
         child: const Column(
           children: [
-            const Sizer(),
+            Sizer(),
             TinderCardStack()
             // if (state.userData0 != null && state.userData0!.isNotEmpty)
             //   const TinderCardStack()

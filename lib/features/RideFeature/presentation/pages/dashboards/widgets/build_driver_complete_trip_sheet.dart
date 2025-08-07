@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,25 +9,26 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BuildDriverCompleteTripSheet extends StatefulWidget {
   const BuildDriverCompleteTripSheet(
-      {super.key, required this.onPressed,required this.onSafety,required this.onCancelTrip,required this.params,required this.onReport, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
+      {super.key, required this.onPressed,this.activeTrip,required this.onSafety,required this.onCancelTrip,required this.params,required this.onReport, required this.onStartRecord, required this.onStopRecord, required this.onCompleteRide, required this.onCompleteRideWithPrice, required this.tripId});
   final Function(String) onPressed;
   final Function onStartRecord;
   final Function onStopRecord;
@@ -37,6 +39,7 @@ class BuildDriverCompleteTripSheet extends StatefulWidget {
   final VoidCallback onReport;
   final RideModeParams params;
   final Function(CancelTripByRiderUseCaseParams params) onCancelTrip;
+  final RunningTripEntity? activeTrip;
 
   @override
   State<BuildDriverCompleteTripSheet> createState() => _BuildDriverCompleteTripSheetState();
@@ -54,6 +57,22 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
   TextEditingController otherController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
+
+  Future<void> openGoogleMapsWithDirections({
+    required double startLat,
+    required double startLng,
+    required double targetLat,
+    required double targetLng,
+  }) async {
+    final googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$targetLat,$targetLng&travelmode=driving';
+
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch Google Maps';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,29 +136,39 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+
                     // PaymentInfoWidget(price: price),
                     //
                     LocationInfoWidget(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       hasTitle: !_isComplete,
                       from: 'أول العاشر من رمضان',
                       to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                     ),
                     const SizedBox(height: 10),
                     if (!_isComplete) ...[
-                      Container(
-                        width: double.infinity,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
-                        child: Text(
-                          context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
-                          style: const TextStyle(
-                            fontSize: FontSize.s16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.whiteColor,
+                      ClickableWidget(
+                        onTap: ()
+                        {
+                          ManageVibration.vibrate();
+                          openGoogleMapsWithDirections(
+                            startLat: widget.activeTrip?.startCoordinates?[1] ?? 0.0,
+                            startLng: widget.activeTrip?.startCoordinates?[0] ?? 0.0,
+                            targetLat: widget.activeTrip?.targetCoordinates?[1] ?? 0.0,
+                            targetLng: widget.activeTrip?.targetCoordinates?[0] ?? 0.0,
+                          );},
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                          child: Text(
+                            context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
+                            style: const TextStyle(
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.whiteColor,
+                            ),
                           ),
                         ),
                       ),
@@ -153,7 +182,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                             Icon(Icons.info_outline, color: context.isDarkMode?AppColors.whiteColor:Colors.black54),
                             SizedBox(width: 5),
                             Text(
-                              "Travel time: ~14 min. Distance: 6.58 Km.",
+                              "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${FormatNumbers().convertNumberToLocalizedString('${widget.activeTrip?.duration??''}', isArabic: context.isArabic)} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${FormatNumbers().convertNumberToLocalizedString(((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}.",
                               style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                             ),
                           ],
@@ -162,6 +191,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                       const SizedBox(height: 12),
                       ClickableWidget(
                         onTap: () {
+                          ManageVibration.vibrate();
                           if (_isRecording) {
                             setState(() {
                               _isRecording = false;
@@ -190,11 +220,12 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                           ),
                         ),
                       ),
-                      Text(context.isArabic?'اخر تسجيل صوتي فقط سيم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
+                      Text(context.isArabic?'اخر تسجيل صوتي فقط سيتم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
 
                       const SizedBox(height: 12),
                       ClickableWidget(
                         onTap: () {
+                          ManageVibration.vibrate();
                           setState(() {
                             _isComplete = true;
                           });
@@ -217,6 +248,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                       const SizedBox(height: 12),
                       ClickableWidget(
                         onTap: () {
+                          ManageVibration.vibrate();
                           setState(() {
                             _isComplete = true;
                             _isCompleteWithPrice = true;
@@ -244,6 +276,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                               context: context,
                               isChangedMindReason: _isChangedMindReason,
                               onSelectChangedMindReason: () {
+                                ManageVibration.vibrate();
                                 setState(() {
                                   _isClientNotShownReason = false;
                                   _isChangedMindReason = !_isChangedMindReason;
@@ -252,6 +285,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                               },
                               isClientNotShownReason: _isClientNotShownReason,
                               onSelectClientNotShownReason: () {
+                                ManageVibration.vibrate();
                                 setState(() {
                                   _isClientNotShownReason = !_isClientNotShownReason;
                                   _isChangedMindReason = false;
@@ -260,6 +294,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                               },
                               isOtherReason: _isOtherReason,
                               onSelectOtherReason: () {
+                                ManageVibration.vibrate();
                                 setState(() {
                                   _isClientNotShownReason = false;
                                   _isChangedMindReason = false;
@@ -347,6 +382,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                       ClickableWidget(
                         onTap: () {
                           if(_isCompleteWithPrice==true){
+                            ManageVibration.vibrate();
                             if(formKey.currentState!.validate()){
                               widget.onCompleteRideWithPrice(_controller.text);
                             }
@@ -374,6 +410,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                       ),
                       ClickableWidget(
                         onTap: () {
+                          ManageVibration.vibrate();
                           setState(() {
                             _isComplete = false;
                             _isCompleteWithPrice = false;
@@ -497,6 +534,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -522,6 +560,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -547,6 +586,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -601,6 +641,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                         label: context.isArabic ? 'الغاء' : 'Close',
                         backColor: AppColors.SECONDARY_COLOR_DARK2,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context.pop();
                           // cubit
                         }),
@@ -610,6 +651,7 @@ class _BuildDriverCompleteTripSheetState extends State<BuildDriverCompleteTripSh
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () async {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             onCancelTrip(CancelTripByRiderUseCaseParams(

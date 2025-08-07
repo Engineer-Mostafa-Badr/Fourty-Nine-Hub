@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomDropdown<T> extends StatefulWidget {
   const CustomDropdown({
@@ -147,6 +148,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                           final item = widget.items[index];
                           return InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() => _selectedItem = item);
                               widget.onItemSelected(item);
                               _closeDropdown();
@@ -221,6 +223,6 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
       return widget.hint;
     }
 
-    return widget.displayStringForItem(_selectedItem!);
+    return widget.displayStringForItem(_selectedItem as T);
   }
 }

@@ -2,15 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_image_picker_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateDoctorLicensePhotoPicker extends StatelessWidget {
   const CreateDoctorLicensePhotoPicker({super.key});
@@ -68,6 +66,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                           ? File(state.file.path)
                           : null,
                       onTap: () async {
+      ManageVibration.vibrate();
                         await createDoctorCubit.uploadPracticingFrontImage(context: context);
                       },
                     );
@@ -127,6 +126,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                           ? File(state.file.path)
                           : null,
                       onTap: () async {
+      ManageVibration.vibrate();
                         await createDoctorCubit.uploadPracticingBehindImage(context: context);
                       },
                     );

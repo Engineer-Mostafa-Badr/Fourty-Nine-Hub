@@ -6,9 +6,10 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
@@ -24,20 +26,18 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/send_file.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/send_contacts.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
-// import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:flutter_video_thumbnail_plus/flutter_video_thumbnail_plus.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
 import '../../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../widgets_contacts/recived_contacts.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class MessageCard extends StatelessWidget {
   final MessageEntity messageEntity;
@@ -205,6 +205,7 @@ class MessageCard extends StatelessWidget {
             },
       child: InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           log("message sender id : ${messageEntity.sender.id}");
           if (messageEntity.isSelected) {
             context
@@ -316,6 +317,7 @@ class MessageCard extends StatelessWidget {
             },
       child: InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           log("message sender id : ${messageEntity.sender.id}");
           if (messageEntity.isSelected) {
             context
@@ -505,6 +507,7 @@ class MessageCard extends StatelessWidget {
                       actions: [
                         TextButton(
                           onPressed: () {
+      ManageVibration.vibrate();
                             Navigator.of(context).pop();
                           },
                           child: const Text("OK"),
@@ -518,6 +521,7 @@ class MessageCard extends StatelessWidget {
                 //   actions: [
                 //     TextButton(
                 //       onPressed: () {
+      ManageVibration.vibrate();
                 //         Navigator.of(context).pop();
                 //       },
                 //       child: const Text("OK"),
@@ -545,6 +549,7 @@ class MessageCard extends StatelessWidget {
         showAlert(context, messageEntity, chatRoomCubit);
       },
       onTap: () {
+      ManageVibration.vibrate();
         log("message sender id : ${messageEntity.sender.id}");
         if (messageEntity.isSelected) {
           context
@@ -911,6 +916,7 @@ class MessageCard extends StatelessWidget {
                                     : const SizedBox(),
                                 InkWell(
                                   onTap: () async {
+      ManageVibration.vibrate();
                                     if ((!messageEntity.isOneTimeSeenMessage) &&
                                         (messageEntity.media.isEmpty)) {
                                       await chatRoomCubit.getOneTimeViewMessage(
@@ -937,6 +943,7 @@ class MessageCard extends StatelessWidget {
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () {
+      ManageVibration.vibrate();
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
@@ -958,6 +965,7 @@ class MessageCard extends StatelessWidget {
                                                   //   actions: [
                                                   //     TextButton(
                                                   //       onPressed: () {
+      ManageVibration.vibrate();
                                                   //         Navigator.of(context)
                                                   //             .pop();
                                                   //       },
@@ -1261,6 +1269,7 @@ class MessageCard extends StatelessWidget {
     final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         log("message sender id : ${messageEntity.sender.id}");
         if (messageEntity.isSelected) {
           context
@@ -1525,6 +1534,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
     final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (widget.messageEntity.isSelected) {
           context
               .read<ChatRoomCubit>()
@@ -1638,6 +1648,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                           width: MediaQuery.of(context).size.width * 0.7,
                           child: GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               log("voice message card tap is listened : ${widget.messageEntity.isListened}");
                               log("voice message card tap : ${widget.messageEntity.toString()}");
                             },
@@ -2103,6 +2114,7 @@ class FourOrMoreMediaCard extends StatelessWidget {
             right: 8,
             child: GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 context.push(Routes.SHOWIMAGEVIEW, extra: messageEntity);
               },
               child: Container(
@@ -2282,6 +2294,7 @@ class CustomVideoCard extends StatelessWidget {
         builder: (context, snapshot) {
           return InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(
                 Routes.IMAGESPAGEVIEW,
                 extra: ImagesPageViewParams(
@@ -2357,6 +2370,7 @@ class _CustomChachedNetworkImageState extends State<CustomChachedNetworkImage> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(
           Routes.IMAGESPAGEVIEW,
           extra: ImagesPageViewParams(

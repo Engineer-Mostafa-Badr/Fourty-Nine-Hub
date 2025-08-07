@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../common/functions/global/upload_file.dart';
+import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../create_post/presentation/widgets/image_details.dart';
+import '../../../domain/entities/main_post_entity.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../pages/show_post_images.dart';
+import '../facebook_widgets/image_from_internet.dart';
+import '../../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../twitter/presentation/pages/twitter_post_details.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookTweetCard extends StatelessWidget {
   const FacebookTweetCard({super.key, required this.post});
@@ -48,6 +49,7 @@ class FacebookTweetCard extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               bottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -71,7 +73,7 @@ class FacebookTweetCard extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    if (post.content!.isNotEmpty || post.images!.isNotEmpty)
+                    if (post.content!.isNotEmpty || post.images.isNotEmpty)
                       _buildContent(context: context, post: post),
                     SizedBox(
                       height: 10.h,
@@ -166,22 +168,23 @@ class FacebookTweetCard extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          if ((post.images?.isNotEmpty ?? false))
+          if ((post.images.isNotEmpty ?? false))
             GridView.builder(
                 padding: const EdgeInsets.all(10),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: post.images!.length == 1 ? 1 : 2),
-                itemCount: post.images!.length < 4 ? post.images!.length : 4,
+                    crossAxisCount: post.images.length == 1 ? 1 : 2),
+                itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         if (index != 3 ||
-                            (index == 3 && post.images!.length == 4)) {
+                            (index == 3 && post.images.length == 4)) {
                           showDialog(
                               context: context,
                               builder: (context) => ImageDetailsScreen(
-                                    image: post.images![index],
+                                    image: post.images[index],
                                     fromPost: true,
                                     onRemoveImage: () {
                                       // controller
@@ -207,10 +210,10 @@ class FacebookTweetCard extends StatelessWidget {
                           Stack(
                             children: [
                               ImageFromInternet(
-                                image: post.images?[index] ?? '',
+                                image: post.images[index] ?? '',
                                 defaultLogo: true,
                               ),
-                              if (index == 3 && post.images!.length > 4)
+                              if (index == 3 && post.images.length > 4)
                                 Container(
                                   margin: const EdgeInsetsDirectional.only(
                                       end: 10, bottom: 10),
@@ -222,7 +225,7 @@ class FacebookTweetCard extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Label(
-                                      text: "+${post.images!.length - 4}",
+                                      text: "+${post.images.length - 4}",
                                       style: Styles.headerText(
                                         color: Colors.white,
                                       ),
@@ -269,6 +272,7 @@ class FacebookTweetCard extends StatelessWidget {
                   itemCount: post.images!.length < 4 ? post.images!.length : 4,
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           if (index != 3 ||
                               (index == 3 && post.images!.length == 4)) {
                             showDialog(

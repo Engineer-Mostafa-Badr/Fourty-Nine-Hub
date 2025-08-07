@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +16,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ComeWithMeSearchView extends StatefulWidget {
   const ComeWithMeSearchView({
@@ -182,6 +182,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
               const Sizer(),
               InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (formKey.currentState!.validate()) {
                     context.read<RequestTripJoinCubit>().makeTripJoinRequest(
                         addId: widget.tripJoinCardEntity.id,

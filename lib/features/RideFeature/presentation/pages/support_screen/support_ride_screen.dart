@@ -6,14 +6,11 @@ import 'package:fourtyninehub/core/enums/support_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SupportRideParams {
   final String tripId;
@@ -84,6 +81,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
+      ManageVibration.vibrate();
                     // context.push(Routes.emergencyContactsScreen);
                   },
                   icon: const Icon(Icons.download, color: Colors.white),
@@ -137,6 +135,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                   height: 50,
                   child: state.isLoadingSubmitRequest? const Center(child: CustomCircularProgressIndicator()): ElevatedButton(
                     onPressed: () {
+      ManageVibration.vibrate();
                       if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                         if(form.currentState!.validate()){
                           cubit.requestEmergencySupport(context: context, clientId: widget.params.clientId, driverId: widget.params.driverId, tripId: widget.params.tripId,userType: widget.params.userType, tripType: widget.params.tripType);

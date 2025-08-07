@@ -1,32 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_google_maps.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../../../ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import '../../../domain/entities/main_post_entity.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../../pages/search_app_users.dart';
+import '../facebook_widgets/facebook_google_maps.dart';
+import '../facebook_widgets/image_from_internet.dart';
+import 'build_with_users.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
+import '../../../../twitter/data/models/twitter_user_model.dart';
+import '../../../../twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -34,7 +25,6 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
@@ -42,6 +32,7 @@ import '../../../../../../service_locator/service_locator.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookPostCard extends StatefulWidget {
   final PostEntity post;
@@ -333,6 +324,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                       isImage: false,
       //                       icon: FontAwesomeIcons.share,
       //                       onTap: () async {
+      ManageVibration.vibrate();
       //                         showModalBottomSheet(
       //                           backgroundColor: Colors.white,
       //                           context: context,
@@ -401,6 +393,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                                           Expanded(
       //                                             child: ClickableWidget(
       //                                               onTap: () async {
+      ManageVibration.vibrate();
       //                                                 if (controller
       //                                                     .shareFormKey
       //                                                     .currentState!
@@ -454,6 +447,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                                           Expanded(
       //                                             child: TextButton(
       //                                               onPressed: () {
+      ManageVibration.vibrate();
       //                                                 Navigator.of(context)
       //                                                     .pop();
       //                                               },
@@ -585,6 +579,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                     isImage: true,
       //                     image: Assets.facebookShare,
       //                     onTap: () async {
+      ManageVibration.vibrate();
       //                       var result = await controller.onShare(
       //                           postId: myPost.isShared == true
       //                               ? myPost.mainPost!.id
@@ -611,6 +606,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }) {
     return ClickableWidget(
       onTap: () {
+      ManageVibration.vibrate();
         showCustomBottomSheet(context);
         // bottomSheet(
         //   context: context,
@@ -625,6 +621,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //           children: [
         //             IconButton(
         //               onPressed: () {
+      ManageVibration.vibrate();
         //                 Navigator.pop(context);
         //               },
         //               icon: const Icon(Icons.arrow_back),
@@ -639,6 +636,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //            // const Spacer(),
         //             IconButton(
         //                 onPressed: () {
+      ManageVibration.vibrate();
         //                   showDialog(
         //                       context: context,
         //                       builder: (_) =>
@@ -655,6 +653,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //           children: [
         //             ClickableWidget(
         //               onTap: () {
+      ManageVibration.vibrate();
         //                 if (widget.fromProfile == false) {
         //                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
         //                 }
@@ -682,6 +681,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //             const Sizer(),
         //             ClickableWidget(
         //               onTap: () {
+      ManageVibration.vibrate();
         //                 if (widget.fromProfile == false) {
         //                   context.push(Routes.OTHERSACCOUNT,
         //                       extra: post.user.id);
@@ -767,6 +767,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //             //           : LocaleKeys
         //             //           .addFriend.localize,
         //             //       onPressed: () {
+      ManageVibration.vibrate();
         //             //         onAddFriend();
         //             //       }),
         //             // )
@@ -805,6 +806,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 title: LocaleKeys.reportPost.localize,
                 subTitle: LocaleKeys.youWillReportPost.localize,
                 onTap: () async {
+      ManageVibration.vibrate();
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
                         context: context,
@@ -821,6 +823,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.deletePost(post.id);
                   if (fromDetails == true) {
                     context.pop();
@@ -832,6 +835,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
+      ManageVibration.vibrate();
                 widget.hidePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
@@ -851,6 +855,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -879,6 +884,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             children: [
               ClickableWidget(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (widget.fromProfile == false) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
@@ -894,6 +900,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               Expanded(
                 child: ClickableWidget(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (widget.fromProfile == false) {
                       context.push(Routes.OTHERSACCOUNT,
                           extra: post.user.id);
@@ -907,6 +914,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           "${post.user.firstName} ${post.user.lastName}",
                           style: Styles.headerText(fontSize: 32),
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (widget.fromProfile == false) {
                               context.push(Routes.OTHERSACCOUNT,
                                   extra: post.user.id);
@@ -923,7 +931,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
                             WidgetSpan(
                                 child: ClickableWidget(
-                                  onTap: (){},
+                                  onTap: (){
+
+      ManageVibration.vibrate();
+                                  },
                                   child: const Icon(
                                     Icons.group,
                                     size: 14,
@@ -939,6 +950,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               IconAppButton(
                 icon: Icons.more_horiz_outlined,
                 onPressed: () {
+      ManageVibration.vibrate();
                   bottomSheet(
                     backColor: Theme.of(context).scaffoldBackgroundColor,
                     context: context,
@@ -956,6 +968,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               padding: const EdgeInsetsDirectional.only(start: 40.0),
               child: ClickableWidget(
                 onTap: () {
+      ManageVibration.vibrate();
                   showDialog(
                       context: context,
                       builder: (_) => CustomScaffold(
@@ -994,6 +1007,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           ClickableWidget(
             onTap: () {
+      ManageVibration.vibrate();
               if (widget.fromProfile == false) {
                 context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
@@ -1012,6 +1026,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 children: [
                   ClickableWidget(
                     onTap: () {
+      ManageVibration.vibrate();
                       if (widget.fromProfile == false) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                       }
@@ -1028,6 +1043,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                     fontSize: 32,
                                     color: Theme.of(context).primaryColor),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   if (widget.fromProfile == false) {
                                     context.push(Routes.OTHERSACCOUNT,
                                         extra: post.user.id);
@@ -1041,6 +1057,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                     fontSize: 32,
                                     color: AppColors.LIGHT_BLUE),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   // if (widget.fromProfile == false) {
                                   //   context.push(Routes.OTHERSACCOUNT,
                                   //       extra: post.user.id);
@@ -1158,6 +1175,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     mainAxisCellCount: mainAxisCellCount,
                     child: ClickableWidget(
                       onTap: () {
+      ManageVibration.vibrate();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -1369,7 +1387,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               width: 10,
             ),
           ],
-          if (post.users != null && post.users!.isNotEmpty)
+          if (post.users.isNotEmpty)
             Row(
               children: [
                 Label(
@@ -1378,28 +1396,30 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.OTHERSACCOUNT,
-                        extra: post.users![0].id);
+                        extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                    "${post.users![0].firstName} ${post.users![0].lastName} ",
+                    "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style: Styles.smallText(
                         decoration: TextDecoration.underline,
                         color: AppColors.GREY_NORMAL_COLOR),
                   ),
                 ),
-                if (post.users!.length > 1)
+                if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                              users: post.users!,
+                              users: post.users,
                             ));
                       },
                       child: Label(
-                        text: '+${post.users!.length - 1}',
+                        text: '+${post.users.length - 1}',
                         style: Styles.mediumText(
                             color: AppColors.GREY_NORMAL_COLOR),
                       ))
@@ -1445,6 +1465,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       children: [
                         IconButton(
                           onPressed: () {
+      ManageVibration.vibrate();
                             Navigator.pop(context);
                           },
                           icon: const Icon(Icons.arrow_back),
@@ -1458,6 +1479,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         ),
                         IconButton(
                           onPressed: () {
+      ManageVibration.vibrate();
                             showDialog(
                               context: context,
                               builder: (_) => const SearchAppUsers(),
@@ -1508,6 +1530,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                               children: [
                                 ClickableWidget(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     if (widget.fromProfile == false) {
                                       context.push(
                                         Routes.OTHERSACCOUNT,
@@ -1540,6 +1563,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                 const Sizer(),
                                 ClickableWidget(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     if (widget.fromProfile == false) {
                                       context.push(
                                         Routes.OTHERSACCOUNT,

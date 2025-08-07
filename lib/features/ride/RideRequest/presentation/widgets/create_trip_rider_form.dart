@@ -23,14 +23,13 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateTripRiderForm extends StatefulWidget {
   const CreateTripRiderForm({super.key});
@@ -149,6 +148,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   condition: time == null);
                             },
                             onTap: () async {
+      ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 TimeOfDay? pickedTime = await showTimePicker(
                                     context: context,
@@ -184,6 +184,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   condition: date == null);
                             },
                             onTap: () async {
+      ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 DateTime? pickedDate = await showDatePicker(
                                   context: context,
@@ -388,6 +389,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                             label: LocaleKeys.premiumRequest.tr(),
                             style: Styles.headerText(color: Colors.white),
                             onPressed: () {
+      ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 if (formKey.currentState!.validate()) {
                                   createRequestCubit.createRequestPremium(
@@ -423,6 +425,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                             label: LocaleKeys.request.tr(),
                             style: Styles.headerText(color: Colors.white),
                             onPressed: () async {
+      ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 if (formKey.currentState!.validate()) {
                                   createRequestCubit.request(
@@ -498,6 +501,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return GestureDetector(onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     shippingCubit.sortData(category.subcategories![index].id);
                     scrollController.jumpTo(0);

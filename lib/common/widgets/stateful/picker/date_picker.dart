@@ -5,8 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DatePickerField extends StatefulWidget {
   final String? title;
@@ -47,6 +46,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+      ManageVibration.vibrate();
         if (widget.isAuthentcation) {
           if (context.isUserLoggedIn) {
             final DateTime? picked = await showDatePicker(

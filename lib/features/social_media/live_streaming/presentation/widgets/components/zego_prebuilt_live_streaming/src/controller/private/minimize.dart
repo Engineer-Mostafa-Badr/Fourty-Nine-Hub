@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import '../../../../zego_uikit/zego_uikit.dart';
 import '../../core/connect_manager.dart';
 import '../../core/core_managers.dart';
 import '../../internal/defines.dart';

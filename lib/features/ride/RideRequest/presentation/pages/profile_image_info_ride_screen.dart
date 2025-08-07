@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ProfileImageInfoRideScreen extends StatefulWidget {
   const ProfileImageInfoRideScreen({super.key});
@@ -130,6 +131,7 @@ class _ProfileImageInfoRideScreenState
             ),
             GestureDetector(
               onTap: () async {
+      ManageVibration.vibrate();
                 var pickedImage =
                     await ImagePicker().pickImage(source: ImageSource.gallery);
                 if (pickedImage != null) {

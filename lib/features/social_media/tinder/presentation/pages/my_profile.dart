@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/count_down.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/custom_circular_percent_indicator.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../widgets/count_down.dart';
+import '../widgets/custom_circular_percent_indicator.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 // import 'package:percent_indicator/percent_indicator.dart';
 
 class FindMyProfileScreen extends StatefulWidget {
@@ -420,7 +421,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                   children: [
                     if (superLikes != null)
                       TextSpan(
-                        text: '${superLikes}',
+                        text: '$superLikes',
                         style: Styles.mediumText(fontSize: 24, color: color),
                       ),
                     TextSpan(
@@ -437,11 +438,9 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                 ),
                 if (getMore)
                   Label(
-                    text: bottomText != null
-                        ? bottomText
-                        : context.isArabic
+                    text: bottomText ?? (context.isArabic
                             ? 'جمع المزيد'
-                            : 'Get More',
+                            : 'Get More'),
                     style: Styles.mediumText(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -483,7 +482,10 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         if (trailing != null)
           ClickableWidget(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             child: Row(
               children: [
                 Text(trailing, style: Styles.mediumText()),
@@ -555,7 +557,10 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
     required Color color,
   }) {
     return ClickableWidget(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.h),

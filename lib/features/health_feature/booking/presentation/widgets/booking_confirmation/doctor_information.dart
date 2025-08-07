@@ -16,19 +16,19 @@ class DoctorInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         DoctorImage(
-          imageUrl: doctor?.image ?? '',
+          imageUrl: doctor.image ?? '',
           rating: doctor.rating,
         ),
         Label(
           text:
-          '${toBeginningOfSentenceCase(doctor?.firstName ?? '')} '
-              '${toBeginningOfSentenceCase(doctor?.lastName ?? '')}',
+          '${toBeginningOfSentenceCase(doctor.firstName ?? '')} '
+              '${toBeginningOfSentenceCase(doctor.lastName ?? '')}',
           style: Styles.headerText(fontWeight: FontWeight.w600),
         ),
         Label(
           text: context.isArabic
-              ? doctor?.subCategory.nameAr ?? ''
-              : doctor?.subCategory.nameEn ?? '',
+              ? doctor.subCategory.nameAr ?? ''
+              : doctor.subCategory.nameEn ?? '',
           maxLines: 1,
           style: Styles.mediumText(fontWeight: FontWeight.w400),
         ),

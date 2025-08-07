@@ -6,7 +6,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_text_field_health.dart';
 
 class CreateDoctorNameField extends StatelessWidget {
-  CreateDoctorNameField({super.key, this.focusNode});
+  const CreateDoctorNameField({super.key, this.focusNode});
   final FocusNode? focusNode;
 
   @override

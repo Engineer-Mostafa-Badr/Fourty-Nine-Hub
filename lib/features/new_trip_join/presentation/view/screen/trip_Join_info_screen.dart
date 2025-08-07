@@ -5,12 +5,11 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../captainshare/screen/captain_share_info_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripJoinInfoScreen extends StatelessWidget {
   const TripJoinInfoScreen({super.key});
@@ -20,6 +19,7 @@ class TripJoinInfoScreen extends StatelessWidget {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           context.push(Routes.AVAILABLE_TRIPS);
         },
         child: Container(

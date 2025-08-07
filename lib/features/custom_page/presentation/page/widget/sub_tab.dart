@@ -13,6 +13,7 @@ import '../../../domain/use_case/update_sub_tab_use_case.dart';
 import '../../cubit/custom_page_cubit.dart';
 import '../../cubit/custom_page_states.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SubTab extends StatefulWidget {
   const SubTab({super.key});
@@ -100,6 +101,7 @@ class _SubTabState extends State<SubTab> {
             return FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
+      ManageVibration.vibrate();
                 final selectedCategories = _selectedItems.entries
                     .where((entry) => entry.value == true)
                     .map((entry) => entry.key)

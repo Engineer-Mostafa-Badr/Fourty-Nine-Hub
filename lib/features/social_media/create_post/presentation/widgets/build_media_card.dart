@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/functions/global/upload_file.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import '../cubit/create_post_cubit.dart';
+import 'show_all_images.dart';
+import '../../../../../res/style/styles.dart';
 
 class BuildMediaCard extends StatelessWidget {
   const BuildMediaCard({super.key});

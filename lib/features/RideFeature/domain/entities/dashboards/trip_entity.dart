@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/rating_entity.dart';
 import 'client_details_entity.dart';
-import 'driver_details_entity.dart';
 import 'sub_category_entity.dart';
 import 'trip_details_entity.dart';
 

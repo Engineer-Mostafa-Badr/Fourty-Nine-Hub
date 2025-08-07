@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class FilterAdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
@@ -449,6 +449,7 @@ class _FilterAdDynamicInputWidgetState
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.onChanged(widget.property.values[index]);
                   value = widget.property.values[index];
                   setState(() {});

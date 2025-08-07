@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -138,6 +139,7 @@ class MyAdsTripJoin extends StatelessWidget {
                           title: LocaleKeys.subscription.localize,
                           color: AppColors.PRIMARY_COLOR,
                           onTap: () {
+      ManageVibration.vibrate();
                             serviceLocator<SubscriptionController>()
                                 .showSubscriptionPlans(
                               wallets: [
@@ -156,6 +158,7 @@ class MyAdsTripJoin extends StatelessWidget {
                           title: LocaleKeys.deleteAd.localize,
                           color: AppColors.SECONDARY_COLOR,
                           onTap: () {
+      ManageVibration.vibrate();
                             showAreYouSure(
                               title: LocaleKeys.deleteAd.localize,
                               subTitle: LocaleKeys.sureRemoveAd.localize,
@@ -212,6 +215,7 @@ class MyAdsTripJoin extends StatelessWidget {
               Expanded(
                   child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -230,6 +234,7 @@ class MyAdsTripJoin extends StatelessWidget {
               Expanded(
                   child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -248,6 +253,7 @@ class MyAdsTripJoin extends StatelessWidget {
               Expanded(
                   child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookPeopleView extends StatefulWidget {
   const FacebookPeopleView({super.key, required this.scrollController});
@@ -70,6 +70,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     // إغلاق الكيبورد عند الانتقال لتاب People
                     _dismissKeyboard();
 
@@ -96,6 +97,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       // إغلاق الكيبورد عند الانتقال لتاب Blocked
                       _dismissKeyboard();
 
@@ -120,6 +122,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     // إغلاق الكيبورد عند الانتقال لتاب Suggestion
                     _dismissKeyboard();
 
@@ -145,6 +148,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               ),
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   // if (context.read<UserCubit>().isLoggedIn) {
                   setState(() {
                     _showSearch = !_showSearch;
@@ -229,7 +233,10 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
             ),
           ])),
           ClickableWidget(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             child: Label(
               text: context.isArabic ? 'مشاهدة المزيد' : 'See More',
               style: Styles.mediumText(
@@ -292,6 +299,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                                 Expanded(
                                   child: ClickableWidget(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       confirmedIndexes.add(index);
                                       setState(() {});
                                     },
@@ -402,6 +410,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                                 Expanded(
                                   child: ClickableWidget(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       requestsIndexes.add(index);
                                       setState(() {});
                                     },
@@ -479,7 +488,10 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                 ),
               ),
               trailing: ClickableWidget(
-                  onTap: () {},
+                  onTap: () {
+
+      ManageVibration.vibrate();
+                  },
                   child: Icon(
                     Icons.close,
                     color: AppColors.Facebook_Red_DARK,
@@ -553,7 +565,10 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                       ),
                     ),
                     trailing: ClickableWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         child: Icon(
                           Icons.close,
                           color: AppColors.Facebook_Red_DARK,

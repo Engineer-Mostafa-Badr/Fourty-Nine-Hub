@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';

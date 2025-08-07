@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -15,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MarriageMyAdsListViewItem extends StatelessWidget {
   const MarriageMyAdsListViewItem({
@@ -30,6 +30,7 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: marriageAds.id);
       },
       child: Container(
@@ -117,6 +118,7 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
                   color: AppColors.SECONDARY_COLOR_DARK2,
                   radius: 15,
                   onTap: () {
+      ManageVibration.vibrate();
                     // TODO: delete request
                   },
                 ),

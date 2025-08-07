@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_drawer_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../data/models/favouite_category_model/favouite_category_model.dart';

@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/pagination_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_entity.dart';
+import '../../../../account_taps/wallet/domain/entities/pagination_entity.dart';
+import 'comment_instagram_entity.dart';
 
 class CommentInstagramDataEntiry {
   final List<CommentInstagramEntity> comments;

@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/data/models/privacy_model.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/communication_privacy_entity.dart';
@@ -11,7 +10,6 @@ import '../../domain/entities/exclusion_entity.dart';
 import '../../domain/entities/media_privacy_entity.dart';
 import '../../domain/entities/only_with_entity.dart';
 import '../../domain/entities/personal_privacy_entity.dart';
-import '../../domain/entities/privacy_entity.dart';
 import '../../domain/entities/remove_response_allowed_entity.dart';
 import '../../domain/entities/remove_response_forbidden_entity.dart';
 import '../../domain/entities/search_users_entity.dart';

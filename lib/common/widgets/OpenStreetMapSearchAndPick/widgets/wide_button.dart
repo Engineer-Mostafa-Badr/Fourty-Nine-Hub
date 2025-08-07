@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class WideButton extends StatelessWidget {
   const WideButton(
     this.text, {
-    Key? key,
+    super.key,
     required,
     this.padding = 0.0,
     this.height = 45,
@@ -12,7 +12,7 @@ class WideButton extends StatelessWidget {
     this.foregroundColor = Colors.white,
     this.width = double.infinity,
     this.textStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  }) : super(key: key);
+  });
 
   /// Should be inside a column, row or flex widget
   final String text;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';

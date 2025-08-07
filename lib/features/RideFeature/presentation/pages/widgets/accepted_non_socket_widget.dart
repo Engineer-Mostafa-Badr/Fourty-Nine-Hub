@@ -1,14 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -17,7 +16,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/dashboards/get_accepted_ride_non_socket_trip_entity.dart';
-import '../../../domain/entities/dashboards/get_available_ride_non_socket_trip_entity.dart';
 
 class AcceptedNonSocketWidget extends StatelessWidget {
   final AcceptedRideNonSocketTripEntity? offers;
@@ -78,19 +76,19 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                             ),
                             child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Row(children: [
                                   SvgPicture.asset(Assets.star2,
                                       width: 8, height: 8),
                                   const Sizer(width: 4),
                                   Label(
-                                      text: formatPrice(offers
-                                          ?.clientDetails?.rating?.count
-                                          ?.toDouble() ??
-                                          0,context) ,
+                                      text: formatPrice(
+                                          offers?.clientDetails?.rating?.count
+                                                  ?.toDouble() ??
+                                              0,
+                                          context),
                                       style: Styles.smallText(
-                                        color: AppColors.PRIMARY_COLOR
-                                      ))
+                                          color: AppColors.PRIMARY_COLOR))
                                 ])))),
                     const VerifiedWidget(),
                   ],
@@ -100,7 +98,7 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                     style: Styles.mediumText()),
                 Label(
                     text:
-                    '(${formatPrice(offers?.clientDetails?.rating?.average ?? 0, context)})',
+                        '(${formatPrice(offers?.clientDetails?.rating?.average ?? 0, context)})',
                     style: Styles.smallText())
               ])),
           const Sizer(width: 32),
@@ -155,7 +153,8 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                               ],
                             ),
                             Label(
-                                text: '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDate?.passengers ?? 1, context)}',
+                                text:
+                                    '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDate?.passengers ?? 1, context)}',
                                 style: Styles.mediumText())
                           ],
                         ),
@@ -194,7 +193,8 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                          text: "${formatPrice(offers?.tripDate?.price ?? 300, context)}",
+                          text: formatPrice(
+                              offers?.tripDate?.price ?? 300, context),
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w700)),
                       const Sizer(width: 4),
@@ -209,13 +209,13 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: "${formatTimeOnly(offers?.tripDate?.date, context)}",
+                        text: formatTimeOnly(offers?.tripDate?.date, context),
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Label(
-                        text: "${formatPickupDate(offers?.tripDate?.date, context)}",
+                        text: formatPickupDate(offers?.tripDate?.date, context),
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
@@ -236,7 +236,9 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                                 ? AppColors.PRIMARY_COLOR_DARK
                                 : AppColors.PRIMARY_COLOR,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                          },
                         ),
                       ),
                       Expanded(
@@ -249,7 +251,9 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                                   ? AppColors.PRIMARY_COLOR_DARK
                                   : AppColors.PRIMARY_COLOR,
                             ),
-                            onPressed: () {}),
+                            onPressed: () {
+                              ManageVibration.vibrate();
+                            }),
                       ),
                       Expanded(
                         child: IconButton(
@@ -259,7 +263,9 @@ class AcceptedNonSocketWidget extends StatelessWidget {
                             height: 25.h,
                             color: AppColors.PRIMARY_COLOR_DARK,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                          },
                         ),
                       )
                     ],

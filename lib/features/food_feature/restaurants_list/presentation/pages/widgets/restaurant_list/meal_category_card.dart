@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../common/functions/helper/lang_helper.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../domain/entities/food_category_entity.dart';
+import '../../../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../../../res/style/styles.dart';
 import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class MealCategoryCard extends StatefulWidget {
   final FoodCategoryEntity? subCategory;

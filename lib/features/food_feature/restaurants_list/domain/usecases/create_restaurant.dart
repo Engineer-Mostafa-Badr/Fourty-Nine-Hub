@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
+import '../../../../../core/error/failure.dart';
+import '../../data/models/restaurant_mneu_model.dart';
+import '../repositories/resturant_list_repo.dart';
 
 class CreateRestaurantUseCase {
   final RestaurantListRepo _restaurantRepo;

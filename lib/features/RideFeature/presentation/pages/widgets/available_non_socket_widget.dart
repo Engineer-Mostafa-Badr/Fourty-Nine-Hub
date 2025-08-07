@@ -1,6 +1,4 @@
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -16,7 +15,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -42,47 +40,48 @@ class AvailableNonSocketWidget extends StatelessWidget {
     String formattedTime =
         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return BlocListener<DashboardsCubit, DashboardsState>(
-  listener: (context, state) {
-    if (state.status == DashboardsStates.error) {
-      String errorName = getFailureName(state.failure!, context);
-      final failure = state.failure;
+      listener: (context, state) {
+        if (state.status == DashboardsStates.error) {
+          String errorName = getFailureName(state.failure!, context);
+          final failure = state.failure;
 
-      // if (failure is ServerFailure) {
-      //   if (failure.errors != null && failure.errors!.isNotEmpty) {
-      //     showErrorMessage(context, failure.errors!.first);
-      //     return;
-      //   }
-      //
-      //   if (errorName == 'DebtError') {
-      //     showDebtDialog(context, offers?.subCategory?.id ?? "");
-      //   } else if (errorName == 'SubscribeError') {
-      //     showSubscribeDialog(context, offers?.subCategory?.id ?? "");
-      //   }
-      //   else {
-      //     showErrorMessage(
-      //         context, getFailureMessage(state.failure!, context));
-      //   }
-      //
-      //   // Optional: After showing dialog, dispatch an event to clear the error
-      //   // context.read<DashboardsCubit>().add(ClearErrorEvent());
-      // }
-    }
-  },
-  child: Container(
+          // if (failure is ServerFailure) {
+          //   if (failure.errors != null && failure.errors!.isNotEmpty) {
+          //     showErrorMessage(context, failure.errors!.first);
+          //     return;
+          //   }
+          //
+          //   if (errorName == 'DebtError') {
+          //     showDebtDialog(context, offers?.subCategory?.id ?? "");
+          //   } else if (errorName == 'SubscribeError') {
+          //     showSubscribeDialog(context, offers?.subCategory?.id ?? "");
+          //   }
+          //   else {
+          //     showErrorMessage(
+          //         context, getFailureMessage(state.failure!, context));
+          //   }
+          //
+          //   // Optional: After showing dialog, dispatch an event to clear the error
+          //   // context.read<DashboardsCubit>().add(ClearErrorEvent());
+          // }
+        }
+      },
+      child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-            color:
-            context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-            borderRadius: BorderRadius.circular(20)
-        ),
+            color: context.isDarkMode
+                ? AppColors.PRIMARY_COLOR
+                : AppColors.cF5F5F5,
+            borderRadius: BorderRadius.circular(20)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClickableWidget(
               onTap: () {
+                ManageVibration.vibrate();
                 context.push(
                   Routes.allClientRatingScreen,
-                extra:offers?.clientDetails?.id,
+                  extra: offers?.clientDetails?.id,
                 );
               },
               child: Column(children: [
@@ -95,21 +94,20 @@ class AvailableNonSocketWidget extends StatelessWidget {
                           width: 50,
                           height: 50,
                           decoration:
-                          const BoxDecoration(shape: BoxShape.circle),
+                              const BoxDecoration(shape: BoxShape.circle),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           child: offers?.clientDetails?.profilePictureUrl ==
-                              null ||
-                              offers!
-                                  .clientDetails!.profilePictureUrl!.isEmpty
+                                      null ||
+                                  offers!
+                                      .clientDetails!.profilePictureUrl!.isEmpty
                               ? Image.asset(
-                            Assets.maleImagePlaceholder,
-                            fit: BoxFit.cover,
-                          )
+                                  Assets.maleImagePlaceholder,
+                                  fit: BoxFit.cover,
+                                )
                               : ImageFromInternet(
-                            image:  offers!
-                                .clientDetails!.profilePictureUrl!,
-                          )
-                      ),
+                                  image:
+                                      offers!.clientDetails!.profilePictureUrl!,
+                                )),
                     ),
                     Positioned(
                         top: 0,
@@ -121,19 +119,19 @@ class AvailableNonSocketWidget extends StatelessWidget {
                             ),
                             child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Row(children: [
                                   SvgPicture.asset(Assets.star2,
                                       width: 8, height: 8),
                                   const Sizer(width: 4),
                                   Label(
-                                      text: formatPrice(offers
-                                          ?.clientDetails?.rating?.count
-                                          ?.toDouble() ??
-                                          0, context),
+                                      text: formatPrice(
+                                          offers?.clientDetails?.rating?.count
+                                                  ?.toDouble() ??
+                                              0,
+                                          context),
                                       style: Styles.smallText(
-                                        color: AppColors.PRIMARY_COLOR
-                                      ))
+                                          color: AppColors.PRIMARY_COLOR))
                                 ])))),
                     const VerifiedWidget(),
                   ],
@@ -175,7 +173,8 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                   Expanded(
                                       flex: 8,
                                       child: Label(
-                                          text: offers?.tripDetails?.startLocation?.title ??
+                                          text: offers?.tripDetails
+                                                  ?.startLocation?.title ??
                                               'Cairo International Airport',
                                           style: Styles.headerText()))
                                 ],
@@ -190,14 +189,16 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                   Expanded(
                                       flex: 8,
                                       child: Label(
-                                          text: offers?.tripDetails?.targetLocation?.title ??
+                                          text: offers?.tripDetails
+                                                  ?.targetLocation?.title ??
                                               'Cairo International Airport',
                                           style: Styles.mediumText(
                                               fontWeight: FontWeight.w300)))
                                 ],
                               ),
                               Label(
-                                  text: '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
+                                  text:
+                                      '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
                                   style: Styles.mediumText())
                             ],
                           ),
@@ -211,7 +212,8 @@ class AvailableNonSocketWidget extends StatelessWidget {
                                 //     width: 40, height: 40, fit: BoxFit.cover)
                                 //     :
                                 ImageFromInternet(
-                                    image: offers!.subCategory?.pictureUrl?? "",
+                                    image:
+                                        offers!.subCategory?.pictureUrl ?? "",
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
@@ -234,9 +236,10 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                            text: "${formatPrice(offers?.tripDetails?.price ?? 0, context)}",
+                            text: formatPrice(
+                                offers?.tripDetails?.price ?? 0, context),
                             style:
-                            Styles.mediumText(fontWeight: FontWeight.w700)),
+                                Styles.mediumText(fontWeight: FontWeight.w700)),
                         const Sizer(width: 4),
                         Label(
                             text: LocaleKeys.egp.tr(),
@@ -249,13 +252,15 @@ class AvailableNonSocketWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: "${formatTimeOnly(offers?.tripDetails?.pickupTime, context)}",
+                          text: formatTimeOnly(
+                              offers?.tripDetails?.pickupTime, context),
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: "${formatPickupDate(offers?.tripDetails?.pickupTime, context)}",
+                          text: formatPickupDate(
+                              offers?.tripDetails?.pickupTime, context),
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
@@ -270,17 +275,17 @@ class AvailableNonSocketWidget extends StatelessWidget {
                             // label: "",
                             height: 30,
                             radius: 15,
-                            widget:   Center(
+                            widget: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Flexible(
                                     child: Label(
-                                      text: "${LocaleKeys.Accept.tr()} ${formatPrice(offers?.tripDetails?.price ?? 0, context)} ${LocaleKeys.egp.localize}",
-                                      style:
-                                          Styles.mediumText(
-                                            color:  Colors.white,
-                                          ),
+                                      text:
+                                          "${LocaleKeys.Accept.tr()} ${formatPrice(offers?.tripDetails?.price ?? 0, context)} ${LocaleKeys.egp.localize}",
+                                      style: Styles.mediumText(
+                                        color: Colors.white,
+                                      ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -289,18 +294,20 @@ class AvailableNonSocketWidget extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
+                              ManageVibration.vibrate();
                               final price = offers?.tripDetails?.price ?? 0;
-                              final tripId = offers?.tripDetails?.id  ?? '';
-                              print("XXQ ${tripId}");
-                              print("XXQ ${offers?.tripDetails?.id }");
-                              context.read<DashboardsCubit>().createNonTrackOffer(
-                                CreateNonTrackOfferParams(
-                                  tripId: tripId,
-                                  priceOffer: price,
-                                ),
-                                  context,
-                                  offers?.subCategory?.id ?? ""
-                              );
+                              final tripId = offers?.tripDetails?.id ?? '';
+                              print("XXQ $tripId");
+                              print("XXQ ${offers?.tripDetails?.id}");
+                              context
+                                  .read<DashboardsCubit>()
+                                  .createNonTrackOffer(
+                                      CreateNonTrackOfferParams(
+                                        tripId: tripId,
+                                        priceOffer: price,
+                                      ),
+                                      context,
+                                      offers?.subCategory?.id ?? "");
                             },
                             backColor: context.isDarkMode
                                 ? AppColors.ACCENT_COLOR
@@ -318,7 +325,9 @@ class AvailableNonSocketWidget extends StatelessWidget {
                               fontSize: 23,
                             ),
                             onPressed: () {
-                              _showOfferFareBottomSheet(context, offers?.tripDetails?.id ?? '');
+                              ManageVibration.vibrate();
+                              _showOfferFareBottomSheet(
+                                  context, offers?.tripDetails?.id ?? '');
                             },
                             backColor: AppColors.SECONDARY_COLOR_DARK2,
                           ),
@@ -360,12 +369,13 @@ class AvailableNonSocketWidget extends StatelessWidget {
           ],
         ),
       ),
-);
+    );
   }
+
   void _showOfferFareBottomSheet(
-      BuildContext context,
-      String tripId,
-      ) {
+    BuildContext context,
+    String tripId,
+  ) {
     final TextEditingController offerPriceController = TextEditingController();
 
     showModalBottomSheet(
@@ -417,9 +427,10 @@ class AvailableNonSocketWidget extends StatelessWidget {
                 TextFormField(
                   controller: offerPriceController,
                   keyboardType: TextInputType.number,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     hintText: LocaleKeys.egp.tr(),
-                    hintStyle: TextStyle(fontSize: 40, color: AppColors.c96979B),
+                    hintStyle:
+                        TextStyle(fontSize: 40, color: AppColors.c96979B),
                     border: UnderlineInputBorder(),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue, width: 2),
@@ -442,18 +453,18 @@ class AvailableNonSocketWidget extends StatelessWidget {
                   radius: 15,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+                    ManageVibration.vibrate();
                     final enteredPrice =
                         num.tryParse(offerPriceController.text) ?? 0;
                     Navigator.pop(context);
 
                     context.read<DashboardsCubit>().createNonTrackOffer(
-                      CreateNonTrackOfferParams(
-                        tripId: tripId,
-                        priceOffer: enteredPrice,
-                      ),
+                        CreateNonTrackOfferParams(
+                          tripId: tripId,
+                          priceOffer: enteredPrice,
+                        ),
                         context,
-                        offers?.subCategory?.id ?? ""
-                    );
+                        offers?.subCategory?.id ?? "");
                   },
                   label: LocaleKeys.done.localize,
                   style: const TextStyle(
@@ -469,5 +480,4 @@ class AvailableNonSocketWidget extends StatelessWidget {
       },
     );
   }
-
 }

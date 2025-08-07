@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/carousel_slider.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/entities/slider_item_entity.dart';
+import '../controllers/slider_cubit.dart/slider_cubit.dart';
+import '../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/states/basic_state.dart';
 import '../../../../routes/routes.dart';
-import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../payment/presentation/pages/widgets/payment_yellow_card.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class AnnounceWidget extends StatelessWidget {
   const AnnounceWidget({super.key});
@@ -61,6 +61,7 @@ class AnnounceWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         child: InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }

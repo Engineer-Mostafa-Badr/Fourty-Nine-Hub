@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../entity/banner_talent_entity.dart';
+import '../entity/star_entity.dart';
+import '../entity/star_winner_entity.dart';
+import '../use_case/fetch_all_star_use_case.dart';
+import '../use_case/upload_my_star_use_case.dart';
 
 abstract class StarRepository {
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(

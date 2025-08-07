@@ -2,14 +2,10 @@ import '../../domain/entities/only_with_entity.dart';
 
 class OnlyWithModel extends OnlyWithEntity {
   OnlyWithModel({
-    required String feature,
-    required String privacyOption,
-    required List<String> allowedUsers,
-  }) : super(
-    feature: feature,
-    privacyOption: privacyOption,
-    allowedUsers: allowedUsers,
-  );
+    required super.feature,
+    required super.privacyOption,
+    required super.allowedUsers,
+  });
 
   // Factory method to create an instance from JSON
   factory OnlyWithModel.fromJson(Map<String, dynamic> json) {

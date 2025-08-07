@@ -6,11 +6,10 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'custom_pickup_container.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart'; // بدون alias
 
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class CustomDatePickerButton extends StatelessWidget {
@@ -92,6 +91,7 @@ class CustomDatePickerButton extends StatelessWidget {
                             height: 38,
                             backColor: AppColors.PRIMARY_COLOR,
                             onPressed: () {
+      ManageVibration.vibrate();
                               // Determine locale based on app language
                               final locale = context.isArabic
                                   ? const Locale('ar', 'EG')
@@ -119,6 +119,7 @@ class CustomDatePickerButton extends StatelessWidget {
                             height: 38,
                             backColor: AppColors.LIGHT_COLOR,
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.pop(context);
                             },
                             label: LocaleKeys.cancel.localize,
@@ -237,6 +238,7 @@ class CustomDatePickerButtonNonSocket extends StatelessWidget {
                             height: 38,
                             backColor: AppColors.PRIMARY_COLOR,
                             onPressed: () {
+      ManageVibration.vibrate();
                               final newDateStr =
                                   "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
                               onDateSelected(newDateStr);
@@ -257,6 +259,7 @@ class CustomDatePickerButtonNonSocket extends StatelessWidget {
                             height: 38,
                             backColor: AppColors.LIGHT_COLOR,
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.pop(context);
                             },
                             label: LocaleKeys.cancel.localize,

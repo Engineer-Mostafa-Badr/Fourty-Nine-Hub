@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/custom_row_v2.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../cubits/trip_join_view/trip_join_view_cubit.dart';
+import 'custom_row_v2.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class DateAndTimePickerV2 extends StatefulWidget {
   const DateAndTimePickerV2({
@@ -32,6 +33,7 @@ class _DateAndTimePickerV2State extends State<DateAndTimePickerV2> {
       children: [
         IconButton(
           onPressed: () async {
+      ManageVibration.vibrate();
             date = await showDatePicker(
               context: context,
               firstDate: DateTime.now().subtract(
@@ -49,6 +51,7 @@ class _DateAndTimePickerV2State extends State<DateAndTimePickerV2> {
         Text(_getDate(), style: Styles.headerText()),
         IconButton(
           onPressed: () async {
+      ManageVibration.vibrate();
             time = await showTimePicker(
               context: context,
               initialTime: const TimeOfDay(hour: 0, minute: 0),

@@ -2,15 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
+import '../../../../common/functions/helper/numbers_helper.dart';
+import '../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/numbers_extensions.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../controller/cubit/star_cubit.dart';
+import '../controller/cubit/star_state.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/widget/olx_pagination/banner.dart';
@@ -19,6 +19,7 @@ import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.da
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../custom_video_player.dart';
 import 'talent_video_player.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class GetAllTalents extends StatelessWidget {
   final bool isMyTalent;
@@ -235,6 +236,7 @@ class GetAllTalents extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: ElevatedButton(
                             onPressed: () {
+                              ManageVibration.vibrate();
                               showAreYouSure(
                                 context: context,
                                 title: LocaleKeys.alert.localize,
@@ -449,6 +451,7 @@ class GetAllTalents extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ElevatedButton(
                         onPressed: () {
+      ManageVibration.vibrate();
                           showAreYouSure(
                             context: context,
                             title: LocaleKeys.alert.localize,

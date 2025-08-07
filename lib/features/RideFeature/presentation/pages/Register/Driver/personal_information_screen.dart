@@ -15,7 +15,6 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_switch_list_title.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/widgets/register_expansion_tile.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -23,15 +22,14 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../widgets/close_widget.dart';
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideFeatureRegisterParams {
   final bool isSocket;
@@ -80,7 +78,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       final DateTime latestDate = DateTime(now.year - 21, now.month, now.day);
       return PopScope(
         canPop: false,
-        child: CustomScaffold(  
+        child: CustomScaffold(
           appBar: const PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: HomeAppbar(),
@@ -142,6 +140,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 UploadFileWidget(
                                   title: LocaleKeys.personalPicture.localize,
                                   onTap: () {
+      ManageVibration.vibrate();
                                     cubit.onUploadPersonalPicture(context);
                                   },
                                   imageUrl: state.personalPicture,
@@ -419,6 +418,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     ),
                                     ClickableWidget(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         showAddNewBrandDialog(
                                             context: context,
                                             onBrandAdded: (String brandName) {
@@ -468,6 +468,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       Sizer(),
                                       ClickableWidget(
                                         onTap: () {
+      ManageVibration.vibrate();
                                           cubit.removeNewBrand();
                                         },
                                         child: const Icon(
@@ -563,6 +564,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                           ),
                                           ClickableWidget(
                                             onTap: () {
+      ManageVibration.vibrate();
                                               if (state.newBrand == null ||
                                                   (state.newBrand?.id.isEmpty ??
                                                       true)) {
@@ -663,6 +665,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                             Sizer(),
                                             ClickableWidget(
                                               onTap: () {
+      ManageVibration.vibrate();
                                                 cubit.removeNewModel();
                                               },
                                               child: const Icon(
@@ -771,12 +774,21 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       ? AppColors.GREY_DARK_COLOR
                                       : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  onChanged: (v) =>
-                                      cubit.formKey.currentState?.validate(),
+                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
+                                  inputFormatter: [
+
+                                  ],
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
                                       return LocaleKeys.required.localize;
                                     }
+                                    final normalized = v.replaceAll(RegExp(r'\s+'), ' ').trim();
+
+                                    final plateRegExp = RegExp(r'^([\u0621-\u064A]\s?){1,3}[٠-٩0-9]{1,4}$');
+                                    if (!plateRegExp.hasMatch(normalized)) {
+                                      return context.isArabic?'رقم اللوحة غير صحيح (مثال: س ب ١٢٣)':'Invalid plate number (e.g. س ب 123)';
+                                    }
+
                                     return null;
                                   },
                                 ),
@@ -975,6 +987,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             // const Sizer(),
                             InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 state.isShipping == true
                                     ? cubit.onLoadingRegister(
                                         context,
@@ -1086,6 +1099,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'الغاء' : 'Close',
                           backColor: AppColors.SECONDARY_COLOR_DARK2,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.pop();
                             // cubit
                           }),
@@ -1095,6 +1109,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'تأكيد' : 'Confirm',
                           backColor: AppColors.PRIMARY_COLOR,
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (cubit.modelFormKey.currentState!.validate()) {
                               context.pop();
                               onModelAdded(cubit.modelNameController.text);
@@ -1165,6 +1180,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'الغاء' : 'Close',
                           backColor: AppColors.SECONDARY_COLOR_DARK2,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.pop();
                             // cubit
                           }),
@@ -1174,6 +1190,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'تأكيد' : 'Confirm',
                           backColor: AppColors.PRIMARY_COLOR,
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (cubit.modelFormKey.currentState!.validate()) {
                               context.pop();
                               onBrandAdded(cubit.brandNameController.text);

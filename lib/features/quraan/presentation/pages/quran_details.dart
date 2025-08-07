@@ -5,12 +5,11 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
-import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class QuranViewPage extends StatefulWidget {
   final int surahId;
@@ -64,6 +63,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                 Icons.arrow_forward,
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.of(context).pop(); // Pop the current screen
               },
             ),

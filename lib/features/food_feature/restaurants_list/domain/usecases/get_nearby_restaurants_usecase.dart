@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
+import '../../../../../core/error/failure.dart';
 
 import '../../../../../../core/abstract/use_case.dart';
-import '../../data/models/restaurant_model.dart';
 import '../entities/restaurant.dart';
 import '../repositories/resturant_list_repo.dart';
 

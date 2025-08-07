@@ -1,6 +1,5 @@
-import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
+import 'user_star_entity.dart';
 
-import '../../../../core/utils/duration_helper.dart';
 
 class StarWinnerEntity {
   final String id;

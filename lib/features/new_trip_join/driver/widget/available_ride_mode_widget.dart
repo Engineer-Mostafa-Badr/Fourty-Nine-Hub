@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../captainshare/widget/one_way_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AvailableRideModeWidget extends StatefulWidget {
   final String? statusDriver;
@@ -31,7 +32,7 @@ class AvailableRideModeWidget extends StatefulWidget {
 }
 
 class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
-  bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  final bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
   late ExpandableController _expandableController;
 
   @override
@@ -263,6 +264,7 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _expandableController.toggle();
                         });
@@ -299,7 +301,10 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                       ),
                       const Spacer(),
                       ClickableWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         child: Text(
                           widget.requestType ?? "",
                           style: TextStyle(
@@ -319,7 +324,10 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                                   AppColors.SECONDARY_COLOR,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+
+      ManageVibration.vibrate();
+                              },
                               child: Text(
                                 LocaleKeys.cancel.localize,
                                 style: const TextStyle(

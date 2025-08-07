@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 
 import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/app_colors.dart';
 
 class UnreadNotificationsBuilder extends StatelessWidget {
   const UnreadNotificationsBuilder({

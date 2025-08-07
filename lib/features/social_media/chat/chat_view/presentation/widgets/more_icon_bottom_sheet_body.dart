@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../data/models/chat_model.dart';
+import '../chat_cubit/chats_cubit.dart';
+import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class MoreIconBottomSheet extends StatefulWidget {
   final ChatModel ChatCategoryEntity;
@@ -31,6 +32,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               // widget.chatsCubit.changeChatMuteState(widget.ChatCategoryEntity.id);
             },
             child: bottomSheetItem(
@@ -43,6 +45,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
           ),
           GestureDetector(
             onTap: () async {
+      ManageVibration.vibrate();
               showDialogToCreateLockChatPassword(context);
             },
             child: bottomSheetItem(
@@ -55,6 +58,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
           ),
           GestureDetector(
             onTap: () async {
+      ManageVibration.vibrate();
               bool confirmDeleted =
                   await showDialogConfirmDeleted(context) ?? false;
               if (confirmDeleted) {
@@ -118,11 +122,13 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             actions: [
               TextButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     Navigator.of(context).pop(false);
                   },
                   child: const Text('No')),
               TextButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     Navigator.of(context).pop(true);
                   },
                   child: const Text('Yes'))
@@ -137,11 +143,13 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
     //         actions: [
     //           TextButton(
     //               onPressed: () {
+      ManageVibration.vibrate();
     //                 Navigator.of(context).pop(false);
     //               },
     //               child: const Text('No')),
     //           TextButton(
     //               onPressed: () {
+      ManageVibration.vibrate();
     //                 Navigator.of(context).pop(true);
     //               },
     //               child: const Text('Yes'))
@@ -185,6 +193,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             actions: [
               TextButton(
                   onPressed: () async {
+      ManageVibration.vibrate();
                     if (widget.ChatCategoryEntity.locked) {
                       // await widget.chatsCubit.unLockChat(
                       //     chatId: widget.ChatCategoryEntity.id,
@@ -237,6 +246,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
     //         actions: [
     //           TextButton(
     //               onPressed: () async {
+      ManageVibration.vibrate();
     //                 if (widget.ChatCategoryEntity.locked) {
     //                   // await widget.chatsCubit.unLockChat(
     //                   //     chatId: widget.ChatCategoryEntity.id,

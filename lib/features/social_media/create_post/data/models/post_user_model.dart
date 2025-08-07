@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
+import '../../domain/entities/post_user_entity.dart';
 
 class PostUserModel extends PostUserEntity {
   PostUserModel(

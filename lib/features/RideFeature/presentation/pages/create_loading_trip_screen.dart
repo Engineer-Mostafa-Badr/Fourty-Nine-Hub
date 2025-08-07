@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/cu
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_pickup_container.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
@@ -20,8 +21,57 @@ class CreateLoadingTripScreen extends StatefulWidget {
       _CreateLoadingTripScreenState();
 }
 
-class _CreateLoadingTripScreenState
-    extends State<CreateLoadingTripScreen> {
+class PickUpLocationCard extends StatelessWidget {
+  final String title;
+  final Color? firstColor;
+
+  const PickUpLocationCard({super.key, required this.title, this.firstColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 48,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: firstColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
+          // Text "PickUp Location"
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CreateLoadingTripScreenState extends State<CreateLoadingTripScreen> {
   String _selectedTime = LocaleKeys.pickupTime.localize;
   String _selectedDate = LocaleKeys.pickupDate.localize;
   int _numberOfPassengers = 0;
@@ -54,6 +104,7 @@ class _CreateLoadingTripScreenState
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        ManageVibration.vibrate();
                         final TimeOfDay? selectedTime = await showTimePicker(
                           context: context,
                           initialTime: TimeOfDay.now(),
@@ -92,6 +143,7 @@ class _CreateLoadingTripScreenState
               ),
               GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   setState(() {
                     _isExpanded = !_isExpanded;
                   });
@@ -107,6 +159,7 @@ class _CreateLoadingTripScreenState
                   children: List.generate(10, (index) {
                     return GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
                         setState(() {
                           _numberOfPassengers = index + 1;
                           _isExpanded = false;
@@ -148,7 +201,9 @@ class _CreateLoadingTripScreenState
               ImageTextRow(
                   imagePath: Assets.logo,
                   text: LocaleKeys.freeCancellation.localize),
-              const SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
               Row(
                 children: [
                   Expanded(
@@ -161,7 +216,9 @@ class _CreateLoadingTripScreenState
                               fontSize: 18,
                               fontWeight: FontWeight.w500),
                           label: LocaleKeys.premium_request.localize,
-                          onPressed: () {})),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                          })),
                   SizedBox(
                     width: 4,
                   ),
@@ -175,7 +232,9 @@ class _CreateLoadingTripScreenState
                               fontSize: 18,
                               fontWeight: FontWeight.w500),
                           label: LocaleKeys.request.localize,
-                          onPressed: () {})),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                          })),
                 ],
               ),
             ],
@@ -267,6 +326,7 @@ class _CreateLoadingTripScreenState
                     radius: 15,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         offerPrice = offerPriceController.text;
                       });
@@ -284,56 +344,6 @@ class _CreateLoadingTripScreenState
           ),
         );
       },
-    );
-  }
-}
-
-class PickUpLocationCard extends StatelessWidget {
-  final String title;
-  final Color? firstColor;
-
-  const PickUpLocationCard({super.key, required this.title, this.firstColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            width: 16,
-            height: 16,
-            decoration: BoxDecoration(
-              color: firstColor,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ),
-          // Text "PickUp Location"
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

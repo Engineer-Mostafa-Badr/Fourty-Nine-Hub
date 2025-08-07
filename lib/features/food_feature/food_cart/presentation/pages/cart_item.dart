@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/cart_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
+import '../../../../../common/widgets/stateless/labels/badged_label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../restaurant_details/data/models/cart_model.dart';
+import '../../../restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class BuildCartItem extends StatefulWidget {
   const BuildCartItem(
@@ -175,6 +172,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                               ? null
                                               : AppColors.SECONDARY_COLOR,
                                           onTap: () {
+      ManageVibration.vibrate();
                                             setState(() {
                                               if ((localQuantity ?? 0) > 1) {
                                                 localQuantity = (localQuantity ?? 1) - 1;
@@ -197,6 +195,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                         _buildQuantityButton(
                                           icon: Icons.add,
                                           onTap: () {
+      ManageVibration.vibrate();
                                             setState(() {
                                               localQuantity = (localQuantity ?? 0) + 1;
                                             });
@@ -216,6 +215,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                   children: [
                                     BadgedLabel(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         setState(() {
                                           _updateQuantity(
                                             restaurantId: widget.cartItem.restaurant?.id ?? '',
@@ -233,6 +233,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                       color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                                       textColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor ,
                                       onTap: () {
+      ManageVibration.vibrate();
                                         setState(() {
                                           localQuantity = widget.quantity;
                                         });

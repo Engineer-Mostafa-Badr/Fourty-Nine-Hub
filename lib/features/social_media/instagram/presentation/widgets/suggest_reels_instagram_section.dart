@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_suggest_reels_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/vedio_suggest_reels_item.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'header_suggest_reels_instagram.dart';
+import 'vedio_suggest_reels_item.dart';
+import '../../../reels/domain/entities/reel_entity.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

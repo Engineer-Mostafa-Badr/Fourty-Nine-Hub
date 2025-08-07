@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/src/controller.dart';
 import '../../../../live_streaming/presentation/widgets/components/zego_uikit/src/components/audio_video/media/player.dart';
 import '../../../../live_streaming/presentation/widgets/components/zego_uikit/src/services/defines/media.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 Widget advanceMediaPlayer({
   required BoxConstraints constraints,
@@ -45,6 +46,7 @@ Widget simpleMediaPlayer({
                     children: [
                       ElevatedButton(
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (ZegoUIKitMediaPlayState.playing == playState) {
                             ZegoUIKitPrebuiltLiveAudioRoomController()
                                 .media
@@ -84,6 +86,7 @@ Widget simpleMediaPlayer({
                       ),
                       ElevatedButton(
                         onPressed: () {
+      ManageVibration.vibrate();
                           ZegoUIKitPrebuiltLiveAudioRoomController()
                               .media
                               .stop();
@@ -101,6 +104,7 @@ Widget simpleMediaPlayer({
                         builder: (context, isMute, _) {
                           return ElevatedButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               ZegoUIKitPrebuiltLiveAudioRoomController()
                                   .media
                                   .muteLocal(!isMute);

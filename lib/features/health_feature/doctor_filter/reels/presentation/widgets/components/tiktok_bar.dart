@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -20,6 +19,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AdvancedTikTokTabBar extends StatefulWidget {
   const AdvancedTikTokTabBar({super.key});
@@ -103,6 +103,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               _buildLiveIcon(onTap: () {
+      ManageVibration.vibrate();
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
@@ -145,6 +146,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           Row(
             children: [
               _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
+      ManageVibration.vibrate();
                 if (context
                     .read<ReelsCubit>()
                     .state
@@ -165,6 +167,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               }),
               // Following Tab
               _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
+      ManageVibration.vibrate();
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
@@ -188,6 +191,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
               // For You Tab with rounded underline
               _buildTab("Reel", 2, onTap: () {
+      ManageVibration.vibrate();
                 setState(() {
                   _selectedIndex = 2;
                 });
@@ -202,6 +206,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           ),
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.Tinder);
             },
             child: const Icon(

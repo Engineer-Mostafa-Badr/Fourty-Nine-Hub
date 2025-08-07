@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/secrets/domain/repositories/secrets_repository_contract.dart';
+import '../../../core/abstract/use_case.dart';
+import '../../../core/error/failure.dart';
+import '../repositories/secrets_repository_contract.dart';
 
 import '../entities/secrets.dart';
 

@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_date_picker.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_pickup_container.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
@@ -20,19 +19,17 @@ import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/error/failure.dart';
-import '../../../../helpers/subscription_method.dart';
+import '../../../../core/loading/custom_loading.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
-import '../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../domain/usecases/create_non_track_trip_use_case.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-import 'package:flutter/material.dart';
-import 'ride_personal_more_info_screen.dart';
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
   final String subCategoryId;
@@ -645,6 +642,7 @@ class _RidePersonalMoreInfoScreenState
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (cubit.selectedDate.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -1059,7 +1057,7 @@ class _RidePersonalMoreInfoScreenState
                   text: LocaleKeys.freeCancellation.localize),
               const SizedBox(height: 15),
               state.isLoadingSubmit
-                  ? const Center(child: CustomCircularProgressIndicator())
+                  ? const Center(child: CustomLoading())
                   : SizedBox(
                       height: 40,
                       child: Row(
@@ -1071,6 +1069,7 @@ class _RidePersonalMoreInfoScreenState
                               radius: 15,
                               label: LocaleKeys.premiumRequest.tr(),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 if (!context.isUserLoggedIn) {
                                   context.push(Routes.LOGIN);
                                   return;
@@ -1150,8 +1149,8 @@ class _RidePersonalMoreInfoScreenState
                                     ..passengers = passengerCount;
 
                                   if (!_validateRequiredFields(p)) {
-                                    print("${p}");
-                                    print("${price}");
+                                    print("$p");
+                                    print("$price");
                                     showErrorMessage(
                                       context,
                                       LocaleKeys
@@ -1187,6 +1186,7 @@ class _RidePersonalMoreInfoScreenState
                               radius: 15,
                               label: LocaleKeys.request.tr(),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 print("normal price ${cubit.offerPrice}");
                                 if (!context.isUserLoggedIn) {
                                   context.push(Routes.LOGIN);
@@ -1395,7 +1395,7 @@ class _RidePersonalMoreInfoScreenState
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
-    String _convertToArabicDigits(String input) {
+    String convertToArabicDigits(String input) {
       const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
       const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
@@ -1406,7 +1406,7 @@ class _RidePersonalMoreInfoScreenState
       return output;
     }
 
-    String _convertToEnglishDigits(String input) {
+    String convertToEnglishDigits(String input) {
       const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
       const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -1457,6 +1457,7 @@ class _RidePersonalMoreInfoScreenState
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               cubit.offerPriceController.clear();
                               Navigator.pop(context);
                             },
@@ -1513,9 +1514,9 @@ class _RidePersonalMoreInfoScreenState
                       ),
                       onChanged: (value) {
                         if (isArabic) {
-                          final englishValue = _convertToEnglishDigits(value);
+                          final englishValue = convertToEnglishDigits(value);
                           final arabicValue =
-                              _convertToArabicDigits(englishValue);
+                              convertToArabicDigits(englishValue);
                           if (arabicValue != value) {
                             final cursorPos = cubit
                                 .offerPriceController.selection.base.offset;
@@ -1533,7 +1534,7 @@ class _RidePersonalMoreInfoScreenState
                       },
                       validator: (value) {
                         final englishValue = value != null
-                            ? _convertToEnglishDigits(value)
+                            ? convertToEnglishDigits(value)
                             : null;
 
                         if (englishValue == null || englishValue.isEmpty) {
@@ -1563,11 +1564,12 @@ class _RidePersonalMoreInfoScreenState
                       radius: 15,
                       backColor: AppColors.PRIMARY_COLOR,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
                           setState(() {
                             // Save in English digits
-                            cubit.offerPrice = _convertToEnglishDigits(
+                            cubit.offerPrice = convertToEnglishDigits(
                                 cubit.offerPriceController.text);
                           });
                         }

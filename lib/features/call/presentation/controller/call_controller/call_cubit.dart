@@ -5,16 +5,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
-import 'package:fourtyninehub/core/utils/logging_service.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
-import 'package:fourtyninehub/features/call/services/video_fix_helper.dart';
-import 'package:fourtyninehub/features/call/services/zego_video_timing_manager.dart';
-import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/enums/call_enums_manager.dart';
+import '../../../../../core/utils/logging_service.dart';
+import '../../../domain/entities/call_data.dart';
+import 'call_state.dart';
+import '../../../services/call_timer_service.dart';
+import '../../../services/video_fix_helper.dart';
+import '../../../services/zego_video_timing_manager.dart';
+import '../../../../../helpers/call_helpers/call_helper/call_with_notification_helper.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -612,16 +612,16 @@ class CallCubit extends Cubit<CallState> {
 
   
   // If remote app goes to background, don't immediately hide video
-  Timer? _backgroundVideoTimer;
-  Future<void> _handleRemoteAppBackground(String streamID) async {
+  Timer? backgroundVideoTimer;
+  Future<void> handleRemoteAppBackground(String streamID) async {
     // Cancel any existing timer
-    _backgroundVideoTimer?.cancel();
+    backgroundVideoTimer?.cancel();
     
     // Start a new timer - if the app doesn't come back to foreground in 3 seconds, disable video
-    _backgroundVideoTimer = Timer(Duration(seconds: 3), () {
+    backgroundVideoTimer = Timer(Duration(seconds: 3), () {
       if (isClosed) return;
       
-      final currentState = this.state as HasCall;
+      final currentState = state as HasCall;
       if (currentState.isRemoteVideoEnabled && _remoteStreamID == streamID) {
         LoggingService.info("⏱️ Remote app still in background after timeout - disabling video");
         emit(currentState.copyWith(
@@ -645,7 +645,7 @@ class CallCubit extends Cubit<CallState> {
   }
 
   // Method to handle when remote video needs refresh
-  Future<void> _handleRemoteVideoRefresh(String streamID) async {
+  Future<void> handleRemoteVideoRefresh(String streamID) async {
     try {
       LoggingService.info("🔄 Refreshing remote video for stream: $streamID");
       
@@ -745,7 +745,7 @@ class CallCubit extends Cubit<CallState> {
             // For Open state, we may want to refresh the remote view to ensure it displays properly
             if (!hasCallState.isRemoteVideoEnabled) {
               LoggingService.info("🔄 Refreshing remote video because camera was just turned on");
-              _handleRemoteVideoRefresh(streamID);
+              handleRemoteVideoRefresh(streamID);
             }
           } else if (state == ZegoRemoteDeviceState.Mute) {
             LoggingService.info("🔇 Remote camera is MUTED - user disabled video");
@@ -756,12 +756,12 @@ class CallCubit extends Cubit<CallState> {
           } else if (state == ZegoRemoteDeviceState.InBackground) {
             LoggingService.info("⏱️ Remote app is in BACKGROUND - may resume shortly");
             // We don't immediately disable video for background state, as it may return
-            _handleRemoteAppBackground(streamID);
+            handleRemoteAppBackground(streamID);
             return; // Let the timer handle state updates
           } else if (state == ZegoRemoteDeviceState.MultiForegroundApp) {
             LoggingService.info("⏱️ Remote device has multiple foreground apps - may affect video");
             // Handle similarly to background state as it may be temporary
-            _handleRemoteAppBackground(streamID);
+            handleRemoteAppBackground(streamID);
             return; // Let the timer handle state updates
           } else if (state == ZegoRemoteDeviceState.RebootRequired) {
             LoggingService.warning("🔄 Remote device requires REBOOT");
@@ -896,7 +896,7 @@ class CallCubit extends Cubit<CallState> {
       
       // CRITICAL: Force update UI state when remote video actually renders
       if (streamID == _remoteStreamID) {
-        final currentState = this.state as HasCall;
+        final currentState = state as HasCall;
         if (currentState.callData.callType == CallType.video.name) {
           LoggingService.info("🔄 Updating UI state for remote video display");
           
@@ -1315,7 +1315,7 @@ class CallCubit extends Cubit<CallState> {
   }
 
   Future<ZegoRoomLogoutResult> logoutZegoRoom({required String roomId}) async {
-    print('logoutRoom : ${roomId}');
+    print('logoutRoom : $roomId');
     stopZegoPreview();
     stopZegoPublish();
     stopZegoListenEvent();

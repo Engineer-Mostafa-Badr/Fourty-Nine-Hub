@@ -1,17 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../ads/interstitial_ad_model.dart';
 import '../../../../../common/models/public/pagination_params.dart';
@@ -19,13 +14,13 @@ import '../../../../../common/widgets/stateful/banners/main_category_banner.dart
 import '../../../../../core/utils/handle_cashback.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'build_Item_search_main_category.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 //MainCategorySearchView
 
 
 class MainCategorySearchView extends StatefulWidget {
-  const MainCategorySearchView({Key? key}) : super(key: key);
+  const MainCategorySearchView({super.key});
 
 
   @override
@@ -121,6 +116,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
               padding: const EdgeInsets.all(16),
               child: InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount(
@@ -176,6 +172,5 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
   }
 
 }
-
 
 

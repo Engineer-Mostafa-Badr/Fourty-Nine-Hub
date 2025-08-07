@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../core/extensions/context_extension.dart';
 
 class SponsoredWidget extends StatelessWidget {
   const SponsoredWidget({

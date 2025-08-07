@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/star_feature/data/model/banner_talent_model.dart';
-import 'package:fourtyninehub/features/star_feature/data/model/star_model.dart';
-import 'package:fourtyninehub/features/star_feature/data/model/star_winner_model.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
+import '../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../core/error/failure.dart';
+import '../model/banner_talent_model.dart';
+import '../model/star_model.dart';
+import '../model/star_winner_model.dart';
+import '../../domain/entity/banner_talent_entity.dart';
+import '../../domain/entity/star_entity.dart';
+import '../../domain/entity/star_winner_entity.dart';
+import '../../domain/use_case/fetch_all_star_use_case.dart';
+import '../../domain/use_case/upload_my_star_use_case.dart';
 
 abstract class StarRemoteDataSource {
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(

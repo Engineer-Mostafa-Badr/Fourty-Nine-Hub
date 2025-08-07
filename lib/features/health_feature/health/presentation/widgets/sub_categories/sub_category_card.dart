@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -31,14 +32,19 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
     print(widget.subCategory.id);
     return GestureDetector(
         onTap: () {
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          print("The x ${widget.subCategory.id}");
-          serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
-              widget.subCategory;
-          context.push(Routes.VISITADOCTORLIST,
-              extra: DoctorsListParams(
-                  fromHome: true, subCategoryId: widget.subCategory.id));
+          ManageVibration.vibrate();
+          if (context.isUserLoggedIn) {
+            AdInterstitialTop.loadIntersitialAd();
+            AdInterstitialTop.showInterstitialAd();
+            print("The x ${widget.subCategory.id}");
+            serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
+                widget.subCategory;
+            context.push(Routes.VISITADOCTORLIST,
+                extra: DoctorsListParams(
+                    fromHome: true, subCategoryId: widget.subCategory.id));
+          } else {
+            pleaseLoginDialog(context);
+          }
         },
         child: Container(
           width: 250.h,
@@ -77,6 +83,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
                               : Icons.favorite_border,
                           color: Colors.red),
                       onPressed: () {
+                        ManageVibration.vibrate();
                         setState(() {
                           isFavorite = !isFavorite;
                         });

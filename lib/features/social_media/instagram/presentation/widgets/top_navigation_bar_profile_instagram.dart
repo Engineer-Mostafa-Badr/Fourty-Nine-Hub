@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/assets/assets.dart';
 
 class TopNavigationBarProfileInstagarm extends StatelessWidget {
   const TopNavigationBarProfileInstagarm({

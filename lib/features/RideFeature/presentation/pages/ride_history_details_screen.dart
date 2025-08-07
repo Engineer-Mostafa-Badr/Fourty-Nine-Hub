@@ -23,6 +23,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/validator.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideHistoryDetailsScreenParams {
   final RideCubit rideCubit;
@@ -56,6 +57,7 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),
@@ -130,6 +132,7 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         context.push(Routes.TripReceiptScreen,
                             extra: TripReceiptScreenParams(
                               rideCubit: serviceLocator<RideCubit>(),
@@ -295,7 +298,10 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                       label: context.isArabic
                           ? "طلب دعم الطوارئ"
                           : "Request emergency support",
-                      onPressed: () {},
+                      onPressed: () {
+
+      ManageVibration.vibrate();
+                      },
                     ),
                   ),
                 ],
@@ -452,6 +458,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
           IconButton(
             icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
             onPressed: () {
+      ManageVibration.vibrate();
               isPlaying ? _player.pause() : _player.play();
             },
           ),
@@ -485,7 +492,10 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
               Icons.file_download,
               color: AppColors.PRIMARY_COLOR,
             ),
-            onPressed: () {},
+            onPressed: () {
+
+      ManageVibration.vibrate();
+            },
           ),
         ],
       ),

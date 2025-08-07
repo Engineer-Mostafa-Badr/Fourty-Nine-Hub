@@ -7,11 +7,11 @@ class ParentSheet extends StatelessWidget {
   final EdgeInsetsGeometry? childPadding;
 
   const ParentSheet({
-    Key? key,
+    super.key,
     @required this.child,
     this.childPadding,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

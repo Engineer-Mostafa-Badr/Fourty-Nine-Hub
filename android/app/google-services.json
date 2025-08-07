@@ -14,91 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "872417805780-bi9ujup85jrnh8hkl3b93k22vbln8hu2.apps.googleusercontent.com",
+          "client_id": "872417805780-g788eo4ip7p9ujn1pqb0phuph8u7ad00.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.app.fourtynine",
-            "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
-          }
-        },
-        {
-          "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB1QP6tPVIeH617TLobf0Cj56yYBIE7ZcA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "872417805780-3ngvvf5k56fddj7bf4vca83eckb86fjc.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.fourtynineDashboard"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:872417805780:android:d377b8e02e51d719850241",
-        "android_client_info": {
-          "package_name": "com.example.fourtynine_dashboard"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB1QP6tPVIeH617TLobf0Cj56yYBIE7ZcA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "872417805780-3ngvvf5k56fddj7bf4vca83eckb86fjc.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.fourtynineDashboard"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:872417805780:android:59b36e9d636247af850241",
-        "android_client_info": {
-          "package_name": "com.example.fourtyninehub"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "872417805780-ocq7k6nf5k4hcmqktjjj2jaoch3fdn6v.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fourtyninehub",
-            "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
+            "certificate_hash": "ca4b51184f61a9f9605feeb6b77220c7051eaffc"
           }
         },
         {

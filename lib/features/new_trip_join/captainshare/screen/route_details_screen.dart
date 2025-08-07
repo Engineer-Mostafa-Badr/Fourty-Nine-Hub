@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/driver_recode_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/support_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -25,6 +23,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RouteDetailsScreen extends StatefulWidget {
   final MyBookingEntity tripEntity;
@@ -152,7 +151,7 @@ class _RouteDetailsScreenState
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Text(context.isArabic?'تفاصيل العميل':'Client Details'),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: PDFView(
@@ -173,6 +172,7 @@ class _RouteDetailsScreenState
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -409,6 +409,7 @@ class _RouteDetailsScreenState
                           height: 50,
                           child: state.isLoadingSubmitRequest? const Center(child: CircularProgressIndicator()): ElevatedButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
                                   // cubit.requestEmergencySupport(context: context, clientId: state.routeDetails.clientDetails?.id??'', driverId: state.routeDetails.driverDetails?.id??'', tripId: state.routeDetails.tripDetails?.id??'', userType: 'driver', tripType: 'tracing');
@@ -472,6 +473,7 @@ class _RouteDetailsScreenState
                         const SizedBox(height: 30),
                         isLoading? const Center(child: CircularProgressIndicator()): ElevatedButton.icon(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             setState(() => isLoading = true);
                             // final path = await _generatePdf(details:state.supportDetails,lat:31.2802705,lng: 31.6775629);
                             setState(() {

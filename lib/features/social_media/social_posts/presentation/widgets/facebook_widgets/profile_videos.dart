@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import 'image_from_internet.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ProfileVideos extends StatelessWidget {
   const ProfileVideos({super.key});
@@ -36,7 +37,10 @@ class ProfileVideos extends StatelessWidget {
   }
   Widget _profileVideo(BuildContext context ,String image) {
     return ClickableWidget(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: AspectRatio(
         aspectRatio: 1 / 3,
         child: Stack(

@@ -4,24 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../common/functions/helper/numbers_helper.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../controller/cubit/star_cubit.dart';
+import '../controller/cubit/star_state.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:video_player/video_player.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/extensions/numbers_extensions.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../main.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../domain/entity/star_entity.dart';
 import '../custom_video_player.dart';
+import '../../../../helpers/manage_vibration.dart' as manageVibration;
 
 class TalentVideoPlayer extends StatefulWidget {
   final String videoUrl;
@@ -45,11 +44,11 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   bool _isInitialized = false;
 
   // Floating player state
-  bool _isFloating = false;
-  Offset _floatingPosition = const Offset(100, 100);
+  final bool _isFloating = false;
+  final Offset _floatingPosition = const Offset(100, 100);
   bool _isPlaying = true;
-  bool _showFloatingControls = false;
-  bool _isDragging = false;
+  final bool _showFloatingControls = false;
+  final bool _isDragging = false;
 
   @override
   void initState() {
@@ -625,6 +624,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
             return InkWell(
               onTap: () {
+      manageVibration.ManageVibration.vibrate();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

@@ -7,9 +7,9 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import '../../../domain/entities/favourite_subcategory_entity.dart';
 
 part 'favourite_sub_categories_state.dart';
@@ -38,10 +38,15 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
         await _getFavouriteSubCategoriesUseCase.call(const NoParams());
     emit(
       result.fold(
-        (failure) => state.copyWith(
+        (failure)   { 
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          return state.copyWith(
           failure: failure,
           status: StateStatus.error,
-        ),
+        );},
         (data) {
           return state.copyWith(
             status: StateStatus.success,
@@ -80,6 +85,11 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+
           emit(state.copyWith(
             failure: failure,
             status: StateStatus.error,
@@ -98,8 +108,13 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
     final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
     bool result = false;
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (failure) 
+            {
+              var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+              emit(state.copyWith(failure: failure, status: StateStatus.error));},
         (data) {
       result = data;
       emit(state.copyWith(status: StateStatus.success));

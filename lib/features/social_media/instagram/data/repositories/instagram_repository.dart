@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_data_source.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/media_post_request_model.dart';
+import '../../../../../core/error/failure.dart';
+import '../datasources/instagram_data_source.dart';
+import '../models/media_post_request_model.dart';
 
 class InstagramRepository {
   final InstagramDataSource dataSource;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
+import '../../domain/entities/reel_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -9,6 +9,7 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ReelAccountInfo extends StatelessWidget {
   final ReelEntity item;
@@ -39,7 +40,10 @@ class ReelAccountInfo extends StatelessWidget {
               height: kToolbarHeight * .4,
               padding: 20,
               label: 'Follow',
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
             )
           ],
         ),

@@ -1,4 +1,3 @@
-import '../../../data/models/client/driver_all_rating_model.dart';
 class ClientAllRatingEntity {
   final String? id;
   final String? firstName;

@@ -6,28 +6,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/personal_documents_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 
-import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../domain/entities/dashboards/driver_settings_entity.dart';
-import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../../domain/usecases/dashboards/update_driver_settings_use_case.dart';
-import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
-import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
-import '../../widgets/fare_bottom_sheet_widget.dart';
 import 'creminal_record_non_socket_screen.dart';
 import 'drivers_license_non_socket_screen.dart';
 import 'drug_analysis_non_socket.dart';
 import 'update_personal_info_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SettingsNotSocket extends StatefulWidget {
   final DriverSettingsEntity? settings;
@@ -39,6 +34,7 @@ class SettingsNotSocket extends StatefulWidget {
 
 class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
+  @override
   void initState() {
     super.initState();
     // enableSound =  widget.settings?.enableNotificationSound ?? false;
@@ -206,6 +202,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: PersonalDocumentsNonSocketScreen())));
@@ -213,6 +210,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
               child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: DriversLicenseNonSocketScreen())));
@@ -223,6 +221,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: VehicleInformationNonSocketScreen())));
@@ -234,6 +233,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           // if(widget.settings?.isCriminalRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: CriminalRecordNonSocketScreen())));
@@ -244,6 +244,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           // if(widget.settings?.isVehicleRecordEnabled == true)
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: TechnicalExaminationNonSocketScreen())));
@@ -255,6 +256,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: DragAnalyticsNonSocketScreen())));
@@ -271,7 +273,10 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 child: AppButton(
                     label: LocaleKeys.deleteRegistration.tr(),
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {}),
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    }),
               ),
             ],
           ),

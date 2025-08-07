@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -7,14 +8,13 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-
 import '../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});
@@ -24,17 +24,6 @@ class LogoutWidget extends StatefulWidget {
 }
 
 class _LogoutWidgetState extends State<LogoutWidget> {
-  // final Socket _socket = serviceLocator<Socket>();
-
-  Future<void> setLogOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("ISLOGIN", false);
-    if (!mounted) return;
-    context.pop();
-    context.pop();
-    context.pushReplacement(Routes.HOME);
-  }
-
   @override
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
@@ -73,6 +62,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                 label: LocaleKeys.logout.localize,
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () async {
+      ManageVibration.vibrate();
                   await controller.logout(context);
                   //Phoenix.rebirth(context);
                   // setState(() {});
@@ -100,6 +90,17 @@ class _LogoutWidgetState extends State<LogoutWidget> {
         )
       ],
     );
+  }
+
+  // final Socket _socket = serviceLocator<Socket>();
+
+  Future<void> setLogOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("ISLOGIN", false);
+    if (!mounted) return;
+    context.pop();
+    context.pop();
+    context.pushReplacement(Routes.HOME);
   }
 }
 

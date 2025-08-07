@@ -11,7 +11,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../res/style/app_colors.dart';
 
@@ -37,7 +37,7 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
   final String? allowedCountryCode;
 
   const OpenStreetMapSearchAndPick({
-    Key? key,
+    super.key,
     required this.onPicked,
     this.zoomOutIcon = Icons.zoom_out_map,
     this.zoomInIcon = Icons.zoom_in_map,
@@ -59,7 +59,7 @@ class OpenStreetMapSearchAndPick extends StatefulWidget {
     this.minAllowedDistanceKm =
         0,
     this.allowedCountryCode = 'EG',
-  }) : super(key: key);
+  });
 
   @override
   State<OpenStreetMapSearchAndPick> createState() =>
@@ -303,6 +303,7 @@ class _OpenStreetMapSearchAndPickState
                     heroTag: 'btn1',
                     backgroundColor: widget.buttonColor,
                     onPressed: () {
+      ManageVibration.vibrate();
                       _mapController.move(
                           _mapController.center, _mapController.zoom + 1);
                     },
@@ -319,6 +320,7 @@ class _OpenStreetMapSearchAndPickState
                     heroTag: 'btn2',
                     backgroundColor: widget.buttonColor,
                     onPressed: () {
+      ManageVibration.vibrate();
                       _mapController.move(
                           _mapController.center, _mapController.zoom - 1);
                     },
@@ -335,6 +337,7 @@ class _OpenStreetMapSearchAndPickState
                     heroTag: 'btn3',
                     backgroundColor: widget.buttonColor,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       if (mapCentre != null) {
                         _mapController.move(
                             LatLng(mapCentre.latitude, mapCentre.longitude),
@@ -456,6 +459,7 @@ class _OpenStreetMapSearchAndPickState
                                               : Colors.black87,
                                         )),
                                     onTap: () {
+      ManageVibration.vibrate();
                                       _mapController.move(
                                           LatLng(_options[index].lat,
                                               _options[index].lon),
@@ -495,6 +499,7 @@ class _OpenStreetMapSearchAndPickState
                               height: widget.buttonHeight,
                               width: widget.buttonWidth,
                               onPressed: () async {
+      ManageVibration.vibrate();
                                 setState(() {
                                   isLoading = true;
                                 });

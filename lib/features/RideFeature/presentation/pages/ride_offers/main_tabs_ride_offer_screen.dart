@@ -8,15 +8,14 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/style/styles.dart';
 import 'accept_ride_offer_screen.dart';
 import 'offer_ride_offer_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MainTabsRideOffer extends StatefulWidget {
   const MainTabsRideOffer({super.key, this.type = 'ride'});
@@ -42,12 +41,15 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
   void initState() {
     super.initState();
     selectedTap = widget.type ?? 'ride';
-    if (widget.type == 'ride')
+    if (widget.type == 'ride') {
       context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-    if (widget.type == 'ride')
+    }
+    if (widget.type == 'ride') {
       context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
-    if (widget.type == 'shipping')
+    }
+    if (widget.type == 'shipping') {
       context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+    }
     _tabController = TabController(length: _tabTitles.length, vsync: this);
   }
 
@@ -87,6 +89,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                     radius: 15,
                     label: LocaleKeys.ride.tr(),
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (selectedTap != 'ride') {
                         setState(() {
                           selectedTap = 'ride';
@@ -136,6 +139,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (selectedTap != 'shipping') {
                         setState(() {
                           selectedTap = 'shipping';
@@ -221,38 +225,46 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
         onTap: (index) {
           if (index == 2) {
             // loadInitialClientAcceptedShippingTrips
-            if (selectedTap == 'ride')
+            if (selectedTap == 'ride') {
               context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
-            if (selectedTap == 'shipping')
+            }
+            if (selectedTap == 'shipping') {
               context
                   .read<ClientTripsCubit>()
                   .loadInitialClientPendingShippingTrips();
+            }
           }
           if (index == 1) {
             print("object1");
-            if (selectedTap == 'ride')
+            if (selectedTap == 'ride') {
               context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
-            if (selectedTap == 'shipping')
+            }
+            if (selectedTap == 'shipping') {
               context
                   .read<ClientTripsCubit>()
                   .loadInitialClientAcceptedShippingTrips();
+            }
           }
           if (index == 0) {
-            if (selectedTap == 'ride')
+            if (selectedTap == 'ride') {
               context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-            if (selectedTap == 'shipping')
+            }
+            if (selectedTap == 'shipping') {
               context
                   .read<ClientTripsCubit>()
                   .loadInitialClientOfferShippingTrips();
+            }
           }
           if (index == 3) {
             print("object");
-            if (selectedTap == 'ride')
+            if (selectedTap == 'ride') {
               context.read<ClientTripsCubit>().loadInitialClientPastTrips();
-            if (selectedTap == 'shipping')
+            }
+            if (selectedTap == 'shipping') {
               context
                   .read<ClientTripsCubit>()
                   .loadInitialClientPastShippingTrips();
+            }
           }
 
           // if (index == 0) {

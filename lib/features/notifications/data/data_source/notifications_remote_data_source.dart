@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/notifications/domain/entities/notificatio
 import 'package:fourtyninehub/features/notifications/domain/entities/status_all_services_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 import 'package:fourtyninehub/features/notifications/helpers/firebase_notification_helper.dart';
-import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 

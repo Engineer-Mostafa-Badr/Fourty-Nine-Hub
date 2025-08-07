@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/widgets/upload_file_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,6 +17,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
 
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class DragAnalyticsNonSocketScreen extends StatelessWidget {
@@ -102,6 +102,7 @@ class DragAnalyticsNonSocketScreen extends StatelessWidget {
                           UploadFileWidget(
                             title: LocaleKeys.dragAnalysis.localize,
                             onTap: (){
+      ManageVibration.vibrate();
                               cubit.onUploadPersonalDrugAnalysisPicture(context);
 
                             },
@@ -149,6 +150,7 @@ class DragAnalyticsNonSocketScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(context.read<DashboardsCubit>().state.personalDrugAnalysisPicture==null){
                       showErrorMessage(context, "Please select drag analysis");
                     }else{

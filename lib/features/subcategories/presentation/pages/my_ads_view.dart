@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
+import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import '../cubit/subcategories_cubit.dart';
+import 'my_ad_card.dart';
+import '../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/widget/custom_loading_search_widget.dart';

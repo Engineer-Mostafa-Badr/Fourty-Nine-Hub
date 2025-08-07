@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../res/style/app_colors.dart';
+
+import '../../../../../../helpers/manage_vibration.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class TripJoinFloatingActionButton extends StatelessWidget {
   const TripJoinFloatingActionButton({
@@ -23,7 +21,10 @@ class TripJoinFloatingActionButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RawMaterialButton(
-            onPressed:onTap,
+            onPressed:(){
+              ManageVibration.vibrate();
+              onTap.call();
+            },
             fillColor:context.isDarkMode?AppColors.Floating_Button_COLOR_DARK: AppColors.PRIMARY_COLOR,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),

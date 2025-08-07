@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/location_reels_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import 'location_reels_widget.dart';
+import '../../../../../res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routes/routes.dart';
 import '../../data/models/new_reels_model.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class UserSection extends StatelessWidget {
   final Reel reel;
@@ -24,6 +23,7 @@ class UserSection extends StatelessWidget {
           if (reel.location.isNotEmpty)
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 context.push(Routes.AllLocationScreen);
               },
               child: const LocationReelsWidget(),

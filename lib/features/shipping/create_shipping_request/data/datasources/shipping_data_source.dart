@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/service/cache_service.dart';
+import '../../../../../core/utils/shared_pref.dart';
+import '../models/driver_register_request_model.dart';
+import '../models/request_model.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class ShippingDataSource {

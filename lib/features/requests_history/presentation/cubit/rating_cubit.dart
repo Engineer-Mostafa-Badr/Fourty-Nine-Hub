@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/requests_history/domain/repositories/history_ride_repo.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/ratin_state.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class RatingCubit extends Cubit<RatingState> {
   final RequestHistoryRepo repository;
@@ -34,6 +37,10 @@ class RatingCubit extends Cubit<RatingState> {
     );
     resposne.fold(
       (error) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(error, currentContext));
         emit(FailiureRatingState(failure: error));
       },
       (data) {

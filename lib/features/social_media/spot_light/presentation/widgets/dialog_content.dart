@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SpotLightDialogContent extends StatelessWidget {
   const SpotLightDialogContent({
@@ -30,7 +29,9 @@ class SpotLightDialogContent extends StatelessWidget {
           ),
           const Sizer(height: 20),
           ElevatedButton(
-            onPressed: (){ Navigator.of(context).pop();},
+            onPressed: (){
+      ManageVibration.vibrate();
+               Navigator.of(context).pop();},
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.PRIMARY_COLOR,
               foregroundColor: Colors.white,
@@ -52,7 +53,9 @@ class SpotLightDialogContent extends StatelessWidget {
           ),
           const Sizer(height: 20,),
           ClickableWidget(
-            onTap: (){ Navigator.of(context).pop();},
+            onTap: (){ 
+      ManageVibration.vibrate();
+              Navigator.of(context).pop();},
             child: Text(
               bottomButtonTitle,
               style: Styles.headerText(color: Colors.red,),

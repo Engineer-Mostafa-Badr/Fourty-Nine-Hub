@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -17,6 +18,11 @@ import '../../../../../res/style/styles.dart';
 import '../../../../notifications/domain/entities/user_trip_entity.dart';
 
 class RideWidget extends StatelessWidget {
+  final bool isTruck;
+
+  final bool isDriver;
+  final bool isSubscribed;
+  final UserTripEntity userTripEntity;
   const RideWidget({
     super.key,
     required this.isTruck,
@@ -24,11 +30,6 @@ class RideWidget extends StatelessWidget {
     required this.isSubscribed,
     required this.userTripEntity,
   });
-
-  final bool isTruck;
-  final bool isDriver;
-  final bool isSubscribed;
-  final UserTripEntity userTripEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +171,7 @@ class RideWidget extends StatelessWidget {
                         isTruck
                             ? GestureDetector(
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   showAnimatedDialog(
                                     context,
                                     AlertDialog(
@@ -189,6 +191,7 @@ class RideWidget extends StatelessWidget {
                                             label: LocaleKeys.close.localize,
                                             backColor: AppColors.PRIMARY_COLOR,
                                             onPressed: () {
+                                              ManageVibration.vibrate();
                                               context.pop();
                                             },
                                           ),
@@ -263,7 +266,9 @@ class RideWidget extends StatelessWidget {
                                       height: 30,
                                       radius: 15,
                                       label: 'Accept',
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        ManageVibration.vibrate();
+                                      },
                                       backColor: AppColors.PRIMARY_COLOR,
                                     ),
                                   ),
@@ -280,7 +285,9 @@ class RideWidget extends StatelessWidget {
                                               color: Colors.white, fontSize: 24)
                                           : Styles.mediumText(
                                               color: Colors.white),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        ManageVibration.vibrate();
+                                      },
                                       backColor: AppColors.SECONDARY_COLOR,
                                     ),
                                   ),
@@ -292,6 +299,7 @@ class RideWidget extends StatelessWidget {
                                 children: [
                                   IconButton(
                                     onPressed: () {
+                                      ManageVibration.vibrate();
                                       bottomSheet(
                                         context: context,
                                         widget: Column(
@@ -414,7 +422,9 @@ class RideWidget extends StatelessWidget {
                                                   color: Colors.white),
                                               backColor:
                                                   AppColors.PRIMARY_COLOR,
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                ManageVibration.vibrate();
+                                              },
                                             ),
                                             AppButton(
                                               label:
@@ -422,7 +432,9 @@ class RideWidget extends StatelessWidget {
                                               color: AppColors.PRIMARY_COLOR,
                                               style: Styles.headerText(),
                                               backColor: AppColors.cF5F5F5,
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                ManageVibration.vibrate();
+                                              },
                                             ),
                                           ],
                                         ),
@@ -434,14 +446,18 @@ class RideWidget extends StatelessWidget {
                                     color: AppColors.PRIMARY_COLOR,
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                    },
                                     icon: const Icon(
                                       Icons.mail_outline_rounded,
                                     ),
                                     color: AppColors.PRIMARY_COLOR,
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                    },
                                     icon: Image.asset(
                                       Assets.reportRounded,
                                       width: 30,
@@ -483,7 +499,9 @@ class RideWidget extends StatelessWidget {
                             Expanded(
                               child: AppButton(
                                 label: LocaleKeys.close.localize,
-                                onPressed: () {},
+                                onPressed: () {
+                                  ManageVibration.vibrate();
+                                },
                                 backColor: AppColors.SECONDARY_COLOR_DARK2,
                                 height: 40,
                               ),
@@ -492,7 +510,9 @@ class RideWidget extends StatelessWidget {
                             Expanded(
                               child: AppButton(
                                 label: LocaleKeys.subscribe.localize,
-                                onPressed: () {},
+                                onPressed: () {
+                                  ManageVibration.vibrate();
+                                },
                                 backColor: AppColors.PRIMARY_COLOR,
                                 height: 40,
                               ),

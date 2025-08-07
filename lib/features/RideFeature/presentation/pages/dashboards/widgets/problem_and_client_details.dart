@@ -7,6 +7,7 @@ import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ProblemAndClientDetails extends StatefulWidget {
   const ProblemAndClientDetails({super.key});
@@ -84,6 +85,7 @@ class _ProblemAndClientDetailsState extends State<ProblemAndClientDetails> {
                       ? LocaleKeys.requestSent.tr()//'Request sent'
                       :LocaleKeys.locationLog.tr(), //'Location log',
               onPressed: () {
+      ManageVibration.vibrate();
                 if (_formKey.currentState!.validate()) {
                   // ScaffoldMessenger.of(context).showSnackBar(
                   //   const SnackBar(content: Text('Processing Data')),

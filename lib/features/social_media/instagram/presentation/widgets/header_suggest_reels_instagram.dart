@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class HeaderSuggestReelsInstagram extends StatelessWidget {
   const HeaderSuggestReelsInstagram({
@@ -24,7 +25,10 @@ class HeaderSuggestReelsInstagram extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             child: Label(
               text: LocaleKeys.watchAll.localize,
               style: Styles.headerText(

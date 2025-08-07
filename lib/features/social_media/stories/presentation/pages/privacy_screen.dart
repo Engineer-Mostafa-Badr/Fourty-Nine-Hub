@@ -328,17 +328,15 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../tinder/data/shared/shared.dart';
-import '../../data/models/followers_model.dart';
 import '../cubit/stories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class StatusPrivacyScreen extends StatefulWidget {
   const StatusPrivacyScreen({super.key});
@@ -694,6 +692,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
 
                         return GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             setState(() {
                               if (title == LocaleKeys.my_contacts_except.tr()) {
                                 if (isSelected) {
@@ -785,6 +784,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+      ManageVibration.vibrate();
                       await _onSavePrivacySettings();
                       Navigator.pop(context);
                     },

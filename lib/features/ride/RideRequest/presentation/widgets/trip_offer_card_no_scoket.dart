@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripOfferCardNoScoket extends StatefulWidget {
   const TripOfferCardNoScoket({super.key, required this.model});
@@ -181,6 +182,7 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                             fontSize: 28, color: Colors.white),
                         label: LocaleKeys.sendOffer.tr(),
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.read<SendOfferNoSocketCubit>().send(
                               tripId: widget.model.id ?? "",
                               model: CreateOfferNoSocketModel(
@@ -230,7 +232,10 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                                     (widget.model.acceptedReq ?? false)
                                 ? AppColors.PRIMARY_COLOR
                                 : AppColors.DARK_GRAY_COLOR,
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                             style: Styles.mediumText(
                                 fontSize: 18, color: Colors.white),
                           ),
@@ -246,7 +251,10 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                                 : AppColors.DARK_GRAY_COLOR,
                             style: Styles.mediumText(
                                 fontSize: 15, color: Colors.white),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                           ),
                         ),
                         const Sizer(),
@@ -258,6 +266,7 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                             style: Styles.mediumText(
                                 fontSize: 18, color: Colors.white),
                             onPressed: () {
+      ManageVibration.vibrate();
                               // tripCubit.report(
                               //     loadingTripId: widget.model.id ?? "");
                               showBottomSheet(
@@ -286,6 +295,7 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                             icon: Icons.call,
                             backColor: AppColors.DARK_GRAY_COLOR,
                             onPressed: () {
+      ManageVibration.vibrate();
                               launchUrlString(
                                   "tel://${widget.model.userId?.phone}");
                             },
@@ -301,7 +311,10 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                             backColor: AppColors.DARK_GRAY_COLOR,
                             style: Styles.mediumText(
                                 fontSize: 18, color: Colors.white),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                           ),
                         ),
                         const Sizer(),
@@ -313,6 +326,7 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
                             style: Styles.mediumText(
                                 fontSize: 15, color: Colors.white),
                             onPressed: () {
+      ManageVibration.vibrate();
                               showBottomSheet(
                                 context: context,
                                 builder: (context) => const ReportView(

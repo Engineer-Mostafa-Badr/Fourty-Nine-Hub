@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/call/presentation/pages/send_whatsapp_cal
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -62,6 +63,7 @@ class BottomSheetHelper {
                     color: AppColors.SECONDARY_COLOR,
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     onTap: () {
+                      ManageVibration.vibrate();
                       Navigator.pop(context);
                       LaunchURLHelper().call(phone: phoneNumber);
                     },
@@ -75,6 +77,7 @@ class BottomSheetHelper {
                     color: AppColors.SECONDARY_COLOR,
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     onTap: () async {
+                      ManageVibration.vibrate();
                       Navigator.pop(context);
 
                       if (await Permission.microphone.request() != PermissionStatus.granted ||

@@ -3,22 +3,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/functions/global/upload_file.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import '../../controller/cubit/star_cubit.dart';
+import '../../controller/cubit/star_state.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -26,6 +26,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../add_talent_widget.dart';
 import '../all_winner_view.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreateStar extends StatefulWidget {
   const CreateStar({super.key});
@@ -73,6 +74,7 @@ class _CreateStarState extends State<CreateStar> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   // Navigator.of(context).push(
                   //   MaterialPageRoute(
                   //     builder: (context) => BlocProvider(
@@ -86,6 +88,7 @@ class _CreateStarState extends State<CreateStar> {
                   children: [
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         if (!context.read<UserCubit>().isLoggedIn) {
                           pleaseLoginDialog(context);
                         }else {

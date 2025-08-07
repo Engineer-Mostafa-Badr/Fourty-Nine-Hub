@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/location.dart';
-import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/patient_info.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/price.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/time.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
@@ -24,6 +23,7 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class VisitaBooking extends StatefulWidget {
   final DoctorDetailsCubit doctorDetailsCubit;
@@ -103,6 +103,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                             height: 50.h,
                             label: LocaleKeys.premiumBook.localize,
                             onPressed: () {
+      ManageVibration.vibrate();
                               serviceLocator<SubscriptionController>()
                                   .checkIfUserSubscribed(
                                 title: context.isArabic

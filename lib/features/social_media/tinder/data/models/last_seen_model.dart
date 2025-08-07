@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
+import '../../domain/domain/last_seen_entity.dart';
 
 class LastSeenModel extends LastSeenEntity {
   LastSeenModel(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../domain/entities/data_suggest_follow_instagram_entity.dart';
+import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
   const DiscoverPeopleProfileInstagramListViewItem(
@@ -77,6 +77,7 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
                 ),
                 backColor: const Color(0xFF0B1035),
                 onPressed: () {
+      ManageVibration.vibrate();
                   context
                       .read<ProfileInstagramCubit>()
                       .followUser(suggest.userId);
@@ -89,6 +90,7 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
             end: 0,
             child: InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 context
                     .read<ProfileInstagramCubit>()
                     .removeFollowUser(suggest.userId);

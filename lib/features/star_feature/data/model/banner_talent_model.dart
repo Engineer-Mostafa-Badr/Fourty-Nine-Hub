@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
+import '../../domain/entity/banner_talent_entity.dart';
 
 class BannerTalentModel extends BannerTalentEntity {
   BannerTalentModel(

@@ -28,8 +28,8 @@ class CounterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? 38.w,
-      height: height ?? 38.w,
+      width: width??42.w,
+      height: height??42.w,
       // padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
           border: Border.all(

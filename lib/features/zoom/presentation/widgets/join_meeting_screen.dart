@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_room.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/messages/messages.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../controller/stream_cubit.dart';
+import '../pages/meeting_room.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../routes/routes.dart';
 import '../controller/stream_state.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({
@@ -202,6 +203,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () async {
+      ManageVibration.vibrate();
                       if (_formKey.currentState!.validate()) {
                         String meetingId = _meetingIdController.text.trim();
                         if (meetingId.isEmpty) {

@@ -17,19 +17,17 @@ class SearchTextFormField extends MainTextFormField {
     super.hintStyle,
     Color? hintColor,
     SvgPicture? icon,
-    Color? cursorColor = AppColors.ACCENT_COLOR,
-    Color? fillColor = Colors.white,
+    super.cursorColor = AppColors.ACCENT_COLOR,
+    super.fillColor = Colors.white,
     super.onEditComplete,
     super.onChanged,
   }) : super(
           hintText: hint ?? '',
           keyboardType: TextInputType.emailAddress,
           validator: null,
-          fillColor: fillColor,
           hintColor: hintColor ?? AppColors.PRIMARY_COLOR_DARK,
           prefixIcon:
               Icon(Icons.search, color: hintColor ?? AppColors.QUANTITY_COLOR),
-          cursorColor: cursorColor,
           suffixIcon: icon,
         );
 }

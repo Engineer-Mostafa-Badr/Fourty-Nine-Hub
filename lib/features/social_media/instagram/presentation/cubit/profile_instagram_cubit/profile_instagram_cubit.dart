@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/data_suggest_follow_instagram_entity.dart';
+import '../../../domain/entities/profile_instagram_data_entity.dart';
+import '../../../domain/entities/reels_specific_user_entity.dart';
+import '../../../domain/usecases/get_instagram_profile_use_case.dart';
+import '../../../domain/usecases/get_instagram_reels_specific_user_use_case.dart';
+import '../../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
+import '../../../domain/usecases/post_follow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_profile_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_specific_user_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../domain/usecases/unfollow_user_instagram_use_case.dart';
 part 'profile_instagram_state.dart';
@@ -46,11 +49,15 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             profileStatus: LoadingStatus.failure, profileFailure: f));
       },
       (data) {
-        print('==> data ${data} ${data.postsEntity.length}');
+        print('==> data $data ${data.postsEntity.length}');
         emit(state.copyWith(
             profileStatus: LoadingStatus.success,
             profileData: data,
@@ -100,6 +107,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             reelsStatus: LoadingStatus.failure, reelsFailure: f));
       },
@@ -153,6 +164,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             suggestFollowStatus: LoadingStatus.failure,
             suggestFollowFailure: f));
@@ -209,6 +224,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
         },
@@ -224,7 +243,10 @@ class ProfileInstagramCubit extends Cubit<ProfileInstagramState> {
         await _unFollowUserInstagramUC(PostFollowUserInstagramParams(userId: userId));
 
     res.fold(
-      (f) {
+      (f) {var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
             addFollowStatus: LoadingStatus.failure, addFollowFailure: f));
         },

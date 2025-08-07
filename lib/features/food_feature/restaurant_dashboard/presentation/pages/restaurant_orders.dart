@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
-import 'package:fourtyninehub/helpers/subscription_method.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import '../cubit/restaurant_dashboard_cubit.dart';
+import '../../../../../helpers/subscription_method.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/assets/assets.dart';
@@ -24,6 +24,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../food_cart/presentation/pages/cart_view.dart';
 import '../../domain/entity/order_food_entity.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AvailableRequestFood extends StatefulWidget {
   const AvailableRequestFood({super.key});
@@ -336,6 +337,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                       backColor: AppColors.getButtonPrimaryWhiteColor(context),
                       label: context.isArabic ? 'اكمال' : "Complete",
                       onPressed: () {
+      ManageVibration.vibrate();
                         controller.completeOrder(data.id!);
                       },
                     ),
@@ -403,6 +405,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                                     AppColors.getButtonPrimaryColor(context),
                                 color: AppColors.getReversedTextColor(context),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   // _showFreeCallBottomSheet(context, item);
                                 },
@@ -412,6 +415,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                                 backColor: AppColors.cD9D9D9,
                                 color: AppColors.black,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   _showRegularCallBottomSheet(
                                       context, item); // Open second
@@ -467,6 +471,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
             ),
             color: AppColors.getRedColor(context),
             onPressed: () async {
+      ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -593,6 +598,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                       color: AppColors.getReversedTextColor(context),
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         final enteredNumber = phoneController.text.trim();
                         if (isBookingForAnotherClient) {
                           if (enteredNumber.isEmpty) {

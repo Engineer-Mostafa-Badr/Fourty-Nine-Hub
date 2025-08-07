@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/single_post_instagram_cubit/single_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/widget/custom_failure_widget.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../../data/models/comment_instagram_model.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import '../../domain/entities/single_post_instagram_entity.dart';
+import '../cubit/single_post_instagram_cubit/single_post_instagram_cubit.dart';
+import '../widgets/post_instagram_widget.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SinglePostInstagramView extends StatelessWidget {
   const SinglePostInstagramView({super.key, required this.postId});
@@ -51,6 +51,7 @@ class SinglePostInstagramView extends StatelessWidget {
             color: Colors.black,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
         ),
@@ -69,6 +70,7 @@ class SinglePostInstagramView extends StatelessWidget {
                 context,
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 context.read<SinglePostInstagramCubit>().getPost(postId);
               },
             );

@@ -2,14 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../cubit/create_resturant_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../restaurants_list/domain/entities/food_category_entity.dart';
+import '../../../../../res/style/styles.dart';
 
 class CreateResturantSubcategoryDropdown extends StatelessWidget {
   const CreateResturantSubcategoryDropdown({super.key});
