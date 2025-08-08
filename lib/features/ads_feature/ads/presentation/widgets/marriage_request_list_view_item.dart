@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MarriageRequestListViewItem extends StatelessWidget {
   const MarriageRequestListViewItem({
@@ -26,6 +27,7 @@ class MarriageRequestListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: marriageAds.adId);
       },
       child: Container(

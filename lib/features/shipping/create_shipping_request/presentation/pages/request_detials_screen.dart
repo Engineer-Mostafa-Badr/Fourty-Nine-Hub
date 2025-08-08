@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
+import '../../data/models/all_trip_model/all_trip_model.dart';
+import '../widgets/trip_card.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 

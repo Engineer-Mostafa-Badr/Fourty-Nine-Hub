@@ -5,7 +5,9 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Package imports:
 
@@ -24,7 +26,6 @@ import '../../internal/pk_combine_notifier.dart';
 import '../defines.dart';
 import '../utils/pop_up_manager.dart';
 import '../utils/pop_up_sheet_menu.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 /// @nodoc
 class ZegoLiveStreamingMemberListSheet extends StatefulWidget {
@@ -168,6 +169,7 @@ class _ZegoLiveStreamingMemberListSheetState
               builder: (context, _, __) {
                 return GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     widget.events.onClicked?.call(user);
                   },
                   child: Container(
@@ -196,6 +198,7 @@ class _ZegoLiveStreamingMemberListSheetState
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(
                 context,
                 rootNavigator: widget.hostManager.config.rootNavigator,
@@ -344,6 +347,7 @@ class _ZegoLiveStreamingMemberListSheetState
           text: widget.innerText.disagreeButton,
           backgroundColor: const Color(0xffA7A6B7),
           onPressed: () {
+      ManageVibration.vibrate();
             ZegoUIKitPrebuiltLiveStreamingController()
                 .coHost
                 .hostRejectCoHostRequest(user);
@@ -358,6 +362,7 @@ class _ZegoLiveStreamingMemberListSheetState
             end: Alignment.bottomRight,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             ZegoUIKitPrebuiltLiveStreamingController()
                 .coHost
                 .hostAgreeCoHostRequest(user);
@@ -419,6 +424,7 @@ class _ZegoLiveStreamingMemberListSheetState
                 ZegoLiveStreamingIconUrls.memberMore),
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             /// product manager say close sheet together
             Navigator.of(
               context,

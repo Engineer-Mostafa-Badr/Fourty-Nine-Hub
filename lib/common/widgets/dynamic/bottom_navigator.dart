@@ -228,6 +228,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       if (index != 2) {
                         widget.onTap(index);
                       }
@@ -254,6 +255,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                               : AppColors.PRIMARY_COLOR,
                                         ),
                                         height: widget.items[index].height-5,
+
                                         unreadCount: !context
                                                 .read<UserCubit>()
                                                 .isLoggedIn

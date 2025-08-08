@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 
 abstract class EditFoodRemoteDataSource {
   // Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders();

@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../helpers/manage_vibration.dart' as manageVibration ;
 
 class ReplyWidget extends StatefulWidget {
   const ReplyWidget({super.key});
@@ -155,6 +156,7 @@ class _ReplyWidgetState extends State<ReplyWidget> with WidgetsBindingObserver {
       },
       child: GestureDetector(
         onTap: () {
+      manageVibration.ManageVibration.vibrate();
           if (!_focusNode.hasFocus && !_showEmojiPicker) {
             _focusNode.requestFocus();
           }
@@ -255,6 +257,7 @@ class _ReplyWidgetState extends State<ReplyWidget> with WidgetsBindingObserver {
                         color: context.isDarkMode ? Colors.white : Colors.black,
                       ),
                       onTap: () {
+      manageVibration.ManageVibration.vibrate();
                         if (_showEmojiPicker) {
                           setState(() {
                             _showEmojiPicker = false;
@@ -334,6 +337,7 @@ class _ReplyWidgetState extends State<ReplyWidget> with WidgetsBindingObserver {
   Widget _emojiText(String emoji) {
     return GestureDetector(
       onTap: () {
+      manageVibration.ManageVibration.vibrate();
         final text = _controller.text;
         final newText = text + emoji;
         _controller.text = newText;

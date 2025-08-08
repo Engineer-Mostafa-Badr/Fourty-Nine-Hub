@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import '../../../zego_uikit/src/components/screen_util/core/size_extension.dart';
 
 import '../../../../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../../../../helpers/manage_vibration.dart';
 
 enum DrawMode { freeDraw, rectangle, circle, triangle }
 
@@ -184,6 +185,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _selectedColor = _colors[index];
                         });
@@ -214,6 +216,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
                     IconButton(
                       icon: const Icon(Icons.brush),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _drawMode = DrawMode.freeDraw;
                         });
@@ -222,6 +225,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
                     IconButton(
                       icon: const Icon(Icons.crop_square),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _drawMode = DrawMode.rectangle;
                         });
@@ -230,6 +234,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
                     IconButton(
                       icon: const Icon(Icons.circle),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _drawMode = DrawMode.circle;
                         });
@@ -238,6 +243,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
                     IconButton(
                       icon: const Icon(Icons.change_history),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _drawMode = DrawMode.triangle;
                         });
@@ -246,6 +252,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
                     IconButton(
                       icon: const Icon(Icons.clear),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _points.clear(); // Clear the board
                           _shapes.clear();

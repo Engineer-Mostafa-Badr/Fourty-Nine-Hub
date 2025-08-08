@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
+import '../../domain/entities/twitter_user_entity.dart';
 class TwitterUserModel extends TwitterUserEntity {
   TwitterUserModel({
     required super.id,

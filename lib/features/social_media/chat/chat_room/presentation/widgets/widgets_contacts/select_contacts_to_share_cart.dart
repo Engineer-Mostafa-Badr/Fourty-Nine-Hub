@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/const.dart';
+import '../../../../../../../res/style/styles.dart';
 
 import '../../../domain/entities/message_shared_contacts_entity.dart';
 

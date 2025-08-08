@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -21,6 +23,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/di
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -66,11 +69,12 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
   Duration _remainingTime = Duration.zero;
   Timer? _timer;
   DateTime? _savedDateTime;
-  bool _isFinished = true;
+  bool _isFinished = false;
+  bool isValidate = false;
   @override
   void initState() {
     super.initState();
-    // _loadSavedDateTime();
+    _loadSavedDateTime();
   }
 
   @override
@@ -83,6 +87,10 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
     _savedDateTime = await getSavedDateTime();
     if (_savedDateTime != null) {
       _startTimer();
+    }else{
+      setState(() {
+        _isFinished = true;
+      });
     }
   }
 
@@ -103,47 +111,19 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       final now = DateTime.now();
-
-      // Fetch latest saved time every second
-      final prefs = await SharedPreferences.getInstance();
-      final savedTimeString = prefs.getString('remaining_time');
-
-      if (savedTimeString == null) {
-        timer.cancel();
-        setState(() {
-          _remainingTime = Duration.zero;
-          _isFinished = true;
-        });
-        return;
-      }
-
-      final latestSavedTime = DateTime.tryParse(savedTimeString);
-
-      if (latestSavedTime == null) return;
-
-      // If time has changed externally, restart the timer
-      if (_savedDateTime == null || _savedDateTime!.toIso8601String() != latestSavedTime.toIso8601String()) {
-        _savedDateTime = latestSavedTime;
-        timer.cancel(); // Stop current timer
-        _startTimer();  // Start a new one with updated time
-        return;
-      }
-
-      // Normal countdown logic
       if (_savedDateTime!.isAfter(now)) {
         setState(() {
           _remainingTime = _savedDateTime!.difference(now);
-          _isFinished = false; // Reset finished state when new valid time is found
+          _isFinished = false;
         });
       } else {
-        // Instead of just canceling, keep checking for new saved time
+        _timer?.cancel();
         setState(() {
           _remainingTime = Duration.zero;
           _isFinished = true;
         });
-        // Don't cancel the timer here - keep it running to detect new saved times
       }
     });
   }
@@ -187,6 +167,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       onSafety: widget.onSafety,
                       is_show_message: true,
                       onMessage: () async {
+                        ManageVibration.vibrate();
                         BottomSheetHelper.startChatAndNavigate(
                           context: context,
                           otherUserId: widget.activeTrip?.clientId??'',
@@ -194,6 +175,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                         );
                       },
                       onContactDriver: () {
+                        ManageVibration.vibrate();
                         BottomSheetHelper.showCallOptionsBottomSheet(
                             context: context,
                             senderId: widget.activeTrip?.driverId ?? '',
@@ -254,6 +236,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                             Expanded(
                               child: ClickableWidget(
                                 onTap: (){
+                                  ManageVibration.vibrate();
                                   setState(() {
                                     _showButtons = false;
                                   });
@@ -378,39 +361,62 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                     const SizedBox(
                       height: 16,
                     ),
-                    PinCodeTextField(
-                      // onTap: () => _showOtpBottomSheet(context),
-                      // readOnly: true,
-                      appContext: context,
-                      length: 6,
-                      controller: otpController,
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(8),
-                        fieldHeight: 50,
-                        fieldWidth: 40,
-                        activeColor: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        inactiveColor: Colors.grey,
-                        selectedColor: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                      animationDuration:
-                      const Duration(milliseconds: 300),
-                      backgroundColor: Colors.transparent,
-                      enableActiveFill: false,
-                      onCompleted: (value) {
-                        widget.onPressed(otpController.text);
-                      },
-                      onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return context.isArabic?'يرجى إدخال رمز التحقيق المكون من 6 أرقام':'Please enter a 6-digit code';
-                        }
-                        return null;
-                      },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PinCodeTextField(
+                          appContext: context,
+                          length: 6,
+                          controller: otpController,
+                          keyboardType: TextInputType.number, // only number keyboard
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly], // only digits allowed
+                          pinTheme: PinTheme(
+                            shape: PinCodeFieldShape.box,
+                            borderRadius: BorderRadius.circular(8),
+                            fieldHeight: 50,
+                            fieldWidth: 40,
+                            activeColor: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            inactiveColor: Colors.grey,
+                            selectedColor: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                          animationDuration: const Duration(milliseconds: 300),
+                          backgroundColor: Colors.transparent,
+                          enableActiveFill: false,
+                          onCompleted: (value) {
+                            widget.onPressed(otpController.text);
+                          },
+                          onChanged: (value) {
+                            if (value.length < 6) {
+                              setState(() {
+                                isValidate = false;
+                              });
+                            }else{
+                              setState(() {
+                                isValidate=true;
+                              });
+                            }
+                            // Optional: trigger form rebuild
+                          },
+                          validator: (value) {
+
+                            return null;
+                          },
+                        ),
+                        // Add space for validation message
+                        if(!isValidate)Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0, left: 4.0,right: 4.0),
+                          child: Text(
+                            context.isArabic
+                                ? 'يرجى إدخال رمز التحقيق المكون من 6 أرقام'
+                                : 'Please enter a 6-digit code',
+                            style: TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        )
+                      ],
                     ),
                     SizedBox(
                       height: 20.h,
@@ -419,12 +425,15 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: ()=>openGoogleMapsWithDirections(
-                              startLat: widget.activeTrip?.startCoordinates?[1]??0.0,
-                              startLng: widget.activeTrip?.startCoordinates?[0]??0.0,
-                              targetLat: widget.activeTrip?.targetCoordinates?[1]??0.0,
-                              targetLng: widget.activeTrip?.targetCoordinates?[0]??0.0,
-                            ),
+                            onTap: ()
+                            {
+                              ManageVibration.vibrate();
+                              openGoogleMapsWithDirections(
+                              startLat: widget.activeTrip?.startCoordinates?[1] ?? 0.0,
+                              startLng: widget.activeTrip?.startCoordinates?[0] ?? 0.0,
+                              targetLat: widget.activeTrip?.targetCoordinates?[1] ?? 0.0,
+                              targetLng: widget.activeTrip?.targetCoordinates?[0] ?? 0.0,
+                            );},
                             child: Container(
                               width: double.infinity,
                               height: 45,
@@ -449,7 +458,16 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                         Expanded(
                           child: ClickableWidget(
                             onTap: (){
-                              if(formKey.currentState!.validate()){
+                              if (otpController.text.length < 6) {
+                                setState(() {
+                                  isValidate = false;
+                                });
+                              }else{
+                                setState(() {
+                                  isValidate=true;
+                                });
+                              }
+                              if(isValidate){
                                 widget.onPressed(otpController.text);
                               }
                             },
@@ -490,7 +508,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                                 color:context.isDarkMode?AppColors.whiteColor: Colors.black54),
                             SizedBox(width: 5),
                             Text(
-                              "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${widget.activeTrip?.duration??''} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}.",
+                              "${context.isArabic?'وقت الرحلة':"Travel time"}: ~${FormatNumbers().convertNumberToLocalizedString('${widget.activeTrip?.duration??''}', isArabic: context.isArabic)} ${context.isArabic?"دقيقة":"min"}. ${context.isArabic?"مسافة":"Distance"}: ${FormatNumbers().convertNumberToLocalizedString(((widget.activeTrip?.distance??0) / 1000).toStringAsFixed(1), isArabic: context.isArabic)} ${LocaleKeys.KM.tr()}.",
                               style: TextStyle(
                                   color: context.isDarkMode?AppColors.whiteColor:Colors.black54, fontSize: 14),
                             ),
@@ -501,10 +519,12 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                     const SizedBox(height: 12),
                     ClickableWidget(
                         onTap: (){
+                          ManageVibration.vibrate();
                           showCancelTripDialog(
                               context: context,
                               isChangedMindReason: _isChangedMindReason,
                               onSelectChangedMindReason: () {
+                                ManageVibration.vibrate();
                                 setState(() {
                                   _isClientNotShownReason = false;
                                   _isChangedMindReason = !_isChangedMindReason;
@@ -513,6 +533,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                               },
                               isClientNotShownReason: _isClientNotShownReason,
                               onSelectClientNotShownReason: () {
+                                ManageVibration.vibrate();
                                 setState(() {
                                   _isClientNotShownReason = !_isClientNotShownReason;
                                   _isChangedMindReason = false;
@@ -521,6 +542,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                               },
                               isOtherReason: _isOtherReason,
                               onSelectOtherReason: () {
+                                ManageVibration.vibrate();
                                 setState(() {
                                   _isClientNotShownReason = false;
                                   _isChangedMindReason = false;
@@ -596,6 +618,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isClientNotShown: true);
                   },
                   child: Container(
@@ -621,6 +644,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isChangedMind: true);
                   },
                   child: Container(
@@ -646,6 +670,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                 const SizedBox(height: 20),
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     cubit.changeReasonSelection(isOther: true);
                   },
                   child: Container(
@@ -709,6 +734,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                         label: context.isArabic ? 'تأكيد' : 'Confirm',
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () async {
+                          ManageVibration.vibrate();
                           context.pop();
                           if (state.isOtherReason == true || state.isChangedMindReason == true || state.isClientNotShownReason == true) {
                             onCancelTrip(CancelTripByRiderUseCaseParams(
@@ -760,7 +786,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
             ),
             const SizedBox(height: 12),
             Text(
-              context.isArabic?'سوف تكمل الرحلة':'You will complete the trip',
+              context.isArabic?'سوف تنتهي الرحلة':'You will finalize the trip',
               style: TextStyle(
                 fontSize: 16,
                 color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
@@ -777,6 +803,7 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                     label: context.isArabic ? 'الغاء' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+                      ManageVibration.vibrate();
                       context.pop();
                       // cubit
                     }),

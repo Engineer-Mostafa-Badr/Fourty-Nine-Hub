@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/create_shipping_request_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -15,6 +15,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'select_shipping_destination.dart';
 import 'shipping_details_widget.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FromAndToWidget extends StatelessWidget {
   const FromAndToWidget({super.key});
@@ -42,6 +43,7 @@ class FromAndToWidget extends StatelessWidget {
           AppButton(
               label: LocaleKeys.continueKey.tr(),
               onPressed: () {
+      ManageVibration.vibrate();
                 bottomSheet(
                     isScrollControlled: true,
                     context: context,
@@ -60,6 +62,7 @@ class FromAndToWidget extends StatelessWidget {
         builder: (context, state) {
       return InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           bottomSheet(
               context: context, widget: const SelectShippingDestination());
         },
@@ -96,7 +99,10 @@ class FromAndToWidget extends StatelessWidget {
         builder: (context, state) {
       return state.fromAddress != null
           ? InkWell(
-              onTap: () {},
+              onTap: () {
+
+      ManageVibration.vibrate();
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: kToolbarHeight * .7,

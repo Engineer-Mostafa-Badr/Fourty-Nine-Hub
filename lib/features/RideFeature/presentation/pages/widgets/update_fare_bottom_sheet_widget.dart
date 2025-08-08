@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/fare_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -13,17 +14,20 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../controllers/cubits/ride_states.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UpdateFareBottomSheetWidget extends StatefulWidget {
   UpdateFareBottomSheetWidget({
     super.key,
     required this.selectedCategoryPrice,
     required this.onChange,
+    required this.isArabic,
     required this.selectedCategoryName,
     required this.highCostPerKm,
     required this.lowCostPerKm,
-  }) : _controller = TextEditingController(
-          text: selectedCategoryPrice > 0
+  }) : _controller = ArabicNumberTextController(
+    isArabic: isArabic,
+    initialText: selectedCategoryPrice > 0
               ? selectedCategoryPrice.toInt().toString()
               : '',
         );
@@ -32,7 +36,8 @@ class UpdateFareBottomSheetWidget extends StatefulWidget {
   final num highCostPerKm;
   final num lowCostPerKm;
   final String selectedCategoryName;
-  final TextEditingController _controller;
+  final bool isArabic;
+  final ArabicNumberTextController _controller;
 
   @override
   State<UpdateFareBottomSheetWidget> createState() => _UpdateFareBottomSheetWidgetState();
@@ -40,6 +45,14 @@ class UpdateFareBottomSheetWidget extends StatefulWidget {
 
 class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidget> {
   final _formKey = GlobalKey<FormState>();
+
+  String convertArabicToEnglishDigits(String input) {
+    const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    for (int i = 0; i < arabicDigits.length; i++) {
+      input = input.replaceAll(arabicDigits[i], i.toString());
+    }
+    return input;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,26 +70,15 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
                 TextFormField(
                   controller: widget._controller,
                   autofocus: true,
-                  cursorColor: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.PRIMARY_COLOR,
+                  cursorColor:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                   cursorHeight: 50,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      if (newValue.text.isEmpty) return newValue;
-                      if (newValue.text == '0') return newValue;
-                      if (newValue.text.startsWith('0')) {
-                        return oldValue;
-                      }
-                      return newValue;
-                    }),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]')),
                   ],
                   style: TextStyle(
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w500,
                     fontSize: 40,
                   ),
@@ -89,9 +91,7 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
                       fontWeight: FontWeight.w500,
                       fontSize: 40,
                     ),
-                    fillColor: context.isDarkMode
-                        ? AppColors.QUANTITY_COLOR
-                        : Colors.white,
+                    fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                     filled: true,
                     border: const UnderlineInputBorder(),
                     focusedBorder: const UnderlineInputBorder(),
@@ -103,45 +103,132 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
                   onChanged: (v){
                     _formKey.currentState!.validate();
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return context.isArabic
-                          ? 'يرجى إدخال مبلغ'
-                          : 'Please enter an amount';
-                    }
-                    if ((double.tryParse(value) ?? 0) < widget.lowCostPerKm) {
-                      return context.isArabic
-                          ? 'يجب ان يكون السعر اكبر من او يساوي ${widget.lowCostPerKm}'
-                          : 'The price must be greater than or equal to ${widget.lowCostPerKm}';
-                    }
-                    if ((double.tryParse(value) ?? 0) > widget.highCostPerKm) {
-                      return context.isArabic
-                          ? 'يجب ان يكون السعر اقل من او يساوي ${widget.highCostPerKm}'
-                          : 'The price must be less than or equal to ${widget.highCostPerKm}';
-                    }
+                    validator: (v) {
+                      String value = context.isArabic?convertArabicToEnglishDigits(v??''):(v??'');
+                      if (value.isEmpty) {
+                        return context.isArabic
+                            ? 'يرجى إدخال مبلغ'
+                            : 'Please enter an amount';
+                      }
+                      print("value $value (double.tryParse(value) ?? 0) ${(double.tryParse(value) ?? 0)}  widget.lowCostPerKm ${widget.lowCostPerKm} widget.highCostPerKm ${widget.highCostPerKm}");
+                      if ((double.tryParse(value) ?? 0) < widget.lowCostPerKm) {
+                        return context.isArabic
+                            ? 'يجب ان يكون السعر اكبر من او يساوي ${widget.lowCostPerKm}'
+                            : 'The price must be greater than or equal to ${widget.lowCostPerKm}';
+                      }
+                      if ((double.tryParse(value) ?? 0) > widget.highCostPerKm) {
+                        return context.isArabic
+                            ? 'يجب ان يكون السعر اقل من او يساوي ${widget.highCostPerKm}'
+                            : 'The price must be less than or equal to ${widget.highCostPerKm}';
+                      }
 
-                    final double? amount = double.tryParse(value);
-                    final double minFare =
-                        state.rideExpectedPrice?.lowestFare ?? 0;
-                    final double maxFare =
-                        state.rideExpectedPrice?.highestFare ?? double.infinity;
+                      final double? amount = double.tryParse(value);
+                      final double minFare =
+                          state.rideExpectedPrice?.lowestFare ?? 0;
+                      final double maxFare =
+                          state.rideExpectedPrice?.highestFare ?? double.infinity;
 
-                    if (amount == null ||
-                        amount < minFare ||
-                        amount > maxFare) {
-                      return context.isArabic
-                          ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} و ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}'
-                          : 'Amount must be between ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} and ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}';
-                    }
+                      if (amount == null ||
+                          amount < minFare ||
+                          amount > maxFare) {
+                        return context.isArabic
+                            ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} و ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}'
+                            : 'Amount must be between ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} and ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}';
+                      }
 
-                    return null;
-                  },
+                      return null;
+                    },
                 ),
+
+                // TextFormField(
+                //   controller: widget._controller,
+                //   autofocus: true,
+                //   cursorColor: context.isDarkMode
+                //       ? Colors.white
+                //       : AppColors.PRIMARY_COLOR,
+                //   cursorHeight: 50,
+                //   keyboardType: TextInputType.number,
+                //   inputFormatters: [
+                //     FilteringTextInputFormatter.digitsOnly,
+                //     TextInputFormatter.withFunction((oldValue, newValue) {
+                //       if (newValue.text.isEmpty) return newValue;
+                //       if (newValue.text == '0') return newValue;
+                //       if (newValue.text.startsWith('0')) {
+                //         return oldValue;
+                //       }
+                //       return newValue;
+                //     }),
+                //   ],
+                //   style: TextStyle(
+                //     color: context.isDarkMode
+                //         ? Colors.white
+                //         : AppColors.PRIMARY_COLOR,
+                //     fontWeight: FontWeight.w500,
+                //     fontSize: 40,
+                //   ),
+                //   textAlign: TextAlign.center,
+                //   decoration: InputDecoration(
+                //     floatingLabelBehavior: FloatingLabelBehavior.never,
+                //     hintText: context.isArabic ? 'ج.م' : 'EGP',
+                //     hintStyle: const TextStyle(
+                //       color: Color(0xff96979B),
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: 40,
+                //     ),
+                //     fillColor: context.isDarkMode
+                //         ? AppColors.QUANTITY_COLOR
+                //         : Colors.white,
+                //     filled: true,
+                //     border: const UnderlineInputBorder(),
+                //     focusedBorder: const UnderlineInputBorder(),
+                //     enabledBorder: const UnderlineInputBorder(),
+                //     errorBorder: const UnderlineInputBorder(),
+                //     disabledBorder: const UnderlineInputBorder(),
+                //     focusedErrorBorder: const UnderlineInputBorder(),
+                //   ),
+                //   onChanged: (v){
+                //     _formKey.currentState!.validate();
+                //   },
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return context.isArabic
+                //           ? 'يرجى إدخال مبلغ'
+                //           : 'Please enter an amount';
+                //     }
+                //     if ((double.tryParse(value) ?? 0) < widget.lowCostPerKm) {
+                //       return context.isArabic
+                //           ? 'يجب ان يكون السعر اكبر من او يساوي ${widget.lowCostPerKm}'
+                //           : 'The price must be greater than or equal to ${widget.lowCostPerKm}';
+                //     }
+                //     if ((double.tryParse(value) ?? 0) > widget.highCostPerKm) {
+                //       return context.isArabic
+                //           ? 'يجب ان يكون السعر اقل من او يساوي ${widget.highCostPerKm}'
+                //           : 'The price must be less than or equal to ${widget.highCostPerKm}';
+                //     }
+                //
+                //     final double? amount = double.tryParse(value);
+                //     final double minFare =
+                //         state.rideExpectedPrice?.lowestFare ?? 0;
+                //     final double maxFare =
+                //         state.rideExpectedPrice?.highestFare ?? double.infinity;
+                //
+                //     if (amount == null ||
+                //         amount < minFare ||
+                //         amount > maxFare) {
+                //       return context.isArabic
+                //           ? 'يجب أن يكون المبلغ بين ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} و ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}'
+                //           : 'Amount must be between ${FormatNumbers().convertNumberToLocalizedString(minFare.toInt().toString(), isArabic: context.isArabic)} and ${FormatNumbers().convertNumberToLocalizedString(maxFare.toInt().toString(), isArabic: context.isArabic)}';
+                //     }
+                //
+                //     return null;
+                //   },
+                // ),
                 const SizedBox(height: 20),
                 AppButton(
                   width: double.infinity,
                   label: LocaleKeys.done.tr(),
                   onPressed: () {
+      ManageVibration.vibrate();
                     if (_formKey.currentState!.validate()) {
                       if (widget.selectedCategoryName.trim().toLowerCase() ==
                           "Captain".toLowerCase()) {
@@ -173,7 +260,13 @@ class _UpdateFareBottomSheetWidgetState extends State<UpdateFareBottomSheetWidge
                             double.parse(widget._controller.text);
                       }
                       Navigator.pop(context);
-                      widget.onChange(num.tryParse(widget._controller.text)??0);
+                      widget.onChange(
+                          num.tryParse(
+                              context.isArabic
+                                  ? convertArabicToEnglishDigits(widget._controller.text)
+                                  : widget._controller.text
+                          ) ?? 0
+                      );
                     }
                   },
                   backColor: AppColors.PRIMARY_COLOR,
@@ -273,6 +366,7 @@ class FareBottomSheetWidget2 extends StatelessWidget {
                 width: double.infinity,
                 label: LocaleKeys.done.tr(),
                 onPressed: () {
+      ManageVibration.vibrate();
                   if (_formKey.currentState!.validate()) {
                     Navigator.pop(context);
                     BlocProvider.of<DashboardsCubit>(context)

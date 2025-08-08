@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -156,6 +157,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     ),
                     ClickableWidget(
                         onTap: () {
+      ManageVibration.vibrate();
                           controller.filterAds(
                               categorize: widget.filterAdsParams.categorization,
                               userType: widget.filterAdsParams.userType,

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/restaurant_dashboard_cubit.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/usecases/update_restaurant_usecase.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantStatisticsView extends StatefulWidget {
   const RestaurantStatisticsView({super.key});
@@ -228,6 +229,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                           fontSize: 32,
                           color: AppColors.getReversedTextColor(context)),
                       onPressed: () async {
+      ManageVibration.vibrate();
                         if (numberController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -377,6 +379,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           setState(() {
                             _isGovernorateExpanded = !_isGovernorateExpanded;
                           });
@@ -451,6 +454,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                                       fontSize: 14),
                                 ),
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     _selectedGovernorateId = gov.id;
                                     _selectedCityId = null;
@@ -477,6 +481,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           setState(() {
                             _isCityExpanded = !_isCityExpanded;
                           });
@@ -542,6 +547,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                                       fontSize: 14),
                                 ),
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     _selectedCityId = city.id;
                                     _isCityExpanded = false;

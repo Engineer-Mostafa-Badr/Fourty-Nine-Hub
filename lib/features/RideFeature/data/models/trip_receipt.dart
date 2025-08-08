@@ -10,6 +10,7 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripReceiptScreenParams {
   final RideCubit rideCubit;
@@ -40,6 +41,7 @@ class _TripReceiptScreenState extends State<TripReceiptScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),
@@ -80,7 +82,7 @@ class _TripReceiptScreenState extends State<TripReceiptScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  context.isArabic? "شكرا لاستخدامك, ${widget.params.historyTripEntity.subCategoryNameAr ?? ""}" : "Thank you for riding, ${widget.params.historyTripEntity.subCategoryNameEn ?? ""}",
+                                  context.isArabic? "شكرا لاستخدامك، ${widget.params.historyTripEntity.subCategoryNameAr ?? ""}" : "Thank you for riding, ${widget.params.historyTripEntity.subCategoryNameEn ?? ""}",
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -134,7 +136,7 @@ class _TripReceiptScreenState extends State<TripReceiptScreen> {
                           context.isArabic ? "ج.م" : "EGP",
                           style:  TextStyle(
                             fontSize: 18,
-                            color: AppColors.black.withOpacity(0.5),
+                            // color:  AppColors.black.withOpacity(0.5),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

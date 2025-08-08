@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../../../../common/widgets/stateless/labels/info_text.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/enums/wallet_types_enums.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
+import '../../../account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import '../../../fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import '../../domain/usecases/subscribe_usecase.dart';
+import '../controllers/subscription_controller.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/format_numbers.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/entities/subscription_plans_entity.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class SubscriptionPlansWidget extends StatefulWidget {
   final SubscriptionPlansEntity subscribePlans;
@@ -190,6 +191,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                               title: e.translatedName,
                               isSelected: e == selectedWallet,
                               onTap: () {
+      ManageVibration.vibrate();
                                 selectedWallet = e;
                                 setState(() {});
                               },
@@ -302,6 +304,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             : Colors.white,
                       ),
                       onPressed: () async {
+      ManageVibration.vibrate();
                         List<num> list = _isPremium
                             ? widget.subscribePlans.premiumPlans
                             : widget.subscribePlans.regularPlans;
@@ -396,6 +399,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         fontSize: 36,
                       ),
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.pop();
                       },
                     ),
@@ -550,7 +554,10 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           Expanded(
             child: ElevatedAppButton(
               label: period,
-              onPressed: () {},
+              onPressed: () {
+      ManageVibration.vibrate();
+
+              },
               backColor: _isPremium
                   ? (context.isDarkMode
                       ? const Color(0xffF45560)
@@ -572,7 +579,10 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           Expanded(
             child: ElevatedAppButton(
               label: FormatNumbers().formatNumberByComma(price.toString(), isArabic: context.isArabic),
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
               backColor: _isPremium
                   ? (context.isDarkMode
                       ? const Color(0xffF45560)

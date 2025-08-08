@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../Register/widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class DriversLicenseNonSocketScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class DriversLicenseNonSocketScreen extends StatelessWidget {
     List<String> uploadFilesTitles = [
       LocaleKeys.driversLicense.localize,
       LocaleKeys.backOfTheLicense.localize,
-      LocaleKeys.aSelfieWithTheLicense.localize,
+      // LocaleKeys.aSelfieWithTheLicense.localize,
     ];
     List<String> uploadLoadingFilesTitles = [
       LocaleKeys.driversLicense.localize,
@@ -119,6 +120,7 @@ class DriversLicenseNonSocketScreen extends StatelessWidget {
                                     (index) => UploadFileWidget(
                                       title: uploadFilesTitles[index],
                                       onTap: (){
+      ManageVibration.vibrate();
                                         if(index==0){
                                           cubit.onUploadDriverLicensePicture(context);
                                         }else if(index==1){
@@ -177,6 +179,7 @@ class DriversLicenseNonSocketScreen extends StatelessWidget {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         context.read<DashboardsCubit>().onSubmitUploadingDriverLicense(context);
                       },

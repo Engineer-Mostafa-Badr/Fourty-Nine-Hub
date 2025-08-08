@@ -26,15 +26,12 @@ class TabItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Tap selected $isSelected");
     return BlocBuilder<CaptainShareCubit, CaptainShareState>(
       builder: (context,state) {
-        print("state.tapIndex ${state.tapIndex}");
         return GestureDetector(
           onTap:
               () {
                 onTap();
-            print("objectIndex $index");
             if(index==1)context.read<CaptainShareCubit>().loadInitialData(context);
             if(index==0)context.read<CaptainShareCubit>().loadInitialAvailableData(context);
             if(index==2)context.read<CaptainShareCubit>().loadInitialRunningData(context);

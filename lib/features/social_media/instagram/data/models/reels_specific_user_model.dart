@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';
+import '../../domain/entities/reels_specific_user_entity.dart';
 
 class ReelsSpecificUserDataModel extends ReelsSpecificUserDataEntity {
   ReelsSpecificUserDataModel({

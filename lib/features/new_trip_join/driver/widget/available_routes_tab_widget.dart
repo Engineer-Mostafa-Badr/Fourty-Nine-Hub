@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/one_way_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import '../../../../core/widget/custom_loading_search_widget.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 
 
 class AvailableRoutesTabWidget extends StatefulWidget {
@@ -38,7 +40,7 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController();
   }
 
   void _onScroll() {
@@ -64,12 +66,16 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
               ? const Center(child: CustomLoadingSearchWidget())
               : cubit.availableBookings.isEmpty
                   ? _emptyMessage()
-                  : ListView.separated(
-                      controller: _scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) => OneWayWidget(
+                  : OlxPaginationWidget(
+              itemsPerPage: 2,
+              loadPage: (page) {
+                print('==> page $page');
+                return context.read<CaptainShareDashboardCubit>().getAvailableBookings(context);
+              },
+              banners: bannersList,
+              items: List.generate(
+                  cubit.availableBookings.length,
+                      (index) => OneWayWidget(
                         requestType: LocaleKeys.regular.localize,
                         hasAcceptButton: true,
                         onAccept: () {
@@ -80,7 +86,7 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
                         statusDriver: cubit.availableBookings[index].status,
                         model: cubit.availableBookings[index],
                         cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
-                                cubit.availableBookings[index].creatorId) &&
+                            cubit.availableBookings[index].creatorId) &&
                             cubit.availableBookings[index].status == 'pending',
                         onCancelBooking: () {
                           if (cubit.availableBookings[index].status ==
@@ -88,19 +94,53 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
                             // cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
                           }
                         },
-                        onJoin: () {
+                        onJoin: (phone) {
                           if ((!(cubit.availableBookings[index].clients ?? [])
-                                  .contains(
-                                      (UserCubit.to.state.data?.id ?? ''))) &&
+                              .contains(
+                              (UserCubit.to.state.data?.id ?? ''))) &&
                               cubit.availableBookings[index].status ==
                                   'pending') {
                             // cubit.joinToRoute(id: cubit.availableBookings[index].id, context: context);
                           }
                         },
-                      ),
-                      separatorBuilder: (context, index) => const Sizer(),
-                      itemCount: cubit.availableBookings.length,
-                    ),
+                      )), scrollController: _scrollController,)
+          // ListView.separated(
+          //             controller: _scrollController,
+          //             physics: const BouncingScrollPhysics(),
+          //             padding: EdgeInsets.zero,
+          //             shrinkWrap: true,
+          //             itemBuilder: (context, index) => OneWayWidget(
+          //               requestType: LocaleKeys.regular.localize,
+          //               hasAcceptButton: true,
+          //               onAccept: () {
+          //                 cubit.acceptRoute(
+          //                     id: cubit.availableBookings[index].id,
+          //                     context: context);
+          //               },
+          //               statusDriver: cubit.availableBookings[index].status,
+          //               model: cubit.availableBookings[index],
+          //               cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+          //                       cubit.availableBookings[index].creatorId) &&
+          //                   cubit.availableBookings[index].status == 'pending',
+          //               onCancelBooking: () {
+          //                 if (cubit.availableBookings[index].status ==
+          //                     'pending') {
+          //                   // cubit.cancelMyBooking(id: cubit.availableBookings[index].id, context: context, from: 'available');
+          //                 }
+          //               },
+          //               onJoin: (phone) {
+          //                 if ((!(cubit.availableBookings[index].clients ?? [])
+          //                         .contains(
+          //                             (UserCubit.to.state.data?.id ?? ''))) &&
+          //                     cubit.availableBookings[index].status ==
+          //                         'pending') {
+          //                   // cubit.joinToRoute(id: cubit.availableBookings[index].id, context: context);
+          //                 }
+          //               },
+          //             ),
+          //             separatorBuilder: (context, index) => const Sizer(),
+          //             itemCount: cubit.availableBookings.length,
+          //           ),
         ],
       );
     });

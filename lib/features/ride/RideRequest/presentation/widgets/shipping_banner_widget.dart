@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ShippingBannerWidget extends StatefulWidget {
   const ShippingBannerWidget({super.key});
@@ -66,6 +67,7 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
                   // onTap: () => context
                   //     .push(Routes.SHIPPING_REGISTER),
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.SHIPPING_REGISTER);
                   },
                   child: Padding(

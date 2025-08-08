@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../entities/main_category_entity.dart';
 
 import '../repositories/fourty_nine_repository.dart';
 

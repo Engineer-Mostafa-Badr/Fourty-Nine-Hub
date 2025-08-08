@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../domain/entities/message_entity.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class OneTimeVoiceMessageView extends StatefulWidget {
   const OneTimeVoiceMessageView({super.key, required this.messageEntity});
@@ -40,6 +41,7 @@ class _OneTimeVoiceMessageViewState extends State<OneTimeVoiceMessageView> {
         leadingWidth: 26,
         leading: IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
           icon: const Icon(

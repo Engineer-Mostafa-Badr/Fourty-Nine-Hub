@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'image_from_internet.dart';
 
 class GradientProfileBorder extends StatelessWidget {
   final String imageUrl;

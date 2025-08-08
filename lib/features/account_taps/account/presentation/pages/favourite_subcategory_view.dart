@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/base_status_enum.dart';
@@ -33,29 +34,33 @@ class FavSubCategoryView extends StatelessWidget {
                     child: const CustomCircularProgressIndicator(),
                   )
                 : state.data != null && state.data!.isNotEmpty
-                    ? GridView.builder(
-                        itemCount: state.data?.length,
-                        padding: EdgeInsets.all(24.w),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: .65,
-                          mainAxisSpacing: 16,
-                          crossAxisSpacing: 16,
-                        ),
-                        itemBuilder: (context, index) =>
-                            FavouriteSubCategoryCard(
-                          item: state.data![index],
-                          onFav: () async {
-                            var result =
-                                await controller.toggleSubCategoryToFavorites(
-                                    state.data![index].id);
-                            if (result == true) {
-                              state.data!.removeWhere((element) =>
-                                  element.id == state.data![index].id);
-                            }
-                          },
-                          mainCategory: state.mainCategory![index],
+                    ? GlowingOverscrollIndicator(
+                        color: AppColors.SECONDARY_COLOR,
+                        axisDirection: AxisDirection.down,
+                        child: GridView.builder(
+                          itemCount: state.data?.length,
+                          padding: EdgeInsets.all(24.w),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: .65,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                          ),
+                          itemBuilder: (context, index) =>
+                              FavouriteSubCategoryCard(
+                            item: state.data![index],
+                            onFav: () async {
+                              var result =
+                                  await controller.toggleSubCategoryToFavorites(
+                                      state.data![index].id);
+                              if (result == true) {
+                                state.data!.removeWhere((element) =>
+                                    element.id == state.data![index].id);
+                              }
+                            },
+                            mainCategory: state.mainCategory![index],
+                          ),
                         ),
                       )
                     : Center(

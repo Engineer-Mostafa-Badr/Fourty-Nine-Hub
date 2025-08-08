@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../../wallet/domain/usecases/get_wallet_usecase.dart';
 import '../../domain/use_case/fetch_user_use_case.dart';
 
@@ -10,6 +14,8 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
   final TransferMoneyUseCase _transferMoneyUseCase;
   final FetchUserUseCase _fetchUserUseCase;
   final GetWalletUseCase _getWalletUseCase;
+
+  TransferMoneyEntity? dataTransfer;
 
   TransferMoneyCubit(
     this._transferMoneyUseCase,
@@ -23,6 +29,9 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     emit(state.copyWith(status: TransferMoneyStates.loading));
     var response = await _getWalletUseCase.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: TransferMoneyStates.failure));
     }, (data) {
       // da = data;
@@ -31,13 +40,6 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
         wallet: data,
       ));
     });
-  }
-
-  void selectUser(String userEmail) {
-    emit(state.copyWith(
-      userSelectedEmail: userEmail,
-      searchUserStatus: TransferMoneyStates.initial,
-    ));
   }
   // Future<void> loadData() async {
   //   // await fetchUsers();
@@ -64,10 +66,15 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     emit(state.copyWith(searchUserStatus: TransferMoneyStates.loading));
     var response = await _fetchUserUseCase(FetchUserParams(query: query));
     return response.fold(
-      (l) => emit(state.copyWith(
-        failure: l,
-        searchUserStatus: TransferMoneyStates.failure,
-      )),
+      (l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(
+          failure: l,
+          searchUserStatus: TransferMoneyStates.failure,
+        ));
+      },
       (data) {
         emit(state.copyWith(
           users: data,
@@ -77,15 +84,26 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     );
   }
 
-  TransferMoneyEntity? dataTransfer;
+  void selectUser(String userEmail) {
+    emit(state.copyWith(
+      userSelectedEmail: userEmail,
+      searchUserStatus: TransferMoneyStates.initial,
+    ));
+  }
+
   Future<TransferMoneyEntity> transferMoney({
     required TransferMoneyParams params,
   }) async {
     emit(state.copyWith(transferStatus: TransferMoneyStates.loading));
     var response = await _transferMoneyUseCase.call(params);
     response.fold(
-      (l) => emit(state.copyWith(
-          failure: l, transferStatus: TransferMoneyStates.failure)),
+      (l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(
+            failure: l, transferStatus: TransferMoneyStates.failure));
+      },
       (data) {
         // getWallet();
         dataTransfer = data;

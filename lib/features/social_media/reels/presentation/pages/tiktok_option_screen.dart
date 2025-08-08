@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 import '../widgets/tiktok_option_body.dart';
 

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_card.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
   const UpdateDoctorPracticingCirtificateCard(
@@ -19,6 +20,7 @@ class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
     return EditDoctorProfileCard(
       title: LocaleKeys.practiceCertification.localize,
       onTap: () {
+      ManageVibration.vibrate();
         bottomSheet(
           context: context,
           widget: EditDoctorDocsView(

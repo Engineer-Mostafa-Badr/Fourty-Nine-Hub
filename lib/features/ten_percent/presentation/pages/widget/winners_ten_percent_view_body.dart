@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winners_grid_view.dart';
-import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/widget/custom_failure_widget.dart';
+import '../../../../account_taps/wallet/presentation/widgets/winners_grid_view.dart';
+import '../../cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class WinnersTenPercentViewBody extends StatelessWidget {
   const WinnersTenPercentViewBody({super.key});
@@ -41,6 +42,7 @@ class WinnersTenPercentViewBody extends StatelessWidget {
           return CustomFailureWidget(
             title: getFailureMessage(state.failure!, context),
             onPressed: () {
+      ManageVibration.vibrate();
               context
                   .read<WinnersTenPercentCubit>()
                   .getWinners(isRefresh: true);

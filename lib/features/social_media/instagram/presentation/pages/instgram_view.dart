@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_view_body.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
+import '../cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
+import '../cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
+import '../widgets/instagram_view_body.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramView extends StatelessWidget {
   final bool hideAppBar;

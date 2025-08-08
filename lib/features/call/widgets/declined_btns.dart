@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/call/widgets/call_control_button.dart';
+import 'call_control_button.dart';
+import '../../../helpers/manage_vibration.dart';
 
 class DeclinedBtns extends StatelessWidget {
   const DeclinedBtns({super.key});
@@ -30,6 +31,7 @@ class DeclinedBtns extends StatelessWidget {
             backgroundColor: backgroundColor,
             iconColor: iconColor,
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
             }),
         const SizedBox(height: 8,),

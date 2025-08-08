@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/settings/domain/repository/setting_repository.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../repository/setting_repository.dart';
 
 import '../entities/disable_entity.dart';
 

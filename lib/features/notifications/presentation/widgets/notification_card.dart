@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../res/assets/assets.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NotificationCard extends StatefulWidget {
   final NotificationEntity notificationEntity;
@@ -41,6 +42,7 @@ class _NotificationCardState extends State<NotificationCard> {
       builder: (context, state) {
         return InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             widget.notificationSeenCallback();
             setState(() {});
           },

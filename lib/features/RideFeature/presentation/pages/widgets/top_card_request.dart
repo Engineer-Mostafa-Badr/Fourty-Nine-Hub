@@ -7,8 +7,10 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/format_numbers.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TopCardRequest extends StatelessWidget {
   final RideOfferEntity rideOffer;
@@ -93,14 +95,39 @@ class TopCardRequest extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          FormatNumbers().convertNumberToLocalizedString(rideOffer.carModel ?? "" , isArabic: context.isArabic),
-                          style: TextStyle(
-                            fontSize: FontSize.s12,
-                            color: textColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        // Text(
+                        //   FormatNumbers().convertNumberToLocalizedString(rideOffer.carModel ?? "بسب" , isArabic: context.isArabic),
+                        //   style: TextStyle(
+                        //     fontSize: FontSize.s12,
+                        //     color: textColor,
+                        //     fontWeight: FontWeight.w600,
+                        //   ),
+                        // ),
+                        Row(
+                          children: [
+                            rideOffer.isComfort?
+                            Image.asset(
+                              Assets.airConditioner,
+                              height: 20,
+                              width: 20,
+                            ) : Image.asset(
+                              Assets.noAirConditioner,
+                              height: 20,
+                              width: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            rideOffer.isNonSmoking?
+                            Image.asset(
+                              Assets.noSmokingIcon,
+                              height: 20,
+                              width: 20,
+                            ) : Image.asset(
+                              Assets.smokingIcon,
+                              height: 16,
+                              width: 16,
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -136,6 +163,7 @@ class TopCardRequest extends StatelessWidget {
                       duration: const Duration(seconds: 10),
                       tween: Tween(begin: 0.0, end: 1.0),
                       onEnd: (){
+                        ManageVibration.vibrate();
                         rideCubit.removeRideOfferFromRideOffers(rideOffer);
                       },
                       builder: (context, value, child) {
@@ -186,6 +214,7 @@ class TopCardRequest extends StatelessWidget {
                       ),
                       child: MaterialButton(
                         onPressed: (){
+      ManageVibration.vibrate();
                           rideCubit.removeRideOfferFromRideOffers(rideOffer);
                         },
                         child: Text(

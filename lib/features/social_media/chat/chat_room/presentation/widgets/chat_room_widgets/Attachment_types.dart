@@ -18,6 +18,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart' as manageVibration;
 
 class AttachmentTypes extends StatefulWidget {
   final ChatRoomCubit chatRoomCubit;
@@ -48,6 +49,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
           label: LocaleKeys.document.tr(),
           icon: Icons.insert_drive_file_outlined,
           onTap: () async {
+      manageVibration.ManageVibration.vibrate();
             setState(() {
               isLoading = true;
             });
@@ -69,6 +71,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
           label: LocaleKeys.camera.tr(),
           icon: Icons.camera_alt,
           onTap: () async {
+      manageVibration.ManageVibration.vibrate();
             context.push(Routes.CHATROOMCAMERAPICKER,
                 extra: CameraPickerViewPrams(
                   chatRoomCubit: widget.chatRoomCubit,
@@ -79,6 +82,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
             color: Colors.purpleAccent,
             label: LocaleKeys.gallery.tr(),
             onTap: () async {
+      manageVibration.ManageVibration.vibrate();
               await widget.chatRoomCubit.pickMedia();
               context.push(
                 Routes.MEDIASLIDER,
@@ -91,6 +95,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
             color: Colors.orange[600]!,
             label: LocaleKeys.audio.tr(),
             onTap: () async {
+      manageVibration.ManageVibration.vibrate();
               setState(() {
                 isLoading = true;
               });
@@ -118,6 +123,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
             label: LocaleKeys.contact.tr(),
             icon: Icons.person,
             onTap: () {
+      manageVibration.ManageVibration.vibrate();
               context.push(
                 Routes.SELECTCONTACTSTOSHARE,
                 extra: widget.chatRoomCubit,
@@ -130,6 +136,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
             label: context.isArabic ? "هدية" : "Gift",
             icon: FontAwesomeIcons.cakeCandles,
             onTap: () async {
+      manageVibration.ManageVibration.vibrate();
               context.pop();
               await showGiftBottomSheet(
                 context,

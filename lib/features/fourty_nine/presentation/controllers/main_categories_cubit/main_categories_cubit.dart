@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/su
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -64,6 +65,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
+  final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
 
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
@@ -76,6 +78,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._getQuestionUseCase,
     this._answerQuestionUseCase,
     this._getMainCategoryDetailsUseCase,
+    this.updateSettingsDashboardUsecase,
     this.getSettingsDashboardUsecase, this.listenToNewTripUseCase, this.listenToAcceptOfferUseCase,
   ) : super(MainCategoriesState());
 
@@ -302,7 +305,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
   }
 
-  Future<void> getSettings(BuildContext context) async {
+  Future<void> getSettings(BuildContext context,{bool? listenToSocket=true}) async {
 
 
     final Either<Failure, SettingsDashboardEntityResponse> result =
@@ -314,17 +317,41 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       },
           (settings) {
 
+            String lady = '62ea012a69ea29c91dfc3917';
         bool isReady = isServiceAvailable(settings);
+        bool isDriverLady = settings.data.categoryIds.any((element) => element.id == lady);
+        print("isDriverLady $isDriverLady");
         if(isReady){
           updateDriverLocation();
-          listenToNewTrip(context,settings.data.enableNotificationSound);
-          listenToAcceptOffer(context);
+          if(listenToSocket==true)listenToNewTrip(context,settings.data.enableNotificationSound);
+          if(listenToSocket==true)listenToAcceptOffer(context);
         }
         emit(state.copyWith(
-            status: StateStatus.success,setting: settings));
+            status: StateStatus.success,setting: settings,isDriverLady:isDriverLady));
       },
     );
   }
+
+  Future<void> updateSettings(bool isReady) async {
+
+
+    final Either<Failure, bool> result =
+    await updateSettingsDashboardUsecase(UpdateSettingsDashboardUsecaseParam(
+      isReady: isReady
+    ));
+
+    if (isClosed) return;
+    result.fold(
+          (failure) {
+      },
+          (settings) {
+        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+
+        getSettings(currentContext,listenToSocket: false);
+      },
+    );
+  }
+
 
   bool isServiceAvailable(SettingsDashboardEntityResponse data) {
     // Check if isReady is true
@@ -402,6 +429,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
     // Listen for new locations (only when moved at least 1m)
     locationService.locationUpdates.listen((position) {
+      log("position.latitude ${position.latitude}");
       emitDriverLocation(lat: position.latitude, long: position.longitude);
       // Fluttertoast.showToast(
       //     msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import '../../../../../common/functions/helper/lang_helper.dart';
 
 import '../../domain/entities/meal_entity.dart';
 import 'option_model.dart';

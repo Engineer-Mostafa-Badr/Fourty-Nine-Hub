@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
 import 'trip_option_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NewTripJoinBody extends StatelessWidget {
   const NewTripJoinBody({super.key});
@@ -22,6 +23,7 @@ class NewTripJoinBody extends StatelessWidget {
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? 'مشاركة كابتن' : 'Captain Share',
                 onTap: () {
+      ManageVibration.vibrate();
                   context.push(Routes.captainShareScreen);
                 },
               ),
@@ -29,12 +31,18 @@ class NewTripJoinBody extends StatelessWidget {
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "جاي معاك" : "Trip Join",
                 icon: Assets.car,
-                onTap: () {},
+                onTap: () {
+
+      ManageVibration.vibrate();
+                },
               ),
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "وصلني معاك" : "Pick me",
-                onTap: () {},
+                onTap: () {
+
+      ManageVibration.vibrate();
+                },
                 icon: Assets.pickMeImage,
               ),
             ],

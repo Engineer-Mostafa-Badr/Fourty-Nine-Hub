@@ -11,12 +11,14 @@ class SharedScaffold extends StatelessWidget {
   final bool isWithBackArrow;
   final Color? backgroundColor;
   final Widget? floatingActionButton;
+  final Function? onBackPressed;
   const SharedScaffold({
     super.key,
     required this.mainCategoryId,
     this.extendBody = false,
     this.isWithBackArrow = true,
     required this.body,
+    this.onBackPressed,
     this.backgroundColor,
     this.floatingActionButton,
   });
@@ -30,9 +32,11 @@ class SharedScaffold extends StatelessWidget {
       drawer: const DrawerWidget(),
       body: body,
       appBar: PreferredSize(
+        
         preferredSize: const Size.fromHeight(30),
         child: HomeAppbar(
           isWithBackArrow: isWithBackArrow,
+          onBackPressed: onBackPressed,
         ),
       ),
       floatingActionButton: floatingActionButton,

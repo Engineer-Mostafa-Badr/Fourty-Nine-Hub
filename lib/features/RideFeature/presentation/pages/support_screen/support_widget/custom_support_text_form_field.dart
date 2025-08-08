@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 
 class CustomSupportTextField extends StatelessWidget {
   final String hintText;
+  final String? labelText;
   final bool? enabled;
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final Function(String?) validator;
 
-  const CustomSupportTextField({super.key, required this.hintText, required this.controller, required this.validator, this.enabled, this.keyboardType, this.inputFormatters});
+  const CustomSupportTextField({Key? key, required this.hintText, this.labelText, required this.controller, required this.validator, this.enabled, this.keyboardType, this.inputFormatters}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class CustomSupportTextField extends StatelessWidget {
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hintText,
+        labelText: labelText,
         hintStyle: TextStyle(color: isDarkMode ? Colors.grey.shade500 : Colors.grey.shade600),
         filled: true,
         fillColor: fillColor,

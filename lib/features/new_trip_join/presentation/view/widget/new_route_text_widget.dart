@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NewRouteTextWidget extends StatelessWidget {
   const NewRouteTextWidget({
@@ -17,6 +18,7 @@ class NewRouteTextWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           context.pop();
         },
         child: Row(

@@ -3,9 +3,9 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../components/audio_video/defines.dart';
 import '../components/defines.dart';
@@ -281,6 +281,7 @@ class ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayPageState
       case ZegoLiveAudioRoomMiniOverlayPageState.minimizing:
         return GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             ZegoUIKitPrebuiltLiveAudioRoomController().minimize.restore(
                   widget.contextQuery(),
                   rootNavigator: widget.rootNavigator,
@@ -360,6 +361,7 @@ class ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayPageState
         backgroundColor: Colors.white,
       ),
       onPressed: () async {
+      ManageVibration.vibrate();
         await ZegoUIKitPrebuiltLiveAudioRoomController().leave(
           context,
           showConfirmation: false,

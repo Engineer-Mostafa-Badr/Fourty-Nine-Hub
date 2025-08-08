@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import 'parent_sheet.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ConfirmationSheet extends StatelessWidget {
   final String? btnTitle;
@@ -86,6 +87,7 @@ class ConfirmationSheet extends StatelessWidget {
           ),
           ClickableWidget(
               onTap: (){
+      ManageVibration.vibrate();
                 context.pop();
               },
               child: Row(

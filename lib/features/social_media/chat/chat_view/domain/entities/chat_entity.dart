@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
+import '../../../chat_room/domain/entities/message_entity.dart';
+import '../../../chat_room/domain/usecases/get_lables_usecase.dart';
 
 class ChatEntity {
   String id;

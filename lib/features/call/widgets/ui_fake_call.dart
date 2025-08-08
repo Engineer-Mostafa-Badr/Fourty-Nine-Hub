@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
-import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
-import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
+import '../../authentication/data/models/user_model.dart';
+import 'build_app_bar.dart';
+import 'build_bottom_btns.dart';
 
 class UIFakeCall extends StatelessWidget {
   final UserModel receiver;

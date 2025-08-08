@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class AddAboutScreen extends StatefulWidget {
   const AddAboutScreen({super.key, required this.currentBio});
@@ -191,6 +192,7 @@ class _AddAboutScreenState extends State<AddAboutScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: InkWell(
                         onTap: () async {
+      ManageVibration.vibrate();
                           currentController.text = selectedText;
                           await context.read<UserCubit>().updateUserBio(bio: selectedText);
                           await context.read<UserCubit>().getUser();

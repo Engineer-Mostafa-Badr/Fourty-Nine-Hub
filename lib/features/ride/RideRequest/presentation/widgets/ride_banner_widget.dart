@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideBannerWidget extends StatelessWidget {
   const RideBannerWidget({super.key});
@@ -48,6 +49,7 @@ class RideBannerWidget extends StatelessWidget {
                                 horizontal: 10, vertical: 5),
                             child: DashboardBanner(
                               onTap: () {
+      ManageVibration.vibrate();
                                 if (state
                                         .model.mainCategory?.isSocketCategory ??
                                     false) {
@@ -76,6 +78,7 @@ class RideBannerWidget extends StatelessWidget {
                           horizontal: 10, vertical: 5),
                       child: DashboardBanner(
                         onTap: () {
+      ManageVibration.vibrate();
                           if (state.model.mainCategory?.isSocketCategory ??
                               false) {
                             log("Socket Screen");

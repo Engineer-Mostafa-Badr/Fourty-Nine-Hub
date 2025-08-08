@@ -1,15 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../data/models/all_trip_model/all_trip_model.dart';
+import '../widgets/trip_card.dart';
 
 class MyRatingScreen extends StatelessWidget {
   const MyRatingScreen({super.key});
@@ -168,6 +169,7 @@ class MyRatingScreen extends StatelessWidget {
                                   icon: Icons.call,
                                   backColor: AppColors.DARK_GRAY_COLOR,
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     launchUrlString("tel://21213123123");
                                   },
                                   style: Styles.mediumText(
@@ -184,7 +186,10 @@ class MyRatingScreen extends StatelessWidget {
                                   backColor: AppColors.DARK_GRAY_COLOR,
                                   style: Styles.mediumText(
                                       fontSize: 18, color: Colors.white),
-                                  onPressed: () {},
+                                  onPressed: () {
+
+      ManageVibration.vibrate();
+                                  },
                                 ),
                               ),
                             ],

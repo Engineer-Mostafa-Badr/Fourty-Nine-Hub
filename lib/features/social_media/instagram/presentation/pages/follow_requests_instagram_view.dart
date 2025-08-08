@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FollowRequestsInstagramView extends StatelessWidget {
   const FollowRequestsInstagramView({super.key});
@@ -19,6 +20,7 @@ class FollowRequestsInstagramView extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
           icon: const Icon(Icons.arrow_back_rounded),

@@ -5,17 +5,17 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/comment_widget_insta.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/show_comments_sheet.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/live_widget.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../instagram/presentation/widgets/comment_widget_insta.dart';
+import '../../data/models/new_reels_model.dart';
+import '../controllers/preload_cubit/preload_bloc.dart';
+import 'comments/show_comments_sheet.dart';
+import 'components/unified_widget_view.dart';
+import 'live_widget.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -24,6 +24,7 @@ import '../../../tinder/data/shared/shared.dart';
 import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import 'love_button.dart';
 import 'share_count_bottom_sheet.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AdvancedTikTokReactionsColumn extends StatelessWidget {
   final Reel reel;
@@ -116,6 +117,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
 
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
               context.push(Routes.LOGIN);
@@ -160,6 +162,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         const SizedBox(height: 20),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
               context.push(Routes.LOGIN);
@@ -214,6 +217,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           ),
           count: reel.commentCount.toString(),
           onTap: () {
+      ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
               context.push(Routes.LOGIN);
@@ -245,6 +249,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           count: reel.shareCount.toString(),
           isReversed: true,
           onTap: () {
+      ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
               context.push(Routes.LOGIN);
@@ -285,6 +290,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               size: 25,
             ),
             onPressed: () {
+      ManageVibration.vibrate();
               showDialog(
                 context: context,
                 barrierColor: Colors.transparent, // يخلي الخلفية شفافة
@@ -307,12 +313,16 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.bookmark_border,
                                   color: Colors.white),
-                              onPressed: () {},
+                              onPressed: () {
+
+      ManageVibration.vibrate();
+                              },
                             ),
                             IconButton(
                               icon: const Icon(Icons.flag_outlined,
                                   color: Colors.white),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 Navigator.pop(context);
                                 if (!serviceLocator<UserCubit>().isLoggedIn) {
                                   context.read<PreloadBloc>().pauseTheVideo();
@@ -360,6 +370,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               //               ),
               //               count: LocaleKeys.report.localize,
               //               onTap: () {
+      ManageVibration.vibrate();
               //                 if (!serviceLocator<UserCubit>().isLoggedIn) {
               //                   context.read<PreloadBloc>().pauseTheVideo();
               //                   context.push(Routes.LOGIN);
@@ -381,6 +392,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               //               ),
               //               count: LocaleKeys.save.localize,
               //               onTap: () {
+      ManageVibration.vibrate();
               //                 if (!serviceLocator<UserCubit>().isLoggedIn) {
               //                   context.read<PreloadBloc>().pauseTheVideo();
               //                   context.push(Routes.LOGIN);
@@ -428,6 +440,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           ),
           count: reel.likeCount.toString(),
           onTap: () {
+      ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
               context.push(Routes.LOGIN);

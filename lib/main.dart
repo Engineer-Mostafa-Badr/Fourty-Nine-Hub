@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/core/utils/location_service_listener.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
@@ -35,7 +35,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
-
 import 'core/service/cache_service.dart';
 import 'core/service/connectivity_service.dart';
 import 'core/service/network_connectivity_cubit.dart';
@@ -51,11 +50,6 @@ import 'features/notifications/presentation/cubits/get_status_all_services_notif
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'routes/pages.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-bool isActivate = false;
-bool isShowOnboarding = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -121,6 +115,7 @@ void main() async {
           : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
+  await LocationServiceWatcher().start();
   runApp(
     LocalizationService.rootWidget(
       child: Phoenix(
@@ -134,6 +129,11 @@ void main() async {
   );
 }
 
+bool isActivate = false;
+bool isShowOnboarding = false;
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -143,49 +143,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
-  void initState() {
-    super.initState();
-
-    NetworkManager().initialize();
-
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  Future<dynamic> getCurrentCall() async {
-    var calls = await FlutterCallkitIncoming.activeCalls();
-    if (calls is List) {
-      if (calls.isNotEmpty) {
-        print('DATA: $calls');
-        return calls[0];
-      } else {
-        return null;
-      }
-    }
-  }
-
-  Future<void> getDevicePushTokenVoIP() async {
-    var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
-    print(devicePushTokenVoIP);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  Future getToken() async {
-    var token = await CacheManager.getAccessToken();
-    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
-  }
-
-  @override
   Widget build(BuildContext context) {
     getToken();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => NetworkConnectivityCubit(navigatorKey: navigatorKey)),
+        BlocProvider(
+            create: (context) =>
+                NetworkConnectivityCubit(navigatorKey: navigatorKey)),
         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
@@ -300,7 +264,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, themeState) {
-              return BlocBuilder<NetworkConnectivityCubit, NetworkConnectivityState>(
+              return BlocBuilder<NetworkConnectivityCubit,
+                  NetworkConnectivityState>(
                 builder: (context, networkState) {
                   // Show full-screen network error when disconnected
                   if (networkState == NetworkConnectivityState.disconnected) {
@@ -363,7 +328,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                   left: 0,
                                   right: 0,
                                   child: NetworkAlertBanner(
-                                      isConnected: networkState == NetworkConnectivityState.connected),
+                                      isConnected: networkState ==
+                                          NetworkConnectivityState.connected),
                                 ),
                               ],
                             ),
@@ -379,5 +345,43 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Future<dynamic> getCurrentCall() async {
+    var calls = await FlutterCallkitIncoming.activeCalls();
+    if (calls is List) {
+      if (calls.isNotEmpty) {
+        print('DATA: $calls');
+        return calls[0];
+      } else {
+        return null;
+      }
+    }
+  }
+
+  Future<void> getDevicePushTokenVoIP() async {
+    var devicePushTokenVoIP =
+        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    print(devicePushTokenVoIP);
+  }
+
+  Future getToken() async {
+    var token = await CacheManager.getAccessToken();
+    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    NetworkManager().initialize();
+
+    WidgetsBinding.instance.addObserver(this);
   }
 }

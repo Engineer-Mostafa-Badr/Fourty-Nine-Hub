@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../res/style/styles.dart';
 
 class CountdownTimer extends StatefulWidget {
   final DateTime endTime;

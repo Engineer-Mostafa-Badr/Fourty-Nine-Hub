@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EditDoctorTimetableView extends StatefulWidget {
   const EditDoctorTimetableView({super.key, required this.params});
@@ -82,6 +83,7 @@ class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
                         : AppButton(
                             label: LocaleKeys.update.localize,
                             onPressed: () {
+      ManageVibration.vibrate();
                               context
                                   .read<EditDoctorTimetableCubit>()
                                   .updateTimeTable(context);

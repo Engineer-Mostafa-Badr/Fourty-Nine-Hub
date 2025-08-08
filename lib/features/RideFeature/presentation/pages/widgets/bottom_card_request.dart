@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BottomCardRequest extends StatefulWidget {
   final int driversCount;
@@ -117,8 +118,94 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                             const Spacer(),
                             Switch(
                               value: state.requestedTrip?.autoAccept ?? false,
+                              // onChanged: (isAutoAccept) async {
+                              //   await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
+                              // },
                               onChanged: (isAutoAccept) async {
-                                await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
+                                final currentAutoAccept = state.requestedTrip?.autoAccept ?? false;
+
+                                // محاولة التفعيل (من false إلى true)
+                                if (!currentAutoAccept && isAutoAccept) {
+                                  final shouldProceed = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          context.isArabic ? "تحذير" : "Alert!",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.PRIMARY_COLOR_DARK,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Text(
+                                        context.isArabic
+                                            ? "كن حذرا ربما تحصل علي سائق ليس لديه الاحتياجات المختاره"
+                                            : "Be careful, you might get a driver who does not meet your selected needs.",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      actions: [
+                                        SizedBox(
+                                          height: 50,
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Expanded(
+                                                child: SizedBox(
+                                                  // width: double.infinity,
+                                                  child: FilledButton(
+                                                    onPressed: () => Navigator.of(context).pop(false),
+                                                    style: FilledButton.styleFrom(
+                                                      backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      context.isArabic ? "إلغاء" : "Cancel",
+                                                      style: const TextStyle(color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  // width: double.infinity,
+                                                  child: FilledButton(
+                                                    onPressed: () => Navigator.of(context).pop(true),
+                                                    style: FilledButton.styleFrom(
+                                                      backgroundColor: AppColors.PRIMARY_COLOR,
+                                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      context.isArabic ? "موافق" : "OK",
+                                                      style: const TextStyle(color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+
+                                  if (shouldProceed == true) {
+                                    await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: true);
+                                  }
+                                }
+                                // محاولة إيقاف التفعيل (من true إلى false)
+                                else if (currentAutoAccept && !isAutoAccept) {
+                                  await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: false);
+                                }
                               },
                               activeColor: switchThumbColor,
                               inactiveThumbColor: switchThumbColor,
@@ -216,6 +303,7 @@ class OfferRow extends StatelessWidget {
                     // Decrease Button
                     GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) return;
                         await rideCubit.updateTripPriceStatus(newOfferPrice: -3);
                       },
@@ -241,6 +329,7 @@ class OfferRow extends StatelessWidget {
                     // Increase Button
                     GestureDetector(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if ((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) return;
                         await rideCubit.updateTripPriceStatus(newOfferPrice: 3);
                       },

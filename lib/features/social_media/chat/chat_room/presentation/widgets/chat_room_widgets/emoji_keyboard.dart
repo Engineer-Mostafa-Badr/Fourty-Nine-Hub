@@ -1,7 +1,7 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../../res/style/app_colors.dart';
 
 class EmojiKeyboard extends StatelessWidget {
   final TextEditingController? textController;

@@ -17,6 +17,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../data/models/loading/get_loading_accepted_model.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AcceptedNonSocketLoadingWidget extends StatelessWidget {
   // final String modeType;
@@ -265,7 +266,10 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                                   ? AppColors.PRIMARY_COLOR_DARK
                                   : AppColors.PRIMARY_COLOR,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                           ),
                         ),
                         Expanded(
@@ -278,7 +282,10 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                                     ? AppColors.PRIMARY_COLOR_DARK
                                     : AppColors.PRIMARY_COLOR,
                               ),
-                              onPressed: () {}),
+                              onPressed: () {
+
+      ManageVibration.vibrate();
+                              }),
                         ),
                         Expanded(
                           child: IconButton(
@@ -288,7 +295,10 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                               height: 25.h,
                               color: AppColors.PRIMARY_COLOR_DARK,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                           ),
                         )
                       ],

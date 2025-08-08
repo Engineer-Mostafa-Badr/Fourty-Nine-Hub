@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reciever_comment_entity.dart';
+import '../../domain/entities/reciever_comment_entity.dart';
 
 class ReceiverCommentModel extends ReceiverCommentEntity {
   const ReceiverCommentModel({

@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/profile_buttom_sheet.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_actions.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../pages/profile_buttom_sheet.dart';
+import '../../pages/reel_actions.dart';
+import 'custom_progress_bar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

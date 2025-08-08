@@ -5,7 +5,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/en
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_reject_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'doctor_unhandled_appotinments_state.dart';
 
 class DoctorUnhandledAppointmentsCubit
@@ -44,8 +46,14 @@ class DoctorUnhandledAppointmentsCubit
         .call(PaginationParams(page: currentPage, limit: pageSize));
 
     response.fold(
-      (failure) => emit(state.copyWith(
-          failure: failure, status: DoctorUnhandledAppointmentsStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: DoctorUnhandledAppointmentsStates.error));
+      },
       (data) {
         appointments.addAll(data);
 
@@ -88,6 +96,10 @@ class DoctorUnhandledAppointmentsCubit
     final response = await _doctorAcceptAppointmentUsecase.call(appointmentId);
     response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             failure: failure, status: DoctorUnhandledAppointmentsStates.error));
       },
@@ -102,6 +114,10 @@ class DoctorUnhandledAppointmentsCubit
     final response = await _doctorRejectAppointmentUsecase.call(appointmentId);
     response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             failure: failure, status: DoctorUnhandledAppointmentsStates.error));
       },

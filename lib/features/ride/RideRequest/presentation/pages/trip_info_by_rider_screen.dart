@@ -36,6 +36,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripInfoByRiderScreen extends StatefulWidget {
   const TripInfoByRiderScreen({super.key, required this.model});
@@ -324,6 +325,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   launchUrlString(
                                       "tel://${widget.model.driverPhone}");
                                 },
@@ -450,6 +452,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                                       fontWeight: FontWeight.w500),
                                   label: LocaleKeys.openGoogleMap.tr(),
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     openGoogleMaps(
                                         lat: widget.model.targetLocation!
                                             .coordinates![0],
@@ -469,6 +472,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500),
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     scaffoldKey.currentState?.showBottomSheet(
                                       (context) {
                                         return Container(
@@ -503,6 +507,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                                                 padding: EdgeInsets.zero,
                                                 width: double.infinity,
                                                 onPressed: () {
+      ManageVibration.vibrate();
                                                   log(
                                                       widget.model.paymentMethod
                                                           .toString(),
@@ -546,6 +551,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                                   label: LocaleKeys.cancel.tr(),
                                   style: Styles.headerText(color: Colors.white),
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     context.read<GetReasonsCubit>().get();
                                   },
                                 ),

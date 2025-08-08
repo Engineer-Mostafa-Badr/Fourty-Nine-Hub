@@ -17,6 +17,7 @@ import '../../../../domain/usecases/dashboards/create_new_offer_dashboard_usecas
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TrukBusWidget extends StatelessWidget {
   final String modeType;
@@ -245,6 +246,7 @@ class TrukBusWidget extends StatelessWidget {
                                     radius: 15,
                                     label: LocaleKeys.Accept.tr(),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       if (tripEntity?.state?.isButtonEnabled ??
                                           false) {
                                         BlocProvider.of<DashboardsCubit>(
@@ -277,6 +279,7 @@ class TrukBusWidget extends StatelessWidget {
                                     style: Styles.mediumText(
                                         color: Colors.white, fontSize: 23),
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       if (tripEntity?.state?.isButtonEnabled ??
                                           false) {
                                         customBottomSheet2(context,
@@ -287,6 +290,7 @@ class TrukBusWidget extends StatelessWidget {
                                                   contextScreen: contextScreen!,
                                                   id: tripEntity!
                                                       .tripDetails!.id,
+                                                  isArabic: context.isArabic,
                                                   selectedCategoryPrice:
                                                       tripEntity?.tripDetails?.price??0,
                                                   subCategoryId: tripEntity!
@@ -324,6 +328,7 @@ class TrukBusWidget extends StatelessWidget {
                                         //             backColor:
                                         //                 AppColors.SECONDARY_COLOR_DARK2,
                                         //             onPressed: () {
+      ManageVibration.vibrate();
                                         //               Navigator.of(context).pop();
                                         //             }),
                                         //         const SizedBox(height: 16),

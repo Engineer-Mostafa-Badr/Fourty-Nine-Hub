@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_my_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_pick_me_usecase.dart';
-import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
-
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
 import '../../domain/entity/click_entity.dart';
 import '../../domain/entity/get_all_count_ads_entity.dart';
@@ -60,6 +61,8 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final ClickUseCase _clickUseCase;
   final FetchMyAdsByIdUseCase _adsByIdUseCase;
 
+  List<String>? selectedImages;
+
   MyAddsCubit(
       this._getMyAdsUseCase,
       this._deleteComeWithMeUseCase,
@@ -84,82 +87,86 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._adsByIdUseCase)
       : super(const MyAddsState());
 
-  void loadData() async {
-    // await getMyAds();
-    await getPickMeTrips();
-    // await getComeWithMeTrips();
-    // await getMyAuctions();
+  void acceptComeWithMeRequest({required String id}) async {
+    final response = await _acceptComeWithMeUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
+      getComeWithMeTrips();
+    });
   }
 
-  Future<void> getMyAds() async {
-    final response = await _getMyAdsUseCase.call(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(state.copyWith(myAds: r, status: MyAddsStates.initState)));
+  void acceptPickMeRequest({
+    required String id,
+  }) async {
+    final response = await _acceptPickMeUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
+      getPickMeTrips();
+    });
   }
 
-  Future<void> getMyAuctions() async {
-    emit(state.copyWith(status: MyAddsStates.loading));
-    final response = await _getMyAuctionsUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(myAuctions: r, status: MyAddsStates.initState)));
+  void cancelAd({required String id}) async {
+    final response = await _cancelAdUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
+      getMyAds();
+    });
   }
 
-  Future<void> getMyInstallment() async {
-    emit(state.copyWith(status: MyAddsStates.loading));
-    final response = await _getMyInstallmentUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
+  Future<void> click({
+    required ClickParams params,
+  }) async {
+    final response = await _clickUseCase(params);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) => emit(state.copyWith(click: r, status: MyAddsStates.success)));
   }
 
-  Future<void> getMyOtherAds() async {
-    emit(state.copyWith(status: MyAddsStates.loading));
-    final response = await _getMyOtherAdsUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(myOtherAds: r, status: MyAddsStates.initState)));
-  }
+  void deleteAd({required String id}) async {}
 
-  Future<void> getMyTripJoin() async {
-    emit(state.copyWith(status: MyAddsStates.loading));
-    final response = await _getMyTripJoinUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) =>
-            emit(state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
-  }
-
-  Future<void> deleteMyTripJoin({required String id}) async {
-    emit(state.copyWith(status: MyAddsStates.loading));
-    final response = await _deleteMyTripJoinUseCase(id);
-    response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-      (r) {
-        emit(
-          state.copyWith(status: MyAddsStates.success),
-        );
-        getMyTripJoin();
-      },
-    );
+  void deleteComeWithMe({required String id}) async {
+    final response = await _deleteComeWithMeUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
+      getComeWithMeTrips();
+    });
   }
 
   Future<void> deleteMyInstallment({required String id}) async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _deleteMyInstallmentUseCase(id);
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+      },
       (r) {
         emit(
           state.copyWith(status: MyAddsStates.success),
@@ -169,107 +176,78 @@ class MyAddsCubit extends Cubit<MyAddsState> {
     );
   }
 
-  Future<void> getPickMeTrips() async {
-    final response = await _getMyPickMeAdsUseCase(const NoParams());
+  Future<void> deleteMyTripJoin({required String id}) async {
+    emit(state.copyWith(status: MyAddsStates.loading));
+    final response = await _deleteMyTripJoinUseCase(id);
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(pickMeTrips: r, status: MyAddsStates.initState)));
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+      },
+      (r) {
+        emit(
+          state.copyWith(status: MyAddsStates.success),
+        );
+        getMyTripJoin();
+      },
+    );
   }
-
-  Future<void> getComeWithMeTrips() async {
-    final response = await _getMyComeWithMeUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(state.copyWith(
-            comeWithMeTrips: r, status: MyAddsStates.initState)));
-  }
-
-  void cancelAd({required String id}) async {
-    final response = await _cancelAdUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
-      getMyAds();
-    });
-  }
-
-  void rejectPickMeRequest({required String id}) async {
-    final response = await _rejectPickMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
-      getPickMeTrips();
-    });
-  }
-
-  void rejectComeWithMeRequest({required String id}) async {
-    final response = await _rejectComeWithMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
-      getComeWithMeTrips();
-    });
-  }
-
-  void acceptComeWithMeRequest({required String id}) async {
-    final response = await _acceptComeWithMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
-      getComeWithMeTrips();
-    });
-  }
-
-  void acceptPickMeRequest({
-    required String id,
-  }) async {
-    final response = await _acceptPickMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
-      getPickMeTrips();
-    });
-  }
-
-  void deleteAd({required String id}) async {}
 
   void deletePickMeRequest({
     required String id,
   }) async {
     final response = await _deletePickMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
       getPickMeTrips();
     });
   }
 
-  void deleteComeWithMe({required String id}) async {
-    final response = await _deleteComeWithMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
-      getComeWithMeTrips();
-    });
+  Future<void> editMyAds({
+    required EditParams params,
+  }) async {
+    final response = await _editMyAdsUseCase(params);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) => emit(state.copyWith(status: MyAddsStates.initState)));
+  }
+
+  Future<void> fetchMyAdsById({
+    required String id,
+  }) async {
+    final response = await _adsByIdUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) => emit(state.copyWith(adsById: r, status: MyAddsStates.success)));
   }
 
   Future<void> getAllCount({
     required Params params,
   }) async {
     final response = await _allCountsUseCase(params);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
         (r) =>
             emit(state.copyWith(allCounts: r, status: MyAddsStates.initState)));
   }
@@ -278,16 +256,151 @@ class MyAddsCubit extends Cubit<MyAddsState> {
     required CountAdsParams params,
   }) async {
     final response = await _allCountsAdsUseCase(params);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
         (r) =>
             emit(state.copyWith(countAds: r, status: MyAddsStates.initState)));
   }
 
-  List<String>? selectedImages;
+  Future<void> getComeWithMeTrips() async {
+    final response = await _getMyComeWithMeUseCase(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
+        (r) => emit(state.copyWith(
+            comeWithMeTrips: r, status: MyAddsStates.initState)));
+  }
 
-  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
+  Future<void> getMyAds() async {
+    final response = await _getMyAdsUseCase.call(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) => emit(state.copyWith(myAds: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getMyAuctions() async {
+    emit(state.copyWith(status: MyAddsStates.loading));
+    final response = await _getMyAuctionsUseCase(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
+        (r) => emit(
+            state.copyWith(myAuctions: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getMyInstallment() async {
+    emit(state.copyWith(status: MyAddsStates.loading));
+    final response = await _getMyInstallmentUseCase(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
+        (r) => emit(
+            state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getMyOtherAds() async {
+    emit(state.copyWith(status: MyAddsStates.loading));
+    final response = await _getMyOtherAdsUseCase(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
+        (r) => emit(
+            state.copyWith(myOtherAds: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getMyTripJoin() async {
+    emit(state.copyWith(status: MyAddsStates.loading));
+    final response = await _getMyTripJoinUseCase(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
+        (r) =>
+            emit(state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getPickMeTrips() async {
+    final response = await _getMyPickMeAdsUseCase(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    },
+        (r) => emit(
+            state.copyWith(pickMeTrips: r, status: MyAddsStates.initState)));
+  }
+
+  void loadData() async {
+    // await getMyAds();
+    await getPickMeTrips();
+    // await getComeWithMeTrips();
+    // await getMyAuctions();
+  }
+
+  void rejectComeWithMeRequest({required String id}) async {
+    final response = await _rejectComeWithMeUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
+      getComeWithMeTrips();
+    });
+  }
+
+  void rejectPickMeRequest({required String id}) async {
+    final response = await _rejectPickMeUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: MyAddsStates.error));
+    }, (r) {
+      getPickMeTrips();
+    });
+  }
+
+  removePhoto(UploadFileEntity? image) {
+    final images = state.images;
+    images?.remove(image);
+    emit(state.copyWith(images: images, status: MyAddsStates.success));
+    // print(state.fileEntity?.mediaId);
+  }
+
+  uploadPhoto({bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -307,44 +420,8 @@ class MyAddsCubit extends Cubit<MyAddsState> {
               images: images,
               // backColor: '#FFFFFFFF',
               status: MyAddsStates.success));
-        }, context: context);
+        },
+        context: context);
     print("length${state.images?.length}");
-  }
-
-  removePhoto(UploadFileEntity? image) {
-    final images = state.images;
-    images?.remove(image);
-    emit(state.copyWith(images: images, status: MyAddsStates.success));
-    // print(state.fileEntity?.mediaId);
-  }
-
-  Future<void> editMyAds({
-    required EditParams params,
-  }) async {
-    final response = await _editMyAdsUseCase(params);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(state.copyWith(status: MyAddsStates.initState)));
-  }
-
-  Future<void> click({
-    required ClickParams params,
-  }) async {
-    final response = await _clickUseCase(params);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(state.copyWith(click: r, status: MyAddsStates.success)));
-  }
-
-  Future<void> fetchMyAdsById({
-    required String id,
-  }) async {
-    final response = await _adsByIdUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(state.copyWith(adsById: r, status: MyAddsStates.success)));
   }
 }

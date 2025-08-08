@@ -10,6 +10,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/bidding_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class Biddings extends StatelessWidget {
   final List<BiddingEntity> biddingsList;
@@ -48,7 +49,10 @@ class Biddings extends StatelessWidget {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextAppButton(label: item.user.fullName, onPressed: () {}),
+              TextAppButton(label: item.user.fullName, onPressed: () {
+
+      ManageVibration.vibrate();
+              }),
               Label(
                   text: item.formatedSinceTime,
                   style: Styles.mediumText(color: Colors.grey))

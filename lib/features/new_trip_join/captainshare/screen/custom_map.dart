@@ -1,7 +1,10 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_google_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_car_marker_widget.dart';
@@ -16,7 +19,9 @@ class CustomGoogleMap extends StatefulWidget {
   final bool enableScrolling;
   final bool? fromClient;
   final String? startAddress;
+  final String? status;
   final String? targetAddress;
+  final String? estimatedTime;
   final List<String> clientAddresses;
 
   const CustomGoogleMap({
@@ -29,6 +34,8 @@ class CustomGoogleMap extends StatefulWidget {
     this.fromClient,
     this.startAddress,
     this.targetAddress,
+    this.status,
+    this.estimatedTime,
     this.clientAddresses = const [],
   });
 
@@ -40,6 +47,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   GoogleMapController? _mapController;
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
+  final Set<Circle> _circles = {}; // إضافة الدوائر
   Marker? _carMarker;
 
   final LatLngBounds egyptBounds = LatLngBounds(
@@ -51,7 +59,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   BitmapDescriptor? _startMarkerIcon;
   BitmapDescriptor? _targetMarkerIcon;
   BitmapDescriptor? _clientMarkerIcon;
-  double _currentZoom = 12.0;
+  double _currentZoom = 16.0;
 
   @override
   void initState() {
@@ -66,6 +74,14 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
     bool shouldUpdate = false;
 
+    if (widget.status != oldWidget.status) {
+      if (_mapController != null && widget.startLocation != null && widget.targetLocation != null && widget.status != TripState.started.name) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _moveCameraToFitStartAndTarget();
+        });
+      }
+    }
+
     if (widget.startLocation != oldWidget.startLocation) {
       _latestStartLocation = widget.startLocation;
       shouldUpdate = true;
@@ -77,21 +93,143 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         );
       }
     }
+    bool areLatLngListsEqual(List<LatLng> a, List<LatLng> b) {
+      if (a.length != b.length) return false;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i].latitude != b[i].latitude || a[i].longitude != b[i].longitude) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    bool areStringListsEqualUnordered(List<String> a, List<String> b) {
+      return const SetEquality().equals(a.toSet(), b.toSet());
+    }
 
     if (widget.targetLocation != oldWidget.targetLocation ||
-        widget.clientLocations != oldWidget.clientLocations ||
-        widget.polylinePoints != oldWidget.polylinePoints ||
+        widget.startLocation != oldWidget.startLocation ||
+        !areLatLngListsEqual(widget.polylinePoints, oldWidget.polylinePoints) ||
+        !areLatLngListsEqual(widget.clientLocations, oldWidget.clientLocations) ||
+        !areStringListsEqualUnordered(widget.clientAddresses, oldWidget.clientAddresses) ||
         widget.startAddress != oldWidget.startAddress ||
-        widget.targetAddress != oldWidget.targetAddress ||
-        widget.clientAddresses != oldWidget.clientAddresses) {
+        widget.targetAddress != oldWidget.targetAddress) {
+      shouldUpdate = true;
+    }
+    if (widget.fromClient != oldWidget.fromClient) {
+      shouldUpdate = true;
+    }
+    if (widget.estimatedTime != oldWidget.estimatedTime) {
       shouldUpdate = true;
     }
 
     if (shouldUpdate) {
       _setMarkersAndPolyline();
+      _moveCameraToFitAllPoints();
     }
   }
 
+  // دالة جديدة للتعامل مع Start و Target فقط
+  void _moveCameraToFitStartAndTarget() {
+    if (_mapController == null || widget.startLocation == null || widget.targetLocation == null) return;
+
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final size = renderBox.size;
+    final mapHeight = size.height;
+    final mapWidth = size.width;
+
+    // حساب padding مناسب للـ top (أكبر من العادي)
+    double padding = _calculateDynamicPaddingForTop(mapHeight, mapWidth);
+
+    final bounds = LatLngBounds(
+      southwest: LatLng(
+        min(widget.startLocation!.latitude, widget.targetLocation!.latitude),
+        min(widget.startLocation!.longitude, widget.targetLocation!.longitude),
+      ),
+      northeast: LatLng(
+        max(widget.startLocation!.latitude, widget.targetLocation!.latitude),
+        max(widget.startLocation!.longitude, widget.targetLocation!.longitude),
+      ),
+    );
+
+    _mapController!.animateCamera(
+      CameraUpdate.newLatLngBounds(bounds, padding),
+    );
+  }
+
+  void _moveCameraToFitAllPoints() {
+    if (_mapController == null) return;
+
+    List<LatLng> allPoints = [];
+    if (widget.startLocation != null) allPoints.add(widget.startLocation!);
+    if (widget.targetLocation != null) allPoints.add(widget.targetLocation!);
+    allPoints.addAll(widget.clientLocations);
+    allPoints.addAll(widget.polylinePoints);
+
+    if (allPoints.length < 2) return;
+
+    // الحصول على حجم الخريطة
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final size = renderBox.size;
+    final mapHeight = size.height;
+    final mapWidth = size.width;
+
+    double minLat = allPoints.first.latitude;
+    double maxLat = allPoints.first.latitude;
+    double minLng = allPoints.first.longitude;
+    double maxLng = allPoints.first.longitude;
+
+    for (var point in allPoints) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+      if (point.longitude < minLng) minLng = point.longitude;
+      if (point.longitude > maxLng) maxLng = point.longitude;
+    }
+
+    LatLngBounds bounds = LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
+
+    // حساب padding مناسب للـ top (أكبر من العادي)
+    double padding = _calculateDynamicPaddingForTop(mapHeight, mapWidth);
+
+    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, padding));
+  }
+
+  // دالة لحساب padding أكبر للتعامل مع مشكلة الـ top
+  double _calculateDynamicPaddingForTop(double mapHeight, double mapWidth) {
+    // حساب أصغر بُعد (العرض أو الارتفاع)
+    double smallestDimension = min(mapHeight, mapWidth);
+
+    // حساب padding أساسي بنسب أكبر عشان نعوض مشكلة الـ top
+    double paddingPercentage;
+
+    if (smallestDimension < 200) {
+      paddingPercentage = 0.18; // 18% للخرائط الصغيرة جداً
+    } else if (smallestDimension < 300) {
+      paddingPercentage = 0.22; // 22% للخرائط الصغيرة
+    } else if (smallestDimension < 500) {
+      paddingPercentage = 0.25; // 25% للخرائط المتوسطة
+    } else {
+      paddingPercentage = 0.28; // 28% للخرائط الكبيرة
+    }
+
+    double calculatedPadding = smallestDimension * paddingPercentage;
+
+    // تأكد من أن padding لا يقل عن 35 ولا يزيد عن 150
+    return calculatedPadding.clamp(35.0, 150.0);
+  }
+
+  // دالة لحساب padding ديناميكي بناءً على حجم الخريطة (للتوافق مع الدوال القديمة)
+  double _calculateDynamicPadding(double mapHeight, double mapWidth) {
+    // استخدام نفس الدالة الجديدة
+    return _calculateDynamicPaddingForTop(mapHeight, mapWidth);
+  }
 
   Future<void> _createCustomMarkerIcons(double size) async {
     _startMarkerIcon = await _createLocationGlowMarker(Colors.green, size);
@@ -195,13 +333,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _setMarkersAndPolyline();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.startLocation != null) {
-        _mapController!.moveCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(target: widget.startLocation!, zoom: _currentZoom),
-          ),
-        );
-      }
+      _moveCameraToFitAllPoints();
     });
   }
 
@@ -209,19 +341,112 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     var lightStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/light_map_style.json');
     var darkStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/dark_map_style.json');
     _mapController?.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _moveCameraToFitAllPoints();
+    });
+  }
+
+  // دالة لحساب المسافة بين نقطتين
+  double _calculateDistance(LatLng point1, LatLng point2) {
+    const double earthRadius = 6371000; // بالمتر
+    double lat1Rad = point1.latitude * pi / 180;
+    double lat2Rad = point2.latitude * pi / 180;
+    double deltaLatRad = (point2.latitude - point1.latitude) * pi / 180;
+    double deltaLngRad = (point2.longitude - point1.longitude) * pi / 180;
+
+    double a = sin(deltaLatRad / 2) * sin(deltaLatRad / 2) +
+        cos(lat1Rad) * cos(lat2Rad) *
+            sin(deltaLngRad / 2) * sin(deltaLngRad / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    return earthRadius * c;
+  }
+
+  // دالة لحساب النقاط الوسطية بين نقطتين
+  List<LatLng> _generateStepPoints(LatLng start, LatLng end, double stepDistance) {
+    List<LatLng> stepPoints = [];
+
+    double totalDistance = _calculateDistance(start, end);
+    if (totalDistance <= stepDistance) {
+      return stepPoints; // مسافة قصيرة جداً، مش محتاجين steps
+    }
+
+    int numberOfSteps = (totalDistance / stepDistance).floor();
+
+    for (int i = 1; i <= numberOfSteps; i++) {
+      double ratio = (stepDistance * i) / totalDistance;
+      double lat = start.latitude + (end.latitude - start.latitude) * ratio;
+      double lng = start.longitude + (end.longitude - start.longitude) * ratio;
+      stepPoints.add(LatLng(lat, lng));
+    }
+
+    return stepPoints;
+  }
+
+  // دالة لإضافة الدوائر الرمادية
+  void _addStepCircles() {
+    _circles.clear();
+
+    if (widget.polylinePoints.isEmpty) return;
+
+    // حساب حجم الدائرة بناءً على الزوم
+    double circleRadius = _calculateCircleRadiusByZoom(_currentZoom);
+    const double stepDistance = 50.0; // المسافة بين كل step (50 متر)
+
+    // إضافة steps بين start location وبداية polyline
+    if (widget.startLocation != null) {
+      LatLng polylineStart = widget.polylinePoints.first;
+      List<LatLng> startSteps = _generateStepPoints(widget.startLocation!, polylineStart, stepDistance);
+
+      for (int i = 0; i < startSteps.length; i++) {
+        _circles.add(Circle(
+          circleId: CircleId('start_step_$i'),
+          center: startSteps[i],
+          radius: circleRadius,
+          fillColor: Colors.grey.withOpacity(0.4),
+          strokeColor: Colors.grey.withOpacity(0.6),
+          strokeWidth: 1,
+        ));
+      }
+    }
+
+    // إضافة steps بين نهاية polyline و target location
+    if (widget.targetLocation != null) {
+      LatLng polylineEnd = widget.polylinePoints.last;
+      List<LatLng> endSteps = _generateStepPoints(polylineEnd, widget.targetLocation!, stepDistance);
+
+      for (int i = 0; i < endSteps.length; i++) {
+        _circles.add(Circle(
+          circleId: CircleId('end_step_$i'),
+          center: endSteps[i],
+          radius: circleRadius,
+          fillColor: Colors.grey.withOpacity(0.4),
+          strokeColor: Colors.grey.withOpacity(0.6),
+          strokeWidth: 1,
+        ));
+      }
+    }
+  }
+
+  // دالة لحساب حجم الدائرة بناءً على الزوم
+  double _calculateCircleRadiusByZoom(double zoom) {
+    const minZoom = 10.0;
+    const maxZoom = 20.0;
+    final clampedZoom = zoom.clamp(minZoom, maxZoom);
+    final normalized = (clampedZoom - minZoom) / (maxZoom - minZoom);
+    return 3 + (normalized * (8 - 3)); // من 3 لـ 8 متر
   }
 
   void _setMarkersAndPolyline() {
     _markers.clear();
     _polylines.clear();
 
-    print("startAddress marker ${widget.startAddress}");
     if (widget.startLocation != null && _startMarkerIcon != null) {
       _markers.add(Marker(
         markerId: const MarkerId('start'),
         position: widget.startLocation!,
         icon: _startMarkerIcon!,
-        infoWindow: (widget.startAddress!=null&&(widget.startAddress?.isNotEmpty??false))?InfoWindow(title: widget.startAddress ?? ''):InfoWindow(),
+        infoWindow: (widget.startAddress != null && (widget.startAddress?.isNotEmpty ?? false)) ? InfoWindow(title: widget.startAddress ?? '') : InfoWindow(),
       ));
     }
 
@@ -230,7 +455,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         markerId: const MarkerId('target'),
         position: widget.targetLocation!,
         icon: _targetMarkerIcon!,
-        infoWindow:  (widget.targetAddress!=null&&(widget.targetAddress?.isNotEmpty??false))?InfoWindow( title: widget.targetAddress ?? ''):InfoWindow(),
+        infoWindow: (widget.targetAddress != null && (widget.targetAddress?.isNotEmpty ?? false)) ? InfoWindow(title: widget.targetAddress ?? '') : InfoWindow(),
       ));
     }
 
@@ -240,10 +465,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           markerId: MarkerId('client_$i'),
           position: widget.clientLocations[i],
           icon: _clientMarkerIcon!,
-          infoWindow: i < widget.clientAddresses.length ?InfoWindow(
+          infoWindow: i < widget.clientAddresses.length
+              ? InfoWindow(
             // title: 'العميل ${i + 1}',
             title: i < widget.clientAddresses.length ? widget.clientAddresses[i] : '',
-          ):InfoWindow(),
+          )
+              : InfoWindow(),
         ));
       }
     }
@@ -260,6 +487,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       }
       _polylines.addAll(_buildGradientPolyline(widget.polylinePoints, gradientColors));
     }
+
+    // إضافة الدوائر الرمادية
+    _addStepCircles();
 
     if (_carMarker != null) {
       _markers.add(_carMarker!);
@@ -333,12 +563,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget.startAddress ${widget.startAddress}');
     Widget mapWidget = GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(target: _getInitialCenter(), zoom: _currentZoom),
       markers: _markers,
       polylines: _polylines,
+      circles: _circles, // إضافة الدوائر للخريطة
       myLocationEnabled: false,
       myLocationButtonEnabled: false,
       zoomControlsEnabled: false,
@@ -352,6 +582,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         if ((_currentZoom - position.zoom).abs() >= 0.5) {
           _currentZoom = position.zoom;
           _updateMarkerIconsByZoom();
+          _addStepCircles(); // تحديث حجم الدوائر مع الزوم
         }
       },
     );
@@ -367,11 +598,14 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           GoogleMapCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
             mapController: _mapController!,
+            size: _currentZoom,
           ),
         if (widget.fromClient == false && _mapController != null)
           DriverCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
             mapController: _mapController!,
+            size: _currentZoom,
+            time: widget.estimatedTime,
           ),
       ],
     );

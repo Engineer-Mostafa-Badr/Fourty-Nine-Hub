@@ -64,7 +64,7 @@ class CustomNotificationWidget extends StatelessWidget {
         Visibility(
           visible: unreadCount != 0,
           child: PositionedDirectional(
-            top: 6,
+            top: 11.h,
             end: -2,
             child: CounterWidget(
               unreadCount: unreadCount,

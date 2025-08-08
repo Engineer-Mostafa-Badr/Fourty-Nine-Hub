@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../domain/usecases/add_reply_usecase.dart';
+import '../../../domain/usecases/post_comment_usecase.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../facebook_widgets/build_reactions_buttons.dart';
+import '../facebook_widgets/user_image.dart';
+import 'comment_replies.dart';
+import '../../../../twitter/presentation/widgets/report_view.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -22,6 +22,7 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class CommentCard extends StatefulWidget {
   final Color textColor;
@@ -97,6 +98,7 @@ class _CommentCardState extends State<CommentCard> {
             const Sizer(),
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 bottomSheet(
                   context: context,
                   widget: _buildPostOptions(
@@ -145,6 +147,7 @@ class _CommentCardState extends State<CommentCard> {
                       isCircle: true,
                       size: 20,
                       onPressed: () async {
+      ManageVibration.vibrate();
                         var result = await widget.onEditComment(
                             PostCommentParams(
                                 postId: widget.comment.id,
@@ -171,6 +174,7 @@ class _CommentCardState extends State<CommentCard> {
                 style: Styles.mediumText(),
                 label: LocaleKeys.reply.localize,
                 onPressed: () {
+      ManageVibration.vibrate();
                   bottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -211,6 +215,7 @@ class _CommentCardState extends State<CommentCard> {
                 title: LocaleKeys.typeYourComment.localize,
                 subTitle: LocaleKeys.youWillReportComment.localize,
                 onTap: () async {
+      ManageVibration.vibrate();
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
                         context: context,
@@ -227,6 +232,7 @@ class _CommentCardState extends State<CommentCard> {
                 title: LocaleKeys.deleteComment.localize,
                 subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.onDeleteComment(widget.comment.id);
                 }),
           if (isMyComment)
@@ -236,6 +242,7 @@ class _CommentCardState extends State<CommentCard> {
                 title: LocaleKeys.editComment.localize,
                 subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.comment.edit = !widget.comment.edit!;
                   editTextController.text = widget.comment.content;
                   setState(() {});
@@ -254,6 +261,7 @@ class _CommentCardState extends State<CommentCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },

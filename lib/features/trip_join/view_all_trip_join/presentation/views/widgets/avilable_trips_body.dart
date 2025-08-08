@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/view_all_trip_join_builder.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
+import 'view_all_trip_join_builder.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 class AvailableTripsBody extends StatefulWidget {
   const AvailableTripsBody({super.key});

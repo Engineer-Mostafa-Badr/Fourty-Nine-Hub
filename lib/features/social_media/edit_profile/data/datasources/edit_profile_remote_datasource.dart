@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
+import '../../../../../core/data/datasources/json_parser.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../../domain/entities/edit_profile_entity.dart';
 
 import '../../../../health_feature/create_doctor/data/models/governrate_model.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';

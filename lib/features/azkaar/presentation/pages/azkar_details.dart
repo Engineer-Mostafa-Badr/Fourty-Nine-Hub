@@ -11,9 +11,9 @@ import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 
 class AzkarDetails extends StatefulWidget {
-  const AzkarDetails({super.key, required this.category});
-
   final String category;
+
+  const AzkarDetails({super.key, required this.category});
 
   @override
   State<AzkarDetails> createState() => _AzkarDetailsState();
@@ -22,28 +22,6 @@ class AzkarDetails extends StatefulWidget {
 class _AzkarDetailsState extends State<AzkarDetails> {
   late ScrollController _scrollController;
   late AzkarCubit _cubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit = context.read<AzkarCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadAzkarData(widget.category);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchDetailsAzkar(widget.category);
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,80 +38,108 @@ class _AzkarDetailsState extends State<AzkarDetails> {
             if (state.status == AzkarStates.loading) {
               return const Center(child: CustomCircularProgressIndicator());
             }
-            return ListView.separated(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
-              itemBuilder: (context, index) {
-                if (index == _cubit.azkarDetails.length) {
-                  return const Center(child: CustomCircularProgressIndicator());
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text.rich(
-                        textDirection: TextDirection.rtl,
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: state.azkarDetail![index].zekr, // Zekr text
-                              style: TextStyle(
-                                fontFamily: 'Amiri',
-                                fontSize: 40.sp,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors.PRIMARY_COLOR,
+            return GlowingOverscrollIndicator(
+              color: AppColors.SECONDARY_COLOR,
+              axisDirection: AxisDirection.down,
+              child: ListView.separated(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                itemBuilder: (context, index) {
+                  if (index == _cubit.azkarDetails.length) {
+                    return const Center(
+                        child: CustomCircularProgressIndicator());
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text.rich(
+                          textDirection: TextDirection.rtl,
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text:
+                                    state.azkarDetail![index].zekr, // Zekr text
+                                style: TextStyle(
+                                  fontFamily: 'Amiri',
+                                  fontSize: 40.sp,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: state.azkarDetail?[index].count != null
-                                  ? '(${state.azkarDetail![index].count})' // Show count with parentheses if not null
-                                  : '', // Count text in red
-                              style: TextStyle(
-                                fontFamily: 'Amiri',
-                                fontSize: 40.sp,
-                                color: Colors.red, // Red color for the count
+                              TextSpan(
+                                text: state.azkarDetail?[index].count != null
+                                    ? '(${state.azkarDetail![index].count})' // Show count with parentheses if not null
+                                    : '', // Count text in red
+                                style: TextStyle(
+                                  fontFamily: 'Amiri',
+                                  fontSize: 40.sp,
+                                  color: Colors.red, // Red color for the count
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                          textAlign: TextAlign.right,
                         ),
-                        textAlign: TextAlign.right,
-                      ),
-                      if (state.azkarDetail![index].description!.isNotEmpty)
-                        Text(state.azkarDetail![index].description!,
-                            textAlign: TextAlign.right,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              fontFamily: 'Amiri',
-                              fontSize: 30.sp,
-                              color: AppColors.SECONDARY_COLOR,
-                            )),
-                      if (state.azkarDetail![index].reference!.isNotEmpty)
-                        Align(
-                          alignment: AlignmentDirectional.topStart,
-                          child: Text(state.azkarDetail![index].reference!,
-                              textAlign: TextAlign.left,
+                        if (state.azkarDetail![index].description!.isNotEmpty)
+                          Text(state.azkarDetail![index].description!,
+                              textAlign: TextAlign.right,
                               textDirection: TextDirection.rtl,
                               style: TextStyle(
                                 fontFamily: 'Amiri',
                                 fontSize: 30.sp,
                                 color: AppColors.SECONDARY_COLOR,
                               )),
-                        ),
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(
-                color: AppColors.GREY_NORMAL_COLOR,
+                        if (state.azkarDetail![index].reference!.isNotEmpty)
+                          Align(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(state.azkarDetail![index].reference!,
+                                textAlign: TextAlign.left,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  fontFamily: 'Amiri',
+                                  fontSize: 30.sp,
+                                  color: AppColors.SECONDARY_COLOR,
+                                )),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(
+                  color: AppColors.GREY_NORMAL_COLOR,
+                ),
+                itemCount: state.azkarDetail?.length ?? 0,
               ),
-              itemCount: state.azkarDetail?.length ?? 0,
             );
           },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<AzkarCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadAzkarData(widget.category);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchDetailsAzkar(widget.category);
+    }
   }
 }

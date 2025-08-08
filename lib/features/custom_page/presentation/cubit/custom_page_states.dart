@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
-import 'package:fourtyninehub/features/custom_page/domain/entity/navigate_bar_entity.dart';
-import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_entity.dart';
+import '../../domain/entity/activate_entity.dart';
+import '../../domain/entity/navigate_bar_entity.dart';
+import '../../domain/entity/social_page_entity.dart';
 
 import '../../../../../../core/error/failure.dart';
 import '../../data/model/update_custom_page_categorise_model.dart';

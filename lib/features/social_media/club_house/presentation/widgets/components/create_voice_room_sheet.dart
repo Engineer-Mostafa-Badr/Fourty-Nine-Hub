@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../controller/club_voice_bloc.dart';
+import '../../pages/audio_stream_screen.dart';
+import '../../../../../../res/style/app_colors.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../controller/club_voice_state.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class CreateRoomScreen extends StatefulWidget {
   const CreateRoomScreen({super.key});
@@ -117,6 +118,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                             ? AppColors.SECONDARY_COLOR
                             : AppColors.PRIMARY_COLOR),
                     onPressed: () async {
+      ManageVibration.vibrate();
                       String roomSub = roomSubjectController.text.trim();
                       if (roomSub.isEmpty) {
                         showErrorMessage(
@@ -143,6 +145,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                             ? AppColors.SECONDARY_COLOR
                             : AppColors.PRIMARY_COLOR),
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     },
                     child: Label(

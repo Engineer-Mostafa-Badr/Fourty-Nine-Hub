@@ -12,6 +12,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/us
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_timetable_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/time_table_options_checkbox.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'edit_doctor_timetable_state.dart';
 
@@ -157,7 +160,10 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
 
   getDoctorWorkDays() async {
     final response = await _getDoctorWorkDaysUsecase(const NoParams());
-    response.fold((l) {
+    response.fold((l) {var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(
           failure: l, status: EditDoctorTimetableStateStatus.error));
     }, (data) {
@@ -204,6 +210,10 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
         visitHomePrice: homeVisitPriceController.text,
         waitingTime: waitingTimeController.text));
     response.fold((l) {
+      var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(
           failure: l, status: EditDoctorTimetableStateStatus.error));
     }, (data) {

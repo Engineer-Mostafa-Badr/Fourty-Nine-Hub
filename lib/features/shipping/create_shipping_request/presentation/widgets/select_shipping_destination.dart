@@ -2,16 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../cubit/create_shipping_request_cubit.dart';
 
 class SelectShippingDestination extends StatelessWidget {
   const SelectShippingDestination({super.key});
@@ -41,6 +42,7 @@ class SelectShippingDestination extends StatelessWidget {
                   )),
                   InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       context.pop();
                     },
                     child: CircleAvatar(

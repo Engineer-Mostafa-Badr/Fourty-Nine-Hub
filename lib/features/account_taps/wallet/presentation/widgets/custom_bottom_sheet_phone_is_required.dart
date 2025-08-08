@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomBottomSheetPhoneIsRequired extends StatelessWidget {
   const CustomBottomSheetPhoneIsRequired({super.key});
@@ -48,6 +49,7 @@ class CustomBottomSheetPhoneIsRequired extends StatelessWidget {
                 ),
                 backColor: AppColors.c0B1035,
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                   context.push(Routes.EDITPROFILE);
                 },
@@ -65,6 +67,7 @@ class CustomBottomSheetPhoneIsRequired extends StatelessWidget {
                 ),
                 backColor: const Color(0xffD9D9D9),
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),

@@ -6,7 +6,9 @@ import 'package:fourtyninehub/features/notifications/domain/usecases/get_notific
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'get_social_notifications_state.dart';
 
 class GetSocialNotificationsCubit extends Cubit<GetSocialNotificationsState> {
@@ -32,6 +34,10 @@ class GetSocialNotificationsCubit extends Cubit<GetSocialNotificationsState> {
         type: 'social', page: page, languageCode: languageCode);
     response.fold(
       (Failure failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(GetSocialNotificationsFailed(Labels.errorHappened));
       },
       (data) {

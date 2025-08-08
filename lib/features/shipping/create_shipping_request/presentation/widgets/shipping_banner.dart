@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateful/banners/main_category_banner.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../data/models/banner_model/banner_model.dart';
+import '../cubit/favorite_main_cateogry_cubit.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ShippingBanner extends StatefulWidget {
   const ShippingBanner({
@@ -127,6 +128,7 @@ class _ShippingBannerState extends State<ShippingBanner> {
     //       ),
     //       InkWell(
     //         onTap: () {
+      ManageVibration.vibrate();
     // if (context.read<UserCubit>().isLoggedIn) {
     //   context.push(Routes.SHIPPING_REGISTER);
     // } else {

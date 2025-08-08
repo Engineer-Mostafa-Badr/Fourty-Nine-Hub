@@ -16,6 +16,7 @@ import '../widgets/booking_confirmation/booking_submit_button.dart';
 import '../widgets/booking_confirmation/confirm_header.dart';
 import '../widgets/booking_confirmation/custom_user_info_section.dart';
 import '../widgets/booking_confirmation/doctor_information.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BookingConfirmationScreen extends StatefulWidget {
   final dynamic doctorDetailsCubit;
@@ -110,6 +111,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
                   // Submit Button
                   BookingButton(
                     onTap: () {
+      ManageVibration.vibrate();
                       bookingController.regularBooking();
                     },
                     title: LocaleKeys.submit.localize,

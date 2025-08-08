@@ -2,15 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/select_contacts_to_share_cart.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../widgets/widgets_contacts/select_contacts_to_share_cart.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class SelectContactsToShareView extends StatefulWidget {
   const SelectContactsToShareView({super.key, required this.chatRoomCubit});
@@ -58,6 +59,7 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
             leadingWidth: 26,
             leading: IconButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 context.pop();
                 context.pop();
               },
@@ -68,7 +70,10 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+
+      ManageVibration.vibrate();
+                },
                 icon: const Icon(
                   Icons.search,
                   color: Colors.white,
@@ -83,6 +88,7 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
           body: _body(),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
+      ManageVibration.vibrate();
               await widget.chatRoomCubit.sendMessage();
               context.pop();
               context.pop();

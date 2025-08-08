@@ -7,6 +7,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import 'widgets/map_section.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ConnectionCallScreen extends StatelessWidget {
   const ConnectionCallScreen({super.key});
@@ -103,6 +104,7 @@ class CallCard extends StatelessWidget {
               ),
             ),
             onPressed: () {
+      ManageVibration.vibrate();
               context.push(Routes.safetyRideScreen);
 
             },
@@ -119,6 +121,7 @@ class CallCard extends StatelessWidget {
               ),
             ),
             onPressed: () {
+      ManageVibration.vibrate();
               context.push(Routes.safetyRideScreen);
             },
             child:  Center(child: Text(LocaleKeys.regularCall.localize)),

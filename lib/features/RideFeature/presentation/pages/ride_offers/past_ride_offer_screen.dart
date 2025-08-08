@@ -24,6 +24,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/get_client_past_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PastRideOfferScreen extends StatefulWidget {
   final String type;
@@ -190,6 +191,7 @@ class ClientPastWidget extends StatelessWidget {
         "${offers?.tripDetails?.price?.toInt() ?? 300}", context);
     return ClickableWidget(
       onTap: () {
+      ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -212,6 +214,7 @@ class ClientPastWidget extends StatelessWidget {
           children: [
             ClickableWidget(
               onTap: () {
+      ManageVibration.vibrate();
                 context.push(
                   Routes.allDriverRatingScreen,
                   extra:offers?.driverDetails?.userId,

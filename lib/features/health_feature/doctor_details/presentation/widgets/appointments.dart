@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorDetailsAppointmentsCard extends StatelessWidget {
   const DoctorDetailsAppointmentsCard({super.key});
@@ -174,6 +175,7 @@ class _DayScheduleWidget extends StatelessWidget {
                       ? AppColors.DARK_GRAY_COLOR
                       : AppColors.LIGHT_GRAY_COLOR),
               onPressed: () {
+      ManageVibration.vibrate();
                 if (item.isAvailable) {
                   context.read<DoctorDetailsCubit>().selectedAppointment = item;
                   context.push(Routes.VISITABOOKING,

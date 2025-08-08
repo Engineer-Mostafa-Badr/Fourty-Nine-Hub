@@ -10,6 +10,7 @@ import '../../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../defines.dart';
 import '../pop_up_manager.dart';
 import 'effect_grid.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomSoundEffectSheet extends StatefulWidget {
@@ -87,6 +88,7 @@ class _ZegoLiveAudioRoomSoundEffectSheetState
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(
                 context,
                 rootNavigator: widget.rootNavigator,
@@ -141,6 +143,7 @@ class _ZegoLiveAudioRoomSoundEffectSheetState
               ),
               iconText: voiceChangerTypeText(effect),
               onPressed: () {
+      ManageVibration.vibrate();
                 ZegoUIKit().setVoiceChangerType(effect.key);
               },
             ),
@@ -176,6 +179,7 @@ class _ZegoLiveAudioRoomSoundEffectSheetState
               ),
               iconText: reverbTypeText(effect),
               onPressed: () {
+      ManageVibration.vibrate();
                 ZegoUIKit().setReverbType(effect.key);
               },
             ),

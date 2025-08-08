@@ -3,30 +3,31 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_driver_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/image_validation.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+import '../../../../../common/widgets/form/text_fields/first_name_text_form_field.dart';
+import '../../../../../common/widgets/form/text_fields/last_name_text_form_field.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../../common/widgets/stateless/labels/info_text.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
+import '../cubit/get_driver_cubit.dart';
+import '../cubit/shipping_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../cubit/update_driver_cubit.dart';
+import '../widgets/image_validation.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class EditDriverScreen extends StatefulWidget {
   const EditDriverScreen({super.key});
@@ -911,6 +912,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             ),
                             label: LocaleKeys.update.tr(),
                             onPressed: () {
+      ManageVibration.vibrate();
                               if (formKey.currentState!.validate()) {
                                 shippingcubit.model.firstName =
                                     firstNameController.text;

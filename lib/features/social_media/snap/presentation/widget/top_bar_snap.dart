@@ -6,15 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/file.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TopBarSnap extends StatefulWidget {
   const TopBarSnap({super.key});
@@ -164,6 +165,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
             children: [
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
@@ -188,7 +190,10 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
                 ),
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  },
                   icon: const Icon(
                     FontAwesomeIcons.shareNodes,
                     size: 30,

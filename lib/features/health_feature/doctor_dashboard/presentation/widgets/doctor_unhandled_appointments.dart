@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
   const DoctorUnhandledAppointmentsWidget({super.key});
@@ -78,6 +79,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                           label: LocaleKeys.showMore.localize,
                           style: Styles.mediumText(color: Colors.white),
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
                           })
                   ],

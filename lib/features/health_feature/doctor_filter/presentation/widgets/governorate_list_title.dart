@@ -8,6 +8,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class GovernorateListTitle extends StatelessWidget {
   final GovernorateEntity governorate;
@@ -27,6 +28,7 @@ class GovernorateListTitle extends StatelessWidget {
 
       ),
       onTap: () {
+      ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.governorate =
             governorate;
 

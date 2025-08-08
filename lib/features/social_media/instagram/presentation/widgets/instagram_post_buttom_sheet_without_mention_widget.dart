@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -14,6 +14,7 @@ import '../../../../../routes/routes.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
 import '../cubit/save_post_instagram/save_post_instagram_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
   const InstagramPostButtomSheetWithoutMentionWidget(
@@ -46,6 +47,7 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
                 final cubit = context.read<SavePostInstagramCubit>();
                 return GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     cubit.savePostInstagram(postId);
                   },
                   child: Container(
@@ -68,6 +70,7 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
           // const Sizer(),
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               context.push(Routes.INSTAGRAMPROFILE, extra: userId);
             },
             child: Container(
@@ -91,6 +94,7 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
               builder: (context, state) {
                 return GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     context
                         .read<ProfileInstagramCubit>()
                         .unFollowUser(userId);
@@ -134,6 +138,7 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
           // const Sizer(),
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               bottomSheet(
                   context: context,
                   widget: ReportView(

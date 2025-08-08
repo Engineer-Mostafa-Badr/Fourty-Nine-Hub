@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/functions/helper/numbers_helper.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/duration_helper.dart';

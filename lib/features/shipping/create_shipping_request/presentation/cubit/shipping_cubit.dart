@@ -4,32 +4,35 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_image.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_images_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_behind.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_front.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/driving_license_behind.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/driving_license_front.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/drivnig_license_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/id_behind.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/id_front.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/info_id_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/register_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/images_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/service/cache_service.dart';
+import '../../data/models/banner_model/banner_model.dart';
+import '../../data/models/car_images_s3_model/car_image.dart';
+import '../../data/models/car_images_s3_model/car_images_s3_model.dart';
+import '../../data/models/car_license_s3_model/car_license_behind.dart';
+import '../../data/models/car_license_s3_model/car_license_front.dart';
+import '../../data/models/car_license_s3_model/car_license_s3_model.dart';
+import '../../data/models/driver_register_request_model.dart';
+import '../../data/models/drivnig_license_s3_model/driving_license_behind.dart';
+import '../../data/models/drivnig_license_s3_model/driving_license_front.dart';
+import '../../data/models/drivnig_license_s3_model/drivnig_license_s3_model.dart';
+import '../../data/models/info_id_s3_model/id_behind.dart';
+import '../../data/models/info_id_s3_model/id_front.dart';
+import '../../data/models/info_id_s3_model/info_id_s3_model.dart';
+import '../../data/models/register_request_model.dart';
+import '../../data/models/request_model.dart';
+import '../../data/repositories/images_repository.dart';
+import '../../data/repositories/shipping_repository.dart';
+import 'shipping_state.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class ShippingCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;
@@ -48,6 +51,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     var response = await repository.getBannerData();
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log(l.toString(), name: "FailureBanner");
         emit(FailureShippingState(failure: l));
       },
@@ -256,7 +263,12 @@ class ShippingCubit extends Cubit<ShippingState> {
               size: await getFileSize(model.idImageInFront!))),
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         log(r.toString(),
             name: "lllllllllllllllllllllllllllllllllllllllllllllll");
@@ -296,6 +308,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log('llllllllllllllja;sdlkfja;slkdjf;aslkdjf;alskdjfa;slkdjf $l');
       },
       (r) async {
@@ -341,7 +357,12 @@ class ShippingCubit extends Cubit<ShippingState> {
               size: await getFileSize(model.drivingImageInFront!))),
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         log(r.toString(),
             name: "lllllllllllllllllllllllllllllllllllllllllllllll");
@@ -374,7 +395,12 @@ class ShippingCubit extends Cubit<ShippingState> {
               size: await getFileSize(model.licenseImageInFront!))),
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         log(r.toString(),
             name: "lllllllllllllllllllllllllllllllllllllllllllllll");
@@ -441,6 +467,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     //     name:` "suuuuuuuuuuuuuuuuuuuuuuccccccccccccccccccessssssssssssssssss");
     resposne.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log(l.toString(), name: "failuerRequest");
       },
       (r) {
@@ -465,6 +495,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
     response.fold(
       (l) async {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         // log("faiuerDriverResiget");
         // emit(FailureShippingState(failure: l));
         // log("successDriverResiget");
@@ -501,6 +535,10 @@ class ShippingCubit extends Cubit<ShippingState> {
     var response = await repository.deleteDriver();
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {

@@ -27,6 +27,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripInfoButtonSheetWidget extends StatefulWidget {
   const TripInfoButtonSheetWidget({super.key, required this.model});
@@ -89,6 +90,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                         children: [
                           GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               Navigator.pop(context);
                             },
                             child: const Icon(
@@ -277,6 +279,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                             },
                             child: GestureDetector(
                               onTap: () {
+      ManageVibration.vibrate();
                                 showModalBottomSheet(
                                   context: context,
                                   shape: const RoundedRectangleBorder(
@@ -319,6 +322,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                                   const Spacer(),
                                                   GestureDetector(
                                                       onTap: () {
+      ManageVibration.vibrate();
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Icon(
@@ -351,6 +355,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                                             64, 135, 225, 1))
                                                     : null,
                                                 onTap: () {
+      ManageVibration.vibrate();
                                                   setState(() {
                                                     paymentMethod = "cash";
                                                   });
@@ -380,6 +385,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                                             64, 135, 225, 1))
                                                     : null, // Checkmark for selected item
                                                 onTap: () {
+      ManageVibration.vibrate();
                                                   context
                                                       .read<CheckPaymentCubit>()
                                                       .check(
@@ -581,6 +587,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                       ),
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           showModalBottomSheet(
                             context: context,
                             backgroundColor: Colors.transparent,
@@ -602,6 +609,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         _launchCall('122');
                                       },
                                       child: Container(
@@ -643,6 +651,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                         height: 8), // Transparent space
                                     GestureDetector(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         Navigator.pop(context);
                                       },
                                       child: Container(
@@ -715,6 +724,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                               label: LocaleKeys.premuimRequest.tr(),
                               style: Styles.headerText(color: Colors.white),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   context.read<RequestRiderTripCubit>().request(
@@ -809,6 +819,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                   label: LocaleKeys.request.tr(),
                                   style: Styles.headerText(color: Colors.white),
                                   onPressed: () async {
+      ManageVibration.vibrate();
                                     if (_formKey.currentState?.validate() ??
                                         false) {
                                       context

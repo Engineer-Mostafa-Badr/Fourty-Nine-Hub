@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AvailableRoutesPointInfo extends StatelessWidget {
   AvailableRoutesPointInfo(
@@ -154,6 +155,7 @@ class AvailableRoutesPointInfo extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         if (status.toLowerCase() == 'free') {
           if(!context.read<UserCubit>().isLoggedIn){
             return pleaseLoginDialog(context);

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CompleteRegisterScreen extends StatelessWidget {
   const CompleteRegisterScreen({super.key, required this.params});
@@ -49,6 +50,7 @@ class CompleteRegisterScreen extends StatelessWidget {
                         label: LocaleKeys.cancel.localize,
                         style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.pop();
                           // Navigator.popAndPushNamed(context, Routes.welcomeRideRegister);
                         },
@@ -64,6 +66,7 @@ class CompleteRegisterScreen extends StatelessWidget {
                         label: LocaleKeys.close.localize,
                         style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
                         onPressed: (){
+      ManageVibration.vibrate();
                           context.go(Routes.RIDE_HOME);
                         },
                         radius: 15,
@@ -119,6 +122,7 @@ class CompleteRegisterScreen extends StatelessWidget {
                 AppButton(
                   label: LocaleKeys.completeRegistration.localize,
                   onPressed: () {
+      ManageVibration.vibrate();
                     context.pushReplacement(Routes.UploadRiderImages,extra: params);
                   },
                   backColor: AppColors.PRIMARY_COLOR,

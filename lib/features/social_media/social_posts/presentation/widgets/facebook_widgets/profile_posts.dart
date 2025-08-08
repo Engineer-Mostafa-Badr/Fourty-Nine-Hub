@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../cubit/social_posts_cubit.dart';
+import 'image_from_internet.dart';
+import 'normal_post_screen.dart';
+import '../../../../twitter/data/models/twitter_user_model.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ProfilePosts extends StatelessWidget {
   const ProfilePosts({super.key});
@@ -126,13 +127,17 @@ class ProfilePosts extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) =>
                     _friendsTile(context, name: names[index],onTap: (){context.read<PeopleTabCubit>().showOtherProfile();
+      ManageVibration.vibrate();
                     })),
             const Sizer(
               height: 20,
             ),
             AppButton(
               label: context.isArabic ? 'عرض كل الأصدقاء' : 'See all friends',
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
               width: double.infinity,
               backColor: AppColors.getFindFillColor(context),
               color: AppColors.getTextColor(context),
@@ -169,7 +174,10 @@ class ProfilePosts extends StatelessWidget {
                 Sizer(),
                 Expanded(
                   child: ClickableWidget(
-                    onTap: (){context.push(Routes.CREATEPOST, extra: 'facebook');},
+                    onTap: (){
+                      
+      ManageVibration.vibrate();
+                      context.push(Routes.CREATEPOST, extra: 'facebook');},
                     child: Label(text: context.isArabic?'بماذا تفكر؟': "What's on your mind?",style: Styles.headerText(
                       fontSize: 32,color: context.isDarkMode
                         ? Colors.grey[300]
@@ -177,7 +185,10 @@ class ProfilePosts extends StatelessWidget {
                     ), ),
                   ),
                 ),
-                ClickableWidget(onTap:(){},child: Icon(Icons.videocam,color: AppColors.getTextColor(context),))
+                ClickableWidget(onTap:(){
+
+      ManageVibration.vibrate();
+                },child: Icon(Icons.videocam,color: AppColors.getTextColor(context),))
               ],
             ),
             const Sizer(
@@ -406,4 +417,3 @@ class ProfileDetails extends StatelessWidget {
     );
   }
 }
-

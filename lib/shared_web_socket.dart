@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/helpers/web_socket/websocket_isolate_manager.dart';
+import 'core/utils/shared_pref.dart';
+import 'helpers/web_socket/websocket_isolate_manager.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SharedWebSocket {
   static IO.Socket? socket;
   static const String _url = 'https://49backend.com';
-  // static const String _url = 'https://2d41-2a09-bac1-2240-10-00-3b7-42.ngrok-free.app';
+  // static const String _url = 'https://566f8035fb27.ngrok-free.app';
 
   static bool _isConnecting = false;
   static Completer<void>? _connectionCompleter;

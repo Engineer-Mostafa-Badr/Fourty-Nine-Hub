@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/follow_button_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'follow_button_instagram.dart';
+import 'instagram_post_buttom_sheet_without_mention_widget.dart';
+import 'instagram_user_info_with_mention_post_widget.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class HeaderPostInstagram extends StatelessWidget {
   const HeaderPostInstagram({
@@ -75,6 +76,7 @@ class HeaderPostInstagram extends StatelessWidget {
                           isReel: isReel,
                           isFollow: isFollow,
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (isFollow) {
                               context
                                   .read<ProfileInstagramCubit>()
@@ -90,6 +92,7 @@ class HeaderPostInstagram extends StatelessWidget {
                     ),
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       showModalBottomSheet(
                         backgroundColor: Colors.white,
                         context: context,

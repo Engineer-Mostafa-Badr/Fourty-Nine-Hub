@@ -16,6 +16,7 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateInstallmentView extends StatelessWidget {
   final String adId;
@@ -124,6 +125,7 @@ class CreateInstallmentView extends StatelessWidget {
                         ? AppColors.SECONDARY_COLOR.withOpacity(.5)
                         : null,
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (state.plans?.isNotEmpty ?? false) {
                         controller.saveInstallment();
                       }

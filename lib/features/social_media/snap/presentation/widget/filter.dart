@@ -8,23 +8,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/snap/presentation/cubit/snap_cubit.dart';
-import 'package:fourtyninehub/features/social_media/snap/presentation/cubit/snap_states.dart';
-import 'package:fourtyninehub/features/social_media/snap/presentation/widget/media_preview_screen.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/snap_cubit.dart';
+import '../cubit/snap_states.dart';
+import 'media_preview_screen.dart';
+import '../../../social_posts/presentation/pages/search_app_users.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -158,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
+      ManageVibration.vibrate();
                                 await _captureAndSaveImage().then((value) {
                                   setState(() {
                                     Navigator.push(
@@ -260,6 +262,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
@@ -288,6 +291,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(width: 10.w),
           IconButton(
             onPressed: () {
+      ManageVibration.vibrate();
               showDialog(
                 context: context,
                 builder: (_) => const SearchAppUsers(),

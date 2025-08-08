@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';
@@ -33,6 +34,7 @@ class ProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (fromProfile == false && userId.isNotEmpty) {
           if (context.isUserLoggedIn) {
             context.read<UserCubit>().updateProfileView(

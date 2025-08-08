@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import 'Modified_widgets/cards/available_trips_card.dart';
+import 'widgets/trip_join/request_log_widget.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'widgets/trip_join/my_trip_widget.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 
 
@@ -206,6 +208,7 @@ class _TripJoinContentState extends State<TripJoinContent>
     bool selected = tabController.index == index;
     return GestureDetector(
       onTap: () {
+        ManageVibration.vibrate();
         tabController.animateTo(index);
         if(index==0){
           context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
@@ -330,4 +333,3 @@ class _TripJoinContentState extends State<TripJoinContent>
   }
 
 }
-

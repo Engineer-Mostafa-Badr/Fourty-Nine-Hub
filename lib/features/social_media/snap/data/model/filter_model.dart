@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/snap/domain/entity/filter_entity.dart';
+import '../../domain/entity/filter_entity.dart';
 
 class FilterModel extends FilterEntity {
   FilterModel(

@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/snap/data/model/filter_model.dart';
-import 'package:fourtyninehub/features/social_media/snap/domain/entity/filter_entity.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../model/filter_model.dart';
+import '../../domain/entity/filter_entity.dart';
 
 abstract class SnapRemoteDataSource {
   Future<Either<Failure, List<FilterEntity>>> fetchFilter();

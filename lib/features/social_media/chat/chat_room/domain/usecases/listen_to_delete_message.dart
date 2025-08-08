@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
+import '../../../../../../core/abstract/use_case.dart';
+import '../repositories/chat_room_repository.dart';
+import 'delete_message_usecase.dart';
 
 class ListenToDeleteMessageUseCase
     extends NormalUseCase<void, Function(DeleteMessageParams)> {

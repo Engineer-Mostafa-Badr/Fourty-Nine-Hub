@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_brand_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_model_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_year_type_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_join_publish_param.dart';
+import '../../../../../core/error/failure.dart';
+import '../entities/car_brand_entity.dart';
+import '../entities/car_model_entity.dart';
+import '../entities/car_year_type_entity.dart';
+import '../entities/trip_info_entity.dart';
+import '../entities/trip_join_publish_param.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class TripJoinRepo {

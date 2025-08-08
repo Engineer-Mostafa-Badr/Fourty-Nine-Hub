@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/features/settings/data/models/disable_model.dart';
+import '../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../core/data/datasources/remote/api/end_points.dart';
+import '../models/disable_model.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../domain/entities/disable_entity.dart';

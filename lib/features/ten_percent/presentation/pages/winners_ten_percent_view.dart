@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
-import 'package:fourtyninehub/features/ten_percent/presentation/pages/widget/winners_ten_percent_view_body.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/format_numbers.dart';
+import '../../../../core/widget/custom_scaffold.dart';
+import '../cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
+import 'widget/winners_ten_percent_view_body.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../res/style/styles.dart';
 
 class WinnersTenPercentView extends StatelessWidget {
   const WinnersTenPercentView({super.key});

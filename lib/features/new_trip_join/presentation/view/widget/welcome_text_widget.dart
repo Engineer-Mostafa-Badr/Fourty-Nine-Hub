@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class WelcomeTextWidget extends StatefulWidget {
   const WelcomeTextWidget({super.key});
@@ -89,6 +91,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
         const Spacer(),
         GestureDetector(
           onTap: () {
+            ManageVibration.vibrate();
             final renderBox = context.findRenderObject() as RenderBox;
             _toggleTooltip(context, renderBox);
           },

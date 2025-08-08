@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/location_entity.dart';
+import '../../domain/entities/location_entity.dart';
 
 class LocationModel extends LocationEntity {
   LocationModel({

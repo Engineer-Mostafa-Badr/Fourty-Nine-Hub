@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram_grid_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_image_create_post_instagram_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'post_body_create_post_instagram_grid_view.dart';
+import 'show_image_create_post_instagram_widget.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class PostBodyCreatePostInstagram extends StatelessWidget {
   const PostBodyCreatePostInstagram({
@@ -103,6 +104,7 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   context
                       .read<CreatePostInstagramCubit>()
                       .changeMultiSelectGalleryPost();
@@ -171,6 +173,7 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () async {
+      ManageVibration.vibrate();
                   context.read<CreatePostInstagramCubit>().pickImage();
                 },
                 child: Container(

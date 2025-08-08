@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -141,6 +142,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                     child: BadgedLabel(
                                       label: '+',
                                       onTap: () {
+      ManageVibration.vibrate();
                                         controller.uploadImage(
                                             subCategoryId: widget
                                                 .categorization.subCategory.id,
@@ -330,6 +332,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                           Expanded(
                               child: InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() {
                                 if (state.myAdById!.subCategory.hasAuction ==
                                     true) {
@@ -366,6 +369,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 setState(() {
                                   if (state.myAdById!.subCategory.hasAuction ==
                                       true) {
@@ -682,6 +686,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       DefaultButton(
                         label: LocaleKeys.edit.localize,
                         onPressed: () {
+      ManageVibration.vibrate();
                           controller.editMyAds(
                             categorization: widget.categorization,
                             selectedEducationLevel: selectedEducationLevel,

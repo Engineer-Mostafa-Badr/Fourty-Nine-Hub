@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/fro
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/plate_number_register_card_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CarLicencePartScreen extends StatelessWidget {
   CarLicencePartScreen({super.key});
@@ -74,6 +75,7 @@ class CarLicencePartScreen extends StatelessWidget {
                   backColor: AppColors.PRIMARY_COLOR,
                   label: LocaleKeys.submit.tr(),
                   onPressed: () async {
+      ManageVibration.vibrate();
                     log("model.toJson()", name: 'lsdkfdkd029384jslkdjf');
                     if (formKey.currentState?.validate() == true) {
                       PartsSocketModel? checkModel =

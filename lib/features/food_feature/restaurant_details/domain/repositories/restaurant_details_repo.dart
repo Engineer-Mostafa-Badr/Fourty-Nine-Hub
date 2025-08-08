@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/change_quantity_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_from_cart_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../usecases/add_food_usecase.dart';
+import '../usecases/change_quantity_usecase.dart';
+import '../usecases/delete_food_from_cart_usecase.dart';
+import '../usecases/get_meals_usecase.dart';
+import '../../../restaurants_list/domain/entities/restaurant.dart';
+import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 
 import '../../../../../core/error/failure.dart';
 

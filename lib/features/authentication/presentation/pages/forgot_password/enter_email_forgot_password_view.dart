@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/f
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EnterEmailForgotPasswordView extends StatelessWidget {
   const EnterEmailForgotPasswordView({super.key});
@@ -72,6 +74,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                 DefaultButton(
                   label: LocaleKeys.sendOTP.localize,
                   onPressed: (){
+      ManageVibration.vibrate();
                     cubit.sendForgetPasswordOTP(context);
                   },
                   labelStyle: TextStyle(

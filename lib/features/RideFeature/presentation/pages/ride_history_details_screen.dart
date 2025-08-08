@@ -20,6 +20,7 @@ import '../../../../common/widgets/form/text_fields/default_text_form_field.dart
 import '../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
 import '../../../../core/utils/validator.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
@@ -113,6 +114,9 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                         rate: widget
                             .params.historyTripEntity.driverAverageRating
                             ?.toString(),
+                        isVerified: widget
+                            .params.historyTripEntity.verifiedBadge && widget
+                            .params.historyTripEntity.isDriverVerified,
                       ),
                     ],
                   ),
@@ -126,40 +130,86 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        context.push(Routes.TripReceiptScreen,
-                            extra: TripReceiptScreenParams(
-                              rideCubit: serviceLocator<RideCubit>(),
-                              historyTripEntity:
-                                  widget.params.historyTripEntity,
-                            ));
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.cF5F5F5,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.receipt_long, color: AppColors.black),
-                            const SizedBox(width: 8),
-                            Text(
-                              context.isArabic ? "الفاتورة" : "Receipt",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.push(Routes.TripReceiptScreen,
+                                extra: TripReceiptScreenParams(
+                                  rideCubit: serviceLocator<RideCubit>(),
+                                  historyTripEntity:
+                                      widget.params.historyTripEntity,
+                                ));
+                          },
+                          child: Container(
+                            width: 250.w,
+                            padding: const EdgeInsets.symmetric( vertical: 8),
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.cF5F5F5,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.receipt_long, color: context.isDarkMode ? AppColors.whiteColor : AppColors.black),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    context.isArabic ? "الفاتورة" : "Receipt",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            showLoadingDialog(context);
+                            serviceLocator<RideCubit>().updateFromLocation(lat: widget.params.historyTripEntity.startLocationLng??0, lng: widget.params.historyTripEntity.startLocationLat??0, address: widget.params.historyTripEntity.startLocationAddressTitle??'');
+                            serviceLocator<RideCubit>().updateToLocation(lat: widget.params.historyTripEntity.targetLocationLng??0, lng: widget.params.historyTripEntity.targetLocationLat??0, address: widget.params.historyTripEntity.targetLocationAddressTitle??'');
+                            await serviceLocator<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                            context.pop();
+                            context.pop();
+                            context.pop();
+                          },
+                          child: Container(
+                            width: 250.w,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8),
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.cF5F5F5,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.keyboard_return, color: context.isDarkMode ? AppColors.whiteColor : AppColors.black),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    context.isArabic ? "إعادة الحجز" : "Rebook",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -186,7 +236,7 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: AppColors.cF5F5F5,
+                            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.cF5F5F5,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(

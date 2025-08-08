@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import '../../../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../../../core/extensions/string_extension.dart';
 
 // import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
@@ -22,6 +22,7 @@ import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../../../../../tinder/data/models/gift_model.dart';
 import '../../../../../../../tinder/data/shared/shared.dart';
 import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SelectLiveGoalsScreen extends StatefulWidget {
   const SelectLiveGoalsScreen({super.key, this.fromLive = false});
@@ -111,6 +112,7 @@ class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
                           color: AppColors.PRIMARY_COLOR,
                         ),
                         onPressed: () {
+      ManageVibration.vibrate();
                           _descriptionController.clear();
                         },
                       )),
@@ -145,6 +147,7 @@ class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
                         ),
                         InkWell(
                           onTap: () {
+      ManageVibration.vibrate();
                             showGiftBottomSheet(context,
                                 receiverId:
                                     context.read<UserCubit>().state.data!.id,
@@ -211,6 +214,7 @@ class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
               ),
               InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   showSuccessMessage(
                       context, LocaleKeys.goalsAreSelectedSuccess.localize);
                   context
@@ -293,6 +297,7 @@ class _GiftItemWidgetState extends State<GiftItemWidget> {
                     alignment: Alignment.topRight,
                     child: InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         context.read<StreamCubit>().unselectGift(widget.gift);
                       },
                       child: const Icon(Icons.close),

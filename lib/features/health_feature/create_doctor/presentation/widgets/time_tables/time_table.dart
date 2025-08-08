@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class Timetable extends StatelessWidget {
   final String title;
@@ -110,6 +111,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
           ),
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               showTimePicker(
                 context: context,
                 initialTime: const TimeOfDay(hour: 10, minute: 0),
@@ -209,6 +211,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
           ),
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               showTimePicker(
                 context: context,
                 initialTime: const TimeOfDay(hour: 11, minute: 0),

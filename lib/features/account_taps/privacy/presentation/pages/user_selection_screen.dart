@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -57,6 +58,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
               children: [
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     setState(() {
                       selectedUserIds.clear();
                       showSearch = !showSearch;
@@ -148,6 +150,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                   ? AppColors.PRIMARY_COLOR_DARK
                   : AppColors.PRIMARY_COLOR,
               onPressed: () {
+      ManageVibration.vibrate();
                 log("Selected User IDs: $selectedUserIds");
                 Navigator.pop(context, selectedUserIds);
               },
@@ -245,6 +248,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() {
                                 if (isSelected) {
                                   selectedUserIds.remove(user.id);
@@ -276,6 +280,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                     color: AppColors.LIGHT_COLOR,
                     backColor: AppColors.PRIMARY_COLOR_DARK,
                     onPressed: () {
+      ManageVibration.vibrate();
                       final params = RemoveAllowedParams(
                         feature: widget.name,
                         targetUserIds: selectedUserIds,
@@ -371,6 +376,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         setState(() {
                           if (isSelected) {
                             selectedUserIds.remove(user.id);

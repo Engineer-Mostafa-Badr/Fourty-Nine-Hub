@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/core/utils/duration_helper.dart';
+import '../../../../core/utils/duration_helper.dart';
 
 class AdRequestEntity {
   final String requestId;

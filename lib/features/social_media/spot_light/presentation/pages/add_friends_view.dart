@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/all_contacts.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_tile.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import 'all_contacts.dart';
+import '../widgets/friends_tile.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AddFriendsScreen extends StatefulWidget {
   const AddFriendsScreen({super.key});
@@ -272,6 +273,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
         trailing: TextButton(
           onPressed: () {
+      ManageVibration.vibrate();
             setState(() {
               blockedIndexes.remove(index);
             });
@@ -290,7 +292,10 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextButton.icon(
-        onPressed: () {},
+        onPressed: () {
+
+      ManageVibration.vibrate();
+        },
         icon: Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(

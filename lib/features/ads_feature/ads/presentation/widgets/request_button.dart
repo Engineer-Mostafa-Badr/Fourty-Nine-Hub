@@ -14,7 +14,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RequestButton extends StatelessWidget {
   const RequestButton({
@@ -82,6 +82,7 @@ class RequestButton extends StatelessWidget {
                       isLoading:
                           controller.state.requestStatus == AdsStates.loading,
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (controller.formKey.currentState!.validate()) {
                           await controller.makeAdRequest(id: adId);
                           //     .then((value) {
@@ -364,6 +365,7 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
 
             InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 focusNode.unfocus();
                 context.pop();
               },

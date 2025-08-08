@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/dialog_content.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_card.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_tile.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/show_dialog.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../widgets/dialog_content.dart';
+import '../widgets/friends_card.dart';
+import '../widgets/friends_tile.dart';
+import '../widgets/show_dialog.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SpotLightSearchView extends StatefulWidget {
   const SpotLightSearchView({super.key});
@@ -182,6 +183,7 @@ class _SpotLightSearchViewState extends State<SpotLightSearchView> {
         ),
         trailing: TextButton(
           onPressed: () {
+      ManageVibration.vibrate();
             setState(() {
               blockedIndexes.remove(index);
             });

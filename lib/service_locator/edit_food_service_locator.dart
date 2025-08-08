@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
+import '../features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class EditFoodServiceLocator {

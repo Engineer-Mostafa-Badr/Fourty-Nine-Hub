@@ -26,16 +26,15 @@ import '../widgets/Images_profile_for_restaurant.dart';
 import '../widgets/subcatigories_restaurant_card.dart';
 
 class RestaurantFavAdsScreen extends StatefulWidget {
-  const  RestaurantFavAdsScreen({super.key, this.onClose});
+  const RestaurantFavAdsScreen({super.key, this.onClose});
+
   final VoidCallback? onClose;
 
   @override
-  State<RestaurantFavAdsScreen> createState() =>
-      _RestaurantFavAdsScreenState();
+  State<RestaurantFavAdsScreen> createState() => _RestaurantFavAdsScreenState();
 }
 
-class _RestaurantFavAdsScreenState
-    extends State<RestaurantFavAdsScreen> {
+class _RestaurantFavAdsScreenState extends State<RestaurantFavAdsScreen> {
   late ScrollController _scrollController;
   bool isFirstSearchListenerCall = true;
 
@@ -46,10 +45,10 @@ class _RestaurantFavAdsScreenState
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().getFoodAds();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().getFoodAds();
+    // }
   }
 
   @override
@@ -73,33 +72,34 @@ class _RestaurantFavAdsScreenState
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
-          final controller = context.read<RestaurantsCubit>();
-          if (!state.isLoading) {
-
-            return context.read<RestaurantsCubit>().foodAdData.isNotEmpty ? Padding(
-              padding: EdgeInsets.symmetric(vertical:  16,horizontal: 10),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height*.7,
-                child:
-                OlxPaginationWidget(
-                itemsPerPage: 2,
-                loadPage: (page) async {},
-                banners: bannersList,
-                items: List.generate(
-                  context
-                      .read<RestaurantsCubit>()
-                      .foodAdData
-                      .length,
+      final controller = context.read<RestaurantsCubit>();
+      if (!state.isLoading) {
+        return context.read<RestaurantsCubit>().foodAdData.isNotEmpty
+            ? Padding(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * .7,
+                  child: OlxPaginationWidget(
+                    scrollController: _scrollController,
+                    itemsPerPage: 2,
+                    loadPage: (page) async {},
+                    banners: bannersList,
+                    items: List.generate(
+                      context.read<RestaurantsCubit>().foodAdData.length,
                       (index) {
-                        var data =  context.read<RestaurantsCubit>().foodAdData[index];
-                        return  Padding(
+                        var data =
+                            context.read<RestaurantsCubit>().foodAdData[index];
+                        return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: FavFoodCard(data: data,index: index,),
+                          child: FavFoodCard(
+                            data: data,
+                            index: index,
+                          ),
                         );
                       },
-                ),
-              ),
-                /*ListView.separated(
+                    ),
+                  ),
+                  /*ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount:  context
@@ -112,35 +112,39 @@ class _RestaurantFavAdsScreenState
                   }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
 
                 ),*/
-              ),
-            ): Center(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-                child: Center( // This will center it vertically and horizontally
-                  child: CustomEmptyWidget(
-                    label: LocaleKeys.noResultsFound.tr(),
+                ),
+              )
+            : Center(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      .65, // Make sure it takes up full height
+                  child: Center(
+                    // This will center it vertically and horizontally
+                    child: CustomEmptyWidget(
+                      label: LocaleKeys.noResultsFound.tr(),
+                    ),
                   ),
                 ),
-              ),
-            );
-
-          } else {
-            return  const CustomLoadingSearchWidget();
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
-            //   child: const Center(
-            //     child: CustomCircularProgressIndicator(),
-            //   ),
-            // );
-          }
-        });
+              );
+      } else {
+        return const CustomLoadingSearchWidget();
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height * .65, // Make sure it takes up full height
+        //   child: const Center(
+        //     child: CustomCircularProgressIndicator(),
+        //   ),
+        // );
+      }
+    });
   }
-
 }
+
 class FavFoodCard extends StatelessWidget {
-  const FavFoodCard({super.key,required this.data, required this.index});
+  const FavFoodCard({super.key, required this.data, required this.index});
+
   final GetAllRestaurantEntity data;
   final int index;
+
   String formatViews(int views) {
     if (views >= 1000000) {
       return "${(views / 1000000).toStringAsFixed(1)}M";
@@ -190,12 +194,9 @@ class FavFoodCard extends StatelessWidget {
       onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: data),
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(
-                color: AppColors.getTextColor(context),
-                width: 1
-            ),
-            borderRadius: BorderRadius.circular(15)
-        ),
+            border:
+                Border.all(color: AppColors.getTextColor(context), width: 1),
+            borderRadius: BorderRadius.circular(15)),
         child: Column(
           children: [
             Padding(
@@ -209,24 +210,25 @@ class FavFoodCard extends StatelessWidget {
                     children: [
                       SvgPicture.asset(
                         Assets.eyeIcon,
-                        color:AppColors.getTextColor(context),
+                        color: AppColors.getTextColor(context),
                       ),
                       Label(
                         // text: "100k",
-                        text: formatViews(data.totalViews!.toInt()).toArabicNumbers(context),
-                        style:  Styles.mediumText(
+                        text: formatViews(data.totalViews!.toInt())
+                            .toArabicNumbers(context),
+                        style: Styles.mediumText(
                           // fontSize: 12,
                           fontWeight: FontWeight.w400,
                           // color: AppColors.c6C6C6C,
-                          color:AppColors.getTextColor(context),
+                          color: AppColors.getTextColor(context),
                         ),
                       ),
                       Label(
                         text: LocaleKeys.views.localize,
-                        style:  Styles.mediumText(
+                        style: Styles.mediumText(
                           // fontSize: 12,
                           fontWeight: FontWeight.w400,
-                          color:AppColors.getTextColor(context),
+                          color: AppColors.getTextColor(context),
                         ),
                       ),
                     ],
@@ -236,7 +238,7 @@ class FavFoodCard extends StatelessWidget {
                     textAlign: TextAlign.right,
                     style: Styles.mediumText(
                       fontWeight: FontWeight.w700,
-                      color:AppColors.getTextColor(context),
+                      color: AppColors.getTextColor(context),
                       // fontSize: 16,
                     ),
                   ),
@@ -265,9 +267,14 @@ class FavFoodCard extends StatelessWidget {
                             .read<RestaurantsCubit>()
                             .toggleFavoriteRestaurant(id);
                         if (result == true) {
-                          context.read<RestaurantsCubit>().restaurants[index].isFavorite
-                          = !context.read<RestaurantsCubit>().restaurants[index].isFavorite!;
-
+                          context
+                                  .read<RestaurantsCubit>()
+                                  .restaurants[index]
+                                  .isFavorite =
+                              !context
+                                  .read<RestaurantsCubit>()
+                                  .restaurants[index]
+                                  .isFavorite!;
                         }
                       },
                     ),
@@ -289,9 +296,7 @@ class FavFoodCard extends StatelessWidget {
                       Text(
                         data.name ?? '',
                         style: Styles.headerText(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 32
-                        ),
+                            fontWeight: FontWeight.w600, fontSize: 32),
                       ),
                       const SizedBox(width: 5),
                       Expanded(
@@ -309,7 +314,10 @@ class FavFoodCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Label(text: (getRatingText(data.totalRating!.toDouble())) ?? "N/A",
+                          Label(
+                            text:
+                                (getRatingText(data.totalRating!.toDouble())) ??
+                                    "N/A",
                             style: Styles.smallText(
                               fontWeight: FontWeight.w600,
                               // fontSize: 16
@@ -319,13 +327,13 @@ class FavFoodCard extends StatelessWidget {
                             initialRating: data.totalRating?.toDouble() ?? 0,
                             ignoreGestures: true,
                             allowHalfRating: true,
-                            itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 3),
                             ratingWidget: RatingWidget(
                               full: SvgPicture.asset(Assets.star1),
                               half: SvgPicture.asset(Assets.halfStar),
                               empty: SvgPicture.asset(Assets.starEmpty,
-                                color: AppColors.getTextColor(context)
-                              ),
+                                  color: AppColors.getTextColor(context)),
                             ),
                             itemSize: 13,
                             onRatingUpdate: (double value) {},
@@ -347,15 +355,20 @@ class FavFoodCard extends StatelessWidget {
                           color: AppColors.getRedColor(context),
                         ),
                       ),
-                      Expanded( // <<< حل المشكلة هنا
+                      Expanded(
+                        // <<< حل المشكلة هنا
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            const Icon(Icons.location_on_rounded,size: 18,),
+                            const Icon(
+                              Icons.location_on_rounded,
+                              size: 18,
+                            ),
                             SizedBox(width: 4),
                             Flexible(
                               child: Text(
-                                '${context.isArabic ? data.government?.governorateNameAr ?? '' : data.government?.governorateNameEn ?? ''}, ${context.isArabic ? data.city?.cityNameAr ?? '' : data.city?.cityNameEn ?? ''}'.toArabicNumbers(context),
+                                '${context.isArabic ? data.government?.governorateNameAr ?? '' : data.government?.governorateNameEn ?? ''}, ${context.isArabic ? data.city?.cityNameAr ?? '' : data.city?.cityNameEn ?? ''}'
+                                    .toArabicNumbers(context),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12,
@@ -417,5 +430,3 @@ class FavoriteButtonAds extends StatelessWidget {
     );
   }
 }
-
-

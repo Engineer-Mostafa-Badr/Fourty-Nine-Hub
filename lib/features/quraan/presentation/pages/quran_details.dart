@@ -9,6 +9,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class QuranViewPage extends StatefulWidget {
   final int surahId;
@@ -62,6 +63,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                 Icons.arrow_forward,
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.of(context).pop(); // Pop the current screen
               },
             ),

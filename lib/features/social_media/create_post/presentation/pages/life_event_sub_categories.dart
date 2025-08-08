@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../domain/entities/life_event_entity.dart';
+import '../cubit/create_post_cubit.dart';
+import 'life_event.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class LifeEventSubCategories extends StatefulWidget {
   const LifeEventSubCategories({super.key, required this.lifeEvent});
@@ -67,6 +68,7 @@ class _LifeEventSubCategoriesState extends State<LifeEventSubCategories> {
                         );
                         return ClickableWidget(
                           onTap: (){
+      ManageVibration.vibrate();
                             context.push(Routes.CREATELIFEEVENT,extra: selected);
                           },
                           child: Container(

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
@@ -17,6 +18,7 @@ class CustomTextNoLogin extends StatelessWidget {
       child: SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             return pleaseLoginDialog(context);
             // context.push(Routes.LOGIN);
           },
@@ -56,6 +58,7 @@ class CustomTextNoLoginNew extends StatelessWidget {
       child: SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             return pleaseLoginDialog(context);
             // context.push(Routes.LOGIN);
           },

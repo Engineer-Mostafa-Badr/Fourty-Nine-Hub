@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../res/style/app_colors.dart';
 
@@ -78,6 +79,7 @@ class _ImageDetailsState extends State<ImageDetails> {
           ),
           IconButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back))

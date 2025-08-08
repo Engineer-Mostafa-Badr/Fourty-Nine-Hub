@@ -1,32 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_reply_card.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/instagram_cubit.dart';
+import 'instagram_reply_card.dart';
+import '../../../reels/presentation/widgets/comments/no_scale_text.dart';
+import '../../../social_posts/domain/entities/comment_entity.dart';
+import '../../../social_posts/domain/usecases/add_reply_usecase.dart';
+import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
+import '../../../social_posts/domain/usecases/post_react_usecase.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../twitter/domain/usecases/twitter_report_usecase.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CommentWidgetInsta extends StatefulWidget {
   final CommentEntity commentData;
@@ -248,6 +249,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       bottomSheet(
                         context: context,
                         widget: _buildPostOptions(
@@ -293,6 +295,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                           size: 20,
                           isCircle: true,
                           onPressed: () async {
+      ManageVibration.vibrate();
                             var result = await widget.onEditComment(
                                 PostCommentParams(
                                     postId: widget.commentData.id,
@@ -337,6 +340,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                 title: LocaleKeys.reportComment.localize,
                 subTitle: LocaleKeys.youWillReportReply.localize,
                 onTap: () async {
+      ManageVibration.vibrate();
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
                         context: context,
@@ -354,6 +358,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                 title: LocaleKeys.deleteComment.localize,
                 subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.onDeleteComment(widget.commentData.id);
                 }),
           if (isMyComment)
@@ -364,6 +369,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                 title: LocaleKeys.editComment.localize,
                 subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.commentData.edit = !widget.commentData.edit!;
                   editTextController.text = widget.commentData.content;
                   setState(() {});
@@ -382,6 +388,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -417,6 +424,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
   Widget _buildReplyButton() {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         widget.onReplyPressed();
       },
       child: NoScaleText(
@@ -446,6 +454,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
       children: [
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             function();
           },
           child: Icon(
@@ -529,6 +538,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
       padding: EdgeInsets.symmetric(horizontal: 40.0.w),
       child: InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           setState(() {
             if (_isRepliesVisible && remainingReplies > 0) {
               _displayedRepliesCount += 3;

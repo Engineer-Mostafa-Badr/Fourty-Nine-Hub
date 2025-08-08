@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class FeedbackWidget extends StatelessWidget {
   const FeedbackWidget({super.key});
 
@@ -25,12 +26,14 @@ class FeedbackWidget extends StatelessWidget {
                 label: LocaleKeys.good.localize,
                 color: Colors.green,
                 onTap: () {
+      ManageVibration.vibrate();
                 },
               ),
               _buildFeedbackButton(
                 label: LocaleKeys.reportDriver.localize,
                 color: Colors.red,
                 onTap: () {
+      ManageVibration.vibrate();
 
                 },
               ),

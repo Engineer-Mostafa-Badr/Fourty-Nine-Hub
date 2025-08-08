@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -44,7 +45,7 @@ class _ProviderAdsState extends State<ProviderAds> {
   //   // super.initState();
   // }
   final AdsManager _adsManager = AdsManager();
-  // late ScrollController _scrollController;
+  late ScrollController _scrollController;
   late AdvertisementCubit _cubit;
 
   @override
@@ -61,35 +62,35 @@ class _ProviderAdsState extends State<ProviderAds> {
     super.initState();
     _adsManager.preloadAds();
     _cubit = context.read<AdvertisementCubit>();
-    // _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  // void _onScroll() {
-  //   if (_scrollController.position.userScrollDirection ==
-  //       ScrollDirection.reverse) {
-  //     widget.onScrollChanged(false);
-  //   } else {
-  //     widget.onScrollChanged(true);
-  //   }
-  //   // setState(() {});
-  //
-  //   if (_scrollController.position.pixels >=
-  //       _scrollController.position.maxScrollExtent - 200) {
-  //     if (widget.params.mainCategory.nameEn == 'Dating') {
-  //       context.read<AdvertisementCubit>().getAds(
-  //             subCategoryId: widget.params.subCategory.id,
-  //             filter: 'male',
-  //           );
-  //     } else {
-  //       context.read<AdvertisementCubit>().getAds(
-  //             subCategoryId: widget.params.subCategory.id,
-  //             filter: widget.params.subCategory.hasAuction == true
-  //                 ? 'sale'
-  //                 : 'provider',
-  //           );
-  //     }
-  //   }
-  // }
+  void _onScroll() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      widget.onScrollChanged(false);
+    } else {
+      widget.onScrollChanged(true);
+    }
+    // setState(() {});
+
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   if (widget.params.mainCategory.nameEn == 'Dating') {
+    //     context.read<AdvertisementCubit>().getAds(
+    //           subCategoryId: widget.params.subCategory.id,
+    //           filter: 'male',
+    //         );
+    //   } else {
+    //     context.read<AdvertisementCubit>().getAds(
+    //           subCategoryId: widget.params.subCategory.id,
+    //           filter: widget.params.subCategory.hasAuction == true
+    //               ? 'sale'
+    //               : 'provider',
+    //         );
+    //   }
+    // }
+  }
 
   @override
   void dispose() {
@@ -115,6 +116,7 @@ class _ProviderAdsState extends State<ProviderAds> {
       );
     }
     return OlxPaginationWidget(
+      scrollController: _scrollController,
       itemsPerPage: 2,
       loadPage: (page) {
         if (widget.params.mainCategory.nameEn == 'Dating') {

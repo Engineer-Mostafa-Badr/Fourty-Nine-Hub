@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
+import '../../../domain/entities/call_data.dart';
 
 abstract class SendCallState extends Equatable {
   @override

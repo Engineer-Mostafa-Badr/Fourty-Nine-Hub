@@ -15,6 +15,7 @@ import 'changePhoneNumber.dart';
 import 'giveOffer.dart';
 import 'ride_options.dart';
 import 'selectDropOffPoints.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideOptionsBottomSheet extends StatefulWidget {
   const RideOptionsBottomSheet({super.key});
@@ -131,6 +132,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               if (state.fromAddress != null)
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     bottomSheet(
                       //backColor: Theme.of(context).scaffoldBackgroundColor,
                       widget: const SelectDropOffPoints(),
@@ -170,6 +172,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               // if (state.isFromAndToLocationSelected)
               InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   bottomSheet(
                     widget: const SelectDropOffPoints(),
                     isScrollControlled: true,
@@ -209,6 +212,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                   children: [
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         bottomSheet(
                             widget: RideContactPhoneNumber(
                               onChanged: (String v) =>
@@ -242,6 +246,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         bottomSheet(
                             widget: GiveOffer(),
                             isScrollControlled: true,
@@ -337,6 +342,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         bottomSheet(
                           widget: const RideOptions(),
                           // isScrollControlled: true,

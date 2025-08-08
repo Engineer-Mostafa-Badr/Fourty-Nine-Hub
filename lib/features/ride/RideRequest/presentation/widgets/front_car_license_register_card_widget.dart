@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class FrontCarLicenseRegisterCardWidget extends StatefulWidget {
   const FrontCarLicenseRegisterCardWidget({super.key});
@@ -76,6 +77,7 @@ class _FrontCarLicenseRegisterCardWidgetState
                   const Sizer(),
                   GestureDetector(
                     onTap: () async {
+      ManageVibration.vibrate();
                       var pickedImage = await ImagePicker()
                           .pickImage(source: ImageSource.gallery);
                       if (pickedImage != null) {

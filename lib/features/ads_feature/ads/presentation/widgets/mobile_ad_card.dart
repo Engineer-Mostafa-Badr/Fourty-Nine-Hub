@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -155,6 +156,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                                           : Icons.favorite,
                                       color: AppColors.SECONDARY_COLOR,
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         if (widget.item.isFavourite == false) {
                                           var result = await widget
                                               .onFav(widget.item.id);
@@ -240,6 +242,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 5),
                         onTap: () {
+      ManageVibration.vibrate();
                           showModalBottomSheet(
                             backgroundColor: context.isDarkMode
                                 ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)

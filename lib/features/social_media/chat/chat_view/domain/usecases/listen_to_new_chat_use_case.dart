@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
+import '../../../../../../core/abstract/use_case.dart';
+import '../entities/chat_entity.dart';
+import '../repositories/chats_repository.dart';
 
 class ListenToNewChatUseCase extends NormalUseCase<void, Function(ChatEntity)> {
   final ChatsRepository _repo;

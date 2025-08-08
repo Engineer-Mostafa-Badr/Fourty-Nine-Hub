@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_category_card.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -25,12 +26,6 @@ class HealthSubCategories extends StatefulWidget {
 
 class _HealthSubCategoriesState extends State<HealthSubCategories> {
   ScrollController? _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +59,7 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                               ),
                               ClickableWidget(
                                 onTap: () {
+                                  ManageVibration.vibrate();
                                   _scrollController?.animateTo(
                                     (_scrollController?.position.pixels ?? 0) +
                                         0.8.sw,
@@ -95,20 +91,24 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
             const Sizer(),
             Expanded(
               child: (state.subCategories != null && state.subCategories != [])
-                  ? ListView.separated(
-                      controller: _scrollController,
-                      separatorBuilder: (context, index) => const Sizer(),
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Padding(
-                        padding: EdgeInsetsDirectional.only(
-                            start: index == 0 ? 16 : 0,
-                            end: index == state.subCategories!.length - 1
-                                ? 16
-                                : 0),
-                        child: HealthSubCategoryCard(
-                            subCategory: state.subCategories![index]),
+                  ? GlowingOverscrollIndicator(
+                      axisDirection: AxisDirection.left,
+                      color: AppColors.SECONDARY_COLOR,
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        separatorBuilder: (context, index) => const Sizer(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsetsDirectional.only(
+                              start: index == 0 ? 16 : 0,
+                              end: index == state.subCategories!.length - 1
+                                  ? 16
+                                  : 0),
+                          child: HealthSubCategoryCard(
+                              subCategory: state.subCategories![index]),
+                        ),
+                        itemCount: state.subCategories?.length ?? 0,
                       ),
-                      itemCount: state.subCategories?.length ?? 0,
                     )
                   : state.subCategories == null
                       ? Shimmer.fromColors(
@@ -135,5 +135,11 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
         ),
       );
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
   }
 }

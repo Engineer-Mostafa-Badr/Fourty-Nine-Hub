@@ -717,6 +717,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../routes/routes.dart';
 import '../../../social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../../data/models/new_reels_model.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ProfileBottomSheet extends StatelessWidget {
   final ScrollController scrollController;

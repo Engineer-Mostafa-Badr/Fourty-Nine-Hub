@@ -23,6 +23,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthContactsButtons extends StatefulWidget {
   const HealthContactsButtons(

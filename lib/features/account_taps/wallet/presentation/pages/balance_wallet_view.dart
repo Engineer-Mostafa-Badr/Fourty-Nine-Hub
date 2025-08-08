@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Ba
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_card_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
@@ -128,6 +130,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                               color: AppColors.AUTH_CONTAINER_COLOR,
                               label: LocaleKeys.requestWithdraw.localize,
                               onPressed: () {
+      ManageVibration.vibrate();
                                 context
                                     .read<BalanceCubit>()
                                     .requestWithdrawBalance();
@@ -137,7 +140,10 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                           : AppButton(
                               backColor: Colors.red.withOpacity(.5),
                               label: LocaleKeys.requestWithdraw.localize,
-                              onPressed: () {},
+                              onPressed: () {
+
+      ManageVibration.vibrate();
+                              },
                               margin: 10,
                             ),
                     // if (state.balance?.openBalance == true && state.withdraw?.data == false )
@@ -246,6 +252,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
       subtitle: Label(text: subTitle),
       trailing: MaterialButton(
         onPressed: () {
+      ManageVibration.vibrate();
           ontap();
         },
         color: color,

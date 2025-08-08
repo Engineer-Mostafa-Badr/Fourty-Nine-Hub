@@ -1,23 +1,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/button_label_create_post_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/caption_text_field_create_second_post.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_images_create_post_second.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'button_label_create_post_instagram.dart';
+import 'caption_text_field_create_second_post.dart';
+import 'show_images_create_post_second.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreatePostSecondPageInstagramViewBody extends StatefulWidget {
   const CreatePostSecondPageInstagramViewBody({
@@ -94,6 +95,7 @@ class _CreatePostSecondPageInstagramViewBodyState
                         ? Icons.close_rounded
                         : Icons.arrow_forward_ios_rounded,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.pushNamed(
                         Routes.TAGUSER,
                         extra: context.read<CreatePostInstagramCubit>(),
@@ -138,6 +140,7 @@ class _CreatePostSecondPageInstagramViewBodyState
                         ? Icons.arrow_forward_ios_rounded
                         : Icons.close_rounded,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.pushNamed(
                         Routes.INSTAGRAMADDLOCATION,
                         extra: context.read<CreatePostInstagramCubit>(),
@@ -156,6 +159,7 @@ class _CreatePostSecondPageInstagramViewBodyState
                         context.isDarkMode ? Colors.white : Colors.black,
                     iconAction: Icons.arrow_forward_ios_rounded,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.pushNamed(
                         Routes.INSTAGRAMADDMUSIC,
                         extra: context.read<CreatePostInstagramCubit>(),
@@ -181,6 +185,7 @@ class _CreatePostSecondPageInstagramViewBodyState
                     : Colors.white),
             backColor: context.isDarkMode ? Colors.white : AppColors.c0B1035,
             onPressed: () {
+      ManageVibration.vibrate();
               if (captionController.text.isEmpty) {
                 showErrorMessage(
                     context, LocaleKeys.captionMustBeAdded.localize);

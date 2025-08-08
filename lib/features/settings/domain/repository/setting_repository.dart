@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
+import '../../../../core/error/failure.dart';
+import '../entities/disable_entity.dart';
 
 abstract class SettingRepository {
   Future<Either<Failure, bool>> deleteAccount();

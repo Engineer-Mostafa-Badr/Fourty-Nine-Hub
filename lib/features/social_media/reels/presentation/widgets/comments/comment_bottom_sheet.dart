@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/comment_input_field.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../data/models/new_reels_model.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../comments.dart';
+import 'comment_input_field.dart';
+import 'no_scale_text.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
@@ -62,6 +63,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+      ManageVibration.vibrate();
         FocusScope.of(context).unfocus();
       },
       child: Container(

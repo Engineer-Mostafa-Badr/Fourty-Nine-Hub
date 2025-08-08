@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../Register/widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class DriversLicenseLoadingScreen extends StatelessWidget {
@@ -91,6 +92,7 @@ class DriversLicenseLoadingScreen extends StatelessWidget {
                                     (index) => UploadFileWidget(
                                       title: uploadFilesTitles[index],
                                       onTap: (){
+      ManageVibration.vibrate();
                                         if(index==0){
                                           cubit.onUploadDriverLicensePicture(context);
                                         }else if(index==1){
@@ -149,6 +151,7 @@ class DriversLicenseLoadingScreen extends StatelessWidget {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         context.read<DashboardsCubit>().onSubmitUploadingDriverLicenseLoading(context);
                       },

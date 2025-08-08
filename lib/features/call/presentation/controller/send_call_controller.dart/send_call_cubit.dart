@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
-import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
+import '../../../domain/entities/call_data.dart';
+import 'send_call_states.dart';
+import '../../../services/call_timer_service.dart';
 
 class SendCallCubit extends Cubit<SendCallState> {
   SendCallCubit() : super(SendCallInitial());

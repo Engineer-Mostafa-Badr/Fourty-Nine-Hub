@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class RequstTripJoinBottomSheet extends StatefulWidget {
   const RequstTripJoinBottomSheet({
@@ -74,6 +75,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
               ),
               InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (formKey.currentState!.validate()) {
                     context.read<RequestTripJoinCubit>().makeTripJoinRequest(
                           subCategory: widget.subCategory,

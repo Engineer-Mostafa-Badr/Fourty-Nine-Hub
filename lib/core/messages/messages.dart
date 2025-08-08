@@ -243,7 +243,7 @@ void showLoadingDialog(BuildContext context,
                   const CustomCircularProgressIndicator(),
                   const SizedBox(height: 20),
                   Text(
-                    message ?? 'Loading...',
+                    message ?? (context.isArabic? 'يرجى الانتظار...' : 'Loading...'),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -501,6 +501,49 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                           .showActiveSubscriptionAmounts(
                               walletType: WalletTypes.mainWallet, price: 50);
                     }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }
+
+
+  showHaveTripDialog({required BuildContext context,required String title,Function()? onClose}) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth/3,
+                    label: context.isArabic? 'حسنا' : 'OK',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      // if(onClose!=null)onClose!();
+                    }),
+
               ],
             ),
             const SizedBox(height: 16),

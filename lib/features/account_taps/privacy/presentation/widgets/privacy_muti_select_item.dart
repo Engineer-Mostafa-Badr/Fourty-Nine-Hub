@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -43,6 +44,7 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
         onTap: () async {
+      ManageVibration.vibrate();
           PrivacyStatus currentStatus = privacyToPrivacyStatus(widget.privacy);
           final res = await showDialog(
             context: context,

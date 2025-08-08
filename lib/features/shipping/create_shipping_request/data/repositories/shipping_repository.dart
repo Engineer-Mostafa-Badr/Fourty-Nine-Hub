@@ -1,16 +1,16 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/service/base_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_images_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/drivnig_license_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/info_id_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/service/base_repository.dart';
+import '../datasources/shipping_data_source.dart';
+import '../models/car_images_s3_model/car_images_s3_model.dart';
+import '../models/car_license_s3_model/car_license_s3_model.dart';
+import '../models/driver_register_request_model.dart';
+import '../models/drivnig_license_s3_model/drivnig_license_s3_model.dart';
+import '../models/info_id_s3_model/info_id_s3_model.dart';
+import '../models/request_model.dart';
 
 class ShippingRepository {
   ShippingDataSource dataSource;

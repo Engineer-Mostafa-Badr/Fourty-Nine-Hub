@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../../../common/widgets/stateless/images/profile_image.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../data/models/comment_model.dart';
+import '../../../domain/entities/comment_entity.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../../domain/usecases/add_reply_usecase.dart';
+import '../../../domain/usecases/post_comment_usecase.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../../pages/post_details_page.dart';
+import '../posts/comment_card.dart';
+import '../posts/comment_replies.dart';
+import '../posts/facebook_post_card.dart';
+import '../../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FaceBookPostDetails extends StatefulWidget {
   String? postId;
@@ -398,6 +399,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                           size: 20,
                           isCircle: true,
                           onPressed: () async {
+      ManageVibration.vibrate();
                             setState(() {
                               loading = true;
                             });
@@ -528,7 +530,11 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
               margin: const EdgeInsets.only(left: 30),
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
-                  onPressed: () {}))
+                  onPressed: () {
+
+
+      ManageVibration.vibrate();
+                  }))
       ],
     );
   }

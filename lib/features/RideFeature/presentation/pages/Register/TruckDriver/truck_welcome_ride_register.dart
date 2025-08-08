@@ -13,6 +13,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../widgets/register_floating_action_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TruckWelcomeRideRegister extends StatelessWidget {
   const TruckWelcomeRideRegister({super.key});
@@ -54,6 +55,7 @@ class TruckWelcomeRideRegister extends StatelessWidget {
                         14,
                         (index) => InkWell(
                           onTap: () {
+      ManageVibration.vibrate();
                             bottomSheet(
                               context: context,
                               widget: Column(

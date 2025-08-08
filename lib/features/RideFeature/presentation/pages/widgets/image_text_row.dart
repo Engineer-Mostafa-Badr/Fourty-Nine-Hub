@@ -13,7 +13,7 @@ class ImageTextRow extends StatelessWidget {
     super.key,
     required this.imagePath,
     required this.text,
-    this.imageSize = 32.0,
+    this.imageSize = 26,
   });
 
   @override

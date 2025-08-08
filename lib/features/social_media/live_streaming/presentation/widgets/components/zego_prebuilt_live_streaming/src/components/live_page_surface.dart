@@ -12,7 +12,24 @@ import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/components.dart';
+// Package imports:
+
+// Project imports:
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/duration_time_board.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/message/view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/update_goals_sheet.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/pop_up_manager.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/config.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/controller.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/connect_manager.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/host_manager.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/live_duration_manager.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/live_status_manager.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/plugins.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/defines.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
@@ -21,24 +38,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
-
-// Package imports:
-
-// Project imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/duration_time_board.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/message/view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/live_status_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/plugins.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/live_duration_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/components.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/controller.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/connect_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/host_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/pop_up_manager.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/defines.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/config.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -143,6 +143,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                         state.selectedGifts.isEmpty
                             ? GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   showUpdateGoalsSheet(context,
                                       onEdit: (String id) {});
                                   // var cubit = context.read<StreamCubit>();
@@ -189,6 +190,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                               )
                             : GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   showUpdateGoalsSheet(context, onEdit: (id) {
                                     state.selectedGifts
                                         .firstWhere(
@@ -202,6 +204,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                                   });
 
                                   // onTap: () {
+      ManageVibration.vibrate();
                                   //   context.read<StreamCubit>().requestBattle(
                                   //       "66b9da437b1fafcdf897bbe1",
                                   //       "6702b91d870285d189a6e408");
@@ -262,6 +265,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                           children: [
                             GestureDetector(
                               onTap: () {
+      ManageVibration.vibrate();
                                 showUserGiftBottomSheet(context,
                                     receiverId: context
                                         .read<UserCubit>()
@@ -282,6 +286,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                             ),
                             GestureDetector(
                               onTap: () {
+      ManageVibration.vibrate();
                                 showUserGiftBottomSheet(context,
                                     receiverId: context
                                         .read<UserCubit>()
@@ -420,6 +425,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                                         Colors.grey.withOpacity(0.9)),
                               ),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 serviceLocator<SubscriptionController>()
                                     .showActiveSubscriptionAmounts(
                                         walletType: WalletTypes.balance);

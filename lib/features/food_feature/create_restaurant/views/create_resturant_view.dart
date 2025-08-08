@@ -1,34 +1,35 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/location/cities_dropdowns.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/location/governorate_dropdown.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/mneu/show_menu.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/name/name_filed.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/photo/license_photo_picker.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/photo/restaurant_photo_picker.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/subcategory.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/submit_button.dart';
-import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../../../../common/widgets/stateless/labels/info_text.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
+import '../cubit/create_menu_cubit/create_menu_cubit.dart';
+import '../cubit/create_resturant_cubit.dart';
+import 'widgets/location/cities_dropdowns.dart';
+import 'widgets/location/governorate_dropdown.dart';
+import 'widgets/mneu/show_menu.dart';
+import 'widgets/name/name_filed.dart';
+import 'widgets/photo/license_photo_picker.dart';
+import 'widgets/photo/restaurant_photo_picker.dart';
+import 'widgets/subcategory.dart';
+import 'widgets/submit_button.dart';
+import '../../edit_food/presentation/pages/edit_food_view.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class CreateRestaurantForm extends StatefulWidget {
   final String? from;
@@ -102,6 +103,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() {
                                 editFood = false;
                               });
@@ -122,6 +124,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                           ElevatedAppButton(
                             label: LocaleKeys.editFood.localize,
                             onPressed: () {
+      ManageVibration.vibrate();
                               context.push(Routes.EditFoodView,
                                   extra: EditFoodParams(
                                       restaurantId: widget.restaurantId ?? '',
@@ -198,6 +201,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                           Expanded(
                             child: ElevatedAppButton(
                               onPressed: () async {
+      ManageVibration.vibrate();
                                 var res = await context
                                     .read<CreateRestaurantCubit>()
                                     .updateRestaurant1(context);

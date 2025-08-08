@@ -7,6 +7,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class QuranPage extends StatefulWidget {
   const QuranPage({super.key});
@@ -43,6 +44,7 @@ class _QuranPageState extends State<QuranPage> {
                   var surah = state.quranSurah![index];
                   return InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -58,6 +60,7 @@ class _QuranPageState extends State<QuranPage> {
                       title: Text(surah.surahNameAr),
                       subtitle: Text('Surah number: ${surah.surahNo}'),
                       onTap: () {
+      ManageVibration.vibrate();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

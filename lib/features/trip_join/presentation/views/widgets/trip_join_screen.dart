@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/test_screen.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import 'test_screen.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../res/assets/assets.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TripJoinScreen extends StatelessWidget {
   const TripJoinScreen({super.key});
@@ -44,6 +45,7 @@ class TripJoinScreen extends StatelessWidget {
                 color:  AppColors.LIGHT_COLOR,
               ),
               label: "Start Journey!", onPressed: (){
+      ManageVibration.vibrate();
               Navigator.push(context, MaterialPageRoute(builder: (context)=> TestScreen1()));
           })
         ],

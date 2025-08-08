@@ -1,18 +1,20 @@
 import 'package:bloc/bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
-import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/data_winners_cashback_entity.dart';
 import '../../../domain/usecases/get_winners_cashback_use_case.dart';
 
 part 'winners_cashback_state.dart';
 
 class WinnersCashbackCubit extends Cubit<WinnersCashbackState> {
-  WinnersCashbackCubit(this._getWinnersCashbackUseCase)
-      : super(WinnersCashbackState(status: WinnersCashbackStates.initial));
-
   final GetWinnersCashbackUseCase _getWinnersCashbackUseCase;
 
   final limit = 15;
+
+  WinnersCashbackCubit(this._getWinnersCashbackUseCase)
+      : super(WinnersCashbackState(status: WinnersCashbackStates.initial));
 
   Future<void> getWinners(context) async {
     if (state.page == 1) {
@@ -25,6 +27,9 @@ class WinnersCashbackCubit extends Cubit<WinnersCashbackState> {
 
     response.fold(
       (f) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
           status: WinnersCashbackStates.failure,
           errMessage: getFailureMessage(f, context),

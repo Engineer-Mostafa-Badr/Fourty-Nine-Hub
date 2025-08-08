@@ -16,6 +16,7 @@ import '../../../../authentication/presentation/controllers/user_cubit/user_cubi
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../health/presentation/controllers/shared_data/health_shared_data.dart';
 import '../cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorContactButtons extends StatelessWidget {
   final String doctorID;
@@ -37,7 +38,9 @@ class DoctorContactButtons extends StatelessWidget {
                   backColor: AppColors.PRIMARY_COLOR,
                   textColor: Colors.white,
                   // onPressed: () {},
-                  onPressed: !context.read<UserCubit>().isLoggedIn
+                  onPressed:(){ 
+      ManageVibration.vibrate();
+                    !context.read<UserCubit>().isLoggedIn
                       ? () {
                     pleaseLoginDialog(context);
                     // context.push(Routes.LOGIN);
@@ -52,7 +55,7 @@ class DoctorContactButtons extends StatelessWidget {
                                   subscribeId:
                                       state.doctor?.subCategory.id ?? '',
                                   title: LocaleKeys.ads.localize);
-                            },
+                            };},
                 ),
               ),
               const Sizer(),
@@ -85,6 +88,7 @@ class DoctorContactButtons extends StatelessWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
                         widget: ReportView(
@@ -155,6 +159,7 @@ class DoctorContactButtons extends StatelessWidget {
                                     const Spacer(),
                                     InkWell(
                                         onTap: () async {
+      ManageVibration.vibrate();
                                           Navigator.of(context).pop();
                                         },
                                         child: CircleAvatar(
@@ -175,7 +180,10 @@ class DoctorContactButtons extends StatelessWidget {
                                     label: LocaleKeys.freeCall.localize,
                                     color: AppColors.whiteColor,
                                     backColor: AppColors.PRIMARY_COLOR,
-                                    onPressed: () {}),
+                                    onPressed: () {
+
+      ManageVibration.vibrate();
+                                    }),
                                 const Sizer(
                                   height: 30,
                                 ),
@@ -184,7 +192,10 @@ class DoctorContactButtons extends StatelessWidget {
                                     label: LocaleKeys.regularCall.localize,
                                     color: AppColors.black,
                                     backColor: AppColors.BG_GRAY_COLOR,
-                                    onPressed: () {})
+                                    onPressed: () {
+
+      ManageVibration.vibrate();
+                                    })
                               ],
                             ),
                           ),
@@ -230,6 +241,7 @@ class DoctorContactButtons extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       bottomSheet(
                           context: context,
                           widget: ReportView(

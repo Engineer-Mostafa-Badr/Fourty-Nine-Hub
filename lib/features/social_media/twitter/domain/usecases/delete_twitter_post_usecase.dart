@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/repositories/twitter_repo.dart';
+import '../repositories/twitter_repo.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';

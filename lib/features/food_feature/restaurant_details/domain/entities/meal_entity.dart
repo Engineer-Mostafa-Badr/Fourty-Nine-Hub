@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/variation_model.dart';
+import '../../data/models/variation_model.dart';
 
 import '../../../../../res/style/const.dart';
 import '../../data/models/option_model.dart';

@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/build_life_event_view.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_feeling_view.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_colors_ballet.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_app_bar.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_header.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_media_card.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_sheet_item.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/entities/activity_entity.dart';
+import '../../domain/entities/feeling_entity.dart';
+import '../../domain/entities/life_event_entity.dart';
+import '../../domain/entities/place_entity.dart';
+import 'build_life_event_view.dart';
+import 'select_activity_view.dart';
+import 'select_feeling_view.dart';
+import '../widgets/build_colors_ballet.dart';
+import '../widgets/build_create_post.dart';
+import '../widgets/build_create_post_app_bar.dart';
+import '../widgets/build_create_post_header.dart';
+import '../widgets/build_media_card.dart';
+import '../widgets/build_search_friends.dart';
+import '../widgets/build_sheet_item.dart';
+import '../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:giphy_get/giphy_get.dart';
@@ -35,6 +35,7 @@ import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/create_post_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key, this.lifeEvent});
@@ -186,6 +187,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     children: [
                       BuildCreatePostAppBar(
                         onTap: () {
+      ManageVibration.vibrate();
                           controller.createPost(
                               context: context,);
                         },
@@ -235,6 +237,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                     end: 8,
                                     child:ClickableWidget(
                                   onTap: (){
+      ManageVibration.vibrate();
                                     context.read<CreatePostCubit>().removeGif();
                                   },
                                   child: Container(
@@ -300,6 +303,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.imageIcon,
                               title:context.isArabic?'صورة/فيديو': "Photo/video",
                               onTap: () async {
+      ManageVibration.vibrate();
                                 await controller.uploadPhoto(context: context);
                                 sheetController.collapse();
                               },
@@ -308,6 +312,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.tagIcon,
                               title: context.isArabic?'اشارة لأشخاص':"Tag people",
                               onTap: () {
+      ManageVibration.vibrate();
                                 sheetController.collapse();
                                 bottomSheet(
                                     isScrollControlled: true,
@@ -324,6 +329,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.feelingIcon,
                               title: context.isArabic?'شعور':"Feeling",
                               onTap: () {
+      ManageVibration.vibrate();
                                 sheetController.collapse();
                                 bottomSheet(
                                     isScrollControlled: true,
@@ -342,6 +348,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.feelingIcon,
                               title: context.isArabic?'نشاط':"Activity",
                               onTap: () {
+      ManageVibration.vibrate();
                                 sheetController.collapse();
                                 bottomSheet(
                                     isScrollControlled: true,
@@ -359,6 +366,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.locationIcon,
                               title:state.place!=null||(state.place?.name.isEmpty??false)?context.isArabic?'ازالة الموقع':"Remove Location":context.isArabic?'موقع':"Check in",
                               onTap: () async{
+      ManageVibration.vibrate();
                                 // if(state.place!=null||(state.place?.name.isEmpty??false)){
                                 //   context.read<CreatePostCubit>().removeAddress();
                                 // }else{
@@ -379,6 +387,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.backgroundIcon,
                               title: context.isArabic?'لون الخلفية':"Background color",
                               onTap: () {
+      ManageVibration.vibrate();
                                 controller.showRemoveBalletColors();
                                 sheetController.collapse();
                               },
@@ -388,6 +397,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               title: context.isArabic?'كاميرا':"Camera",
                               color: context.isDarkMode?Colors.white:null,
                               onTap: () async {
+      ManageVibration.vibrate();
                                 await controller.uploadPhoto(
                                     context: context, isGallery: false);
                                 sheetController.collapse();
@@ -398,6 +408,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.gifIcon,
                               title: context.isArabic?'صورة متحركة':"GIF",
                               onTap: () async {
+      ManageVibration.vibrate();
                                 print(state.images);
                                 print(state.images?.length);
                                 print(state.selectedLifeEvent);
@@ -429,6 +440,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               icon: Assets.lifeEventIcon,
                               title: context.isArabic?'حدث':"Life event",
                               onTap: () {
+      ManageVibration.vibrate();
                                 sheetController.collapse();
                                 context.push(Routes.LIFEEVENT);
                               },

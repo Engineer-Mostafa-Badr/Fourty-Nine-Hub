@@ -37,9 +37,9 @@ class RideExpectedPriceParams {
       if (wayPointTwo != null)
         "wayPointTwo": {"latitude": wayPointTwo![0], "longitude": wayPointTwo![1]},
       "options": {
-        if (comfort != null) "comfort": comfort,
-        if (nonSmoking != null) "nonSmoking": nonSmoking,
-        if (autoAccept != null) "autoAccept": autoAccept,
+        "comfort": true,
+        "nonSmoking": true,
+        "autoAccept": true,
         if (isPremium != null) "isPremium": isPremium,
       },
     };

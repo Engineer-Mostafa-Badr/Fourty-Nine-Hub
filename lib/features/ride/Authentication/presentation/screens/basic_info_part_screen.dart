@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../RideRequest/data/models/driver_ride_model/driver_ride_model.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BasicInfoPartScreen extends StatelessWidget {
   BasicInfoPartScreen({super.key, this.model});
@@ -62,6 +63,7 @@ class BasicInfoPartScreen extends StatelessWidget {
                     color: Colors.white,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       log(model?.basicInfo?.part.toJson()
                           .toString()??"lskdf", name: "lkdkdkddkdkdk");
                       if (formKey.currentState?.validate() == true) {

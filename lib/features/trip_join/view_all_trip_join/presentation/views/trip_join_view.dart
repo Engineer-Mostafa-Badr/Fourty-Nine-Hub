@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_screen.dart';
-import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/trip_option_widget.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_content.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../new_trip_join/captainshare/screen/captain_share_screen.dart';
+import '../../../../new_trip_join/presentation/view/widget/trip_option_widget.dart';
+import '../../../view_all_pick_me/presentation/views/all_pickme_view.dart';
+import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
+import 'trip_join_content.dart';
+import 'Modified_widgets/trip_join_floating_action_button.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TripJoinView extends StatefulWidget {
   const TripJoinView({super.key,required this.initialIndex,});
@@ -119,6 +121,7 @@ class _TripJoinViewState extends State<TripJoinView>
                       imagePath: Assets.locationTripIcon,
                       title: getTitleForIndex(index),
                       onTap: () {
+                        ManageVibration.vibrate();
                         setState(() {
                           selectedIndex = index;
                           _controller.forward(from: 0);
@@ -209,6 +212,7 @@ class _TripJoinViewState extends State<TripJoinView>
                   children: [
                     GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
                         switch (selectedIndex) {
                           case 0:
                             context.push(Routes.captainShareInfoScreen);
@@ -274,6 +278,7 @@ class _TripJoinViewState extends State<TripJoinView>
         return TripJoinFloatingActionButton(
           title: LocaleKeys.createRoute.localize,
           onTap: () {
+            ManageVibration.vibrate();
             context.push(Routes.newRouteScreen);
           },
         );
@@ -283,6 +288,7 @@ class _TripJoinViewState extends State<TripJoinView>
           child: TripJoinFloatingActionButton(
             title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
             onTap: () {
+              ManageVibration.vibrate();
               context.push(Routes.TRIP_JOIN);
             },
           ),
@@ -293,6 +299,7 @@ class _TripJoinViewState extends State<TripJoinView>
           child: TripJoinFloatingActionButton(
             title: context.isArabic ? "انشر رحلتك" : "Post your ride",
             onTap: () {
+              ManageVibration.vibrate();
               context.push(Routes.AddNewPickMe);
             },
           ),

@@ -4,7 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 
@@ -119,6 +119,7 @@ class FormTextField extends StatelessWidget {
                 }
               },
           onTap: () {
+      ManageVibration.vibrate();
             if (onTap != null) {
               onTap!();
             }

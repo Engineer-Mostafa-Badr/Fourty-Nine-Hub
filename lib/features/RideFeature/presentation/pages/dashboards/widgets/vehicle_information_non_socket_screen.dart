@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../Register/widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class VehicleInformationNonSocketScreen extends StatelessWidget {
@@ -25,7 +26,7 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> uploadFilesTitles = [
-      LocaleKeys.vehiclePicture.localize,
+      // LocaleKeys.vehiclePicture.localize,
       LocaleKeys.vehicleRegistrationCertificate.localize,
       LocaleKeys.backSideOfTheCertificate.localize,
     ];
@@ -89,17 +90,14 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
                                   (index) => UploadFileWidget(
                                     title: uploadFilesTitles[index],
                                     onTap: () {
+      ManageVibration.vibrate();
                                       if (index == 0) {
-                                        cubit.onUploadVehiclePicture(context);
-                                      } else if (index == 1) {
                                         cubit.onUploadVehicleFrontPicture(context);
                                       } else {
                                         cubit.onUploadVehicleBackPicture(context);
                                       }
                                     },
                                     imageUrl: index == 0
-                                        ? state.vehiclePicture
-                                        : index == 1
                                             ? state.vehicleFrontPicture
                                             : state.vehicleBackPicture,
                                   ),
@@ -139,13 +137,10 @@ class VehicleInformationNonSocketScreen extends StatelessWidget {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         if(context.read<DashboardsCubit>().driverLicenseFormKey.currentState!.validate()) {
                           print("object");
-                          if(context.read<DashboardsCubit>().state.vehiclePicture==null){
-                            showErrorMessage(context, "Please select vehicle picture");
-                            return;
-                          }
                           if(context.read<DashboardsCubit>().state.vehicleFrontPicture==null){
                             showErrorMessage(context, "Please select front of vehicle license picture");
                             return;

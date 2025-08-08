@@ -3,6 +3,8 @@ enum TripState {
   completed,
   started,
   canceled,
+  cancelledByClient,
+  cancelledByDriver,
   accepted,
   goToClient,
   inLocation,

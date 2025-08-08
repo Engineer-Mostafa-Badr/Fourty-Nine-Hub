@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'available_pickme_screen.dart';
 
 class AllPickMeView extends StatefulWidget {
@@ -27,32 +28,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
   // late Animation<double> _positionAnimation;
   late TabController tabController;
   int selectedIndex = 0; // Changed to 0 to match availableTrips as default
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 3, vsync: this);
-    // tabController.addListener(() {
-    //   setState(() {});
-    // });
-    tabController.addListener(() {
-      setState(() {
-        selectedIndex = tabController.index;
-        // Update category based on selected index
-        switch (tabController.index) {
-          case 0:
-            _displayedCategory = LocaleKeys.availableTrips;
-            break;
-          case 1:
-            _displayedCategory = LocaleKeys.requestLog;
-            break;
-          case 2:
-            _displayedCategory = LocaleKeys.myAds;
-            break;
-        }
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +128,32 @@ class _AllPickMeViewState extends State<AllPickMeView>
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+    // tabController.addListener(() {
+    //   setState(() {});
+    // });
+    tabController.addListener(() {
+      setState(() {
+        selectedIndex = tabController.index;
+        // Update category based on selected index
+        switch (tabController.index) {
+          case 0:
+            _displayedCategory = LocaleKeys.availableTrips;
+            break;
+          case 1:
+            _displayedCategory = LocaleKeys.requestLog;
+            break;
+          case 2:
+            _displayedCategory = LocaleKeys.myAds;
+            break;
+        }
+      });
+    });
+  }
+
   Widget _buildCardForCategory() {
     switch (_displayedCategory) {
       case LocaleKeys.availableTrips:
@@ -169,38 +170,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
     }
   }
 
-  _buildStatusCategories() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: _buildCategory(
-            title: LocaleKeys.availableTrips,
-            index: 0,
-          ),
-        ),
-        const Sizer(
-          width: 10,
-        ),
-        Expanded(
-          child: _buildCategory(
-            title: LocaleKeys.requestLog,
-            index: 1,
-          ),
-        ),
-        const Sizer(
-          width: 10,
-        ),
-        Expanded(
-          child: _buildCategory(
-            title: LocaleKeys.myAds,
-            index: 2,
-          ),
-        ),
-      ],
-    );
-  }
-
   _buildCategory({
     required String title,
     required int index,
@@ -214,6 +183,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
       //   });
       // },
       onTap: () {
+        ManageVibration.vibrate();
         tabController.animateTo(index);
         if (index == 0) {
           // context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
@@ -297,6 +267,38 @@ class _AllPickMeViewState extends State<AllPickMeView>
           ),
         ],
       ),
+    );
+  }
+
+  _buildStatusCategories() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: _buildCategory(
+            title: LocaleKeys.availableTrips,
+            index: 0,
+          ),
+        ),
+        const Sizer(
+          width: 10,
+        ),
+        Expanded(
+          child: _buildCategory(
+            title: LocaleKeys.requestLog,
+            index: 1,
+          ),
+        ),
+        const Sizer(
+          width: 10,
+        ),
+        Expanded(
+          child: _buildCategory(
+            title: LocaleKeys.myAds,
+            index: 2,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -3,13 +3,13 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/trip_repository.dart';
 
-class StartDriverTripUseCase extends UseCase<bool, StartDriverTripParams> {
+class StartDriverTripUseCase extends UseCase<String, StartDriverTripParams> {
   final TripRepository _repository;
 
   const StartDriverTripUseCase(this._repository);
 
   @override
-  Future<Either<Failure, bool>> call(StartDriverTripParams params) {
+  Future<Either<Failure, String>> call(StartDriverTripParams params) {
     return _repository.startDriverTrip(params);
   }
 }

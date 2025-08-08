@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/instagram_cubit.dart';
+import '../../../reels/presentation/widgets/comments.dart';
+import '../../../reels/presentation/widgets/comments/no_scale_text.dart';
+import '../../../social_posts/domain/entities/comment_entity.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final CommentEntity comment;
@@ -61,6 +62,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
+      ManageVibration.vibrate();
           FocusScope.of(context).unfocus();
         },
         child: Container(

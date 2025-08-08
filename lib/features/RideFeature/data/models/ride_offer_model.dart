@@ -7,6 +7,8 @@ class RideOfferModel extends RideOfferEntity {
     required super.offerId,
     required super.driverId,
     required super.tripId,
+    required super.isComfort,
+    required super.isNonSmoking,
     required super.driverName,
     required super.driverImage,
     required super.price,
@@ -27,6 +29,8 @@ class RideOfferModel extends RideOfferEntity {
     return RideOfferModel(
       offerId: json['id'] ?? '',
       driverId: driverDetails['id'] ?? '',
+      isComfort: driverDetails['isComfort'] ?? false,
+      isNonSmoking: driverDetails['isNonSmoking'] ?? false,
       tripId: tripDetails['id'] ?? '',
       driverName: driverDetails['firstName'],
       driverImage: driverDetails['picture'],

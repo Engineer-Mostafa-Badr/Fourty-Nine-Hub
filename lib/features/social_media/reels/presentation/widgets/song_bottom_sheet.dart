@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/original_sound_widget.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/sound_title_widget.dart';
+import 'original_sound_widget.dart';
+import 'sound_title_widget.dart';
 
 class SongBottomSheet extends StatelessWidget {
   const SongBottomSheet({super.key});

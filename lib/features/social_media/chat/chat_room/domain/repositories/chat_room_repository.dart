@@ -1,27 +1,27 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/assign_labels_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/create_lable_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_unpin_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/pin_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/update_chat_usecase.dart';
+import '../../../../../../core/error/failure.dart';
+import '../entities/message_entity.dart';
+import '../usecases/assign_labels_usecase.dart';
+import '../usecases/clear_chat_usecase.dart';
+import '../usecases/create_lable_usecase.dart';
+import '../usecases/delete_message_usecase.dart';
+import '../usecases/get_chat_usecase.dart';
+import '../usecases/get_lables_usecase.dart';
+import '../usecases/get_messages_usecase.dart';
+import '../usecases/get_one_time_view_message_usecase.dart';
+import '../usecases/listen_to_pin_message_usecase.dart';
+import '../usecases/listen_to_recording_usecase.dart';
+import '../usecases/listen_to_typing_usecase.dart';
+import '../usecases/listen_to_unpin_message_usecase.dart';
+import '../usecases/mark_message_as_seen_usecase.dart';
+import '../usecases/mark_messages_as_delivered_usecase.dart';
+import '../usecases/pin_message_usecase.dart';
+import '../usecases/send_message_usecase.dart';
+import '../usecases/set_record_as_listened.dart';
+import '../usecases/unpin_message_usecase.dart';
+import '../usecases/update_chat_usecase.dart';
 
 abstract class ChatRoomRepository {
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);

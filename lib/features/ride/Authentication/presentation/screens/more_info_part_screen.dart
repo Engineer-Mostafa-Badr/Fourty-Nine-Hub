@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/mor
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MoreInfoPartScreen extends StatelessWidget {
   MoreInfoPartScreen({super.key});
@@ -45,6 +46,7 @@ class MoreInfoPartScreen extends StatelessWidget {
                       backColor: AppColors.PRIMARY_COLOR,
                       label: LocaleKeys.submit.tr(),
                       onPressed: () async {
+      ManageVibration.vibrate();
                         log("model.toJson()", name: 'lsdkfdkd029384jslkdjf');
                         if (formKey.currentState?.validate() == true) {
                           PartsSocketModel? checkModel =

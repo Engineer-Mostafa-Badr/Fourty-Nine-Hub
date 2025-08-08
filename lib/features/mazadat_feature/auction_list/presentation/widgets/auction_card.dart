@@ -12,6 +12,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AuctionCard extends StatelessWidget {
   final AuctionEntity item;

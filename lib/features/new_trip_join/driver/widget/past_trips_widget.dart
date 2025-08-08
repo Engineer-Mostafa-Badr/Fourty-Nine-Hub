@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../routes/routes.dart';
 import 'available_ride_mode_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PastTripsWidget extends StatelessWidget {
   final List<String> content;
@@ -20,6 +21,7 @@ class PastTripsWidget extends StatelessWidget {
               children: [
                 AvailableRideModeWidget(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.captainRideDetails);
                   },
                   cancelButton: false,
@@ -27,7 +29,10 @@ class PastTripsWidget extends StatelessWidget {
                   requestType: context.isArabic?'عادي':'Regular',
                 ),
                 AvailableRideModeWidget(
-                  onTap: () {},
+                  onTap: () {
+
+      ManageVibration.vibrate();
+                  },
                   statusDriver: context.isArabic?'منتهي':"Expired",
                   requestType: context.isArabic?'عادي':'Regular',
                 ),

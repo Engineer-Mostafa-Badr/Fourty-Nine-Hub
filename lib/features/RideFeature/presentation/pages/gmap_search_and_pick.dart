@@ -16,6 +16,9 @@ import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../core/loading/custom_loading.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
+
 class PickedData {
   final String address;
   final double latitude;
@@ -71,7 +74,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   @override
   void initState() {
     super.initState();
-    // fetchUserLocation();
+    fetchUserLocation();
   }
 
   String _getCountryName(String? countryCode, BuildContext context) {
@@ -260,7 +263,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     await _controller.setMapStyle(isDark ? darkStyle : lightStyle);
 
-    fetchUserLocation();
+    // fetchUserLocation();
   }
 
   Future<void> _handleLocationSelection() async {
@@ -489,7 +492,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                   ),
                 ),
 
-                if (_isLoading) const Center(child: CircularProgressIndicator()),
+                if (_isLoading) const Center(child: CustomLoading(searchLoading: true)),
 
                 // Set Location Button
                 Positioned(

@@ -32,6 +32,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RiderRegisterView extends StatefulWidget {
   const RiderRegisterView({super.key});
@@ -426,6 +427,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                 ),
                 label: LocaleKeys.submit.tr(),
                 onPressed: () async {
+      ManageVibration.vibrate();
                   PartsSocketModel partsSocketModel =
                       await CacheManager.getSocketPartModel() ??
                           PartsSocketModel();

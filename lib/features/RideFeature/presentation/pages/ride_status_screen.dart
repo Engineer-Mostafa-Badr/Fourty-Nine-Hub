@@ -108,6 +108,8 @@ class RideStatusScreen extends StatelessWidget {
                               toLocation:
                               'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               onGoogleMap: () {},
+                              showOTP: false,
+                              showCancelButton: false,
                               onPartialPayment: () {},
                               onCallEmergency: () {},
                               onCancelRide: () {},
@@ -262,6 +264,14 @@ Widget buildDriverCircle({
                   const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(

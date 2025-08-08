@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/check_withdraw_balance_use_cse.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../../domain/entities/balance/balance_history_entity.dart';
 import '../../../domain/usecases/get_balance_history_use_case.dart';
 import '../../../domain/usecases/transfer_balance_use_cse.dart';
@@ -17,6 +21,14 @@ class BalanceCubit extends Cubit<BalanceState> {
   final RequestWithdrawBalanceUseCase _withdrawBalanceUseCase;
   final CheckRequestWithdrawUseCase _checkRequestWithdrawUseCase;
 
+  List<BalanceHistoryEntity> history = [];
+
+  bool isLoadingMore = false;
+
+  bool hasMoreData = true;
+
+  int currentPage = 1;
+  int pageSize = 10;
   BalanceCubit(
     this._balanceUseCases,
     this._balanceHistoryUseCase,
@@ -25,35 +37,19 @@ class BalanceCubit extends Cubit<BalanceState> {
     this._withdrawBalanceUseCase,
     this._checkRequestWithdrawUseCase,
   ) : super(const BalanceState());
+  checkRequestWithdrawBalance() async {
+    final response = await _checkRequestWithdrawUseCase.call(const NoParams());
+    return response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
 
-  loadData() async {
-    await fetchBalanceWallet();
-    await checkRequestWithdrawBalance();
-    await loadInitialData();
-    // await fetchBalanceHistory();
-  }
-
-  Future<void> fetchBalanceWallet() async {
-    final response = await _balanceUseCases.call(const NoParams());
-    response.fold((l) {
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
-      emit(state.copyWith(balance: data, status: BalanceStates.success));
+      emit(state.copyWith(
+        withdraw: data,
+      ));
     });
-  }
-
-  List<BalanceHistoryEntity> history = [];
-  bool isLoadingMore = false;
-  bool hasMoreData = true;
-  int currentPage = 1;
-  int pageSize = 10;
-
-  Future<void> loadInitialData() async {
-    emit(state.copyWith(status: BalanceStates.loading));
-    history.clear();
-    currentPage = 1;
-    hasMoreData = true;
-    await fetchBalancetHistory();
   }
 
   Future<void> fetchBalancetHistory() async {
@@ -66,8 +62,13 @@ class BalanceCubit extends Cubit<BalanceState> {
     );
 
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: BalanceStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: BalanceStates.error));
+      },
       (data) {
         history.addAll(data);
 
@@ -81,6 +82,46 @@ class BalanceCubit extends Cubit<BalanceState> {
         emit(state.copyWith(history: history, status: BalanceStates.success));
       },
     );
+  }
+
+  Future<void> fetchBalanceWallet() async {
+    final response = await _balanceUseCases.call(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: BalanceStates.error));
+    }, (data) {
+      emit(state.copyWith(balance: data, status: BalanceStates.success));
+    });
+  }
+
+  loadData() async {
+    await fetchBalanceWallet();
+    await checkRequestWithdrawBalance();
+    await loadInitialData();
+    // await fetchBalanceHistory();
+  }
+
+  Future<void> loadInitialData() async {
+    emit(state.copyWith(status: BalanceStates.loading));
+    history.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchBalancetHistory();
+  }
+
+  requestWithdrawBalance() async {
+    final response = await _withdrawBalanceUseCase(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+
+      emit(state.copyWith(failure: l, status: BalanceStates.errorRequest));
+    }, (data) {
+      emit(state.copyWith(status: BalanceStates.initial));
+    });
   }
 
   // Future<List<BalanceHistoryEntity>> fetchBalanceHistory({
@@ -106,6 +147,10 @@ class BalanceCubit extends Cubit<BalanceState> {
   transferFiveBalance() async {
     final response = await _transferFiveBalanceUseCase(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
       fetchBalanceWallet();
@@ -116,30 +161,14 @@ class BalanceCubit extends Cubit<BalanceState> {
   transferTenBalance() async {
     final response = await _transferTenBalanceUseCase(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
       fetchBalanceWallet();
       emit(state.copyWith(status: BalanceStates.successTen));
-    });
-  }
-
-  requestWithdrawBalance() async {
-    final response = await _withdrawBalanceUseCase(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: BalanceStates.errorRequest));
-    }, (data) {
-      emit(state.copyWith(status: BalanceStates.initial));
-    });
-  }
-
-  checkRequestWithdrawBalance() async {
-    final response = await _checkRequestWithdrawUseCase.call(const NoParams());
-    return response.fold((l) {
-      emit(state.copyWith(failure: l, status: BalanceStates.error));
-    }, (data) {
-      emit(state.copyWith(
-        withdraw: data,
-      ));
     });
   }
 }

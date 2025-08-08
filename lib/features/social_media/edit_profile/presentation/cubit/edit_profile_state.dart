@@ -16,6 +16,7 @@ class EditProfileState {
   String? selectedJobPrivacy;
   String? selectedCountryPrivacy;
   String? selectedStatusPrivacy;
+  bool? isDriverLady;
 
   EditProfileState({
     this.status = EditProfileStates.initial,
@@ -31,6 +32,7 @@ class EditProfileState {
     this.selectedCountryPrivacy,
     this.governorates,
     this.selectedCity,
+    this.isDriverLady,
   });
 
   EditProfileState copyWith({
@@ -46,10 +48,12 @@ class EditProfileState {
     String? selectedStatusPrivacy,
     String? selectedCountryPrivacy,
     String? selectedCity,
+    bool? isDriverLady,
     List<GovernorateEntity>? governorates,
   }) {
     return EditProfileState(
       status: status ?? this.status,
+      isDriverLady: isDriverLady ?? this.isDriverLady,
       getGovernmentStatus: getGovernmentStatus ?? this.getGovernmentStatus,
       failure: failure ?? this.failure,
       isMale: isMale ?? this.isMale,

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 void showCreateRouteModalSheet(BuildContext context,
     {required String seatId,
@@ -195,6 +196,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                       title: LocaleKeys.book.localize,
                       color: AppColors.PRIMARY_COLOR,
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         bookTrip(
                           isComfort: localComfortToggle,

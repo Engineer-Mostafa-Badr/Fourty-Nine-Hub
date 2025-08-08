@@ -3,26 +3,27 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/driverStatistics_cubit.dart';
+import '../cubit/get_all_trip_cubit.dart';
+import '../cubit/shipping_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../widgets/trip_card.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class DahsboardDriverScreen extends StatefulWidget {
   const DahsboardDriverScreen({super.key});
@@ -60,6 +61,7 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
                   children: [
                     IconButton(
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.pop();
                       },
                       icon: const Icon(Icons.arrow_back),
@@ -99,6 +101,7 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
                           // )
                           IconButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               context.read<GetAllTripCubit>().getAllTrips();
                             },
                             icon: const Icon(Icons.update),
@@ -183,6 +186,7 @@ class NewTripWidget extends StatelessWidget {
                                       horizontal: 35),
                                   child: GestureDetector(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       //هتروح لي صفحه subscription
                                       serviceLocator<SubscriptionController>()
                                           .showActiveSubscriptionAmounts(
@@ -338,6 +342,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.registrationForm.tr(),
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.push(Routes.EDITDRIVERSCREEN);
                         },
                         backColor: Colors.white,
@@ -365,6 +370,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineSubscription.tr(),
                         onPressed: () {
+      ManageVibration.vibrate();
                           // serviceLocator<SubscriptionController>()
                           //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
                           // context.push(Routes.)
@@ -405,6 +411,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                                         backColor: AppColors.PRIMARY_COLOR,
                                         label: LocaleKeys.addSubscription.tr(),
                                         onPressed: () {
+      ManageVibration.vibrate();
                                           serviceLocator<
                                                   SubscriptionController>()
                                               .showSubscriptionPlans(
@@ -441,6 +448,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineSubscription.tr(),
                         onPressed: () {
+      ManageVibration.vibrate();
                           log('message');
                           serviceLocator<SubscriptionController>()
                               .showSubscriptionPlans(subCategoryId: "");
@@ -468,7 +476,10 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineId.tr(),
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         backColor: Colors.white,
                       ),
                       const SizedBox(
@@ -492,7 +503,10 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineDriverLicense.tr(),
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         backColor: Colors.white,
                       ),
                       const SizedBox(
@@ -516,7 +530,10 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: "",
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         backColor: Colors.white,
                       ),
                       const SizedBox(
@@ -540,7 +557,10 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: "",
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         backColor: Colors.white,
                       ),
                       const SizedBox(
@@ -565,6 +585,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: "",
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.push(Routes.MyRating);
                         },
                         backColor: Colors.white,
@@ -575,6 +596,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                       AppButton(
                         label: LocaleKeys.deleteRegistration.tr(),
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.read<ShippingCubit>().deleteDriver();
                         },
                         color: Colors.white,

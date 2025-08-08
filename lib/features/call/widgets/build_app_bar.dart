@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
-import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
-import 'package:fourtyninehub/features/call/widgets/call_control_button.dart';
+import '../../authentication/data/models/user_model.dart';
+import '../presentation/controller/call_controller/call_cubit.dart';
+import '../presentation/controller/call_controller/call_state.dart';
+import '../presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import '../presentation/controller/send_call_controller.dart/send_call_states.dart';
+import '../services/call_timer_service.dart';
+import 'call_control_button.dart';
 
 class CallTimer extends StatefulWidget {
   const CallTimer({super.key});

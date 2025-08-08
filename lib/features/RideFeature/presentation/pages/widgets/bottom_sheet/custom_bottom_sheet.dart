@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 
 import '../../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
     {required child, height = 150, required String title, bool isDarkMode = false}) {
@@ -39,12 +40,14 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
                     IconButton(
                       icon: const SizedBox(),
                       onPressed: () {
+      ManageVibration.vibrate();
                       },
                     ),
                     Text(title,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w600)),
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/close.svg'),
                       onPressed: () {
+      ManageVibration.vibrate();
                         Navigator.pop(context);
                       },
                     ),
@@ -97,9 +100,9 @@ Future<dynamic> customBottomSheet2(
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SizedBox(),
+                        const SizedBox(width: 48),
                         Expanded(
                           child: Text(
                             title,
@@ -116,6 +119,7 @@ Future<dynamic> customBottomSheet2(
                         IconButton(
                           icon: SvgPicture.asset('assets/icons/close.svg'),
                           onPressed: () {
+      ManageVibration.vibrate();
                             Navigator.pop(context);
                           },
                         ),
@@ -180,6 +184,7 @@ Future<dynamic> customBottomSheet2(context,
                   IconButton(
                     icon: SvgPicture.asset('assets/icons/close.svg'),
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.pop(context);
                     },
                   ),

@@ -1,6 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../domain/useCase/fetch_communication_privacy_use_case.dart';
 import '../../domain/useCase/fetch_connection_privacy_use_case.dart';
@@ -33,7 +36,21 @@ class PrivacyCubit extends Cubit<PrivacyState> {
   final RemoveAllowedUseCase removeAllowedUseCase;
   final RemoveForbiddenUseCase removeForbiddenUseCase;
 
-  PrivacyCubit(this._privacyUseCase, this.fetchConnectionPrivacyUseCase, this.updatePersonalPrivacyUseCase, this.updateConnectionPrivacyUseCase, this.fetchCommunicationPrivacyUseCase, this.updateCommunicationPrivacyUseCase, this.searchUsersPrivacyUseCase, this.updateOnlyWithPrivacyUseCase, this.updateExceptFromPrivacyUseCase, this.fetchMediaPrivacyUseCase, this.updateMediaPrivacyUseCase, this.fetchExclusionPrivacyUseCase, this.removeAllowedUseCase, this.removeForbiddenUseCase)
+  PrivacyCubit(
+      this._privacyUseCase,
+      this.fetchConnectionPrivacyUseCase,
+      this.updatePersonalPrivacyUseCase,
+      this.updateConnectionPrivacyUseCase,
+      this.fetchCommunicationPrivacyUseCase,
+      this.updateCommunicationPrivacyUseCase,
+      this.searchUsersPrivacyUseCase,
+      this.updateOnlyWithPrivacyUseCase,
+      this.updateExceptFromPrivacyUseCase,
+      this.fetchMediaPrivacyUseCase,
+      this.updateMediaPrivacyUseCase,
+      this.fetchExclusionPrivacyUseCase,
+      this.removeAllowedUseCase,
+      this.removeForbiddenUseCase)
       : super(const PrivacyState());
 
   void loadData() async {
@@ -43,23 +60,30 @@ class PrivacyCubit extends Cubit<PrivacyState> {
     await fetchDataCommunicationPrivacy();
     await fetchDataMediaPrivacy();
   }
+
   Future<void> fetchExclusionData({required String feature}) async {
     emit(state.copyWith(status: PrivacyStates.loading));
 
-    final response = await fetchExclusionPrivacyUseCase.call(ExclusionParams(feature: feature));
+    final response = await fetchExclusionPrivacyUseCase
+        .call(ExclusionParams(feature: feature));
 
     response.fold(
-          (failure) {
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         print("ExclusionEntity: error");
         emit(state.copyWith(failure: failure, status: PrivacyStates.error));
       },
-          (exclusionEntity) {
-        print("ExclusionEntity: ${exclusionEntity.data}");  // Check data before emission
-        emit(state.copyWith(exclusionEntity: exclusionEntity, status: PrivacyStates.success));
+      (exclusionEntity) {
+        print(
+            "ExclusionEntity: ${exclusionEntity.data}"); // Check data before emission
+        emit(state.copyWith(
+            exclusionEntity: exclusionEntity, status: PrivacyStates.success));
       },
     );
   }
-
 
   // Future<void> fetchDataExclusionPrivacy({required ExclusionParams params}) async {
   //   emit(state.copyWith(status: PrivacyStates.loading));
@@ -70,10 +94,15 @@ class PrivacyCubit extends Cubit<PrivacyState> {
   //     emit(state.copyWith(exclusionEntity: data, status: PrivacyStates.success));
   //   });
   // }
-  Future<void> removeForbiddenData({required RemoveAllowedParams params}) async {
+  Future<void> removeForbiddenData(
+      {required RemoveAllowedParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await removeForbiddenUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(removeForbiddenDataEntity: data));
@@ -84,16 +113,25 @@ class PrivacyCubit extends Cubit<PrivacyState> {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await removeAllowedUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(removeDataEntity: data));
     });
   }
 
-  Future<void> updateDataMediaPrivacy({required UpdateMediaPrivacyParams params}) async {
+  Future<void> updateDataMediaPrivacy(
+      {required UpdateMediaPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updateMediaPrivacyUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(updatePersonalPrivacyDataEntity: data));
@@ -101,11 +139,15 @@ class PrivacyCubit extends Cubit<PrivacyState> {
     });
   }
 
-
-  Future<void> updateOnlyWithPrivacy({required UpdateOnlyWithPrivacyParams params}) async {
+  Future<void> updateOnlyWithPrivacy(
+      {required UpdateOnlyWithPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updateOnlyWithPrivacyUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(onlyWithEntity: data));
@@ -113,17 +155,21 @@ class PrivacyCubit extends Cubit<PrivacyState> {
     });
   }
 
-  Future<void> updateExceptFromPrivacy({required UpdateExceptFromPrivacyParams params}) async {
+  Future<void> updateExceptFromPrivacy(
+      {required UpdateExceptFromPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updateExceptFromPrivacyUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(exceptFromEntity: data));
       // loadData();
     });
   }
-
 
   Future<void> searchRestaurant(String searchKeyword) async {
     emit(state.copyWith(status: PrivacyStates.loading, isSearching: true));
@@ -133,11 +179,15 @@ class PrivacyCubit extends Cubit<PrivacyState> {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             failure: failure, status: PrivacyStates.error, isSearching: false));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           searchUsers: data,
           status: PrivacyStates.success,
@@ -146,80 +196,113 @@ class PrivacyCubit extends Cubit<PrivacyState> {
       },
     );
   }
+
   Future<void> fetchDataMediaPrivacy() async {
     emit(state.copyWith(status: PrivacyStates.loading));
     final response = await fetchMediaPrivacyUseCase.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
-      emit(state.copyWith(mediaPrivacyEntity: data, status: PrivacyStates.success));
+      emit(state.copyWith(
+          mediaPrivacyEntity: data, status: PrivacyStates.success));
     });
   }
+
   Future<void> fetchDataCommunicationPrivacy() async {
     emit(state.copyWith(status: PrivacyStates.loading));
-    final response = await fetchCommunicationPrivacyUseCase.call(const NoParams());
+    final response =
+        await fetchCommunicationPrivacyUseCase.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
-      emit(state.copyWith(communicationPrivacyEntity: data, status: PrivacyStates.success));
+      emit(state.copyWith(
+          communicationPrivacyEntity: data, status: PrivacyStates.success));
     });
   }
-  Future<void> updateDataCommunicationPrivacy({required UpdateCommunicationPrivacyParams params}) async {
+
+  Future<void> updateDataCommunicationPrivacy(
+      {required UpdateCommunicationPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updateCommunicationPrivacyUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(updatePersonalPrivacyDataEntity: data));
       loadData();
     });
   }
-
-
 
   Future<void> fetchDataConnectionPrivacy() async {
     emit(state.copyWith(status: PrivacyStates.loading));
     final response = await fetchConnectionPrivacyUseCase.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
-      emit(state.copyWith(connectionPrivacyEntity: data, status: PrivacyStates.success));
+      emit(state.copyWith(
+          connectionPrivacyEntity: data, status: PrivacyStates.success));
     });
   }
-  Future<void> updateDataConnectionPrivacy({required UpdateConnectionPrivacyParams params}) async {
+
+  Future<void> updateDataConnectionPrivacy(
+      {required UpdateConnectionPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updateConnectionPrivacyUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(updatePersonalPrivacyDataEntity: data));
       loadData();
     });
   }
-
-
-
-
-
 
   Future<void> fetchDataPrivacy() async {
     emit(state.copyWith(status: PrivacyStates.loading));
     final response = await _privacyUseCase.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
-      emit(state.copyWith(personalPrivacyEntity: data, status: PrivacyStates.success));
+      emit(state.copyWith(
+          personalPrivacyEntity: data, status: PrivacyStates.success));
     });
   }
-  Future<void> updateDataPersonalPrivacy({required UpdatePersonalPrivacyParams params}) async {
+
+  Future<void> updateDataPersonalPrivacy(
+      {required UpdatePersonalPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updatePersonalPrivacyUseCase.call(params);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(updatePersonalPrivacyDataEntity: data));
       loadData();
     });
   }
-
 }

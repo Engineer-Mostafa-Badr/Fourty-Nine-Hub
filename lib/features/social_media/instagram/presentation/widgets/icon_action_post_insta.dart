@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/comment_instagram_cubit/comments_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/comment_instagram_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_and_value_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/utils/format_numbers.dart';
+import '../cubit/comment_instagram_cubit/comments_instagram_cubit.dart';
+import '../pages/comment_instagram_view.dart';
+import 'icon_and_value_widget.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 import '../../domain/entities/instagram_post_entity.dart';
 import '../cubit/like_post_instagram/like_post_instagram_cubit.dart';
 import '../cubit/save_post_instagram/save_post_instagram_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class IconsActionPostInsta extends StatelessWidget {
   const IconsActionPostInsta({
@@ -50,6 +51,7 @@ class IconsActionPostInsta extends StatelessWidget {
                       state.posts![currentPost].likesCounter,
                       useArabicNumerals: context.isArabic),
                   onPressed: () {
+      ManageVibration.vibrate();
                     cubit.likePostInstagram(
                       state.posts![currentPost].id,
                       state.posts![currentPost].likesCounter,
@@ -75,6 +77,7 @@ class IconsActionPostInsta extends StatelessWidget {
                 posts[currentPost].commentsCounter,
                 useArabicNumerals: context.isArabic),
             onPressed: () {
+      ManageVibration.vibrate();
               bottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -102,7 +105,10 @@ class IconsActionPostInsta extends StatelessWidget {
             value: FormatNumbers().formatNumber(
                 posts[currentPost].shareCounter,
                 useArabicNumerals: context.isArabic),
-            onPressed: () {},
+            onPressed: () {
+
+      ManageVibration.vibrate();
+            },
           ),
           const Spacer(),
           BlocProvider(
@@ -112,6 +118,7 @@ class IconsActionPostInsta extends StatelessWidget {
                 final cubit = context.read<SavePostInstagramCubit>();
                 return GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     cubit.savePostInstagram(posts[currentPost].id);
                   },
                   child: Icon(

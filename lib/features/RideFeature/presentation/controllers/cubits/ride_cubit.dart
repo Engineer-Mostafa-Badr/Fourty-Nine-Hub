@@ -8,6 +8,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_image.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
@@ -79,10 +80,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../main.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/pages.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
@@ -237,15 +241,73 @@ class RideCubit extends Cubit<RideState> {
           (data) {
         CliLogger.info("RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP:  $data");
         // RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP:  {driverGoToClientToStartTrip: {startArrivingTime: true}
-        if (state.requestedTrip != null) {
-          state.requestedTrip!.status = TripState.goToClient.name;
-          print(
-              "RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+
+        Map<String, dynamic> parsedData =
+        data is String ? jsonDecode(data) : data;
+        if (data != null) {
+          try {
+            RideRequestTripEntity rideRequestTrip =
+            RideRequestTripModel.fromJson(parsedData);
+            if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
+                rideRequestTrip.status == TripState.completed.name) {
+              fetchUserLocation();
+            } else {
+              if (rideRequestTrip.targetCoordinates != null &&
+                  rideRequestTrip.targetCoordinates!.length >= 2) {
+                updateToLocation(
+                  lat: rideRequestTrip.targetCoordinates!.first,
+                  lng: rideRequestTrip.targetCoordinates!.last,
+                  address: rideRequestTrip.to!,
+                );
+              }
+
+              if (rideRequestTrip.startCoordinates != null &&
+                  rideRequestTrip.startCoordinates!.length >= 2) {
+                updateCurrentLocation(
+                  lat: rideRequestTrip.startCoordinates!.first,
+                  lng: rideRequestTrip.startCoordinates!.last,
+                  address: rideRequestTrip.from!,
+                );
+              }
+
+              if (rideRequestTrip.wayPointOne != null &&
+                  rideRequestTrip.wayPointOne!.length >= 2 &&
+                  rideRequestTrip.wayPointOneTitle != null) {
+                updateWayPointOne(
+                  lat: rideRequestTrip.wayPointOne!.first,
+                  lng: rideRequestTrip.wayPointOne!.last,
+                  address: rideRequestTrip.wayPointOneTitle!,
+                );
+              }
+
+              if (rideRequestTrip.wayPointTwo != null &&
+                  rideRequestTrip.wayPointTwo!.length >= 2 &&
+                  rideRequestTrip.wayPointTwoTitle != null) {
+                updateWayPointTwo(
+                  lat: rideRequestTrip.wayPointTwo!.first,
+                  lng: rideRequestTrip.wayPointTwo!.last,
+                  address: rideRequestTrip.wayPointTwoTitle!,
+                );
+              }
+            }
+            if (state.requestedTrip != null) {
+              state.requestedTrip!.status = TripState.goToClient.name;
+              print(
+                  "RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+            } else {
+              print(
+                  "RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+            }
+            emit(state.copyWith(
+                status: RideStates.success, requestedTrip: rideRequestTrip));
+          } catch (e, stackTrace) {
+            CliLogger.error(
+                "❌ Error parsing RideRequestTripModel: $e\n$stackTrace");
+          }
         } else {
-          print(
-              "RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
+          CliLogger.error(
+              "❌ Invalid data format in RIDE:ACCEPT_DRIVER_OFFER: $data");
         }
-        emit(state.copyWith(status: RideStates.success));
       });
 
       //action: the driver has arrived
@@ -288,17 +350,17 @@ class RideCubit extends Cubit<RideState> {
       });
 
       // Auto accept trip
-      SharedWebSocket.socket!.on("Ride:acceptTripFromDriver", (data) {
-        CliLogger.info("Ride:acceptTripFromDriver:  $data");
+      SharedWebSocket.socket!.on("RIDE:ACCEPTED_AUTO_TRIP", (data) {
+        CliLogger.info("RIDE:ACCEPTED_AUTO_TRIP:  $data");
         Map<String, dynamic> parsedData =
             data is String ? jsonDecode(data) : data;
         if (data != null) {
           try {
             RideRequestTripEntity rideRequestTrip =
                 RideRequestTripModel.fromJson(parsedData);
-            if (rideRequestTrip.status == TripState.canceled.name ||
+            if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
                 rideRequestTrip.status == TripState.completed.name) {
-              _fetchUserLocation();
+              fetchUserLocation();
             } else {
               if (rideRequestTrip.targetCoordinates != null &&
                   rideRequestTrip.targetCoordinates!.length >= 2) {
@@ -377,16 +439,124 @@ class RideCubit extends Cubit<RideState> {
           print(
               "RIDE:RIDE:DRIVER_COMPLETED_TRIP statttttus:  ${state.requestedTrip!.status.toString()}");
         }
+        // state.rideExpectedPrice = null;
+        // state.requestedTrip = null;
+        // state.currentLocation = null;
+        // state.toLocation = null;
+        // state.wayPointOne = null;
+        // state.wayPointTwo = null;
+        // await _fetchUserLocation();
+
+        emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
+        // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
+      });
+
+      // trip finalized socket event
+      SharedWebSocket.socket!.on("RIDE:FINALIZE_DRIVER_TRIP_PRE_START", (data) async {
+        CliLogger.info("RIDE:FINALIZE_DRIVER_TRIP_PRE_START:  $data");
+        if (state.requestedTrip != null) {
+          state.requestedTrip!.status = TripState.canceled.name;
+          print(
+              "RIDE:FINALIZE_DRIVER_TRIP_PRE_START statttttus:  ${state.requestedTrip!.status.toString()}");
+        } else {
+          print(
+              "RIDE:FINALIZE_DRIVER_TRIP_PRE_START statttttus:  ${state.requestedTrip!.status.toString()}");
+        }
+        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        toastification.show(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(currentContext.isArabic?"تنبيه!":"Alert!",
+                style: TextStyle(color: currentContext.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(currentContext.isArabic? "لقد تم إلغاء الرحلة من قبل السائق" :  "Trip has been canceled by the driver",
+                style: TextStyle(color: Theme.of(currentContext).textTheme.bodyLarge?.color,
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w400
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          autoCloseDuration: const Duration(seconds: 5),
+          progressBarTheme: ProgressIndicatorThemeData(
+              color: AppColors.SECONDARY_COLOR
+          ),
+          primaryColor: AppColors.SECONDARY_COLOR,
+          backgroundColor: Theme.of(currentContext).dialogBackgroundColor,
+          showProgressBar: true,
+
+        );
         state.rideExpectedPrice = null;
         state.requestedTrip = null;
         state.currentLocation = null;
         state.toLocation = null;
         state.wayPointOne = null;
         state.wayPointTwo = null;
-        await _fetchUserLocation();
-
+        await fetchUserLocation();
         emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
-        // RIDE:DRIVER_COMPLETED_TRIP:  {driverCompletedTrip: true}
+        // RIDE:DRIVER_CANCELLED_TRIP:  {driverCancelledTrip: true}
+      });
+
+      // trip canceled by driver socket event
+      SharedWebSocket.socket!.on("RIDE:TRIP_CANCELLED_BY_DRIVER", (data) async {
+        CliLogger.info("RIDE:TRIP_CANCELLED_BY_DRIVER:  $data");
+        if (state.requestedTrip != null) {
+          state.requestedTrip!.status = TripState.canceled.name;
+          print(
+              "RIDE:TRIP_CANCELLED_BY_DRIVER statttttus:  ${state.requestedTrip!.status.toString()}");
+        } else {
+          print(
+              "RIDE:TRIP_CANCELLED_BY_DRIVER statttttus:  ${state.requestedTrip!.status.toString()}");
+        }
+        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        toastification.show(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(currentContext.isArabic?"تنبيه!":"Alert!",
+                style: TextStyle(color: currentContext.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(currentContext.isArabic? "لقد تم إلغاء الرحلة من قبل السائق" :  "Trip has been canceled by the driver",
+                style: TextStyle(color: Theme.of(currentContext).textTheme.bodyLarge?.color,
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w400
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          autoCloseDuration: const Duration(seconds: 5),
+          progressBarTheme: ProgressIndicatorThemeData(
+              color: AppColors.SECONDARY_COLOR
+          ),
+          primaryColor: AppColors.SECONDARY_COLOR,
+          backgroundColor: Theme.of(currentContext).dialogBackgroundColor,
+          showProgressBar: true,
+
+        );
+        state.rideExpectedPrice = null;
+        state.requestedTrip = null;
+        state.currentLocation = null;
+        state.toLocation = null;
+        state.wayPointOne = null;
+        state.wayPointTwo = null;
+        await fetchUserLocation();
+        emit(state.copyWith(status: RideStates.success, driverLocation: null, previousDriverLocation: null));
+        // RIDE:DRIVER_CANCELLED_TRIP:  {driverCancelledTrip: true}
       });
 
       // tracking
@@ -403,7 +573,7 @@ class RideCubit extends Cubit<RideState> {
 
           final String? incomingTripId = updateLocation['tripId'] as String?;
           if (state.requestedTrip != null &&
-              state.requestedTrip!.status == TripState.started.name &&
+              (state.requestedTrip!.status == TripState.started.name || state.requestedTrip!.status == TripState.goToClient.name || state.requestedTrip!.status == TripState.inLocation.name) &&
               incomingTripId == state.requestedTrip!.id) {
 
             if (updateLocation.containsKey('location')) {
@@ -417,6 +587,9 @@ class RideCubit extends Cubit<RideState> {
                 // IMPORTANT: Store the current driverLocation as the previousDriverLocation
                 // before updating to the new location.
                 final gmap.LatLng? oldDriverLocation = state.driverLocation;
+
+
+                log("newDriverLocation $newDriverLocation");
 
                 emit(state.copyWith(
                   driverLocation: newDriverLocation,
@@ -485,7 +658,7 @@ class RideCubit extends Cubit<RideState> {
         state.toLocation = null;
         state.wayPointOne = null;
         state.wayPointTwo = null;
-        await _fetchUserLocation();
+        await fetchUserLocation();
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: state.requestedTrip));
       },
@@ -566,15 +739,22 @@ class RideCubit extends Cubit<RideState> {
       fetchShippingCategories(UserCubit.to.state.data?.id ?? '', true),
       fetchRideGovernorates(),
     ]);
+    state.rideExpectedPrice = null;
+    phoneNumberController.clear();
+    state.requestedTrip = null;
+    state.currentLocation = null;
+    state.toLocation = null;
+    state.wayPointOne = null;
+    state.wayPointTwo = null;
     if (state.requestedTrip == null && state.rideExpectedPrice == null) {
-      _fetchUserLocation();
+      fetchUserLocation();
     } else {
-      if (state.requestedTrip!.status == TripState.canceled.name ||
-          state.requestedTrip!.status == TripState.completed.name) {
-        _fetchUserLocation();
+      if (state.requestedTrip?.status == TripState.canceled.name ||
+          state.requestedTrip?.status == TripState.completed.name || state.requestedTrip!.status == TripState.cancelledByClient.name || state.requestedTrip!.status == TripState.cancelledByDriver.name) {
+        fetchUserLocation();
       } else {
-        if (state.requestedTrip!.targetCoordinates != null &&
-            state.requestedTrip!.targetCoordinates!.length >= 2) {
+        if (state.requestedTrip?.targetCoordinates != null &&
+            (state.requestedTrip?.targetCoordinates?.length??0) >= 2) {
           updateToLocation(
             lat: state.requestedTrip!.targetCoordinates!.first,
             lng: state.requestedTrip!.targetCoordinates!.last,
@@ -661,7 +841,7 @@ class RideCubit extends Cubit<RideState> {
         state.toLocation = null;
         state.wayPointOne = null;
         state.wayPointTwo = null;
-        await _fetchUserLocation();
+        await fetchUserLocation();
         showSuccessMessage(
             context, context.isArabic ? "رحلة سعيدة" : "Happy trip");
         emit(state.copyWith(
@@ -681,7 +861,7 @@ class RideCubit extends Cubit<RideState> {
     state.toLocation = null;
     state.wayPointOne = null;
     state.wayPointTwo = null;
-    await _fetchUserLocation();
+    await fetchUserLocation();
     showSuccessMessage(context, context.isArabic ? "رحلة سعيدة" : "Happy trip");
     emit(state.copyWith(
         status: RideStates.success,
@@ -716,7 +896,7 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.success));
   }
 
-  Future<void> _fetchUserLocation() async {
+  Future<void> fetchUserLocation() async {
     emit(state.copyWith(status: RideStates.loading));
 
     try {
@@ -736,7 +916,7 @@ class RideCubit extends Cubit<RideState> {
       );
 
       emit(state.copyWith(
-          status: RideStates.success, currentLocation: currentLocation));
+          status: RideStates.success, currentLocation: currentLocation, toLocation: null, wayPointOne: null, wayPointTwo: null));
     } catch (e) {
       log('_fetchUserLocation ${e.toString()}');
     }
@@ -1074,7 +1254,7 @@ class RideCubit extends Cubit<RideState> {
 
   double getTotalPrice(double price, {bool isScooter = false}) {
     double totalPrice = price;
-    // if (!isScooter) {
+    if (!isScooter) {
     if (serviceLocator<RideCubit>().isComfort) {
       totalPrice += state.rideExpectedPrice?.comfort ?? 0;
     }
@@ -1084,7 +1264,12 @@ class RideCubit extends Cubit<RideState> {
     if (serviceLocator<RideCubit>().isAutoAccept) {
       totalPrice += state.rideExpectedPrice?.autoAccept ?? 0;
     }
-    // }
+    }
+    else{
+      if (serviceLocator<RideCubit>().isAutoAccept) {
+        totalPrice += state.rideExpectedPrice?.autoAccept ?? 0;
+      }
+    }
     return totalPrice;
   }
 
@@ -1197,9 +1382,9 @@ class RideCubit extends Cubit<RideState> {
       },
       (rideRequestTrip) {
         log("tripId${rideRequestTrip.id}");
-        if (rideRequestTrip.status == TripState.canceled.name ||
+        if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
-          _fetchUserLocation();
+          fetchUserLocation();
         } else {
           if (rideRequestTrip.targetCoordinates != null &&
               rideRequestTrip.targetCoordinates!.length >= 2) {
@@ -1306,10 +1491,12 @@ class RideCubit extends Cubit<RideState> {
       (failure) => emit(state.copyWith(
           status: RideStates.error, failure: failure, requestedTrip: null)),
       (rideRequestTrip) {
-        if (rideRequestTrip.status == TripState.canceled.name ||
+        if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
-          _fetchUserLocation();
+          log("state.requestedTrip?.status from ride request ${rideRequestTrip.status}");
+          fetchUserLocation();
         } else {
+          log("state.requestedTrip?.status from ride request ${rideRequestTrip.status}");
           if (rideRequestTrip.targetCoordinates != null &&
               rideRequestTrip.targetCoordinates!.length >= 2) {
             updateToLocation(
@@ -1362,9 +1549,9 @@ class RideCubit extends Cubit<RideState> {
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
       (rideRequestTrip) {
-        if (rideRequestTrip.status == TripState.canceled.name ||
+        if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
-          _fetchUserLocation();
+          fetchUserLocation();
         } else {
           if (rideRequestTrip.targetCoordinates != null &&
               rideRequestTrip.targetCoordinates!.length >= 2) {
@@ -1431,7 +1618,7 @@ class RideCubit extends Cubit<RideState> {
           state.toLocation = null;
           state.wayPointOne = null;
           state.wayPointTwo = null;
-          await _fetchUserLocation();
+          await fetchUserLocation();
         }
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: state.requestedTrip));
@@ -2806,5 +2993,31 @@ class RideCubit extends Cubit<RideState> {
   Future<void> close() {
     SharedWebSocket.socket!.off(SocketIOListeners.rideSendOffer);
     return super.close();
+  }
+
+  returnToSocket() async {
+      serviceLocator<RideCubit>().selectedCategoryType = 'ride';
+      serviceLocator<RideCubit>().selectedCategoryIndex = 0;
+      state.rideCategory?.subCategories.insert(0, state.rideCategory!.subCategories.removeAt(0));
+      serviceLocator<RideCubit>().subCategoryId = state.rideCategory?.subCategories[0].subCategoryId ?? '';
+      selectedCategoryIsSocket = true;
+      state.rideExpectedPrice = null;
+      state.currentLocation = null;
+      state.toLocation = null;
+      state.wayPointOne = null;
+      state.wayPointTwo = null;
+      await fetchUserLocation();
+      emit(state.copyWith(status: RideStates.success));
+  }
+
+  returnToSoketFromSwitch() async {
+    selectedCategoryIsSocket = true;
+    state.rideExpectedPrice = null;
+    state.currentLocation = null;
+    state.toLocation = null;
+    state.wayPointOne = null;
+    state.wayPointTwo = null;
+    await fetchUserLocation();
+    emit(state.copyWith(status: RideStates.success));
   }
 }

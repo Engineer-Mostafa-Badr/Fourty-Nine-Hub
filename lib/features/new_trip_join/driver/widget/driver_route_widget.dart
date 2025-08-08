@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class DriverRouteWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
@@ -163,7 +164,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                       children: [
                         Text(
                           ((widget.model?.availableSeats ?? 0) >= 2)
-                              ? LocaleKeys.free.localize
+                              ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                               : LocaleKeys.booked.localize,
                           style: TextStyle(
                             fontSize: 20.sp,
@@ -186,7 +187,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                           padding: const EdgeInsets.only(left: 13),
                           child: Text(
                             ((widget.model?.availableSeats ?? 0) >= 1)
-                                ? LocaleKeys.free.localize
+                                ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                                 : LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
@@ -358,7 +359,10 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    },
                     child: Text(
                       isComfort(widget.model?.features ?? [])
                           ? LocaleKeys.comfort.localize
@@ -380,6 +384,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                   label: context.isArabic ? 'قبول' : 'Accept',
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
+      ManageVibration.vibrate();
                     if(widget.onAccept!=null){
                       widget.onAccept!();
                     }
@@ -419,10 +424,10 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
       }).toList();
     }
 
-    log("clients ${clients.length}");
 
     return GestureDetector(
       onTap: (){
+      ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(

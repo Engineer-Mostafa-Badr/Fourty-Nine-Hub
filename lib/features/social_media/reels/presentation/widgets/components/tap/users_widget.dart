@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/utils/hex_color_helper.dart';
 
 import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../settings/presentation/pages/widgets/custombutton.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class UsersWidget extends StatelessWidget {
   const UsersWidget({
@@ -67,7 +68,10 @@ class UsersWidget extends StatelessWidget {
           ),
           SizedBox(width: 12.w),
           CustomButton(
-            onPressed: () {},
+            onPressed: () {
+
+      ManageVibration.vibrate();
+            },
             color: HexColor('F33D49'),
             textStyle: TextStyle(
               fontSize: 12,

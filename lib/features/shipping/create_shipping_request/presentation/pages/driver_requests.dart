@@ -3,18 +3,19 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/get_all_trip_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../widgets/trip_card.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class DriverRequests extends StatelessWidget {
   const DriverRequests({super.key});
@@ -61,6 +62,7 @@ class DriverRequests extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 35),
                               child: GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   serviceLocator<SubscriptionController>()
                                       .showActiveSubscriptionAmounts(
                                           walletType: WalletTypes.balance);

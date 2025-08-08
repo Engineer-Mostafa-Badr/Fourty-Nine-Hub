@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+import '../../../twitter/data/models/twitter_user_model.dart';
 
 import '../../domain/entities/comment_entity.dart';
 

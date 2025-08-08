@@ -1,16 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class BroadcastView extends StatefulWidget {
   const BroadcastView({super.key});
@@ -127,6 +128,7 @@ class _BroadcastViewState extends State<BroadcastView> {
                 )
               : InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     setState(() {
                       isFollowing = true;
                     });
