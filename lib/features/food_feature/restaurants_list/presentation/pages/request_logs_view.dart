@@ -40,10 +40,10 @@ class _RestaurantRequestLogsScreenState
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().getReqLogs();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().getReqLogs();
+    // }
   }
 
   @override
@@ -91,6 +91,7 @@ class _RestaurantRequestLogsScreenState
 
           if (!state.isLoading) {
             return OlxPaginationWidget(
+              scrollController: _scrollController,
               itemsPerPage: 2,
               loadPage: (page) async {},
               banners: bannersList,

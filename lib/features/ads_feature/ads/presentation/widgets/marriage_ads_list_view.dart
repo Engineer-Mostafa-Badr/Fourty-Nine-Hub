@@ -17,15 +17,18 @@ class MarriageAdsListView extends StatelessWidget {
     super.key,
     required this.controller,
     required this.state,
+    required this.scrollController,
   });
 
   final SubcategoriesCubit controller;
   final SubcategoriesState state;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
     print('state.ads! ${state.ads!.length}');
     return OlxPaginationWidget(
+      scrollController: scrollController,
       itemsPerPage: 2,
       loadPage: (page) {
         print('==> page $page');
@@ -37,7 +40,7 @@ class MarriageAdsListView extends StatelessWidget {
       items: List.generate(
         state.ads!.length,
         (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

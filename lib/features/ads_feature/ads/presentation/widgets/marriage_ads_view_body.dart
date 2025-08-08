@@ -536,7 +536,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
 
     return MarriageAdsListView(
-      // scrollController: widget._scrollController,
+      scrollController: widget._scrollController,
       controller: widget.controller,
       state: widget.state,
     );

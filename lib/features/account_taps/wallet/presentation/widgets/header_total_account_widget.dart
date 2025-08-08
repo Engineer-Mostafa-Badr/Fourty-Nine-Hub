@@ -70,9 +70,10 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: FormatNumbers().formatNumberByComma(
-                        balance,
-                        isArabic: context.isArabic,
+                      text: FormatNumbers().formatNumber(
+                        balance.toInt,
+                        useArabicNumerals: context.isArabic,
+                        // isArabic: context.isArabic,
                       ),
                       style: Styles.headerText(
                         color: Colors.white,

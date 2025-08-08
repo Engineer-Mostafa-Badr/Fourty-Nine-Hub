@@ -38,10 +38,10 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<HealthCubit>().getBookings('current');
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<HealthCubit>().getBookings('current');
+    // }
   }
 
   @override
@@ -89,6 +89,7 @@ class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
           child: Column(
             children: [
               OlxPaginationWidget(
+                scrollController: _scrollController,
                 itemsPerPage: 2,
                 loadPage: (page) =>
                     context.read<HealthCubit>().getBookings('current'),

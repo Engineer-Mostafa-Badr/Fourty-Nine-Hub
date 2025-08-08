@@ -96,6 +96,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
         );
       }
       return OlxPaginationWidget(
+        scrollController: _scrollController,
         itemsPerPage: 2,
         loadPage: (page) async {
           if (_scrollController.position.userScrollDirection ==

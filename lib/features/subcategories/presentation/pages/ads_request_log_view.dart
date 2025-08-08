@@ -41,12 +41,12 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context
-          .read<SubcategoriesCubit>()
-          .getRequestsLogByMainCategory(widget.mainCategoryId);
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context
+    //       .read<SubcategoriesCubit>()
+    //       .getRequestsLogByMainCategory(widget.mainCategoryId);
+    // }
 
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
@@ -80,6 +80,7 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
       }
       // if(controller.requestsLog.isEmpty){return Center(child: Label(text: "No Requests Found.",style: Styles.mediumText(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),),);}
       return OlxPaginationWidget(
+        scrollController: _scrollController,
         itemsPerPage: 2,
         loadPage: (page) => context
             .read<SubcategoriesCubit>()

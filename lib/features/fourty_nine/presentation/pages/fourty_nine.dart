@@ -137,6 +137,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -263,17 +264,23 @@ class _FourtyNineViewState extends State<FourtyNineView>
               builder: (context, state) {
                 final controller = context.read<MainCategoriesCubit>();
                 if (state.status == StateStatus.loading) {
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 40, top: 20),
-                      height: MediaQuery.of(context).size.height * 0.16,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: Colors.grey),
+                  return Column(
+                    children: List.generate(
+                      5,
+                      (index) => Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 2),
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -281,13 +288,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 if (state.data != null) {
                   List<Widget> items = List.generate(
                     state.data?.length ?? 0,
-                        (index) => InkWell(
+                    (index) => InkWell(
                       onTap: () {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         HandleCashback.setCount('mainCategoriesCount', context);
-                        if (state.data![index].id == '62c8b5b09332225799fe335e') {
+                        if (state.data![index].id ==
+                            '62c8b5b09332225799fe335e') {
                           context.push(Routes.MARRIAGESUBCATEGORIES,
                               extra: state.data![index]);
                         } else {
@@ -295,42 +303,56 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               extra: state.data![index]);
                         }
                       },
-                      child: HomeMainCategoryBanner(
-                        category: state.data![index],
-                        imageHeight: MediaQuery.sizeOf(context).height * 0.10,
-                        onFavorite: () async {
-                          ManageVibration.vibrate();
-                          var result =
-                          await controller.toggleFavoriteMedicalService(
-                              state.data![index].id);
-                          print("result$result");
-                          return result;
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: HomeMainCategoryBanner(
+                          category: state.data![index],
+                          // imageHeight: MediaQuery.sizeOf(context).height * 0.10,
+                          onFavorite: () async {
+                            ManageVibration.vibrate();
+                            var result =
+                                await controller.toggleFavoriteMedicalService(
+                                    state.data![index].id);
+                            print("result$result");
+                            return result;
+                          },
+                        ),
                       ),
                     ),
                   );
                   return CarouselSlider(
                     options: CarouselOptions(
-                      height:  MediaQuery.of(context).size.height * (0.4),
-                      // Adjust depending on card height
+                      height: MediaQuery.of(context).size.height * (0.5),
                       autoPlay: true,
                       enlargeCenterPage: false,
                       enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                      viewportFraction: 0.31,
-                      enlargeFactor:0.5,
+                      viewportFraction: 1 / 5,
                       enableInfiniteScroll: true,
                       autoPlayInterval: const Duration(seconds: 3),
                       scrollDirection: Axis.vertical,
+                      onPageChanged: (index, reason) {
+                        print(
+                            'Scrolled to index $index'); // <-- Here you can detect
+                        print(
+                            'Scrolled to currentIndex $currentIndex'); // <-- Here you can detect scroll
+
+                        // Trigger something when scrolling forward
+                        if (index > currentIndex) {
+                          print('User scrolled forward');
+                          _isScrollingDown = false;
+                        } else {
+                          print('User scrolled backward');
+                          _isScrollingDown = true;
+                        }
+                        setState(() => currentIndex = index);
+                      },
                     ),
                     items: items.map((item) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: item,
-                      );
+                      return item;
                     }).toList(),
                   );
-                 /* return Container(
+                  /* return Container(
                     margin: EdgeInsets.only(bottom: 40),
                     height: MediaQuery.of(context).size.height * (0.6),
                     width: double.infinity,
