@@ -256,7 +256,6 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/pages
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/single_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/tag_user_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
@@ -441,6 +440,7 @@ import '../features/social_media/create_post/presentation/pages/create_life_even
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
 import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
+import '../features/social_media/instagram/presentation/widgets/tag_user_view.dart';
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
