@@ -65,6 +65,16 @@ class RunningTripsEntity {
   final String? driverProfileUrl;
   final double? driverAverageRating;
   final int? driverRatingCount;
+  final String? paymentMethod;
+  final String? wayPointOneAddressTitle;
+  final double? wayPointOneLat;
+  final double? wayPointOneLng;
+  final String? wayPointTwoAddressTitle;
+  final double? wayPointTwoLat;
+  final double? wayPointTwoLng;
+  final bool isDriverVerified;
+  final bool verifiedBadge;
+  final List<List<double>> polyline;
 
   RunningTripsEntity({
     required this.tripId,
@@ -89,5 +99,15 @@ class RunningTripsEntity {
     required this.driverProfileUrl,
     required this.driverAverageRating,
     required this.driverRatingCount,
+    required this.paymentMethod,
+    required this.wayPointOneAddressTitle,
+    required this.wayPointOneLat,
+    required this.wayPointOneLng,
+    required this.wayPointTwoAddressTitle,
+    required this.wayPointTwoLat,
+    required this.wayPointTwoLng,
+    required this.isDriverVerified,
+    required this.verifiedBadge,
+    required this.polyline,
   });
 }

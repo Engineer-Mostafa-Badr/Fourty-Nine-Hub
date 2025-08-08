@@ -19,11 +19,13 @@ class JoinToRouteParams{
   final double lat;
   final double lng;
   final String routeId;
+  final String phone;
 
-  JoinToRouteParams({required this.lat, required this.lng, required this.routeId});
+  JoinToRouteParams({required this.lat, required this.lng, required this.routeId,required this.phone});
 
   //toJson
   Map<String, dynamic> toJson() => {
+    "phoneNumber":phone,
     "pickupLocation": {
       "longitude": lng,
       "latitude": lat

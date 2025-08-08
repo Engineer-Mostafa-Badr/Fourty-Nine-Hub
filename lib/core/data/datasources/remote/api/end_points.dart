@@ -783,7 +783,7 @@ class EndPoints {
   }
 
   static String getGlobalFeed(TwitterFeedParams params) {
-    return '/facebook/feed/general?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/feed/global?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getInstagramPosts(TwitterFeedParams params) {

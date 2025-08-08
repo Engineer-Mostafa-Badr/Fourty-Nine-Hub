@@ -30,7 +30,7 @@ class _UpdatePersonalInfoWidgetState extends State<UpdatePersonalInfoWidget> {
           children: [
             Text(widget.title,
                 style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.w500)),
+                    fontSize: 14, fontWeight: FontWeight.w500)),
             Text('Exd.in ${widget.exdIn} days',
                 style: const TextStyle(
                     fontSize: 12,
@@ -40,7 +40,7 @@ class _UpdatePersonalInfoWidgetState extends State<UpdatePersonalInfoWidget> {
         ),),
           const Spacer(),
            Text(LocaleKeys.update.tr(),//'Update',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,
               color: widget.isEnabled==true?null:AppColors.GREY_DARK_COLOR
               )),
           const SizedBox(width: 8),

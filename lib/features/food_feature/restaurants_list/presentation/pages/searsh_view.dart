@@ -129,6 +129,7 @@ class SearchRestaurantView extends StatelessWidget {
                       SearchRestaurantStates.loadingSubCategories) {
                     return Expanded(
                       child: OlxPaginationWidget(
+                        scrollController: ScrollController(),
                         itemsPerPage: 3,
                         loadPage: (page) async {},
                         banners: bannersList,
@@ -242,6 +243,7 @@ class SearchRestaurantView extends StatelessWidget {
                       child: RefreshIndicator(
                         onRefresh: () async => searchCubit.refreshState(),
                         child: OlxPaginationWidget(
+                          scrollController: ScrollController(),
                           itemsPerPage: 3,
                           loadPage: (page) async {},
                           banners: bannersList,

@@ -4,6 +4,16 @@ class HistoryTripsEntity {
   final bool? isAutoAccept;
   final bool? isPremium;
   final double? price;
+  final String? paymentMethod;
+  final String? wayPointOneAddressTitle;
+  final double? wayPointOneLat;
+  final double? wayPointOneLng;
+  final String? wayPointTwoAddressTitle;
+  final double? wayPointTwoLat;
+  final double? wayPointTwoLng;
+  final bool isDriverVerified;
+  final bool verifiedBadge;
+  final List<List<double>> polyline;
   final DateTime? createdAt;
   final String? startLocationAddressTitle;
   final double? startLocationLat;
@@ -37,6 +47,15 @@ class HistoryTripsEntity {
     required this.targetLocationLat,
     required this.targetLocationLng,
     required this.subcategoryId,
+    required this.wayPointOneAddressTitle,
+    required this.wayPointOneLat,
+    required this.wayPointOneLng,
+    required this.wayPointTwoAddressTitle,
+    required this.wayPointTwoLat,
+    required this.wayPointTwoLng,
+    required this.isDriverVerified,
+    required this.verifiedBadge,
+    required this.paymentMethod,
     required this.subCategoryNameAr,
     required this.subCategoryNameEn,
     required this.subCategoryPicture,
@@ -47,5 +66,6 @@ class HistoryTripsEntity {
     required this.driverAverageRating,
     required this.driverRatingCount,
     required this.recordUrl,
+    required this.polyline
   });
 }

@@ -20,6 +20,10 @@ abstract class Assets {
   static String logoWithoutText = 'assets/icons/logoWithoutText.png';
   static String supportIcon = 'assets/icons/support_icon.svg';
   static String rideMenu = 'assets/icons/ride_menu.png';
+  static String noAirConditioner = 'assets/icons/noAirConditioner.png';
+  static String airConditioner = 'assets/icons/airConditioner.png';
+  static String smokingIcon = 'assets/icons/smooking.png';
+  static String noSmokingIcon = 'assets/icons/noSmooking.png';
   static String targetLocation = 'assets/icons/targetLocation.png';
   static String callEmergencyIcon = 'assets/icons/call_emergency_icon.svg';
   static String beforeRide = 'assets/icons/before_ride.svg';

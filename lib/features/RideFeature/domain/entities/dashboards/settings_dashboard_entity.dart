@@ -3,6 +3,8 @@ import 'sub_category_entity.dart';
 
 class SettingsDashboardEntity {
   final bool isReady;
+  final bool isComfort;
+  final bool isNonSmoking;
   final bool isCaptainShareEnabled;
   final bool enableNotificationSound;
   final List<SubCategoryEntity> categoryIds;
@@ -31,6 +33,8 @@ class SettingsDashboardEntity {
 
   SettingsDashboardEntity( {
     required this.isReady,
+    required this.isComfort,
+    required this.isNonSmoking,
     required this.isCaptainShareEnabled,
     required this.enableNotificationSound,
     required this.categoryIds,

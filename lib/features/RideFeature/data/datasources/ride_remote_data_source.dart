@@ -696,7 +696,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   @override
   Future<Either<Failure, List<HistoryTripsEntity>>> getAllHistoryTrips(
       GetAllHistoryTripsUseCaseParams params) async {
-    try {
+    // try {
       final response = await _apiConsumer.get(
         EndPoints.getAllHistoryTrips(limit: params.limit, page: params.page),
       );
@@ -710,9 +710,10 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         }
         return Right(historyTrips);
       });
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
-    }
+    // } catch (e) {
+    //   log('History Trip error: $e');
+    //   return Left(ServerFailure(message: e.toString()));
+    // }
   }
 
   @override

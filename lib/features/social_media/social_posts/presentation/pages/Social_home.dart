@@ -142,20 +142,20 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 drawer: widget.params?.hideAppBar == true
                     ? null
                     : const DrawerWidget(),
-                bottomNavigationBar: widget.params?.hideAppBar == true
-                    ? null
-                    : BottomNavigator(
-                        scrollController: scrollController,
-                        isScrollingDown: _isScrollingDown,
-                        mainCategory: 2,
-                        index: 2,
-                      ),
-                floatingActionButton: _shouldShowFloatingButton()
-                    ? const FloatingButton(changeView: 2)
-                    : null,
-                floatingActionButtonLocation: _shouldShowFloatingButton()
-                    ? FloatingActionButtonLocation.centerDocked
-                    : null,
+                // bottomNavigationBar: widget.params?.hideAppBar == true
+                //     ? null
+                //     : BottomNavigator(
+                //         scrollController: scrollController,
+                //         isScrollingDown: _isScrollingDown,
+                //         mainCategory: 2,
+                //         index: 2,
+                //       ),
+                // floatingActionButton: _shouldShowFloatingButton()
+                //     ? const FloatingButton(changeView: 2)
+                //     : null,
+                // floatingActionButtonLocation: _shouldShowFloatingButton()
+                //     ? FloatingActionButtonLocation.centerDocked
+                //     : null,
                 body: TabBarView(
                   controller: _tabController,
                   children: [
@@ -283,7 +283,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
       builder: (context, state) {
         return context.read<UserCubit>().isLoggedIn
             ? _buildLoggedInFacebookView()
-            : _buildGuestFacebookView();
+            : _buildLoggedInFacebookView();
       },
     );
   }

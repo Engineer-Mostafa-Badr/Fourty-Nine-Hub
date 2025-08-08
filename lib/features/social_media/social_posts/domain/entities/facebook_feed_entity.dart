@@ -10,5 +10,4 @@ class FacebookFeedEntity {
   final List<SuggestUserEntity>? suggestedFriends;
 
   FacebookFeedEntity({ this.posts,  this.reels,  this.tweets, this.suggestedFriends, this.ads});
-
 }

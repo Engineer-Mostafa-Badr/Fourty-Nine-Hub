@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/widget/trip_join_sliders.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -35,7 +38,6 @@ class _NewRideModeScreenState extends State<NewRideModeScreen> {
           language: true,
           leading: IconButton(
             onPressed: () {
-      ManageVibration.vibrate();
               Navigator.pop(context);
             },
             icon: const Icon(
@@ -54,97 +56,98 @@ class NewRideModeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocProvider(
       create: (context) =>
-          serviceLocator<CaptainShareDashboardCubit>()..getSettings(context),
-      child: GlowingOverscrollIndicator(
-        color: AppColors.SECONDARY_COLOR,
-        axisDirection: AxisDirection.down,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(15.w),
-          child:
-              BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
-            builder: (context, state) {
-              var cubit = context.read<CaptainShareDashboardCubit>();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Row(
-                  //   children: [
-                  //     IconButton(
-                  //       onPressed: () {
-                  //         context.pop();
-                  //       },
-                  //       icon: const Icon(Icons.arrow_back),
-                  //     ),
-                  //     Text(
-                  //       context.isArabic ? 'وضع الركوب' : 'Ride Mode',
-                  //       style: TextStyle(
-                  //         fontSize: 35.sp,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  RideModeButton(
-                      onTap: () {
-        ManageVibration.vibrate();
-                        context.push(Routes.runningAndPastTripsScreen);
-                      },
-                      onRefreshSettings: () {
-                        cubit.getSettings(context);
-                      },
-                      isCaptain:
-                          state.setting?.data.isCaptainShareEnabled ?? false,
-                      isReady: state.setting?.data.isReady ?? false,
-                      isRegistered: state.setting != null,
-                      isApproved: state.setting?.data.isApproved ?? false),
-                  SizedBox(height: 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TripOptionWidget(
-                        imagePath: Assets.locationTripIcon,
-                        title:
-                            context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
-                        onTap: () {
-        ManageVibration.vibrate();
-                          context.push(Routes.captainShareScreen);
-                        },
-                        iconColor: AppColors.getButtonPrimaryColor(context),
-                      ),
-                      TripOptionWidget(
-                        icon: Assets.car,
-                        imagePath: Assets.locationTripIcon,
-                        title: context.isArabic ? "جاي معاك" : "Trip Join",
-                        onTap: () {
-        ManageVibration.vibrate();
-                          context.push(Routes.AVAILABLE_TRIPS);
-                        },
-                        iconColor: AppColors.getButtonPrimaryColor(context),
-                      ),
-                      TripOptionWidget(
-                        icon: Assets.pickMeIcon,
-                        imagePath: Assets.locationTripIcon,
-                        title: context.isArabic ? "وصلني معاك" : "Pick me",
-                        onTap: () {
-        ManageVibration.vibrate();
-                          context.push(Routes.All_PickMe_View);
-                        },
-                        iconColor: AppColors.getButtonPrimaryColor(context),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
+          serviceLocator<CaptainShareDashboardCubit>(),
+      child: RideModeTabs(),
     );
   }
 }
+
+class RideModeTabs extends StatefulWidget {
+  const RideModeTabs({super.key});
+
+  @override
+  State<RideModeTabs> createState() => _RideModeTabsState();
+}
+
+class _RideModeTabsState extends State<RideModeTabs> {
+
+  @override
+  initState(){
+    context.read<CaptainShareDashboardCubit>().initData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
+      builder: (context, state) {
+        var cubit = context.read<CaptainShareDashboardCubit>();
+        if(state.isLoading){
+          return Center(child: CustomCircularProgressIndicator());
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RideModeButton(
+                onTap: () {
+                  context.push(Routes.runningAndPastTripsScreen);
+                },
+                onRefreshSettings: () {
+                  cubit.getSettings(context);
+                },
+                isCaptain:
+                state.setting?.data.isCaptainShareEnabled ?? false,
+                isReady: state.setting?.data.isReady ?? false,
+                isRegistered: state.setting != null,
+                isApproved: state.setting?.data.isApproved ?? false,
+                hasActiveTrip:cubit.activeTrip!=null
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TripOptionWidget(
+                  imagePath: Assets.locationTripIcon,
+                  title:
+                  context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
+                  onTap: () {
+                    context.push(Routes.captainShareScreen);
+                  },
+                  iconColor: AppColors.getButtonPrimaryColor(context),
+                ),
+                TripOptionWidget(
+                  icon: Assets.car,
+                  imagePath: Assets.locationTripIcon,
+                  title: context.isArabic ? "جاي معاك" : "Trip Join",
+                  onTap: () {
+                    context.push(Routes.AVAILABLE_TRIPS);
+                  },
+                  iconColor: AppColors.getButtonPrimaryColor(context),
+                ),
+                TripOptionWidget(
+                  icon: Assets.pickMeIcon,
+                  imagePath: Assets.locationTripIcon,
+                  title: context.isArabic ? "وصلني معاك" : "Pick me",
+                  onTap: () {
+                    context.push(Routes.All_PickMe_View);
+                  },
+                  iconColor: AppColors.getButtonPrimaryColor(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 44,),
+            Expanded(child: TripJoinSliders())
+          ],
+        );
+      },
+    );
+  }
+}
+
 
 class RideModeButton extends StatelessWidget {
   final void Function()? onTap;
@@ -153,6 +156,7 @@ class RideModeButton extends StatelessWidget {
   final bool isReady;
   final bool isRegistered;
   final bool isApproved;
+  final bool hasActiveTrip;
 
   const RideModeButton({
     super.key,
@@ -162,6 +166,7 @@ class RideModeButton extends StatelessWidget {
     required this.isReady,
     required this.isRegistered,
     required this.isApproved,
+    required this.hasActiveTrip,
   });
 
   // bool isServiceAvailable() {
@@ -170,33 +175,29 @@ class RideModeButton extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: isRegistered == false
-    ? () async {
-        ManageVibration.vibrate();
-        await context.push(Routes.welcomeRideRegister, extra: false);
-        if (onRefreshSettings != null) onRefreshSettings!();
-      }
-    : (isApproved == false)
-        ? () async {
-            ManageVibration.vibrate();
-            await context.push(Routes.RIDE_HOME);
-            if (onRefreshSettings != null) onRefreshSettings!();
-          }
-        : (isReady == false || isCaptain == false)
-            ? () async {
-                ManageVibration.vibrate();
-                await context.push(Routes.rideModeScreen,
-                    extra: const RideModeParams(
-                        modeType: 'ride',
-                        isSocket: true,
-                        currentIndex: 3));
+          onTap:hasActiveTrip?(){
+            showErrorMessage(context, context.isArabic?'برجاء اكمال الرحله الجاريه في توصيله اولا':'Please complete the running trip at ride first');
+          }: isRegistered == false
+              ? () async {
+                  await context.push(Routes.welcomeRideRegister, extra: false);
+                  if (onRefreshSettings != null) onRefreshSettings!();
+                }
+              : (isApproved == false)
+                  ? () async {
+                      await context.push(Routes.RIDE_HOME);
+                      if (onRefreshSettings != null) onRefreshSettings!();
+                    }
+                  : (isReady == false || isCaptain == false)
+                      ? () async {
+                          await context.push(Routes.rideModeScreen,
+                              extra: const RideModeParams(
+                                  modeType: 'ride',
+                                  isSocket: true,
+                                  currentIndex: 3));
 
-                if (onRefreshSettings != null) onRefreshSettings!();
-              }
-            : () {
-                ManageVibration.vibrate();
-                onTap?.call();
-              },
+                          if (onRefreshSettings != null) onRefreshSettings!();
+                        }
+                      : onTap,
           child: Container(
             margin: EdgeInsets.all(5.w),
             width: double.infinity,
@@ -261,7 +262,9 @@ class RideModeButton extends StatelessWidget {
           ClickableWidget(
             onTap: () async {
               ManageVibration.vibrate();
-              if (isRegistered == false) {
+              if(hasActiveTrip) {
+                showErrorMessage(context, context.isArabic?'برجاء اكمال الرحله الجاريه في توصيله اولا':'Please complete the running trip at ride first');
+              } else if (isRegistered == false) {
                 await context.push(Routes.welcomeRideRegister, extra: false);
                 if (onRefreshSettings != null) onRefreshSettings!();
               } else if (isApproved == false) {

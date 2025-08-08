@@ -74,7 +74,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   @override
   void initState() {
     super.initState();
-    // fetchUserLocation();
+    fetchUserLocation();
   }
 
   String _getCountryName(String? countryCode, BuildContext context) {
@@ -263,7 +263,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     await _controller.setMapStyle(isDark ? darkStyle : lightStyle);
 
-    fetchUserLocation();
+    // fetchUserLocation();
   }
 
   Future<void> _handleLocationSelection() async {

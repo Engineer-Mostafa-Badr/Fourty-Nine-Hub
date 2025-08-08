@@ -122,6 +122,17 @@ class AvailableRideTripItem extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.w300),
                       ),
                       // const SizedBox(height: 25),
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(tripEntity.isComfort==true?Assets.airConditioner:Assets.noAirConditioner,width: 25,height: 25,),
+                            SizedBox(width: 5,),
+                            Image.asset(tripEntity.isNonSmoking==true?Assets.noSmokingIcon:Assets.smokingIcon,width: tripEntity.isNonSmoking==true?25:30,height: tripEntity.isNonSmoking==true?25:30,),
+                          ],
+                        ),
+                      ),
 
                     ],
                   ),
@@ -129,7 +140,7 @@ class AvailableRideTripItem extends StatelessWidget {
                 Expanded(
                   flex: 6,
                   child: Column(
-                    spacing: 4,
+                    // mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(spacing: 0, children: [
@@ -155,18 +166,8 @@ class AvailableRideTripItem extends StatelessWidget {
                                 maxLines: 2,
                                 style: Styles.mediumText(fontWeight: FontWeight.w300,fontSize: 24)))
                       ]),
+
                       const SizedBox(height: 5),
-                      // Align(
-                      //   alignment: AlignmentDirectional.centerEnd,
-                      //   child: RichText(
-                      //     text: TextSpan(
-                      //       style: const TextStyle(color: AppColors.black),
-                      //       children: <TextSpan>[
-                      //         TextSpan(text: '${(tripEntity.distance / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}'),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
 
                     ],
                   ),
@@ -229,7 +230,8 @@ class AvailableRideTripItem extends StatelessWidget {
 
                               );
                             });
-                          } else {
+                          }
+                          else {
                             cubit.autoAcceptTrip(context, tripEntity.id,params);
                           }
                         }else{
@@ -255,12 +257,12 @@ class AvailableRideTripItem extends StatelessWidget {
                               TextSpan(
                                   text: '${LocaleKeys.Accept.tr()} ${FormatNumbers().convertNumberToLocalizedString((tripEntity.price??0).ceil().toString(), isArabic: context.isArabic)}  ',
                                   style: Styles.mediumText(
-                                    color: Colors.white,
+                                    color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black,
                                   )),
                               TextSpan(
                                   text: LocaleKeys.egp.tr(),
                                   style: Styles.smallText(
-                                    color: Colors.white,
+                                    color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black,
                                   )),
                             ],
                           ),
@@ -274,7 +276,7 @@ class AvailableRideTripItem extends StatelessWidget {
                     radius: 15,
                     height: 30,
                     label: tripEntity.isAutoAccept == false ? LocaleKeys.acceptAnothePrice.tr() : LocaleKeys.refuse.tr(),
-                    style: Styles.mediumText(color: Colors.white, fontSize: tripEntity.isAutoAccept == false ? 28 : 28),
+                    style: Styles.mediumText(color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black, fontSize: tripEntity.isAutoAccept == false ? 28 : 28),
                     onPressed: () {
                       ManageVibration.vibrate();
                       if(tripEntity.isPremium||tripEntity.isButtonEnabled){

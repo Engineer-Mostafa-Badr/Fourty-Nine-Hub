@@ -14,26 +14,32 @@ class UpdateSettingsDashboardUsecase{
 }
 class UpdateSettingsDashboardUsecaseParam {
     UpdateSettingsDashboardUsecaseParam({
-        required this.isReady,
-        required this.isCaptainShare,
-        required this.enableSound,
-        required this.subscriptionPlan,
-        required this.perKm,
-        required this.favoriteCity,
-        required this.subCategoriesActive,
+        this.isReady,
+        this.isComfort,
+        this.isNonSmoking,
+        this.isCaptainShare,
+        this.enableSound,
+        this.subscriptionPlan,
+        this.perKm,
+        this.favoriteCity,
+        this.subCategoriesActive,
     });
 
-    final bool isReady;
-    final bool isCaptainShare;
-    final bool enableSound;
-    final String subscriptionPlan;
-    final num perKm;
-    final String favoriteCity;
-    final List<SubCategoriesActive> subCategoriesActive;
+    final bool? isReady;
+    final bool? isComfort;
+    final bool? isNonSmoking;
+    final bool? isCaptainShare;
+    final bool? enableSound;
+    final String? subscriptionPlan;
+    final num? perKm;
+    final String? favoriteCity;
+    final List<SubCategoriesActive>? subCategoriesActive;
 
     factory UpdateSettingsDashboardUsecaseParam.fromJson(Map<String, dynamic> json){ 
         return UpdateSettingsDashboardUsecaseParam(
             isReady: json["isReady"] ?? false,
+            isComfort: json["isComfort"] ?? false,
+            isNonSmoking: json["isNonSmoking"] ?? false,
             enableSound: json["isVoiceCommentAlertsEnabled"] ?? false,
             isCaptainShare: json["isCaptainShareEnabled"] ?? false,
             subscriptionPlan: json["subscriptionPlan"] ?? "",
@@ -44,13 +50,15 @@ class UpdateSettingsDashboardUsecaseParam {
     }
 
     Map<String, dynamic> toJson() => {
-        "isReady": isReady,
-        "isCaptainShareEnabled": isCaptainShare,
-        'isVoiceCommentAlertsEnabled': enableSound,
-        "subscriptionPlan": subscriptionPlan,
-        "favoriteCity": favoriteCity,
-        "pricingPerKm": perKm,
-        "subCategoriesActive": subCategoriesActive.map((x) => x.toJson()).toList(),
+        if(isReady != null)"isReady": isReady,
+        if(isComfort != null)"isComfort": isComfort,
+        if(isNonSmoking != null)"isNonSmoking": isNonSmoking,
+        if(isCaptainShare != null)"isCaptainShareEnabled": isCaptainShare,
+        if(enableSound != null)'isVoiceCommentAlertsEnabled': enableSound,
+        if(subscriptionPlan != null)"subscriptionPlan": subscriptionPlan,
+        if(favoriteCity != null)"favoriteCity": favoriteCity,
+        if(perKm != null)"pricingPerKm": perKm,
+        if(subCategoriesActive != null&& subCategoriesActive!=[])"subCategoriesActive": subCategoriesActive?.map((x) => x.toJson()).toList(),
     };
 
 }

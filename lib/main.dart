@@ -7,30 +7,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'common/theme/cubit/cubit.dart';
-import 'common/theme/cubit/states.dart';
-import 'core/localization/localization_service.dart';
-import 'core/themes/dark_theme.dart';
-import 'core/utils/shared_pref.dart';
-import 'features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'features/call/presentation/pages/whatsapp_screen.dart';
-import 'features/call/widgets/minimized_call_overlay.dart';
-import 'features/custom_page/presentation/cubit/custom_page_cubit.dart';
-import 'features/custom_page/presentation/cubit/custom_page_states.dart';
-import 'features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
-import 'features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
-import 'features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
-import 'features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
-import 'features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
-import 'features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
-import 'helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
-import 'routes/routes.dart';
-import 'secrets/controller/secrets_cubit.dart';
-import 'service_locator/service_locator.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
+import 'package:fourtyninehub/common/theme/cubit/states.dart';
+import 'package:fourtyninehub/core/localization/localization_service.dart';
+import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/core/utils/location_service_listener.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
+import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
+import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
@@ -49,8 +50,6 @@ import 'features/notifications/presentation/cubits/get_status_all_services_notif
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'routes/pages.dart';
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -116,6 +115,7 @@ void main() async {
           : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
+  await LocationServiceWatcher().start();
   runApp(
     LocalizationService.rootWidget(
       child: Phoenix(

@@ -42,10 +42,10 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
+    // }
 
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
@@ -78,6 +78,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
         );
       }
       return OlxPaginationWidget(
+        scrollController: _scrollController,
         itemsPerPage: 2,
         loadPage: (page) =>
             context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),

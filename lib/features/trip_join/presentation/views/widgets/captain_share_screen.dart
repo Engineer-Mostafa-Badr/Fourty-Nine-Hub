@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import 'test_screen.dart';
-import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/test_screen.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/assets/assets.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class CaptainShareScreen extends StatelessWidget {
   const CaptainShareScreen({super.key});
@@ -17,7 +17,7 @@ class CaptainShareScreen extends StatelessWidget {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 89,),
-          const Text("Captain Share!",style:
+          Text("Captain Share!",style:
             TextStyle(
               color: AppColors.PRIMARY_COLOR,
               fontWeight: FontWeight.w600,
@@ -44,7 +44,6 @@ class CaptainShareScreen extends StatelessWidget {
                 color:  AppColors.LIGHT_COLOR,
               ),
               label: "Join Now!", onPressed: (){
-      ManageVibration.vibrate();
               Navigator.push(context, MaterialPageRoute(builder: (context)=> TestScreen1()));
           })
         ],
@@ -64,9 +63,9 @@ class BulletPoint extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("• ", style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 20,
+          Expanded(child: Text(text, style: TextStyle(fontSize: 20,
           fontWeight: FontWeight.w700,
-            color: AppColors.black
+            color: context.isDarkMode? AppColors.whiteColor : AppColors.black
           ))),
         ],
       ),

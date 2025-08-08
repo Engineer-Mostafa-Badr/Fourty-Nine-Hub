@@ -5,6 +5,8 @@ class AvailableRideTripModel extends AvailableRideTripEntity {
     required super.id,
     required super.isAutoAccept,
     required super.isPremium,
+    required super.isComfort,
+    required super.isNonSmoking,
     required super.price,
     required super.paymentMethod,
     required super.passengers,
@@ -32,6 +34,8 @@ class AvailableRideTripModel extends AvailableRideTripEntity {
       id: json['tripeDetails']['id']??'',
       isAutoAccept: json['tripeDetails']['isAutoAccept']??false,
       isPremium: json['tripeDetails']['isPremium']??false,
+      isComfort: json['tripeDetails']['isComfort']??false,
+      isNonSmoking: json['tripeDetails']['isNonSmoking']??false,
       price: json['tripeDetails']['price']??0,
       paymentMethod: json['tripeDetails']['paymentMethod']??'',
       passengers: json['tripeDetails']['passengers']??0,
@@ -49,7 +53,7 @@ class AvailableRideTripModel extends AvailableRideTripEntity {
       clientGender: json['clientDetails']['gender']??'',
       clientRatingCount: json['clientDetails']['rating']['ratingCount']??0,
       clientRatingAverage: json['clientDetails']['rating']['average']??0,
-      createdAt: json['createdAt'],
+      createdAt: json['createdAt']??'',
       isButtonEnabled: json['state']['isButtonEnabled']??false,
     );
   }

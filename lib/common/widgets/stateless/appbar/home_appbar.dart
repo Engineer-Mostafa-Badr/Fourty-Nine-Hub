@@ -38,6 +38,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final double? toolbarHeight;
   final Widget? leading;
   final Widget? inChat;
+  final Function? onBackPressed;
   final PreferredSizeWidget? bottom;
 
   const HomeAppbar({
@@ -52,6 +53,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.isDetailsCardService = false,
     this.showChat = true,
     this.isIconWhite = false,
+    this.onBackPressed,
     this.showLanguage = false,
     this.color = AppColors.PRIMARY_COLOR,
     this.language = false,
@@ -123,7 +125,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isWithBackArrow)
             Expanded(
               child: IconAppButton(
-                onPressed: () => context.pop(),
+                onPressed: () => onBackPressed != null ? onBackPressed!() : context.pop(),
                 icon: Icons.arrow_back_ios,
                 size: 20,
               ),
