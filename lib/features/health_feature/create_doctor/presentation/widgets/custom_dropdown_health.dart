@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomDropdownHealth<T> extends StatefulWidget {
   const CustomDropdownHealth({
@@ -151,6 +152,7 @@ class _CustomDropdownHealthState<T> extends State<CustomDropdownHealth<T>>
                           final item = widget.items[index];
                           return InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               setState(() => _selectedItem = item);
                               widget.onItemSelected(item);
                               _closeDropdown();

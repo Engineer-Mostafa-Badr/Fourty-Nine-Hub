@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TestCardDashboard extends StatelessWidget {
   const TestCardDashboard({super.key, required this.entity});
@@ -123,6 +124,7 @@ class TestCardDashboard extends StatelessWidget {
                           title: LocaleKeys.Accept.localize,
                           color: AppColors.PRIMARY_COLOR,
                           onTap: () async {
+      ManageVibration.vibrate();
                             await BlocProvider.of<AcceptTripForDriverCubit>(
                                     context)
                                 .acceptTripForDriver(tripId: entity.id);

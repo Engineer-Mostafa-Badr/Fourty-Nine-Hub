@@ -11,6 +11,7 @@ import '../../core/seat/seat_manager.dart';
 import '../defines.dart';
 import '../pop_up_manager.dart';
 import 'list_sheet.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomMemberButton extends StatefulWidget {
@@ -71,6 +72,7 @@ class _ZegoLiveAudioRoomMemberButtonState
 
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         showMemberListSheet(
           context: context,
           avatarBuilder: widget.avatarBuilder,

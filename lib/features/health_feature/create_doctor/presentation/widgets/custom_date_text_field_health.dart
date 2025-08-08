@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomDateTextFieldHealth extends StatelessWidget {
   const CustomDateTextFieldHealth({
@@ -33,7 +34,10 @@ class CustomDateTextFieldHealth extends StatelessWidget {
         maxLines: 1,
         keyboardType: keyboardType,
         readOnly: true,
-        onTap: () {},
+        onTap: () {
+
+      ManageVibration.vibrate();
+        },
         onChanged: onChanged,
         style: Styles.mediumText(
           fontSize: 32,

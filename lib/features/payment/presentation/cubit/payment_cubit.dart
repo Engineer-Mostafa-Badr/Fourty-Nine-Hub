@@ -27,11 +27,25 @@ import 'package:fourtyninehub/features/payment/domain/use_cases/insta_pay_use_ca
 import 'package:fourtyninehub/features/payment/domain/use_cases/multi_payment_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/pay_with_token_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/paymob_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
 part 'payment_state.dart';
 
 class PaymentCubit extends Cubit<PaymentState> {
+  final GetPaymentProviderUseCase getPaymentProviderUseCase;
+  final PaymobUseCase paymobUseCase;
+  final FawryCardUseCase fawryCardUseCase;
+  final FawrySaveCardTokenUseCase fawrySaveCardTokenUseCase;
+  final GetSavedCardsUseCase getSavedCardsUseCase;
+  final DeleteCardUseCase deleteCardUseCase;
+  final MutliPaymentUseCase makeMultiPaymentUseCase;
+  final InstaPayUseCase instaPayUseCase;
+  final PayWithTokenseCase payWithTokenUseCase; // Add this line
+  CardEntity? _selectedCard;
+
+  File? _selectedImage;
+  Map<String, String> paymentProviderMap = {};
   PaymentCubit(
       this.getPaymentProviderUseCase,
       this.paymobUseCase,
@@ -43,115 +57,49 @@ class PaymentCubit extends Cubit<PaymentState> {
       this.instaPayUseCase,
       this.payWithTokenUseCase)
       : super(PaymentState());
-  final GetPaymentProviderUseCase getPaymentProviderUseCase;
-  final PaymobUseCase paymobUseCase;
-  final FawryCardUseCase fawryCardUseCase;
-  final FawrySaveCardTokenUseCase fawrySaveCardTokenUseCase;
-  final GetSavedCardsUseCase getSavedCardsUseCase;
-  final DeleteCardUseCase deleteCardUseCase;
-  final MutliPaymentUseCase makeMultiPaymentUseCase;
-  final InstaPayUseCase instaPayUseCase;
-  final PayWithTokenseCase payWithTokenUseCase; // Add this line
-
   CardEntity? get selectedCard => _selectedCard;
-  CardEntity? _selectedCard;
-  File? _selectedImage;
-  Future<void> payWithToken({
-    required String cardId,
-    required String amountId,
-    required String cvv,
-  }) async {
-    emit(state.copyWith(status: StateStatus.loading));
 
-    final response = await payWithTokenUseCase(PayWithTokenParams(
-      cardId: cardId,
-      amountId: amountId,
+  File? get selectedImage => _selectedImage;
+
+  /// Charge with Card
+  Future<void> chargeWithCard({
+    required String cardNumber,
+    required String cardExpiryYear,
+    required String cardExpiryMonth,
+    required String cvv,
+    required String amountId,
+    required String providerId,
+    required String paymentMethod,
+  }) async {
+    emit(state.copyWith(status: StateStatus.loading)); // Set loading status
+
+    final response = await fawryCardUseCase(FawryParams(
+      cardNumber: cardNumber,
+      cardExpiryYear: cardExpiryYear,
+      cardExpiryMonth: cardExpiryMonth,
       cvv: cvv,
+      amountId: amountId,
+      providerId: providerId,
+      paymentMethod: paymentMethod,
     ));
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
       (data) {
         emit(state.copyWith(
-          payWithTokenResponseData: data,
+          fawryPayWithCardData: data,
           status: StateStatus.success,
         ));
         print(
-            "Pay with Token Data: ${data.message}"); // Logging the message or data received
+            "Fawry Pay with Card Data: ${data.message}"); // Logging the message or data received
       },
     );
-  }
-
-  File? get selectedImage => _selectedImage;
-  Future<void> uploadProfileImage({required BuildContext context}) async {
-    emit(state.copyWith(uploadStatus: StateStatus.loading));
-    final result = await UploadFile().uploadImage(
-      subCategoryId: "66b6167938e6690c102ffa9c",
-      onUploaded: (media) {
-        emit(state.copyWith(
-            uploadedImage: File(media.file.path),
-            uploadStatus: StateStatus.success,
-            imageMediaId: media.mediaId));
-      },
-      context: context,
-    );
-    if (result != null) {
-    } else {
-      emit(state.copyWith(uploadStatus: StateStatus.error));
-    }
-  }
-
-  Future<void> postInstaPay(
-    context, {
-    required String receiptId,
-    required String amountId,
-    required String paymentProviderId,
-    required String phoneNumber,
-  }) async {
-    emit(state.copyWith(instaPayStatus: StateStatus.loading));
-
-    showLoadingDialog(context);
-
-    final response = await instaPayUseCase(
-      InstaPayParams(
-        receiptId: receiptId,
-        amountId: amountId,
-        paymentProviderId: paymentProviderId,
-        phoneNumber: phoneNumber,
-      ),
-    );
-
-    response.fold(
-      (failure) {
-        Navigator.pop(context);
-        emit(state.copyWith(
-          failure: failure,
-          instaPayStatus: StateStatus.error,
-        ));
-      },
-      (data) {
-        Navigator.pop(context);
-        emit(state.copyWith(
-          instaPayResponseData: data,
-          instaPayStatus: StateStatus.success,
-        ));
-        showSuccessMessage(context, LocaleKeys.paymentSuccessful.localize);
-        context.go(Routes.HOME);
-        print("InstaPay Data: ${data.message}");
-      },
-    );
-  }
-
-  void setSelectedImage(File xFile) {
-    final file = File(xFile.path);
-    emit(state.copyWith(selectedImage: file));
-  }
-
-  void selectCard(CardEntity card) {
-    _selectedCard = card;
-    emit(state.copyWith());
   }
 
   Future<void> deleteCard(String cardId) async {
@@ -160,6 +108,10 @@ class PaymentCubit extends Cubit<PaymentState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           failure: failure,
           status: StateStatus.error,
@@ -176,8 +128,6 @@ class PaymentCubit extends Cubit<PaymentState> {
       },
     );
   }
-
-  Map<String, String> paymentProviderMap = {};
 
   /// get PaymentProvider
 
@@ -212,6 +162,10 @@ class PaymentCubit extends Cubit<PaymentState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
       (data) {
@@ -224,83 +178,18 @@ class PaymentCubit extends Cubit<PaymentState> {
     );
   }
 
-  /// Charge with Card
-  Future<void> chargeWithCard({
-    required String cardNumber,
-    required String cardExpiryYear,
-    required String cardExpiryMonth,
-    required String cvv,
-    required String amountId,
-    required String providerId,
-    required String paymentMethod,
-  }) async {
-    emit(state.copyWith(status: StateStatus.loading)); // Set loading status
-
-    final response = await fawryCardUseCase(FawryParams(
-      cardNumber: cardNumber,
-      cardExpiryYear: cardExpiryYear,
-      cardExpiryMonth: cardExpiryMonth,
-      cvv: cvv,
-      amountId: amountId,
-      providerId: providerId,
-      paymentMethod: paymentMethod,
-    ));
-
-    response.fold(
-      (failure) {
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-      (data) {
-        emit(state.copyWith(
-          fawryPayWithCardData: data,
-          status: StateStatus.success,
-        ));
-        print(
-            "Fawry Pay with Card Data: ${data.message}"); // Logging the message or data received
-      },
-    );
-  }
-
-  /// Save Card Token
-  Future<void> saveCardToken({
-    required String cardNumber,
-    required String cardExpiryYear,
-    required String cardExpiryMonth,
-    required String cardAlias,
-    required String cvv,
-  }) async {
-    emit(state.copyWith(status: StateStatus.loading)); // Set loading status
-
-    final response = await fawrySaveCardTokenUseCase(FawrySaveCardTokenParams(
-      cardNumber: cardNumber,
-      cardExpiryYear: cardExpiryYear,
-      cardExpiryMonth: cardExpiryMonth,
-      cardAlias: cardAlias,
-      cvv: cvv,
-    ));
-
-    response.fold(
-      (failure) {
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-      (data) {
-        emit(state.copyWith(
-          fawryCardTokenResponseData: data,
-          status: StateStatus.success,
-        ));
-        print(
-            "Fawry Card Token Response Data: ${data.message}"); // Logging the message or data received
-      },
-    );
-  }
-
   Future<void> getSavedCards() async {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await getSavedCardsUseCase(const NoParams());
 
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
       (data) {
         // Print the saved cards data
         print(
@@ -326,6 +215,10 @@ class PaymentCubit extends Cubit<PaymentState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
       (data) {
@@ -336,5 +229,147 @@ class PaymentCubit extends Cubit<PaymentState> {
         print("Multi-Payment Response Data: ${data.message}");
       },
     );
+  }
+
+  Future<void> payWithToken({
+    required String cardId,
+    required String amountId,
+    required String cvv,
+  }) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await payWithTokenUseCase(PayWithTokenParams(
+      cardId: cardId,
+      amountId: amountId,
+      cvv: cvv,
+    ));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+      (data) {
+        emit(state.copyWith(
+          payWithTokenResponseData: data,
+          status: StateStatus.success,
+        ));
+        print(
+            "Pay with Token Data: ${data.message}"); // Logging the message or data received
+      },
+    );
+  }
+
+  Future<void> postInstaPay(
+    context, {
+    required String receiptId,
+    required String amountId,
+    required String paymentProviderId,
+    required String phoneNumber,
+  }) async {
+    emit(state.copyWith(instaPayStatus: StateStatus.loading));
+
+    showLoadingDialog(context);
+
+    final response = await instaPayUseCase(
+      InstaPayParams(
+        receiptId: receiptId,
+        amountId: amountId,
+        paymentProviderId: paymentProviderId,
+        phoneNumber: phoneNumber,
+      ),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        Navigator.pop(context);
+        emit(state.copyWith(
+          failure: failure,
+          instaPayStatus: StateStatus.error,
+        ));
+      },
+      (data) {
+        Navigator.pop(context);
+        emit(state.copyWith(
+          instaPayResponseData: data,
+          instaPayStatus: StateStatus.success,
+        ));
+        showSuccessMessage(context, LocaleKeys.paymentSuccessful.localize);
+        context.go(Routes.HOME);
+        print("InstaPay Data: ${data.message}");
+      },
+    );
+  }
+
+  /// Save Card Token
+  Future<void> saveCardToken({
+    required String cardNumber,
+    required String cardExpiryYear,
+    required String cardExpiryMonth,
+    required String cardAlias,
+    required String cvv,
+  }) async {
+    emit(state.copyWith(status: StateStatus.loading)); // Set loading status
+
+    final response = await fawrySaveCardTokenUseCase(FawrySaveCardTokenParams(
+      cardNumber: cardNumber,
+      cardExpiryYear: cardExpiryYear,
+      cardExpiryMonth: cardExpiryMonth,
+      cardAlias: cardAlias,
+      cvv: cvv,
+    ));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+      (data) {
+        emit(state.copyWith(
+          fawryCardTokenResponseData: data,
+          status: StateStatus.success,
+        ));
+        print(
+            "Fawry Card Token Response Data: ${data.message}"); // Logging the message or data received
+      },
+    );
+  }
+
+  void selectCard(CardEntity card) {
+    _selectedCard = card;
+    emit(state.copyWith());
+  }
+
+  void setSelectedImage(File xFile) {
+    final file = File(xFile.path);
+    emit(state.copyWith(selectedImage: file));
+  }
+
+  Future<void> uploadProfileImage({required BuildContext context}) async {
+    emit(state.copyWith(uploadStatus: StateStatus.loading));
+    final result = await UploadFile().uploadImage(
+      subCategoryId: "66b6167938e6690c102ffa9c",
+      onUploaded: (media) {
+        emit(state.copyWith(
+            uploadedImage: File(media.file.path),
+            uploadStatus: StateStatus.success,
+            imageMediaId: media.mediaId));
+      },
+      context: context,
+    );
+    if (result != null) {
+    } else {
+      emit(state.copyWith(uploadStatus: StateStatus.error));
+    }
   }
 }

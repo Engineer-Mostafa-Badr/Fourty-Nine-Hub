@@ -12,6 +12,7 @@ import '../cubit/book_doctor_appointment_cubit.dart';
 import '../widgets/booking_confirmation/booking_submit_button.dart';
 import '../widgets/booking_successed/booking_summary_info.dart';
 import '../widgets/booking_successed/thanks_header.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SuccessfulBookingScreen extends StatelessWidget {
   final dynamic doctorDetailsCubit;
@@ -53,6 +54,7 @@ class SuccessfulBookingScreen extends StatelessWidget {
                 // Submit Button
                 BookingButton(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.pushAndRemoveUntil(
                         Routes.SUCCESSFULLBOOKING, (route) => route == Routes.HOME);
                   },

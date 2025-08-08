@@ -2,33 +2,34 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/pages/send_whatsapp_call.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/forward_messages_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/enums/call_enums_manager.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../core/states/basic_state.dart';
+import '../../../../../../authentication/data/models/user_model.dart';
+import '../../../../../../authentication/domain/entities/user_entity.dart';
+import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../call/presentation/pages/send_whatsapp_call.dart';
+import '../../../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../../pages/forward_messages_view.dart';
+import '../label_colors_map.dart';
+import '../../../../chat_view/presentation/chat_cubit/chats_cubit.dart';
+import '../../../../../../../helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
+import '../../../../../../../res/assets/assets.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/const.dart';
+import '../../../../../../../res/style/styles.dart';
+import '../../../../../../../routes/routes.dart';
+import '../../../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../../tinder/data/shared/shared.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class ChatRoomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const ChatRoomAppBar({super.key, required this.chatRoomCubit});
@@ -90,6 +91,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         leadingWidth: 20,
                         leading: InkWell(
                           onTap: () {
+      ManageVibration.vibrate();
                             if (context
                                 .read<ChatRoomCubit>()
                                 .chat
@@ -454,6 +456,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 : Colors.black,
                                           ),
                                           onPressed: () async {
+      ManageVibration.vibrate();
                                             if (await Permission.microphone
                                                         .request() !=
                                                     PermissionStatus.granted ||
@@ -517,6 +520,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 : Colors.black,
                                           ),
                                           onPressed: () async {
+      ManageVibration.vibrate();
                                             if (await Permission.microphone
                                                         .request() !=
                                                     PermissionStatus.granted ||
@@ -634,6 +638,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         icon: Icons.copy,
                                         size: 20,
                                         onPressed: () async {
+      ManageVibration.vibrate();
                                           await widget.chatRoomCubit
                                               .copyMessage(
                                             widget.chatRoomCubit
@@ -651,6 +656,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         1)
                                       IconButton(
                                         onPressed: () async {
+      ManageVibration.vibrate();
                                           await widget.chatRoomCubit.pinMessage(
                                             message: widget.chatRoomCubit
                                                 .selectedMessages.first,
@@ -666,6 +672,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                       ),
                                     IconButton(
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         // await chatsCubit.deleteChat();
                                         await widget.chatRoomCubit
                                             .deleteMessages();
@@ -680,6 +687,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                     ),
                                     IconButton(
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         context.push(
                                           Routes.FORWARDMESSAGES,
                                           extra: ForwardMessagesViewParams(
@@ -708,6 +716,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
             if (widget.chatRoomCubit.chat.isBirthdayMonth)
               InkWell(
                 onTap: () async {
+      ManageVibration.vibrate();
                   await showGiftBottomSheet(
                     context,
                     receiverId: widget.chatRoomCubit.chat.userId,
@@ -814,6 +823,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                       children: [
                                         InkWell(
                                           onTap: () {
+      ManageVibration.vibrate();
                                             setState(() {
                                               newLabelColor = LabelColorsMap
                                                   .getRandomColor();
@@ -888,6 +898,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           .PRIMARY_COLOR_DARK,
                                                 ),
                                                 onPressed: () async {
+      ManageVibration.vibrate();
                                                   await chatRoomCubit
                                                       .createLable(
                                                           name:
@@ -909,6 +920,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           .PRIMARY_COLOR_DARK,
                                                 ),
                                                 onPressed: () async {
+      ManageVibration.vibrate();
                                                   setState(() {
                                                     isEditingNewLabel = false;
                                                     newLabelController.clear();
@@ -921,6 +933,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                 } else {
                                   return InkWell(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       setState(() {
                                         isEditingNewLabel = true;
                                       });
@@ -1026,6 +1039,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                           ),
                         ),
                         onPressed: () async {
+      ManageVibration.vibrate();
                           // Action to save or perform when Save is tapped
                           await chatRoomCubit.assignLabels();
                           Navigator.pop(context);
@@ -1092,6 +1106,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                       const Spacer(),
                       InkWell(
                         onTap: () async {
+      ManageVibration.vibrate();
                           await widget.chatRoomCubit.unpinMessage();
                         },
                         child: Icon(
@@ -1382,6 +1397,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                 ),
               ),
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.of(context).pop();
               },
             ),
@@ -1391,6 +1407,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                 style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
               ),
               onPressed: () async {
+      ManageVibration.vibrate();
                 await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();

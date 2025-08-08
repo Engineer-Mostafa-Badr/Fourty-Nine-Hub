@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/custom_error.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/debouncer.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/tag_user_view_body.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/error/custom_error.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/debouncer.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import '../cubit/tag_users_cubit/tag_users_cubit.dart';
+import 'tag_user_view_body.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TagUserView extends StatefulWidget {
   const TagUserView({super.key});
@@ -184,6 +185,7 @@ class _TagUserViewState extends State<TagUserView> {
                             ),
                             suffixIcon: IconButton(
                               onPressed: () {
+      ManageVibration.vibrate();
                                 isSearchClicked = false;
                                 _focusNode.unfocus();
                                 searchController.clear();
@@ -216,6 +218,7 @@ class _TagUserViewState extends State<TagUserView> {
                           ),
                           IconButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.close_rounded),
@@ -229,7 +232,10 @@ class _TagUserViewState extends State<TagUserView> {
                           ),
                           const Spacer(),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                             icon: const Icon(
                               Icons.check,
                               color: Color(0xffFF3308),
@@ -310,6 +316,7 @@ class _TagUserViewState extends State<TagUserView> {
                                             )
                                           : null,
                                       onTap: () {
+      ManageVibration.vibrate();
                                         context
                                             .read<CreatePostInstagramCubit>()
                                             .addUserTag(user);
@@ -325,6 +332,7 @@ class _TagUserViewState extends State<TagUserView> {
                     : Expanded(
                         child: TagUserViewBody(
                           onTap: () {
+      ManageVibration.vibrate();
                             _focusNode.requestFocus();
                             isSearchClicked = true;
                             setState(() {});

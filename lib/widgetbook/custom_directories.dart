@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/widgetbook/component_usecases/clickable_widget_usecase.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import 'component_usecases/call_message_buttons_usecase.dart';
@@ -178,35 +179,44 @@ final customDirectories = <WidgetbookNode>[
             ],
           ),
 
-          //? App Bottom Navigation Bar Widget
+          //? clickable widget
+          WidgetbookComponent(
+            name: 'Clickable Widget',
+            useCases: [
+              WidgetbookUseCase(
+                name: 'Clickable Widget Documentation',
+                builder: clickableWidgetDocumentation,
+              ),
+              WidgetbookUseCase(
+                name: 'Clickable Widget UseCase',
+                builder: clickableWidgetWidget,
+              ),
+              WidgetbookUseCase(
+                name: 'ClickableWidget Examples',
+                builder: clickableWidgetExamples,
+              ),
+            ],
+          ),
+          //? custom failure widget
+          WidgetbookComponent(
+            name: 'Custom Expanded Input Widget',
+            useCases: [
+              WidgetbookUseCase(
+                name: 'Custom Expanded Input Widget Documentation',
+                builder: expandedInputWidgetDocumentation,
+              ),
+              WidgetbookUseCase(
+                name: 'Custom Expanded Input Widget UseCase',
+                builder: expandedInputWidgetWidget,
+              ),
+            ],
+          ),
+          //? custom floating action button
+          //? custom loading search widget
+          //? custom notification badge
+          //? custom switch button
+          //? custom switch list title
 
-          //? AppTopBar Widget
-
-          //? backgroundLogoPersonalImg Widget
-
-          //? clickable Container Widget
-
-          //? Color Container Widget
-
-          //? Dual ActionButtons
-
-          //? InfoDisplayWithTitleIcon
-
-          //? Icon Background
-
-          //? InfoDisplay
-
-          //? PartnerItem
-
-          //? RichTextSections
-
-          //? RowTitlePrice
-
-          //? SelectManagerItem
-
-          //? StatusListWidget
-
-          //? TappableIcon
         ],
       ),
       // Layout Folder

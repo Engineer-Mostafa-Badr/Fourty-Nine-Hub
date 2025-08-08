@@ -2,7 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/data/models/contact_us_model.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../domain/usecases/create_contact_us_usecase.dart';
 
 part 'contact_us_state.dart';
@@ -32,7 +35,13 @@ class ContactUsCubit extends Cubit<ContactUsState> {
           await _createContactUsUseCase(ContactUsModel.fromJson(data));
 
       response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+          emit(state.copyWith(failure: l, status: StateStatus.error));
+        },
         (r) {
           messageController = TextEditingController(text: "");
           phoneController = TextEditingController(text: "");

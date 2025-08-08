@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../domain/usecases/end_auction_usecase.dart';
@@ -28,45 +30,17 @@ class AuctionDetailsCubit extends Cubit<AuctionDetailsState> {
       this._endAuctionUsecase)
       : super(const AuctionDetailsState());
 
-  void loadData({required String id}) async {
-    await getAuctionDetails(id: id);
-  }
-
-  Future<void> getAuctionDetails({required String id}) async {
-    emit(state.copyWith(status: AuctionDetailsStates.loading));
-    final response = await _getAuctionDetailsUseCase(id);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: AuctionDetailsStates.error)),
-        (data) => emit(state.copyWith(
-            auction: data, status: AuctionDetailsStates.initState)));
-  }
-
-  Future<void> sendBidding({required SendBiddingParams params}) async {
-    final response = await _sendBiddingUseCase(params);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            status: AuctionDetailsStates.error, failure: failure)),
-        (done) => emit(state.copyWith(
-            status: AuctionDetailsStates.success,
-            successMessage: Labels.biddingPlacedSuccess)));
-  }
-
-  Future<void> followUser({required String userId}) async {
-    final response = await _followUsersAuctionUseCase(userId);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            status: AuctionDetailsStates.error, failure: failure)),
-        (done) => emit(state.copyWith(
-            status: AuctionDetailsStates.success,
-            successMessage: Labels.followedSuccess)));
-  }
-
   Future<void> endAuction({required String id}) async {
     final response = await _endAuctionUsecase(id);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            status: AuctionDetailsStates.error, failure: failure)), (done) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+
+      emit(
+          state.copyWith(status: AuctionDetailsStates.error, failure: failure));
+    }, (done) {
       emit(state.copyWith(
           status: AuctionDetailsStates.success,
           successMessage: Labels.success));
@@ -74,12 +48,69 @@ class AuctionDetailsCubit extends Cubit<AuctionDetailsState> {
     });
   }
 
+  Future<void> followUser({required String userId}) async {
+    final response = await _followUsersAuctionUseCase(userId);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+
+      emit(
+          state.copyWith(status: AuctionDetailsStates.error, failure: failure));
+    },
+        (done) => emit(state.copyWith(
+            status: AuctionDetailsStates.success,
+            successMessage: Labels.followedSuccess)));
+  }
+
+  Future<void> getAuctionDetails({required String id}) async {
+    emit(state.copyWith(status: AuctionDetailsStates.loading));
+    final response = await _getAuctionDetailsUseCase(id);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      return emit(
+          state.copyWith(failure: failure, status: AuctionDetailsStates.error));
+    },
+        (data) => emit(state.copyWith(
+            auction: data, status: AuctionDetailsStates.initState)));
+  }
+
+  void loadData({required String id}) async {
+    await getAuctionDetails(id: id);
+  }
+
+  Future<void> sendBidding({required SendBiddingParams params}) async {
+    final response = await _sendBiddingUseCase(params);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+
+      emit(
+          state.copyWith(status: AuctionDetailsStates.error, failure: failure));
+    },
+        (done) => emit(state.copyWith(
+            status: AuctionDetailsStates.success,
+            successMessage: Labels.biddingPlacedSuccess)));
+  }
+
   void showAuctionRequests(
       {required String id, required BuildContext context}) async {
     final response = await _getAuctionRequestsUseCase(id);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            status: AuctionDetailsStates.error, failure: failure)), (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+
+      emit(
+          state.copyWith(status: AuctionDetailsStates.error, failure: failure));
+    }, (data) {
       bottomSheet(
           context: context,
           widget: Biddings(

@@ -5,6 +5,7 @@ import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CancelOrder extends StatelessWidget {
   final String id;
@@ -30,7 +31,11 @@ class CancelOrder extends StatelessWidget {
               label: 'Cancel Request',
               backColor: Colors.grey[100] ?? Colors.grey,
               textColor: Colors.black,
-              onPressed: () {}),
+              onPressed: () 
+              {
+
+      ManageVibration.vibrate();
+              }),
           const Sizer(),
         ],
       ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dialogs/soon_dialog.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
 
 class CallingCard extends StatelessWidget {
   final bool isVideo;

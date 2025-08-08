@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OfferCard extends StatelessWidget {
   const OfferCard({super.key});
@@ -57,7 +58,10 @@ class OfferCard extends StatelessWidget {
               Expanded(
                   child: Label(text: 'EGP 120', style: Styles.mediumText())),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  },
                   child: Label(
                       text: 'Accept',
                       style: Styles.mediumText(color: Colors.white))),

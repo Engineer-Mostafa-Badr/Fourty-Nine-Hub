@@ -91,6 +91,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                             _BaseIcon(
                               icon: Icons.close,
                               onTap: () {
+      ManageVibration.vibrate();
                                 context.read<ChatRoomCubit>().media.clear();
                                 context.pop();
                               },
@@ -208,6 +209,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                       ? Colors.grey.withOpacity(0.3)
                                       : Colors.grey),
                               onPressed: () async {
+      ManageVibration.vibrate();
                                 if (!(context
                                             .read<ChatRoomCubit>()
                                             .media
@@ -234,6 +236,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                                 : Icons.looks_one_outlined,
                                             color: Colors.grey),
                                         onPressed: () async {
+      ManageVibration.vibrate();
                                           setState(() {
                                             context
                                                     .read<ChatRoomCubit>()
@@ -325,6 +328,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
       child: Builder(builder: (context) {
         return InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             setState(() {
               _selectedIndex = index;
               _pageController.jumpToPage(index);
@@ -350,6 +354,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                     ? Center(
                         child: IconButton(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             setState(() {
                               context
                                   .read<ChatRoomCubit>()
@@ -461,6 +466,7 @@ class _VideoPlayerCardState extends State<VideoPlayerCard> {
       child: _controller.value.isInitialized
           ? GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 _togglePlayPause();
               },
               child: AspectRatio(

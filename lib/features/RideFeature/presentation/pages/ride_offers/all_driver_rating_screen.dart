@@ -12,6 +12,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AllDriverRatingScreen extends StatelessWidget {
   const AllDriverRatingScreen({super.key});
@@ -201,4 +202,3 @@ class ReviewCard extends StatelessWidget {
     );
   }
 }
-

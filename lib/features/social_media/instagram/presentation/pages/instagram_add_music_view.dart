@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_music_cubit/instagram_add_music_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../cubit/instagram_add_music_cubit/instagram_add_music_cubit.dart';
+import '../widgets/post_instagram_widget.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramAddMusicView extends StatelessWidget {
   const InstagramAddMusicView({super.key});
@@ -27,6 +28,7 @@ class InstagramAddMusicView extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             Navigator.pop(context);
           },
           icon: const Icon(Icons.close_rounded),
@@ -126,7 +128,10 @@ class InstagramAddMusicViewBody extends StatelessWidget {
                       ),
                       const Spacer(),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(6),
                           child: Icon(
@@ -142,7 +147,10 @@ class InstagramAddMusicViewBody extends StatelessWidget {
                         width: 8,
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         child: Icon(
                           Icons.arrow_circle_right,
                           color: context.isDarkMode
@@ -174,7 +182,10 @@ class InstagramAddMusicListView extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
             child: ListTile(
-              onTap: () {},
+              onTap: () {
+
+      ManageVibration.vibrate();
+              },
               leading: ImageFromInternet(
                 image: testImage,
                 height: 44,
@@ -201,7 +212,10 @@ class InstagramAddMusicListView extends StatelessWidget {
                 ),
               ),
               trailing: IconButton(
-                onPressed: () {},
+                onPressed: () {
+
+      ManageVibration.vibrate();
+                },
                 icon: const Icon(Icons.turned_in_not),
               ),
             ),
@@ -235,6 +249,7 @@ class MusicSectionsWidget extends StatelessWidget {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: () {
+      ManageVibration.vibrate();
                           final index = sections.indexOf(section);
                           context
                               .read<InstagramAddMusicCubit>()

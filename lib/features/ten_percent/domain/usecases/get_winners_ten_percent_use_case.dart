@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/entities/winners_ten_percent_entity.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/repositories/ten_percent_repo.dart';
+import '../entities/winners_ten_percent_entity.dart';
+import '../repositories/ten_percent_repo.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';

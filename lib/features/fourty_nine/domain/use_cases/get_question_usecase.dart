@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/question_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../entities/question_entity.dart';
+import '../repositories/fourty_nine_repository.dart';
 
 class GetQuestionUseCase extends UseCase<QuestionEntity, NoParams> {
   final FourtyNineRepository _repo;

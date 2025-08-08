@@ -21,6 +21,7 @@ import '../../../../../../../core/service/get_file_size_format.dart';
 import '../../../../../../../res/style/const.dart';
 import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'message_card.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ReceivedFileCard extends StatefulWidget {
   const ReceivedFileCard({
@@ -59,6 +60,7 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (widget.messageEntity.isSelected) {
           context
               .read<ChatRoomCubit>()
@@ -156,6 +158,7 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
                           children: [
                             GestureDetector(
                               onTap: () async {
+      ManageVibration.vibrate();
                                 log("Downloading...");
                                 await downloadAndOpenFile(
                                   fileUrl: widget.messageEntity.media[0].url,

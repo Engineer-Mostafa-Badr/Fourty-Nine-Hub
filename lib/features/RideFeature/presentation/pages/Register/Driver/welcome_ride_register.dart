@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/register_floating_action_button.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class WelcomeRideRegister extends StatefulWidget {
   const WelcomeRideRegister({super.key, required this.isShipping});
@@ -80,6 +81,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                                   var subCategory = list?[index];
                                   return  InkWell(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       if(widget.isShipping==true){
                                         cubit.onSelectShippingSubCategory(subCategory?.subCategoryId??'',context);
                                       }else{
@@ -124,6 +126,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
               ),
               RegisterNextRow(
                 onTap: () {
+      ManageVibration.vibrate();
                   if(widget.isShipping==true){
                     if(state.shippingSubCategories?.where((e)=>e.isSelected==true).toList().isEmpty??false){
                       showErrorMessage(context, context.isArabic?'يجب اختيار صنف واحد على الاقل':'Please select at least one category');

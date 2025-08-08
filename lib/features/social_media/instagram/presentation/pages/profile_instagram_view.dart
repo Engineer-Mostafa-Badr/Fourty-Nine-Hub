@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/profile_instagram_view_body.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/widget/custom_failure_widget.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import '../widgets/profile_instagram_view_body.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ProfileInstagramView extends StatelessWidget {
   const ProfileInstagramView({
@@ -26,6 +27,7 @@ class ProfileInstagramView extends StatelessWidget {
           return Scaffold(
             body: CustomFailureWidget(
               onPressed: () {
+      ManageVibration.vibrate();
                 context
                     .read<ProfileInstagramCubit>()
                     .getUserProfile(userId: userId);

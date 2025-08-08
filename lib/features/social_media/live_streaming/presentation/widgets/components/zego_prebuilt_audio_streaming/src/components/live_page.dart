@@ -4,11 +4,11 @@ import 'dart:core';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../../../../core/widget/custom_scaffold.dart';
 import '../core/connect/connect_manager.dart';
@@ -142,6 +142,7 @@ class _ZegoLiveAudioRoomPageState extends State<ZegoLiveAudioRoomPage>
   Widget clickListener({required Widget child}) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         /// listen only click event in empty space
       },
       child: Listener(

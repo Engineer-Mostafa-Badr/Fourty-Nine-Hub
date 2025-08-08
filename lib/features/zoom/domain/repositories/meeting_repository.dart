@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
-import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
-import 'package:fourtyninehub/features/zoom/domain/usecases/send_gift_use_case.dart';
-import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart';
+import '../entities/scheduled_meeting.dart';
+import '../usecases/add_room_use_case.dart';
+import '../usecases/send_gift_use_case.dart';
+import '../usecases/send_points_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 

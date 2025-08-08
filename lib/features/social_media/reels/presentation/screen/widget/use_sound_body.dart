@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class UseSoundBody extends StatelessWidget {
   const UseSoundBody({
@@ -165,7 +166,10 @@ class UseSoundBody extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+
+      ManageVibration.vibrate();
+            },
             icon: SvgPicture.asset(Assets.addFavIcon),
             label: Text(
               context.isArabic ? "اضافة للمفضلة" : "Add to favourites",

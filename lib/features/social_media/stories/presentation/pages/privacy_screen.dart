@@ -336,6 +336,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../cubit/stories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class StatusPrivacyScreen extends StatefulWidget {
   const StatusPrivacyScreen({super.key});
@@ -691,6 +692,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
 
                         return GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             setState(() {
                               if (title == LocaleKeys.my_contacts_except.tr()) {
                                 if (isSelected) {
@@ -782,6 +784,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+      ManageVibration.vibrate();
                       await _onSavePrivacySettings();
                       Navigator.pop(context);
                     },

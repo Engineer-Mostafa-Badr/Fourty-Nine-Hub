@@ -4,6 +4,8 @@
         <package android:name="com.facebook.katana" />
         <!-- Facebook Messenger app -->
         <package android:name="com.facebook.orca" />
+        <!-- Facebook Lite -->
+        <package android:name="com.facebook.lite" />
         <!-- Instagram app (if needed for Instagram login) -->
         <package android:name="com.instagram.android" />
     </queries>

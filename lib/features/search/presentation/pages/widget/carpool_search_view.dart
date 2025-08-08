@@ -17,6 +17,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CarpoolSearchView extends StatefulWidget {
   const CarpoolSearchView({super.key, required this.type});
@@ -256,7 +257,10 @@ class _AvailableRoutesBottomSheetState
                   title: LocaleKeys.premuimRequest.localize,
                   // color: testColor,
                   color: AppColors.getSecondryColor(context),
-                  onTap: () {},
+                  onTap: () {
+
+      ManageVibration.vibrate();
+                  },
                 ),
               ),
               const Sizer(width: 5),
@@ -265,7 +269,10 @@ class _AvailableRoutesBottomSheetState
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.regularRequest.localize,
                   color: AppColors.PRIMARY_COLOR,
-                  onTap: () {},
+                  onTap: () {
+
+      ManageVibration.vibrate();
+                  },
                 ),
               )
             ],

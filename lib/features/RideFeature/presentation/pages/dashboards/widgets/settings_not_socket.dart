@@ -22,6 +22,7 @@ import 'creminal_record_non_socket_screen.dart';
 import 'drivers_license_non_socket_screen.dart';
 import 'drug_analysis_non_socket.dart';
 import 'update_personal_info_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SettingsNotSocket extends StatefulWidget {
   final DriverSettingsEntity? settings;
@@ -201,6 +202,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: PersonalDocumentsNonSocketScreen())));
@@ -208,6 +210,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
               child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: DriversLicenseNonSocketScreen())));
@@ -218,6 +221,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: VehicleInformationNonSocketScreen())));
@@ -229,6 +233,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           // if(widget.settings?.isCriminalRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: CriminalRecordNonSocketScreen())));
@@ -239,6 +244,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           // if(widget.settings?.isVehicleRecordEnabled == true)
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: TechnicalExaminationNonSocketScreen())));
@@ -250,6 +256,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
 
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: DragAnalyticsNonSocketScreen())));
@@ -266,7 +273,10 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 child: AppButton(
                     label: LocaleKeys.deleteRegistration.tr(),
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {}),
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    }),
               ),
             ],
           ),

@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/transfer_money_success.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/form/text_fields/search_text_form_field.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -270,6 +272,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                         height: 44,
                         radius: 15,
                         onPressed: () {
+      ManageVibration.vibrate();
                           if (formKey.currentState!.validate()) {
                             if (searchController.text.isEmpty) {
                               // If no user is selected or the user is not in the filtered list
@@ -381,6 +384,7 @@ class _TransferMoneyViewBodyState extends State<TransferMoneyViewBody> {
                             style: Styles.headerText(),
                           ),
                           onTap: () {
+      ManageVibration.vibrate();
                             searchController.text = user.email;
                             context
                                 .read<TransferMoneyCubit>()

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import '../../zego_uikit/src/components/audio_video/audio_video_view.dart';
 import '../../zego_uikit/src/services/defines/user.dart';
 import 'defines.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Project imports:
 

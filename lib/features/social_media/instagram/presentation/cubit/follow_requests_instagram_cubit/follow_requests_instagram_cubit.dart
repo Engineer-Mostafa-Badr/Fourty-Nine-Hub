@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/data_suggest_follow_instagram_entity.dart';
+import '../../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'follow_requests_instagram_state.dart';
 
@@ -23,6 +26,10 @@ class FollowRequestsInstagramCubit extends Cubit<FollowRequestsInstagramState> {
     );
     result.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             state: FollowRequestsInstagramStates.failure, failure: failure));
       },

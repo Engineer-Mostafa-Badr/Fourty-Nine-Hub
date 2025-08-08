@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_image_picker_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateDoctorProfilePhotoPicker extends StatefulWidget {
   const CreateDoctorProfilePhotoPicker({super.key});
@@ -45,6 +46,7 @@ class _CreateDoctorProfilePhotoPickerState
                 isUploaded: state is CreateDoctorUploadProfileImage,
                 imageFile: state is CreateDoctorUploadProfileImage ? File(state.file.path) : null,
                 onTap: () async {
+      ManageVibration.vibrate();
                   if (state is CreateDoctorUploadProfileImage) {
                     await createDoctorCubit.uploadProfileImage(
                       context: context,
@@ -65,6 +67,7 @@ class _CreateDoctorProfilePhotoPickerState
                   ),
                   InkWell(
                     onTap: () async {
+      ManageVibration.vibrate();
                       await createDoctorCubit.uploadProfileImage(
                           context: context);
                     },
@@ -81,6 +84,7 @@ class _CreateDoctorProfilePhotoPickerState
               }
               return InkWell(
                 onTap: () async {
+      ManageVibration.vibrate();
                   await createDoctorCubit.uploadProfileImage(context: context);
                 },
                 child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(

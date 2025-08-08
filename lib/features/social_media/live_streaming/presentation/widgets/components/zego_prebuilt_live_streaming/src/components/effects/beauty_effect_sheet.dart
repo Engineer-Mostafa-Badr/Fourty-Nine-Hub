@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../../../../../res/style/app_colors.dart';
 import '../../config.dart';
@@ -100,6 +101,7 @@ class _ZegoLiveStreamingBeautyEffectSheetState
               ),
               iconText: beautyEffectTypeText(effect),
               onPressed: () {
+      ManageVibration.vibrate();
                 selectedEffectTypeNotifier.value = effect;
               },
             ),
@@ -223,6 +225,7 @@ class _ZegoLiveStreamingBeautyEffectSheetState
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(
                 context,
                 rootNavigator: widget.rootNavigator,
@@ -253,6 +256,7 @@ class _ZegoLiveStreamingBeautyEffectSheetState
             iconSize: Size(38.zR, 38.zR),
             buttonSize: Size(_besHeaderHeight, _besHeaderHeight),
             onPressed: () {
+      ManageVibration.vibrate();
               beauty.selectedID.value = '';
 
               selectedEffectTypeNotifier.value = BeautyEffectType.none;

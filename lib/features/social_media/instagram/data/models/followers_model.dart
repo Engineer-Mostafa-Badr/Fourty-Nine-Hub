@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
+import '../../domain/entities/followers_entity.dart';
 
 class FollowersModel extends FollowersEntity {
   const FollowersModel(

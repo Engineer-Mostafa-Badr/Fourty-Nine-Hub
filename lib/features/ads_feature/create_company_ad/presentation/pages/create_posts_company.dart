@@ -24,6 +24,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
 import '../cubit/create_company_ad_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreatePostCompanyParams {
   final bool text;
@@ -96,6 +97,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     label: context.isArabic ? 'إلغاء' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -104,6 +106,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     label: context.isArabic ? 'متابعة' : 'Continue',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       showLoadingDialog(context);
                       await context
@@ -161,6 +164,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                               padding: const EdgeInsets.all(10.0),
                               child: GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   if(formKey.currentState!.validate()){
                                     if(state.files==null||(state.files?.isEmpty??false)){
                                       showErrorMessage(context, context.isArabic?'الصورة مطلوبة':'Image is required');
@@ -195,6 +199,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                 _buildMediaCard(photo),
                               GestureDetector(
                                 onTap: () async {
+      ManageVibration.vibrate();
                                   await controller.uploadPhoto(
                                       hasLoading: false,
                                       isGallery: true,
@@ -301,6 +306,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           itemBuilder: (context, index) => ClickableWidget(
             // Handle image interactions
             onTap: () {
+      ManageVibration.vibrate();
               if (index != 3 || (index == 3 && state.files!.length == 4)) {
                 List<XFile> files = state.files??[];
                 Navigator.push(
@@ -383,6 +389,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     top: 5,
                     child: ClickableWidget(
                       onTap: () {
+      ManageVibration.vibrate();
                         controller.removePhoto(state.files?[index], state.mediaIds?[index]);
                       },
                       child: const Icon(

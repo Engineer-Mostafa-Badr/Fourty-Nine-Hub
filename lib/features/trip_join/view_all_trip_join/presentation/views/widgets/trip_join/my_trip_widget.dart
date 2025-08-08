@@ -3,28 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
+import '../../../../../../../routes/routes.dart';
+import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import '../../../../domain/entities/my_ads_trip_join_entity.dart';
 import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import '../../Modified_widgets/cards/available_trips_card.dart';
 import '../../Modified_widgets/trip_join_card.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
 import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
+import '../../Modified_widgets/trip_join_floating_action_button.dart';
+import 'request_log_widget.dart';
 
 class MyAdsTripWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -38,47 +39,6 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
   late ScrollController _scrollController;
 
   bool _isVisible = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ViewAllTripJoinCubit>().getMyAds();
-    }
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isVisible) {
-        print("Visaible $_isVisible");
-        setState(() => _isVisible = false);
-      }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isVisible) {
-        print("Visaible true $_isVisible");
-        setState(() => _isVisible = true);
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.removeListener(_scrollListener);
-
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,163 +56,172 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
               return Center(child: Text(LocaleKeys.noData.localize));
             }
 
-            return ListView.separated(
-              shrinkWrap: true,
-              controller: _scrollController,
-              itemCount: context.read<ViewAllTripJoinCubit>().myAdsData.length,
-              separatorBuilder: (context, i) => SizedBox(
-                height: 10.h,
-              ),
-              itemBuilder: (context, i) {
-                MyAdsTripDocEntity data =
-                    context.read<ViewAllTripJoinCubit>().myAdsData[i];
+            return GlowingOverscrollIndicator(
+              color: AppColors.SECONDARY_COLOR,
+              axisDirection: AxisDirection.down,
+              child: ListView.separated(
+                shrinkWrap: true,
+                controller: _scrollController,
+                itemCount:
+                    context.read<ViewAllTripJoinCubit>().myAdsData.length,
+                separatorBuilder: (context, i) => SizedBox(
+                  height: 10.h,
+                ),
+                itemBuilder: (context, i) {
+                  MyAdsTripDocEntity data =
+                      context.read<ViewAllTripJoinCubit>().myAdsData[i];
 
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.h,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          CustomCard(
-                            radius: 20,
-                            children: [
-                              const Sizer(
-                                height: 8,
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 32.0.h),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.remove_red_eye_sharp,
-                                            color: context.isDarkMode
-                                                ? AppColors.whiteColor
-                                                : AppColors.DARK_GRAY_COLOR,
-                                          ),
-                                          const Sizer(),
-                                          Label(
-                                            text:
-                                                '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
-                                            style: Styles.mediumText(
-                                              fontSize: 24,
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            CustomCard(
+                              radius: 20,
+                              children: [
+                                const Sizer(
+                                  height: 8,
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 32.0.h),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.remove_red_eye_sharp,
                                               color: context.isDarkMode
                                                   ? AppColors.whiteColor
                                                   : AppColors.DARK_GRAY_COLOR,
                                             ),
-                                          ),
-                                        ],
+                                            const Sizer(),
+                                            Label(
+                                              text:
+                                                  '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
+                                              style: Styles.mediumText(
+                                                fontSize: 24,
+                                                color: context.isDarkMode
+                                                    ? AppColors.whiteColor
+                                                    : AppColors.DARK_GRAY_COLOR,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      data.formattedOfferType,
-                                      style: Styles.headerText(
-                                          color: AppColors.getRedColor(context),
-                                          fontSize: 32),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Divider(),
-                              const Sizer(),
-                              TripCardInfoWidget(
-                                  title: context.isArabic
-                                      ? data.vehicleDetails?.brandAr ?? ""
-                                      : data.vehicleDetails?.brandEn ?? "",
-                                  model: context.isArabic
-                                      ? data.vehicleDetails?.modelAr ?? ""
-                                      : data.vehicleDetails?.modelEn ?? "",
-                                  icon: Assets.tripJoinCarIcon,
-                                  price:
-                                      formatPrice(data.pricePerSeat?.round() ?? 1, context),
-                                  seats: LocaleKeys.eachSeat.localize
-                                  // icon: widget.iconCar
-                                  //     ? Assets.tripJoinCarIcon
-                                  //     : widget.isMale
-                                  //     ? Assets.maleUser
-                                  //     : Assets.femaleUser,
+                                      Text(
+                                        data.formattedOfferType,
+                                        style: Styles.headerText(
+                                            color:
+                                                AppColors.getRedColor(context),
+                                            fontSize: 32),
+                                      ),
+                                    ],
                                   ),
-                              const Sizer(
-                                height: 30,
-                              ),
-                              _locationWidget(
-                                  title: data.location?.start?.address ?? "",
-                                  iconColor: AppColors.LIGHT_BLUE),
-                              const Sizer(),
-                              _locationWidget(
-                                  title: data.location?.target?.address ?? "",
-                                  iconColor: AppColors.CHECK_MARK_COLOR),
-                              const Sizer(),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 32.0.h,
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      formatTimestamp(data.startDate!, context),
-                                      style: Styles.headerText(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold),
+                                const Divider(),
+                                const Sizer(),
+                                TripCardInfoWidget(
+                                    title: context.isArabic
+                                        ? data.vehicleDetails?.brandAr ?? ""
+                                        : data.vehicleDetails?.brandEn ?? "",
+                                    model: context.isArabic
+                                        ? data.vehicleDetails?.modelAr ?? ""
+                                        : data.vehicleDetails?.modelEn ?? "",
+                                    icon: Assets.tripJoinCarIcon,
+                                    price: formatPrice(
+                                        data.pricePerSeat?.round() ?? 1,
+                                        context),
+                                    seats: LocaleKeys.eachSeat.localize
+                                    // icon: widget.iconCar
+                                    //     ? Assets.tripJoinCarIcon
+                                    //     : widget.isMale
+                                    //     ? Assets.maleUser
+                                    //     : Assets.femaleUser,
                                     ),
-                                    Text(
-                                      // data.passengers == 1
-                                      //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
-                                      //     : ''
-                                      '${data.passengers} ${LocaleKeys.seat.localize}',
-                                      style: Styles.headerText(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      data.isRepeat == true
-                                          ? LocaleKeys.repeated.localize
-                                          : LocaleKeys.oneTime.localize,
-                                      style: Styles.headerText(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                const Sizer(
+                                  height: 30,
                                 ),
-                              ),
-                              const Divider(),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 32.0.h,
+                                _locationWidget(
+                                    title: data.location?.start?.address ?? "",
+                                    iconColor: AppColors.LIGHT_BLUE),
+                                const Sizer(),
+                                _locationWidget(
+                                    title: data.location?.target?.address ?? "",
+                                    iconColor: AppColors.CHECK_MARK_COLOR),
+                                const Sizer(),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 32.0.h,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        formatTimestamp(
+                                            data.startDate!, context),
+                                        style: Styles.headerText(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        // data.passengers == 1
+                                        //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
+                                        //     : ''
+                                        '${data.passengers} ${LocaleKeys.seat.localize}',
+                                        style: Styles.headerText(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        data.isRepeat == true
+                                            ? LocaleKeys.repeated.localize
+                                            : LocaleKeys.oneTime.localize,
+                                        style: Styles.headerText(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: AppButton(
-                                  backColor: AppColors.PRIMARY_COLOR_DARK,
-                                  color: AppColors.whiteColor,
-                                  onPressed: () {
-                                    context
-                                        .read<ViewAllTripJoinCubit>()
-                                        .deleteMyAdsTrip(
-                                            data.id ?? "", context);
-                                  },
-                                  label: LocaleKeys.deleteRequest.localize,
+                                const Divider(),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 32.0.h,
+                                  ),
+                                  child: AppButton(
+                                    backColor: AppColors.PRIMARY_COLOR_DARK,
+                                    color: AppColors.whiteColor,
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                      context
+                                          .read<ViewAllTripJoinCubit>()
+                                          .deleteMyAdsTrip(
+                                              data.id ?? "", context);
+                                    },
+                                    label: LocaleKeys.deleteRequest.localize,
+                                  ),
                                 ),
-                              ),
-                              const Sizer(),
-                            ],
-                          ),
-                        ],
-                      ),
-                      data.isPremium == true ||
-                              data.isButtonEnabled!.state == true
-                          ? SizedBox()
-                          : TripCardSubscribeText(),
-                    ],
-                  ),
-                );
-              },
+                                const Sizer(),
+                              ],
+                            ),
+                          ],
+                        ),
+                        data.isPremium == true ||
+                                data.isButtonEnabled!.state == true
+                            ? SizedBox()
+                            : TripCardSubscribeText(),
+                      ],
+                    ),
+                  );
+                },
+              ),
             );
           },
         ),
@@ -273,6 +242,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              ManageVibration.vibrate();
                               context.pop();
                             },
                             child: Container(
@@ -298,6 +268,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                   ? "أعلن عن سيارتك"
                                   : "Advertise your car",
                               onTap: () {
+                                ManageVibration.vibrate();
                                 context.push(Routes.TRIP_JOIN);
                               },
                             ),
@@ -309,27 +280,22 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
     );
   }
 
-  _locationWidget({required String title, required Color iconColor}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 32.0.h,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(Icons.trip_origin, color: iconColor, size: 20),
-          const Sizer(width: 13),
-          Flexible(
-            child: Text(
-              title,
-              style: Styles.headerText(fontSize: 32),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            ),
-          ),
-        ],
-      ),
-    );
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.removeListener(_scrollListener);
+
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _scrollController.addListener(_onScroll);
   }
 
   TripCardInfoWidget({
@@ -436,6 +402,52 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
         ),
       ),
     );
+  }
+
+  _locationWidget({required String title, required Color iconColor}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 32.0.h,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(Icons.trip_origin, color: iconColor, size: 20),
+          const Sizer(width: 13),
+          Flexible(
+            child: Text(
+              title,
+              style: Styles.headerText(fontSize: 32),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<ViewAllTripJoinCubit>().getMyAds();
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isVisible) {
+        print("Visaible $_isVisible");
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isVisible) {
+        print("Visaible true $_isVisible");
+        setState(() => _isVisible = true);
+      }
+    }
   }
 }
 

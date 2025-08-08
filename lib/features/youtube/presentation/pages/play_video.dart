@@ -12,6 +12,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../widgets/youtube_video_card.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class PlayVideo extends StatelessWidget {
   const PlayVideo({super.key});
@@ -64,7 +65,10 @@ class PlayVideo extends StatelessWidget {
                   height: kToolbarHeight * .5,
                   label: 'Subscribe',
                   padding: 10,
-                  onPressed: () {}),
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  }),
             ],
           ),
           const Sizer(),
@@ -74,17 +78,32 @@ class PlayVideo extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: [
                 _buildActionItem(
-                    label: 'Like', icon: Icons.thumb_up_outlined, onTap: () {}),
+                    label: 'Like', icon: Icons.thumb_up_outlined, onTap: () {
+
+      ManageVibration.vibrate();
+                    }),
                 _buildActionItem(
                     label: 'Dislike',
                     icon: Icons.thumb_down_outlined,
-                    onTap: () {}),
+                    onTap: () {
+
+      ManageVibration.vibrate();
+                    }),
                 _buildActionItem(
-                    label: 'Share', icon: Icons.share, onTap: () {}),
+                    label: 'Share', icon: Icons.share, onTap: () {
+
+      ManageVibration.vibrate();
+                    }),
                 _buildActionItem(
-                    label: 'Save', icon: Icons.bookmark_outline, onTap: () {}),
+                    label: 'Save', icon: Icons.bookmark_outline, onTap: () {
+
+      ManageVibration.vibrate();
+                    }),
                 _buildActionItem(
-                    label: 'Report', icon: Icons.flag_outlined, onTap: () {}),
+                    label: 'Report', icon: Icons.flag_outlined, onTap: () {
+
+      ManageVibration.vibrate();
+                    }),
               ],
             ),
           )
@@ -120,6 +139,7 @@ class PlayVideo extends StatelessWidget {
   Widget _buildCommentsWidget({required BuildContext context}) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         bottomSheet(
             context: context,
             isScrollControlled: true,

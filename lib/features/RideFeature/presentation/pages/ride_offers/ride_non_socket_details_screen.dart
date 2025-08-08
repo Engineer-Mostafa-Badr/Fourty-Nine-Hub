@@ -32,6 +32,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 import '../dashboards/widgets/ride_details_rating_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideNonSocketDetailsScreen extends StatefulWidget {
   const RideNonSocketDetailsScreen({
@@ -189,6 +190,7 @@ class _RideNonSocketDetailsScreenState
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -462,6 +464,7 @@ class _RideNonSocketDetailsScreenState
                               ? const Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     if (state.supportStatus ==
                                         RequestEmergencyStatus
                                             .noRequest.status) {
@@ -587,6 +590,7 @@ class _RideNonSocketDetailsScreenState
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton.icon(
                                 onPressed: () async {
+      ManageVibration.vibrate();
                                   setState(() => isLoading = true);
                                   final path = await _generatePdf(
                                       details: state.supportDetails,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../core/extensions/context_extension.dart';
 
 abstract class AppColors {
   static const PRIMARY_COLOR = Color(0xFF0B1135);

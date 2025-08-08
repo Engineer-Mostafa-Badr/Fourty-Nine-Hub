@@ -12,6 +12,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ImagesPageViewParams {
   final MessageEntity messageEntity;
@@ -56,6 +57,7 @@ class _ImagesPageViewState extends State<ImagesPageView> {
         leadingWidth: 26,
         leading: IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
           icon: const Icon(
@@ -180,6 +182,7 @@ class _CustomVideoPlayerCardState extends State<CustomVideoPlayerCard> {
       child: _controller.value.isInitialized
           ? GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 _togglePlayPause();
               },
               child: AspectRatio(

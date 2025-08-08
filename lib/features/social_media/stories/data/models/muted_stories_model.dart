@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
+import 'friends_stories_model.dart';
 
 class MutedStoriesResponse {
   final bool status;

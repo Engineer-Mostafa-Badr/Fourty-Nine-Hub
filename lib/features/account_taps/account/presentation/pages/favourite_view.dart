@@ -6,13 +6,15 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/cubit/favourite_drawer_state.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/ad_card_drawer_favourite.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/cubit/favourite_drawer_cubit.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class FavouriteView extends StatefulWidget {
   const FavouriteView({super.key});
@@ -41,23 +43,28 @@ class _FavouriteViewState extends State<FavouriteView> {
             return Padding(
               padding: EdgeInsets.all(10.0.w),
               child: state.favourite!.isNotEmpty && state.favourite != null
-                  ? ListView.builder(
-                      itemBuilder: (context, index) => AdCardDrawerFavourite(
-                            item: state.favourite![index],
-                            onFav: (String) {},
-                            onRemoveFav: () {
-                              context
-                                  .read<FavouriteDrawerCubit>()
-                                  .deleteFavouriteAds(
-                                      id: state.favourite![index].id);
-                            },
-                          ),
-                      // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      //     childAspectRatio: .8,
-                      //     mainAxisSpacing: 10,
-                      //     crossAxisSpacing: 10,
-                      //     crossAxisCount: 2),
-                      itemCount: state.favourite?.length ?? 0)
+                  ? GlowingOverscrollIndicator(
+                      color: AppColors.SECONDARY_COLOR,
+                      axisDirection: AxisDirection.down,
+                      child: ListView.builder(
+                          itemBuilder: (context, index) =>
+                              AdCardDrawerFavourite(
+                                item: state.favourite![index],
+                                onFav: (String) {},
+                                onRemoveFav: () {
+                                  context
+                                      .read<FavouriteDrawerCubit>()
+                                      .deleteFavouriteAds(
+                                          id: state.favourite![index].id);
+                                },
+                              ),
+                          // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          //     childAspectRatio: .8,
+                          //     mainAxisSpacing: 10,
+                          //     crossAxisSpacing: 10,
+                          //     crossAxisCount: 2),
+                          itemCount: state.favourite?.length ?? 0),
+                    )
                   : Center(
                       child: Label(
                           style: Styles.mediumText(fontSize: 60.sp),

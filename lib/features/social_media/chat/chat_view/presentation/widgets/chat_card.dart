@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../core/utils/custom_show_dialog.dart';
 
@@ -49,6 +50,7 @@ class _ChatCardState extends State<ChatCard> {
               : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
           // Highlight color on tap
           onTap: () {
+      ManageVibration.vibrate();
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
               context.read<ChatsCubit>().selectChat = widget.chat!;
               context.push(Routes.CHATROOM, extra: widget.chatsCubit);
@@ -239,6 +241,7 @@ class _ChatCardState extends State<ChatCard> {
                                                                                 widget.chat!.isBirthdayMonth)
                                                                             ? InkWell(
                                                                                 onTap: () async {
+      ManageVibration.vibrate();
                                                                                   await showGiftBottomSheet(
                                                                                     context,
                                                                                     receiverId: widget.chat!.userId,
@@ -275,6 +278,7 @@ class _ChatCardState extends State<ChatCard> {
                                                                                   color: AppColors.SECONDARY_COLOR,
                                                                                 ),
                                                                                 onPressed: () {
+      ManageVibration.vibrate();
                                                                                   context.read<ChatsCubit>().selectChat = widget.chat!;
                                                                                   context.push(Routes.CHATROOM, extra: widget.chatsCubit);
                                                                                 },
@@ -284,14 +288,20 @@ class _ChatCardState extends State<ChatCard> {
                                                                                   Icons.call,
                                                                                   color: AppColors.SECONDARY_COLOR,
                                                                                 ),
-                                                                                onPressed: () {},
+                                                                                onPressed: () {
+
+      ManageVibration.vibrate();
+                                                                                },
                                                                               ),
                                                                               IconButton(
                                                                                 icon: const Icon(
                                                                                   Icons.videocam,
                                                                                   color: AppColors.SECONDARY_COLOR,
                                                                                 ),
-                                                                                onPressed: () {},
+                                                                                onPressed: () {
+
+      ManageVibration.vibrate();
+                                                                                },
                                                                               ),
                                                                               IconButton(
                                                                                 icon: const Icon(
@@ -299,6 +309,7 @@ class _ChatCardState extends State<ChatCard> {
                                                                                   color: AppColors.SECONDARY_COLOR,
                                                                                 ),
                                                                                 onPressed: () {
+      ManageVibration.vibrate();
                                                                                   context.read<ChatsCubit>().selectChat = widget.chat!;
                                                                                   context.push(Routes.VIEWCONTACT, extra: widget.chatsCubit);
                                                                                 },
@@ -451,6 +462,7 @@ class _ChatCardState extends State<ChatCard> {
                                           widget.chat!.isBirthdayMonth)
                                       ? InkWell(
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             await showGiftBottomSheet(
                                               context,
                                               receiverId: widget.chat!.userId,
@@ -651,7 +663,10 @@ class _ChatCardState extends State<ChatCard> {
                               : widget.chat!.isAdmin == "admin"
                                   ? const SizedBox()
                                   : GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+
+      ManageVibration.vibrate();  
+                                      },
                                       child: Row(
                                         children: [
                                           Label(
@@ -665,6 +680,7 @@ class _ChatCardState extends State<ChatCard> {
                                                 horizontal: 2.0),
                                             child: InkWell(
                                               onTap: () async {
+      ManageVibration.vibrate();
                                                 // Call the getLastSeen function
                                                 await context
                                                     .read<ChatsCubit>()

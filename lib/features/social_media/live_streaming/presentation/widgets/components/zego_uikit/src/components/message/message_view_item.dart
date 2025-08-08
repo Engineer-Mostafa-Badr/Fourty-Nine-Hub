@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 typedef ZegoInRoomMessageViewItemPressEvent = void Function(
   ZegoInRoomMessage message,
@@ -101,6 +102,7 @@ class _ZegoInRoomLiveMessageViewItemState
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         widget.onItemClick?.call(widget.message);
       },
       onLongPress: () {
@@ -355,6 +357,7 @@ class _ZegoInRoomLiveMessageViewItemState
 
         return GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             if (state == ZegoInRoomMessageState.failed) {
               ZegoUIKit().resendInRoomMessage(widget.message);
             }

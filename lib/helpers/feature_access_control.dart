@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import '../features/authentication/domain/entities/user_entity.dart';
+import 'manage_vibration.dart';
 
 class FeatureAccessControl {
   static bool canAccessFeature(String featureName, UserEntity? user) {
@@ -40,6 +41,7 @@ class FeatureAccessControl {
           ),
           ElevatedButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               // Show upgrade dialog or navigate to login
             },

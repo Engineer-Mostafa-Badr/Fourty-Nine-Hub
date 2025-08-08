@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../res/style/styles.dart';
 import '../../../domain/entity/custom_page_categories_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NavigatorSubCategoryCard extends StatefulWidget {
   final CustomPageSubCategoriesEntity item;
@@ -70,6 +71,7 @@ class _NavigatorSubCategoryCardState extends State<NavigatorSubCategoryCard> {
                               ? Icons.favorite_outline
                               : Icons.favorite,
                           onPressed: () async {
+      ManageVibration.vibrate();
                             var result = await widget.onFav();
                             print("resutlt=$result");
                             print(result);

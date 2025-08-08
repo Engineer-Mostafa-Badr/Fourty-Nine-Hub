@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import '../../../../core/error/failure.dart';
+import '../entities/banner.dart';
+import '../repositories/fourty_nine_repository.dart';
 
 class GetBannerByIdUseCase {
   final FourtyNineRepository _fourtyNineRepository;

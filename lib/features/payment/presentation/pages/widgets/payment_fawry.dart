@@ -14,6 +14,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
 import '../../cache_out_cubit/payment_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PaymentFawryCard extends StatefulWidget {
   const PaymentFawryCard({super.key});
@@ -140,6 +141,7 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                   InkWell(
                     //  onTap: (){},
                     onTap: () {
+      ManageVibration.vibrate();
                       if (formKey.currentState!.validate()) {
                         if (hasDigitalWallet) {
                           // Call for digital wallet submission

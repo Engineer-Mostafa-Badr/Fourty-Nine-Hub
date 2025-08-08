@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/account_taps/wallet/data/models/pagination_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_data_entity.dart';
+import '../../../../account_taps/wallet/data/models/pagination_model.dart';
+import 'instagram_post_model.dart';
+import '../../domain/entities/instagram_post_data_entity.dart';
 
 class InstagramPostDataModel extends InstagramPostDataEntity {
   InstagramPostDataModel({

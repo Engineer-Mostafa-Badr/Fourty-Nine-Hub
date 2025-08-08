@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OptionsBottomsheetWidget extends StatefulWidget {
   const OptionsBottomsheetWidget({super.key, required this.rideCubit, required this.selectedCategoryPrice, required this.selectedCategoryName});
@@ -90,6 +91,7 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                   width: double.infinity,
                   label: context.isArabic ? "تفعيل" : "Apply",
                   onPressed: () {
+      ManageVibration.vibrate();
                     widget.rideCubit.isComfort = _isComfort;
                     widget.rideCubit.isNonSmoker = _isNonSmoker;
                     widget.rideCubit.isAutoAccept = _isAutoAccept;
@@ -152,4 +154,3 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
     );
   }
 }
-

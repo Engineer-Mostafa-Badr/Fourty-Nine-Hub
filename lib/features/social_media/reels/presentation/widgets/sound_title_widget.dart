@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -19,6 +20,7 @@ class SoundTitleWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               context.pop();
             },
             child: const Icon(
@@ -66,6 +68,7 @@ class SoundTitleWidget extends StatelessWidget {
               SizedBox(width: 12),
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   Share.share(
                       'https://www.youtube.com/watch?v=ka0eicWdyyE&ab_channel=ThepathtoAllah%D8%A7%D9%84%D8%B7%D8%B1%D9%8A%D9%82%D8%A7%D9%84%D9%8A%D8%A7%D9%84%D9%84%D9%87%E2%99%A5'); // النص اللي هيتشارك
                 },

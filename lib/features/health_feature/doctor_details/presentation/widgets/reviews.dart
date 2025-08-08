@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorDetailsReviewsWidget extends StatelessWidget {
   const DoctorDetailsReviewsWidget({super.key, required this.doctorId});
@@ -53,6 +54,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                       AppButton(
                         label: LocaleKeys.viewAll.localize,
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.push(Routes.DOCTORREVIEWS, extra: doctorId);
                         },
                         style: Styles.headerText(color: Colors.white),

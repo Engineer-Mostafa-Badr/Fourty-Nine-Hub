@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/main.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../explore_reels_cubit/reel_cubit.dart';
+import '../../../../../../main.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../../core/isolates/get_video_isolate.dart';

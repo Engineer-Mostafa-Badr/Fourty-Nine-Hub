@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import '../../../domain/entities/trip_join_card_entity.dart';
 
 import 'vehicle_id.dart';
 

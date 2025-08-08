@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import 'image_from_internet.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ProfilePhotos extends StatelessWidget {
   const ProfilePhotos({super.key, this.name});
@@ -75,7 +76,10 @@ final String? name;
   }
   Widget _photoCategory(BuildContext context,String image,String label){
     return ClickableWidget(
-      onTap: (){},
+      onTap: (){
+
+      ManageVibration.vibrate();
+      },
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -120,7 +124,10 @@ final String? name;
 
   Widget _profilePhoto(String image) {
     return ClickableWidget(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: AspectRatio(
         aspectRatio: 4 / 4,
         child: Container(

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../domain/entities/comment_entity.dart';
+import '../../../domain/usecases/post_comment_usecase.dart';
+import '../facebook_widgets/build_reactions_buttons.dart';
+import '../facebook_widgets/user_image.dart';
+import '../../../../twitter/domain/usecases/twitter_report_usecase.dart';
+import '../../../../twitter/presentation/widgets/report_view.dart';
+import '../../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class ReplyCard extends StatefulWidget {
   final Color textColor;
@@ -86,6 +87,7 @@ class _ReplyCardState extends State<ReplyCard> {
             )),
             GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   bottomSheet(
                     context: context,
                     widget: _buildPostOptions(
@@ -127,6 +129,7 @@ class _ReplyCardState extends State<ReplyCard> {
                       size: 20,
                       isCircle: true,
                       onPressed: () async {
+      ManageVibration.vibrate();
                         var result = await widget.onEditComment(
                             PostCommentParams(
                                 postId: widget.reply.id,
@@ -170,6 +173,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 title: LocaleKeys.reportReply.localize,
                 subTitle: LocaleKeys.youWillReportReply.localize,
                 onTap: () async {
+      ManageVibration.vibrate();
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
                         context: context,
@@ -185,6 +189,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 title: LocaleKeys.deleteReply.localize,
                 subTitle: LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.onDeleteReply(widget.reply.id);
                 }),
           if (isMyComment)
@@ -193,6 +198,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 title: LocaleKeys.editReply.localize,
                 subTitle: LocaleKeys.youWillEditReply.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.reply.edit = !widget.reply.edit!;
                   editTextController.text = widget.reply.content;
                   setState(() {});
@@ -211,6 +217,7 @@ class _ReplyCardState extends State<ReplyCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },

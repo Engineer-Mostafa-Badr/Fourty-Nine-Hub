@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'doctor_city_filter_state.dart';
 
@@ -25,7 +28,13 @@ class DoctorCityFilterCubit extends Cubit<DoctorCityFilterState> {
     final response = await _getCitiesUseCase.call(governorateId);
 
     response.fold(
-      (failure) => emit(DoctorCityFilterError(Labels.errorHappened)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(DoctorCityFilterError(Labels.errorHappened));
+      },
       (data) {
         _cities = data;
         emit(DoctorCityFilterLoaded(data));

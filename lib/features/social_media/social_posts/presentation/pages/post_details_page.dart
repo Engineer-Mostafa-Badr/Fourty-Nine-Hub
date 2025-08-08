@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/entities/post_entity.dart';
+import '../../domain/usecases/add_reply_usecase.dart';
+import '../cubit/social_posts_cubit.dart';
+import '../widgets/posts/facebook_post_card.dart';
+import '../../../twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -22,7 +22,8 @@ import '../../domain/entities/comment_entity.dart';
 import '../../domain/usecases/post_comment_usecase.dart';
 import '../../domain/usecases/post_react_usecase.dart';
 import '../widgets/posts/comment_card.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class PostDetailsPage extends StatefulWidget {
   // final PostEntity post;
@@ -229,6 +230,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           size: 20,
                           isCircle: true,
                           onPressed: () async {
+      ManageVibration.vibrate();
                             CommentEntity data = await widget.onAddComment(
                               PostCommentParams(
                                   postId: state.postDetails!.id,
@@ -308,7 +310,10 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               margin: const EdgeInsets.only(left: 30),
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
-                  onPressed: () {}))
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  }))
       ],
     );
   }

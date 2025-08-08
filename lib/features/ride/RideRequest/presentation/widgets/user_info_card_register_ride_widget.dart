@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/val
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UserInfoCardRegisterRideWidget extends StatefulWidget {
   const UserInfoCardRegisterRideWidget({super.key, this.model,});
@@ -208,6 +209,7 @@ class _UserInfoCardRegisterRideWidgetState
                 children: [
                   GestureDetector(
                     onTap: () async {
+      ManageVibration.vibrate();
                       var pickedDate = await showDatePicker(
                           context: context,
                           firstDate: DateTime(1800),

@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../data/models/expired_requests_model.dart';
+import '../../data/models/is_restaurant_model.dart';
+import '../entities/food_category_entity.dart';
+import '../usecases/create_restaurant.dart';
+import '../usecases/getsubcategory_restaurants_usecase.dart';
+import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../entities/log_count_entity.dart';

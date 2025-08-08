@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class UserProfileImage extends StatelessWidget {
   final String? imageURL;
@@ -30,6 +31,7 @@ class UserProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (fromProfile == false && context.read<UserCubit>().isLoggedIn) {
           context.push(Routes.OTHERSACCOUNT, extra: userId);
         }

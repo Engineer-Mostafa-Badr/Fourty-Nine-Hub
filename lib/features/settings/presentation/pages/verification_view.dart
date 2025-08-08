@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/settings/presentation/pages/widgets/verification_view_body.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
+import 'widgets/verification_view_body.dart';
 
 import '../../../authentication/domain/entities/forget_password_questions_entity.dart';
 

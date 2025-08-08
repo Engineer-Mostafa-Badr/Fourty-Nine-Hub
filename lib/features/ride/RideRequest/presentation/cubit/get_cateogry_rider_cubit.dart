@@ -4,6 +4,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class GetCateogryRiderCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repo;
@@ -13,6 +16,10 @@ class GetCateogryRiderCubit extends Cubit<RiderState> {
     var response = await repo.getCateogry();
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureRiderState(failure: l));
       },
       (r) {

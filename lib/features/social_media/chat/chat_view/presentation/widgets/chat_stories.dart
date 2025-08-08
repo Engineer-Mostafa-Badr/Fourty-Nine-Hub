@@ -487,6 +487,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For loca
 import '../../../../stories/presentation/pages/more_stories.dart';
 import '../../../../tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ChatStories extends StatelessWidget {
   const ChatStories({super.key});
@@ -579,6 +580,7 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           if (context.read<UserCubit>().isLoggedIn) {
             await Navigator.push(
               context,
@@ -696,6 +698,7 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           if (context.read<UserCubit>().isLoggedIn) {
             await Navigator.push(
               context,
@@ -758,6 +761,7 @@ class ChatStories extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () async {
+      ManageVibration.vibrate();
           context.read<UserCubit>().isLoggedIn
               ? await Navigator.push(
                   context,

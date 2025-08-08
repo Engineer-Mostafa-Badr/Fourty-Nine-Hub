@@ -25,6 +25,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../health/domain/entities/most_booking_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorsListParams {
   final bool fromHome;
@@ -557,6 +558,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
             label: LocaleKeys.book.localize,
             color: AppColors.getRedColor(context),
             onPressed: () {
+      ManageVibration.vibrate();
               // context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
           ),
@@ -634,6 +636,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                     AppColors.getButtonPrimaryColor(context),
                                 color: AppColors.getReversedTextColor(context),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   // _showFreeCallBottomSheet(context, item);
                                 },
@@ -643,6 +646,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                 backColor: AppColors.cD9D9D9,
                                 color: AppColors.black,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   _showRegularCallBottomSheet(
                                       context, item); // Open second
@@ -696,6 +700,7 @@ class CallMessageReportButtons extends StatelessWidget {
             ),
             color: AppColors.getRedColor(context),
             onPressed: () async {
+      ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -823,6 +828,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       color: AppColors.getReversedTextColor(context),
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         final enteredNumber = phoneController.text.trim();
                         if (isBookingForAnotherClient) {
                           if (enteredNumber.isEmpty) {

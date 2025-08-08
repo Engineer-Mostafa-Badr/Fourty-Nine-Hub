@@ -19,6 +19,7 @@ import '../../../../domain/usecases/dashboards/add_rate_with_driver_use_case.dar
 import '../../../../domain/usecases/dashboards/loading/create_rate_with_driver_loading_use_case.dart';
 import '../../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideDetailsRatingWidget extends StatefulWidget {
   final bool isRate;
@@ -67,6 +68,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
           const SizedBox(width: 5),
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               showModalBottomSheet(
                 context: context,
                 constraints: BoxConstraints(
@@ -228,6 +230,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
                       ),
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       if(formKey.currentState!.validate()){
                         widget.onRating!=null?widget.onRating!(rateController.text, _rating):null;
                       }
@@ -1181,5 +1184,4 @@ class _RatingBottomSheetClientState extends State<RatingBottomSheetClient> {
 
 
 }
-
 

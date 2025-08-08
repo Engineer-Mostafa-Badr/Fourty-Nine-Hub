@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../core/enums/trip_states_enum.dart';
 import '../../controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class GoogleMapCarMarkerWidget extends StatefulWidget {
   final Function(Marker?) onCarMarkerUpdated;
@@ -92,6 +93,7 @@ class _GoogleMapCarMarkerWidgetState extends State<GoogleMapCarMarkerWidget> {
               ? InfoWindow(title: "ETA: $eta")
               : const InfoWindow(),
           onTap: () {
+      ManageVibration.vibrate();
             if (eta != null && eta.isNotEmpty) {
               widget.mapController.showMarkerInfoWindow(const MarkerId("car"));
             }

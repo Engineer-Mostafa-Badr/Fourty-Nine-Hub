@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/followers_entity.dart';
 
 enum FollowStates { loading, initState, error, success }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class MyBroadcastsCard extends StatelessWidget {

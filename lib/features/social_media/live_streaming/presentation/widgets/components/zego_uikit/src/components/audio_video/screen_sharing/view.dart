@@ -8,6 +8,7 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 
 import '../../../../zego_uikit.dart';
 import '../../internal/type_transform.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 const isScreenSharingExtraInfoKey = 'isScreenSharing';
 
@@ -73,6 +74,7 @@ class _ZegoScreenSharingViewState extends State<ZegoScreenSharingView> {
           ),
         ),
         onTap: () {
+      ManageVibration.vibrate();
           if (!isShowFullScreenButtonNotifier.value) {
             isShowFullScreenButtonNotifier.value = true;
             Future.delayed(const Duration(seconds: 3), () {
@@ -245,6 +247,7 @@ class _ZegoScreenSharingViewState extends State<ZegoScreenSharingView> {
                   Padding(padding: EdgeInsets.only(top: 20.zR)),
                   TextButton(
                     onPressed: () {
+      ManageVibration.vibrate();
                       ZegoUIKit.instance.stopSharingScreen();
                     },
                     style: OutlinedButton.styleFrom(
@@ -337,6 +340,7 @@ class _ZegoScreenSharingViewState extends State<ZegoScreenSharingView> {
     return IconButton(
       icon: getFullScreenIcon(),
       onPressed: () {
+      ManageVibration.vibrate();
         if (widget.user?.id ==
             widget.controller?.fullscreenUserNotifier.value?.id) {
           widget.controller?.fullscreenUserNotifier.value = null;

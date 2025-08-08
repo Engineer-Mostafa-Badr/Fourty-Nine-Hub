@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wheel_wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/gift_competitions_entity.dart';
@@ -85,6 +86,7 @@ class CompetitionsPopUpItems extends StatelessWidget {
           CustomButtonWalletAndGiftAndCashback(
             title: LocaleKeys.close.localize,
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
             },
             status: true,

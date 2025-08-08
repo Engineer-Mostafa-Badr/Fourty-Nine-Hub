@@ -33,6 +33,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OtherAccountView extends StatefulWidget {
   OtherAccountView({super.key, payload}) {
@@ -309,6 +310,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadPhoto(
                                                 isGallery: true, context: context);
@@ -320,6 +322,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadPhoto(
                                                 isGallery: false, context: context);
@@ -343,6 +346,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
                                                 isGallery: true, context: context);
@@ -354,6 +358,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
+      ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
                                                 isGallery: false, context: context);
@@ -372,6 +377,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: AppButton(
                                 label: LocaleKeys.editProfile.localize,
                                 onPressed: () async {
+      ManageVibration.vibrate();
                                   await context.push(Routes.EDITPROFILE);
                                   controller.getUserProfile(id: widget.userId);
                                 },
@@ -509,6 +515,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           state.newCover != null
                               ? InkWell(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     showDialog(
                                         context: context,
                                         builder: (context) =>
@@ -532,6 +539,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 )
                               : InkWell(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     showDialog(
                                         context: context,
                                         builder: (context) =>
@@ -571,6 +579,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           if (loginUser?.id == user.id)
                             InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 selectCoverImage();
                               },
                               child: Container(
@@ -623,6 +632,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         style: Styles.mediumText(
                                             color: AppColors.getTextColor(context), fontSize: 24),
                                         onPressed: () {
+      ManageVibration.vibrate();
                                           onFollow();
                                         }),
                                   ),
@@ -724,6 +734,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         state.newImage != null
                             ? InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
@@ -762,6 +773,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               )
                             : GestureDetector(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     context.read<UserCubit>().updateProfileView(
                                         isProfile: false,
@@ -798,6 +810,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             bottom: 10.h,
                             child: InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 selectImageGallary();
                               },
                               child: Container(

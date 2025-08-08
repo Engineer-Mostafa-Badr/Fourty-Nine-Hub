@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/style/app_colors.dart';
 
 class BuildDropDown extends StatelessWidget {
   const BuildDropDown({super.key, required this.text, required this.icon, this.width, this.height, this.fontWeight});

@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chat_last_seen_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_online_offline_status_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/show_deleted_message_usecase.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../authentication/domain/entities/user_entity.dart';
+import '../../../chat_room/data/models/seen_history_model.dart';
+import '../../../chat_room/domain/entities/message_entity.dart';
+import '../entities/chat_category_entity.dart';
+import '../entities/chat_entity.dart';
+import '../usecases/get_chat_last_seen_usecase.dart';
+import '../usecases/get_chats_usecase.dart';
+import '../usecases/get_online_offline_status_usecase.dart';
+import '../usecases/lock_chat_request.dart';
+import '../usecases/show_deleted_message_usecase.dart';
 
 abstract class ChatsRepository {
   Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);

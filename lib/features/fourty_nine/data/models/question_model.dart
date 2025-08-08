@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/question_entity.dart';
+import '../../domain/entities/question_entity.dart';
 
 class QuestionModel extends QuestionEntity{
   QuestionModel({required super.id, required super.messageEn, required super.messageAr, required super.enableAnswers, required super.openInfoOrQuestions,});

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
+import '../../domain/domain/user_data_tinder_entity.dart';
 
 class UserDataTinderModel extends UserDataTinderEntity {
   UserDataTinderModel({

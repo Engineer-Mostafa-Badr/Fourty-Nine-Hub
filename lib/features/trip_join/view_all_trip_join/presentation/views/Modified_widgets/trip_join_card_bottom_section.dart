@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_button.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'cards/trip_contacts_buttons.dart';
+import 'trip_join_card_button.dart';
+import '../../../../../../res/style/app_colors.dart';
 
 class TripJoinButtonsSection extends StatelessWidget {
   const TripJoinButtonsSection({

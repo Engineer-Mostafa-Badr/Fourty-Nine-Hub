@@ -5,928 +5,37 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/chat_categories.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
-import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/my_broadcast_card.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/enums/chat_categories.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/states/basic_state.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../routes/routes.dart';
 import '../../../../../../service_locator/service_locator.dart';
+import '../../../../../authentication/domain/entities/user_entity.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../broadcasts/presentation/widgets/follow_broadcast_card.dart';
+import '../../../broadcasts/presentation/widgets/my_broadcast_card.dart';
+import '../../domain/entities/chat_entity.dart';
+import '../../domain/usecases/get_chats_usecase.dart';
+import '../chat_cubit/chats_cubit.dart';
 import '../widgets/calling_card.dart';
+import '../widgets/chat_stories.dart';
 import '../widgets/end_to_end_Encrypted_widget.dart';
 import '../widgets/new_chat_card.dart';
-
-class ChatsViewParams {
-  final int initialTabIndex;
-  bool isFromStartChat = false;
-  ChatEntity? selectedChat;
-
-  ChatsViewParams(
-      {this.initialTabIndex = 0,
-      this.isFromStartChat = false,
-      this.selectedChat});
-}
-
-class ChatView extends StatefulWidget {
-  final ChatsViewParams chatsViewParams;
-
-  const ChatView({super.key, required this.chatsViewParams});
-
-  @override
-  State<ChatView> createState() => _ChatViewState();
-}
-
-class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
-  late ChatsCubit chatsCubit;
-  late TabController tabController;
-  bool expandedOptions = false;
-  late ScrollController scrollController;
-  double lastOffset = 0.0;
-
-  @override
-  void initState() {
-    if (widget.chatsViewParams.isFromStartChat) {
-      chatsCubit = context.read<ChatsCubit>()..init();
-      chatsCubit.selectChat = widget.chatsViewParams.selectedChat!;
-      // print(
-      //     'widget.chatsViewParams.selectedChat! ${widget.chatsViewParams.selectedChat!}');
-      Future.microtask(() async {
-        await context
-            .read<ChatsCubit>()
-            .getOnlineOfflineStatus(chat: widget.chatsViewParams.selectedChat!);
-        context.push(Routes.CHATROOM, extra: chatsCubit);
-      });
-    } else {
-      chatsCubit = context.read<ChatsCubit>()..init();
-    }
-    tabController =
-        TabController(length: ChatCategories.values.length, vsync: this)
-          ..addListener(() {
-            if (tabController.previousIndex != tabController.index) {
-              chatsCubit.getChatsByCategory(
-                  ChatCategories.values[tabController.index]);
-            }
-          });
-
-    scrollController = ScrollController()
-      ..addListener(() {
-        if (lastOffset > scrollController.offset) {
-          // Scrolled down
-          if (!expandedOptions) {
-            setState(() {
-              expandedOptions = true;
-            });
-          }
-        } else if (lastOffset < scrollController.offset) {
-          // Scrolled up
-          if (expandedOptions) {
-            setState(() {
-              expandedOptions = false;
-            });
-          }
-        }
-        lastOffset = scrollController.offset;
-      });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ChatsCubit, ChatsState>(
-      builder: (context, state) {
-        // final chatsCubit = context.read<ChatsCubit>();
-        return CustomScaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(
-                context.read<ChatsCubit>().selectedChats.isEmpty ? 40 : 0),
-            child: Builder(
-              builder: (context) {
-                if (context.read<ChatsCubit>().selectedChats.isEmpty) {
-                  return HomeAppbar(
-                    isHaveLeading: false,
-                    isWithBackArrow: true,
-                    inChat: PopupMenuButton(
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                      color: context.isDarkMode
-                          ? AppColors.QUANTITY_COLOR
-                          : AppColors.BACKGROUND_COLOR,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      offset: const Offset(0, 50),
-                      onSelected: (int value) async {
-                        if (value == 2) {
-                          context.push(Routes.CHATPROFILEVIEW);
-                        }
-                        if (value == 1) {
-                          await context
-                              .read<ChatsCubit>()
-                              .recoverDeletedChats();
-                        }
-                      },
-                      itemBuilder: (context) {
-                        return _mainMenuBuilder();
-                      },
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-          ),
-          body: SafeArea(
-            child: DefaultTabController(
-              length: ChatCategories.values.length,
-              initialIndex: widget.chatsViewParams.initialTabIndex,
-              child: NestedAppbar(
-                scrollController:
-                    scrollController, // Attach the ScrollController here
-                appBars: [
-                  if (context.read<ChatsCubit>().selectedChats.isNotEmpty)
-                    _selectedChatAppBar(chatsCubit),
-                  SliverAppBar(
-                    expandedHeight: MediaQuery.of(context).size.height *
-                        0.1, // Responsive height
-                    automaticallyImplyLeading: false,
-                    floating: true,
-                    flexibleSpace: BlocProvider(
-                      create: (context) => serviceLocator<StoryCubit>()
-                        ..fetchStories()
-                        ..getMutedStories(),
-                      child: const Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: ChatStories(),
-                      ),
-                    ),
-                  ),
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    floating: true,
-                    pinned: true,
-                    titleSpacing: 0,
-                    title: _buildCategoriesLabels(),
-                  )
-                ],
-                // body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                //   builder: (context, state) {
-                //     return _buildCategoriesViews();
-                //   },
-                // ),
-                body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                  builder: (context, state) {
-                    return context.read<UserCubit>().isLoggedIn
-                        ? _buildCategoriesViews()
-                        : Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      return pleaseLoginDialog(context);
-                                      // context.push(Routes.LOGIN);
-                                    },
-                                    child: Label(
-                                      text: LocaleKeys.login.localize,
-                                      style: const TextStyle(
-                                        color: AppColors.PRIMARY_COLOR_DARK,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor:
-                                            AppColors.PRIMARY_COLOR_DARK,
-                                      ),
-                                    )),
-                                Label(
-                                  text: LocaleKeys
-                                      .continueUsingChatServices.localize,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                  },
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  List<PopupMenuEntry<int>> _mainMenuBuilder() {
-    return [
-      // PopupMenuItem<int>(
-      //   value: 0,
-      //   child: Text(
-      //     LocaleKeys.newGroup.localize,
-      //     style: Styles.mediumText(
-      //         color:
-      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-      //   ),
-      // ),
-      // PopupMenuItem<int>(
-      //   value: 1,
-      //   child: Text(
-      //     LocaleKeys.newBroadcast.localize,
-      //     style: Styles.mediumText(
-      //         color:
-      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-      //   ),
-      // ),
-      PopupMenuItem<int>(
-        value: 0,
-        child: Label(
-          text: context.isArabic ? "الرسائل المميزة" : "Starred Messages",
-          style: Styles.mediumText(
-            fontSize: 32,
-            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-          ),
-        ),
-      ),
-      PopupMenuItem<int>(
-        value: 1,
-        child: Label(
-          text: LocaleKeys.recoverDeletedChats.localize,
-          style: Styles.mediumText(
-            fontSize: 32,
-            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-          ),
-        ),
-      ),
-      PopupMenuItem<int>(
-        value: 2,
-        child: Label(
-          text: LocaleKeys.profile.localize,
-          style: Styles.mediumText(
-            fontSize: 32,
-            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-          ),
-        ),
-      ),
-    ];
-  }
-
-  // Widget _buildCategoriesLabels() {
-  //   return TabBar(
-  //       controller: tabController,
-  //       labelColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-  //       unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
-  //       indicatorColor: Colors.red,
-  //       tabAlignment: TabAlignment.start,
-  //       isScrollable: true,
-  //       tabs: ChatCategories.values.map((e) {
-  //         return Tab(text: e.name.localize);
-  //       }).toList());
-  // }
-
-  Widget _buildCategoriesLabels() {
-    return SizedBox(
-      height: 33,
-      child: TabBar(
-        controller: tabController,
-        // labelColor: AppColors.PRIMARY_COLOR,
-        dividerColor: Colors.transparent,
-        // unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
-        indicator: BoxDecoration(
-          color: Colors.red.withValues(alpha: 0.1), // Light red background
-          borderRadius: BorderRadius.circular(8), // Rounded corners
-        ),
-        tabAlignment: TabAlignment.start,
-        isScrollable: true,
-        tabs: ChatCategories.values.map((e) {
-          return Tab(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              child: Text(
-                e.name.localize,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: e == ChatCategories.values[tabController.index]
-                      ? Colors.red
-                      : AppColors.LIGHT_GRAY_COLOR2,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildCategoriesViews() {
-    return TabBarView(
-        controller: tabController,
-        children: ChatCategories.values
-            .map((e) => _chatCategoryWidgetMapper(e))
-            .toList());
-  }
-
-  Widget _chatCategoryWidgetMapper(ChatCategories category) {
-    switch (category) {
-      case ChatCategories.social:
-        return Column(
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  expandedOptions = !expandedOptions;
-                });
-              },
-              child: SizedBox(
-                width: double.infinity,
-                child: Icon(
-                  expandedOptions
-                      ? FontAwesomeIcons.anglesUp
-                      : FontAwesomeIcons.anglesDown,
-                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
-                  size: 18,
-                ),
-              ),
-            ),
-            ChatOptions(
-              icon: Icons.archive_outlined,
-              text: context.isArabic ? "المؤرشفة" : "Archived",
-              onTap: () async {
-                final result = await context.push(Routes.ARCHIVEDCHATS,
-                    extra: OptionsChatsViewParams(
-                      category: 'Archive',
-                      chatsCubit: chatsCubit,
-                      isSecret: false,
-                    ));
-
-                // Check if the result is true, refresh the home page
-                if (result == true) {
-                  log("pop");
-                  await chatsCubit.getChatsByCategory(ChatCategories.social);
-                  setState(() {});
-                }
-              },
-            ),
-            // const Divider(),
-            AnimatedSwitcher(
-              duration:
-                  const Duration(milliseconds: 500), // Duration of animation
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                      key: const ValueKey(1),
-                      icon: Icons.mail_lock_outlined,
-                      text: context.isArabic
-                          ? "الدردشات المغلقة"
-                          : "Locked chats",
-                      // onTap: () async {
-                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
-                      //       extra: OptionsChatsViewParams(
-                      //         category: 'LockedChats',
-                      //         chatsCubit: chatsCubit,
-                      //         isSecret: true,
-                      //       ));
-
-                      //   // Check if the result is true, refresh the home page
-                      //   if (result == true) {
-                      //     log("pop");
-                      //     await chatsCubit
-                      //         .getChatsByCategory(ChatCategories.social);
-                      //     setState(() {});
-                      //   }
-                      // },
-                      onTap: () async {
-                        await lockedChatsOnTap();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                      key: const ValueKey(2),
-                      icon: Icons.person_off_outlined,
-                      text: LocaleKeys.anonymous.localize,
-                      onTap: () async {
-                        final result = await context.push(Routes.ARCHIVEDCHATS,
-                            extra: OptionsChatsViewParams(
-                              category: ChatCategoriesIds.anonymous,
-                              chatsCubit: chatsCubit,
-                              isSecret: false,
-                            ));
-
-                        // Check if the result is true, refresh the home page
-                        if (result == true) {
-                          log("pop");
-                          await chatsCubit
-                              .getChatsByCategory(ChatCategories.social);
-                          setState(() {});
-                        }
-                      },
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                      key: const ValueKey(3),
-                      icon: Icons.emoji_people,
-                      text: LocaleKeys.greet.localize,
-                      onTap: () async {
-                        final result = await context.push(Routes.ARCHIVEDCHATS,
-                            extra: OptionsChatsViewParams(
-                              category: ChatCategoriesIds.greet,
-                              chatsCubit: chatsCubit,
-                              isSecret: false,
-                            ));
-
-                        // Check if the result is true, refresh the home page
-                        if (result == true) {
-                          log("pop");
-                          await chatsCubit
-                              .getChatsByCategory(ChatCategories.social);
-                          setState(() {});
-                        }
-                      },
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            // const Divider(),
-            _buildCategoryChats(),
-
-            const MessagesAreEndToEndEncrypted(),
-          ],
-        );
-      case ChatCategories.service:
-        return Column(
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  expandedOptions = !expandedOptions;
-                });
-              },
-              child: SizedBox(
-                width: double.infinity,
-                child: Icon(
-                  expandedOptions
-                      ? FontAwesomeIcons.anglesUp
-                      : FontAwesomeIcons.anglesDown,
-                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
-                  size: 18,
-                ),
-              ),
-            ),
-            ChatOptions(
-              icon: Icons.archive_outlined,
-              text: context.isArabic ? "المؤرشفة" : "Archived",
-              onTap: () async {
-                final result = await context.push(Routes.ARCHIVEDCHATS,
-                    extra: OptionsChatsViewParams(
-                      category: 'Archive',
-                      chatsCubit: chatsCubit,
-                      isSecret: false,
-                    ));
-
-                // Check if the result is true, refresh the home page
-                if (result == true) {
-                  log("pop");
-                  await chatsCubit.getChatsByCategory(ChatCategories.service);
-                  setState(() {});
-                }
-              },
-            ),
-            // const Divider(),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                      key: const ValueKey(4),
-                      icon: Icons.mail_lock_outlined,
-                      text: context.isArabic
-                          ? "الدردشات المغلقة"
-                          : "Locked chats",
-                      // onTap: () async {
-                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
-                      //       extra: OptionsChatsViewParams(
-                      //         category: 'LockedChats',
-                      //         chatsCubit: chatsCubit,
-                      //         isSecret: true,
-                      //       ));
-
-                      //   // Check if the result is true, refresh the home page
-                      //   if (result == true) {
-                      //     log("pop");
-                      //     await chatsCubit
-                      //         .getChatsByCategory(ChatCategories.service);
-                      //     setState(() {});
-                      //   }
-                      // },
-                      onTap: () async {
-                        await lockedChatsOnTap();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            // const Divider(),
-            _buildCategoryChats(),
-            const MessagesAreEndToEndEncrypted(),
-          ],
-        );
-      // case ChatCategories.groups:
-      case ChatCategories.unread:
-        return Column(
-          children: [
-            _buildCategoryChats(),
-            const MessagesAreEndToEndEncrypted(),
-          ],
-        );
-      case ChatCategories.calls:
-        return _buildCallingHistory(isVideo: false);
-      // case ChatCategories.broadcast:
-      //   return buildBroadcast();
-      //   case ChatCategories.archived:
-      // case ChatCategories.anonymous:
-      // case ChatCategories.greet:
-      //   return _buildCategoryChats();
-      // case ChatCategories.socialCalls:
-      // case ChatCategories.serviceCalls:
-      // return _buildCallingHistory(isVideo: false);
-      // case ChatCategories.locked:
-      // return _buildCategoryChats(isSecret: true);
-    }
-  }
-
-  Future<void> lockedChatsOnTap() async {
-    final LocalAuthentication auth = LocalAuthentication();
-
-    // Check if local authentication is available
-    bool isAvailable =
-        await auth.canCheckBiometrics || await auth.isDeviceSupported();
-
-    if (isAvailable) {
-      try {
-        // Attempt to authenticate the user
-        bool didAuthenticate = await auth.authenticate(
-          localizedReason: context.isArabic
-              ? 'تحقق من البصمة للوصول إلى المحادثات المغلقة'
-              : 'Please authenticate to access locked chats',
-          // options: const AuthenticationOptions(
-          //   biometricOnly: true,
-          //   stickyAuth: true,
-          // ),
-        );
-
-        if (didAuthenticate) {
-          // User authenticated successfully
-          final result = await context.push(
-            Routes.ARCHIVEDCHATS,
-            extra: OptionsChatsViewParams(
-              category: 'LockedChats',
-              chatsCubit: chatsCubit,
-              isSecret: true,
-            ),
-          );
-
-          // Check if the result is true, refresh the home page
-          if (result == true) {
-            log("pop");
-            await chatsCubit.getChatsByCategory(ChatCategories.social);
-            setState(() {});
-          }
-        } else {
-          log("Authentication failed");
-        }
-      } catch (e) {
-        log("Error during authentication: $e");
-      }
-    } else {
-      log("Local authentication not available on this device.");
-    }
-  }
-
-  Widget _buildCategoryChats({bool isSecret = false}) {
-    return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-      return state.chats == null || state.isLoading
-          ?
-          // const Center(
-          //     child: CustomCircularProgressIndicator(),
-          //   )
-          const SizedBox()
-          : state.chats!.isEmpty
-              ? Center(
-                  child: Label(
-                      text: LocaleKeys.noChatsUntilNow.localize,
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 26,
-                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR
-                      ),),
-                )
-              : Expanded(
-                child: Scrollbar(
-                    // isAlwaysShown: true,  // Ensures the scrollbar is always visible
-                    interactive: true,
-                    thumbVisibility: true,
-                    thickness: 3,
-                    child: ListView.separated(
-                      shrinkWrap: false,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      // Enable scrolling
-                      itemBuilder: (context, index) => (state
-                              .chats![index].archived)
-                          ? const SizedBox()
-                          : Slidable(
-                              key: ValueKey(index),
-                              closeOnScroll: false,
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                dismissible: DismissiblePane(onDismissed: () {}),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (value) {
-                                      // bottomSheet logic
-                                    },
-                                    backgroundColor: context.isDarkMode
-                                        ? AppColors.DARK_BLUE_COLOR
-                                        : const Color.fromARGB(
-                                            255, 191, 191, 191),
-                                    foregroundColor: context.isDarkMode
-                                        ? AppColors.DARK_BLUE_COLOR
-                                        : Colors.white,
-                                    icon: Icons.more_horiz,
-                                    label: LocaleKeys.more.localize,
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (value) async {
-                                      // Archive or unarchive logic
-                                    },
-                                    backgroundColor: context.isDarkMode
-                                        ? Colors.white
-                                        : AppColors.PRIMARY_COLOR,
-                                    foregroundColor: context.isDarkMode
-                                        ? AppColors.DARK_BLUE_COLOR
-                                        : Colors.white,
-                                    icon: Icons.delete_outlined,
-                                    label: state.chats![index].archived
-                                        ? LocaleKeys.unarchive.localize
-                                        : LocaleKeys.archive.localize,
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                ],
-                              ),
-                              child: NewChatCard(
-                                isSecret: isSecret,
-                                chat: state.chats?[index],
-                                chatsCubit: chatsCubit,
-                              ),
-                            ),
-                      separatorBuilder: (context, index) {
-                        return const SizedBox();
-                        // return Padding(
-                        //   padding:
-                        //   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-                        //   child: Divider(
-                        //     thickness: 1,
-                        //     color:context.isDarkMode ? Colors.white12 : Colors.black12,
-                        //     height: 5,
-                        //   ),
-                        // );
-                      },
-                      itemCount: state.chats?.length ?? 0,
-                    ),
-                  ),
-              );
-    });
-  }
-
-  Widget _buildCallingHistory({required bool isVideo}) {
-    return DefaultTabController(
-      length: 2, // Two tabs: Social and Services
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        // Keeps the height minimal for alignment
-        children: [
-          // Centered Tab Bar for Social and Services
-          SizedBox(
-            height: 33,
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                // Adjust padding as needed
-                // constraints: const BoxConstraints(maxWidth: 300), // Controls width for centering
-                child: TabBar(
-                  dividerColor: Colors.transparent,
-                  labelPadding: const EdgeInsets.symmetric(horizontal: 32),
-                  indicator: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.1),
-                    // Light red background for selected tab
-                    borderRadius: BorderRadius.circular(12), // Rounded corners
-                  ),
-                  labelColor: Colors.red,
-                  unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
-                  isScrollable: false,
-                  tabs: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                      ),
-                      child: Tab(text: LocaleKeys.social.localize),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                      ),
-                      child: Tab(text: LocaleKeys.services.localize),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            // TabBarView to display content for each tab
-            child: TabBarView(
-              children: [
-                // Social tab: Show video calls
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      CallingCard(isVideo: index.isEven),
-                  separatorBuilder: (context, index) => const SizedBox(),
-                  itemCount: 8,
-                ),
-                // Services tab: Show voice calls
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      CallingCard(isVideo: index.isEven),
-                  separatorBuilder: (context, index) => const SizedBox(),
-                  itemCount: 8,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildBroadcast() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Follow Section
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  LocaleKeys.broadcasts.localize,
-                  style: Styles.mediumText(fontWeight: FontWeight.w600),
-                ),
-              ),
-              const Spacer(),
-              TextButton(
-                onPressed: () {
-                  context.push(Routes.SEEALLBROADCASTS);
-                },
-                child: Text(
-                  LocaleKeys.seeAll.localize,
-                  style: Styles.smallText(
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 16,
-              )
-            ],
-          ),
-          SizedBox(
-            height: 160, // Set the height for the horizontal list view
-            child: ListView(
-              scrollDirection:
-                  Axis.horizontal, // Makes the list scroll horizontally
-              children: const [
-                FollowBroadcastCard(
-                  'FC Barcelona',
-                  'https://www.hyperakt.com/assets/images/fc-barcelona/Barcelona.jpg',
-                ),
-                FollowBroadcastCard(
-                  'BBC News',
-                  'https://seeklogo.com/images/B/bbc-news-logo-8648ABD044-seeklogo.com.png',
-                ),
-                FollowBroadcastCard(
-                  'Real Madrid FC',
-                  'https://images.alphacoders.com/116/thumb-1920-1163534.jpg',
-                ),
-                FollowBroadcastCard(
-                  'FC Barcelona',
-                  'https://www.hyperakt.com/assets/images/fc-barcelona/Barcelona.jpg',
-                ),
-                FollowBroadcastCard(
-                  'BBC News',
-                  'https://seeklogo.com/images/B/bbc-news-logo-8648ABD044-seeklogo.com.png',
-                ),
-                FollowBroadcastCard(
-                  'Real Madrid FC',
-                  'https://images.alphacoders.com/116/thumb-1920-1163534.jpg',
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, top: 24, right: 16),
-            child: Text(
-              LocaleKeys.myBroadcasts.localize,
-              style: Styles.mediumText(fontWeight: FontWeight.w600),
-            ),
-          ),
-          ListView.separated(
-            itemCount: 10,
-            separatorBuilder: (context, index) {
-              return const Divider(
-                color: Colors.grey,
-              );
-            },
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return const MyBroadcastsCard();
-            },
-            physics: const NeverScrollableScrollPhysics(),
-          ),
-        ],
-      ),
-    );
-  }
-}
+import 'archived_chats_view.dart';
 
 _selectedChatAppBar(ChatsCubit chatsCubit) {
   return SliverAppBar(
@@ -944,6 +53,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                     context.read<ChatsCubit>().selectedChats.isNotEmpty
                         ? IconButton(
                             onPressed: () {
+                              ManageVibration.vibrate();
                               context.read<ChatsCubit>().clearSelectedChats();
                             },
                             icon: const Icon(Icons.arrow_back))
@@ -963,6 +73,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                       children: [
                         IconButton(
                           onPressed: () async {
+                            ManageVibration.vibrate();
                             await context.read<ChatsCubit>().pinAndUnpinChat();
                           },
                           icon: const Icon(Icons.push_pin_outlined),
@@ -972,6 +83,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                         ),
                         IconButton(
                           onPressed: () async {
+                            ManageVibration.vibrate();
                             await context.read<ChatsCubit>().deleteChat();
                           },
                           icon: Icon(
@@ -983,6 +95,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                         ),
                         IconButton(
                           onPressed: () async {
+                            ManageVibration.vibrate();
                             await context.read<ChatsCubit>().changeMuteChat();
                           },
                           icon: Icon(
@@ -994,6 +107,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                         ),
                         IconButton(
                           onPressed: () async {
+                            ManageVibration.vibrate();
                             await context
                                 .read<ChatsCubit>()
                                 .changeArchiveChat(isArchivedTab: false);
@@ -1050,6 +164,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                   textColor: AppColors.PRIMARY_COLOR_DARK,
                                   // Set "Undo" text color to gray
                                   onPressed: () async {
+                                    ManageVibration.vibrate();
                                     await context
                                         .read<ChatsCubit>()
                                         .changeArchiveChat(
@@ -1150,6 +265,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                 textColor: AppColors.PRIMARY_COLOR_DARK,
                                 // Set "Undo" text color to gray
                                 onPressed: () async {
+                                  ManageVibration.vibrate();
                                   await context
                                       .read<ChatsCubit>()
                                       .lockChats(isLockedTap: false);
@@ -1207,8 +323,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                           PopupMenuItem<int>(
                             value: 3,
                             child: Text(
-                              context.isArabic
-                                  ? "قفل المحادثات": "Lock Chats",
+                              context.isArabic ? "قفل المحادثات" : "Lock Chats",
                               style: Styles.mediumText(
                                   color: context.isDarkMode
                                       ? Colors.white
@@ -1228,16 +343,16 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
 }
 
 class ChatOptions extends StatelessWidget {
+  final IconData icon;
+
+  final String text;
+  final Function()? onTap;
   const ChatOptions({
     super.key,
     required this.icon,
     required this.text,
     this.onTap,
   });
-
-  final IconData icon;
-  final String text;
-  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1266,6 +381,924 @@ class ChatOptions extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ChatsViewParams {
+  final int initialTabIndex;
+  bool isFromStartChat = false;
+  ChatEntity? selectedChat;
+
+  ChatsViewParams(
+      {this.initialTabIndex = 0,
+      this.isFromStartChat = false,
+      this.selectedChat});
+}
+
+class ChatView extends StatefulWidget {
+  final ChatsViewParams chatsViewParams;
+
+  const ChatView({super.key, required this.chatsViewParams});
+
+  @override
+  State<ChatView> createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
+  late ChatsCubit chatsCubit;
+  late TabController tabController;
+  bool expandedOptions = false;
+  late ScrollController scrollController;
+  double lastOffset = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatsCubit, ChatsState>(
+      builder: (context, state) {
+        // final chatsCubit = context.read<ChatsCubit>();
+        return CustomScaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(
+                context.read<ChatsCubit>().selectedChats.isEmpty ? 40 : 0),
+            child: Builder(
+              builder: (context) {
+                if (context.read<ChatsCubit>().selectedChats.isEmpty) {
+                  return HomeAppbar(
+                    isHaveLeading: false,
+                    isWithBackArrow: true,
+                    inChat: PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      color: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : AppColors.BACKGROUND_COLOR,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      offset: const Offset(0, 50),
+                      onSelected: (int value) async {
+                        if (value == 2) {
+                          context.push(Routes.CHATPROFILEVIEW);
+                        }
+                        if (value == 1) {
+                          await context
+                              .read<ChatsCubit>()
+                              .recoverDeletedChats();
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return _mainMenuBuilder();
+                      },
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ),
+          body: SafeArea(
+            child: DefaultTabController(
+              length: ChatCategories.values.length,
+              initialIndex: widget.chatsViewParams.initialTabIndex,
+              child: NestedAppbar(
+                scrollController:
+                    scrollController, // Attach the ScrollController here
+                appBars: [
+                  if (context.read<ChatsCubit>().selectedChats.isNotEmpty)
+                    _selectedChatAppBar(chatsCubit),
+                  SliverAppBar(
+                    expandedHeight: MediaQuery.of(context).size.height *
+                        0.1, // Responsive height
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    flexibleSpace: BlocProvider(
+                      create: (context) => serviceLocator<StoryCubit>()
+                        ..fetchStories()
+                        ..getMutedStories(),
+                      child: const Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: ChatStories(),
+                      ),
+                    ),
+                  ),
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    pinned: true,
+                    titleSpacing: 0,
+                    title: _buildCategoriesLabels(),
+                  )
+                ],
+                // body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                //   builder: (context, state) {
+                //     return _buildCategoriesViews();
+                //   },
+                // ),
+                body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                  builder: (context, state) {
+                    return context.read<UserCubit>().isLoggedIn
+                        ? _buildCategoriesViews()
+                        : Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      return pleaseLoginDialog(context);
+                                      // context.push(Routes.LOGIN);
+                                    },
+                                    child: Label(
+                                      text: LocaleKeys.login.localize,
+                                      style: const TextStyle(
+                                        color: AppColors.PRIMARY_COLOR_DARK,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor:
+                                            AppColors.PRIMARY_COLOR_DARK,
+                                      ),
+                                    )),
+                                Label(
+                                  text: LocaleKeys
+                                      .continueUsingChatServices.localize,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildBroadcast() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Follow Section
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  LocaleKeys.broadcasts.localize,
+                  style: Styles.mediumText(fontWeight: FontWeight.w600),
+                ),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () {
+                  ManageVibration.vibrate();
+                  context.push(Routes.SEEALLBROADCASTS);
+                },
+                child: Text(
+                  LocaleKeys.seeAll.localize,
+                  style: Styles.smallText(
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 160, // Set the height for the horizontal list view
+            child: ListView(
+              scrollDirection:
+                  Axis.horizontal, // Makes the list scroll horizontally
+              children: const [
+                FollowBroadcastCard(
+                  'FC Barcelona',
+                  'https://www.hyperakt.com/assets/images/fc-barcelona/Barcelona.jpg',
+                ),
+                FollowBroadcastCard(
+                  'BBC News',
+                  'https://seeklogo.com/images/B/bbc-news-logo-8648ABD044-seeklogo.com.png',
+                ),
+                FollowBroadcastCard(
+                  'Real Madrid FC',
+                  'https://images.alphacoders.com/116/thumb-1920-1163534.jpg',
+                ),
+                FollowBroadcastCard(
+                  'FC Barcelona',
+                  'https://www.hyperakt.com/assets/images/fc-barcelona/Barcelona.jpg',
+                ),
+                FollowBroadcastCard(
+                  'BBC News',
+                  'https://seeklogo.com/images/B/bbc-news-logo-8648ABD044-seeklogo.com.png',
+                ),
+                FollowBroadcastCard(
+                  'Real Madrid FC',
+                  'https://images.alphacoders.com/116/thumb-1920-1163534.jpg',
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 24, right: 16),
+            child: Text(
+              LocaleKeys.myBroadcasts.localize,
+              style: Styles.mediumText(fontWeight: FontWeight.w600),
+            ),
+          ),
+          ListView.separated(
+            itemCount: 10,
+            separatorBuilder: (context, index) {
+              return const Divider(
+                color: Colors.grey,
+              );
+            },
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return const MyBroadcastsCard();
+            },
+            physics: const NeverScrollableScrollPhysics(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    if (widget.chatsViewParams.isFromStartChat) {
+      chatsCubit = context.read<ChatsCubit>()..init();
+      chatsCubit.selectChat = widget.chatsViewParams.selectedChat!;
+      // print(
+      //     'widget.chatsViewParams.selectedChat! ${widget.chatsViewParams.selectedChat!}');
+      Future.microtask(() async {
+        await context
+            .read<ChatsCubit>()
+            .getOnlineOfflineStatus(chat: widget.chatsViewParams.selectedChat!);
+        context.push(Routes.CHATROOM, extra: chatsCubit);
+      });
+    } else {
+      chatsCubit = context.read<ChatsCubit>()..init();
+    }
+    tabController =
+        TabController(length: ChatCategories.values.length, vsync: this)
+          ..addListener(() {
+            if (tabController.previousIndex != tabController.index) {
+              chatsCubit.getChatsByCategory(
+                  ChatCategories.values[tabController.index]);
+            }
+          });
+
+    scrollController = ScrollController()
+      ..addListener(() {
+        if (lastOffset > scrollController.offset) {
+          // Scrolled down
+          if (!expandedOptions) {
+            setState(() {
+              expandedOptions = true;
+            });
+          }
+        } else if (lastOffset < scrollController.offset) {
+          // Scrolled up
+          if (expandedOptions) {
+            setState(() {
+              expandedOptions = false;
+            });
+          }
+        }
+        lastOffset = scrollController.offset;
+      });
+
+    super.initState();
+  }
+
+  Future<void> lockedChatsOnTap() async {
+    final LocalAuthentication auth = LocalAuthentication();
+
+    // Check if local authentication is available
+    bool isAvailable =
+        await auth.canCheckBiometrics || await auth.isDeviceSupported();
+
+    if (isAvailable) {
+      try {
+        // Attempt to authenticate the user
+        bool didAuthenticate = await auth.authenticate(
+          localizedReason: context.isArabic
+              ? 'تحقق من البصمة للوصول إلى المحادثات المغلقة'
+              : 'Please authenticate to access locked chats',
+          // options: const AuthenticationOptions(
+          //   biometricOnly: true,
+          //   stickyAuth: true,
+          // ),
+        );
+
+        if (didAuthenticate) {
+          // User authenticated successfully
+          final result = await context.push(
+            Routes.ARCHIVEDCHATS,
+            extra: OptionsChatsViewParams(
+              category: 'LockedChats',
+              chatsCubit: chatsCubit,
+              isSecret: true,
+            ),
+          );
+
+          // Check if the result is true, refresh the home page
+          if (result == true) {
+            log("pop");
+            await chatsCubit.getChatsByCategory(ChatCategories.social);
+            setState(() {});
+          }
+        } else {
+          log("Authentication failed");
+        }
+      } catch (e) {
+        log("Error during authentication: $e");
+      }
+    } else {
+      log("Local authentication not available on this device.");
+    }
+  }
+
+  Widget _buildCallingHistory({required bool isVideo}) {
+    return DefaultTabController(
+      length: 2, // Two tabs: Social and Services
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        // Keeps the height minimal for alignment
+        children: [
+          // Centered Tab Bar for Social and Services
+          SizedBox(
+            height: 33,
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                // Adjust padding as needed
+                // constraints: const BoxConstraints(maxWidth: 300), // Controls width for centering
+                child: TabBar(
+                  dividerColor: Colors.transparent,
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 32),
+                  indicator: BoxDecoration(
+                    color: Colors.red.withValues(alpha: 0.1),
+                    // Light red background for selected tab
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                  ),
+                  labelColor: Colors.red,
+                  unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
+                  isScrollable: false,
+                  tabs: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      child: Tab(text: LocaleKeys.social.localize),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      child: Tab(text: LocaleKeys.services.localize),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            // TabBarView to display content for each tab
+            child: TabBarView(
+              children: [
+                // Social tab: Show video calls
+                GlowingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  color: AppColors.SECONDARY_COLOR,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) =>
+                        CallingCard(isVideo: index.isEven),
+                    separatorBuilder: (context, index) => const SizedBox(),
+                    itemCount: 8,
+                  ),
+                ),
+                // Services tab: Show voice calls
+                GlowingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  color: AppColors.SECONDARY_COLOR,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) =>
+                        CallingCard(isVideo: index.isEven),
+                    separatorBuilder: (context, index) => const SizedBox(),
+                    itemCount: 8,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget _buildCategoriesLabels() {
+  //   return TabBar(
+  //       controller: tabController,
+  //       labelColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+  //       unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
+  //       indicatorColor: Colors.red,
+  //       tabAlignment: TabAlignment.start,
+  //       isScrollable: true,
+  //       tabs: ChatCategories.values.map((e) {
+  //         return Tab(text: e.name.localize);
+  //       }).toList());
+  // }
+
+  Widget _buildCategoriesLabels() {
+    return SizedBox(
+      height: 33,
+      child: TabBar(
+        controller: tabController,
+        // labelColor: AppColors.PRIMARY_COLOR,
+        dividerColor: Colors.transparent,
+        // unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
+        indicator: BoxDecoration(
+          color: Colors.red.withValues(alpha: 0.1), // Light red background
+          borderRadius: BorderRadius.circular(8), // Rounded corners
+        ),
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
+        tabs: ChatCategories.values.map((e) {
+          return Tab(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Text(
+                e.name.localize,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: e == ChatCategories.values[tabController.index]
+                      ? Colors.red
+                      : AppColors.LIGHT_GRAY_COLOR2,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildCategoriesViews() {
+    return TabBarView(
+        controller: tabController,
+        children: ChatCategories.values
+            .map((e) => _chatCategoryWidgetMapper(e))
+            .toList());
+  }
+
+  Widget _buildCategoryChats({bool isSecret = false}) {
+    return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
+      return state.chats == null || state.isLoading
+          ?
+          // const Center(
+          //     child: CustomCircularProgressIndicator(),
+          //   )
+          const SizedBox()
+          : state.chats!.isEmpty
+              ? Center(
+                  child: Label(
+                    text: LocaleKeys.noChatsUntilNow.localize,
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR),
+                  ),
+                )
+              : Expanded(
+                  child: Scrollbar(
+                    // isAlwaysShown: true,  // Ensures the scrollbar is always visible
+                    interactive: true,
+                    thumbVisibility: true,
+                    thickness: 3,
+                    child: GlowingOverscrollIndicator(
+                      axisDirection: AxisDirection.down,
+                      color: AppColors.SECONDARY_COLOR,
+                      child: ListView.separated(
+                        shrinkWrap: false,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        // Enable scrolling
+                        itemBuilder: (context, index) =>
+                            (state.chats![index].archived)
+                                ? const SizedBox()
+                                : Slidable(
+                                    key: ValueKey(index),
+                                    closeOnScroll: false,
+                                    endActionPane: ActionPane(
+                                      motion: const ScrollMotion(),
+                                      dismissible:
+                                          DismissiblePane(onDismissed: () {}),
+                                      children: [
+                                        SlidableAction(
+                                          onPressed: (value) {
+                                            // bottomSheet logic
+                                          },
+                                          backgroundColor: context.isDarkMode
+                                              ? AppColors.DARK_BLUE_COLOR
+                                              : const Color.fromARGB(
+                                                  255, 191, 191, 191),
+                                          foregroundColor: context.isDarkMode
+                                              ? AppColors.DARK_BLUE_COLOR
+                                              : Colors.white,
+                                          icon: Icons.more_horiz,
+                                          label: LocaleKeys.more.localize,
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                        SlidableAction(
+                                          onPressed: (value) async {
+                                            // Archive or unarchive logic
+                                          },
+                                          backgroundColor: context.isDarkMode
+                                              ? Colors.white
+                                              : AppColors.PRIMARY_COLOR,
+                                          foregroundColor: context.isDarkMode
+                                              ? AppColors.DARK_BLUE_COLOR
+                                              : Colors.white,
+                                          icon: Icons.delete_outlined,
+                                          label: state.chats![index].archived
+                                              ? LocaleKeys.unarchive.localize
+                                              : LocaleKeys.archive.localize,
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                      ],
+                                    ),
+                                    child: NewChatCard(
+                                      isSecret: isSecret,
+                                      chat: state.chats?[index],
+                                      chatsCubit: chatsCubit,
+                                    ),
+                                  ),
+                        separatorBuilder: (context, index) {
+                          return const SizedBox();
+                          // return Padding(
+                          //   padding:
+                          //   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+                          //   child: Divider(
+                          //     thickness: 1,
+                          //     color:context.isDarkMode ? Colors.white12 : Colors.black12,
+                          //     height: 5,
+                          //   ),
+                          // );
+                        },
+                        itemCount: state.chats?.length ?? 0,
+                      ),
+                    ),
+                  ),
+                );
+    });
+  }
+
+  Widget _chatCategoryWidgetMapper(ChatCategories category) {
+    switch (category) {
+      case ChatCategories.social:
+        return Column(
+          children: [
+            InkWell(
+              onTap: () {
+                ManageVibration.vibrate();
+                setState(() {
+                  expandedOptions = !expandedOptions;
+                });
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Icon(
+                  expandedOptions
+                      ? FontAwesomeIcons.anglesUp
+                      : FontAwesomeIcons.anglesDown,
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
+                  size: 18,
+                ),
+              ),
+            ),
+            ChatOptions(
+              icon: Icons.archive_outlined,
+              text: context.isArabic ? "المؤرشفة" : "Archived",
+              onTap: () async {
+                ManageVibration.vibrate();
+                final result = await context.push(Routes.ARCHIVEDCHATS,
+                    extra: OptionsChatsViewParams(
+                      category: 'Archive',
+                      chatsCubit: chatsCubit,
+                      isSecret: false,
+                    ));
+
+                // Check if the result is true, refresh the home page
+                if (result == true) {
+                  log("pop");
+                  await chatsCubit.getChatsByCategory(ChatCategories.social);
+                  setState(() {});
+                }
+              },
+            ),
+            // const Divider(),
+            AnimatedSwitcher(
+              duration:
+                  const Duration(milliseconds: 500), // Duration of animation
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(1),
+                      icon: Icons.mail_lock_outlined,
+                      text: context.isArabic
+                          ? "الدردشات المغلقة"
+                          : "Locked chats",
+                      // onTap: () async {
+                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
+                      //       extra: OptionsChatsViewParams(
+                      //         category: 'LockedChats',
+                      //         chatsCubit: chatsCubit,
+                      //         isSecret: true,
+                      //       ));
+
+                      //   // Check if the result is true, refresh the home page
+                      //   if (result == true) {
+                      //     log("pop");
+                      //     await chatsCubit
+                      //         .getChatsByCategory(ChatCategories.social);
+                      //     setState(() {});
+                      //   }
+                      // },
+                      onTap: () async {
+                        ManageVibration.vibrate();
+                        await lockedChatsOnTap();
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(2),
+                      icon: Icons.person_off_outlined,
+                      text: LocaleKeys.anonymous.localize,
+                      onTap: () async {
+                        ManageVibration.vibrate();
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.anonymous,
+                              chatsCubit: chatsCubit,
+                              isSecret: false,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatsCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(3),
+                      icon: Icons.emoji_people,
+                      text: LocaleKeys.greet.localize,
+                      onTap: () async {
+                        ManageVibration.vibrate();
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.greet,
+                              chatsCubit: chatsCubit,
+                              isSecret: false,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatsCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            // const Divider(),
+            _buildCategoryChats(),
+
+            const MessagesAreEndToEndEncrypted(),
+          ],
+        );
+      case ChatCategories.service:
+        return Column(
+          children: [
+            InkWell(
+              onTap: () {
+                ManageVibration.vibrate();
+                setState(() {
+                  expandedOptions = !expandedOptions;
+                });
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Icon(
+                  expandedOptions
+                      ? FontAwesomeIcons.anglesUp
+                      : FontAwesomeIcons.anglesDown,
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
+                  size: 18,
+                ),
+              ),
+            ),
+            ChatOptions(
+              icon: Icons.archive_outlined,
+              text: context.isArabic ? "المؤرشفة" : "Archived",
+              onTap: () async {
+                ManageVibration.vibrate();
+                final result = await context.push(Routes.ARCHIVEDCHATS,
+                    extra: OptionsChatsViewParams(
+                      category: 'Archive',
+                      chatsCubit: chatsCubit,
+                      isSecret: false,
+                    ));
+
+                // Check if the result is true, refresh the home page
+                if (result == true) {
+                  log("pop");
+                  await chatsCubit.getChatsByCategory(ChatCategories.service);
+                  setState(() {});
+                }
+              },
+            ),
+            // const Divider(),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(4),
+                      icon: Icons.mail_lock_outlined,
+                      text: context.isArabic
+                          ? "الدردشات المغلقة"
+                          : "Locked chats",
+                      // onTap: () async {
+                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
+                      //       extra: OptionsChatsViewParams(
+                      //         category: 'LockedChats',
+                      //         chatsCubit: chatsCubit,
+                      //         isSecret: true,
+                      //       ));
+
+                      //   // Check if the result is true, refresh the home page
+                      //   if (result == true) {
+                      //     log("pop");
+                      //     await chatsCubit
+                      //         .getChatsByCategory(ChatCategories.service);
+                      //     setState(() {});
+                      //   }
+                      // },
+                      onTap: () async {
+                        ManageVibration.vibrate();
+                        await lockedChatsOnTap();
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            // const Divider(),
+            _buildCategoryChats(),
+            const MessagesAreEndToEndEncrypted(),
+          ],
+        );
+      // case ChatCategories.groups:
+      case ChatCategories.unread:
+        return Column(
+          children: [
+            _buildCategoryChats(),
+            const MessagesAreEndToEndEncrypted(),
+          ],
+        );
+      case ChatCategories.calls:
+        return _buildCallingHistory(isVideo: false);
+      // case ChatCategories.broadcast:
+      //   return buildBroadcast();
+      //   case ChatCategories.archived:
+      // case ChatCategories.anonymous:
+      // case ChatCategories.greet:
+      //   return _buildCategoryChats();
+      // case ChatCategories.socialCalls:
+      // case ChatCategories.serviceCalls:
+      // return _buildCallingHistory(isVideo: false);
+      // case ChatCategories.locked:
+      // return _buildCategoryChats(isSecret: true);
+    }
+  }
+
+  List<PopupMenuEntry<int>> _mainMenuBuilder() {
+    return [
+      // PopupMenuItem<int>(
+      //   value: 0,
+      //   child: Text(
+      //     LocaleKeys.newGroup.localize,
+      //     style: Styles.mediumText(
+      //         color:
+      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+      //   ),
+      // ),
+      // PopupMenuItem<int>(
+      //   value: 1,
+      //   child: Text(
+      //     LocaleKeys.newBroadcast.localize,
+      //     style: Styles.mediumText(
+      //         color:
+      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+      //   ),
+      // ),
+      PopupMenuItem<int>(
+        value: 0,
+        child: Label(
+          text: context.isArabic ? "الرسائل المميزة" : "Starred Messages",
+          style: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 1,
+        child: Label(
+          text: LocaleKeys.recoverDeletedChats.localize,
+          style: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 2,
+        child: Label(
+          text: LocaleKeys.profile.localize,
+          style: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
+    ];
   }
 }
 

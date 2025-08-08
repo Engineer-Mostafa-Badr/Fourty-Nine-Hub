@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/change_quantity_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_from_cart_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../../../core/error/failure.dart';
+import '../../domain/usecases/add_food_usecase.dart';
+import '../../domain/usecases/change_quantity_usecase.dart';
+import '../../domain/usecases/delete_food_from_cart_usecase.dart';
+import '../../domain/usecases/get_meals_usecase.dart';
+import '../../../restaurants_list/data/models/restaurant_mneu_model.dart';
+import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../domain/repositories/restaurant_details_repo.dart';
 import '../datasources/restaurant_details_remote_data_source.dart';

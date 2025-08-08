@@ -18,6 +18,7 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 
 import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // ignore: must_be_immutable
 class AllTripNoSocketScreen extends StatefulWidget {
@@ -126,7 +127,10 @@ class _AllTripNoSocketScreenState extends State<AllTripNoSocketScreen> {
                             ownerId: e.userId?.id ?? "",
                             subcategoryId: e.categoryId ?? "");
                         return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              
+      ManageVibration.vibrate();
+                            },
                             child: TripOfferCardNoScoket(
                               model: e,
                             ));

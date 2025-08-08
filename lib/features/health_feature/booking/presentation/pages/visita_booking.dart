@@ -23,6 +23,7 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class VisitaBooking extends StatefulWidget {
   final DoctorDetailsCubit doctorDetailsCubit;
@@ -102,6 +103,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                             height: 50.h,
                             label: LocaleKeys.premiumBook.localize,
                             onPressed: () {
+      ManageVibration.vibrate();
                               serviceLocator<SubscriptionController>()
                                   .checkIfUserSubscribed(
                                 title: context.isArabic

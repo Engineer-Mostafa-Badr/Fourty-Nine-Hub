@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -118,6 +119,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
         ),
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             bottomSheet(
               context: context,
               isScrollControlled: true,
@@ -175,6 +177,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
           final v = values[index];
           return ListTile(
             onTap: () {
+      ManageVibration.vibrate();
               action(v);
               setState(() {
                 value = v;
@@ -222,6 +225,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
           return WidgetSpan(
               child: InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               widget.onChanged(e);
               value = e;
               setState(() {});

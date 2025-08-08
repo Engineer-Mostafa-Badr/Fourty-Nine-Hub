@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TechnicalExaminationScreen extends StatelessWidget {
   const TechnicalExaminationScreen({super.key});
@@ -94,6 +95,7 @@ class TechnicalExaminationScreen extends StatelessWidget {
                           UploadFileWidget(
                             title: LocaleKeys.technicalExamination.localize,
                             onTap: (){
+      ManageVibration.vibrate();
                               cubit.onUploadPersonalTechnicalExaminationPicture(context);
 
                             },
@@ -141,6 +143,7 @@ class TechnicalExaminationScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     print("object");
                     if(context.read<RideRegisterCubit>().state.personalTechnicalExaminationPicture==null){
                       showErrorMessage(context, "Please select technical examination");

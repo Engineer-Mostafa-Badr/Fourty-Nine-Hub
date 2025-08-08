@@ -10,6 +10,9 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class GetAllTripsCubit extends Cubit<GetAllTripsState> {
   // final Socket SharedWebSocket.socket!;
@@ -62,8 +65,13 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
         );
 
         response.fold(
-          (failure) =>
-              emit(GetAllTripsFailure('There are no trips, try again')),
+          (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+            emit(GetAllTripsFailure('There are no trips, try again'));
+          },
           (data) {
             try {
               emit(GetAllTripsLoading());

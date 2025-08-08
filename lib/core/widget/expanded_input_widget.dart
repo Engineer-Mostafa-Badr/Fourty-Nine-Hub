@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class ExpandedInputWidget extends StatefulWidget {
   final String title, disableMsg;
   final Color? titleColor;
@@ -113,6 +114,7 @@ class _ExpandedInputWidgetState extends State<ExpandedInputWidget> {
         SizedBox(height: 7.h),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             print(widget.enabled);
             if (widget.enabled!) {
               setState(() {
@@ -203,6 +205,7 @@ class _ExpandedInputWidgetState extends State<ExpandedInputWidget> {
                   widget.dropDownList.length,
                   (index) => GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       widget.onSelectItem(index);
                       isExpanded = false;
                       controller.text = widget.hasTranslation==true?context.isArabic?widget.dropDownList[index].nameAr:widget.dropDownList[index].nameEn:widget.dropDownList[index];

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import '../../../subcategories/data/models/sub_category_model.dart';
 
 import '../../../../res/style/const.dart';
 import '../../domain/entities/main_category_entity.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
-import 'package:fourtyninehub/features/call/widgets/declined_app_bar.dart';
-import 'package:fourtyninehub/features/call/widgets/declined_btns.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../authentication/data/models/user_model.dart';
+import '../../widgets/declined_app_bar.dart';
+import '../../widgets/declined_btns.dart';
+import '../../../../res/style/app_colors.dart';
 
 class DeclinedCallScreen extends StatefulWidget {
   final UserModel receiver;

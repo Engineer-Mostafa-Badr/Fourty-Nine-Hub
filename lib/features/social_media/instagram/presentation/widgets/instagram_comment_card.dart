@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_replies.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'instagram_comment_replies.dart';
+import '../../../social_posts/domain/entities/comment_entity.dart';
+import '../../../social_posts/domain/usecases/add_reply_usecase.dart';
+import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -20,6 +20,7 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramCommentCard extends StatefulWidget {
   final Color textColor;
@@ -90,6 +91,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             )),
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 bottomSheet(
                   context: context,
                   widget: _buildPostOptions(
@@ -151,6 +153,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                     size: 20,
                     isCircle: true,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       var result = await widget.onEditComment(PostCommentParams(
                           postId: widget.comment.id,
                           content: editTextController.text));
@@ -175,6 +178,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             ),
             InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 if (widget.comment.isLove == true) {
                   // widget.onCommentReact();
                   widget.comment.isLove = false;
@@ -207,6 +211,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 style: Styles.mediumText(),
                 label: LocaleKeys.reply.localize,
                 onPressed: () {
+      ManageVibration.vibrate();
                   bottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -242,6 +247,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 title: LocaleKeys.reportComment.localize,
                 subTitle: LocaleKeys.youWillReportReply.localize,
                 onTap: () async {
+      ManageVibration.vibrate();
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
                         context: context,
@@ -259,6 +265,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 title: LocaleKeys.deleteComment.localize,
                 subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.onDeleteComment(widget.comment.id);
                 }),
           if (isMyComment)
@@ -269,6 +276,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 title: LocaleKeys.editComment.localize,
                 subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.comment.edit = !widget.comment.edit!;
                   editTextController.text = widget.comment.content;
                   setState(() {});
@@ -287,6 +295,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },

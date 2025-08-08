@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/last_like_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
+import 'comment_instagram_model.dart';
+import 'last_like_model.dart';
+import '../../domain/entities/instagram_post_entity.dart';
 
 
 class InstagramPostModel extends InstagramPostEntity {

@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/domain/use_case/share_app_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
 
@@ -10,9 +13,13 @@ class ShareAppCubit extends Cubit<ShareAppState> {
 
   Future<void> shareApp() async {
     final response = await _shareAppUseCase.call(const NoParams());
-    response.fold(
-        (failure) => emit(
-            state.copyWith(failure: failure, status: ShareAppStates.error)),
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: ShareAppStates.error));
+    },
         (r) =>
             emit(state.copyWith(shareApp: r, status: ShareAppStates.success)));
   }

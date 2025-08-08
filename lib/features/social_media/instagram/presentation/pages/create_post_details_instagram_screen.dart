@@ -2,18 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/post_instagram_state.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/Post/create_post_instagram_cubit.dart';
+import '../cubit/Post/post_instagram_state.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreatePostDetailsInstagramScreen extends StatelessWidget {
   CreatePostDetailsInstagramScreen({super.key, required this.images});
@@ -212,6 +213,7 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             context
                                 .read<CreatePostInstagramCubit>()
                                 .create(content: content.text, images: images);

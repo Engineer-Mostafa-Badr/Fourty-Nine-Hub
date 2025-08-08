@@ -5,22 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/images/image_picker_placeholder.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/edit_food_cubit.dart';
+import '../../../restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
+import '../../../restaurants_list/data/models/restaurant_mneu_model.dart';
+import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class EditFoodView extends StatefulWidget {
   var restaurantData;
@@ -210,6 +211,7 @@ class _EditFoodViewState extends State<EditFoodView>
                       ),
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -256,6 +258,7 @@ class _EditFoodViewState extends State<EditFoodView>
                                   ),
                                 ),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   onDelete(meal.id ?? '');
                                   // Navigator.of(context).pop();
                                 },
@@ -309,6 +312,7 @@ class _EditFoodViewState extends State<EditFoodView>
                 flex: 2,
                 child: GestureDetector(
                   onTap: () async {
+      ManageVibration.vibrate();
                     await context.read<EditFoodCubit>().uploadProfileImage(
                           context: context,
                           subcategoryId: '62c8babb8e28a58a3edf581d',

@@ -18,6 +18,7 @@ import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart'
 import '../../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../domain/entities/booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CurrentBookingsScreen extends StatefulWidget {
   const CurrentBookingsScreen({super.key, this.onClose});
@@ -226,7 +227,10 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                     isButton: false,
                     isSubscribed: doctor?.isPremium ?? false,
                     buttonTitle: '',
-                    onTap: () {},
+                    onTap: () {
+
+      ManageVibration.vibrate();
+                    },
                   ),
                   const Sizer(),
                 ],

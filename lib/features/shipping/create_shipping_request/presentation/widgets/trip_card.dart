@@ -3,22 +3,23 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../data/models/all_trip_model/all_trip_model.dart';
+import '../cubit/accept_decline_trip_cubit.dart';
+import '../cubit/call_message_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../cubit/trip_cubit.dart';
+import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TripCardWidget extends StatefulWidget {
   const TripCardWidget(
@@ -84,6 +85,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             if (!widget.buttons && !widget.yourRequest) {
               // context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
@@ -241,6 +243,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                         color: Colors.white,
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () {
+      ManageVibration.vibrate();
                           log(widget.model.id.toString(),
                               name: "lksdjfklsdjfkf");
                           context
@@ -265,6 +268,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             fontSize: 28, color: Colors.white),
                                         label: LocaleKeys.sendOffer.tr(),
                                         onPressed: () {
+      ManageVibration.vibrate();
                                           tripCubit.newOffer(
                                               id: widget.model.id ?? "",
                                               price:
@@ -325,7 +329,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                         false)
                                                 ? AppColors.PRIMARY_COLOR
                                                 : AppColors.DARK_GRAY_COLOR,
-                                            onPressed: () {},
+                                            onPressed: () {
+
+      ManageVibration.vibrate();
+                                            },
                                             style: Styles.mediumText(
                                                 fontSize: 18,
                                                 color: Colors.white),
@@ -344,7 +351,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             style: Styles.mediumText(
                                                 fontSize: 15,
                                                 color: Colors.white),
-                                            onPressed: () {},
+                                            onPressed: () {
+
+      ManageVibration.vibrate();
+                                            },
                                           ),
                                         ),
                                         const Sizer(),
@@ -357,6 +367,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 fontSize: 18,
                                                 color: Colors.white),
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               // tripCubit.report(
                                               //     loadingTripId: widget.model.id ?? "");
                                               showBottomSheet(
@@ -390,6 +401,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             backColor:
                                                 AppColors.DARK_GRAY_COLOR,
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               launchUrlString(
                                                   "tel://21213123123");
                                             },
@@ -408,7 +420,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             style: Styles.mediumText(
                                                 fontSize: 18,
                                                 color: Colors.white),
-                                            onPressed: () {},
+                                            onPressed: () {
+
+      ManageVibration.vibrate();
+                                            },
                                           ),
                                         ),
                                         const Sizer(),
@@ -421,6 +436,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 fontSize: 15,
                                                 color: Colors.white),
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               showBottomSheet(
                                                 context: context,
                                                 builder: (context) =>

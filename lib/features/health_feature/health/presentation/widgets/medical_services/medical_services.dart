@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_service_card.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -24,12 +25,6 @@ class HealthMedicalServices extends StatefulWidget {
 
 class _HealthMedicalServicesState extends State<HealthMedicalServices> {
   ScrollController? _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +113,7 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
                             ),
                             ClickableWidget(
                               onTap: () {
+                                ManageVibration.vibrate();
                                 _scrollController?.animateTo(
                                   (_scrollController?.position.pixels ?? 0) +
                                       0.8.sw,
@@ -150,21 +146,25 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
             Expanded(
               child: state.medicalServices != null &&
                       state.medicalServices != []
-                  ? ListView.separated(
-                      controller: _scrollController,
-                      separatorBuilder: (context, index) => const Sizer(),
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Padding(
-                        padding: EdgeInsetsDirectional.only(
-                            start: index == 0 ? 16 : 0,
-                            end: index == state.medicalServices!.length - 1
-                                ? 16
-                                : 0),
-                        child: HealthMedicalServiceCard(
-                          subCategory: state.medicalServices![index],
+                  ? GlowingOverscrollIndicator(
+                      axisDirection: AxisDirection.left,
+                      color: AppColors.SECONDARY_COLOR,
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        separatorBuilder: (context, index) => const Sizer(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsetsDirectional.only(
+                              start: index == 0 ? 16 : 0,
+                              end: index == state.medicalServices!.length - 1
+                                  ? 16
+                                  : 0),
+                          child: HealthMedicalServiceCard(
+                            subCategory: state.medicalServices![index],
+                          ),
                         ),
+                        itemCount: state.medicalServices!.length,
                       ),
-                      itemCount: state.medicalServices!.length,
                     )
                   : state.medicalServices == null
                       ? Shimmer.fromColors(
@@ -191,5 +191,11 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
         ),
       );
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
   }
 }

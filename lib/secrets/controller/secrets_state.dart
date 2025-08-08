@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
+import '../../core/error/failure.dart';
 
 import '../domain/entities/secrets.dart';
 

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TinderSubCategoryAdsView extends StatefulWidget {
   // final TinderSubAdsViewParams params;
@@ -88,7 +89,10 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                             child: Column(
                               children: [
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+
+      ManageVibration.vibrate();
+                                  },
                                   child: Icon(
                                     Icons.favorite,
                                     size: iconSize,

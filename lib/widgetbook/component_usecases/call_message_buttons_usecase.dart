@@ -7,6 +7,8 @@ import '../../res/style/app_colors.dart';
 import '../utils/flutter_markdown.dart';
 import '../utils/provider_wrapper.dart';
 import 'text_input_widget_usecases.dart';
+import '../../helpers/manage_vibration.dart';
+import '../../helpers/manage_vibration.dart';
 
 // CallMessageButtons Widgetbook Implementation
 @widgetbook.UseCase(
@@ -550,6 +552,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -569,6 +572,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Mock Premium Call Started')),
@@ -602,6 +606,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -642,6 +647,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Mock Report Submitted')),
@@ -667,6 +673,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

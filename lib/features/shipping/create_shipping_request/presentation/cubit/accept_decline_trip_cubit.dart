@@ -1,8 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import '../../data/repositories/shipping_repository.dart';
+import 'shipping_state.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class AcceptDeclineTripCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;
@@ -12,6 +15,10 @@ class AcceptDeclineTripCubit extends Cubit<ShippingState> {
         await repository.acceptTrip(loadingRequestId: loadingRequestId);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {
@@ -25,6 +32,10 @@ class AcceptDeclineTripCubit extends Cubit<ShippingState> {
         await repository.declineTrip(loadingRequestId: loadingRequestId);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {
@@ -38,6 +49,10 @@ class AcceptDeclineTripCubit extends Cubit<ShippingState> {
     var response = await repository.cancelTrip(tripId: tripId);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {
@@ -50,6 +65,10 @@ class AcceptDeclineTripCubit extends Cubit<ShippingState> {
     var response = await repository.completeTrip(loadingTrip: loadingTrip);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) {

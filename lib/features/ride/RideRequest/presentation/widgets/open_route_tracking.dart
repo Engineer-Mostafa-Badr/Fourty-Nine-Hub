@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 // import 'package:location/location.dart';
 
 class OpenRouteTracking extends StatefulWidget {
@@ -138,6 +139,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+      ManageVibration.vibrate();
           // if (currentLocation != null) {
           //   mapController.move(
           //     LatLng(currentLocation!.latitude!, currentLocation!.longitude!),

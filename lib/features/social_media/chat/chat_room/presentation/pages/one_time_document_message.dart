@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:path/path.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 // class OneTimeDocumentMessageViewParams {
 //   final MessageEntity messageEntity;
@@ -307,6 +308,7 @@ class _OneTimeDocumentMessageViewState
         leadingWidth: 26,
         leading: IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             Navigator.pop(context);
           },
           icon: const Icon(
@@ -485,6 +487,7 @@ class _OneTimeDocumentMessageViewState
                     size: 30,
                   ),
                   onPressed: () async {
+      ManageVibration.vibrate();
                     setState(() {
                       widget.oneTimeDocumentMessageViewParams.chatRoomCubit
                               .isOneTimeView =

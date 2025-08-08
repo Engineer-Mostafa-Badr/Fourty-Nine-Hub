@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/utils/logging_service.dart';
+import '../../../core/utils/logging_service.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
-import 'package:fourtyninehub/features/call/services/video_fix_helper.dart';
+import 'video_fix_helper.dart';
 
 /// Specialized manager to fix remote video issues and ensure proper display
 class RemoteVideoManager {

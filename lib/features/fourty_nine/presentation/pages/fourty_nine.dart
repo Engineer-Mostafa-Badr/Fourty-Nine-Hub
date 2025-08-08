@@ -441,6 +441,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
         GestureDetector(
           onTap: () {
+            ManageVibration.vibrate();
             if (context.read<UserCubit>().isLoggedIn) {
               Navigator.push(
                   context,
@@ -469,6 +470,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
             ),
             Routes.MAINCATEGORIESCARDS,
             () {
+              ManageVibration.vibrate();
               log('extra is $extra');
               AdInterstitialTop.loadIntersitialAd();
               AdInterstitialTop.showInterstitialAd();
@@ -485,6 +487,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       {List<MainCategoryEntity>? extra}) {
     return InkWell(
       onTap: () {
+        ManageVibration.vibrate();
         onTab();
         if (routeName == Routes.MAINCATEGORIESCARDS) {
           context.push(routeName,

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../domain/entities/restaurant_mneu.dart';
 
 class RestaurantMneuModel extends RestaurantMenu {
   const RestaurantMneuModel({

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/register/driver_register/data/models/rider_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../core/enums/main_services_enum.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../ride/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
 import '../../../../subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
@@ -23,8 +25,65 @@ class DriverRegisterCubit extends Cubit<DriverRegisterState> {
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final service = MainServicesEnum.ride;
 
+  final captainOptions = [
+    RideServicesEnum.captain,
+    RideServicesEnum.intercity,
+    RideServicesEnum.suv,
+    RideServicesEnum.pickup,
+    RideServicesEnum.premium,
+  ];
+
+  final womenOptions = [
+    RideServicesEnum.womenOnly,
+    RideServicesEnum.intercity,
+    RideServicesEnum.premium,
+  ];
+
   DriverRegisterCubit(this._getCarTypesUseCase, this._getSubCategoriesUseCase)
       : super(const DriverRegisterState());
+
+  // change subCategory selection
+  void changeCarTypeSelection({
+    required CarTypeModel item,
+  }) =>
+      emit(state.copyWith(carType: item));
+  // change subCategory selection
+  void changeOptions({
+    required RideServicesEnum item,
+  }) {
+    final list = state.selectedOptions ?? [];
+    if (list.contains(item)) {
+      list.remove(item);
+    } else {
+      list.add(item);
+    }
+    emit(state.copyWith(selectedOptions: list));
+  }
+
+  // change subCategory selection
+  void changeSubCategorySelection({
+    required SubCategoryEntity item,
+  }) =>
+      emit(state.copyWith(subCategory: item));
+
+  bool enterPrice() {
+    final service = getRideServiceEnum(value: state.subCategory?.id ?? '');
+    return service.isCaptain ||
+        service.isScooter ||
+        service.isTaxi ||
+        service.isWomenOnly;
+  }
+
+  List<RideServicesEnum> handleAvailableServices() {
+    if (captainOptions
+        .contains(getRideServiceEnum(value: state.subCategory?.id ?? ''))) {
+      return captainOptions;
+    } else if (womenOptions
+        .contains(getRideServiceEnum(value: state.subCategory?.id ?? ''))) {
+      return womenOptions;
+    }
+    return [];
+  }
 
   Future<void> loadData({required String id}) async {
     emit(state.copyWith(status: DriverRegisterStatuses.loading));
@@ -37,6 +96,10 @@ class DriverRegisterCubit extends Cubit<DriverRegisterState> {
               paginationParams: PaginationParams.basic(),
               userId: user ?? ''));
       subCategories.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           failure: failure,
           status: DriverRegisterStatuses.error,
@@ -68,61 +131,4 @@ class DriverRegisterCubit extends Cubit<DriverRegisterState> {
       ));
     }
   }
-
-  List<RideServicesEnum> handleAvailableServices() {
-    if (captainOptions
-        .contains(getRideServiceEnum(value: state.subCategory?.id ?? ''))) {
-      return captainOptions;
-    } else if (womenOptions
-        .contains(getRideServiceEnum(value: state.subCategory?.id ?? ''))) {
-      return womenOptions;
-    }
-    return [];
-  }
-
-  final captainOptions = [
-    RideServicesEnum.captain,
-    RideServicesEnum.intercity,
-    RideServicesEnum.suv,
-    RideServicesEnum.pickup,
-    RideServicesEnum.premium,
-  ];
-  final womenOptions = [
-    RideServicesEnum.womenOnly,
-    RideServicesEnum.intercity,
-    RideServicesEnum.premium,
-  ];
-
-  // change subCategory selection
-  void changeSubCategorySelection({
-    required SubCategoryEntity item,
-  }) =>
-      emit(state.copyWith(subCategory: item));
-
-  // change subCategory selection
-  void changeOptions({
-    required RideServicesEnum item,
-  }) {
-    final list = state.selectedOptions ?? [];
-    if (list.contains(item)) {
-      list.remove(item);
-    } else {
-      list.add(item);
-    }
-    emit(state.copyWith(selectedOptions: list));
-  }
-
-  bool enterPrice() {
-    final service = getRideServiceEnum(value: state.subCategory?.id ?? '');
-    return service.isCaptain ||
-        service.isScooter ||
-        service.isTaxi ||
-        service.isWomenOnly;
-  }
-
-  // change subCategory selection
-  void changeCarTypeSelection({
-    required CarTypeModel item,
-  }) =>
-      emit(state.copyWith(carType: item));
 }

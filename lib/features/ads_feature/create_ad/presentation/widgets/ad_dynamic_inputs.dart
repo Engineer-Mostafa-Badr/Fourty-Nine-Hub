@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widget
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
@@ -320,6 +321,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             itemCount: widget.property.values.length,
             itemBuilder: (context, index) => ClickableWidget(
                   onTap: () {
+      ManageVibration.vibrate();
                     widget.onChanged(widget.property.values[index]);
                     value = widget.property.values[index];
                     setState(() {});

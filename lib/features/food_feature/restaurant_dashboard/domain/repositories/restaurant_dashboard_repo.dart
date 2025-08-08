@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/delete_restaurant_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/update_restaurant_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
+import '../usecases/delete_restaurant_usecase.dart';
+import '../usecases/update_restaurant_usecase.dart';
+import '../../presentation/cubit/restaurant_statistics_cubit.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';

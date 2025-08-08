@@ -11,6 +11,7 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../domain/entities/dashboards/trip_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ClientOffersWidget extends StatelessWidget {
   final String modeType;
@@ -216,7 +217,10 @@ class ClientOffersWidget extends StatelessWidget {
                           height: 30,
                           radius: 15,
                           label: LocaleKeys.Accept.tr(),
-                          onPressed: () {},
+                          onPressed: () {
+
+      ManageVibration.vibrate();
+                          },
                           backColor: AppColors.PRIMARY_COLOR
                         ),
                       ),
@@ -228,7 +232,10 @@ class ClientOffersWidget extends StatelessWidget {
                           label: LocaleKeys.refuse.tr(),
                           style: Styles.mediumText(
                               color: Colors.white, fontSize: 23),
-                          onPressed: () {},
+                          onPressed: () {
+
+      ManageVibration.vibrate();
+                          },
                           backColor: AppColors.SECONDARY_COLOR_DARK2
                              
                         ),

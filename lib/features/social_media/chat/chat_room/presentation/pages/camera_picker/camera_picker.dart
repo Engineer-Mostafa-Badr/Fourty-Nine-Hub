@@ -7,24 +7,25 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/core/extensions/file_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../../../../../../../core/extensions/file_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../core/messages/messages.dart';
+import '../../controllers/camera_picker_cubit/camera_picker_cubit.dart';
+import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
+import '../../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 // import 'package:video_trimmer/video_trimmer.dart';
 
@@ -120,6 +121,7 @@ class _CamViewState extends State<_CamView> {
                         return _BaseIcon(
                           icon: Icons.close,
                           onTap: () {
+      ManageVibration.vibrate();
                             context.pop();
                             context.pop();
                           },
@@ -190,6 +192,7 @@ class _CamViewState extends State<_CamView> {
                         return _BaseIcon(
                           icon: Icons.check,
                           onTap: () {
+      ManageVibration.vibrate();
                             final media = context
                                 .read<CameraPickerCubit>()
                                 .state
@@ -226,6 +229,7 @@ class _CamViewState extends State<_CamView> {
                         if (state.pickMode == PickMode.photo) {
                           return IconButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               controller.takePicture();
                             },
                             icon: _pickIcon,
@@ -234,6 +238,7 @@ class _CamViewState extends State<_CamView> {
                             CameraPickerStatus.startVideo) {
                           return InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               controller.stopVideoRecording();
                             },
                             child: Stack(
@@ -252,6 +257,7 @@ class _CamViewState extends State<_CamView> {
                         } else {
                           return IconButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               controller.startVideoRecording();
                             },
                             icon: _pickIcon,
@@ -268,6 +274,7 @@ class _CamViewState extends State<_CamView> {
                           state.status != CameraPickerStatus.startVideo) {
                         return _BaseIcon(
                           onTap: () {
+      ManageVibration.vibrate();
                             CliLogger.info('Flip camera');
                             controller.flipCamera();
                           },
@@ -306,6 +313,7 @@ class _CamViewState extends State<_CamView> {
   Widget _permissionButton(String label) {
     return InkWell(
         onTap: () async {
+      ManageVibration.vibrate();
           openAppSettings().then((value) {
             if (value) {
               context.read<CameraPickerCubit>().init();
@@ -434,6 +442,7 @@ class _ImagesListState extends State<_ImagesList> {
                           ? AppColors.SECONDARY_COLOR
                           : null,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (controller.state.status !=
                             CameraPickerStatus.startVideo) {
                           controller.emitPhotoPickMode();
@@ -453,6 +462,7 @@ class _ImagesListState extends State<_ImagesList> {
                           ? AppColors.SECONDARY_COLOR
                           : null,
                       onPressed: () {
+      ManageVibration.vibrate();
                         controller.emitVideoPickMode();
                       },
                     );
@@ -474,6 +484,7 @@ class _ImagesListState extends State<_ImagesList> {
       bool isPhoto = true}) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (mounted &&
             context.read<CameraPickerCubit>().state.status !=
                 CameraPickerStatus.startVideo) {

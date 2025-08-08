@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/topic_entity.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
+import '../entity/topic_entity.dart';
+import '../usecases/edit_goal_use_case.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/abstract/use_case.dart';

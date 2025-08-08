@@ -26,6 +26,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import '../../../doctor_details/presentation/widgets/doctor_image.dart';
 import '../../../doctor_details/presentation/widgets/info.dart';
 import '../../../health/presentation/widgets/cards/health_contacts_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorCard extends StatelessWidget {
   final DoctorEntity doctor;
@@ -38,6 +39,7 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (UserCubit.to.isLoggedIn) {
           context.push(Routes.VISITADOCTORDETAILS,
               extra: DoctorDetailsParams(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../core/utils/format_numbers.dart';
+import '../../../../create_post/presentation/pages/life_event.dart';
+import '../../../domain/entities/post_entity.dart';
+import 'image_from_internet.dart';
+import '../../../../../../res/style/app_colors.dart';
 
 class FacebookLifeEventWidget extends StatelessWidget {
   const FacebookLifeEventWidget({super.key, required this.postEntity});

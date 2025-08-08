@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
@@ -86,6 +87,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView>
                               right: 0,
                               child: InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     isShowExplainCompanyAd = !isShowExplainCompanyAd;
                                   });
@@ -135,6 +137,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView>
                               right: 0,
                               child: InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   setState(() {
                                     isShowExplainPersonalAd = !isShowExplainPersonalAd;
                                     if (isShowExplainPersonalAd) {

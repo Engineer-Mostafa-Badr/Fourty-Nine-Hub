@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/format_numbers.dart';
+import '../../domain/entities/comment_instagram_entity.dart';
+import 'post_instagram_widget.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CommentInstagramListViewItem extends StatelessWidget {
   const CommentInstagramListViewItem({
@@ -68,7 +69,10 @@ class CommentInstagramListViewItem extends StatelessWidget {
                 height: 7,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+
+      ManageVibration.vibrate();
+                },
                 child: Label(
                   text: LocaleKeys.reply.localize,
                   style: Styles.headerText(
@@ -82,7 +86,10 @@ class CommentInstagramListViewItem extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.favorite_border),
-          onPressed: () {},
+          onPressed: () {
+
+      ManageVibration.vibrate();
+          },
         ),
       ],
     );

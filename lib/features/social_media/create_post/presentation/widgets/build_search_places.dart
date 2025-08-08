@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import '../../domain/entities/place_entity.dart';
+import '../cubit/create_post_cubit.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 

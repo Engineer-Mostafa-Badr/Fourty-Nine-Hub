@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CriminalRecordScreen extends StatelessWidget {
   const CriminalRecordScreen({super.key});
@@ -102,6 +103,7 @@ class CriminalRecordScreen extends StatelessWidget {
                         UploadFileWidget(
                           title: LocaleKeys.criminalRecord.localize,
                           onTap: () {
+      ManageVibration.vibrate();
                             cubit.onUploadPersonalCriminalRecordPicture(context);
                           },
                           imageUrl: state.personalCriminalRecordPicture,
@@ -152,6 +154,7 @@ class CriminalRecordScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (context.read<RideRegisterCubit>().state.personalCriminalRecordPicture == null) {
                       showErrorMessage(context, "Please select criminal record");
                     } else {

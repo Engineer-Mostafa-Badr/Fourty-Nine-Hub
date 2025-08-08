@@ -7,12 +7,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../core/widget/clickable_widget.dart';
-import '../../../../../helpers/manage_vibration.dart';
 import 'custom_wave_painter.dart';
 import 'font_manager.dart';
 
@@ -38,7 +38,6 @@ class BottomRideStatusWidget extends StatefulWidget {
 
   final Function onStartRecord;
   final Function onStopRecord;
-
 
   const BottomRideStatusWidget({
     super.key,
@@ -73,9 +72,9 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:  context.isDarkMode
+        color: context.isDarkMode
             ? AppColors.QUANTITY_COLOR
-            :  AppColors.whiteColor,
+            : AppColors.whiteColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),

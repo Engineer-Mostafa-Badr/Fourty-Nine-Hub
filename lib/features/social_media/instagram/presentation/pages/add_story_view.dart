@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AddStoryView extends StatelessWidget {
   const AddStoryView({super.key});
@@ -13,6 +14,7 @@ class AddStoryView extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
                 icon: const Icon(

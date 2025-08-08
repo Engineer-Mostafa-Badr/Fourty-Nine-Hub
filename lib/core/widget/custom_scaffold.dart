@@ -1,4 +1,3 @@
-
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common/widgets/dialogs/please_login_dialog.dart';
@@ -95,6 +95,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
               ),
               floatingWidget: GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   floatingNavigatorCubit.changeFloatingNavigator();
                 },
                 child: Column(
@@ -230,6 +231,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
                                 context.push(Routes.RIDE_HOME);
@@ -248,6 +250,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.health.localize,
                               image: Assets.healthIcon,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
                                 context.push(Routes.VISITA);
@@ -257,6 +260,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.meal.localize,
                               image: Assets.meal,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
                                 context.push(Routes.FOOD);
@@ -266,6 +270,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.marriage.localize,
                               image: Assets.married,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
                                 context.push(Routes.MARRIAGESUBCATEGORIES);
@@ -275,6 +280,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.find.localize,
                               image: Assets.find,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
                                 context.push(Routes.Tinder);
@@ -282,8 +288,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.reel.localize,
-                              image: context.isDarkMode ? Assets.reelBarPng : Assets.reel,
+                              image: context.isDarkMode
+                                  ? Assets.reelBarPng
+                                  : Assets.reel,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
                                 context.push(Routes.REELS);
@@ -293,9 +302,10 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.spotlight.localize,
                               image: Assets.spotlight,
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
-                                if(!context.read<UserCubit>().isLoggedIn){
+                                if (!context.read<UserCubit>().isLoggedIn) {
                                   return pleaseLoginDialog(context);
                                 }
                                 context.push(Routes.SPOTLIGHT);
@@ -305,10 +315,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.live.localize,
                               image: Assets.liveIcon,
                               onTap: () {
+                                ManageVibration.vibrate();
 
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
-                                if(!context.read<UserCubit>().isLoggedIn){
+                                if (!context.read<UserCubit>().isLoggedIn) {
                                   return pleaseLoginDialog(context);
                                 }
                                 context.push(Routes.LIVE);
@@ -328,9 +339,10 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.whatsApp,
                               padding: const EdgeInsets.all(2),
                               onTap: () {
+                                ManageVibration.vibrate();
                                 floatingNavigatorCubit
                                     .changeFloatingNavigator();
-                                if(!context.read<UserCubit>().isLoggedIn){
+                                if (!context.read<UserCubit>().isLoggedIn) {
                                   return pleaseLoginDialog(context);
                                 }
                                 context.push(Routes.CHAT,
@@ -346,6 +358,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(

@@ -10,6 +10,7 @@ import '../../../services/defines/media.dart';
 import '../../../services/internal/core/core.dart';
 import '../../../services/uikit_service.dart';
 import 'container.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// You can use this control to play audio or video.
 ///
@@ -233,6 +234,7 @@ class _ZegoUIKitMediaPlayerState extends State<ZegoUIKitMediaPlayer> {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
+      ManageVibration.vibrate();
             if (showVolumeSliderNotifier.value) {
               showVolumeSliderNotifier.value = false;
             } else {
@@ -392,6 +394,7 @@ class _ZegoUIKitMediaPlayerState extends State<ZegoUIKitMediaPlayer> {
           right: spacing,
           child: GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               ZegoUIKit().muteMediaLocal(!isMute);
             },
             onLongPress: widget.canControl
@@ -485,6 +488,7 @@ class _ZegoUIKitMediaPlayerState extends State<ZegoUIKitMediaPlayer> {
         builder: (context, playState, _) {
           return GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               onPlayButtonClick(playState);
             },
             child: SizedBox(
@@ -507,6 +511,7 @@ class _ZegoUIKitMediaPlayerState extends State<ZegoUIKitMediaPlayer> {
         builder: (context, playState, _) {
           return GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               onPlayButtonClick(playState);
             },
             child: SizedBox(

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import 'font_manager.dart';
 import 'payment_info_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideFindingCard extends StatefulWidget {
   const RideFindingCard({super.key});
@@ -139,6 +140,7 @@ class _RideFindingCardState extends State<RideFindingCard> {
           const SizedBox(height: 16),
           GestureDetector(
             onTap: (){
+      ManageVibration.vibrate();
               // context.push(Routes.supportRideScreen);
             },
             child: Container(

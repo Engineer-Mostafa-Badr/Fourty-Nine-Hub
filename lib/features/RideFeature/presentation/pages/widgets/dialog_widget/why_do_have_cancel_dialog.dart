@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class WhyDoHaveCancelDialog extends StatelessWidget {
   const WhyDoHaveCancelDialog({super.key});
 
@@ -45,6 +46,7 @@ class WhyDoHaveCancelDialog extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
@@ -66,6 +68,7 @@ class WhyDoHaveCancelDialog extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(

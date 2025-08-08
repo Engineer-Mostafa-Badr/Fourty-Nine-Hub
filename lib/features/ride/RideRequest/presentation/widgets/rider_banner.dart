@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RiderBanner extends StatefulWidget {
   const RiderBanner({
@@ -43,6 +44,7 @@ class _RiderBannerState extends State<RiderBanner> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         print(context.read<UserCubit>().isLoggedIn);
         if (context.read<UserCubit>().isLoggedIn) {
           showModalBottomSheet(

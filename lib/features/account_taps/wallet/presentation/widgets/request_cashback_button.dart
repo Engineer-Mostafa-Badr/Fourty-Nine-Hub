@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -33,7 +34,10 @@ class RequestCashbackButton extends StatelessWidget {
         return AppButton(
           label: LocaleKeys.waitingApproval.localize,
           style: Styles.headerText(color: Colors.white, fontSize: 32),
-          onPressed: () {},
+          onPressed: () {
+
+      ManageVibration.vibrate();
+          },
           backColor: const Color(0xB3F33D49),
         );
       } else {
@@ -44,6 +48,7 @@ class RequestCashbackButton extends StatelessWidget {
               ? const Color(0xffF33D49)
               : const Color(0xB3F33D49),
           onPressed: () {
+      ManageVibration.vibrate();
             if (amount >= target) {
               context.read<CashbackCubit>().requestWithdrawal(context);
             }

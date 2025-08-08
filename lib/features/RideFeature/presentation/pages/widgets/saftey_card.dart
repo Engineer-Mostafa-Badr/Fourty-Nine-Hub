@@ -7,6 +7,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class SafetyCard extends StatelessWidget {
@@ -83,6 +84,7 @@ class SafetyCard extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: (){
+      ManageVibration.vibrate();
               context.push(Routes.rideFindingScreen);
             },
             style: ElevatedButton.styleFrom(

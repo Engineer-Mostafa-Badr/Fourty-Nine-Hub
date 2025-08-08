@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/social_media/reels/data/models/receiver_comment_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reciever_comment_entity.dart';
+import 'receiver_comment_model.dart';
+import '../../domain/entities/reciever_comment_entity.dart';
 
 class AddCommentResponse {
   final bool status;

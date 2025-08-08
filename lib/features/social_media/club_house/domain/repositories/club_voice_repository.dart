@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
+import '../entities/club_voice_room_entity.dart';
+import '../usecases/join_club_voice_use_case.dart';
+import '../usecases/search_club_voice_use_case.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/error/failure.dart';

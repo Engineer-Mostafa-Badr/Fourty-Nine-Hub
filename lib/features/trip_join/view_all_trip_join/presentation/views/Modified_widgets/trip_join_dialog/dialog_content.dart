@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class DialogContent extends StatelessWidget {
   const DialogContent({
@@ -49,7 +50,9 @@ class DialogContent extends StatelessWidget {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){ Navigator.of(context).pop();},
+                  onPressed: (){
+      ManageVibration.vibrate();
+                     Navigator.of(context).pop();},
                   style: ElevatedButton.styleFrom(
                     backgroundColor:context.isDarkMode?AppColors.red_Color_DARK:  AppColors.SECONDARY_COLOR,
                     foregroundColor: Colors.white,
@@ -72,7 +75,9 @@ class DialogContent extends StatelessWidget {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){ Navigator.of(context).pop();},
+                  onPressed: (){
+      ManageVibration.vibrate();
+                     Navigator.of(context).pop();},
                   style: ElevatedButton.styleFrom(
                     backgroundColor:context.isDarkMode?AppColors.Floating_Button_COLOR_DARK: AppColors.buttonDialog,
                     foregroundColor: Colors.white,

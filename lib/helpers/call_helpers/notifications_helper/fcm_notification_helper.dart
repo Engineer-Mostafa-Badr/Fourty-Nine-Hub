@@ -7,8 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../core/extensions/context_extension.dart';
+import '../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import '../call_helper/call_with_notification_helper.dart';
@@ -17,10 +17,11 @@ import '../../../service_locator/service_locator.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import '../../../firebase_options.dart';
-import 'package:fourtyninehub/main.dart';
+import '../../../main.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:flutter/material.dart';
+import '../../manage_vibration.dart';
 
 abstract class FcmNotificationHelper {
   Future<void> setup(BuildContext context);
@@ -264,6 +265,7 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
         Overlay.of(overlayContext),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             Navigator.of(overlayContext).pushNamed(message.data['path'] ?? '');
           },
           child: CustomSnackBar.error(

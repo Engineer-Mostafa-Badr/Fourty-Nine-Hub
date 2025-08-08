@@ -11,6 +11,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entity/chance_entity.dart';
 import '../../domain/entity/image_chance_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ChanceCardWidget extends StatefulWidget {
   const ChanceCardWidget({
@@ -36,6 +37,7 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         Navigator.push(
             context,
             MaterialPageRoute(

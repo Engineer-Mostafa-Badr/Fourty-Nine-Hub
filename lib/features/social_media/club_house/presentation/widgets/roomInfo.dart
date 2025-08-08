@@ -9,6 +9,7 @@ import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RoomInfoWidget extends StatelessWidget {
   const RoomInfoWidget({super.key});
@@ -219,6 +220,7 @@ class RoomInfoWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(Routes.CLUBHOUSECHAT);
             },
             child: Container(

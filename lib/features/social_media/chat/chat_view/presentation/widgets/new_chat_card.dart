@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -21,6 +21,7 @@ import '../../../chat_room/presentation/widgets/label_colors_map.dart';
 import '../../domain/entities/chat_entity.dart';
 import '../chat_cubit/chats_cubit.dart';
 import 'chat_stories.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class NewChatCard extends StatefulWidget {
   final bool isSecret;
@@ -53,6 +54,7 @@ class _NewChatCardState extends State<NewChatCard> {
               ? AppColors.QUANTITY_COLOR
               : AppColors.LIGHT_GRAY_COLOR.withValues(alpha: 0.2),
           onTap: () {
+      ManageVibration.vibrate();
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
               context.read<ChatsCubit>().selectChat = widget.chat!;
               context.push(Routes.CHATROOM, extra: widget.chatsCubit);
@@ -159,6 +161,7 @@ class _NewChatCardState extends State<NewChatCard> {
       return Center(
         child: GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             if (widget.chat!.hasStory) {}
             if (widget.chat!.isAdmin != "admin") {
               if (context.isUserLoggedIn) {
@@ -319,6 +322,7 @@ class _NewChatCardState extends State<NewChatCard> {
                   widget.chat!.isBirthdayMonth)
                 InkWell(
                   onTap: () async {
+      ManageVibration.vibrate();
                     await showGiftBottomSheet(
                       context,
                       receiverId: widget.chat!.userId,
@@ -510,7 +514,10 @@ class _NewChatCardState extends State<NewChatCard> {
         if (widget.chat?.lastSeenCount != null)
           if (widget.chat!.isAdmin != "admin")
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+      ManageVibration.vibrate();
+              },
+                
               child: Row(
                 children: [
                   Label(
@@ -526,6 +533,7 @@ class _NewChatCardState extends State<NewChatCard> {
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: InkWell(
                       onTap: () async {
+      ManageVibration.vibrate();
                         // Call the getLastSeen function
                         print('widget.chat!.isAdmin ${widget.chat!.isAdmin}');
                         if (widget.chat!.isAdmin != "admin") {
@@ -622,6 +630,7 @@ class _NewChatCardState extends State<NewChatCard> {
                             widget.chat!.isBirthdayMonth)
                           InkWell(
                             onTap: () async {
+      ManageVibration.vibrate();
                               await showGiftBottomSheet(
                                 context,
                                 receiverId: widget.chat!.userId,
@@ -653,6 +662,7 @@ class _NewChatCardState extends State<NewChatCard> {
                               color: AppColors.SECONDARY_COLOR,
                             ),
                             onPressed: () {
+      ManageVibration.vibrate();
                               context.read<ChatsCubit>().selectChat =
                                   widget.chat!;
                               context.push(Routes.CHATROOM,
@@ -664,14 +674,20 @@ class _NewChatCardState extends State<NewChatCard> {
                               Icons.call,
                               color: AppColors.SECONDARY_COLOR,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                           ),
                           IconButton(
                             icon: const Icon(
                               Icons.videocam,
                               color: AppColors.SECONDARY_COLOR,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            },
                           ),
                           IconButton(
                             icon: const Icon(
@@ -679,6 +695,7 @@ class _NewChatCardState extends State<NewChatCard> {
                               color: AppColors.SECONDARY_COLOR,
                             ),
                             onPressed: () {
+      ManageVibration.vibrate();
                               context.read<ChatsCubit>().selectChat =
                                   widget.chat!;
                               context.push(Routes.VIEWCONTACT,

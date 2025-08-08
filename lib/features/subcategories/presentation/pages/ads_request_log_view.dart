@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_loading_search_widget.dart';
+import '../cubit/subcategories_cubit.dart';
+import 'ads_request_log_card.dart';
+import '../../../../res/style/styles.dart';
 
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';

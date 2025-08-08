@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_photos.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_posts.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_videos.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../cubit/social_posts_cubit.dart';
+import 'image_from_internet.dart';
+import 'profile_photos.dart';
+import 'profile_posts.dart';
+import 'profile_videos.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../res/style/const.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookOtherProfile extends StatefulWidget {
   const FacebookOtherProfile({super.key, required this.scrollController});
@@ -52,6 +53,7 @@ class _FacebookOtherProfileState extends State<FacebookOtherProfile> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _showPosts = true;
                     if (_showPosts) {
@@ -68,6 +70,7 @@ class _FacebookOtherProfileState extends State<FacebookOtherProfile> {
             Expanded(
               child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     setState(() {
                       _showPhotos = true;
                       if (_showPhotos) {
@@ -84,6 +87,7 @@ class _FacebookOtherProfileState extends State<FacebookOtherProfile> {
             Expanded(
               child: GestureDetector(
                 onTap: () {setState(() {
+      ManageVibration.vibrate();
                   _showVideos = true;
                   if (_showVideos) {
                     _showPhotos = false;
@@ -153,6 +157,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 height: 270.h,
                 child: InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     // showDialog(
                     //     context: context,
                     //     builder: (context) =>
@@ -181,6 +186,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   start: 10,
                   child: GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       // if (context.isUserLoggedIn) {
                       //   context.read<UserCubit>().updateProfileView(
                       //       isProfile: false,
@@ -290,6 +296,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       label:
                       isFriend?LocaleKeys.friend.localize :LocaleKeys.addFriend.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           isFriend= !isFriend;
                         });
@@ -306,7 +313,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   Expanded(
                     child: AppButton(
                       label: LocaleKeys.message.localize,
-                      onPressed: () {},
+                      onPressed: () {
+
+      ManageVibration.vibrate();
+                      },
                       backColor: AppColors.getButtonPrimaryWhiteColor(context),
                       color: AppColors.getPrimaryTextColor(context),
                       textColor: AppColors.getPrimaryTextColor(context),
@@ -318,7 +328,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   const Sizer(),
                   AppButton(
                     label: '',
-                    onPressed: () {},
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    },
                     backColor: AppColors.getFindFillColor(context),
                     color: AppColors.getTextColor(context),
                     textColor: AppColors.getTextColor(context),

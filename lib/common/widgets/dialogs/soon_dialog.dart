@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -32,6 +33,8 @@ void soonDialog(BuildContext context) {
           AppButton(
               label: LocaleKeys.ok.localize,
               onPressed: () {
+      ManageVibration.vibrate();
+
                 Navigator.pop(context);
               })
         ],

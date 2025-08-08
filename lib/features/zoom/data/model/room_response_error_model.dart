@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/zoom/domain/entities/room_response.dart';
+import '../../domain/entities/room_response.dart';
 
 class RoomResponseErrorModel extends RoomResponse {
   const RoomResponseErrorModel(

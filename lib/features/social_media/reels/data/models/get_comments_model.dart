@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/receiver_comment_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reciever_comment_entity.dart';
+import 'add_comments_model.dart';
+import 'receiver_comment_model.dart';
+import '../../domain/entities/reciever_comment_entity.dart';
 
 class GetCommentsResponse {
   final bool status;

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/pagination_entity.dart';
+import '../../../../account_taps/wallet/domain/entities/pagination_entity.dart';
 
 class ProfileInstagramDataEntity {
   final String username;

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_image_tag_people_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import '../cubit/tag_users_cubit/tag_users_cubit.dart';
+import 'show_image_tag_people_widget.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TagUserViewBody extends StatelessWidget {
   const TagUserViewBody({
@@ -36,7 +37,10 @@ class TagUserViewBody extends StatelessWidget {
                     height: 12,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+
+      ManageVibration.vibrate();
+                    },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -162,6 +166,7 @@ class TagUserViewBody extends StatelessWidget {
                               ),
                               trailing: IconButton(
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     context
                                         .read<CreatePostInstagramCubit>()
                                         .removeUserTag(user);

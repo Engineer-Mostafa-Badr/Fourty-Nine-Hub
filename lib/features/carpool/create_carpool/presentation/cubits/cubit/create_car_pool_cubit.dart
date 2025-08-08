@@ -5,7 +5,9 @@ import 'package:fourtyninehub/features/carpool/create_carpool/data/models/create
 import 'package:fourtyninehub/features/carpool/create_carpool/domain/entities/create_carpool.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/domain/usecases/create_carpool_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'create_car_pool_state.dart';
 
 class CreateCarPoolCubit extends Cubit<CreateCarPoolState> {
@@ -21,8 +23,13 @@ class CreateCarPoolCubit extends Cubit<CreateCarPoolState> {
     final response =
         await createCarpoolUsecase.call(createCarpoolParam: createCarpoolParam);
     response.fold(
-        (Failure failure) =>
-            emit(CreateCarPoolFailure(errorMessage: Labels.errorHappened)),
+        (Failure failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(CreateCarPoolFailure(errorMessage: Labels.errorHappened));
+        },
         (data) {
       print("dataaaaaa $data");
       emit(CreateCarPoolSuccess(createCarPoolModel: data));

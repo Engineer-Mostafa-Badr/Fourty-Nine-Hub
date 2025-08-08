@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UpdateDoctorPersonalInfo extends StatelessWidget {
   const UpdateDoctorPersonalInfo({super.key, required this.doctor});
@@ -14,6 +15,7 @@ class UpdateDoctorPersonalInfo extends StatelessWidget {
     return EditDoctorProfileCard(
       title: LocaleKeys.personalInformation.localize,
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.EDITDOCTORPERSONALINFO, extra: doctor);
       },
     );

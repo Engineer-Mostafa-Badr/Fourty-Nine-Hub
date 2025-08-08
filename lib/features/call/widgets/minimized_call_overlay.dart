@@ -5,14 +5,15 @@ import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
-import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
-import 'package:fourtyninehub/features/call/widgets/screen_lock_manager.dart';
-import 'package:fourtyninehub/main.dart';
+import '../presentation/controller/call_controller/call_cubit.dart';
+import '../presentation/controller/call_controller/call_state.dart';
+import '../presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import '../presentation/controller/send_call_controller.dart/send_call_states.dart';
+import '../services/call_timer_service.dart';
+import 'screen_lock_manager.dart';
+import '../../../main.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
+import '../../../helpers/manage_vibration.dart';
 
 // Class to manage global call overlay display
 class CallOverlayManager {
@@ -457,6 +458,7 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                   // }
                 },
                 onTap: () {
+      ManageVibration.vibrate();
                   // Don't stop the timer when returning to call screen
                   print(
                       "Tapped on minimized overlay. Current timer: ${_timerService.formatDuration(_timerService.duration.value)}");

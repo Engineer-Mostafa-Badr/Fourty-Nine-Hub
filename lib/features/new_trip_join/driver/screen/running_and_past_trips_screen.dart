@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_route
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../res/assets/assets.dart';
 import '../widget/available_routes_tab_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RunningAndPastTripsScreen extends StatefulWidget {
   const RunningAndPastTripsScreen({super.key});
@@ -219,6 +220,7 @@ class _TabBarContentRideModeWidgetState
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TabBarRowRideModeWidget(
             onTap: () {
+      ManageVibration.vibrate();
               setState(() {
                 showHint = !showHint;
               });

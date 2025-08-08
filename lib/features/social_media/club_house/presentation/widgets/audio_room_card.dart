@@ -15,6 +15,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../res/style/styles.dart';
 import '../pages/audio_stream_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AudioRoomCard extends StatelessWidget {
   final ClubVoiceRoomEntity room;
@@ -27,6 +28,7 @@ class AudioRoomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         context.read<ClubVoiceCubit>().joinRoom(room.id);
         Navigator.push(
           context,

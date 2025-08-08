@@ -20,6 +20,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AcceptRideOfferScreen extends StatefulWidget {
   final String type;
@@ -414,7 +415,10 @@ class ClientAcceptWidget extends StatelessWidget {
                                 ? AppColors.PRIMARY_COLOR_DARK
                                 : AppColors.PRIMARY_COLOR,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+
+      ManageVibration.vibrate();
+                          },
                         ),
                       ),
                       Expanded(
@@ -427,7 +431,10 @@ class ClientAcceptWidget extends StatelessWidget {
                                   ? AppColors.PRIMARY_COLOR_DARK
                                   : AppColors.PRIMARY_COLOR,
                             ),
-                            onPressed: () {}),
+                            onPressed: () {
+
+      ManageVibration.vibrate();
+                            }),
                       ),
                       Expanded(
                         child: IconButton(
@@ -437,7 +444,10 @@ class ClientAcceptWidget extends StatelessWidget {
                             height: 25.h,
                             color: AppColors.PRIMARY_COLOR_DARK,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+
+      ManageVibration.vibrate();
+                          },
                         ),
                       )
                     ],

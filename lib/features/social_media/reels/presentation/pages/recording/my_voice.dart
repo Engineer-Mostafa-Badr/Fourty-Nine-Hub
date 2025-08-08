@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart'
@@ -22,6 +22,7 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
@@ -403,6 +404,7 @@ class MyVoiceVideoRecordingScreenState
                   const Spacer(),
                   IconButton(
                       onPressed: () {
+      ManageVibration.vibrate();
                         Navigator.pop(context);
                       },
                       icon: Icon(
@@ -463,6 +465,7 @@ class MyVoiceVideoRecordingScreenState
                       ],
                     ),
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<ReelsCubit>()
                           .pickMediaFromGallery(context)

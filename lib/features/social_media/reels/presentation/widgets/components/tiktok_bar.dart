@@ -5,21 +5,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../ads/interstitial_ad_model.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../controllers/preload_cubit/preload_bloc.dart';
+import '../../shared/tiktok_option_sheet.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../routes/routes.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../../res/style/app_colors.dart';
 import '../../pages/recording/recording_shared.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class AdvancedTikTokTabBar extends StatefulWidget {
   const AdvancedTikTokTabBar({super.key});
@@ -58,6 +59,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           children: [
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 if (context.read<ReelsCubit>().state.controllers[
                         context.read<ReelsCubit>().state.focusedIndex] !=
                     null) {
@@ -84,6 +86,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             Row(
               children: [
                 _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
+      ManageVibration.vibrate();
                   if (context
                       .read<ReelsCubit>()
                       .state
@@ -106,6 +109,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 SizedBox(width: 16),
                 // Following Tab
                 _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
+      ManageVibration.vibrate();
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   if (context
@@ -130,6 +134,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 SizedBox(width: 16),
                 // For You Tab with rounded underline
                 _buildTab("Reel", 2, onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _selectedIndex = 2;
                   });
@@ -144,6 +149,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             ),
             GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 if (!serviceLocator<UserCubit>().isLoggedIn) {
                   context.read<PreloadBloc>().pauseTheVideo();
                   context.push(Routes.LOGIN);
@@ -166,6 +172,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
         ),
         SizedBox(height: 18),
         _buildLiveIcon(onTap: () {
+      ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           if (context

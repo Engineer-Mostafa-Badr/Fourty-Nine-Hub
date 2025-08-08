@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:fourtyninehub/core/service/storage.dart';
+import '../core/service/storage.dart';
 import 'package:vibration/vibration.dart';
 
 class ManageVibration {

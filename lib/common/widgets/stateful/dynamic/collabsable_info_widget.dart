@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../stateless/labels/read_more_label.dart';
 import '../../stateless/labels/label.dart';
 import '../../../../res/style/styles.dart';
@@ -19,6 +20,7 @@ class _CollabsableInfoWidgetState extends State<CollabsableInfoWidget> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         showDetails = !showDetails;
         setState(() {});
       },

@@ -1,9 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/use_cases/get_wheel_use_case.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class WheelCubit extends Cubit<BasicState<WheelEntity>> {
   final GetWheelUseCase _getWheelUseCase;
@@ -17,6 +20,10 @@ class WheelCubit extends Cubit<BasicState<WheelEntity>> {
       result.fold(
         (failure) {
           print(failure);
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           return state.copyWith(status: StateStatus.error, failure: failure);
         },
         (wheel) => state.copyWith(status: StateStatus.success, data: wheel),

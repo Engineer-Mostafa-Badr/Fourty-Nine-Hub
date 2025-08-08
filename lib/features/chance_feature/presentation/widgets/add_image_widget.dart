@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AddImageWidget extends StatelessWidget {
   const AddImageWidget({super.key});
@@ -12,7 +13,10 @@ class AddImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(

@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/food_feature/food_cart/data/models/master_model.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/domain/entities/cart_item_entity.dart';
+import 'master_model.dart';
+import '../../domain/entities/cart_item_entity.dart';
 
 import '../../../restaurant_details/data/models/option_model.dart';
 

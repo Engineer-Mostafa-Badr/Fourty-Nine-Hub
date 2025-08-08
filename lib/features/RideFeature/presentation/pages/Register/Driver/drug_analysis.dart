@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DragAnalyticsScreen extends StatelessWidget {
   const DragAnalyticsScreen({super.key});
@@ -99,6 +100,7 @@ class DragAnalyticsScreen extends StatelessWidget {
                           UploadFileWidget(
                             title: LocaleKeys.dragAnalysis.localize,
                             onTap: (){
+      ManageVibration.vibrate();
                               cubit.onUploadPersonalDrugAnalysisPicture(context);
 
                             },
@@ -146,6 +148,7 @@ class DragAnalyticsScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if(context.read<RideRegisterCubit>().state.personalDrugAnalysisPicture==null){
                       showErrorMessage(context, "Please select drag analysis");
                     }else{

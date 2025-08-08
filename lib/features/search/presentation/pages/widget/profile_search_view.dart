@@ -17,6 +17,7 @@ import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ProfileSearchView extends StatefulWidget {
   const ProfileSearchView({super.key});
@@ -114,6 +115,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
                 final user = _cubit.usersSearch[index];
                 return InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.OTHERSACCOUNT, extra: user.id);
                   },
                   child: Padding(
@@ -169,6 +171,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
               final user = _cubit.usersSearch[index];
               return InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   context.push(Routes.OTHERSACCOUNT, extra: user.id);
                 },
 

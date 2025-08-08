@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/car_info_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/date_time_picker_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/distance_and_price_per_person_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/driver_phone_number_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/publish_button_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/select_seat_and_repeat_v2.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/total_price_v2.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'car_info_v2.dart';
+import 'date_time_picker_v2.dart';
+import 'distance_and_price_per_person_v2.dart';
+import 'driver_phone_number_v2.dart';
+import 'publish_button_v2.dart';
+import 'select_seat_and_repeat_v2.dart';
+import 'total_price_v2.dart';
 
 class TripAndCarInformationV2 extends StatefulWidget {
   const TripAndCarInformationV2({super.key});

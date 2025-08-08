@@ -3,35 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../../common/widgets/stateless/images/social_image_viewer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/instagram_cubit.dart';
+import 'insta_reel_card.dart';
+import 'instagram_post_comments.dart';
+import '../../../social_posts/domain/entities/post_entity.dart';
+import '../../../social_posts/domain/usecases/add_reply_usecase.dart';
+import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
+import '../../../social_posts/domain/usecases/post_react_usecase.dart';
+import '../../../social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramProfilePostsView extends StatefulWidget {
   const InstagramProfilePostsView({
@@ -202,6 +203,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
+      ManageVibration.vibrate();
                                       var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
@@ -242,6 +244,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   IconAppButton(
                                     icon: FontAwesomeIcons.comment,
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       // if (!serviceLocator<UserCubit>()
                                       //     .isLoggedIn) {
                                       //   context.push(Routes.LOGIN);
@@ -269,6 +272,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                             child: GestureDetector(
                                               behavior: HitTestBehavior.opaque,
                                               onTap: () {
+      ManageVibration.vibrate();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
@@ -385,6 +389,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   text: WidgetSpan(
                                       child: GestureDetector(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       setState(() {
                                         _isExpanded = !_isExpanded;
                                       });
@@ -770,6 +775,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
+      ManageVibration.vibrate();
                                       var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
@@ -810,6 +816,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   IconAppButton(
                                     icon: FontAwesomeIcons.comment,
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       // if (!serviceLocator<UserCubit>()
                                       //     .isLoggedIn) {
                                       //   context.push(Routes.LOGIN);
@@ -837,6 +844,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                             child: GestureDetector(
                                               behavior: HitTestBehavior.opaque,
                                               onTap: () {
+      ManageVibration.vibrate();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
@@ -950,6 +958,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   text: WidgetSpan(
                                       child: GestureDetector(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       setState(() {
                                         _isExpanded = !_isExpanded;
                                       });
@@ -1014,6 +1023,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
       children: [
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
@@ -1034,6 +1044,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
               children: [
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
                   },
                   child: TextAppButton(
@@ -1042,6 +1053,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                           fontSize: 30.sp),
                       label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.push(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);
                       }),

@@ -6,19 +6,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/Attachment_types.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/emoji_keyboard.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'Attachment_types.dart';
+import 'emoji_keyboard.dart';
+import '../../../../chat_view/presentation/chat_cubit/chats_cubit.dart';
+import '../../../../../../../res/style/app_colors.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
 import 'replay_message_widget.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
 
 class SendMessageWidget extends StatefulWidget {
   const SendMessageWidget({super.key});
@@ -173,6 +174,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
     return LayoutBuilder(builder: (context, constraints) {
       return InkWell(
         onTap: () async {
+      ManageVibration.vibrate();
           await context.read<ChatRoomCubit>().sendMessage();
         },
         child: const CircleAvatar(
@@ -270,6 +272,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                           controller: _messageTextController,
                           focusNode: _messageFocusNode,
                           onTap: () {
+      ManageVibration.vibrate();
                             _closeEmojiKeyboard();
                             _openTextKeyboard();
                           },
@@ -299,6 +302,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                             color: Colors.grey,
                           ),
                           onTap: () {
+      ManageVibration.vibrate();
                             setState(() {
                               context.read<ChatRoomCubit>().isOneTimeView =
                                   !context.read<ChatRoomCubit>().isOneTimeView;
@@ -428,6 +432,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         color: Colors.grey,
       ),
       onPressed: () {
+      ManageVibration.vibrate();
         _closeEmojiKeyboard();
         _openTextKeyboard();
       },
@@ -441,6 +446,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         color: Colors.grey,
       ),
       onPressed: () {
+      ManageVibration.vibrate();
         _closeTextKeyboard();
         _openEmojiKeyboard();
       },
@@ -461,6 +467,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         color: Colors.grey,
       ),
       onPressed: () {
+      ManageVibration.vibrate();
         bottomSheet(
             context: context,
             widget: AttachmentTypes(

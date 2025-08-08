@@ -1,34 +1,29 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_all_restaurant_use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_expired_orders_use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
-import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
-import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/enums/main_services_enum.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../authentication/domain/entities/user_entity.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../fourty_nine/domain/entities/banner.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../../fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
+import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../subcategories/domain/usecases/toggle_favorite_category.dart';
+import '../../../../subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import '../../data/models/expired_requests_model.dart';
+import '../../data/models/is_restaurant_model.dart';
+import '../../domain/entities/food_category_entity.dart';
 import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
@@ -37,11 +32,18 @@ import '../../domain/entities/restaurant_entity.dart';
 import '../../domain/entities/set_request_seen_entity.dart';
 import '../../domain/entities/user_order_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
+import '../../domain/usecases/change_connectivity_use_case.dart';
+import '../../domain/usecases/get_all_restaurant_use_case.dart';
+import '../../domain/usecases/get_expired_orders_use_case.dart';
 import '../../domain/usecases/get_food_ads_use_case.dart';
+import '../../domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import '../../domain/usecases/get_req_logs_count_use_case.dart';
 import '../../domain/usecases/get_req_logs_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
+import '../../domain/usecases/getsubcategory_restaurants_usecase.dart';
+import '../../domain/usecases/is_resturant_usecase.dart';
 import '../../domain/usecases/set_request_log_seen_use_case.dart';
+import '../../domain/usecases/toggle_restaurant_favourite_use_case.dart';
 
 part 'restaurants_list_state.dart';
 
@@ -72,6 +74,56 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   final SetRequestLogSeenUseCase setRequestLogSeenUseCase;
   final GetFoodAdsUseCase getFoodAdsUseCase;
 
+  final service = MainServicesEnum.food;
+
+  UserEntity? user;
+  String? token;
+  bool showSearch = false;
+  int pageSize = 10;
+
+  bool isLoadingMore = false;
+
+  bool hasMoreData = true;
+
+  bool hasMoreExpiredOrders = true;
+  bool hasMoreUserOrders = true;
+
+  int currentPage = 1;
+
+  int currentExpiredOrdersPage = 1;
+
+  int currentUserOrdersPage = 1;
+
+  bool isLoadingRestaurantMore = false;
+
+  bool isLoadingExpiredOrdersMore = false;
+
+  bool isLoadingUserOrdersMore = false;
+
+  bool hasMoreRestaurantsData = true;
+
+  int currentRestaurantsPage = 1;
+
+  List<FoodCategoryEntity> subCategories = [];
+
+  List<GetAllRestaurantEntity> restaurants = [];
+
+  List<OrderData> expiredOrders = [];
+
+  List<UserOrderEntity> userOrders = [];
+
+  bool hasMoreReqLogs = true;
+
+  int currentReqLogsPage = 1;
+
+  bool isLoadingMoreLogs = false;
+
+  List<LogsRequestLogsEntity> reqLogs = [];
+
+  List<GetAllRestaurantEntity> foodAdData = [];
+  bool hasMoreFoodAds = true;
+  int currentPageFoodAds = 1;
+  bool isLoadingMoreFoodAds = false;
   RestaurantsCubit(
     this._getMainCategoryDetailsUseCase,
     this._getAllRestaurantUseCase,
@@ -88,41 +140,214 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     this._getExpiredOrdersUseCase,
     this._toggleRestaurantFavouriteUseCase,
     this._getUserOrderUseCase,
-    this.getReqLogsUseCase, this.addRateRestaurantUseCase, this.getReqLogsCountUseCase, this.setRequestLogSeenUseCase, this.getFoodAdsUseCase,
+    this.getReqLogsUseCase,
+    this.addRateRestaurantUseCase,
+    this.getReqLogsCountUseCase,
+    this.setRequestLogSeenUseCase,
+    this.getFoodAdsUseCase,
   ) : super(const RestaurantsListState());
+  Future<void> fetchOrderData() async {
+    if (!hasMoreUserOrders || isLoadingUserOrdersMore) return;
 
-  final service = MainServicesEnum.food;
-  UserEntity? user;
-  String? token;
-  bool showSearch = false;
+    isLoadingUserOrdersMore = true;
+    emit(state.copyWith(isLoadingUserOrdersMore: true));
 
-  @override
-  void onChange(Change<RestaurantsListState> change) {
-    print("Current State: ${change.currentState.status}");
-    print("Next State: ${change.nextState.status}");
-    super.onChange(change);
+    final response = await _getUserOrderUseCase(
+        params: GetUserOrderParams(page: currentUserOrdersPage, limit: 5));
+    response.fold(
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        isLoadingUserOrdersMore = false;
+        emit(state.copyWith(
+            failure: failure,
+            isLoadingUserOrdersMore: false,
+            status: RestaurantsListStates.error));
+      },
+      (data) {
+        userOrders.addAll(data ?? []);
+
+        if ((data.length ?? 0) < 5) {
+          hasMoreUserOrders = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentUserOrdersPage++;
+        }
+
+        isLoadingUserOrdersMore = false;
+        emit(state.copyWith(
+            userOrderEntity: data, isLoadingUserOrdersMore: false));
+      },
+    );
   }
 
-  Future<void> setReqSeen({required String params}) async {
-    emit(state.copyWith(status: RestaurantsListStates.loading));
+  Future<void> fetchRestaurants() async {
+    if (hasMoreRestaurantsData == false || isLoadingRestaurantMore == true) {
+      return;
+    }
+    print("OpenFuncOOO");
 
-    final response = await setRequestLogSeenUseCase(SetRequestLogSeenParams(requestId: params));
+    isLoadingRestaurantMore = true;
+    emit(state.copyWith(isLoadingRestaurantsMore: true));
+    final response = await _getSubCategoryRestaurantsUseCases(
+        GetSubCategoryRestaurants(
+            id: state.selectedSubCategoryId ?? '',
+            page: currentRestaurantsPage,
+            limit: pageSize,
+            userId: serviceLocator<UserCubit>().state.data?.id ?? ''));
 
     response.fold(
-          (failure) {
-        emit(state.copyWith(failure: failure, status: RestaurantsListStates.error));
-      },
-          (setData) async {
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
-          setRequestLogSeenEntity: setData,
-          status: RestaurantsListStates.success,
+          failure: failure, status: RestaurantsListStates.error));},
+      (data) {
+        restaurants.addAll(data);
 
-        ));
-       await getReqCount();
-         loadInitialReqLogs();
+        if (data.length < pageSize) {
+          hasMoreRestaurantsData = false;
+          emit(state.copyWith(isLoadingRestaurantsMore: false));
+        } else {
+          currentRestaurantsPage++;
+        }
 
+        isLoadingRestaurantMore = false;
 
-          },
+        emit(state.copyWith(
+            allRestaurant: restaurants, isLoadingRestaurantsMore: false));
+      },
+    );
+  }
+
+  Future<void> fetchSubCategories() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    FoodCategoryEntity allRestaurants = FoodCategoryEntity(
+      id: '',
+      image: Assets.allRestaurants,
+      isSelected: true,
+      fromAsset: true,
+      nameAr: 'كل المطاعم',
+      nameEn: 'All Restaurants',
+    );
+
+    isLoadingMore = true;
+    emit(state.copyWith(isLoadingMore: true));
+
+    final response = await _getMealCategoriesWithCountRestaurantsUseCase(
+        params: PostCommentsParams(
+            userId: user?.id, page: currentPage, limit: pageSize));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+          failure: failure, status: RestaurantsListStates.error));},
+      (data) {
+        subCategories.addAll(data);
+        if (currentPage == 1) subCategories.insert(0, allRestaurants);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(
+            mealCategories: subCategories, isLoadingMore: false));
+      },
+    );
+  }
+
+  Future<void> getBannerById() async {
+    final response = await _getBannerByIdUseCase.call(id: service.id);
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RestaurantsListStates.error));},
+        (data) => emit(state.copyWith(banner: data)));
+  }
+
+  Future<void> getExpiredOrders() async {
+    if (!hasMoreExpiredOrders || isLoadingExpiredOrdersMore) return;
+
+    isLoadingExpiredOrdersMore = true;
+    emit(state.copyWith(isLoadingExpiredOrdersMore: true));
+
+    final response = await _getExpiredOrdersUseCase(
+        params: PaginationParams(page: currentExpiredOrdersPage, limit: 5));
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingExpiredOrdersMore = false;
+        emit(state.copyWith(
+            failure: failure,
+            isLoadingExpiredOrdersMore: false,
+            status: RestaurantsListStates.error));
+      },
+      (data) {
+        expiredOrders.addAll(data.data ?? []);
+
+        if ((data.data.length ?? 0) < 5) {
+          hasMoreExpiredOrders = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentExpiredOrdersPage++;
+        }
+
+        isLoadingExpiredOrdersMore = false;
+        emit(state.copyWith(
+            expiredRequestsResponse: data, isLoadingExpiredOrdersMore: false));
+      },
+    );
+  }
+
+  Future<void> getFoodAds() async {
+    if (!hasMoreFoodAds || isLoadingMoreFoodAds) return;
+    isLoadingMoreFoodAds = true;
+    emit(state.copyWith(isLoadingMoreLogs: true));
+    final response = await getFoodAdsUseCase(
+        params: PaginationParams(page: currentPageFoodAds, limit: 5));
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMoreFoodAds = false;
+        emit(state.copyWith(
+            failure: failure,
+            isLoadingMoreLogs: false,
+            status: RestaurantsListStates.error));
+      },
+      (data) {
+        foodAdData.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreFoodAds = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentPageFoodAds++;
+        }
+
+        isLoadingMoreFoodAds = false;
+        emit(state.copyWith(foodAdEntity: data, isLoadingMoreLogs: false));
+      },
     );
   }
 
@@ -132,10 +357,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     final response = await getReqLogsCountUseCase(NoParams());
 
     response.fold(
-          (failure) {
-        emit(state.copyWith(failure: failure, status: RestaurantsListStates.error));
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: RestaurantsListStates.error));
       },
-          (reqCount) {
+      (reqCount) {
         emit(state.copyWith(
           reqCount: reqCount,
           status: RestaurantsListStates.success,
@@ -143,42 +373,61 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       },
     );
   }
-  void updateLogEntity(LogsRequestLogsEntity updatedEntity) {
-    // Get current state
-    final currentState = state;
 
-    // Check if we have logs in the current state
-    if (currentState.logsEntity != null) {
-      // Create updated list by replacing the matching log
-      final updatedList = currentState.logsEntity!.map((log) =>
-      log.id == updatedEntity.id ? updatedEntity : log
-      ).toList();
+  Future<void> getReqLogs() async {
+    if (!hasMoreReqLogs || isLoadingMoreLogs) return;
 
-      // Emit new state with updated list
-      emit(currentState.copyWith(
-        logsEntity: updatedList,
-        status: RestaurantsListStates.success,
-      ));
-    }
-  }
+    isLoadingMoreLogs = true;
+    emit(state.copyWith(isLoadingMoreLogs: true));
 
-  Future<void> rateRestaurant({required AddRateRestaurantParams params}) async {
-    emit(state.copyWith(status: RestaurantsListStates.loading));
-
-    final response = await addRateRestaurantUseCase(params);
-
+    final response = await getReqLogsUseCase(
+        params: PaginationParams(page: currentReqLogsPage, limit: 5));
     response.fold(
-          (failure) {
-        emit(state.copyWith(failure: failure, status: RestaurantsListStates.error));
-      },
-          (rateData) {
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMoreLogs = false;
         emit(state.copyWith(
-          rateResponseEntity: rateData,
-            status: RestaurantsListStates.success,
+            failure: failure,
+            isLoadingMoreLogs: false,
+            status: RestaurantsListStates.error));
+      },
+      (data) {
+        reqLogs.addAll(data);
 
-        ));
+        if ((data.length ?? 0) < 5) {
+          hasMoreReqLogs = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentReqLogsPage++;
+        }
+
+        isLoadingMoreLogs = false;
+        emit(state.copyWith(logsEntity: data, isLoadingMoreLogs: false));
       },
     );
+  }
+
+  Future<void> isRestaurant() async {
+    if (user != null) {
+      final response = await _isResturantUseCase.call(const NoParams());
+      response.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RestaurantsListStates.error));
+      }, (data) {
+        print('sadafasfasvsdvd$data');
+        emit(state.copyWith(isRestaurant: data));
+      });
+    } else {
+      emit(state.copyWith(
+          isRestaurant:
+              IsRestaurantModel(isRestaurant: false, approved: false)));
+    }
   }
 
   Future<void> loadData() async {
@@ -190,84 +439,68 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     emit(state.copyWith(status: RestaurantsListStates.success));
   }
 
-  Future<void> _getUser() async {
-    user= UserCubit.to.state.data;
-    // await serviceLocator<UserCubit>()
-    //     .getUser()
-    //     .then((Either<Failure, UserEntity>? value) {
-    //   value?.fold(
-    //     (failure) => print("Failed to get user: $failure"),
-    //     (u) => user = u,
-    //   );
-    // });
+  void loadInitialData() async {
+    subCategories.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchSubCategories();
   }
 
-  Future<bool> toggleFavoriteSubcategory(String subcategoryId) async {
-    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
-    bool isFav = false;
-    response.fold(
-        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-        (data) {
-      isFav = true;
-      emit(state.copyWith(status: RestaurantsListStates.success));
-    });
-    return isFav;
+  void loadInitialExpiredOrders() async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
+    expiredOrders.clear();
+    currentExpiredOrdersPage = 1;
+    hasMoreExpiredOrders = true;
+    await getExpiredOrders();
+    emit(state.copyWith(status: RestaurantsListStates.success));
   }
 
-  Future<void> toggleFavoriteCategory(String categoryId) async {
-    final response = await _toggleFavoriteCategoryUseCase(categoryId);
-    response.fold(
-        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-        (data) async {
-      await _getMainCategoryDetails();
-    });
+  void loadInitialFoodAds() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    foodAdData.clear();
+    currentPageFoodAds = 1;
+    hasMoreFoodAds = true;
+    await getFoodAds();
+    emit(state.copyWith(status: RestaurantsListStates.success));
   }
 
-  Future<bool> toggleFavoriteRestaurant(String id) async {
-    final response = await _toggleRestaurantFavouriteUseCase(id);
-    bool result = false;
-    response.fold(
-        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: RestaurantsListStates.success));
-      loadInitialFoodAds();
-    });
-    return result;
+  void loadInitialReqLogs() async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
+    reqLogs.clear();
+    currentReqLogsPage = 1;
+    hasMoreReqLogs = true;
+    await getReqLogs();
+    emit(state.copyWith(status: RestaurantsListStates.success));
   }
 
-  void removeFromFavorites(String id) {
-    restaurants.removeWhere((element) => element.id == id);
-    // Also update the foodAdData if needed
-    foodAdData.removeWhere((element) => element.id == id);
-    emit(state.copyWith(
-      allRestaurant: restaurants,
-      foodAdEntity: foodAdData,
-    ));
-  }
-
-  Future<void> isRestaurant() async {
-    if (user != null) {
-      final response = await _isResturantUseCase.call(const NoParams());
-      response.fold(
-          (failure) =>
-              emit(state.copyWith(status: RestaurantsListStates.error)),
-          (data) {
-        print('sadafasfasvsdvd$data');
-        emit(state.copyWith(isRestaurant: data));
-      });
+  void loadInitialRestaurantsData(String? id) async {
+    FoodCategoryEntity selectedCategory;
+    if (subCategories.isNotEmpty) {
+      selectedCategory =
+          subCategories.firstWhere((element) => element.id == id);
+      print("Elmonx $selectedCategory");
     } else {
-      emit(state.copyWith(
-          isRestaurant:
-              IsRestaurantModel(isRestaurant: false, approved: false)));
+      selectedCategory = FoodCategoryEntity(
+        id: '',
+        image: Assets.allRestaurants,
+        isSelected: true,
+        fromAsset: true,
+        nameAr: 'كل المطاعم',
+        nameEn: 'All Restaurants',
+      );
     }
-  }
-
-  Future<void> getBannerById() async {
-    final response = await _getBannerByIdUseCase.call(id: service.id);
-    response.fold(
-        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-        (data) => emit(state.copyWith(banner: data)));
+    emit(state.copyWith(
+        selectedSubCategoryId: id ?? '', selectedCategory: selectedCategory));
+    restaurants.clear();
+    currentRestaurantsPage = 1;
+    hasMoreRestaurantsData = true;
+    await fetchRestaurants();
+    subCategories.map((e) => e.isSelected = false).toList();
+    if (subCategories.isNotEmpty) {
+      subCategories
+          .firstWhere((element) => element.id == state.selectedSubCategoryId)
+          .isSelected = true;
+    }
   }
 
   // Future<void> getAllRestaurant(int page) async {
@@ -339,201 +572,147 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     await fetchOrderData();
   }
 
-  Future<void> fetchOrderData() async {
-    if (!hasMoreUserOrders || isLoadingUserOrdersMore) return;
+  @override
+  void onChange(Change<RestaurantsListState> change) {
+    print("Current State: ${change.currentState.status}");
+    print("Next State: ${change.nextState.status}");
+    super.onChange(change);
+  }
 
-    isLoadingUserOrdersMore = true;
-    emit(state.copyWith(isLoadingUserOrdersMore: true));
+  Future<void> rateRestaurant({required AddRateRestaurantParams params}) async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
 
-    final response = await _getUserOrderUseCase(
-        params: GetUserOrderParams(page: currentUserOrdersPage, limit: 5));
+    final response = await addRateRestaurantUseCase(params);
+
     response.fold(
       (failure) {
-        isLoadingUserOrdersMore = false;
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
-            failure: failure,
-            isLoadingUserOrdersMore: false,
-            status: RestaurantsListStates.error));
+            failure: failure, status: RestaurantsListStates.error));
       },
-      (data) {
-        userOrders.addAll(data ?? []);
-
-        if ((data.length ?? 0) < 5) {
-          hasMoreUserOrders = false;
-          emit(state.copyWith(isLoadingMore: false));
-        } else {
-          currentUserOrdersPage++;
-        }
-
-        isLoadingUserOrdersMore = false;
+      (rateData) {
         emit(state.copyWith(
-            userOrderEntity: data, isLoadingUserOrdersMore: false));
+          rateResponseEntity: rateData,
+          status: RestaurantsListStates.success,
+        ));
       },
     );
   }
 
-  int pageSize = 10;
-
-  void loadInitialData() async {
-    subCategories.clear();
-    currentPage = 1;
-    hasMoreData = true;
-    await fetchSubCategories();
-  }
-
-  void loadInitialReqLogs() async {
-    emit(state.copyWith(status: RestaurantsListStates.loading));
-    reqLogs.clear();
-    currentReqLogsPage = 1;
-    hasMoreReqLogs = true;
-    await getReqLogs();
-    emit(state.copyWith(status: RestaurantsListStates.success));
-  }
-
-  void loadInitialExpiredOrders() async {
-    emit(state.copyWith(status: RestaurantsListStates.loading));
-    expiredOrders.clear();
-    currentExpiredOrdersPage = 1;
-    hasMoreExpiredOrders = true;
-    await getExpiredOrders();
-    emit(state.copyWith(status: RestaurantsListStates.success));
-  }
-
-  void loadInitialRestaurantsData(String? id) async {
-    FoodCategoryEntity selectedCategory;
-    if (subCategories.isNotEmpty) {
-      selectedCategory =
-          subCategories.firstWhere((element) => element.id == id);
-      print("Elmonx $selectedCategory");
-    } else {
-      selectedCategory = FoodCategoryEntity(
-        id: '',
-        image: Assets.allRestaurants,
-        isSelected: true,
-        fromAsset: true,
-        nameAr: 'كل المطاعم',
-        nameEn: 'All Restaurants',
-      );
-    }
+  void removeFromFavorites(String id) {
+    restaurants.removeWhere((element) => element.id == id);
+    // Also update the foodAdData if needed
+    foodAdData.removeWhere((element) => element.id == id);
     emit(state.copyWith(
-        selectedSubCategoryId: id ?? '', selectedCategory: selectedCategory));
-    restaurants.clear();
-    currentRestaurantsPage = 1;
-    hasMoreRestaurantsData = true;
-    await fetchRestaurants();
-    subCategories.map((e) => e.isSelected = false).toList();
-    if (subCategories.isNotEmpty) {
-      subCategories
-          .firstWhere((element) => element.id == state.selectedSubCategoryId)
-          .isSelected = true;
-    }
+      allRestaurant: restaurants,
+      foodAdEntity: foodAdData,
+    ));
   }
 
-  bool isLoadingMore = false;
-  bool hasMoreData = true;
-  bool hasMoreExpiredOrders = true;
-  bool hasMoreUserOrders = true;
-  int currentPage = 1;
-  int currentExpiredOrdersPage = 1;
-  int currentUserOrdersPage = 1;
-  bool isLoadingRestaurantMore = false;
-  bool isLoadingExpiredOrdersMore = false;
-  bool isLoadingUserOrdersMore = false;
-  bool hasMoreRestaurantsData = true;
-  int currentRestaurantsPage = 1;
-  List<FoodCategoryEntity> subCategories = [];
-  List<GetAllRestaurantEntity> restaurants = [];
-  List<OrderData> expiredOrders = [];
-  List<UserOrderEntity> userOrders = [];
+  Future<void> setReqSeen({required String params}) async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
 
-  bool hasMoreReqLogs = true;
-  int currentReqLogsPage = 1;
-  bool isLoadingMoreLogs = false;
-
-  List<LogsRequestLogsEntity> reqLogs = [];
-
-  Future<void> fetchSubCategories() async {
-    if (!hasMoreData || isLoadingMore) return;
-
-    FoodCategoryEntity allRestaurants = FoodCategoryEntity(
-      id: '',
-      image: Assets.allRestaurants,
-      isSelected: true,
-      fromAsset: true,
-      nameAr: 'كل المطاعم',
-      nameEn: 'All Restaurants',
-    );
-
-    isLoadingMore = true;
-    emit(state.copyWith(isLoadingMore: true));
-
-    final response = await _getMealCategoriesWithCountRestaurantsUseCase(
-        params: PostCommentsParams(
-            userId: user?.id, page: currentPage, limit: pageSize));
+    final response = await setRequestLogSeenUseCase(
+        SetRequestLogSeenParams(requestId: params));
 
     response.fold(
-      (failure) => emit(state.copyWith(
-          failure: failure, status: RestaurantsListStates.error)),
-      (data) {
-        subCategories.addAll(data);
-        if (currentPage == 1) subCategories.insert(0, allRestaurants);
-
-        if (data.length < pageSize) {
-          hasMoreData = false;
-          emit(state.copyWith(isLoadingMore: false));
-        } else {
-          currentPage++;
-        }
-
-        isLoadingMore = false;
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
-            mealCategories: subCategories, isLoadingMore: false));
+            failure: failure, status: RestaurantsListStates.error));
+      },
+      (setData) async {
+        emit(state.copyWith(
+          setRequestLogSeenEntity: setData,
+          status: RestaurantsListStates.success,
+        ));
+        await getReqCount();
+        loadInitialReqLogs();
       },
     );
   }
 
-  Future<void> fetchRestaurants() async {
-    if (hasMoreRestaurantsData == false || isLoadingRestaurantMore == true) {
-      return;
+  Future<void> toggleFavoriteCategory(String categoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(categoryId);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: RestaurantsListStates.error));
+    }, (data) async {
+      await _getMainCategoryDetails();
+    });
+  }
+
+  Future<bool> toggleFavoriteRestaurant(String id) async {
+    final response = await _toggleRestaurantFavouriteUseCase(id);
+    bool result = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: RestaurantsListStates.error));
+    }, (data) {
+      result = data;
+      emit(state.copyWith(status: RestaurantsListStates.success));
+      loadInitialFoodAds();
+    });
+    return result;
+  }
+
+  Future<bool> toggleFavoriteSubcategory(String subcategoryId) async {
+    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+    bool isFav = false;
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: RestaurantsListStates.error));
+    }, (data) {
+      isFav = true;
+      emit(state.copyWith(status: RestaurantsListStates.success));
+    });
+    return isFav;
+  }
+
+  void updateLogEntity(LogsRequestLogsEntity updatedEntity) {
+    // Get current state
+    final currentState = state;
+
+    // Check if we have logs in the current state
+    if (currentState.logsEntity != null) {
+      // Create updated list by replacing the matching log
+      final updatedList = currentState.logsEntity!
+          .map((log) => log.id == updatedEntity.id ? updatedEntity : log)
+          .toList();
+
+      // Emit new state with updated list
+      emit(currentState.copyWith(
+        logsEntity: updatedList,
+        status: RestaurantsListStates.success,
+      ));
     }
-    print("OpenFuncOOO");
-
-    isLoadingRestaurantMore = true;
-    emit(state.copyWith(isLoadingRestaurantsMore: true));
-    final response = await _getSubCategoryRestaurantsUseCases(
-        GetSubCategoryRestaurants(
-            id: state.selectedSubCategoryId ?? '',
-            page: currentRestaurantsPage,
-            limit: pageSize,
-            userId: serviceLocator<UserCubit>().state.data?.id ?? ''));
-
-    response.fold(
-      (failure) => emit(state.copyWith(
-          failure: failure, status: RestaurantsListStates.error)),
-      (data) {
-        restaurants.addAll(data);
-
-        if (data.length < pageSize) {
-          hasMoreRestaurantsData = false;
-          emit(state.copyWith(isLoadingRestaurantsMore: false));
-        } else {
-          currentRestaurantsPage++;
-        }
-
-        isLoadingRestaurantMore = false;
-
-        emit(state.copyWith(
-            allRestaurant: restaurants, isLoadingRestaurantsMore: false));
-      },
-    );
   }
 
   Future<void> _getMainCategoryDetails() async {
     // if (user != null) {
     final response = await _getMainCategoryDetailsUseCase(service.id);
-    response.fold(
-        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: RestaurantsListStates.error));
+    }, (data) {
       emit(state.copyWith(
         mainCategory: data,
       ));
@@ -541,114 +720,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     // }
   }
 
-  Future<void> getExpiredOrders() async {
-    if (!hasMoreExpiredOrders || isLoadingExpiredOrdersMore) return;
-
-    isLoadingExpiredOrdersMore = true;
-    emit(state.copyWith(isLoadingExpiredOrdersMore: true));
-
-    final response = await _getExpiredOrdersUseCase(
-        params: PaginationParams(page: currentExpiredOrdersPage, limit: 5));
-    response.fold(
-      (failure) {
-        isLoadingExpiredOrdersMore = false;
-        emit(state.copyWith(
-            failure: failure,
-            isLoadingExpiredOrdersMore: false,
-            status: RestaurantsListStates.error));
-      },
-      (data) {
-        expiredOrders.addAll(data.data ?? []);
-
-        if ((data.data.length ?? 0) < 5) {
-          hasMoreExpiredOrders = false;
-          emit(state.copyWith(isLoadingMore: false));
-        } else {
-          currentExpiredOrdersPage++;
-        }
-
-        isLoadingExpiredOrdersMore = false;
-        emit(state.copyWith(
-            expiredRequestsResponse: data, isLoadingExpiredOrdersMore: false));
-      },
-    );
+  Future<void> _getUser() async {
+    user = UserCubit.to.state.data;
+    // await serviceLocator<UserCubit>()
+    //     .getUser()
+    //     .then((Either<Failure, UserEntity>? value) {
+    //   value?.fold(
+    //     (failure) => print("Failed to get user: $failure"),
+    //     (u) => user = u,
+    //   );
+    // });
   }
-
-  Future<void> getReqLogs() async {
-    if (!hasMoreReqLogs || isLoadingMoreLogs) return;
-
-    isLoadingMoreLogs = true;
-    emit(state.copyWith(isLoadingMoreLogs: true));
-
-    final response = await getReqLogsUseCase(
-        params: PaginationParams(page: currentReqLogsPage, limit: 5));
-    response.fold(
-          (failure) {
-            isLoadingMoreLogs = false;
-        emit(state.copyWith(
-            failure: failure,
-            isLoadingMoreLogs: false,
-            status: RestaurantsListStates.error));
-      },
-          (data) {
-            reqLogs.addAll(data);
-
-        if ((data.length ?? 0) < 5) {
-          hasMoreReqLogs = false;
-          emit(state.copyWith(isLoadingMore: false));
-        } else {
-          currentReqLogsPage++;
-        }
-
-        isLoadingMoreLogs = false;
-        emit(state.copyWith(
-            logsEntity: data, isLoadingMoreLogs: false));
-      },
-    );
-  }
-
-  List<GetAllRestaurantEntity> foodAdData = [];
-  bool hasMoreFoodAds = true;
-  int currentPageFoodAds = 1;
-  bool isLoadingMoreFoodAds = false;
-
-  void loadInitialFoodAds() async {
-    // emit(state.copyWith(status: RestaurantsListStates.loading));
-    foodAdData.clear();
-    currentPageFoodAds = 1;
-    hasMoreFoodAds = true;
-    await getFoodAds();
-    emit(state.copyWith(status: RestaurantsListStates.success));
-  }
-
-  Future<void> getFoodAds() async {
-    if (!hasMoreFoodAds || isLoadingMoreFoodAds) return;
-    isLoadingMoreFoodAds = true;
-    emit(state.copyWith(isLoadingMoreLogs: true));
-    final response = await getFoodAdsUseCase(
-        params: PaginationParams(page: currentPageFoodAds, limit: 5));
-    response.fold(
-          (failure) {
-            isLoadingMoreFoodAds = false;
-        emit(state.copyWith(
-            failure: failure,
-            isLoadingMoreLogs: false,
-            status: RestaurantsListStates.error));
-      },
-          (data) {
-            foodAdData.addAll(data);
-        if ((data.length ?? 0) < 5) {
-          hasMoreFoodAds = false;
-          emit(state.copyWith(isLoadingMore: false));
-        } else {
-          currentPageFoodAds++;
-        }
-
-            isLoadingMoreFoodAds = false;
-        emit(state.copyWith(
-            foodAdEntity: data, isLoadingMoreLogs: false));
-      },
-    );
-  }
-
 }
