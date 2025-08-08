@@ -5,7 +5,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -17,8 +16,13 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/format_numbers.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../res/style/app_colors.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import '../../../new_trip_join/captainshare/screen/custom_map.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RunningTripParams {
   final RideCubit rideCubit;
@@ -55,7 +59,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
     }
   }
 
-  void _fetchMoreTrips() {
+  _fetchMoreTrips() {
     if (isFetching) return;
     setState(() => isFetching = true);
 
@@ -79,7 +83,6 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
-      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),
@@ -95,44 +98,82 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
-                  return const Center(child: CustomLoading());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else  {
                   if(state.runningTrips?.isEmpty??true) {
                     return Center(child: Text(context.isArabic ? "لا يوجد رحلات حالية" : "No running trips"));
                   }
-                  return ListView.builder(
-                    controller: _scrollController,
-                    itemCount: (state.runningTrips?.length ?? 0) + (isFetching ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == state.runningTrips?.length) {
-                        return const Center(child: CustomLoading());
-                      }
-                      final trip = state.runningTrips?[index];
-                      if (trip == null) return const SizedBox.shrink();
-                      // return Padding(
-                      //   padding: const EdgeInsets.all(16),
-                      //   child: Row(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
-                      //       const SizedBox(width: 16),
-                      //       PriceColumn(
-                      //         startAddressTitle: trip.startLocationAddressTitle,
-                      //         targetAddressTitle: trip.targetLocationAddressTitle,
-                      //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
-                      //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
-                      //       ),
-                      //
-                      //       const Spacer(),
-                      //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
-                      //     ],
-                      //   ),
-                      // );
-                      return TripCard(trip: trip);
+                  return OlxPaginationWidget(
+                    itemsPerPage: 2,
+                    loadPage: (page) {
+                      print('==> page $page');
+                      return _fetchMoreTrips();
                     },
+                    banners: bannersList,
+                    items: List.generate(
+                      state.runningTrips?.length ?? 0,
+                          (index){
+                            if (index == state.runningTrips?.length) {
+                              return const Center(child: CustomCircularProgressIndicator());
+                            }
+                            final trip = state.runningTrips?[index];
+                            if (trip == null) return const SizedBox.shrink();
+                            // return Padding(
+                            //   padding: const EdgeInsets.all(16),
+                            //   child: Row(
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
+                            //       const SizedBox(width: 16),
+                            //       PriceColumn(
+                            //         startAddressTitle: trip.startLocationAddressTitle,
+                            //         targetAddressTitle: trip.targetLocationAddressTitle,
+                            //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
+                            //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
+                            //       ),
+                            //
+                            //       const Spacer(),
+                            //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
+                            //     ],
+                            //   ),
+                            // );
+                            return TripCard(trip: trip);
+                }
+                    ),
                   );
+                  // return ListView.builder(
+                  //   controller: _scrollController,
+                  //   itemCount: (state.runningTrips?.length ?? 0) + (isFetching ? 1 : 0),
+                  //   itemBuilder: (context, index) {
+                  //     if (index == state.runningTrips?.length) {
+                  //       return const Center(child: CustomCircularProgressIndicator());
+                  //     }
+                  //     final trip = state.runningTrips?[index];
+                  //     if (trip == null) return const SizedBox.shrink();
+                  //     // return Padding(
+                  //     //   padding: const EdgeInsets.all(16),
+                  //     //   child: Row(
+                  //     //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     //     children: [
+                  //     //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
+                  //     //       const SizedBox(width: 16),
+                  //     //       PriceColumn(
+                  //     //         startAddressTitle: trip.startLocationAddressTitle,
+                  //     //         targetAddressTitle: trip.targetLocationAddressTitle,
+                  //     //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
+                  //     //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
+                  //     //       ),
+                  //     //
+                  //     //       const Spacer(),
+                  //     //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
+                  //     //     ],
+                  //     //   ),
+                  //     // );
+                  //     return TripCard(trip: trip);
+                  //   },
+                  // );
                 }
                 // return Center(child: context.isArabic ? const Text("لا يوجد رحلات مشغلة حاليا") : const Text("No running trips available"));
               },
@@ -153,15 +194,11 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
 class PriceColumn extends StatelessWidget {
   final String? startAddressTitle;
   final String? targetAddressTitle;
-  final String date;
-  final String price;
 
   const PriceColumn({
     super.key,
     required this.startAddressTitle,
     required this.targetAddressTitle,
-    required this.date,
-    required this.price,
   });
 
   @override
@@ -184,13 +221,13 @@ class PriceColumn extends StatelessWidget {
                   text: startAddressTitle!,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
                 ),
               ),
             ],
           ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 16),
         if(targetAddressTitle != null)
           Row(
             children: [
@@ -206,7 +243,7 @@ class PriceColumn extends StatelessWidget {
                   text: targetAddressTitle!,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
                 ),
               ),
@@ -214,32 +251,32 @@ class PriceColumn extends StatelessWidget {
           ),
         const SizedBox(height: 4),
 
-        Row(
-          spacing: 4,
-          children: [
-            Label(
-              text: date,
-              style: const TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(width: 40),
-            Label(
-              text: price,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                color: AppColors.PRIMARY_COLOR,
-              ),
-            ),
-            // Label(
-            //     text: LocaleKeys.egp.tr(),
-            //     style: Styles.mediumText(
-            //         color: AppColors.SECONDARY_COLOR,
-            //         fontWeight: FontWeight.w700))
-          ],
-        ),
+        // Row(
+        //   spacing: 4,
+        //   children: [
+        //     Label(
+        //       text: date,
+        //       style: const TextStyle(
+        //         fontWeight: FontWeight.w400,
+        //         fontSize: 14,
+        //       ),
+        //     ),
+        //     const SizedBox(width: 40),
+        //     Label(
+        //       text: FormatNumbers().convertNumberToLocalizedString(price, isArabic: context.isArabic),
+        //       style:  TextStyle(
+        //         fontWeight: FontWeight.w600,
+        //         fontSize: 14,
+        //         color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+        //       ),
+        //     ),
+        //     // Label(
+        //     //     text: LocaleKeys.egp.tr(),
+        //     //     style: Styles.mediumText(
+        //     //         color: AppColors.SECONDARY_COLOR,
+        //     //         fontWeight: FontWeight.w700))
+        //   ],
+        // ),
 
       ],
     );
@@ -252,82 +289,128 @@ class TripCard extends StatelessWidget {
 
   const TripCard({super.key, required this.trip});
 
+  List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final isArabic = context.isArabic;
     final dateFormat = DateFormat('hh:mm a', isArabic ? 'ar' : 'en');
     final numberFormat = NumberFormat('#,##0', isArabic ? 'ar' : 'en');
 
+    List<gmap.LatLng> clients = [];
+    List<String> clientsAddress = [];
+
+    try {
+      if (trip.wayPointOneAddressTitle != null &&
+          trip.wayPointOneLat != null &&
+          trip.wayPointOneLng != null) {
+        clients.add(gmap.LatLng(trip.wayPointOneLng!, trip.wayPointOneLat!));
+      }
+
+      if (trip.wayPointTwoAddressTitle != null &&
+          trip.wayPointTwoLat != null &&
+          trip.wayPointTwoLng != null) {
+        clients.add(gmap.LatLng(trip.wayPointTwoLng!, trip.wayPointTwoLat!));
+      }
+    } catch (e) {
+      print('Error processing client locations: $e');
+    }
+
+    if(trip.wayPointOneAddressTitle !=null && (trip.wayPointOneAddressTitle?.isNotEmpty??false)){
+      clientsAddress.add(trip.wayPointOneAddressTitle!);
+    }
+
+    if(trip.wayPointTwoAddressTitle!=null && (trip.wayPointTwoAddressTitle?.isNotEmpty??false)){
+      clientsAddress.add(trip.wayPointTwoAddressTitle!);
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
+        color:context.isDarkMode ? Colors.grey[800] :  Colors.white,
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
       ),
       child: Column(
         children: [
           // Flutter Map with two markers
           if(trip.startLocationLat != null && trip.startLocationLng != null && trip.targetLocationLat != null && trip.targetLocationLng != null)
-          ClipRRect(
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-            child: SizedBox(
-              height: 130,
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
-                  zoom: 10.0,
+            ClipRRect(
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+              child: SizedBox(
+                height: 130,
+                child: CustomGoogleMap(
+                  startLocation: gmap.LatLng(trip.startLocationLng?? 0, trip.startLocationLat?? 0),
+                  targetLocation: gmap.LatLng(trip.targetLocationLng?? 0, trip.targetLocationLat?? 0),
+                  clientAddresses: clientsAddress,
+                  clientLocations: clients,
+                  polylinePoints: _convertPolylineToLatLng(trip.polyline ?? []),
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate: context.isDarkMode
-                        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-                        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-                    userAgentPackageName: 'com.example.app',
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
-                        width: 40,
-                        height: 40,
-                        child: const Icon(Icons.location_on, color: Colors.blue),
-                      ),
-                      Marker(
-                        point: LatLng(trip.targetLocationLat?? 0, trip.targetLocationLng?? 0),
-                        width: 40,
-                        height: 40,
-                        child: const Icon(Icons.location_on, color: AppColors.c19D176),
-                      ),
-                    ],
-                  ),
-                ],
               ),
             ),
-          ),
+          // ClipRRect(
+          //   borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          //   child: SizedBox(
+          //     height: 130,
+          //     child: FlutterMap(
+          //       options: MapOptions(
+          //         center: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
+          //         zoom: 10.0,
+          //       ),
+          //       children: [
+          //         TileLayer(
+          //           urlTemplate: context.isDarkMode
+          //               ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+          //               : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+          //           userAgentPackageName: 'com.example.app',
+          //         ),
+          //         MarkerLayer(
+          //           markers: [
+          //             Marker(
+          //               point: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
+          //               width: 40,
+          //               height: 40,
+          //               child: const Icon(Icons.location_on, color: Colors.blue),
+          //             ),
+          //             Marker(
+          //               point: LatLng(trip.targetLocationLat?? 0, trip.targetLocationLng?? 0),
+          //               width: 40,
+          //               height: 40,
+          //               child: const Icon(Icons.location_on, color: AppColors.c19D176),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
           // Trip Details
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CarContainer(
                   title: isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn,
                   image: trip.subCategoryPicture,
+                  date: dateFormat.format(trip.createdAt!),
+                  price: '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 PriceColumn(
                   startAddressTitle: trip.startLocationAddressTitle,
                   targetAddressTitle: trip.targetLocationAddressTitle,
-                  date: dateFormat.format(trip.createdAt!),
-                  price: '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
+
                 ),
                 const Spacer(),
                 PersonTripWidget(
                   image: trip.driverProfileUrl,
                   name: trip.driverFirstName?.split(' ').first,
                   rate: trip.driverAverageRating?.toString(),
+                  isVerified: trip.verifiedBadge && trip.isDriverVerified,
                 ),
               ],
             ),

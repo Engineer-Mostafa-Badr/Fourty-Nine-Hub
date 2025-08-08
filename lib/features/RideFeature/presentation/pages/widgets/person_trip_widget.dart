@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -7,12 +8,14 @@ class PersonTripWidget extends StatelessWidget {
   final String ?image;
   final String? name;
   final String? rate;
+  final bool isVerified;
 
   const PersonTripWidget({
     super.key,
     required this.image,
     required this.name,
     required this.rate,
+    required this.isVerified,
   });
 
   @override
@@ -72,7 +75,7 @@ class PersonTripWidget extends StatelessWidget {
                         rate!,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 10,
+                          fontSize: 8,
                           fontWeight: FontWeight.bold,
                           color: AppColors.black,
                         ),
@@ -81,26 +84,32 @@ class PersonTripWidget extends StatelessWidget {
                   ),
                 ),
               ),
+              if (isVerified)
+              PositionedDirectional(
+                bottom: 0,
+                start: 0,
+                child: Icon(Icons.verified, color: Colors.blue, size: 16,),
+              ),
             ],
           ),
           const SizedBox(
             height: 8,
           ),
           if(name != 'null' && name != null)
-          SizedBox(
-            width: 70,
-            child: Text(
-              name!,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppColors.black,
+            SizedBox(
+              width: 70,
+              child: Text(
+                name!,
+                style:  TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: context.isDarkMode? AppColors.whiteColor : AppColors.black,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
             ),
-          ),
         ],
       ),
     );
