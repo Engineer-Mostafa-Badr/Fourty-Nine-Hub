@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/carousel_slider.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -29,14 +30,15 @@ class TripJoinSliders extends StatelessWidget {
               children:[
                 Text(context.isArabic?"مشاركة كابتن!":"Captain Share!",style:
                 TextStyle(
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode? AppColors.SECONDARY_COLOR :AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w600,
                     fontSize: 30
                 ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12,),
-                Image.asset(Assets.captainShare),
+                context.isDarkMode?Image.asset(Assets.captainDarkInfoIcon,
+                  height: MediaQuery.of(context).size.height*0.3,fit: BoxFit.cover,):SvgPicture.asset(Assets.captainInfoIcon,height: MediaQuery.of(context).size.height*0.3),
                 const SizedBox(height: 44,),
                 BulletPoint(text: context.isArabic?"وفر المال واحجز مقعدًا واحدًا.":"Save money & Book 1 seat."),
                 BulletPoint(text: context.isArabic?"اتجه إلى الوجهة النهائية.":"Heading final destination."),
@@ -54,14 +56,17 @@ class TripJoinSliders extends StatelessWidget {
               children: [
                 Text(context.isArabic?"جاي معاك !":"Trip Join!",style:
                 TextStyle(
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode? AppColors.SECONDARY_COLOR :AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w600,
                     fontSize: 30
                 ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12,),
-                Image.asset(Assets.tripJoinNew),
+                context.isDarkMode?Image.asset(Assets.tripDarkInfoIcon,
+                  height: MediaQuery.of(context).size.height*0.3,
+                  fit: BoxFit.cover,):SvgPicture.asset(Assets.tripInfoIcon,
+                    height: MediaQuery.of(context).size.height*0.3),
                 const SizedBox(height: 44,),
                 BulletPoint(text: context.isArabic?"انت مالك سيارة.":"You are a car Owner."),
                 BulletPoint(text: context.isArabic?"قم بالإعلان عن رحلتك المتكررة يوميًا.":"Advertise your daily repeat trip."),
@@ -80,14 +85,19 @@ class TripJoinSliders extends StatelessWidget {
               children: [
                 Text(context.isArabic?"وصلني معاك !":"Pick me!",style:
                 TextStyle(
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode? AppColors.SECONDARY_COLOR :AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w600,
                     fontSize: 30
                 ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12,),
-                Image.asset(Assets.pickMe),
+                context.isDarkMode?Image.asset(Assets.pickMeDarkInfoIcon,
+                  height: MediaQuery.of(context).size.height*0.3,
+                  fit: BoxFit.cover,):Image.asset(Assets.pickMe,
+                    height: MediaQuery.of(context).size.height*0.3),
+
+                // Image.asset(Assets.pickMe),
                 const SizedBox(height: 44,),
                 BulletPoint(text: context.isArabic?"لا يوجد لديك سيارة؟":"Don't have a car?!"),
                 BulletPoint(text: context.isArabic?"تعبت من السعر العالي.":"Tired from the expensive price."),

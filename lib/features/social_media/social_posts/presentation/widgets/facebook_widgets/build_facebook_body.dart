@@ -71,6 +71,11 @@ class _FacebookBodyState extends State<FacebookBody>
               controller: tabController,
               padding: EdgeInsets.zero,
               labelPadding: EdgeInsets.zero,
+              onTap: (i){
+                if(i==0){
+                  context.read<SocialPostsCubit>().loadData();
+                }
+              },
               tabs: [
                 Tab(
                   height: 44,

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/suggest_reels_facebook_section.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
@@ -27,17 +28,26 @@ class FaceBookView extends StatefulWidget {
 
 class _FaceBookViewState extends State<FaceBookView>
     with TickerProviderStateMixin {
+  late ScrollController _scrollController;
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_onScroll);
     super.initState();
   }
 
-  // void _onScroll() {
-  //   if (widget.scrollController.position.pixels >=
-  //       widget.scrollController.position.maxScrollExtent - 200) {
-  //     context.read<SocialPostsCubit>().getAllFeed();
-  //   }
-  // }
+  void _onScroll() {
+    if (!mounted) return; // حماية إضافية
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 400) {
+      if(UserCubit.to.isLoggedIn)context.read<SocialPostsCubit>().getAllFeed();
+      if(!UserCubit.to.isLoggedIn)context.read<SocialPostsCubit>().getGlobalFeed();
+    }
+  }
+  @override
+  void dispose() {
+    // _scrollController.removeListener(_onScroll);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +69,15 @@ class _FaceBookViewState extends State<FaceBookView>
         color: AppColors.getTextColor(context),
         onRefresh: () async {
           controller.loadData();
-          context.read<StoryCubit>()
+          if(UserCubit.to.isLoggedIn) {
+            context.read<StoryCubit>()
             ..fetchStories(loadMore: true)
             ..getMutedStories();
+          }
           controller.onRefresh();
         },
         child: ListView(
-            controller: widget.scrollController,
+            controller: _scrollController,
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             children: [
@@ -88,8 +100,7 @@ class _FaceBookViewState extends State<FaceBookView>
                   : Column(
                       children: [
                         // Container(height: 10,color: Colors.black,),
-                        if (controller.suggestedFriends.isNotEmpty)
-                          const BuildFacebookSuggestPeople(),
+
                         ListView.builder(
                             shrinkWrap: true,
                             padding: const EdgeInsets.all(0),
@@ -101,6 +112,8 @@ class _FaceBookViewState extends State<FaceBookView>
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  if (post.suggestedFriends?.isNotEmpty ?? false)
+                                    BuildFacebookSuggestPeople(suggestedFriends: post.suggestedFriends??[],),
                                   ListView.builder(
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(0),
@@ -114,7 +127,7 @@ class _FaceBookViewState extends State<FaceBookView>
                                     },
                                   ),
                                   if (post.reels?.isNotEmpty ?? false)
-                                    FacebookReels(
+                                    SuggestReelsFaceBookSection(
                                       reels: post.reels ?? [],
                                     ),
                                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/test_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -62,9 +63,9 @@ class BulletPoint extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("• ", style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 20,
+          Expanded(child: Text(text, style: TextStyle(fontSize: 20,
           fontWeight: FontWeight.w700,
-            color: AppColors.black
+            color: context.isDarkMode? AppColors.whiteColor : AppColors.black
           ))),
         ],
       ),

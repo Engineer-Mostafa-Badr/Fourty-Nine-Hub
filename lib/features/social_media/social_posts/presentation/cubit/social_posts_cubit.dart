@@ -124,7 +124,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final shareFormKey = GlobalKey<FormState>();
 
   void loadData() async {
-    await loadInitialData();
+    print("UserCubit.to.isLoggedIn ${UserCubit.to.isLoggedIn}");
+    if(UserCubit.to.isLoggedIn)await loadInitialData();
+    if(!UserCubit.to.isLoggedIn)await loadInitialGlobalData();
+  }
+
+  void loadGlobalData() async {
+    await loadInitialGlobalData();
   }
 
   String? content;
@@ -338,7 +344,20 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     emit(state.copyWith(status: StateStatus.loading));
     Future.wait([
       getAllFeed(),
-      loadSuggestData(),
+    ]);
+    loadFaceData=false;
+    emit(state.copyWith(status: StateStatus.updated));
+  }
+
+  Future loadInitialGlobalData() async {
+    print("loadInitialGlobalData");
+    loadFaceData=true;
+    allFeed.clear();
+    facePage = 1;
+    hasMoreFaceData = true;
+    emit(state.copyWith(status: StateStatus.loading));
+    Future.wait([
+      getGlobalFeed(),
     ]);
     loadFaceData=false;
     emit(state.copyWith(status: StateStatus.updated));
@@ -354,7 +373,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     isLoadingFaceMore = true;
     emit(state.copyWith(status: StateStatus.loading));
     final response =
-        await _getFeedUseCase(TwitterFeedParams(limit: 5, page: facePage));
+        await _getFeedUseCase(TwitterFeedParams(limit: 4, page: facePage));
     List<PostEntity> tweets = [];
     List<PostEntity> advertisements = [];
     List<Reel> reels = [];
@@ -362,10 +381,19 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
-      // if (data.isNotEmpty) {
+          // if(facePage.isEven&&(facePage % 3 != 0)){
+            reels = await fetchReels();
+          // }
+
+          if(facePage.isOdd&&(facePage != 3 || facePage % 3 != 0)){
+            suggestedFriends = await getSuggestedFriends();
+          }
+
+          // if(facePage == 3 || facePage % 3 == 0){
+            advertisements = await getAdvertisements((facePage == 3 || facePage % 3 == 0)?4:1);
+          // }
         // tweets = await getTwitterFeed();
-        // advertisements = await getAdvertisements();
-        reels = await fetchReels();
+
         // suggestedFriends = await getSuggestedFriends();
       // }
       List<FacebookFeedEntity> totalPosts = [];
@@ -420,6 +448,70 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     return reels;
   }
   // get global feed posts
+  Future<void> getGlobalFeed() async {
+    print("hasMoreFaceData $hasMoreFaceData");
+    print(isLoadingFaceMore);
+    if (!hasMoreFaceData || isLoadingFaceMore) return;
+    isLoadingFaceMore = true;
+    emit(state.copyWith(status: StateStatus.loading));
+    final response =
+    await _getGlobalFeedUseCase(TwitterFeedParams(limit: 15, page: facePage));
+    List<PostEntity> tweets = [];
+    List<PostEntity> advertisements = [];
+    List<Reel> reels = [];
+    List<SuggestUserEntity> suggestedFriends = [];
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async {
+          // if(facePage.isEven&&(facePage % 3 != 0)){
+          // reels = await fetchReels();
+          // }
+
+          // if(facePage.isOdd&&(facePage != 3 || facePage % 3 != 0)){
+          //   suggestedFriends = await getSuggestedFriends();
+          // }
+
+          // if(facePage == 3 || facePage % 3 == 0){
+          // advertisements = await getAdvertisements((facePage == 3 || facePage % 3 == 0)?4:1);
+          // }
+          // tweets = await getTwitterFeed();
+
+          // suggestedFriends = await getSuggestedFriends();
+          // }
+          List<FacebookFeedEntity> totalPosts = [];
+          FacebookFeedEntity feed = FacebookFeedEntity(
+              tweets: tweets,
+              posts: data,
+              ads: advertisements,
+              reels: reels,
+              suggestedFriends: suggestedFriends
+          );
+          totalPosts.add(feed);
+          allFeed.add(feed);
+          if (tweets.isEmpty&&data.isEmpty&&advertisements.isEmpty&&reels.isEmpty&&suggestedFriends.isEmpty) {
+            hasMoreFaceData = false;
+          } else {
+            facePage++;
+          }
+          isLoadingFaceMore = false;
+          // totalPosts.addAll(tweets);
+          // totalPosts.addAll(advertisements);
+          // final isLastPage = totalPosts.length < (5);
+          // if (facePage == 1) {
+          //   print("page == 1 $facePage");
+          //   facebookFeedPagingController.itemList = [];
+          // }
+          // if (isLastPage) {
+          //   print("isLastPage = $isLastPage");
+          //   facebookFeedPagingController.appendLastPage(totalPosts);
+          // } else {
+          //   print("isNotLastPage = $isLastPage");
+          //   final nextPageKey = facePage + 1;
+          //   facebookFeedPagingController.appendPage(totalPosts, nextPageKey);
+          // }
+          emit(state.copyWith(posts: data,status: StateStatus.initial));
+        });
+  }
   // getGlobalFeed(int page) async {
   //   final response =
   //       await _getGlobalFeedUseCase(TwitterFeedParams(limit: 10, page: page));
@@ -456,9 +548,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // get advertisements
-  Future<List<PostEntity>> getAdvertisements() async {
+  Future<List<PostEntity>> getAdvertisements(int limit) async {
     final response = await _advertisementUseCase(
-        TwitterFeedParams(limit: 1, page: facePage));
+        TwitterFeedParams(limit: limit, page: facePage));
     List<PostEntity> advertisements = [];
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -513,26 +605,27 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     await getSuggestedFriends();
     emit(state.copyWith(status: StateStatus.updated));
   }
-  getSuggestedFriends() async {
-    if (!hasMorePeopleData || isLoadingPeopleMore) return;
-    isLoadingPeopleMore = true;
-    emit(state.copyWith(status: StateStatus.loading));
+  Future<List<SuggestUserEntity>> getSuggestedFriends() async {
+    // if (!hasMorePeopleData || isLoadingPeopleMore) return;
+    // isLoadingPeopleMore = true;
+    // emit(state.copyWith(status: StateStatus.loading));
     // if (page != 4) {
       final response = await _suggestedFriendsUseCase(
-          SuggestedFriendsParams(limit: 15, page: suggestPeoplePage));
+          SuggestedFriendsParams(limit: 6, page: facePage));
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) {
-            if (data.length < 15||suggestedFriends.length>=60) {
-              hasMorePeopleData = false;
-            } else {
-              suggestPeoplePage++;
-            }
-            isLoadingPeopleMore = false;
+            // if (data.length < 15||suggestedFriends.length>=60) {
+            //   hasMorePeopleData = false;
+            // } else {
+            //   suggestPeoplePage++;
+            // }
+            // isLoadingPeopleMore = false;
         suggestedFriends.addAll(data);
         emit(state.copyWith(
             suggestedFriends: data, status: StateStatus.initial));
       });
+      return suggestedFriends;
   }
 
 

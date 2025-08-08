@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -23,8 +24,9 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 class BuildFacebookSuggestPeople extends StatefulWidget {
   const BuildFacebookSuggestPeople({
     super.key,
+    required this.suggestedFriends
   });
-
+  final List<SuggestUserEntity> suggestedFriends;
   @override
   State<BuildFacebookSuggestPeople> createState() =>
       _BuildFacebookSuggestPeopleState();
@@ -33,19 +35,19 @@ class BuildFacebookSuggestPeople extends StatefulWidget {
 class _BuildFacebookSuggestPeopleState
     extends State<BuildFacebookSuggestPeople> {
   TextEditingController messageController = TextEditingController();
-  late ScrollController _scrollController;
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SocialPostsCubit>().getSuggestedFriends();
-    }
-  }
+  // late ScrollController _scrollController;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _scrollController = ScrollController()..addListener(_onScroll);
+  // }
+  //
+  // void _onScroll() {
+  //   if (_scrollController.position.pixels >=
+  //       _scrollController.position.maxScrollExtent - 200) {
+  //     context.read<SocialPostsCubit>().getSuggestedFriends();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -120,13 +122,13 @@ class _BuildFacebookSuggestPeopleState
                 children: [
                   Expanded(
                     child: ListView.separated(
-                        controller: _scrollController,
+                        // controller: _scrollController,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
                                 context.push(Routes.OTHERSACCOUNT,
-                                    extra: cubit.suggestedFriends[index].id);
+                                    extra: widget.suggestedFriends[index].id);
                               },
                               child: Container(
                                 width: 167,
@@ -164,7 +166,7 @@ class _BuildFacebookSuggestPeopleState
                                               12), // Rounded top corners
                                         ),
                                         child: ImageFromInternet(
-                                          image: cubit.suggestedFriends[index]
+                                          image: widget.suggestedFriends[index]
                                               .profilePicture,
                                           fit: BoxFit
                                               .fill, // Ensures the image covers the area
@@ -198,7 +200,7 @@ class _BuildFacebookSuggestPeopleState
                                           children: [
                                             // User Name
                                             Text(
-                                              "${cubit.suggestedFriends[index].firstName} ${cubit.suggestedFriends[index].lastName}",
+                                              "${widget.suggestedFriends[index].firstName} ${widget.suggestedFriends[index].lastName}",
                                               maxLines: 1,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
@@ -209,7 +211,7 @@ class _BuildFacebookSuggestPeopleState
                                             ),
                                             // const SizedBox(height: 4), // Spacing
                                             // Mutual Friends Count
-                                            cubit.suggestedFriends[index]
+                                            widget.suggestedFriends[index]
                                                         .mutualFriendsCount ==
                                                     0
                                                 ? Text(
@@ -232,7 +234,7 @@ class _BuildFacebookSuggestPeopleState
                                                                     0.5)),
                                                   )
                                                 : Text(
-                                                    "${cubit.suggestedFriends[index].mutualFriendsCount.toLocalizedArabic(context)} ${LocaleKeys.mutualFriend.localize}",
+                                                    "${widget.suggestedFriends[index].mutualFriendsCount.toLocalizedArabic(context)} ${LocaleKeys.mutualFriend.localize}",
                                                     maxLines: 1,
                                                     style: TextStyle(
                                                         fontWeight:
@@ -260,7 +262,7 @@ class _BuildFacebookSuggestPeopleState
                                                   flex: 2,
                                                   child: ClickableWidget(
                                                     onTap: () async {
-                                                      if (cubit
+                                                      if (widget
                                                               .suggestedFriends[
                                                                   index]
                                                               .addedSuccessfully ==
@@ -270,24 +272,24 @@ class _BuildFacebookSuggestPeopleState
                                                                 SocialPostsCubit>()
                                                             .friendRequest(
                                                               context: context,
-                                                              userId: cubit
+                                                              userId: widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .id,
                                                             );
                                                         if (response == true) {
-                                                          cubit
+                                                          widget
                                                               .suggestedFriends[
                                                                   index]
                                                               .addedSuccessfully = true;
                                                           setState(() {});
                                                         }
-                                                      } else if (cubit
+                                                      } else if (widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .addedSuccessfully ==
                                                               true &&
-                                                          cubit
+                                                          widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .followSuccessfully ==
@@ -297,24 +299,24 @@ class _BuildFacebookSuggestPeopleState
                                                                 SocialPostsCubit>()
                                                             .followRequest(
                                                               context: context,
-                                                              userId: cubit
+                                                              userId: widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .id,
                                                             );
                                                         if (response == true) {
-                                                          cubit
+                                                          widget
                                                               .suggestedFriends[
                                                                   index]
                                                               .followSuccessfully = true;
                                                           setState(() {});
                                                         }
-                                                      } else if (cubit
+                                                      } else if (widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .addedSuccessfully ==
                                                               true &&
-                                                          cubit
+                                                          widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .followSuccessfully ==
@@ -410,7 +412,7 @@ class _BuildFacebookSuggestPeopleState
                                                                               .sendGreetMessage(
                                                                         context:
                                                                             context,
-                                                                        userId: cubit
+                                                                        userId: widget
                                                                             .suggestedFriends[index]
                                                                             .id,
                                                                         message:
@@ -418,9 +420,9 @@ class _BuildFacebookSuggestPeopleState
                                                                       );
                                                                       if (result ==
                                                                           true) {
-                                                                        cubit.suggestedFriends.removeWhere((element) =>
+                                                                        widget.suggestedFriends.removeWhere((element) =>
                                                                             element.id ==
-                                                                            cubit.suggestedFriends[index].id);
+                                                                            widget.suggestedFriends[index].id);
                                                                         showSuccessMessage(
                                                                           context,
                                                                           LocaleKeys
@@ -481,7 +483,7 @@ class _BuildFacebookSuggestPeopleState
                                                       alignment:
                                                           Alignment.center,
                                                       decoration: BoxDecoration(
-                                                        border: cubit
+                                                        border: widget
                                                                     .suggestedFriends[
                                                                         index]
                                                                     .followSuccessfully ==
@@ -494,7 +496,7 @@ class _BuildFacebookSuggestPeopleState
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8),
-                                                        color: cubit
+                                                        color: widget
                                                                     .suggestedFriends[
                                                                         index]
                                                                     .addedSuccessfully ==
@@ -502,9 +504,9 @@ class _BuildFacebookSuggestPeopleState
                                                             ? AppColors
                                                                 .getButtonPrimaryWhiteColor(
                                                                     context)
-                                                            : cubit.suggestedFriends[index].addedSuccessfully ==
+                                                            : widget.suggestedFriends[index].addedSuccessfully ==
                                                                         true &&
-                                                                    cubit
+                                                            widget
                                                                             .suggestedFriends[
                                                                                 index]
                                                                             .followSuccessfully ==
@@ -516,7 +518,7 @@ class _BuildFacebookSuggestPeopleState
                                                                     .transparent,
                                                       ),
                                                       child: Text(
-                                                        cubit
+                                                        widget
                                                                     .suggestedFriends[
                                                                         index]
                                                                     .addedSuccessfully ==
@@ -524,9 +526,9 @@ class _BuildFacebookSuggestPeopleState
                                                             ? LocaleKeys
                                                                 .addFriend
                                                                 .localize
-                                                            : cubit.suggestedFriends[index].addedSuccessfully ==
+                                                            : widget.suggestedFriends[index].addedSuccessfully ==
                                                                         true &&
-                                                                    cubit
+                                                            widget
                                                                             .suggestedFriends[
                                                                                 index]
                                                                             .followSuccessfully ==
@@ -538,7 +540,7 @@ class _BuildFacebookSuggestPeopleState
                                                                     .sendGreetMessage
                                                                     .localize,
                                                         style: TextStyle(
-                                                          color: cubit
+                                                          color: widget
                                                                       .suggestedFriends[
                                                                           index]
                                                                       .followSuccessfully ==
@@ -560,7 +562,7 @@ class _BuildFacebookSuggestPeopleState
                                                 const SizedBox(
                                                     width: 4), // Spacing
                                                 // Remove Button
-                                                if (cubit
+                                                if (widget
                                                         .suggestedFriends[index]
                                                         .addedSuccessfully ==
                                                     false)
@@ -572,19 +574,13 @@ class _BuildFacebookSuggestPeopleState
                                                                 SocialPostsCubit>()
                                                             .removeSuggestUser(
                                                               context: context,
-                                                              userId: cubit
+                                                              userId: widget
                                                                   .suggestedFriends[
                                                                       index]
                                                                   .id,
                                                             );
                                                         if (data == true) {
-                                                          cubit.suggestedFriends
-                                                              .removeWhere((e) =>
-                                                                  e.id ==
-                                                                  cubit
-                                                                      .suggestedFriends[
-                                                                          index]
-                                                                      .id);
+                                                          widget.suggestedFriends.removeAt(index);
                                                           setState(() {});
                                                         }
                                                       },
@@ -637,7 +633,7 @@ class _BuildFacebookSuggestPeopleState
                         separatorBuilder: (context, index) => const SizedBox(
                               width: 8,
                             ),
-                        itemCount: cubit.suggestedFriends.length),
+                        itemCount: widget.suggestedFriends.length),
                   ),
                   if (cubit.isLoadingPeopleMore == true)
                     const Center(

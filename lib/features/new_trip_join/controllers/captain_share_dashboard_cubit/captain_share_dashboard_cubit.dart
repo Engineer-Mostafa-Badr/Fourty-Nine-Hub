@@ -134,7 +134,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       emit(state.copyWith(runningRoute: runningRoute));
     }
     if(index==0)loadInitialAvailableData(context);
-    // if(index==1)getRunningRoute(context);
+    if(index==1)getRunningRoute(context);
     if(index==2)loadInitialPastData(context);
     emit(state.copyWith(tapIndex: index,status: CaptainShareDashboardStates.success));
   }
@@ -286,6 +286,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   }
 
   bool isLoadingRunningTrip = false;
+  List<BookingClientEntity> clients = [];
 
   Future<void> getRunningRoute(BuildContext context) async {
     isLoadingRunningTrip = true;
@@ -303,6 +304,8 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
             state.copyWith(failure: failure, status: CaptainShareDashboardStates.error));
       },
           (data) {
+            clients = List.from(data.clients ?? []);
+            clients.sort((a, b) => (a.pickupDistanceFromStart??0).compareTo(b.pickupDistanceFromStart??0));
             isLoadingRunningTrip = false;
         emit(state.copyWith(status: CaptainShareDashboardStates.success,runningRoute:data));
       },
@@ -363,8 +366,11 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
     }, (data) {
       currentContext.pop();
-      getRunningRoute(currentContext);
-      showSuccessMessage(currentContext, currentContext.isArabic?'تم التقاط الراكب بنجاح':'Client Picked Successfully');
+      if(otp.isEmpty)clients.firstWhere((c) => c.id == passengerId).status = RouteClientStatus.cancelled.name;
+      if(otp.isNotEmpty)clients.firstWhere((c) => c.id == passengerId).status = RouteClientStatus.pickedUp.name;
+      // getRunningRoute(currentContext);
+      if(otp.isNotEmpty)showSuccessMessage(currentContext, currentContext.isArabic?'تم التقاط الراكب بنجاح':'Client Picked Successfully');
+      if(otp.isEmpty)showSuccessMessage(currentContext, currentContext.isArabic?'تم الغاء الرحله لهذا الراكب بنجاح':'Trip Cancelled For This Client Successfully');
       emit(state.copyWith(status: CaptainShareDashboardStates.success));
     });
   }
@@ -372,6 +378,23 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   Future<void> onDriverArrivedToClient(
       {required String routeId,required String passengerId}) async {
     final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    final index = clients.indexWhere((c) => c.id == passengerId);
+    BookingClientEntity? client = clients.firstWhereOrNull((c) => c.id == passengerId);
+    if (index == -1) return;
+
+    if (index == 0&&client?.status!='acceptedByDriver') {
+      return; // First client, no restrictions
+    } else if (index == 1) {
+      if(clients[0].status == 'acceptedByDriver') {
+        showErrorMessage(currentContext, currentContext.isArabic?'عليك التقاط العميل الاول اولا للتمكن من التقاط هذا العميل':'You must pick the first client first to be able to pick this client');
+        return;
+      }
+    } else if (index == 2) {
+      if(clients[0].status == 'acceptedByDriver'||clients[1].status == 'acceptedByDriver') {
+        showErrorMessage(currentContext, currentContext.isArabic?'عليك التقاط العميل ${clients[0].status == 'acceptedByDriver'?'الاول':clients[1].status == 'acceptedByDriver'?"الثاني":''} اولا للتمكن من التقاط هذا العميل':'You must pick the ${clients[0].status == 'acceptedByDriver'?'first':clients[1].status == 'acceptedByDriver'?"second":''} client first to be able to pick this client');
+        return;
+      }
+    }
     showLoadingDialog(currentContext);
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if(!serviceEnabled){
@@ -465,6 +488,10 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   Future<void> dropOffClient(
       {required String routeId,required String passengerId, required BuildContext context}) async {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if(clients.any((c)=>c.status=='acceptedByDriver')){
+      showErrorMessage(currentContext, currentContext.isArabic?"برجاء التقاط جميع الركاب اولا":"Please pick all clients first");
+      return;
+    }
     showLoadingDialog(currentContext);
     Position? currentPosition = await getCurrentPosLatLong();
 
@@ -488,7 +515,8 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
     }, (data) {
       currentContext.pop();
-      getRunningRoute(currentContext);
+      clients.firstWhere((c) => c.id == passengerId).status = RouteClientStatus.completed.name;
+      // getRunningRoute(currentContext);
       showSuccessMessage(currentContext, currentContext.isArabic?'تم توصيل الراكب بنجاح':'Client Dropped Off Successfully');
       emit(state.copyWith(status: CaptainShareDashboardStates.success));
     });
