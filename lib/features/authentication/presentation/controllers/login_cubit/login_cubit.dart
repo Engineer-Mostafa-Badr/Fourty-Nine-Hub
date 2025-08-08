@@ -312,30 +312,30 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<User?> loginWithGoogle() async {
-    final googleAccount = await GoogleSignIn().signIn();
+  // Future<User?> loginWithGoogle() async {
+  //   final googleAccount = await GoogleSignIn().signIn();
 
-    final googleAuth = await googleAccount?.authentication;
+  //   final googleAuth = await googleAccount?.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+  //   final credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth?.accessToken,
+  //     idToken: googleAuth?.idToken,
+  //   );
 
-    final userCredential = await FirebaseAuth.instance.signInWithCredential(
-      credential,
-    );
-    return userCredential.user;
-  }
+  //   final userCredential = await FirebaseAuth.instance.signInWithCredential(
+  //     credential,
+  //   );
+  //   return userCredential.user;
+  // }
 
-  // //Google Sign In
+  // Google Sign In
   // Future<void> signInWithGoogle() async {
   //   emit(const SocialAuthState(status: AuthStatus.authenticating));
-  //
+
   //   try {
   //     // Sign in with Firebase
   //     final userCredential = await _socialAuthService.signInWithGoogle();
-  //
+
   //     if (userCredential?.user != null) {
   //       await _handleSocialLogin(userCredential!);
   //     } else {
