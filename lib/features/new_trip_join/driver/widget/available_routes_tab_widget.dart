@@ -40,7 +40,7 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController();
   }
 
   void _onScroll() {
@@ -103,7 +103,7 @@ class _AvailableRoutesTabWidgetState extends State<AvailableRoutesTabWidget> {
                             // cubit.joinToRoute(id: cubit.availableBookings[index].id, context: context);
                           }
                         },
-                      )))
+                      )), scrollController: _scrollController,)
           // ListView.separated(
           //             controller: _scrollController,
           //             physics: const BouncingScrollPhysics(),
