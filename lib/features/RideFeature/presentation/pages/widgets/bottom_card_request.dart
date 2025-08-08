@@ -154,18 +154,18 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                                               Expanded(
                                                 child: SizedBox(
                                                   // width: double.infinity,
-                                                  child: OutlinedButton(
+                                                  child: FilledButton(
                                                     onPressed: () => Navigator.of(context).pop(false),
-                                                    style: OutlinedButton.styleFrom(
+                                                    style: FilledButton.styleFrom(
+                                                      backgroundColor: AppColors.PRIMARY_COLOR_DARK,
                                                       padding: const EdgeInsets.symmetric(vertical: 14),
-                                                      side: const BorderSide(color: Colors.red),
                                                       shape: RoundedRectangleBorder(
                                                         borderRadius: BorderRadius.circular(12),
                                                       ),
                                                     ),
                                                     child: Text(
                                                       context.isArabic ? "إلغاء" : "Cancel",
-                                                      style: const TextStyle(color: Colors.red),
+                                                      style: const TextStyle(color: Colors.white),
                                                     ),
                                                   ),
                                                 ),

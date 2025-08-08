@@ -80,7 +80,7 @@ class _TripReceiptScreenState extends State<TripReceiptScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  context.isArabic? "شكرا لاستخدامك, ${widget.params.historyTripEntity.subCategoryNameAr ?? ""}" : "Thank you for riding, ${widget.params.historyTripEntity.subCategoryNameEn ?? ""}",
+                                  context.isArabic? "شكرا لاستخدامك، ${widget.params.historyTripEntity.subCategoryNameAr ?? ""}" : "Thank you for riding, ${widget.params.historyTripEntity.subCategoryNameEn ?? ""}",
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -134,7 +134,7 @@ class _TripReceiptScreenState extends State<TripReceiptScreen> {
                           context.isArabic ? "ج.م" : "EGP",
                           style:  TextStyle(
                             fontSize: 18,
-                            color: AppColors.black.withOpacity(0.5),
+                            // color:  AppColors.black.withOpacity(0.5),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

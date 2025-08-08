@@ -243,7 +243,7 @@ void showLoadingDialog(BuildContext context,
                   const CustomCircularProgressIndicator(),
                   const SizedBox(height: 20),
                   Text(
-                    message ?? 'Loading...',
+                    message ?? (context.isArabic? 'يرجى الانتظار...' : 'Loading...'),
                     textAlign: TextAlign.center,
                   ),
                 ],

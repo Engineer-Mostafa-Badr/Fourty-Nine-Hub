@@ -130,7 +130,6 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
           Image.asset(Assets.noSmokingIcon,
             height: 20,
             width: 40,),
-
         if(index == 3)
           Icon(Icons.autorenew, size: 20,),
         if(index == 3)

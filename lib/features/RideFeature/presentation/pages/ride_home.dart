@@ -919,7 +919,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _buildTopMap(RideState state, BuildContext context) {
     List<gmap.LatLng> routePoints = [];
-    List<String> clientsAddress = [];
+
 
     List<gmap.LatLng> driverRoutePoints = [];
 
@@ -941,6 +941,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     }
 
     List<gmap.LatLng> clients = [];
+    List<String> clientsAddress = [];
 
     try {
       if (state.wayPointOne != null &&
