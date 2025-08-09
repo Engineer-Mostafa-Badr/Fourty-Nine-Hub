@@ -157,8 +157,8 @@ dependencies:
   visibility_detector: ^0.4.0+2
   voice_message_package: ^2.2.1
   web_socket_channel: ^3.0.3
-  webview_flutter: ^4.8.0
-#  webview_flutter_android: ^4.5.0
+  webview_flutter: 4.13.0
+#  webview_flutter_android: ^4.2.2
   wechat_assets_picker: ^9.5.0
   widget_and_text_animator: null
   widgetbook: ^3.12.0

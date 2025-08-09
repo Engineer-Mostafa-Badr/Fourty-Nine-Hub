@@ -95,6 +95,18 @@
     </array>
     <key>NSUserTrackingUsageDescription</key>
     <string>This identifier will be used to deliver personalized ads to you.</string>
-
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>com.googleusercontent.apps.872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a</string>
+    </array>
+  </dict>
+</array>
+<key>NSAppleMusicUsageDescription</key>
+<string>Need Apple ID for authentication</string>
 </dict>
 </plist>

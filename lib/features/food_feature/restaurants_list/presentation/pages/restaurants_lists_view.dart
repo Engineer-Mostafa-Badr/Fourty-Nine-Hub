@@ -953,11 +953,4 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       ),
     );
   }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().fetchRestaurants();
-    }
-  }
 }

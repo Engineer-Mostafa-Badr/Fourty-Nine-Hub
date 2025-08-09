@@ -715,6 +715,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   label: 'Apple',
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   textColor: Colors.black,
+                  color: AppColors.PRIMARY_COLOR,
                   icon: FontAwesomeIcons.apple,
                   onPressed: () async {
                     try {
