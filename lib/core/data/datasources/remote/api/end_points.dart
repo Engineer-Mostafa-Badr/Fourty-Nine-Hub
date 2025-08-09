@@ -73,7 +73,7 @@ class EndPoints {
   static const verifyOTP = '/auth/verify/email';
   static const VerifyPhoneOTP = '/auth/verify/phone-number';
   static const getWelcomeGift = '/auth/welcome-gift';
-  static const socialLogin = '/auth/social/login';
+  static const socialLogin = '/oauth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>872417805780-9fcstpdvbg6t1rpmmgmk6ogjmcjrb21i.apps.googleusercontent.com</string>
+	<string>872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.872417805780-9fcstpdvbg6t1rpmmgmk6ogjmcjrb21i</string>
+	<string>com.googleusercontent.apps.872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>872417805780-16bqk61d1vspkehfatdogbqaqpvhco3i.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.app.fourtynine</string>
+	<string>com.fourtyninehub.fourtynine</string>
 	<key>PROJECT_ID</key>
 	<string>app-af0a7</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:872417805780:ios:f7768fd45fe620df850241</string>
+	<string>1:872417805780:ios:af9be494449aa24f850241</string>
 </dict>
 </plist>
