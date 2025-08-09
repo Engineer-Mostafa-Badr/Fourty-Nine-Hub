@@ -10,7 +10,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
 import '../../common/widgets/stateless/buttons/app_button.dart';
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -180,7 +180,6 @@ Future<void> showPermissionDialog({required String message}) async =>
           TextAppButton(
             label: LocaleKeys.openAppSettings.tr(),
             onPressed: () async {
-      ManageVibration.vibrate();
               await openAppSettings();
               AppPages.router.configuration.navigatorKey.currentContext!.pop();
             },
@@ -244,7 +243,7 @@ void showLoadingDialog(BuildContext context,
                   const CustomCircularProgressIndicator(),
                   const SizedBox(height: 20),
                   Text(
-                    message ?? 'Loading...',
+                    message ?? (context.isArabic? 'يرجى الانتظار...' : 'Loading...'),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -339,7 +338,6 @@ void showConfirmDialog(
                 child: DefaultButton(
                   label: cancelText ?? 'Cancel',
                   onPressed: () {
-      ManageVibration.vibrate();
                     Navigator.of(context, rootNavigator: true).pop();
                     onCancel?.call();
                   },
@@ -350,7 +348,6 @@ void showConfirmDialog(
                 child: ElevatedAppButton(
                   label: confirmText ?? 'Delete',
                   onPressed: () {
-      ManageVibration.vibrate();
                     Navigator.of(context, rootNavigator: true).pop();
                     onConfirm?.call();
                   },
@@ -439,7 +436,6 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: LocaleKeys.close.localize,
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
-      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -448,7 +444,6 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: LocaleKeys.subscribe.localize,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
-      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       SubscriptionMethod().subscribe(
                           subscribeId: subCategoryId,
@@ -493,7 +488,6 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: context.isArabic? 'اغلاق' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
-      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -502,12 +496,54 @@ showSubscribeDialog(BuildContext context, String subCategoryId, {String? title})
                     label: context.isArabic? 'دفع' : 'Pay',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
-      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       serviceLocator<SubscriptionController>()
                           .showActiveSubscriptionAmounts(
                               walletType: WalletTypes.mainWallet, price: 50);
                     }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }
+
+
+  showHaveTripDialog({required BuildContext context,required String title,Function()? onClose}) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth/3,
+                    label: context.isArabic? 'حسنا' : 'OK',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      // if(onClose!=null)onClose!();
+                    }),
+
               ],
             ),
             const SizedBox(height: 16),

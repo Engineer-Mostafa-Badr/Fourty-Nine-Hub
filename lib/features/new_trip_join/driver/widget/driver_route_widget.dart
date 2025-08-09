@@ -164,7 +164,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                       children: [
                         Text(
                           ((widget.model?.availableSeats ?? 0) >= 2)
-                              ? LocaleKeys.free.localize
+                              ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                               : LocaleKeys.booked.localize,
                           style: TextStyle(
                             fontSize: 20.sp,
@@ -187,7 +187,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                           padding: const EdgeInsets.only(left: 13),
                           child: Text(
                             ((widget.model?.availableSeats ?? 0) >= 1)
-                                ? LocaleKeys.free.localize
+                                ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                                 : LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
@@ -424,7 +424,6 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
       }).toList();
     }
 
-    log("clients ${clients.length}");
 
     return GestureDetector(
       onTap: (){

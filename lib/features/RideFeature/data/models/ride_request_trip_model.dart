@@ -25,6 +25,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.driverId,
     required super.driverFirstName,
     required super.driverIsArrivingIn,
+    required super.tripStartedAt,
     required super.driverPhoneNumber,
     required super.driverProfilePicture,
     required super.driverRating,
@@ -142,6 +143,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
       driverStartLng: json['driverLocation']?['start']?['longitude'] ?? 0.0,
       driverTargetLat: json['driverLocation']?['target']?['latitude'] ?? 0.0,
       driverTargetLng: json['driverLocation']?['target']?['longitude'] ?? 0.0,
+      tripStartedAt: json['startedAt'] != null ? DateTime.parse(json['startedAt']).toLocal() : null,
     );
   }
 }

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../core/enums/base_status_enum.dart';
-import '../../../../../../core/error/failure.dart';
-import '../../../../../../core/messages/messages.dart';
-import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../cubit/social_posts_cubit.dart';
-import 'build_facebook_suggest_people.dart';
-import 'facebook_reels.dart';
-import 'normal_post_screen.dart';
-import '../posts/create_post_banner.dart';
-import '../../../../stories/presentation/cubit/stories_cubit.dart';
-import '../../../../stories/presentation/pages/facebook_stories.dart';
-import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_suggest_people.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_reels.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/suggest_reels_facebook_section.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 
 class FaceBookView extends StatefulWidget {
@@ -27,17 +28,26 @@ class FaceBookView extends StatefulWidget {
 
 class _FaceBookViewState extends State<FaceBookView>
     with TickerProviderStateMixin {
+  late ScrollController _scrollController;
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_onScroll);
     super.initState();
   }
 
-  // void _onScroll() {
-  //   if (widget.scrollController.position.pixels >=
-  //       widget.scrollController.position.maxScrollExtent - 200) {
-  //     context.read<SocialPostsCubit>().getAllFeed();
-  //   }
-  // }
+  void _onScroll() {
+    if (!mounted) return; // حماية إضافية
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 400) {
+      if(UserCubit.to.isLoggedIn)context.read<SocialPostsCubit>().getAllFeed();
+      if(!UserCubit.to.isLoggedIn)context.read<SocialPostsCubit>().getGlobalFeed();
+    }
+  }
+  @override
+  void dispose() {
+    // _scrollController.removeListener(_onScroll);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +64,21 @@ class _FaceBookViewState extends State<FaceBookView>
       }
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
+      // print("allFeed ${controller.allFeed[0].posts?.length}");
       return RefreshIndicator(
         backgroundColor: AppColors.getFillColor(context),
         color: AppColors.getTextColor(context),
         onRefresh: () async {
           controller.loadData();
-          context.read<StoryCubit>()
+          if(UserCubit.to.isLoggedIn) {
+            context.read<StoryCubit>()
             ..fetchStories(loadMore: true)
             ..getMutedStories();
+          }
           controller.onRefresh();
         },
         child: ListView(
-            controller: widget.scrollController,
+            controller: _scrollController,
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             children: [
@@ -88,8 +101,7 @@ class _FaceBookViewState extends State<FaceBookView>
                   : Column(
                       children: [
                         // Container(height: 10,color: Colors.black,),
-                        if (controller.suggestedFriends.isNotEmpty)
-                          const BuildFacebookSuggestPeople(),
+
                         ListView.builder(
                             shrinkWrap: true,
                             padding: const EdgeInsets.all(0),
@@ -101,6 +113,8 @@ class _FaceBookViewState extends State<FaceBookView>
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  if (post.suggestedFriends?.isNotEmpty ?? false)
+                                    BuildFacebookSuggestPeople(suggestedFriends: post.suggestedFriends??[],),
                                   ListView.builder(
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(0),
@@ -114,7 +128,7 @@ class _FaceBookViewState extends State<FaceBookView>
                                     },
                                   ),
                                   if (post.reels?.isNotEmpty ?? false)
-                                    FacebookReels(
+                                    SuggestReelsFaceBookSection(
                                       reels: post.reels ?? [],
                                     ),
                                 ],

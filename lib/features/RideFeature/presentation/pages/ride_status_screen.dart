@@ -108,6 +108,8 @@ class RideStatusScreen extends StatelessWidget {
                               toLocation:
                               'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               onGoogleMap: () {},
+                              showOTP: false,
+                              showCancelButton: false,
                               onPartialPayment: () {},
                               onCallEmergency: () {},
                               onCancelRide: () {},

@@ -23,6 +23,7 @@ class RideRequestTripEntity {
   final DateTime? createdAt;
   final double? rating;
   final DateTime? driverIsArrivingIn;
+  final DateTime? tripStartedAt;
   final String? driverId;
   final String? driverUserId;
   final String? driverFirstName;
@@ -45,7 +46,7 @@ class RideRequestTripEntity {
   final double? driverTargetLng;
   final String? otp;
 
-  RideRequestTripEntity({required this.vehicleModelEn, required this.vehicleBrandEn, required this.id, required this.userId, required this.subCategoryId, required this.from, required this.to, required this.wayPointOneTitle, required this.wayPointTwoTitle, required this.wayPointOne, required this.wayPointTwo, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.lowestFare, required this.highestFare, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium,  required this.createdAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModelAr, required this.vehicleColor, required this.vehicleBrandAr, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId, required this.polyline, required this.driverPolyline, required this.driverStartLat, required this.driverStartLng, required this.driverTargetLat, required this.driverTargetLng, required this.otp});
+  RideRequestTripEntity({required this.vehicleModelEn, required this.vehicleBrandEn, required this.id, required this.userId, required this.subCategoryId, required this.from, required this.to, required this.wayPointOneTitle, required this.wayPointTwoTitle, required this.wayPointOne, required this.wayPointTwo, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.lowestFare, required this.highestFare, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium,  required this.createdAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModelAr, required this.vehicleColor, required this.vehicleBrandAr, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId, required this.polyline, required this.driverPolyline, required this.driverStartLat, required this.driverStartLng, required this.driverTargetLat, required this.driverTargetLng, required this.otp, required this.tripStartedAt});
 
   RideRequestTripEntity copyWith({
     String? id,
@@ -68,6 +69,7 @@ class RideRequestTripEntity {
     DateTime? createdAt,
     double? rating,
     DateTime? driverIsArrivingIn,
+    DateTime? tripStartedAt,
     String? driverId,
     String? driverUserId,
     String? driverFirstName,
@@ -111,6 +113,7 @@ class RideRequestTripEntity {
       createdAt: createdAt ?? this.createdAt,
       rating: rating ?? this.rating,
       driverIsArrivingIn: driverIsArrivingIn ?? this.driverIsArrivingIn,
+      tripStartedAt: tripStartedAt ?? this.tripStartedAt,
       driverId: driverId ?? this.driverId,
       driverUserId: driverUserId ?? this.driverUserId,
       driverFirstName: driverFirstName ?? this.driverFirstName,

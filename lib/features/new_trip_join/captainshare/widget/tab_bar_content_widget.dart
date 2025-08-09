@@ -12,605 +12,21 @@ import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_r
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/header_text_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../presentation/view/widget/taps/tab_bar_row_widget.dart';
 import 'one_way_widget.dart';
 
-Widget _emptyMessage() {
-  return Center(
-    child: Text(
-      LocaleKeys.thereIsNoTripsInThisList.localize,
-      style: TextStyle(
-        fontSize: 28.sp,
-        fontWeight: FontWeight.w600,
-        color: const Color(
-          0xff727272,
-        ),
-      ),
-    ),
-  );
-}
-
-// 🔹 ويدجيت لكل تاب
-class AvailableTripsWidget extends StatefulWidget {
-  final List<String> content;
-
-  const AvailableTripsWidget({super.key, required this.content});
-
-  @override
-  State<AvailableTripsWidget> createState() => _AvailableTripsWidgetState();
-}
-
-class BookingsWidget extends StatefulWidget {
-  final List<String> content;
-
-  const BookingsWidget({super.key, required this.content});
-
-  @override
-  State<BookingsWidget> createState() => _BookingsWidgetState();
-}
-
-class ExpiredTripsWidget extends StatefulWidget {
-  final List<String> content;
-
-  const ExpiredTripsWidget({super.key, required this.content});
-
-  @override
-  State<ExpiredTripsWidget> createState() => _ExpiredTripsWidgetState();
-}
-
-class RunningTripsWidget extends StatefulWidget {
-  final List<String> content;
-
-  const RunningTripsWidget({super.key, required this.content});
-
-  @override
-  State<RunningTripsWidget> createState() => _RunningTripsWidgetState();
-}
-
 class TabBarContentWidget extends StatefulWidget {
-  final TabController _tabController;
   const TabBarContentWidget({super.key, required TabController tabController})
       : _tabController = tabController;
+  final TabController _tabController;
 
   @override
   _TabBarContentWidgetState createState() => _TabBarContentWidgetState();
-}
-
-class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
-  late ScrollController _scrollController;
-  bool _isVisible = true;
-  final double _lastScrollOffset = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
-        builder: (context, state) {
-      var cubit = context.read<CaptainShareCubit>();
-      return Stack(
-        children: [
-          cubit.isLoadingAvailableBookings
-              ? const Center(child: CustomLoadingSearchWidget())
-              : cubit.availableBookings.isEmpty
-                  ? _emptyMessage()
-                  : GlowingOverscrollIndicator(
-                      color: AppColors.SECONDARY_COLOR,
-                      axisDirection: AxisDirection.down,
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        physics: const BouncingScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => OneWayWidget(
-                          requestType: LocaleKeys.regular.localize,
-                          statusDriver: cubit.availableBookings[index].status,
-                          model: cubit.availableBookings[index],
-                          cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
-                                  cubit.availableBookings[index].creatorId) &&
-                              cubit.availableBookings[index].status ==
-                                  'pending',
-                          onCancelBooking: () {
-                            if (cubit.availableBookings[index].status ==
-                                'pending') {
-                              cubit.cancelMyBooking(
-                                  id: cubit.availableBookings[index].id,
-                                  context: context,
-                                  from: 'available');
-                            }
-                          },
-                          onJoin: () {
-                            if ((!(cubit.availableBookings[index].clients ?? [])
-                                    .contains(
-                                        (UserCubit.to.state.data?.id ?? ''))) &&
-                                cubit.availableBookings[index].status ==
-                                    'pending') {
-                              cubit.joinToRoute(
-                                  id: cubit.availableBookings[index].id,
-                                  context: context);
-                            }
-                          },
-                        ),
-                        separatorBuilder: (context, index) => const Sizer(),
-                        itemCount: cubit.availableBookings.length,
-                      ),
-                    ),
-          PositionedDirectional(
-            bottom: 0.h,
-            start: 0,
-            end: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isVisible ? 1 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          context.push(Routes.captainShareInfoScreen);
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                      TripJoinFloatingActionButton(
-                        title: LocaleKeys.createRoute.localize,
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          cubit.onNavigateToCreateRoute(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<CaptainShareCubit>().getAvailableBookings(context);
-    }
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
-    }
-  }
-}
-
-class _BookingsWidgetState extends State<BookingsWidget> {
-  late ScrollController _scrollController;
-  bool _isVisible = true;
-  final double _lastScrollOffset = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        BlocBuilder<CaptainShareCubit, CaptainShareState>(
-            builder: (context, state) {
-          var cubit = context.read<CaptainShareCubit>();
-          if (cubit.isLoadingMyBookings) {
-            return const Center(child: CustomLoadingSearchWidget());
-          }
-          if (cubit.myBookings.isEmpty) {
-            return _emptyMessage();
-          } else {
-            return ListView.separated(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => OneWayWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  statusDriver: cubit.myBookings[index].status,
-                  model: cubit.myBookings[index],
-                  cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
-                          cubit.myBookings[index].creatorId) &&
-                      cubit.myBookings[index].status == 'pending',
-                  onCancelBooking: () {
-                    if (cubit.myBookings[index].status == 'pending') {
-                      cubit.cancelMyBooking(
-                          id: cubit.myBookings[index].id,
-                          context: context,
-                          from: 'myBookings');
-                    }
-                  }),
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: cubit.myBookings.length,
-            );
-          }
-        }),
-        PositionedDirectional(
-            bottom: 0.h,
-            start: 0,
-            end: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isVisible ? 1 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          context
-                              .read<CaptainShareCubit>()
-                              .onNavigateToCreateRoute(context);
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                      TripJoinFloatingActionButton(
-                        title: LocaleKeys.createRoute.localize,
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          context.push(Routes.newRouteScreen);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )),
-      ],
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<CaptainShareCubit>().getMyBookings(context);
-    }
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
-    }
-  }
-}
-
-class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
-  late ScrollController _scrollController;
-  bool _isVisible = true;
-  final double _lastScrollOffset = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        BlocBuilder<CaptainShareCubit, CaptainShareState>(
-            builder: (context, state) {
-          var cubit = context.read<CaptainShareCubit>();
-          return cubit.isLoadingExpiredBookings
-              ? const Center(child: CustomLoadingSearchWidget())
-              : cubit.expiredBookings.isEmpty
-                  ? _emptyMessage()
-                  : GlowingOverscrollIndicator(
-                      color: AppColors.SECONDARY_COLOR,
-                      axisDirection: AxisDirection.down,
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        // physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => OneWayWidget(
-                            requestType: LocaleKeys.regular.localize,
-                            statusDriver: cubit.expiredBookings[index].status,
-                            model: cubit.expiredBookings[index],
-                            cancelButton: ((UserCubit.to.state.data?.id ??
-                                        '') ==
-                                    cubit.expiredBookings[index].creatorId) &&
-                                cubit.expiredBookings[index].status ==
-                                    'pending',
-                            onCancelBooking: () {
-                              if (cubit.expiredBookings[index].status ==
-                                  'pending') {
-                                cubit.cancelMyBooking(
-                                    id: cubit.expiredBookings[index].id,
-                                    context: context,
-                                    from: 'expiredBookings');
-                              }
-                            }),
-                        separatorBuilder: (context, index) => const Sizer(),
-                        itemCount: cubit.expiredBookings.length,
-                      ),
-                    );
-        }),
-        PositionedDirectional(
-            bottom: 0.h,
-            start: 0,
-            end: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isVisible ? 1 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          context
-                              .read<CaptainShareCubit>()
-                              .onNavigateToCreateRoute(context);
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                      TripJoinFloatingActionButton(
-                        title: LocaleKeys.createRoute.localize,
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          context.push(Routes.newRouteScreen);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )),
-      ],
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<CaptainShareCubit>().getExpiredBookings(context);
-    }
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
-    }
-  }
-}
-
-class _RunningTripsWidgetState extends State<RunningTripsWidget> {
-  late ScrollController _scrollController;
-  bool _isVisible = true;
-  final double _lastScrollOffset = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
-      builder: (context, state) {
-        return Stack(
-          children: [
-            BlocBuilder<CaptainShareCubit, CaptainShareState>(
-                builder: (context, state1) {
-              var cubit = context.read<CaptainShareCubit>();
-              if (cubit.isLoadingRunningBookings) {
-                return const Center(child: CustomLoadingSearchWidget());
-              }
-              if (cubit.runningBookings.isEmpty) {
-                return _emptyMessage();
-              } else {
-                return GlowingOverscrollIndicator(
-                  color: AppColors.SECONDARY_COLOR,
-                  axisDirection: AxisDirection.down,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => OneWayWidget(
-                        requestType: LocaleKeys.regular.localize,
-                        statusDriver: cubit.runningBookings[index].status,
-                        model: cubit.runningBookings[index],
-                        cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
-                                cubit.runningBookings[index].creatorId) &&
-                            cubit.runningBookings[index].status == 'pending',
-                        onCancelBooking: () {
-                          if (cubit.runningBookings[index].status ==
-                              'pending') {
-                            cubit.cancelMyBooking(
-                                id: cubit.runningBookings[index].id,
-                                context: context,
-                                from: 'runningBookings');
-                          }
-                        }),
-                    separatorBuilder: (context, index) => const Sizer(),
-                    itemCount: cubit.runningBookings.length,
-                  ),
-                );
-              }
-            }),
-            PositionedDirectional(
-                bottom: 0.h,
-                start: 0,
-                end: 0,
-                child: AnimatedSlide(
-                  duration: const Duration(milliseconds: 300),
-                  offset: _isVisible ? Offset.zero : const Offset(0, 2),
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: _isVisible ? 1 : 0,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 30.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              context
-                                  .read<CaptainShareCubit>()
-                                  .onNavigateToCreateRoute(context);
-                            },
-                            child: Container(
-                              height: 48.h,
-                              width: 48.h,
-                              decoration: BoxDecoration(
-                                  color:
-                                      AppColors.getButtonPrimaryColor(context),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Icon(
-                                size: 19,
-                                Icons.question_mark,
-                                color: context.isDarkMode
-                                    ? AppColors.black
-                                    : Colors.white,
-                              ),
-                            ),
-                          ),
-                          TripJoinFloatingActionButton(
-                            title: LocaleKeys.createRoute.localize,
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              context.push(Routes.newRouteScreen);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )),
-            if (state.runningRoute != null &&
-                (state.runningRoute?.yourStatus?.isNotEmpty ?? false))
-              BuildRunningTripSheet(
-                model: state.runningRoute!,
-              ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<CaptainShareCubit>().getRunningBookings(context);
-    }
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
-    }
-  }
 }
 
 class _TabBarContentWidgetState extends State<TabBarContentWidget> {
@@ -709,4 +125,562 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
         return const SizedBox.shrink();
     }
   }
+}
+
+// 🔹 ويدجيت لكل تاب
+class AvailableTripsWidget extends StatefulWidget {
+  final List<String> content;
+
+  const AvailableTripsWidget({super.key, required this.content});
+
+  @override
+  State<AvailableTripsWidget> createState() => _AvailableTripsWidgetState();
+}
+
+class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
+  late ScrollController _scrollController;
+  bool _isVisible = true;
+  final double _lastScrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<CaptainShareCubit>().getAvailableBookings(context);
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
+        builder: (context, state) {
+      var cubit = context.read<CaptainShareCubit>();
+      return Stack(
+        children: [
+          cubit.isLoadingAvailableBookings
+              ? const Center(child: CustomLoadingSearchWidget())
+              : cubit.availableBookings.isEmpty
+                  ? _emptyMessage()
+                  : ListView.separated(
+                      controller: _scrollController,
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => OneWayWidget(
+                        requestType: LocaleKeys.regular.localize,
+                        statusDriver: cubit.availableBookings[index].status,
+                        model: cubit.availableBookings[index],
+                        cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+                                cubit.availableBookings[index].creatorId) &&
+                            cubit.availableBookings[index].status == 'pending',
+                        onCancelBooking: () {
+                          if (cubit.availableBookings[index].status ==
+                              'pending') {
+                            cubit.cancelMyBooking(
+                                id: cubit.availableBookings[index].id,
+                                context: context,
+                                from: 'available');
+                          }
+                        },
+                        onJoin: (phone) {
+                          print("(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)}");
+                          if ((!(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)) &&
+                              cubit.availableBookings[index].status ==
+                                  'pending') {
+                            cubit.joinToRoute(
+                                phone:phone,
+                                id: cubit.availableBookings[index].id,
+                                context: context);
+                          }
+                        },
+                      ),
+                      separatorBuilder: (context, index) => const Sizer(),
+                      itemCount: cubit.availableBookings.length,
+                    ),
+          PositionedDirectional(
+            bottom: 0.h,
+            start: 0,
+            end: 0,
+            child: AnimatedSlide(
+              duration: const Duration(milliseconds: 300),
+              offset: _isVisible ? Offset.zero : const Offset(0, 2),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _isVisible ? 1 : 0,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 30.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context.push(Routes.captainShareInfoScreen);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      TripJoinFloatingActionButton(
+                        title: LocaleKeys.createRoute.localize,
+                        onTap: () {
+                          cubit.onNavigateToCreateRoute(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class BookingsWidget extends StatefulWidget {
+  final List<String> content;
+
+  const BookingsWidget({super.key, required this.content});
+
+  @override
+  State<BookingsWidget> createState() => _BookingsWidgetState();
+}
+
+class _BookingsWidgetState extends State<BookingsWidget> {
+  late ScrollController _scrollController;
+  bool _isVisible = true;
+  final double _lastScrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<CaptainShareCubit>().getMyBookings(context);
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        BlocBuilder<CaptainShareCubit, CaptainShareState>(
+            builder: (context, state) {
+          var cubit = context.read<CaptainShareCubit>();
+          if (cubit.isLoadingMyBookings) {
+            return const Center(child: CustomLoadingSearchWidget());
+          }
+          if (cubit.myBookings.isEmpty) {
+            return _emptyMessage();
+          } else {
+            return ListView.separated(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => OneWayWidget(
+                  requestType: LocaleKeys.regular.localize,
+                  statusDriver: cubit.myBookings[index].status,
+                  model: cubit.myBookings[index],
+                  cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+                          cubit.myBookings[index].creatorId) &&
+                      cubit.myBookings[index].status == 'pending',
+                  onCancelBooking: () {
+                    if (cubit.myBookings[index].status == 'pending') {
+                      cubit.cancelMyBooking(
+                          id: cubit.myBookings[index].id,
+                          context: context,
+                          from: 'myBookings');
+                    }
+                  }),
+              separatorBuilder: (context, index) => const Sizer(),
+              itemCount: cubit.myBookings.length,
+            );
+          }
+        }),
+        PositionedDirectional(
+            bottom: 0.h,
+            start: 0,
+            end: 0,
+            child: AnimatedSlide(
+              duration: const Duration(milliseconds: 300),
+              offset: _isVisible ? Offset.zero : const Offset(0, 2),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _isVisible ? 1 : 0,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 30.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context
+                              .read<CaptainShareCubit>()
+                              .onNavigateToCreateRoute(context);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      TripJoinFloatingActionButton(
+                        title: LocaleKeys.createRoute.localize,
+                        onTap: () {
+                          context.push(Routes.newRouteScreen);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
+      ],
+    );
+  }
+}
+
+class RunningTripsWidget extends StatefulWidget {
+  final List<String> content;
+
+  const RunningTripsWidget({super.key, required this.content});
+
+  @override
+  State<RunningTripsWidget> createState() => _RunningTripsWidgetState();
+}
+
+class _RunningTripsWidgetState extends State<RunningTripsWidget> {
+  late ScrollController _scrollController;
+  bool _isVisible = true;
+  final double _lastScrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<CaptainShareCubit>().getRunningBookings(context);
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CaptainShareCubit, CaptainShareState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            BlocBuilder<CaptainShareCubit, CaptainShareState>(
+                builder: (context, state1) {
+              var cubit = context.read<CaptainShareCubit>();
+              if (cubit.isLoadingRunningBookings) {
+                return const Center(child: CustomLoadingSearchWidget());
+              }
+              if (cubit.runningBookings.isEmpty) {
+                return _emptyMessage();
+              } else {
+                return ListView.separated(
+                  controller: _scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => OneWayWidget(
+                      requestType: LocaleKeys.regular.localize,
+                      statusDriver: cubit.runningBookings[index].status,
+                      model: cubit.runningBookings[index],
+                      cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+                              cubit.runningBookings[index].creatorId) &&
+                          cubit.runningBookings[index].status == 'pending',
+                      onCancelBooking: () {
+                        if (cubit.runningBookings[index].status == 'pending') {
+                          cubit.cancelMyBooking(
+                              id: cubit.runningBookings[index].id,
+                              context: context,
+                              from: 'runningBookings');
+                        }
+                      }),
+                  separatorBuilder: (context, index) => const Sizer(),
+                  itemCount: cubit.runningBookings.length,
+                );
+              }
+            }),
+            PositionedDirectional(
+                bottom: 0.h,
+                start: 0,
+                end: 0,
+                child: AnimatedSlide(
+                  duration: const Duration(milliseconds: 300),
+                  offset: _isVisible ? Offset.zero : const Offset(0, 2),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: _isVisible ? 1 : 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CaptainShareCubit>()
+                                  .onNavigateToCreateRoute(context);
+                            },
+                            child: Container(
+                              height: 48.h,
+                              width: 48.h,
+                              decoration: BoxDecoration(
+                                  color:
+                                      AppColors.getButtonPrimaryColor(context),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                size: 19,
+                                Icons.question_mark,
+                                color: context.isDarkMode
+                                    ? AppColors.black
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                          TripJoinFloatingActionButton(
+                            title: LocaleKeys.createRoute.localize,
+                            onTap: () {
+                              context.push(Routes.newRouteScreen);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+            if (state.runningRoute != null &&
+                (state.runningRoute?.yourStatus?.isNotEmpty ?? false))
+              BuildRunningTripSheet(
+                model: state.runningRoute!,
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ExpiredTripsWidget extends StatefulWidget {
+  final List<String> content;
+
+  const ExpiredTripsWidget({super.key, required this.content});
+
+  @override
+  State<ExpiredTripsWidget> createState() => _ExpiredTripsWidgetState();
+}
+
+class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
+  late ScrollController _scrollController;
+  bool _isVisible = true;
+  final double _lastScrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_scrollListener);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<CaptainShareCubit>().getExpiredBookings(context);
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isVisible) {
+        setState(() => _isVisible = false);
+      }
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isVisible) {
+        setState(() => _isVisible = true);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        BlocBuilder<CaptainShareCubit, CaptainShareState>(
+            builder: (context, state) {
+          var cubit = context.read<CaptainShareCubit>();
+          return cubit.isLoadingExpiredBookings
+              ? const Center(child: CustomLoadingSearchWidget())
+              : cubit.expiredBookings.isEmpty
+                  ? _emptyMessage()
+                  : ListView.separated(
+                      controller: _scrollController,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => OneWayWidget(
+                          requestType: LocaleKeys.regular.localize,
+                          statusDriver: cubit.expiredBookings[index].status,
+                          model: cubit.expiredBookings[index],
+                          cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+                                  cubit.expiredBookings[index].creatorId) &&
+                              cubit.expiredBookings[index].status == 'pending',
+                          onCancelBooking: () {
+                            if (cubit.expiredBookings[index].status ==
+                                'pending') {
+                              cubit.cancelMyBooking(
+                                  id: cubit.expiredBookings[index].id,
+                                  context: context,
+                                  from: 'expiredBookings');
+                            }
+                          }),
+                      separatorBuilder: (context, index) => const Sizer(),
+                      itemCount: cubit.expiredBookings.length,
+                    );
+        }),
+        PositionedDirectional(
+            bottom: 0.h,
+            start: 0,
+            end: 0,
+            child: AnimatedSlide(
+              duration: const Duration(milliseconds: 300),
+              offset: _isVisible ? Offset.zero : const Offset(0, 2),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _isVisible ? 1 : 0,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 30.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context
+                              .read<CaptainShareCubit>()
+                              .onNavigateToCreateRoute(context);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      TripJoinFloatingActionButton(
+                        title: LocaleKeys.createRoute.localize,
+                        onTap: () {
+                          context.push(Routes.newRouteScreen);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
+      ],
+    );
+  }
+}
+
+Widget _emptyMessage() {
+  return Center(
+    child: Text(
+      LocaleKeys.thereIsNoTripsInThisList.localize,
+      style: TextStyle(
+        fontSize: 28.sp,
+        fontWeight: FontWeight.w600,
+        color: const Color(
+          0xff727272,
+        ),
+      ),
+    ),
+  );
 }

@@ -37,10 +37,10 @@ class RideExpectedPriceParams {
       if (wayPointTwo != null)
         "wayPointTwo": {"latitude": wayPointTwo![0], "longitude": wayPointTwo![1]},
       "options": {
-        if (comfort != null) "comfort": true,
-        if (nonSmoking != null) "nonSmoking": true,
-        if (autoAccept != null) "autoAccept": true,
-        if (isPremium != null) "isPremium": false,
+        "comfort": true,
+        "nonSmoking": true,
+        "autoAccept": true,
+        if (isPremium != null) "isPremium": isPremium,
       },
     };
     if ((data["options"] as Map).isEmpty) {

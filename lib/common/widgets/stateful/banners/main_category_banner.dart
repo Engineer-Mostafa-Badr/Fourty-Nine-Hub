@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../stateless/buttons/iconAppButton.dart';
 
@@ -123,7 +122,6 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                                     ? Icons.favorite_outline
                                     : Icons.favorite,
                                 onPressed: () async {
-      ManageVibration.vibrate();
                                   final result =
                                       await widget.onFavorite();
                                   print("resutlt=$result");
@@ -328,7 +326,6 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     if (widget.canRegister) {
       return GestureDetector(
         onTap: () {
-      ManageVibration.vibrate();
           log('88888888888888888888888888');
           widget.onRegister?.call();
         },
@@ -662,7 +659,6 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
     if (widget.canRegister) {
       return GestureDetector(
         onTap: () {
-      ManageVibration.vibrate();
             log('88888888888888888888888888');
             widget.onRegister?.call();
           },

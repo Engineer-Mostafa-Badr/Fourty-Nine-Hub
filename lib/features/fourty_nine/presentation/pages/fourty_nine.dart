@@ -253,7 +253,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
             BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
               builder: (context, state) {
                 var data = state.data;
-                print('MainCategoriesCubit data is $data');
                 return _buildMainCategoriesViews(data);
               },
             ),

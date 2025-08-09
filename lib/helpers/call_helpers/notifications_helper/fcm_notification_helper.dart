@@ -122,14 +122,24 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) {
+      (RemoteMessage message) async {
+        AudioPlayer player = AudioPlayer();
+        await player.play(AssetSource("audio/notification.mp3"));
+
         /// TODO: handle on message open app
       },
     );
   }
 
   @override
-  void handleInitialMessage() {
+  Future<void> handleInitialMessage() async {
+    // final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    //
+    // if (initialMessage != null) {
+      AudioPlayer player = AudioPlayer();
+      await player.play(AssetSource("audio/notification.mp3"));
+      // await _handleNotification(initialMessage); // your handler
+    // }
     /// TODO: handle initial message
   }
 

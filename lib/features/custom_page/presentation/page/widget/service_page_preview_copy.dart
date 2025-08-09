@@ -43,7 +43,6 @@ import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key, this.noNavBar = false});
@@ -321,7 +320,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 child: CustomAnimatedText(
                   text: LocaleKeys.youCanDeActivatePage.localize,
                   onTap: () {
-      ManageVibration.vibrate();
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -712,7 +710,6 @@ class _MainCategoriesListViewState extends State<MainCategoriesListView> {
 
         return InkWell(
           onTap: () {
-      ManageVibration.vibrate();
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('mainCategoriesCount', context);
