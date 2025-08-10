@@ -27,7 +27,7 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
-		<key>CFBundleURLTypes</key>
+		<!-- <key>CFBundleURLTypes</key>
 		<array>
 			<dict>
 				<key>CFBundleTypeRole</key>
@@ -38,13 +38,42 @@
 					<string>fb892486282359942</string>
 				</array>
 			</dict>
+		</array> -->
+		<!-- Google Sign-in Section -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>fb660212443761468</string>
+					<!-- TODO Replace this value: -->
+					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+					<string>com.googleusercontent.apps.872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-in Section -->
+		<key>FacebookAppID</key>
+		<string>660212443761468</string>
+		<key>FacebookClientToken</key>
+		<string>255815a3e684d4212c43e057a063712a</string>
+		<key>FacebookDisplayName</key>
+		<string>Fourtyninehub</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>fbapi</string>
+			<string>fb-messenger-share-api</string>
 		</array>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-3940256099942544~3347511713</string>
 		<key>GIDClientID</key>
-		<string>872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf.apps.googleusercontent.com</string>
+		<string>872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com</string>
+		<!-- <key>GIDServerClientID</key>
+		<string>872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com</string> -->
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSCameraUsageDescription</key>
