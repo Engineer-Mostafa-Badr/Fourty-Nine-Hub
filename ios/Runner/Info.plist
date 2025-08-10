@@ -50,7 +50,7 @@
 					<string>fb660212443761468</string>
 					<!-- TODO Replace this value: -->
 					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
-					<string>com.googleusercontent.apps.872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a</string>
+					<string>com.googleusercontent.apps.361206050719-6go2s7r10d1pckpo715rmc21jne7fddo</string>
 				</array>
 			</dict>
 		</array>
@@ -71,9 +71,9 @@
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-3940256099942544~3347511713</string>
 		<key>GIDClientID</key>
-		<string>872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com</string>
+		<string>361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com</string>
 		<!-- <key>GIDServerClientID</key>
-		<string>872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com</string> -->
+		<string>361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com</string> -->
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSCameraUsageDescription</key>

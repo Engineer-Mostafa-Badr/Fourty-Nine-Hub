@@ -365,7 +365,8 @@ class SocialAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    serverClientId: '872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com',
+    // serverClientId: '872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com',
+    serverClientId: '361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com',
   );
 
   // Get current user
