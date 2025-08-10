@@ -50,7 +50,7 @@ class _WalletWidgetState extends State<WalletWidget> {
         builder: (BuildContext context, state) {
           return Container(
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.only(bottom: 10, left: 5, right: 5, ),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12.r),

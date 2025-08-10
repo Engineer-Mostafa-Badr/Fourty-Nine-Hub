@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -31,7 +32,6 @@ import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PagePreview extends StatefulWidget {
   const PagePreview({super.key, this.state, this.isButtonsVisible = false});
@@ -95,7 +95,7 @@ class _PagePreviewState extends State<PagePreview>
               leading: IconButton(
                 icon: const Icon(Icons.menu), // The menu icon
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   HandleCashback.setCount('drawerCount', context);
                   _scaffoldKey.currentState?.openDrawer();
                 },
@@ -233,7 +233,7 @@ class _PagePreviewState extends State<PagePreview>
                               Expanded(
                                 child: CustomElevatedButton(
                                   onPressed: () async {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
@@ -245,7 +245,10 @@ class _PagePreviewState extends State<PagePreview>
                                               CrossAxisAlignment.center,
                                           children: [
                                             Label(
-                                                text:context.isArabic?LocaleKeys.restartToApply.localize:'Restart to Apply',
+                                                text: context.isArabic
+                                                    ? LocaleKeys
+                                                        .restartToApply.localize
+                                                    : 'Restart to Apply',
                                                 style: Styles.headerText(
                                                     fontWeight:
                                                         FontWeight.w400)),
@@ -255,7 +258,7 @@ class _PagePreviewState extends State<PagePreview>
                                                 Expanded(
                                                   child: AppButton(
                                                     onPressed: () {
-      ManageVibration.vibrate();
+                                                      ManageVibration.vibrate();
                                                       Navigator.pop(context);
                                                     },
                                                     label: LocaleKeys
@@ -274,7 +277,7 @@ class _PagePreviewState extends State<PagePreview>
                                                 Expanded(
                                                   child: AppButton(
                                                     onPressed: () {
-      ManageVibration.vibrate();
+                                                      ManageVibration.vibrate();
                                                       context
                                                           .read<
                                                               CustomPageCubit>()
@@ -316,7 +319,7 @@ class _PagePreviewState extends State<PagePreview>
                               Expanded(
                                 child: CustomElevatedButton(
                                   onPressed: () async {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
@@ -328,7 +331,10 @@ class _PagePreviewState extends State<PagePreview>
                                               CrossAxisAlignment.center,
                                           children: [
                                             Label(
-                                                text:context.isArabic?LocaleKeys.restartToApply.localize:'Restart to Apply',
+                                                text: context.isArabic
+                                                    ? LocaleKeys
+                                                        .restartToApply.localize
+                                                    : 'Restart to Apply',
                                                 style: Styles.headerText(
                                                     fontWeight:
                                                         FontWeight.w400)),
@@ -338,7 +344,7 @@ class _PagePreviewState extends State<PagePreview>
                                                 Expanded(
                                                   child: AppButton(
                                                     onPressed: () {
-      ManageVibration.vibrate();
+                                                      ManageVibration.vibrate();
                                                       Navigator.pop(context);
                                                     },
                                                     label: LocaleKeys
@@ -360,7 +366,7 @@ class _PagePreviewState extends State<PagePreview>
                                                         .getButtonPrimaryColor(
                                                             context),
                                                     onPressed: () {
-      ManageVibration.vibrate();
+                                                      ManageVibration.vibrate();
                                                       context
                                                           .read<
                                                               CustomPageCubit>()

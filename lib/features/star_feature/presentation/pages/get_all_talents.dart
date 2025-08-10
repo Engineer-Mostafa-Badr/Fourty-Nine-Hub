@@ -22,10 +22,10 @@ import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
   final bool isMyTalent;
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
 
   const GetAllTalents(
-      {super.key, this.scrollController, this.isMyTalent = false});
+      {super.key,required this.scrollController, this.isMyTalent = false});
 
   // final ScrollController _scrollController = ScrollController();
   @override
@@ -51,9 +51,9 @@ class GetAllTalents extends StatelessWidget {
             );
           }
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.61,
+            height: MediaQuery.of(context).size.height *.8,
             child: OlxPaginationWidget(
-              scrollController: scrollController ?? ScrollController(),
+              scrollController: scrollController,
               itemsPerPage: 1,
               loadPage: (page) => cubit.getAllTalent(),
               banners: bannersList,
@@ -203,9 +203,9 @@ class GetAllTalents extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "${context.isArabic ? convertToArabicNumbers(talent.totalViews.toShortScale) : talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic ? convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)) : timeago.format(createdAt, locale: context.locale.languageCode)}",
+                                    "${talent.user.firstName} ${talent.user.lastName} • ${context.isArabic ? convertToArabicNumbers(talent.totalViews.toShortScale) : talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic ? convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)) : timeago.format(createdAt, locale: context.locale.languageCode)}",
                                     style: TextStyle(
-                                      fontSize: 26.sp,
+                                      fontSize: 20.sp,
                                       color: context.isDarkMode
                                           ? Colors.white
                                           : Colors.grey,

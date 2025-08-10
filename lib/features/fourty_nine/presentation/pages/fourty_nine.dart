@@ -305,7 +305,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 2),
+                            horizontal: 0, vertical: 2),
                         child: HomeMainCategoryBanner(
                           category: state.data![index],
                           // imageHeight: MediaQuery.sizeOf(context).height * 0.10,
