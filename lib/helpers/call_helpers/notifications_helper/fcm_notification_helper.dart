@@ -40,15 +40,15 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   
   FcmNotificationHelperImpl._internal(this._firebaseMessaging);
   
-  // إضافة StreamSubscriptions للتحكم في الـ listeners
+  // add StreamSubscriptions to control listeners
   StreamSubscription<RemoteMessage>? _onMessageSubscription;
   StreamSubscription<RemoteMessage>? _onMessageOpenedAppSubscription;
   StreamSubscription<String>? _onTokenRefreshSubscription;
   
-  // إضافة flag لمنع التكرار
+  // add flag to prevent multiple setup
   bool _isSetupCompleted = false;
   
-  // إضافة singleton pattern
+  // add singleton pattern
   static FcmNotificationHelperImpl? _instance;
   
   factory FcmNotificationHelperImpl(FirebaseMessaging firebaseMessaging) {
@@ -94,7 +94,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       // _firebaseMessaging.onTokenRefresh.listen((token) {
       //   log('+++++ FCM Token +++++++++ $token');
       // });
-      // إلغاء الـ subscription القديم إذا كان موجود
+      // cancel old token refresh subscription if exists
       _onTokenRefreshSubscription?.cancel();
       
       _onTokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((token) {
@@ -119,7 +119,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
   @override
   Future<void> setup(BuildContext context) async {
-    // منع إعادة الـ setup إذا كان مُكتمل بالفعل
+    // skip setup if already setup 
     if (_isSetupCompleted) {
       log('+++++ FCM already setup, skipping... +++++++++');
       return;
@@ -127,7 +127,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     
     log('+++++ FCM setup Message +++++++++');
     
-    // طلب الأذونات
+     // Request permission
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -143,10 +143,10 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     //   await _handleNotification(message,context:context);
     // });
 
-    // إلغاء الـ listeners القديمة قبل إنشاء جديدة
+    // dispose old listeners before adding new
     _disposeListeners();
 
-    // إنشاء الـ listeners الجديدة
+    // add new listeners
     _onMessageSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log('+++++ FCM Message Received +++++++++ ${message.data}');
       await _handleNotification(message, context: context);
@@ -163,17 +163,17 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       },
     );
 
-    // تعيين الـ background message handler (هذا لا يحتاج إلغاء لأنه static)
+    // background message handler (this doesn't need to be cancelled as it's static)
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
-    // إعداد token refresh listener
+    // add token refresh listener
     await onFcmTokenChanges();
     
     _isSetupCompleted = true;
     log('+++++ FCM setup completed +++++++++');
   }
 
-  /// إلغاء جميع الـ listeners
+  /// dispose all FCM listeners
   void _disposeListeners() {
     log('+++++ Disposing old FCM listeners +++++++++');
     _onMessageSubscription?.cancel();
@@ -190,10 +190,10 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     log('+++++ Disposing FCM Helper +++++++++');
     _disposeListeners();
     _isSetupCompleted = false;
-    _instance = null; // إعادة تعيين الـ singleton
+    _instance = null; // reassign singleton
   }
 
-  /// إعادة تهيئة الـ FCM Helper (مفيد عند الـ logout/login)
+  /// reInitialize FCM Helper (useful when logout/login)
   void reset() {
     log('+++++ Resetting FCM Helper +++++++++');
     dispose();
