@@ -43,6 +43,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/enums/base_status_enum.dart';
@@ -841,6 +842,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (r) {
+          if(from == 'comments'){
+
+          }
       if (from == 'details') {
         // changeReaction(state.postDetails, params.react);
       } else if (from == 'userPosts') {
@@ -923,13 +927,20 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 // add comment
   Future<CommentEntity> onPostComment(
       {required PostCommentParams params, required String from}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+
     var response = await _postCommentUseCase(params);
     CommentEntity? model;
     response.fold(
-        (failure) => emit(
+        (failure) {
+          currentContext.pop();
+          emit(
               state.copyWith(failure: failure, status: StateStatus.error),
-            ), (data) {
+            );
+          }, (data) {
       model = data;
+      currentContext.pop();
       if (from == 'feed') {
         // print(feedPagingController.itemList!.length);
         // var currentPost = feedPagingController.itemList
@@ -946,12 +957,18 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // add reply
   Future<CommentEntity> replyOnComment(
       {required ReplyOnCommentParams params, required String from}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     var response = await _replyOnCommentUseCase(params);
     CommentEntity? model;
     response.fold(
-        (failure) => emit(
+        (failure) {
+          currentContext.pop();
+          emit(
               state.copyWith(failure: failure, status: StateStatus.error),
-            ), (data) {
+            );
+        }, (data) {
+      currentContext.pop();
       model = data;
       if (from == 'feed') {
         // var currentPost = feedPagingController.itemList
@@ -995,6 +1012,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   required String postId,
   CommentEntity? comment,
   }) async {
+    print("hasMorePostCommentsData postId $postId");
     print(hasMorePostCommentsData);
     print(isLoadingPostCommentsMore);
     if (!hasMorePostCommentsData || isLoadingPostCommentsMore) return;

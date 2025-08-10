@@ -54,6 +54,12 @@ class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
+    print("widget.comment.isAngry ${widget.comment.isAngry}");
+    print("widget.comment.isHaha ${widget.comment.isHaha}");
+    print(widget.comment.isLikes);
+    print(widget.comment.isLove);
+    print(widget.comment.isSad);
+    print(widget.comment.isWow);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -92,6 +98,41 @@ class _CommentCardState extends State<CommentCard> {
                   widget.comment.content ?? '',
                   textAlign: TextAlign.start,
                   style: Styles.mediumText(fontSize: 65.sp),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    BuildReactionsButtons(
+                      post: widget.comment,
+                      from: 'comments',
+                    ),
+                    const Sizer(),
+                    TextAppButton(
+                        style: Styles.mediumText(),
+                        label: LocaleKeys.reply.localize,
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                          bottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              widget: BlocProvider.value(
+                                value: serviceLocator<SocialPostsCubit>()
+                                  ..loadCommentRepliesData(context:context, commentId:widget.comment.id),
+                                child: CommentReplies(
+                                  replies: const [],
+                                  postId: widget.comment.post,
+                                  commentId: widget.comment.id,
+                                  onAddReply: (ReplyOnCommentParams params) =>
+                                      widget.onAddReply(params),
+                                  onDeleteReply: (String id) =>
+                                      widget.onDeleteReply(id),
+                                  from: widget.from,
+                                  onEditComment: (PostCommentParams params) =>
+                                      widget.onEditComment(params),
+                                ),
+                              ));
+                        })
+                  ],
                 ),
               ],
             )),
@@ -162,42 +203,8 @@ class _CommentCardState extends State<CommentCard> {
             ),
           ),
         const Sizer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            BuildReactionsButtons(
-              post: widget.comment,
-              from: 'comments',
-            ),
-            const Sizer(),
-            TextAppButton(
-                style: Styles.mediumText(),
-                label: LocaleKeys.reply.localize,
-                onPressed: () {
-      ManageVibration.vibrate();
-                  bottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      widget: BlocProvider.value(
-                        value: serviceLocator<SocialPostsCubit>()
-                          ..loadCommentRepliesData(context:context, commentId:widget.comment.id),
-                        child: CommentReplies(
-                          replies: const [],
-                          postId: widget.comment.post,
-                          commentId: widget.comment.id,
-                          onAddReply: (ReplyOnCommentParams params) =>
-                              widget.onAddReply(params),
-                          onDeleteReply: (String id) =>
-                              widget.onDeleteReply(id),
-                          from: widget.from,
-                          onEditComment: (PostCommentParams params) =>
-                              widget.onEditComment(params),
-                        ),
-                      ));
-                })
-          ],
-        ),
-        const Sizer(),
+
+        // const Sizer(),
       ],
     );
   }

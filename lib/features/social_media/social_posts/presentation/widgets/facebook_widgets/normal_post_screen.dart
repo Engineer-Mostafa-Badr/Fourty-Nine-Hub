@@ -193,6 +193,7 @@ class NormalPostScreen extends StatelessWidget {
                 // Comment button
                 ClickableWidget(
                   onTap: () {
+                    print("postEntity.id ${postEntity.id}");
       ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
@@ -204,45 +205,41 @@ class NormalPostScreen extends StatelessWidget {
                           child: FacebookPostComments(
                             postId: postEntity.id,
                             onAddComment: (PostCommentParams params) {
-                              // return controller.onPostComment(
-                              //     params: params, from: 'feed');
+                              return context.read<SocialPostsCubit>().onPostComment(
+                                  params: params, from: 'feed');
                             },
                             onCommentReply: (ReplyOnCommentParams params) {
-                              // return controller.replyOnComment(
-                              //   params: ReplyOnCommentParams(
-                              //       postId: params.postId,
-                              //       content: params.content,
-                              //       commentId:
-                              //       params.commentId),
-                              //   from: 'feed',
-                              // );
+                              return context.read<SocialPostsCubit>().replyOnComment(
+                                params: ReplyOnCommentParams(
+                                    postId: params.postId,
+                                    content: params.content,
+                                    commentId:
+                                    params.commentId),
+                                from: 'feed',
+                              );
                             },
                             onDeleteComment: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
+                              return await context.read<SocialPostsCubit>()
+                                  .deleteComment(
+                                  context: context,
+                                  commentId: id,
+                                  postId: postEntity.id,
+                                  from: 'feed');
                               // print(result);
                             },
                             onDeleteReply: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
+                              return await context.read<SocialPostsCubit>()
+                                  .deleteComment(
+                                  context: context,
+                                  commentId: id,
+                                  postId: postEntity.id,
+                                  from: 'feed');
                             },
                             from: 'feed',
                             onEditComment: (PostCommentParams params) async {
-                              // var result = await controller
-                              //     .editComment(params: params);
-                              // return result;
+                              var result = await context.read<SocialPostsCubit>()
+                                  .editComment(params: params);
+                              return result;
                             },
                           ),
                         ));

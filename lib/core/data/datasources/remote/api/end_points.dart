@@ -885,7 +885,7 @@ class EndPoints {
   }
 
   static String reactOnPost(String postId) {
-    return '/facebook/post/react/$postId?subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/posts/$postId/reactions?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String reactOnComment(String postId) {

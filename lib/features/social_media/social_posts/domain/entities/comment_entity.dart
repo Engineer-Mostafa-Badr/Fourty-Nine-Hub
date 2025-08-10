@@ -7,6 +7,7 @@ class CommentEntity {
   final String post;
   dynamic user;
   bool? isLove;
+  List<CommentEntity>? replies;
   bool? isLikes;
   bool? isWow;
   bool? edit;
@@ -30,6 +31,7 @@ class CommentEntity {
     required this.id,
     required this.content,
     this.reply,
+    this.replies,
     required this.post,
     required this.createdAt,
     required this.user,
@@ -55,6 +57,7 @@ class CommentEntity {
         '_id': id,
         'content': content,
         'post': post,
+        'replies': replies,
         'isLove': isLove,
         'isLikes': isLikes,
         'user': user,

@@ -86,7 +86,7 @@ class PostModel extends PostEntity {
     }
 
     return PostModel(
-      id: json['_id']?.toString() ?? '',
+      id: json['id']?.toString()??json['_id']?.toString() ?? '',
       content: json['content']?.toString(),
       location: json['location'] is Map ? LocationModel.fromJson(json['location']) : null,
       photo: user.image,

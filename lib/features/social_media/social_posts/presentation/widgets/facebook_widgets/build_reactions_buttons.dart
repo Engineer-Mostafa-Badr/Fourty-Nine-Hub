@@ -250,6 +250,14 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     bool? isAngry,
   }) {
     setState(() {
+      widget.post.isLikes=false;
+      widget.post.isHaha=false;
+      widget.post.isLove=false;
+      widget.post.isWow=false;
+      widget.post.isSad=false;
+      widget.post.isAngry=false;
+    });
+    setState(() {
       if (isLikes != null) {
         widget.post.isLikes = isLikes;
       }
@@ -393,7 +401,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
               ? Image.asset(
                   item.imageAsset(),
                   fit: BoxFit.fill,
-              color: context.isDarkMode?Colors.white:null
+              // color: context.isDarkMode?Colors.white:null
                 )
               : Lottie.asset(
                   item.lottieAsset(),
@@ -412,10 +420,10 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SvgPicture.asset(Assets.likeIcon,color:AppColors.getTextColor(context)),
+        SvgPicture.asset(Assets.likeIcon,color:context.isDarkMode?AppColors.whiteColor:null),
         SizedBox(width: 8.w), // Space between icon and text
         Label(
-          text: LocaleKeys.like.localize,
+          text: "${LocaleKeys.like.localize}.",
           style: TextStyle(
               color:AppColors.getTextColor(context),
               fontSize: 14,
@@ -426,6 +434,8 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
   }
 
   Widget _buildCurrentReaction() {
+    print("widget.post.isLikes ${widget.post.isLikes}");
+    print("widget.post.isSad ${widget.post.isSad}");
     if (widget.post.isLikes) {
       return _buildReactionItem(
           name: LocaleKeys.like.localize,
