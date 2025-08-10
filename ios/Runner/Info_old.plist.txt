@@ -12,28 +12,34 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Achievers</string>
+		<string>Fourtyninehub</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
-		<!-- <key>CFBundleLocalizations</key>
-		<array>
-			<string>en</string>
-			<string>ar</string>
-		</array> -->
 		<key>CFBundleName</key>
-		<string>Achievers</string>
+		<string>fourtyninehub</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
-		
-		<!-- URL Schemes for Social Login -->
+		<!-- <key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf</string>
+					<string>fb892486282359942</string>
+				</array>
+			</dict>
+		</array> -->
+		<!-- Google Sign-in Section -->
 		<key>CFBundleURLTypes</key>
 		<array>
 			<dict>
@@ -41,69 +47,51 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<!-- Facebook URL Scheme -->
-					<string>fb1006682554128161</string>
-					<!-- Google URL Scheme - من GoogleService-Info.plist REVERSED_CLIENT_ID -->
+					<string>fb660212443761468</string>
+					<!-- TODO Replace this value: -->
+					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
 					<string>com.googleusercontent.apps.361206050719-6go2s7r10d1pckpo715rmc21jne7fddo</string>
 				</array>
 			</dict>
 		</array>
-		
-		<key>CFBundleVersion</key>
-		<string>$(FLUTTER_BUILD_NUMBER)</string>
-		
-		<!-- Google Configuration -->
-		<key>GIDClientID</key>
-		<string>361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com</string>
-		
-		<!-- Facebook Configuration -->
+		<!-- End of the Google Sign-in Section -->
 		<key>FacebookAppID</key>
-		<string>1006682554128161</string>
+		<string>660212443761468</string>
 		<key>FacebookClientToken</key>
-		<string>fd9c2bafeab8274f0ad9f92ce05d90fe</string>
+		<string>255815a3e684d4212c43e057a063712a</string>
 		<key>FacebookDisplayName</key>
-		<string>Achievers</string>
-		
-		<!-- Apple Sign-In Support -->
-		<key>com.apple.developer.applesignin</key>
-		<array>
-			<string>Default</string>
-		</array>
-		
-		<!-- Query Schemes for Social Apps -->
+		<string>Fourtyninehub</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>fbapi</string>
 			<string>fb-messenger-share-api</string>
-			<string>fbauth2</string>
-			<string>fbshareextension</string>
 		</array>
-		
-		<!-- AdMob Configuration -->
+		<key>CFBundleVersion</key>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-3940256099942544~3347511713</string>
-		
+		<key>GIDClientID</key>
+		<string>361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com</string>
+		<!-- <key>GIDServerClientID</key>
+		<string>361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com</string> -->
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
-		
-		<!-- Permissions -->
 		<key>NSCameraUsageDescription</key>
-		<string>We need access to your camera to take pictures.</string>
+		<string>$(PRODUCT_NAME) Camera Usage!</string>
 		<key>NSContactsUsageDescription</key>
-		<string>We need access to your contacts for better user experience.</string>
+		<string>Reason we need access to the contact list</string>
 		<key>NSFaceIDUsageDescription</key>
-		<string>Use Face ID for secure authentication.</string>
+		<string>Why is my app authenticating using face id?</string>
 		<key>NSLocationAlwaysUsageDescription</key>
-		<string>We need your location for better service.</string>
+		<string>This app needs access to your location to show your current position.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>We need your location to get accurate prayer times.</string>
+		<string>This app needs access to your location to show your current position.</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>We need access to microphone to record audio.</string>
+		<string>We need to access to the microphone to record audio file</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>We need permission to save images to your library.</string>
+		<string>We need access to your photo library to save the videos.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>We need access to your photo library to upload images.</string>
-		
+		<string>We need access to your photo library to save the videos.</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>UIBackgroundModes</key>
@@ -116,10 +104,6 @@
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
-		<key>UIStatusBarHidden</key>
-		<false/>
-		<key>UIStatusBarStyle</key>
-		<string></string>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
