@@ -58,11 +58,11 @@
 		
 		<!-- Facebook Configuration -->
 		<key>FacebookAppID</key>
-		<string>1006682554128161</string>
-		<key>FacebookClientToken</key>
-		<string>fd9c2bafeab8274f0ad9f92ce05d90fe</string>
+		<string>660212443761468</string>
+		<!-- <key>FacebookClientToken</key>
+		<string>fd9c2bafeab8274f0ad9f92ce05d90fe</string> -->
 		<key>FacebookDisplayName</key>
-		<string>Achievers</string>
+		<string>49fortest</string>
 		
 		<!-- Apple Sign-In Support -->
 		<key>com.apple.developer.applesignin</key>
