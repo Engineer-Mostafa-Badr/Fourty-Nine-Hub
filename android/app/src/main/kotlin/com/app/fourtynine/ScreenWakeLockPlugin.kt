@@ -1,4 +1,4 @@
-package com.app.fourtynine
+package com.fourtyninehub.fourtynine
 
 import android.app.Activity
 import android.view.WindowManager
@@ -15,7 +15,7 @@ class ScreenWakeLockPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     private var wakeLockEnabled = false
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(binding.binaryMessenger, "com.app.fourtynine/screen_wakelock")
+        channel = MethodChannel(binding.binaryMessenger, "com.fourtyninehub.fourtynine/screen_wakelock")
         channel.setMethodCallHandler(this)
     }
 

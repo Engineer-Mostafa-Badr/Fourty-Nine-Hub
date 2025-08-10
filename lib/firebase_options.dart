@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,23 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB1QP6tPVIeH617TLobf0Cj56yYBIE7ZcA',
-    appId: '1:872417805780:android:94641dc7b1e1c719850241',
-    messagingSenderId: '872417805780',
-    projectId: 'app-af0a7',
-    storageBucket: 'app-af0a7.appspot.com',
+    apiKey: 'AIzaSyACecBTljJZl7XCzfDsaHjYDTMYcVULV9M',
+    appId: '1:361206050719:android:8fd9d30d8e87729cab57aa',
+    messagingSenderId: '361206050719',
+    projectId: 'hub-bef9d',
+    storageBucket: 'hub-bef9d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAcLUPf0rh7vBTVxfUweafXv3sTDpOkWEo',
-    appId: '1:872417805780:ios:af9be494449aa24f850241',
-    messagingSenderId: '872417805780',
-    projectId: 'app-af0a7',
-    storageBucket: 'app-af0a7.firebasestorage.app',
-    androidClientId:
-    '872417805780-16bqk61d1vspkehfatdogbqaqpvhco3i.apps.googleusercontent.com',
-    iosClientId:
-    '872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAOSH2EShHg35-XYjvQVUkTFh9SdRdozu4',
+    appId: '1:361206050719:ios:5dc195ff4b5ae685ab57aa',
+    messagingSenderId: '361206050719',
+    projectId: 'hub-bef9d',
+    storageBucket: 'hub-bef9d.firebasestorage.app',
     iosBundleId: 'com.fourtyninehub.fourtynine',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAyfzXIDNAv7BZPfpl7TSRRXBobOTpB5uQ',
+    appId: '1:361206050719:web:d5915096706f01dbab57aa',
+    messagingSenderId: '361206050719',
+    projectId: 'hub-bef9d',
+    authDomain: 'hub-bef9d.firebaseapp.com',
+    storageBucket: 'hub-bef9d.firebasestorage.app',
+    measurementId: 'G-Z75GECK5VG',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAOSH2EShHg35-XYjvQVUkTFh9SdRdozu4',
+    appId: '1:361206050719:ios:bba7653b728d6768ab57aa',
+    messagingSenderId: '361206050719',
+    projectId: 'hub-bef9d',
+    storageBucket: 'hub-bef9d.firebasestorage.app',
+    iosBundleId: 'com.fourtyninehub.fourtynine',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAyfzXIDNAv7BZPfpl7TSRRXBobOTpB5uQ',
+    appId: '1:361206050719:web:e9df38d8deacacc2ab57aa',
+    messagingSenderId: '361206050719',
+    projectId: 'hub-bef9d',
+    authDomain: 'hub-bef9d.firebaseapp.com',
+    storageBucket: 'hub-bef9d.firebasestorage.app',
+    measurementId: 'G-0PHEQ83456',
+  );
+
 }

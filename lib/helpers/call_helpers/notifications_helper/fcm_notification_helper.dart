@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -25,25 +26,36 @@ import '../../manage_vibration.dart';
 
 abstract class FcmNotificationHelper {
   Future<void> setup(BuildContext context);
-
   Future<Either<Exception, String>> getFcmToken();
   Future<String> getFcmUserToken();
   Future onFcmTokenChanges();
-
   Future<Either<Exception, void>> subscribeTopic(String topic);
-
   void handleInitialMessage();
-
-  Future<Either<Exception, void>> sendNotification(
-      SendNotificationParams params);
+  Future<Either<Exception, void>> sendNotification(SendNotificationParams params);
+  void dispose();
 }
 
 class FcmNotificationHelperImpl implements FcmNotificationHelper {
   final FirebaseMessaging _firebaseMessaging;
-
-  FcmNotificationHelperImpl(
-    this._firebaseMessaging,
-  );
+  
+  FcmNotificationHelperImpl._internal(this._firebaseMessaging);
+  
+  // add StreamSubscriptions to control listeners
+  StreamSubscription<RemoteMessage>? _onMessageSubscription;
+  StreamSubscription<RemoteMessage>? _onMessageOpenedAppSubscription;
+  StreamSubscription<String>? _onTokenRefreshSubscription;
+  
+  // add flag to prevent multiple setup
+  bool _isSetupCompleted = false;
+  
+  // add singleton pattern
+  static FcmNotificationHelperImpl? _instance;
+  
+  factory FcmNotificationHelperImpl(FirebaseMessaging firebaseMessaging) {
+    _instance ??= FcmNotificationHelperImpl._internal(firebaseMessaging);
+    return _instance!;
+  }
+  
 
   @override
   Future<Either<Exception, String>> getFcmToken() async {
@@ -73,16 +85,20 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     // }
 
     final result = await _firebaseMessaging.getToken();
-
     return result!;
   }
 
   @override
   Future onFcmTokenChanges() async {
     try {
-      _firebaseMessaging.onTokenRefresh.listen((token) {
-        log('+++++ FCM Token +++++++++ $token');
-
+      // _firebaseMessaging.onTokenRefresh.listen((token) {
+      //   log('+++++ FCM Token +++++++++ $token');
+      // });
+      // cancel old token refresh subscription if exists
+      _onTokenRefreshSubscription?.cancel();
+      
+      _onTokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((token) {
+        log('+++++ FCM Token Refreshed +++++++++ $token');
         /// TODO: send token to server
       });
     } catch (e) {
@@ -94,7 +110,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
   Future<Either<Exception, void>> subscribeTopic(String topic) async {
     try {
       await _firebaseMessaging.subscribeToTopic(topic);
-      log('+++++ FCM Topic +++++++++ $topic');
+      log('+++++ FCM Topic Subscribed +++++++++ $topic');
       return const Right(null);
     } catch (e) {
       return Left(Exception('Unable to subscribe to topic $topic'));
@@ -103,7 +119,15 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
   @override
   Future<void> setup(BuildContext context) async {
+    // skip setup if already setup 
+    if (_isSetupCompleted) {
+      log('+++++ FCM already setup, skipping... +++++++++');
+      return;
+    }
+    
     log('+++++ FCM setup Message +++++++++');
+    
+     // Request permission
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -114,21 +138,65 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       sound: true,
     );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      log('+++++ FCM Message +++++++++ ${message.data}');
-      await _handleNotification(message,context:context);
+    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //   log('+++++ FCM Message +++++++++ ${message.data}');
+    //   await _handleNotification(message,context:context);
+    // });
+
+    // dispose old listeners before adding new
+    _disposeListeners();
+
+    // add new listeners
+    _onMessageSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      log('+++++ FCM Message Received +++++++++ ${message.data}');
+      await _handleNotification(message, context: context);
     });
 
-    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+    // FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) async {
+        log('+++++ FCM Message Opened App +++++++++ ${message.data}');
         AudioPlayer player = AudioPlayer();
         await player.play(AssetSource("audio/notification.mp3"));
-
         /// TODO: handle on message open app
       },
     );
+
+    // background message handler (this doesn't need to be cancelled as it's static)
+    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+
+    // add token refresh listener
+    await onFcmTokenChanges();
+    
+    _isSetupCompleted = true;
+    log('+++++ FCM setup completed +++++++++');
+  }
+
+  /// dispose all FCM listeners
+  void _disposeListeners() {
+    log('+++++ Disposing old FCM listeners +++++++++');
+    _onMessageSubscription?.cancel();
+    _onMessageOpenedAppSubscription?.cancel();
+    _onTokenRefreshSubscription?.cancel();
+    
+    _onMessageSubscription = null;
+    _onMessageOpenedAppSubscription = null;
+    _onTokenRefreshSubscription = null;
+  }
+
+  @override
+  void dispose() {
+    log('+++++ Disposing FCM Helper +++++++++');
+    _disposeListeners();
+    _isSetupCompleted = false;
+    _instance = null; // reassign singleton
+  }
+
+  /// reInitialize FCM Helper (useful when logout/login)
+  void reset() {
+    log('+++++ Resetting FCM Helper +++++++++');
+    dispose();
   }
 
   @override
@@ -136,8 +204,8 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     // final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     //
     // if (initialMessage != null) {
-      AudioPlayer player = AudioPlayer();
-      await player.play(AssetSource("audio/notification.mp3"));
+    AudioPlayer player = AudioPlayer();
+    await player.play(AssetSource("audio/notification.mp3"));
       // await _handleNotification(initialMessage); // your handler
     // }
     /// TODO: handle initial message
@@ -152,12 +220,10 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       print('Access token inside sendNotification $token');
       if (token == null) {
         log('++++++++++++++notification sent++ no data');
-
         return Left(Exception('Unable to send notification'));
       }
 
       print('+++++ Token +++++++++ $token');
-
       print('++++++++++++++notification sent++ ${params.toMap()}');
 
       final result = await post(
@@ -169,6 +235,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
         },
         body: json.encode(params.toMap()),
       );
+      
       print('result of sendNotification ${result.body}');
       if (result.statusCode > 199 && result.statusCode < 300) {
         print('+++++++++ ${json.decode(result.body)} ++++++++++');
@@ -220,7 +287,7 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
     //TODO Get Context to show SnackBar
     final overlayContext = navigatorKey.currentContext!;
 
-    if(context!=null){
+    if(context != null){
       AudioPlayer player = AudioPlayer();
       player.play(AssetSource("audio/notification.mp3"));
       toastification.show(
@@ -258,14 +325,13 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
           },
         ),
         showProgressBar: true,
-
       );
-    }else{
+    } else {
       showTopSnackBar(
         Overlay.of(overlayContext),
         GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             Navigator.of(overlayContext).pushNamed(message.data['path'] ?? '');
           },
           child: CustomSnackBar.error(

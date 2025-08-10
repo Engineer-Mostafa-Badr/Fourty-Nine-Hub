@@ -73,7 +73,7 @@ class EndPoints {
   static const verifyOTP = '/auth/verify/email';
   static const VerifyPhoneOTP = '/auth/verify/phone-number';
   static const getWelcomeGift = '/auth/welcome-gift';
-  static const socialLogin = '/auth/social/login';
+  static const socialLogin = '/oauth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
@@ -1711,4 +1711,26 @@ class EndPoints {
       '/loading/trip/rating/driver';
   static const addRateToClientWithDriverLoadingNonSocket =
       '/loading/trip/rating/';
+
+      //! Spot Light
+    // Spotlight Profile Endpoints
+    static const getMySpotlightProfile = '/spotlight/profile/me';
+    static String getSpotlightProfileForUser(String userId) => '/spotlight/profile/$userId';
+  
+  // Spotlight Media Endpoints  
+  static String getMySpotlightMedia({int page = 1, int limit = 10}) => 
+      '/spotlight/media/me?page=$page&limit=$limit';
+  
+  static String getSpotlightMediaForUser(String userId, {int page = 1, int limit = 10}) => 
+      '/spotlight/media/$userId?page=$page&limit=$limit';
+  
+  // Media Upload Endpoints
+  static const requestUploadMedia = '/spotlight/media/upload/request';
+  static const confirmUploadMedia = '/spotlight/media/upload/confirm';
+  static const uploadMedia = '/spotlight/media/upload';
+
+  // Additional endpoints that might be useful
+  static const likeMedia = '/spotlight/media/like';
+  static const unlikeMedia = '/spotlight/media/unlike';
+  static const deleteMedia = '/spotlight/media/delete'; 
 }
