@@ -664,14 +664,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.message ?? "Something went wrong",
-                    )));
+                          error.message ?? "Something went wrong",
+                        )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.toString(),
-                    )));
+                          error.toString(),
+                        )));
                   }
                 },
               ),
@@ -696,14 +696,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.message ?? "Something went wrong",
-                    )));
+                          error.message ?? "Something went wrong",
+                        )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.toString(),
-                    )));
+                          error.toString(),
+                        )));
                   }
                 },
               ),
@@ -715,7 +715,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                   label: 'Apple',
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   textColor: Colors.black,
-                  color: AppColors.PRIMARY_COLOR,
                   icon: FontAwesomeIcons.apple,
                   onPressed: () async {
                     try {
@@ -729,14 +728,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                       print(error.message);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                        error.message ?? "Something went wrong",
-                      )));
+                            error.message ?? "Something went wrong",
+                          )));
                     } catch (error) {
                       print(error);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                        error.toString(),
-                      )));
+                            error.toString(),
+                          )));
                     }
                   },
                 ),

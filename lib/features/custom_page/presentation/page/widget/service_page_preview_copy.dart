@@ -40,6 +40,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../fourty_nine/presentation/widgets/grid_blocks_widget.dart';
 import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';

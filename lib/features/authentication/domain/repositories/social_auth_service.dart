@@ -500,6 +500,7 @@ class SocialAuthService {
       // Trigger the sign-in flow
       final LoginResult loginResult = await FacebookAuth.instance.login(
         permissions: ['email', 'public_profile'],
+        loginBehavior: LoginBehavior.webOnly,
       );
 
       dev.log('Facebook login result status: ${loginResult.status}');

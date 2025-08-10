@@ -15,6 +15,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../custom_video_player.dart';
