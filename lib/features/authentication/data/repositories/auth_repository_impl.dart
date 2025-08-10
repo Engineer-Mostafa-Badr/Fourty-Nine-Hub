@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -28,6 +29,8 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_ot
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_questions_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../domain/entities/register_by_phone_entity.dart';
 import '../../domain/entities/verify_otp_entity.dart';
@@ -321,8 +324,24 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+  // @override
+  // Future<Either<Failure, void>> signOut() {
+  //   return _remoteDataSource.logout();
+  // }
   @override
-  Future<Either<Failure, void>> signOut() {
+  Future<Either<Failure, void>> signOut() async {
+    // إلغاء الـ notification listeners قبل الـ logout
+    try {
+      if (serviceLocator.isRegistered<FcmNotificationHelper>()) {
+        final fcmHelper = serviceLocator<FcmNotificationHelper>();
+        if (fcmHelper is FcmNotificationHelperImpl) {
+          fcmHelper.dispose(); 
+        }
+      }
+    } catch (e) {
+      log('Error disposing FCM helper during logout: $e');
+    }
+
     return _remoteDataSource.logout();
   }
 

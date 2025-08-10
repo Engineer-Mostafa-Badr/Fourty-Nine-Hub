@@ -4,8 +4,8 @@
             "delegate_permission/common.handle_all_urls"
         ],
         "target": {
-            "namespace": "com.app.fourtynine",
-            "package_name": "com.app.fourtynine",
+            "namespace": "com.fourtyninehub.fourtynine",
+            "package_name": "com.fourtyninehub.fourtynine",
             "sha256_cert_fingerprints": [
                 "61:18:bf:4b:75:e1:09:84:39:73:71:5f:91:da:f7:a2:9c:aa:76:29:a2:9a:62:5e:00:1f:14:0d:d9:ec:eb:79"
             ]

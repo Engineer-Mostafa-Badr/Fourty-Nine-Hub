@@ -1,4 +1,4 @@
-package com.app.fourtyninehub
+package com.fourtyninehub.fourtyninehub
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
