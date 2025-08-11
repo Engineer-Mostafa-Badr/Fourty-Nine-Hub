@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
@@ -13,8 +14,10 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../custom_video_player.dart';
@@ -25,7 +28,7 @@ class GetAllTalents extends StatelessWidget {
   final ScrollController scrollController;
 
   const GetAllTalents(
-      {super.key,required this.scrollController, this.isMyTalent = false});
+      {super.key, required this.scrollController, this.isMyTalent = false});
 
   // final ScrollController _scrollController = ScrollController();
   @override
@@ -51,7 +54,7 @@ class GetAllTalents extends StatelessWidget {
             );
           }
           return SizedBox(
-            height: MediaQuery.of(context).size.height *.8,
+            height: MediaQuery.of(context).size.height * .8,
             child: OlxPaginationWidget(
               scrollController: scrollController,
               itemsPerPage: 1,
@@ -162,7 +165,7 @@ class GetAllTalents extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsetsDirectional.only(start: 16.0),
                         child: Row(
                           children: [
                             // Padding(
@@ -226,6 +229,79 @@ class GetAllTalents extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: 10.w),
+                            IconButton(
+                              onPressed: () {
+                                bottomSheet(
+                                  context: context,
+                                  asAlertDialog: true,
+                                  isDismissible: true,
+                                  backColor: context.isDarkMode
+                                      ? Color(0xff0D0D0D)
+                                      : null,
+                                  widget: Column(
+                                    spacing: 20,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: context.isDarkMode
+                                              ? Color(0xff0D0D0D)
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                LocaleKeys.report.localize,
+                                                style: TextStyle(
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontSize: 28.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                LocaleKeys.report.localize,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontSize: 20.sp,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              AppButton(
+                                                label:
+                                                    LocaleKeys.report.localize,
+                                                backColor:
+                                                    AppColors.SECONDARY_COLOR,
+                                                textColor: Colors.white,
+                                                onPressed: () {
+                                                  // context.read<StarCubit>().reportTalent(
+                                                  //   talentId: talent.id,
+                                                  // );
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.more_vert_rounded,
+                                size: 20,
+                              ),
+                            ),
                           ],
                         ),
                       ),
