@@ -1011,9 +1011,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getPostComments({
   required BuildContext context,
   required String postId,
+    int? page,
   CommentEntity? comment,
   }) async {
-    print("hasMorePostCommentsData postId $postId");
+    // print("postComments.last.id ${postComments.last.id}");
     print(hasMorePostCommentsData);
     print(isLoadingPostCommentsMore);
     if (!hasMorePostCommentsData || isLoadingPostCommentsMore) return;
@@ -1021,7 +1022,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPostCommentsUseCase(
       PostCommentsParams(
-        page: postCommentsPage,
+        page: page??postCommentsPage,
         limit: pageSize,
         postId: postId,
       ),
@@ -1114,7 +1115,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     CommentEntity? comment,
 }) async {
     print("comment?.repliesCount ${comment?.repliesCount}");
-    if(comment?.repliesCount==0){
+    if(comment?.remainingRepliesCount==0){
       return;
     }
     // print(hasMoreCommentRepliesData);
@@ -1127,15 +1128,25 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         page: commentRepliesPage,
         limit: 4,
         postId: commentId,
+          id: (comment?.replies?.isNotEmpty??false)?(comment?.replies??[]).last.id:null
       ),
     );
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {
-              commentReplies.addAll(data);
+              print("comment?.replies?.length ${comment?.replies?.length}");
               comment?.replies?.addAll(data);
-              comment?.repliesCount = (comment.repliesCount??0)-data.length;
+              print("comment?.replies?.length ${comment?.replies?.length}");
+              print("comment?.repliesCount ${comment?.repliesCount}");
+              print("comment?.repliesCount ${(comment?.repliesCount??0)-data.length}");
+              if((comment?.remainingRepliesCount??0)<=4){
+                comment?.remainingRepliesCount =0;
+              }else{
+                comment?.remainingRepliesCount = (comment.remainingRepliesCount??0)-data.length;
+              }
+              commentReplies.addAll(data);
           if (data.length < 4) {
+
             hasMoreCommentRepliesData = false;
           } else {
             commentRepliesPage++;

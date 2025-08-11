@@ -996,7 +996,7 @@ class EndPoints {
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {

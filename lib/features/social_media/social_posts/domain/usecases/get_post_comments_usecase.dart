@@ -18,6 +18,7 @@ class GetPostCommentsUseCase
 
 class PostCommentsParams {
   final int? page;
+  final String? id;
   final int? limit;
   final String? postId;
   final String? userId;
@@ -26,6 +27,7 @@ class PostCommentsParams {
     this.limit,
     this.userId,
     this.postId,
+    this.id,
   });
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {};

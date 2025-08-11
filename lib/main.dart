@@ -51,6 +51,9 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'routes/pages.dart';
 
+// Global key for ToastificationWrapper to prevent recreation during network changes
+final GlobalKey _toastificationKey = GlobalKey();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
@@ -264,81 +267,87 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, themeState) {
-              return BlocBuilder<NetworkConnectivityCubit,
-                  NetworkConnectivityState>(
-                builder: (context, networkState) {
-                  // Show full-screen network error when disconnected
-                  if (networkState == NetworkConnectivityState.disconnected) {
-                    return MaterialApp(
-                      theme: lightTheme,
-                      darkTheme: darkTheme,
-                      themeMode: ThemeMode.light,
-                      home: const NetworkErrorScreen(),
-                      debugShowCheckedModeBanner: false,
-                      localizationsDelegates: context.localizationDelegates,
-                      supportedLocales: context.supportedLocales,
-                      locale: context.locale,
-                    );
-                  }
-
-                  return FutureBuilder<bool>(
-                    future: CacheManager.getMode(),
-                    builder: (context, snapshot) {
-                      return BlocBuilder<CustomPageCubit, CustomPageState>(
-                        builder: (BuildContext context, custom) {
-                          return Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: Stack(
-                              children: [
-                                ToastificationWrapper(
-                                  child: MaterialApp.router(
-                                    routerConfig: AppPages.router,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      final mediaQuery = MediaQuery.of(context);
-                                      return MediaQuery(
-                                        data: mediaQuery.copyWith(
-                                          textScaler: TextScaler.noScaling,
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            child!,
-                                            const WhatsAppCallScreen(),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    themeMode: (snapshot.data ?? false)
-                                        ? ThemeMode.dark
-                                        : ThemeMode.light,
-                                    theme: lightTheme,
-                                    darkTheme: darkTheme,
-                                    title: '49',
-                                    debugShowCheckedModeBanner: false,
-                                    localizationsDelegates:
-                                        context.localizationDelegates,
-                                    supportedLocales: context.supportedLocales,
-                                    locale: context.locale,
-                                  ),
-                                ),
-                                const MinimizedCallOverlay(),
-                                // Keep the network alert banner for connected state
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: NetworkAlertBanner(
-                                      isConnected: networkState ==
-                                          NetworkConnectivityState.connected),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
+              return BlocListener<NetworkConnectivityCubit, NetworkConnectivityState>(
+                listener: (context, networkState) {
+                  // Handle network state changes without rebuilding the widget tree
+                  // The network alert banner will update automatically through its own BlocBuilder
                 },
+                child: FutureBuilder<bool>(
+                  future: CacheManager.getMode(),
+                  builder: (context, snapshot) {
+                    return BlocBuilder<CustomPageCubit, CustomPageState>(
+                      builder: (BuildContext context, custom) {
+                        return Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: Stack(
+                            children: [
+                              ToastificationWrapper(
+                                key: _toastificationKey,
+                                child: MaterialApp.router(
+                                  routerConfig: AppPages.router,
+                                  builder:
+                                      (BuildContext context, Widget? child) {
+                                    final mediaQuery = MediaQuery.of(context);
+                                    return MediaQuery(
+                                      data: mediaQuery.copyWith(
+                                        textScaler: TextScaler.noScaling,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          child!,
+                                          const WhatsAppCallScreen(),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  themeMode: (snapshot.data ?? false)
+                                      ? ThemeMode.dark
+                                      : ThemeMode.light,
+                                  theme: lightTheme,
+                                  darkTheme: darkTheme,
+                                  title: '49',
+                                  debugShowCheckedModeBanner: false,
+                                  localizationsDelegates:
+                                      context.localizationDelegates,
+                                  supportedLocales: context.supportedLocales,
+                                  locale: context.locale,
+                                ),
+                              ),
+                              const MinimizedCallOverlay(),
+                              // Network alert banner with its own BlocBuilder to avoid rebuilding the main tree
+                              BlocBuilder<NetworkConnectivityCubit, NetworkConnectivityState>(
+                                builder: (context, networkState) {
+                                  return Stack(
+                                    children: [
+                                      // Network alert banner for connected state
+                                      if (networkState == NetworkConnectivityState.connected)
+                                        Positioned(
+                                          bottom: 0,
+                                          left: 0,
+                                          right: 0,
+                                          child: NetworkAlertBanner(isConnected: true),
+                                        ),
+                                      // Network error overlay for disconnected state
+                                      if (networkState == NetworkConnectivityState.disconnected)
+                                        Positioned.fill(
+                                          child: Container(
+                                            color: Colors.black.withOpacity(0.8),
+                                            child: const Center(
+                                              child: NetworkErrorScreen(),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               );
             },
           );

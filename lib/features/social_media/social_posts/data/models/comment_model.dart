@@ -14,6 +14,7 @@ class CommentModel extends CommentEntity {
       super.likesCount,
       super.loveCount,
       super.repliesCount,
+      super.remainingRepliesCount,
       super.totalCount,
       super.sadCount,
       super.hahaCount,
@@ -53,6 +54,7 @@ class CommentModel extends CommentEntity {
       sadCount: json['sadCount'] ?? 0,
       angryCount: json['angryCount'] ?? 0,
       repliesCount: json['repliesCount'] ?? 0,
+      remainingRepliesCount: json['repliesCount'] ?? 0,
       totalCount: json['totalCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
     );

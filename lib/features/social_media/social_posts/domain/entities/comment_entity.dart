@@ -22,6 +22,7 @@ class CommentEntity {
   num? angryCount;
   num? hahaCount;
   num? repliesCount;
+  num? remainingRepliesCount;
   num? totalCount;
   final DateTime createdAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt);
@@ -43,6 +44,7 @@ class CommentEntity {
     this.angryCount = 0,
     this.hahaCount = 0,
     this.repliesCount = 0,
+    this.remainingRepliesCount = 0,
     this.totalCount = 0,
     this.isLove = false,
     this.isLikes = false,
@@ -74,6 +76,7 @@ class CommentEntity {
         'sadCount': sadCount,
         'angryCount': angryCount,
         'repliesCount': repliesCount,
+        'remainingRepliesCount': remainingRepliesCount,
         'totalCount': totalCount,
         'createdAt': createdAt,
       };

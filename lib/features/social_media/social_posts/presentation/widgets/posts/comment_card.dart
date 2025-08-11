@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/reply_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -84,7 +85,7 @@ class _CommentCardState extends State<CommentCard> {
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     final bool hasReplies = widget.comment.replies != null && widget.comment.replies!.isNotEmpty;
-    final bool hasMoreReplies = (widget.comment.repliesCount ?? 0) > (widget.comment.replies?.length ?? 0);
+    final bool hasMoreReplies = (widget.comment.remainingRepliesCount ?? 0) > 0;
     // Sizing tuned to resemble Facebook comments
     final double mainAvatarSize = 36.w;
     final double replyAvatarSize = 28.w; // keep in sync with ReplyCard
@@ -92,451 +93,475 @@ class _CommentCardState extends State<CommentCard> {
     final double threadX = mainAvatarSize / 2; // center of avatar
     // Length from the replies' start edge to the vertical thread line
     final double connectorLength = (mainAvatarSize + avatarContentGap) - threadX;
+    final double elbowRadius = 10.w;
+    final double connectorStroke = 2.w;
+    final double replyConnectorTop = 6.h; // align the horizontal elbow near the top of the reply bubble
 
     if (hasReplies) {
       _measureThreadHeight(lineTopOffset: mainAvatarSize + 8.h);
     }
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      child: Stack(
-        key: _stackKey,
-        children: [
-          // Main vertical thread line
-          if (hasReplies || hasMoreReplies)
-            PositionedDirectional(
-              start: threadX, // align with avatar center
-              top: mainAvatarSize + 8.h, // start just below avatar
-              child: SizedBox(
-                height: _threadLineHeight ?? 0,
-                child: Container(
-                  width: 2.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(1.r),
+    return ClickableWidget(
+      onLongPress: (){
+        ManageVibration.vibrate();
+        bottomSheet(
+          context: context,
+          widget: _buildPostOptions(
+            isMyComment: widget.comment.user.id == user?.id,
+            post: widget.comment,
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        child: Stack(
+          key: _stackKey,
+          children: [
+            // Main vertical thread line
+            if (hasReplies || hasMoreReplies)
+              PositionedDirectional(
+                start: threadX, // align with avatar center
+                top: mainAvatarSize + 8.h, // start just below avatar
+                child: SizedBox(
+                  height: _threadLineHeight ?? 0,
+                  child: Container(
+                    width: 2.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(1.r),
+                    ),
                   ),
                 ),
               ),
-            ),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Profile Image
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: UserProfileImage(
-                      size: mainAvatarSize,
-                      accountId: 0,
-                      withBorder: false,
-                      imageURL: widget.comment.user.image.isNotEmpty
-                          ? widget.comment.user.image
-                          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s',
-                      userId: widget.comment.user.id,
-                    ),
-                  ),
-                  SizedBox(width: avatarContentGap),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Comment Bubble
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                          decoration: BoxDecoration(
-                            color: context.isDarkMode
-                                ? AppColors.QUANTITY_COLOR.withOpacity(0.8)
-                                : const Color(0xFFF0F2F5),
-                            borderRadius: BorderRadius.circular(18.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
-                                spreadRadius: 1,
-                                blurRadius: 3,
-                                offset: const Offset(0, 1),
-                              ),
-                            ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Profile Image
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      widget.comment.user.firstName,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                            : const Color(0xFF1C1E21),
+                        ],
+                      ),
+                      child: UserProfileImage(
+                        size: mainAvatarSize,
+                        accountId: 0,
+                        withBorder: false,
+                        imageURL: widget.comment.user.image.isNotEmpty
+                            ? widget.comment.user.image
+                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s',
+                        userId: widget.comment.user.id,
+                      ),
+                    ),
+                    SizedBox(width: avatarContentGap),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Comment Bubble
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode
+                                  ? AppColors.QUANTITY_COLOR.withOpacity(0.8)
+                                  : const Color(0xFFF0F2F5),
+                              borderRadius: BorderRadius.circular(18.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.03),
+                                  spreadRadius: 1,
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        widget.comment.user.firstName,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : const Color(0xFF1C1E21),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                    widget.comment.sinceTime,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: context.isDarkMode
-                                          ? Colors.white60
-                                          : const Color(0xFF65676B),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                widget.comment.content ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  height: 1.3,
-                                  color: context.isDarkMode
-                                      ? Colors.white.withOpacity(0.9)
-                                      : const Color(0xFF1C1E21),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        // Action buttons
-                        Padding(
-                          padding: EdgeInsets.only(left: 16.w),
-                          child: Row(
-                            children: [
-                              BuildReactionsButtons(
-                                post: widget.comment,
-                                from: 'comments',
-                              ),
-                              SizedBox(width: 20.w),
-                              GestureDetector(
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  widget.comment.makeReply = !widget.comment.makeReply!;
-                                  if (widget.comment.edit == true) {
-                                    widget.comment.edit = false;
-                                  }
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  LocaleKeys.reply.localize,
+                                SizedBox(height: 4.h),
+                                Text(
+                                  widget.comment.content ?? '',
                                   style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    height: 1.3,
+                                    color: context.isDarkMode
+                                        ? Colors.white.withOpacity(0.9)
+                                        : const Color(0xFF1C1E21),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          // Action buttons
+                          Padding(
+                            padding: EdgeInsets.only(left: 16.w),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.comment.sinceTime,
+                                  style: TextStyle(
+                                    fontSize: 12,
                                     color: context.isDarkMode
                                         ? Colors.white60
                                         : const Color(0xFF65676B),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Edit comment input
-                        if (widget.comment.edit == true)
-                          Container(
-                            margin: EdgeInsets.only(
-                              bottom: 16.h,
-                              left: mainAvatarSize + avatarContentGap + 4.w,
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                            decoration: BoxDecoration(
-                              color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        spreadRadius: 1,
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  child: ProfileImage(
-                                    accountId: 0,
-                                    fromProfile: true,
-                                    imageURL: user?.profilePicture,
-                                    userId: '',
-                                    size: 32,
-                                  ),
+                                SizedBox(width: 16.w),
+                                BuildReactionsButtons(
+                                  post: widget.comment,
+                                  from: 'comments',
                                 ),
-                                SizedBox(width: 12.w),
-                                Expanded(
-                                  child: TextFormField(
-                                    maxLines: null,
-                                    controller: editTextController,
-                                    onChanged: (v) {
-                                      setState(() {});
-                                    },
-                                    style: const TextStyle(fontSize: 13),
-                                    decoration: InputDecoration(
-                                      hintText: context.isArabic ? 'اكتب تعليق...' : 'Edit comment...',
-                                      hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
-                                      fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
-                                      border: InputBorder.none,
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                      errorBorder: InputBorder.none,
-                                      focusedErrorBorder: InputBorder.none,
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                                SizedBox(width: 20.w),
+                                GestureDetector(
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    widget.comment.makeReply = !widget.comment.makeReply!;
+                                    if (widget.comment.edit == true) {
+                                      widget.comment.edit = false;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    LocaleKeys.reply.localize,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: context.isDarkMode
+                                          ? Colors.white60
+                                          : const Color(0xFF65676B),
                                     ),
                                   ),
                                 ),
-                                if (editTextController.text.isNotEmpty)
-                                  GestureDetector(
-                                    onTap: () async {
-                                      ManageVibration.vibrate();
-                                      var result = await widget.onEditComment(
-                                          PostCommentParams(
-                                              postId: widget.comment.id,
-                                              content: editTextController.text));
-                                      if (result == true) {
-                                        widget.comment.content = editTextController.text;
-                                        widget.comment.edit = false;
-                                      }
-                                      setState(() {});
-                                    },
-                                    child: Icon(
-                                      Icons.send,
-                                      size: 18,
-                                      color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
-                                    ),
-                                  ),
                               ],
                             ),
                           ),
-                        // Reply input
-                        if (widget.comment.makeReply == true)
-                          Container(
-                            margin: EdgeInsets.only(
-                              bottom: 16.h,
-                              left: mainAvatarSize + avatarContentGap + 4.w,
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                            decoration: BoxDecoration(
-                              color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        spreadRadius: 1,
-                                        blurRadius: 2,
+                          // Edit comment input
+                          if (widget.comment.edit == true)
+                            Container(
+                              margin: EdgeInsets.only(
+                                bottom: 16.h,
+                                left: mainAvatarSize + avatarContentGap + 4.w,
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                              decoration: BoxDecoration(
+                                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: ProfileImage(
+                                      accountId: 0,
+                                      fromProfile: true,
+                                      imageURL: user?.profilePicture,
+                                      userId: '',
+                                      size: 32,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: TextFormField(
+                                      maxLines: null,
+                                      controller: editTextController,
+                                      onChanged: (v) {
+                                        setState(() {});
+                                      },
+                                      style: const TextStyle(fontSize: 13),
+                                      decoration: InputDecoration(
+                                        hintText: context.isArabic ? 'اكتب تعليق...' : 'Edit comment...',
+                                        hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
+                                        fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        focusedErrorBorder: InputBorder.none,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                  child: ProfileImage(
-                                    accountId: 0,
-                                    fromProfile: true,
-                                    imageURL: user?.profilePicture,
-                                    userId: '',
-                                    size: 32,
+                                  if (editTextController.text.isNotEmpty)
+                                    GestureDetector(
+                                      onTap: () async {
+                                        ManageVibration.vibrate();
+                                        var result = await widget.onEditComment(
+                                            PostCommentParams(
+                                                postId: widget.comment.id,
+                                                content: editTextController.text));
+                                        if (result == true) {
+                                          widget.comment.content = editTextController.text;
+                                          widget.comment.edit = false;
+                                        }
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                        Icons.send,
+                                        size: 18,
+                                        color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          // Reply input
+                          if (widget.comment.makeReply == true)
+                            Container(
+                              margin: EdgeInsets.only(
+                                bottom: 16.h,
+                                left: mainAvatarSize + avatarContentGap + 4.w,
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                              decoration: BoxDecoration(
+                                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: ProfileImage(
+                                      accountId: 0,
+                                      fromProfile: true,
+                                      imageURL: user?.profilePicture,
+                                      userId: '',
+                                      size: 32,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 12.w),
-                                Expanded(
-                                  child: TextFormField(
-                                    maxLines: null,
-                                    controller: replyController,
-                                    onChanged: (v) {
-                                      setState(() {});
-                                    },
-                                    style: const TextStyle(fontSize: 13),
-                                    decoration: InputDecoration(
-                                      hintText: context.isArabic ? 'أكتب ردك علي التعليق...' : 'Write a reply...',
-                                      hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
-                                      fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
-                                      border: InputBorder.none,
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                      errorBorder: InputBorder.none,
-                                      focusedErrorBorder: InputBorder.none,
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: TextFormField(
+                                      maxLines: null,
+                                      controller: replyController,
+                                      onChanged: (v) {
+                                        setState(() {});
+                                      },
+                                      style: const TextStyle(fontSize: 13),
+                                      decoration: InputDecoration(
+                                        hintText: context.isArabic ? 'أكتب ردك علي التعليق...' : 'Write a reply...',
+                                        hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
+                                        fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        focusedErrorBorder: InputBorder.none,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                                      ),
+                                    ),
+                                  ),
+                                  if (replyController.text.isNotEmpty)
+                                    GestureDetector(
+                                      onTap: () async {
+                                        ManageVibration.vibrate();
+                                        var result = await widget.onAddReply(
+                                            ReplyOnCommentParams(
+                                                postId: widget.comment.post,
+                                                commentId: widget.comment.id,
+                                                content: replyController.text));
+                                        if (result != null) {
+                                          replyController.clear();
+                                          widget.comment.repliesCount = (widget.comment.repliesCount ?? 0) + 1;
+                                          widget.comment.makeReply = false;
+                                        }
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                        Icons.send,
+                                        size: 18,
+                                        color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    // More options button
+                    GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        bottomSheet(
+                          context: context,
+                          widget: _buildPostOptions(
+                            isMyComment: widget.comment.user.id == user?.id,
+                            post: widget.comment,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.w),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.transparent,
+                        ),
+                        child: Icon(
+                          Icons.more_horiz,
+                          color: context.isDarkMode
+                              ? Colors.white60
+                              : const Color(0xFF65676B),
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // Replies section
+                if (hasReplies)
+                  Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: mainAvatarSize + avatarContentGap,
+                      top: 8.h,
+                    ),
+                    child: Column(
+                      children: [
+                        for (int i = 0; i < (widget.comment.replies?.length ?? 0); i++)
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 8.h),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                // Curved horizontal connector from vertical thread to reply
+                                PositionedDirectional(
+                                  start: -connectorLength,
+                                  top: replyConnectorTop - elbowRadius,
+                                  child: SizedBox(
+                                    width: connectorLength,
+                                    height: elbowRadius + connectorStroke,
+                                    child: CustomPaint(
+                                      painter: _ConnectorPainter(
+                                        color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                                        strokeWidth: connectorStroke,
+                                        radius: elbowRadius,
+                                        isRtl: Directionality.of(context) == TextDirection.rtl,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                if (replyController.text.isNotEmpty)
-                                  GestureDetector(
-                                    onTap: () async {
-                                      ManageVibration.vibrate();
-                                      var result = await widget.onAddReply(
-                                          ReplyOnCommentParams(
-                                              postId: widget.comment.post,
-                                              commentId: widget.comment.id,
-                                              content: replyController.text));
-                                      if (result != null) {
-                                        replyController.clear();
-                                        widget.comment.repliesCount = (widget.comment.repliesCount ?? 0) + 1;
-                                        widget.comment.makeReply = false;
-                                      }
-                                      setState(() {});
-                                    },
-                                    child: Icon(
-                                      Icons.send,
-                                      size: 18,
-                                      color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
-                                    ),
+                                if (i == ((widget.comment.replies?.length ?? 1) - 1))
+                                  PositionedDirectional(
+                                    start: -connectorLength,
+                                    top: replyConnectorTop,
+                                    child: SizedBox(key: _lastConnectorKey, width: 1, height: 1),
                                   ),
+                                ReplyCard(
+                                  onDeleteReply: (String id) async {
+                                    bool result = await widget.onDeleteReply(id);
+                                    if (result) {
+                                      widget.comment.replies?.removeWhere((e) => e.id == id);
+                                      widget.comment.repliesCount = (widget.comment.repliesCount??0)-1;
+                                      setState(() {});
+                                    }
+                                  },
+                                  onEditComment: (PostCommentParams params) =>
+                                      widget.onEditComment(params),
+                                  reply: widget.comment.replies![i],
+                                  onReplyReact: (String id) {},
+                                  onReport: (TwitterReportParams params) {},
+                                ),
                               ],
                             ),
                           ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 8.w),
-                  // More options button
-                  GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      bottomSheet(
-                        context: context,
-                        widget: _buildPostOptions(
-                          isMyComment: widget.comment.user.id == user?.id,
-                          post: widget.comment,
+                // Show replies button
+                if (hasMoreReplies)
+                  Container(
+                    margin: EdgeInsets.only(top: 12.h, left: 52.w),
+                    child: GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        context.read<SocialPostsCubit>().getCommentReplies(
+                            context: context,
+                            commentId: widget.comment.id,
+                            comment: widget.comment);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.r),
+                          color: Colors.transparent,
                         ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.w),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.transparent,
-                      ),
-                      child: Icon(
-                        Icons.more_horiz,
-                        color: context.isDarkMode
-                            ? Colors.white60
-                            : const Color(0xFF65676B),
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // Replies section
-              if (hasReplies)
-                Padding(
-                  padding: EdgeInsetsDirectional.only(
-                    start: mainAvatarSize + avatarContentGap,
-                    top: 8.h,
-                  ),
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < (widget.comment.replies?.length ?? 0); i++)
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8.h),
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              // Horizontal connector line
-                              PositionedDirectional(
-                                start: -connectorLength,
-                                top: (replyAvatarSize / 2) + 2.h,
-                                child: Container(
-                                  width: connectorLength,
-                                  height: 2.h,
-                                  color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
-                                ),
-                              ),
-                              if (i == ((widget.comment.replies?.length ?? 1) - 1))
-                                PositionedDirectional(
-                                  start: -connectorLength,
-                                  top: (replyAvatarSize / 2) + 2.h,
-                                  child: SizedBox(key: _lastConnectorKey, width: 1, height: 1),
-                                ),
-                              ReplyCard(
-                                onDeleteReply: (String id) async {
-                                  bool result = await widget.onDeleteReply(id);
-                                  if (result) {
-                                    widget.comment.replies?.removeWhere((e) => e.id == id);
-                                    setState(() {});
-                                  }
-                                },
-                                onEditComment: (PostCommentParams params) =>
-                                    widget.onEditComment(params),
-                                reply: widget.comment.replies![i],
-                                onReplyReact: (String id) {},
-                                onReport: (TwitterReportParams params) {},
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              // Show replies button
-              if (hasMoreReplies)
-                Container(
-                  margin: EdgeInsets.only(top: 12.h, left: 52.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      context.read<SocialPostsCubit>().getCommentReplies(
-                          context: context,
-                          commentId: widget.comment.id,
-                          comment: widget.comment);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
-                        color: Colors.transparent,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            context.isArabic ? Icons.subdirectory_arrow_left : Icons.subdirectory_arrow_right,
-                            size: 16,
-                            color: context.isDarkMode
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.PRIMARY_COLOR,
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            '${LocaleKeys.show.localize} ${(widget.comment.repliesCount ?? 0) - (widget.comment.replies?.length ?? 0)} ${LocaleKeys.replies.localize}',
-                            style: TextStyle(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              context.isArabic ? Icons.subdirectory_arrow_left : Icons.subdirectory_arrow_right,
+                              size: 16,
                               color: context.isDarkMode
                                   ? AppColors.SECONDARY_COLOR
                                   : AppColors.PRIMARY_COLOR,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 6.w),
+                            Text(
+                              '${LocaleKeys.show.localize} ${(widget.comment.remainingRepliesCount ?? 0)} ${LocaleKeys.replies.localize}',
+                              style: TextStyle(
+                                color: context.isDarkMode
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.PRIMARY_COLOR,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -663,5 +688,53 @@ class _CommentCardState extends State<CommentCard> {
         ),
       ),
     );
+  }
+}
+
+class _ConnectorPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double radius;
+  final bool isRtl;
+
+  _ConnectorPainter({
+    required this.color,
+    required this.strokeWidth,
+    required this.radius,
+    required this.isRtl,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = true;
+
+    final path = Path();
+
+    if (isRtl) {
+      // In RTL, draw from right edge towards left with a rounded elbow
+      path.moveTo(size.width, 0);
+      path.quadraticBezierTo(size.width, radius, size.width - radius, radius);
+      path.lineTo(0, radius);
+    } else {
+      // LTR: from left vertical line to right
+      path.moveTo(0, 0);
+      path.quadraticBezierTo(0, radius, radius, radius);
+      path.lineTo(size.width, radius);
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _ConnectorPainter oldDelegate) {
+    return color != oldDelegate.color ||
+        strokeWidth != oldDelegate.strokeWidth ||
+        radius != oldDelegate.radius ||
+        isRtl != oldDelegate.isRtl;
   }
 }
