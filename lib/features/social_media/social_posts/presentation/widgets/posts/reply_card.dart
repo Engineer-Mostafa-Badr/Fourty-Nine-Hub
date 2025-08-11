@@ -49,9 +49,12 @@ class _ReplyCardState extends State<ReplyCard> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
+    // Keep sizes synced with CommentCard so the connector lines align visually
+    final double replyAvatarSize = 28.w;
+    final double avatarContentGap = 12.w;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 8.h),
-      margin: EdgeInsets.only(left: 0.w), // Indent replies to show hierarchy
+      margin: EdgeInsets.only(left: 0.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -73,7 +76,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 ),
                 child: UserProfileImage(
                   accountId: 0,
-                  size: 14,
+                  size: replyAvatarSize,
                   withBorder: false,
                   imageURL: widget.reply.user.image.isNotEmpty
                       ? widget.reply.user.image
@@ -81,7 +84,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   userId: widget.reply.user.id,
                 ),
               ),
-              SizedBox(width: 10.w),
+              SizedBox(width: avatarContentGap),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +96,7 @@ class _ReplyCardState extends State<ReplyCard> {
                         color: context.isDarkMode
                             ? AppColors.QUANTITY_COLOR.withOpacity(0.6)
                             : const Color(0xFFF0F2F5).withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(16.r),
+                        borderRadius: BorderRadius.circular(18.r),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.02),
@@ -114,7 +117,7 @@ class _ReplyCardState extends State<ReplyCard> {
                                   widget.reply.user.firstName,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     color: context.isDarkMode
                                         ? Colors.white
                                         : const Color(0xFF1C1E21),
@@ -124,7 +127,7 @@ class _ReplyCardState extends State<ReplyCard> {
                               Text(
                                 widget.reply.sinceTime,
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 10,
                                   color: context.isDarkMode
                                       ? Colors.white60
                                       : const Color(0xFF65676B),
@@ -137,7 +140,7 @@ class _ReplyCardState extends State<ReplyCard> {
                           Text(
                             widget.reply.content,
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 14,
                               height: 1.3,
                               color: context.isDarkMode
                                   ? Colors.white.withOpacity(0.9)

@@ -55,28 +55,66 @@ class CommentCard extends StatefulWidget {
 class _CommentCardState extends State<CommentCard> {
   final editTextController = TextEditingController();
   final replyController = TextEditingController();
+  final GlobalKey _stackKey = GlobalKey();
+  final GlobalKey _lastConnectorKey = GlobalKey();
+  double? _threadLineHeight;
+
+  void _measureThreadHeight({required double lineTopOffset}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        final stackBox = _stackKey.currentContext?.findRenderObject() as RenderBox?;
+        final markerBox = _lastConnectorKey.currentContext?.findRenderObject() as RenderBox?;
+        if (stackBox != null && markerBox != null) {
+          final stackTop = stackBox.localToGlobal(Offset.zero).dy;
+          final markerTop = markerBox.localToGlobal(Offset.zero).dy;
+          final computed = (markerTop - stackTop) - lineTopOffset;
+          if (computed > 0 && (_threadLineHeight == null || (computed - _threadLineHeight!).abs() > 1)) {
+            setState(() {
+              _threadLineHeight = computed;
+            });
+          }
+        }
+      } catch (_) {
+        // ignore measure errors
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     final bool hasReplies = widget.comment.replies != null && widget.comment.replies!.isNotEmpty;
     final bool hasMoreReplies = (widget.comment.repliesCount ?? 0) > (widget.comment.replies?.length ?? 0);
+    // Sizing tuned to resemble Facebook comments
+    final double mainAvatarSize = 36.w;
+    final double replyAvatarSize = 28.w; // keep in sync with ReplyCard
+    final double avatarContentGap = 12.w;
+    final double threadX = mainAvatarSize / 2; // center of avatar
+    // Length from the replies' start edge to the vertical thread line
+    final double connectorLength = (mainAvatarSize + avatarContentGap) - threadX;
+
+    if (hasReplies) {
+      _measureThreadHeight(lineTopOffset: mainAvatarSize + 8.h);
+    }
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: Stack(
+        key: _stackKey,
         children: [
           // Main vertical thread line
           if (hasReplies || hasMoreReplies)
             PositionedDirectional(
-              start: 36.w, // Align with center of profile image
-              top: 60.h, // Start below profile image
-              bottom: hasMoreReplies ? 60.h : 0, // Extend to "Show replies" button if exists
-              child: Container(
-                width: 2.w,
-                decoration: BoxDecoration(
-                  color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(1.r),
+              start: threadX, // align with avatar center
+              top: mainAvatarSize + 8.h, // start just below avatar
+              child: SizedBox(
+                height: _threadLineHeight ?? 0,
+                child: Container(
+                  width: 2.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(1.r),
+                  ),
                 ),
               ),
             ),
@@ -101,7 +139,7 @@ class _CommentCardState extends State<CommentCard> {
                       ],
                     ),
                     child: UserProfileImage(
-                      size: 20,
+                      size: mainAvatarSize,
                       accountId: 0,
                       withBorder: false,
                       imageURL: widget.comment.user.image.isNotEmpty
@@ -110,7 +148,7 @@ class _CommentCardState extends State<CommentCard> {
                       userId: widget.comment.user.id,
                     ),
                   ),
-                  SizedBox(width: 12.w),
+                  SizedBox(width: avatarContentGap),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +249,10 @@ class _CommentCardState extends State<CommentCard> {
                         // Edit comment input
                         if (widget.comment.edit == true)
                           Container(
-                            margin: EdgeInsets.only(bottom: 16.h, left: 52.w),
+                            margin: EdgeInsets.only(
+                              bottom: 16.h,
+                              left: mainAvatarSize + avatarContentGap + 4.w,
+                            ),
                             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                             decoration: BoxDecoration(
                               color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
@@ -287,7 +328,10 @@ class _CommentCardState extends State<CommentCard> {
                         // Reply input
                         if (widget.comment.makeReply == true)
                           Container(
-                            margin: EdgeInsets.only(bottom: 16.h, left: 52.w),
+                            margin: EdgeInsets.only(
+                              bottom: 16.h,
+                              left: mainAvatarSize + avatarContentGap + 4.w,
+                            ),
                             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                             decoration: BoxDecoration(
                               color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
@@ -398,24 +442,34 @@ class _CommentCardState extends State<CommentCard> {
               // Replies section
               if (hasReplies)
                 Padding(
-                  padding: EdgeInsetsDirectional.only(start: 48.w, top: 8.h),
+                  padding: EdgeInsetsDirectional.only(
+                    start: mainAvatarSize + avatarContentGap,
+                    top: 8.h,
+                  ),
                   child: Column(
                     children: [
                       for (int i = 0; i < (widget.comment.replies?.length ?? 0); i++)
                         Padding(
                           padding: EdgeInsets.only(bottom: 8.h),
                           child: Stack(
+                            clipBehavior: Clip.none,
                             children: [
                               // Horizontal connector line
                               PositionedDirectional(
-                                start: -24.w,
-                                top: 24.h,
+                                start: -connectorLength,
+                                top: (replyAvatarSize / 2) + 2.h,
                                 child: Container(
-                                  width: 24.w,
+                                  width: connectorLength,
                                   height: 2.h,
                                   color: AppColors.PRIMARY_COLOR.withOpacity(0.3),
                                 ),
                               ),
+                              if (i == ((widget.comment.replies?.length ?? 1) - 1))
+                                PositionedDirectional(
+                                  start: -connectorLength,
+                                  top: (replyAvatarSize / 2) + 2.h,
+                                  child: SizedBox(key: _lastConnectorKey, width: 1, height: 1),
+                                ),
                               ReplyCard(
                                 onDeleteReply: (String id) async {
                                   bool result = await widget.onDeleteReply(id);
