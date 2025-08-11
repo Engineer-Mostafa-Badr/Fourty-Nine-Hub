@@ -49,7 +49,6 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           boxColor: Colors.white,
           boxRadius: 10,
           onReactionChanged: (Reaction<String>? reaction) async {
-            print(reaction?.value);
             if (reaction != null) {
               await _handleReactionChange(reaction, controller);
             }
@@ -79,7 +78,6 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
 
   Future<void> _handleReactionChange(
       Reaction<String> reaction, SocialPostsCubit controller) async {
-    print("reaction.${reaction.value}");
     if ((reaction.value == 'like' || reaction.value == 'likes') &&
         widget.post.isLikes == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
@@ -434,8 +432,6 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
   }
 
   Widget _buildCurrentReaction() {
-    print("widget.post.isLikes ${widget.post.isLikes}");
-    print("widget.post.isSad ${widget.post.isSad}");
     if (widget.post.isLikes) {
       return _buildReactionItem(
           name: LocaleKeys.like.localize,

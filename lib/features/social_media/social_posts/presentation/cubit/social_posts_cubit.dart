@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -955,7 +956,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // add reply
-  Future<CommentEntity> replyOnComment(
+  Future<CommentEntity?> replyOnComment(
       {required ReplyOnCommentParams params, required String from}) async {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
@@ -980,7 +981,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
       emit(state.copyWith(newComment: data, status: StateStatus.success));
     });
-    return model!;
+    return model;
   }
 
   // show comments with rendered data
@@ -1109,17 +1110,22 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getCommentReplies({
     required BuildContext context,
     required String commentId,
+    // int? page,
     CommentEntity? comment,
 }) async {
-    print(hasMoreCommentRepliesData);
-    print(isLoadingCommentRepliesMore);
-    if (!hasMoreCommentRepliesData || isLoadingCommentRepliesMore) return;
+    print("comment?.repliesCount ${comment?.repliesCount}");
+    if(comment?.repliesCount==0){
+      return;
+    }
+    // print(hasMoreCommentRepliesData);
+    // print(isLoadingCommentRepliesMore);
+    // if (!hasMoreCommentRepliesData || isLoadingCommentRepliesMore) return;
     isLoadingCommentRepliesMore = true;
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPostCommentRepliesUseCase(
       PostCommentsParams(
         page: commentRepliesPage,
-        limit: pageSize,
+        limit: 4,
         postId: commentId,
       ),
     );
@@ -1127,7 +1133,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {
               commentReplies.addAll(data);
-          if (data.length < pageSize) {
+              comment?.replies?.addAll(data);
+              comment?.repliesCount = (comment.repliesCount??0)-data.length;
+          if (data.length < 4) {
             hasMoreCommentRepliesData = false;
           } else {
             commentRepliesPage++;

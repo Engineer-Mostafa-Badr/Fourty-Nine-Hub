@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../../core/extensions/string_extension.dart';
@@ -60,6 +61,11 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       final user = context.read<UserCubit>().state.data;
+      if(controller.loadPostComments){
+        return Center(
+          child: CustomCircularProgressIndicator(),
+        );
+      }
       return CustomScaffold(
         appBar: AppBar(
           toolbarHeight: 120.h,
@@ -130,7 +136,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                       maxLines: null,
                       style: const TextStyle(fontSize: 15),
                       decoration: InputDecoration(
-                        hintText: 'Write a comment...',
+                        hintText: context.isArabic?'اكتب تعليق...':'Write a comment...',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
                         fillColor: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.grey.shade200,
                         border: InputBorder.none, // Removes border
@@ -218,16 +224,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
             onEditComment: (PostCommentParams params) =>
                 widget.onEditComment(params),
           ),
-          if (comment.repliesCount != 0)
-            Container(
-                margin: const EdgeInsets.only(left: 30),
-                child: TextAppButton(
-                    label:
-                        '${LocaleKeys.show.localize} ${comment.repliesCount} ${LocaleKeys.replies.localize}',
-                    onPressed: () {
 
-        ManageVibration.vibrate();
-                    }))
         ],
       ),
     );

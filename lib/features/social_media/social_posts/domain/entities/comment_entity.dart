@@ -11,6 +11,7 @@ class CommentEntity {
   bool? isLikes;
   bool? isWow;
   bool? edit;
+  bool? makeReply;
   bool? isSad;
   bool? isAngry;
   bool? isHaha;
@@ -50,6 +51,7 @@ class CommentEntity {
     this.isAngry = false,
     this.isHaha = false,
     this.edit = false,
+    this.makeReply = false,
   });
 
   //toJson
