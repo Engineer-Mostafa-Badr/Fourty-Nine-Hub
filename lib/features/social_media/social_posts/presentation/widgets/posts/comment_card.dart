@@ -54,13 +54,22 @@ class _CommentCardState extends State<CommentCard> {
   final replyController = TextEditingController();
   final GlobalKey _stackKey = GlobalKey();
   final GlobalKey _lastConnectorKey = GlobalKey();
+  final GlobalKey _showRepliesConnectorKey = GlobalKey();
   double? _threadLineHeight;
 
   void _measureThreadHeight({required double lineTopOffset}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final stackBox = _stackKey.currentContext?.findRenderObject() as RenderBox?;
-        final markerBox = _lastConnectorKey.currentContext?.findRenderObject() as RenderBox?;
+        RenderBox? markerBox;
+        
+        // Always try to get the marker from show replies button if it exists, otherwise from replies
+        if ((widget.comment.remainingRepliesCount ?? 0) > 0) {
+          markerBox = _showRepliesConnectorKey.currentContext?.findRenderObject() as RenderBox?;
+        } else if (widget.comment.replies != null && widget.comment.replies!.isNotEmpty) {
+          markerBox = _lastConnectorKey.currentContext?.findRenderObject() as RenderBox?;
+        }
+        
         if (stackBox != null && markerBox != null) {
           final stackTop = stackBox.localToGlobal(Offset.zero).dy;
           final markerTop = markerBox.localToGlobal(Offset.zero).dy;
@@ -95,6 +104,13 @@ class _CommentCardState extends State<CommentCard> {
 
     if (hasReplies || hasMoreReplies) {
       _measureThreadHeight(lineTopOffset: mainAvatarSize + 8.h);
+      
+      // Additional measurement for show replies button if no visible replies
+      if (!hasReplies && hasMoreReplies) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _measureThreadHeight(lineTopOffset: mainAvatarSize + 8.h);
+        });
+      }
     }
 
     return Container(
@@ -108,7 +124,7 @@ class _CommentCardState extends State<CommentCard> {
               start: threadX - 5, // align with avatar center
               top: mainAvatarSize + (hasMoreReplies?15:24).h, // start just below avatar
               child: SizedBox(
-                height: _threadLineHeight ?? 0,
+                height: _threadLineHeight ?? (hasMoreReplies ? 120.h : 0), // Fallback height for show replies button
                 child: Container(
                   width: 2.w,
                   decoration: BoxDecoration(
@@ -619,7 +635,7 @@ class _CommentCardState extends State<CommentCard> {
                       PositionedDirectional(
                         start: -connectorLength,
                         top: 12.h + (28.w / 2), // Center of reply avatar height
-                        child: SizedBox(key: _lastConnectorKey, width: 1, height: 1),
+                        child: SizedBox(key: _showRepliesConnectorKey, width: 1, height: 1),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 12.h),
