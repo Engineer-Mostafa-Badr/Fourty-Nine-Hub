@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
+
 import 'core/service/cache_service.dart';
 import 'core/service/connectivity_service.dart';
 import 'core/service/network_connectivity_cubit.dart';
@@ -108,12 +110,14 @@ void main() async {
   // Routes.onBoardingScreen
   print('will go onBoardingScreen ${!isShowOnboarding}');
   // final initialRoute = Routes.ChooseLangScreen;
+  isActivate = await CacheManager.getActivation() ?? false;
+  isShowOnboarding = await CacheManager.getShowOnboarding();
+  // final initialRoute = Routes.splash;
   final initialRoute = !isShowOnboarding
       ? Routes.ChooseLangScreen
       : isActivate
           ? Routes.PAGEPREVIEW
           : Routes.HOME;
-
   AppPages.initializeRouter(initialRoute);
   await LocationServiceWatcher().start();
   runApp(

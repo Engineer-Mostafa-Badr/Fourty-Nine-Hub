@@ -13,6 +13,7 @@ import '../../../../ads/native_ad_card.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/numbers_extensions.dart';
 import '../../../../core/extensions/string_extension.dart';
@@ -271,6 +272,53 @@ class _BeStarViewState extends State<BeStarView> {
                           Assets.idea,
                           height: 24,
                           width: 24,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          showAnimatedDialog(
+                            context,
+                            AlertDialog(
+                              contentPadding: const EdgeInsets.all(0),
+                              content: Stack(
+                                // mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    width: double.infinity,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    child: Image.asset(
+                                      Assets.talentGIF,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  PositionedDirectional(
+                                    top: 10,
+                                    start: 10,
+                                    child: InkWell(
+                                      onTap: () {
+                                        ManageVibration.vibrate();
+                                        context.pop();
+                                      },
+                                      child: Image.asset(
+                                        Assets.close,
+                                        height: 24,
+                                        width: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Label(
+                         text: 'Assets.idea',
                         ),
                       ),
                     ],

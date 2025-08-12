@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -14,12 +15,20 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import '../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
+import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../custom_video_player.dart';
 import 'talent_video_player.dart';
 
@@ -240,6 +249,7 @@ class GetAllTalents extends StatelessWidget {
                                       : null,
                                   widget: Column(
                                     spacing: 20,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
@@ -254,41 +264,54 @@ class GetAllTalents extends StatelessWidget {
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Text(
-                                                LocaleKeys.report.localize,
-                                                style: TextStyle(
-                                                  color: context.isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: 28.sp,
-                                                  fontWeight: FontWeight.bold,
+                                              Container(
+                                                padding: const EdgeInsets.symmetric( horizontal: 8),
+                                                child: Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      Assets.instagramHideIcon,
+                                                      width: 24,
+                                                      color: Colors.black,
+                                                    ),
+                                                    const Sizer(),
+                                                    Text(
+                                                      LocaleKeys.hide.localize,
+                                                      style: Styles.headerText(fontWeight: FontWeight.w400),
+                                                    )
+                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                LocaleKeys.report.localize,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: context.isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: 20.sp,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              AppButton(
-                                                label:
-                                                    LocaleKeys.report.localize,
-                                                backColor:
-                                                    AppColors.SECONDARY_COLOR,
-                                                textColor: Colors.white,
-                                                onPressed: () {
-                                                  // context.read<StarCubit>().reportTalent(
-                                                  //   talentId: talent.id,
-                                                  // );
-                                                  Navigator.pop(context);
+                                              const Sizer(),
+                                              GestureDetector(
+                                                onTap: (){
+                                                  ManageVibration.vibrate();
+                                                  bottomSheet(
+                                                    context: context,
+                                                    widget: ReportView(
+                                                      id: 'postId',
+                                                      categoryId: 'test',
+                                                    ),);
                                                 },
+                                                child: Container(
+                                                  padding: const EdgeInsets.symmetric( horizontal: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.report,
+                                                        color: Colors.red,
+                                                        size: 24,
+                                                      ),
+                                                      const Sizer(),
+                                                      Text(
+                                                        LocaleKeys.report.localize,
+                                                        style: Styles.headerText(
+                                                            fontWeight: FontWeight.w400, color: Colors.red),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
+
                                             ],
                                           ),
                                         ),
