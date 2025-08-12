@@ -93,7 +93,7 @@ class _CommentCardState extends State<CommentCard> {
     final double connectorStroke = 2.w;
     final double replyConnectorTop = 6.h; // align the horizontal elbow near the top of the reply bubble
 
-    if (hasReplies) {
+    if (hasReplies || hasMoreReplies) {
       _measureThreadHeight(lineTopOffset: mainAvatarSize + 8.h);
     }
 
@@ -592,39 +592,60 @@ class _CommentCardState extends State<CommentCard> {
                 ),
               // Show replies button
               if (hasMoreReplies)
-                Container(
-                  margin: EdgeInsets.only(top: 12.h, left: 52.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      context.read<SocialPostsCubit>().getCommentReplies(context: context, commentId: widget.comment.id, comment: widget.comment);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
-                        color: Colors.transparent,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            context.isArabic ? Icons.subdirectory_arrow_left : Icons.subdirectory_arrow_right,
-                            size: 16,
-                            color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            '${LocaleKeys.show.localize} ${(widget.comment.remainingRepliesCount ?? 0)} ${LocaleKeys.replies.localize}',
-                            style: TextStyle(
-                              color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                Padding(
+                  padding: EdgeInsetsDirectional.only(
+                    start: mainAvatarSize + avatarContentGap,
+                    top: 8.h,
+                  ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      PositionedDirectional(
+                        start: -connectorLength - 4,
+                        top: (replyConnectorTop - elbowRadius) + 5,
+                        child: SizedBox(
+                          width: connectorLength,
+                          height: elbowRadius + connectorStroke,
+                          child: CustomPaint(
+                            painter: _ConnectorPainter(
+                              color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                              strokeWidth: connectorStroke,
+                              radius: elbowRadius,
+                              isRtl: Directionality.of(context) == TextDirection.rtl,
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      PositionedDirectional(
+                        start: -connectorLength,
+                        top: replyConnectorTop,
+                        child: SizedBox(key: _lastConnectorKey, width: 1, height: 1),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 12.h),
+                        child: GestureDetector(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.read<SocialPostsCubit>().getCommentReplies(context: context, commentId: widget.comment.id, comment: widget.comment);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.r),
+                              color: Colors.transparent,
+                            ),
+                            child: Text(
+                              '${LocaleKeys.show.localize} ${(widget.comment.remainingRepliesCount ?? 0)} ${LocaleKeys.replies.localize}',
+                              style: TextStyle(
+                                color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
