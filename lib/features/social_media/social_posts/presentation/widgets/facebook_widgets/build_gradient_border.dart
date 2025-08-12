@@ -21,12 +21,26 @@ class GradientProfileBorder extends StatelessWidget {
           size: Size(fullWidth??40, fullWidth??40),
           painter: SegmentedGradientBorderPainter(segments: segments,borderWidth: borderWidth),
         ),
-        ImageFromInternet(
-          image: imageUrl,
-          isCircle: true,
-          defaultLogo: false,
-          width: imageWidth??30,
-          height: imageWidth??30,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            ImageFromInternet(
+              image: imageUrl,
+              isCircle: true,
+              defaultLogo: false,
+              width: imageWidth??30,
+              height: imageWidth??30,
+            ),
+            Container(
+              width: (imageWidth??30) / 2,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(color: Colors.black, width: 2),
+              ),
+              child: Text('M'),
+            )
+          ],
         ),
       ],
     );

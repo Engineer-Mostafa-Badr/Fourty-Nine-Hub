@@ -193,57 +193,87 @@ class NormalPostScreen extends StatelessWidget {
                 // Comment button
                 ClickableWidget(
                   onTap: () {
+                    print("postEntity.id ${postEntity.id}");
       ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.94,
+                        ),
                         widget: BlocProvider.value(
                           value: serviceLocator<SocialPostsCubit>()
                             ..loadPostCommentsData(
                                 context: context, postId: postEntity.id),
-                          child: FacebookPostComments(
-                            postId: postEntity.id,
-                            onAddComment: (PostCommentParams params) {
-                              // return controller.onPostComment(
-                              //     params: params, from: 'feed');
-                            },
-                            onCommentReply: (ReplyOnCommentParams params) {
-                              // return controller.replyOnComment(
-                              //   params: ReplyOnCommentParams(
-                              //       postId: params.postId,
-                              //       content: params.content,
-                              //       commentId:
-                              //       params.commentId),
-                              //   from: 'feed',
-                              // );
-                            },
-                            onDeleteComment: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
-                              // print(result);
-                            },
-                            onDeleteReply: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
-                            },
-                            from: 'feed',
-                            onEditComment: (PostCommentParams params) async {
-                              // var result = await controller
-                              //     .editComment(params: params);
-                              // return result;
-                            },
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: AlignmentDirectional.center,
+                                child: Container(
+                                  width: 40,
+                                  height: 4.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.getTextColor(context),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
+                              ),
+                              Sizer(),
+                              Align(
+                                alignment: AlignmentDirectional.topStart,
+                                child: Text(
+                                  context.isArabic?'الأكثر شيوعا':"Most Relevant",
+                                  style: TextStyle(
+                                    color: AppColors.getTextColor(context),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Sizer(),
+                              Expanded(
+                                child: FacebookPostComments(
+                                  postId: postEntity.id,
+                                  onAddComment: (PostCommentParams params) {
+                                    return context.read<SocialPostsCubit>().onPostComment(
+                                        params: params, from: 'feed');
+                                  },
+                                  onCommentReply: (ReplyOnCommentParams params) {
+                                    return context.read<SocialPostsCubit>().replyOnComment(
+                                      params: ReplyOnCommentParams(
+                                          postId: params.postId,
+                                          content: params.content,
+                                          commentId:
+                                          params.commentId),
+                                      from: 'feed',
+                                    );
+                                  },
+                                  onDeleteComment: (String id) async {
+                                    return await context.read<SocialPostsCubit>()
+                                        .deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: postEntity.id,
+                                        from: 'feed');
+                                    // print(result);
+                                  },
+                                  onDeleteReply: (String id) async {
+                                    return await context.read<SocialPostsCubit>()
+                                        .deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: postEntity.id,
+                                        from: 'feed');
+                                  },
+                                  from: 'feed',
+                                  onEditComment: (PostCommentParams params) async {
+                                    var result = await context.read<SocialPostsCubit>()
+                                        .editComment(params: params);
+                                    return result;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ));
                   },

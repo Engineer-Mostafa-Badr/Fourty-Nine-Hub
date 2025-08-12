@@ -67,7 +67,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height*0.6;
     // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 

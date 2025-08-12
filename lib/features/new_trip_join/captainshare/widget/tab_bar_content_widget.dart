@@ -559,7 +559,16 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
+    // _scrollController = ScrollController()..addListener(_scrollListener);
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        _isVisible = false;
+      } else {
+        _isVisible = true;
+      }
+      setState(() {});
+    });
   }
 
   void _onScroll() {

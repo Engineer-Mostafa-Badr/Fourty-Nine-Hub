@@ -271,7 +271,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
 
   @override
   Widget build(BuildContext context) {
-    print("objectUser${UserCubit.to.state.data?.id}");
     return Scaffold(
       key: _scaffoldKey,
       bottomNavigationBar: widget.noNavBar || _isScrollingDown

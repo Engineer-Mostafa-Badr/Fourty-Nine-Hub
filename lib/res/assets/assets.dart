@@ -207,6 +207,8 @@ abstract class Assets {
   // navigator
   static String logo = 'assets/images/logo_600.png';
   static String womanPlaceHolder = 'assets/icons/woman_place_holder.png';
+  static String womanIcon = 'assets/icons/woman.png';
+  static String manIcon = 'assets/icons/man.png';
   static String logoWithBlackText = 'assets/images/logoWithBlackText.png';
   static String allRestaurants = 'assets/images/allRestaurants.png';
 //   static String healthcare = 'assets/images/healthcare.png';
