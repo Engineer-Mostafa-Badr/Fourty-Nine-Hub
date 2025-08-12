@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -78,8 +80,8 @@ class _ReplyCardState extends State<ReplyCard> {
                   accountId: 0,
                   size: replyAvatarSize,
                   withBorder: false,
-                  imageURL: widget.reply.user.image.isNotEmpty
-                      ? widget.reply.user.image
+                  imageURL: widget.reply.user?.image.isNotEmpty
+                      ? widget.reply.user?.image
                       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s',
                   userId: widget.reply.user.id,
                 ),
@@ -90,108 +92,186 @@ class _ReplyCardState extends State<ReplyCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Reply Bubble - smaller and more subtle than main comments
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-                      decoration: BoxDecoration(
-                        color: context.isDarkMode
-                            ? AppColors.QUANTITY_COLOR.withOpacity(0.6)
-                            : const Color(0xFFF0F2F5).withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(18.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.02),
-                            spreadRadius: 0.5,
-                            blurRadius: 2,
-                            offset: const Offset(0, 1),
+                    ClickableWidget(
+                      onLongPress: (){
+                        ManageVibration.vibrate();
+                        bottomSheet(
+                          context: context,
+                          widget: _buildPostOptions(
+                            isMyComment: widget.reply.user.id == user?.id,
+                            post: widget.reply,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // User name and time row
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  widget.reply.user.firstName,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : const Color(0xFF1C1E21),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                        decoration: BoxDecoration(
+                          color: context.isDarkMode
+                              ? AppColors.QUANTITY_COLOR.withOpacity(0.6)
+                              : const Color(0xFFF0F2F5).withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(18.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.02),
+                              spreadRadius: 0.5,
+                              blurRadius: 2,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // User name and time row
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "${widget.reply.user.firstName} ${widget.reply.user.lastName}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : const Color(0xFF1C1E21),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                widget.reply.sinceTime,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: context.isDarkMode
-                                      ? Colors.white60
-                                      : const Color(0xFF65676B),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 3.h),
-                          // Reply content
-                          Text(
-                            widget.reply.content,
-                            style: TextStyle(
-                              fontSize: 14,
-                              height: 1.3,
-                              color: context.isDarkMode
-                                  ? Colors.white.withOpacity(0.9)
-                                  : const Color(0xFF1C1E21),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 3.h),
+                            // Reply content
+                            Text(
+                              widget.reply.content,
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1.3,
+                                color: context.isDarkMode
+                                    ? Colors.white.withOpacity(0.9)
+                                    : const Color(0xFF1C1E21),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: 6.h),
                     // Action buttons row - smaller and more subtle
                     Padding(
-                      padding: EdgeInsets.only(left: 14.w),
+                      padding: EdgeInsetsDirectional.only(start: 14.w),
                       child: Row(
                         children: [
-                          BuildReactionsButtons(
-                            post: widget.reply,
-                            from: 'comments',
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.reply.sinceTime,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: context.isDarkMode
+                                        ? Colors.white60
+                                        : const Color(0xFF65676B),
+                                  ),
+                                ),
+                                SizedBox(width: 16.w),
+                                BuildReactionsButtons(
+                                  post: widget.reply,
+                                  from: 'comments',
+                                  showTitle: true,
+                                  showIcon: false,
+                                ),
+                              ],
+                            ),
                           ),
+                          if((widget.reply.angryCount??0)>0)Row(
+                            children: [
+                              Text('${widget.reply.angryCount??0}',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              Image.asset(
+                                Assets.angry,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                          if((widget.reply.sadCount??0)>0)Row(
+                            children: [
+                              Text('${widget.reply.sadCount??0}',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              Image.asset(
+                                Assets.sad,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                          if((widget.reply.wowCount??0)>0)Row(
+                            children: [
+                              Text('${widget.reply.wowCount??0}',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              Image.asset(
+                                Assets.wow,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                          if((widget.reply.loveCount??0)>0)Row(
+                            children: [
+                              Text('${widget.reply.loveCount??0}',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              Image.asset(
+                                Assets.heart,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                          if((widget.reply.hahaCount??0)>0)Row(
+                            children: [
+                              Text('${widget.reply.hahaCount??0}',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              Image.asset(
+                                Assets.haha,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                          if((widget.reply.likesCount??0)>0)Row(
+                            children: [
+                              Text('${widget.reply.likesCount??0}',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              Image.asset(
+                                Assets.like,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
+                          ),
+
                         ],
                       ),
                     ),
                   ],
-                ),
-              ),
-              SizedBox(width: 6.w),
-              // More options button - smaller for replies
-              GestureDetector(
-                onTap: () {
-                  ManageVibration.vibrate();
-                  bottomSheet(
-                    context: context,
-                    widget: _buildPostOptions(
-                      isMyComment: widget.reply.user.id == user?.id,
-                      post: widget.reply,
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(6.w),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                  ),
-                  child: Icon(
-                    Icons.more_horiz,
-                    color: context.isDarkMode
-                        ? Colors.white60
-                        : const Color(0xFF65676B),
-                    size: 18,
-                  ),
                 ),
               ),
             ],

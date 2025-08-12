@@ -1135,10 +1135,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {
               print("comment?.replies?.length ${comment?.replies?.length}");
-              comment?.replies?.addAll(data);
-              print("comment?.replies?.length ${comment?.replies?.length}");
-              print("comment?.repliesCount ${comment?.repliesCount}");
-              print("comment?.repliesCount ${(comment?.repliesCount??0)-data.length}");
+              for(var element in data){
+                if(comment?.replies?.any((e)=>e.id==element.id)??false){
+                }else{
+                  comment?.replies?.add(element);
+
+                }
+              }
               if((comment?.remainingRepliesCount??0)<=4){
                 comment?.remainingRepliesCount =0;
               }else{

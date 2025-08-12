@@ -170,6 +170,8 @@ class _BuildFacebookSuggestPeopleState
                                               .profilePicture,
                                           fit: BoxFit
                                               .fill, // Ensures the image covers the area
+                                          firstChar: widget.suggestedFriends[index].firstName[0].toUpperCase(),
+                                            charPadding:5
                                         ),
                                       ),
                                     ),

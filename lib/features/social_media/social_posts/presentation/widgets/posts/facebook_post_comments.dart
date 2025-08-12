@@ -67,19 +67,19 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         );
       }
       return CustomScaffold(
-        appBar: AppBar(
-          toolbarHeight: 120.h,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.grey),
-          surfaceTintColor: Colors.transparent,
-          title: Label(
-              text:
-                  '${controller.postComments.length} ${LocaleKeys.comments.localize}',
-              style: Styles.mediumText()),
-          leading: IconButton(
-              onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
-          centerTitle: true,
-        ),
+        // appBar: AppBar(
+        //   toolbarHeight: 120.h,
+        //   elevation: 0,
+        //   iconTheme: const IconThemeData(color: Colors.grey),
+        //   surfaceTintColor: Colors.transparent,
+        //   title: Label(
+        //       text:
+        //           '${controller.postComments.length} ${LocaleKeys.comments.localize}',
+        //       style: Styles.mediumText()),
+        //   leading: IconButton(
+        //       onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+        //   centerTitle: true,
+        // ),
         body: Column(
           children: [
             Expanded(child: OlxPaginationWidget(

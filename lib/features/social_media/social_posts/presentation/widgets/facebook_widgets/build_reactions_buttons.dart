@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
@@ -16,9 +18,11 @@ import 'package:lottie/lottie.dart';
 
 class BuildReactionsButtons extends StatefulWidget {
   const BuildReactionsButtons(
-      {super.key, required this.post, required this.from});
+      {super.key, required this.post, required this.from,this.showIcon=true,this.showTitle});
   final dynamic post;
   final String from;
+  final bool? showTitle;
+  final bool? showIcon;
 
   @override
   State<BuildReactionsButtons> createState() => _BuildReactionsButtonsState();
@@ -392,7 +396,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        (widget.showIcon==false && from == 'view')?SizedBox():SizedBox(
           height: from == 'view' ? 28 : 28,
           width: from == 'view' ? 28 : 28,
           child: from == 'view'
@@ -407,8 +411,9 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
                   onLoaded: (loaded) {},
                 ),
         ),
-        if (widget.from == 'posts' && from == 'view') ...[
-          Label(text: name, style: Styles.mediumText(color: Colors.grey)),
+        if ((widget.from == 'posts' && from == 'view')||(widget.showTitle==true&& from == 'view')) ...[
+          Label(text: name, style: Styles.mediumText(color:item.name=='like'?AppColors.c3897F0:(item.name=='wow'||item.name=='haha'||item.name=='sad')?AppColors.ACCENT_COLOR:AppColors.SECONDARY_COLOR)
+          ),
         ],
       ],
     );
@@ -418,8 +423,8 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SvgPicture.asset(Assets.likeIcon,color:context.isDarkMode?AppColors.whiteColor:null),
-        SizedBox(width: 8.w), // Space between icon and text
+        if(widget.showIcon==true)...[SvgPicture.asset(Assets.likeIcon,color:context.isDarkMode?AppColors.whiteColor:null),
+        SizedBox(width: 8.w)], // Space between icon and text
         Label(
           text: "${LocaleKeys.like.localize}.",
           style: TextStyle(

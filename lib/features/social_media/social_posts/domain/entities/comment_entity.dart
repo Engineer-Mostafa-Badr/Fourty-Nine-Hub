@@ -28,7 +28,7 @@ class CommentEntity {
   Duration get publishedDuration => DateTime.now().difference(createdAt);
 
   String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+      DurationHelper().formatTimeAgo(createdAt);
   CommentEntity({
     required this.id,
     required this.content,

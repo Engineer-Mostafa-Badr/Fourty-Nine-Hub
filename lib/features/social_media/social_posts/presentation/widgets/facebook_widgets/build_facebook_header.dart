@@ -40,12 +40,39 @@ class BuildFacebookHeader extends StatelessWidget {
       children: [
         // if (user != null && user.image != null)
         user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.image),
-          child: ImageFromInternet(
-            image: user.image ?? '',
-            isCircle: true,
-            defaultLogo: false,
-            width: 40,
-            height: 40,
+          child: Stack(
+            // alignment: Alignment.center,
+            children: [
+              ImageFromInternet(
+                image: user.image ?? '',
+                isCircle: true,
+                defaultLogo: false,
+                width: 40,
+                height: 40,
+                firstChar: user.firstName[0].toUpperCase(),
+                charPadding:0
+              ),
+              // PositionedDirectional(
+              //   bottom: 0,
+              //   start: 0,
+              //   end: 0,
+              //   child: Container(
+              //     width: 10,
+              //     decoration: BoxDecoration(
+              //       shape: BoxShape.circle,
+              //       color: Colors.white,
+              //       border: Border.all(color: Colors.black, width: 0.5),
+              //     ),
+              //     alignment: Alignment.center,
+              //     child: Text(user.firstName[0].toUpperCase(),style: TextStyle(
+              //
+              //         fontWeight: FontWeight.w500,
+              //
+              //         color: AppColors.PRIMARY_COLOR,
+              //         fontSize: 8),),
+              //   ),
+              // )
+            ],
           ),
         ),
         const SizedBox(width: 10.0),
