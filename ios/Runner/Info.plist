@@ -59,8 +59,8 @@
 		<!-- Facebook Configuration -->
 		<key>FacebookAppID</key>
 		<string>660212443761468</string>
-		<!-- <key>FacebookClientToken</key>
-		<string>fd9c2bafeab8274f0ad9f92ce05d90fe</string> -->
+		<key>FacebookClientToken</key>
+		<string>255815a3e684d4212c43e057a063712a</string>
 		<key>FacebookDisplayName</key>
 		<string>49fortest</string>
 		

@@ -364,6 +364,7 @@ class SocialAuthService {
     // هذا يجب أن يطابق CLIENT_ID في GoogleService-Info.plist
     serverClientId:
         '361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com',
+        
   );
 
   // Get current user
