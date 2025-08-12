@@ -106,7 +106,7 @@ class _CommentCardState extends State<CommentCard> {
           if (hasReplies || hasMoreReplies)
             PositionedDirectional(
               start: threadX - 5, // align with avatar center
-              top: mainAvatarSize + 8.h, // start just below avatar
+              top: mainAvatarSize + (hasMoreReplies?15:24).h, // start just below avatar
               child: SizedBox(
                 height: _threadLineHeight ?? 0,
                 child: Container(
@@ -550,7 +550,7 @@ class _CommentCardState extends State<CommentCard> {
                             children: [
                               PositionedDirectional(
                                 start: -connectorLength - 4,
-                                top: (replyConnectorTop - elbowRadius) + 5,
+                                top: (replyConnectorTop - elbowRadius) + 15,
                                 child: SizedBox(
                                   width: connectorLength,
                                   height: elbowRadius + connectorStroke,
@@ -602,7 +602,7 @@ class _CommentCardState extends State<CommentCard> {
                     children: [
                       PositionedDirectional(
                         start: -connectorLength - 4,
-                        top: (replyConnectorTop - elbowRadius) + 5,
+                        top: (12.h + (28.w / 2) - (elbowRadius + connectorStroke) / 2)+5, // Center of reply avatar height
                         child: SizedBox(
                           width: connectorLength,
                           height: elbowRadius + connectorStroke,
@@ -618,7 +618,7 @@ class _CommentCardState extends State<CommentCard> {
                       ),
                       PositionedDirectional(
                         start: -connectorLength,
-                        top: replyConnectorTop,
+                        top: 12.h + (28.w / 2), // Center of reply avatar height
                         child: SizedBox(key: _lastConnectorKey, width: 1, height: 1),
                       ),
                       Container(
