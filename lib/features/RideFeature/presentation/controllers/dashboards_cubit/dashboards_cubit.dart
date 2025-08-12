@@ -3113,8 +3113,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      print("currentPosition.latitude ${currentPosition.latitude}");
-      print("currentPosition.latitude ${currentPosition.longitude}");
     }
     final Either<Failure, bool> result = await emergencySupportUseCase(
         EmergencySupportParams(

@@ -62,8 +62,8 @@ class BulletPoint extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("• ", style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 20,
+          const Text("• ", style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700)),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 18,
           fontWeight: FontWeight.w700,
             color: context.isDarkMode? AppColors.whiteColor : AppColors.black
           ))),

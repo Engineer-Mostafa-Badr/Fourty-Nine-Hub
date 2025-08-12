@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,6 +44,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/enums/base_status_enum.dart';
@@ -841,6 +843,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (r) {
+          if(from == 'comments'){
+
+          }
       if (from == 'details') {
         // changeReaction(state.postDetails, params.react);
       } else if (from == 'userPosts') {
@@ -923,13 +928,20 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 // add comment
   Future<CommentEntity> onPostComment(
       {required PostCommentParams params, required String from}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+
     var response = await _postCommentUseCase(params);
     CommentEntity? model;
     response.fold(
-        (failure) => emit(
+        (failure) {
+          currentContext.pop();
+          emit(
               state.copyWith(failure: failure, status: StateStatus.error),
-            ), (data) {
+            );
+          }, (data) {
       model = data;
+      currentContext.pop();
       if (from == 'feed') {
         // print(feedPagingController.itemList!.length);
         // var currentPost = feedPagingController.itemList
@@ -944,14 +956,20 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // add reply
-  Future<CommentEntity> replyOnComment(
+  Future<CommentEntity?> replyOnComment(
       {required ReplyOnCommentParams params, required String from}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     var response = await _replyOnCommentUseCase(params);
     CommentEntity? model;
     response.fold(
-        (failure) => emit(
+        (failure) {
+          currentContext.pop();
+          emit(
               state.copyWith(failure: failure, status: StateStatus.error),
-            ), (data) {
+            );
+        }, (data) {
+      currentContext.pop();
       model = data;
       if (from == 'feed') {
         // var currentPost = feedPagingController.itemList
@@ -963,7 +981,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
       emit(state.copyWith(newComment: data, status: StateStatus.success));
     });
-    return model!;
+    return model;
   }
 
   // show comments with rendered data
@@ -993,8 +1011,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getPostComments({
   required BuildContext context,
   required String postId,
+    int? page,
   CommentEntity? comment,
   }) async {
+    // print("postComments.last.id ${postComments.last.id}");
     print(hasMorePostCommentsData);
     print(isLoadingPostCommentsMore);
     if (!hasMorePostCommentsData || isLoadingPostCommentsMore) return;
@@ -1002,7 +1022,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPostCommentsUseCase(
       PostCommentsParams(
-        page: postCommentsPage,
+        page: page??postCommentsPage,
         limit: pageSize,
         postId: postId,
       ),
@@ -1091,25 +1111,45 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getCommentReplies({
     required BuildContext context,
     required String commentId,
+    // int? page,
     CommentEntity? comment,
 }) async {
-    print(hasMoreCommentRepliesData);
-    print(isLoadingCommentRepliesMore);
-    if (!hasMoreCommentRepliesData || isLoadingCommentRepliesMore) return;
+    print("comment?.repliesCount ${comment?.repliesCount}");
+    if(comment?.remainingRepliesCount==0){
+      return;
+    }
+    // print(hasMoreCommentRepliesData);
+    // print(isLoadingCommentRepliesMore);
+    // if (!hasMoreCommentRepliesData || isLoadingCommentRepliesMore) return;
     isLoadingCommentRepliesMore = true;
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPostCommentRepliesUseCase(
       PostCommentsParams(
         page: commentRepliesPage,
-        limit: pageSize,
+        limit: 4,
         postId: commentId,
+          id: (comment?.replies?.isNotEmpty??false)?(comment?.replies??[]).last.id:null
       ),
     );
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {
+              print("comment?.replies?.length ${comment?.replies?.length}");
+              for(var element in data){
+                if(comment?.replies?.any((e)=>e.id==element.id)??false){
+                }else{
+                  comment?.replies?.add(element);
+
+                }
+              }
+              if((comment?.remainingRepliesCount??0)<=4){
+                comment?.remainingRepliesCount =0;
+              }else{
+                comment?.remainingRepliesCount = (comment.remainingRepliesCount??0)-data.length;
+              }
               commentReplies.addAll(data);
-          if (data.length < pageSize) {
+          if (data.length < 4) {
+
             hasMoreCommentRepliesData = false;
           } else {
             commentRepliesPage++;
