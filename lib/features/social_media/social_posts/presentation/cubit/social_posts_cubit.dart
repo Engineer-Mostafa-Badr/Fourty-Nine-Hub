@@ -1025,6 +1025,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         page: page??postCommentsPage,
         limit: pageSize,
         postId: postId,
+          id: (postComments.isNotEmpty)?postComments.last.id:null
       ),
     );
     response.fold(

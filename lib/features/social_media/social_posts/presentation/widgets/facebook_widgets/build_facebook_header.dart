@@ -39,7 +39,9 @@ class BuildFacebookHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // if (user != null && user.image != null)
-        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.image),
+        user.hasStory==false?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,
+            firstChar:user.firstName[0].toUpperCase()
+        ):ClickableWidget(onTap: ()=>print(user.image),
           child: Stack(
             // alignment: Alignment.center,
             children: [
@@ -52,26 +54,6 @@ class BuildFacebookHeader extends StatelessWidget {
                 firstChar: user.firstName[0].toUpperCase(),
                 charPadding:0
               ),
-              // PositionedDirectional(
-              //   bottom: 0,
-              //   start: 0,
-              //   end: 0,
-              //   child: Container(
-              //     width: 10,
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.white,
-              //       border: Border.all(color: Colors.black, width: 0.5),
-              //     ),
-              //     alignment: Alignment.center,
-              //     child: Text(user.firstName[0].toUpperCase(),style: TextStyle(
-              //
-              //         fontWeight: FontWeight.w500,
-              //
-              //         color: AppColors.PRIMARY_COLOR,
-              //         fontSize: 8),),
-              //   ),
-              // )
             ],
           ),
         ),
