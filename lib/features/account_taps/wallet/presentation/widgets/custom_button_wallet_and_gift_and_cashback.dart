@@ -42,10 +42,11 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
               (context.isDarkMode
                   ? const Color(0xB3F45560)
                   : const Color(0xB3F33D49))),
-      onPressed: () {
-        ManageVibration.vibrate();
-        status ? onPressed : () {};
-      },
+          onPressed:  status ? onPressed : () {},
+      // onPressed: () {
+      //   ManageVibration.vibrate();
+      //   status ? onPressed : () {};
+      // },
       padding: padding,
     );
   }
