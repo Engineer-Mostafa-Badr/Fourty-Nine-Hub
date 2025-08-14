@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -59,55 +60,115 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     // Shuffle every 5 seconds
     _shuffleTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       setState(() {
-        pages.shuffle(Random());
+        if(pages.any((e)=>e.index==11)){
+          pages = firstPages;
+        }else{
+          pages = secondPages;
+        }
       });
     });
   }
 
-  void _initializePages() {
-    pages = [
-      BottomItemModel(
-        icon: FontAwesomeIcons.bowlFood,
-        label: LocaleKeys.ads.localize,
-        index: 0,
-        cacheKey: 'adCount',
-        image: Assets.spcialAdsIcon,
-        route: Routes.CREATECOMPANYAD,
-      ),
-      BottomItemModel(
-        icon: FontAwesomeIcons.list,
-        label: LocaleKeys.reels.localize,
-        index: 1,
-        cacheKey: 'reelsCount',
-        image: Assets.reelBar,
-        route: Routes.REELS,
-      ),
-      BottomItemModel(
-        icon: FontAwesomeIcons.plus,
-        label: LocaleKeys.health.localize,
-        cacheKey: 'healthCount',
-        image: Assets.health,
-        index: 2,
-        route: Routes.VISITA,
-      ),
-      BottomItemModel(
-        icon: FontAwesomeIcons.plus,
-        label: LocaleKeys.notifications.localize,
-        cacheKey: 'notificationsCount',
-        image: Assets.bell,
-        index: 3,
-        route: Routes.NOTIFICATIONS,
-      ),
-      BottomItemModel(
-        icon: FontAwesomeIcons.car,
-        label: LocaleKeys.more.localize,
-        cacheKey: 'drawerCount',
-        index: 4,
-        image: Assets.menuSvg,
-        route: Routes.RIDE_HOME,
-      ),
-    ];
+  List<BottomItemModel> _shuffleButKeepIndex(int fixedIndex, List<BottomItemModel> items) {
+    if (items.length <= fixedIndex) return items;
+
+    // Keep a reference to the fixed item
+    final fixedItem = items[fixedIndex];
+
+    // Copy items without the fixed one
+    final otherItems = List<BottomItemModel>.from(items)..removeAt(fixedIndex);
+
+    // Shuffle the remaining items
+    otherItems.shuffle(Random());
+
+    // Insert the fixed item back in the same position
+    otherItems.insert(fixedIndex, fixedItem);
+
+    return otherItems;
   }
+
+  void _initializePages() {
+    pages = secondPages;
+  }
+
+  List<BottomItemModel> firstPages = [
+    BottomItemModel(
+      icon: FontAwesomeIcons.bowlFood,
+      label: LocaleKeys.find.localize,
+      index: 0,
+      cacheKey: 'tinderCount',
+      image: Assets.find,
+      route: Routes.Tinder,
+    ),
+    BottomItemModel(
+      icon: FontAwesomeIcons.list,
+      label: LocaleKeys.reels.localize,
+      index: 1,
+      cacheKey: 'reelsCount',
+      image: Assets.reelBarPng,
+      route: Routes.REELS,
+      // height: 60,
+    ),
+    BottomItemModel(
+      icon: FontAwesomeIcons.plus,
+      label: LocaleKeys.health.localize,
+      cacheKey: 'healthCount',
+      image: Assets.health,
+      index: 2,
+      route: Routes.VISITA,
+    ),
+    BottomItemModel(icon: FontAwesomeIcons.plus, label: LocaleKeys.chat.localize, cacheKey: 'chatCount', image: Assets.whatsApp, index: 3, route: Routes.CHAT, height: 20),
+    BottomItemModel(
+      icon: FontAwesomeIcons.car,
+      label: LocaleKeys.book.localize,
+      cacheKey: 'bookingCount',
+      index: 4,
+      image: Assets.booking,
+      route: Routes.RIDE_HOME,
+    ),
+  ];
+  List<BottomItemModel> secondPages = [
+    BottomItemModel(
+      icon: FontAwesomeIcons.bowlFood,
+      label: LocaleKeys.ride.localize,
+      index: 11,
+      cacheKey: 'rideCount',
+      image: Assets.rideIcon1,
+      route: Routes.RIDE_HOME,
+    ),
+    BottomItemModel(
+        icon: FontAwesomeIcons.plus,
+        label: LocaleKeys.tripJoin.localize,
+        cacheKey: 'tripJoinCount',
+        image: Assets.tripJoinIcon2,
+        index: 12, route: Routes.newRideModeScreen,
+    ),
+    BottomItemModel(
+      icon: FontAwesomeIcons.plus,
+      label: LocaleKeys.health.localize,
+      cacheKey: 'healthCount',
+      image: Assets.health,
+      index: 13,
+      route: Routes.VISITA,
+    ),
+
+    BottomItemModel(
+      icon: FontAwesomeIcons.car,
+      label: LocaleKeys.meal.localize,
+      cacheKey: 'bookingCount',
+      index: 14,
+      image: Assets.mealIcon,
+      route: Routes.FOOD,
+    ),
+    BottomItemModel(
+      icon: FontAwesomeIcons.plus,
+      label: LocaleKeys.health.localize,
+      cacheKey: 'healthCount',
+      image: Assets.healthIcon1,
+      index: 15,
+      route: Routes.VISITA,
+    ),
+  ];
 
   @override
   void dispose() {
@@ -123,7 +184,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         ManageVibration.vibrate();
 
         if (pages[index].index == 4) {
-          Scaffold.of(context).openDrawer();
+          soonDialog(context);
         } else if (pages[index].index == 0) {
           context.push(pages[index].route);
         } else if (pages[index].index == 3) {
@@ -167,15 +228,13 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState(
+  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState(
         scrollController: scrollController,
         isScrollingDown: isScrollingDown,
       );
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
-    with SingleTickerProviderStateMixin {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
   bool isScrollingDown;
 
@@ -241,82 +300,69 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             ),
             child: bottomNavBarHeight == 75
                 ? Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(widget.items.length, (index) {
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      if (index != 2) {
-                        widget.onTap(index);
-                      }
-                    },
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.zero,
-                      child: isScrollingDown
-                          ? Container()
-                          : ClickableWidget(
-                        child: widget.items[index].index == 3
-                            ? Builder(
-                          builder: (context) {
-                            final getUnreadNotificationsCountCubit =
-                            context.watch<GetUnreadNotificationsCountCubit>();
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CustomNotificationWidget(
-                                  icon: Image.asset(
-                                    Assets.notification,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : AppColors.PRIMARY_COLOR,
-                                  ),
-                                  height: widget.items[index].height - 5,
-                                  unreadCount: !context.read<UserCubit>().isLoggedIn
-                                      ? 0
-                                      : getUnreadNotificationsCountCubit
-                                      .unreadNotificationsCountEntity
-                                      ?.total ??
-                                      0,
-                                ),
-                                Expanded(
-                                  child: Label(
-                                    text: widget.items[index].label,
-                                    style: Styles.smallText(),
-                                  ),
-                                ),
-                              ],
-                            );
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: List.generate(widget.items.length, (index) {
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (index != 2) {
+                              widget.onTap(index);
+                            }
                           },
-                        )
-                            : widget.items[index].index != 2
-                            ? Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Column(
-                            children: [
-                              SvgPicture.asset(
-                                widget.items[index].image!,
-                                height: widget.items[index].height,
-                                width: widget.items[index].height,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors.PRIMARY_COLOR,
-                              ),
-                              Label(
-                                text: widget.items[index].label,
-                                style: Styles.smallText(),
-                              ),
-                            ],
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.zero,
+                            child: isScrollingDown
+                                ? Container()
+                                : ClickableWidget(
+                                    child: widget.items[index].index != 2&&
+                                        widget.items[index].index != 13
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                            child: Column(
+                                              children: [
+                                                (widget.items[index].index == 3 ||
+                                                        widget.items[index].index == 4 ||
+                                                        widget.items[index].index == 0 ||
+                                                        widget.items[index].index == 12 ||
+                                                        widget.items[index].index == 11 ||
+                                                        widget.items[index].index == 15 ||
+                                                        widget.items[index].index == 14 ||
+                                                        widget.items[index].index == 1)
+                                                    ? Image.asset(
+                                                        widget.items[index].image!,
+                                                        height: widget.items[index].height,
+                                                        width: widget.items[index].height,
+                                                        color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                                      )
+                                                    : SvgPicture.asset(
+                                                        widget.items[index].image!,
+                                                        height: widget.items[index].height,
+                                                        width: widget.items[index].height,
+                                                        color:
+                                                        context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                                      ),
+                                                if (widget.items[index].index == 3)
+                                                  SizedBox(
+                                                    height: 4.h,
+                                                  ),
+                                                Expanded(
+                                                  child: Label(
+                                                    text: widget.items[index].label,
+                                                    style: Styles.smallText(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ),
                           ),
-                        )
-                            : Container(),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            )
+                        ),
+                      );
+                    }),
+                  )
                 : Container(),
           ),
         ),

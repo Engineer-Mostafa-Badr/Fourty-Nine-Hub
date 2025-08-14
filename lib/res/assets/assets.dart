@@ -563,6 +563,19 @@ abstract class Assets {
   static String maleUser = 'assets/images/trip_join/male_user.png';
   static String femaleUser = 'assets/images/trip_join/female_user.png';
   static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
+  static String foodIcon = 'assets/icons/foodIcon.png';
+  static String tripJoinIcon1 = 'assets/icons/tripJoin.png';
+  static String newTripJoin = 'assets/icons/newTripJoin.png';
+  static String tripJoinIcon2 = 'assets/icons/tripJoinIcon2.png';
+  static String rideIcon1 = 'assets/icons/rideIcon.png';
+  static String healthIcon1 = 'assets/icons/healthIcon.png';
+  static String gamesIcon = 'assets/icons/gamesIcon.png';
+  static String bidIcon = 'assets/icons/bidIcon.png';
+  static String mealIcon = 'assets/icons/mealIcon.png';
+  static String chanceIcon = 'assets/icons/chanceIcon.png';
+  static String moneyExchange = 'assets/icons/moneyExchange.png';
+  static String chanceImage = 'assets/images/changeImage.png';
+  static String bidImage = 'assets/images/bidImage.png';
   static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
 //   static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
 
@@ -663,6 +676,8 @@ abstract class Assets {
   static String doctorImage = "assets/images/doctor.png";
   static String marriage = "assets/images/marriage.png";
   static String reelBar = "assets/icons/reelBar.svg";
+  static String booking = "assets/icons/booking.png";
+  static String tinderIcon = "assets/icons/tinder.png";
   static String reelBarPng = "assets/icons/reelBar.png";
   static String gridIcon = "assets/icons/gridIcon.png";
   static String sliderIcon = "assets/icons/sliderIcon.png";
