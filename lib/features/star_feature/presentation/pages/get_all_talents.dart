@@ -16,18 +16,13 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import '../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import '../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../custom_video_player.dart';
 import 'talent_video_player.dart';
@@ -228,12 +223,24 @@ class GetAllTalents extends StatelessWidget {
                             ),
                             ...List.generate(
                               5,
-                              (index) => Padding(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: Image.asset(
-                                  index < talent.averageRating.floor()
-                                      ? "assets/49-New-icons/star_gold.png"
-                                      : "assets/49-New-icons/star.png",
+                              (starIndex) => GestureDetector(
+                                onTap: () {
+                                  // context
+                                  //     .read<ClientOrdersCubit>()
+                                  //     .changeDeriveRate(index + 1);
+                                  talent;
+                                  cubit.changeRating(talent.id, starIndex + 1);
+                                  debugPrint(
+                                      'GestureDetector onTap ${talent.averageRating}');
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  child: Image.asset(
+                                    starIndex < talent.averageRating
+                                        ? "assets/49-New-icons/star_gold.png"
+                                        : "assets/49-New-icons/star.png",
+                                  ),
                                 ),
                               ),
                             ),
@@ -265,7 +272,9 @@ class GetAllTalents extends StatelessWidget {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.symmetric( horizontal: 8),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
                                                 child: Row(
                                                   children: [
                                                     SvgPicture.asset(
@@ -276,24 +285,28 @@ class GetAllTalents extends StatelessWidget {
                                                     const Sizer(),
                                                     Text(
                                                       LocaleKeys.hide.localize,
-                                                      style: Styles.headerText(fontWeight: FontWeight.w400),
+                                                      style: Styles.headerText(
+                                                          fontWeight:
+                                                              FontWeight.w400),
                                                     )
                                                   ],
                                                 ),
                                               ),
                                               const Sizer(),
                                               GestureDetector(
-                                                onTap: (){
+                                                onTap: () {
                                                   ManageVibration.vibrate();
                                                   bottomSheet(
                                                     context: context,
                                                     widget: ReportView(
                                                       id: 'postId',
                                                       categoryId: 'test',
-                                                    ),);
+                                                    ),
+                                                  );
                                                 },
                                                 child: Container(
-                                                  padding: const EdgeInsets.symmetric( horizontal: 8),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
                                                   child: Row(
                                                     children: [
                                                       const Icon(
@@ -303,15 +316,20 @@ class GetAllTalents extends StatelessWidget {
                                                       ),
                                                       const Sizer(),
                                                       Text(
-                                                        LocaleKeys.report.localize,
-                                                        style: Styles.headerText(
-                                                            fontWeight: FontWeight.w400, color: Colors.red),
+                                                        LocaleKeys
+                                                            .report.localize,
+                                                        style:
+                                                            Styles.headerText(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    Colors.red),
                                                       )
                                                     ],
                                                   ),
                                                 ),
                                               ),
-
                                             ],
                                           ),
                                         ),
