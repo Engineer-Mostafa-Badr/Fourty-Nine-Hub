@@ -68,6 +68,7 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_view.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
@@ -4712,6 +4713,12 @@ class AppPages {
                           tripEntity: state.extra as GetLoadingHistoryEntity),
                     )),
               ),
+              GoRoute(
+                  path: Paths.CHANCE,
+                  name: Routes.CHANCE,
+                pageBuilder: (context, state) => customTransition(
+                    context,
+                    state,ChanceView()),),
             ],
           ),
         ]);
