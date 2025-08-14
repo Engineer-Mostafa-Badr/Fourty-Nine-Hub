@@ -26,7 +26,10 @@ class MyAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADdetails, extra: item.id),
+      onTap: () {
+        ManageVibration.vibrate();
+        context.push(Routes.ADdetails, extra: item.id);
+      },
       child: Container(
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(

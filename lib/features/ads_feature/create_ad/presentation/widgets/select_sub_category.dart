@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -32,7 +33,10 @@ class SelectSubCategory extends StatelessWidget {
   Widget _buildCategoryTile(
       {required SubCategoryEntity category, required BuildContext context}) {
     return ListTile(
-      onTap: () => onSelected(category),
+      onTap: () {
+        ManageVibration.vibrate();
+        onSelected(category);
+      },
       leading: SquareImage(
           radius: 5,
           width: kToolbarHeight * .5,

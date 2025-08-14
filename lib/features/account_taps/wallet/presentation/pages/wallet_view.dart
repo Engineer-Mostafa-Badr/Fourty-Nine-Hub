@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_view_body.dart';
 import 'package:fourtyninehub/features/competition/presentation/pages/competition_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/wallet_history.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -33,12 +34,14 @@ class WalletView extends StatelessWidget {
           children: [
             walletInfoCell(
                 icon: Icons.wallet,
-                onTap: () => bottomSheet(
+                onTap: () {
+                  ManageVibration.vibrate();
+                   bottomSheet(
                     context: context,
                     isScrollControlled: true,
                     widget: const WalletHistory(
                       list: [],
-                    )),
+                    ));},
                 label: 'Balance',
                 value: '${100}'),
             walletInfoCell(
@@ -93,7 +96,10 @@ class WalletView extends StatelessWidget {
       required Function onTap}) {
     return Expanded(
       child: InkWell(
-        onTap: () => onTap(),
+        onTap: () {
+          ManageVibration.vibrate();
+          onTap();
+        },
         child: Column(
           children: [
             Icon(

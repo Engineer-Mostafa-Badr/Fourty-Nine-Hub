@@ -606,7 +606,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: InkWell(
-        onTap: () => onTap(),
+        onTap: () {
+          ManageVibration.vibrate();
+          onTap();
+        },
         child: Padding(
           padding: const EdgeInsetsDirectional.only(
               top: 12.0, bottom: 12.0, start: 16),
@@ -805,7 +808,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     return Expanded(
       child: InkWell(
-        onTap: () => onTap(),
+        onTap: () {
+          ManageVibration.vibrate();
+          onTap();
+        },
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -916,6 +922,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        ManageVibration.vibrate();
                         if (!context.read<UserCubit>().isLoggedIn) {
                           return pleaseLoginDialog(context);
                         }
@@ -946,6 +953,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     text: LocaleKeys.gallery.localize,
                                   ),
                                   onTap: () async {
+                                    ManageVibration.vibrate();
                                     await context.read<UserCubit>().uploadPhoto(
                                         isGallery: true, context: context);
                                     // Reload user data if needed
@@ -969,6 +977,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   title:
                                       Label(text: LocaleKeys.camera.localize),
                                   onTap: () async {
+                                    ManageVibration.vibrate();
                                     await context.read<UserCubit>().uploadPhoto(
                                         isGallery: false, context: context);
                                     // Reload user data if needed
@@ -997,6 +1006,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     ),
                                   ),
                                   onTap: () async {
+                                    ManageVibration.vibrate();
                                     Navigator.pop(context);
 
                                     // Reload user data if needed

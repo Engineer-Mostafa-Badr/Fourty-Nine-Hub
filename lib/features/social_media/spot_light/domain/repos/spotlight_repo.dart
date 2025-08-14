@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/paginated_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_media_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_profile_entity.dart';
@@ -25,6 +26,12 @@ abstract class SpotlightRepository {
     int limit = 10,
   });
   
+  // Friends Stories methods
+  Future<Either<Failure, FriendsStoriesEntity>> getFriendsStories({
+    int page = 1,
+    int limit = 50,
+  });
+  
   // Upload methods
   Future<Either<Failure, UploadRequestEntity>> requestUploadMedia({
     required MediaType mediaType,
@@ -44,7 +51,7 @@ abstract class SpotlightRepository {
     String? caption,
   });
   
-  // Additional methods
+  // Action methods
   Future<Either<Failure, bool>> likeMedia(String mediaId);
   Future<Either<Failure, bool>> unlikeMedia(String mediaId);
   Future<Either<Failure, bool>> deleteMedia(String mediaId);

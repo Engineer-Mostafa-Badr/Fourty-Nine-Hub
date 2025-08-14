@@ -157,7 +157,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     ),
                     ClickableWidget(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           controller.filterAds(
                               categorize: widget.filterAdsParams.categorization,
                               userType: widget.filterAdsParams.userType,

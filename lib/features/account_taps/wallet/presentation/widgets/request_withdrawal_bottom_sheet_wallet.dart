@@ -116,7 +116,7 @@ class _RequestWithdrawalBottomSheetWalletState
                         builder: (context, child) {
                           return PaymentMethodItem(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               setState(() {
                                 _selectedIndex = index;
                               });
@@ -145,7 +145,7 @@ class _RequestWithdrawalBottomSheetWalletState
                           return PaymentMethodItem(
                             title: p.title,
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               setState(() {
                                 _selectedIndex = index;
                               });

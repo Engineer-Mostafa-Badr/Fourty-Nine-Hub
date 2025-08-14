@@ -391,6 +391,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 isScrollable: true,
                 controller: _tabController,
                 onTap: (index) async {
+                  ManageVibration.vibrate();
                   await widget.controller.changeSubCatIndex(index);
                 },
                 padding: EdgeInsets.zero,

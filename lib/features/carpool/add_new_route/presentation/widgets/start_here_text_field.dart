@@ -72,7 +72,7 @@ class _StartHereTextField extends State<StartHereTextField> {
             CustomButton(
               title: LocaleKeys.searchFind.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (formKey.currentState!.validate()) {
                   hereLocationCubit.searchLocationHere(
                       apiKey: "", query: startingController.text);

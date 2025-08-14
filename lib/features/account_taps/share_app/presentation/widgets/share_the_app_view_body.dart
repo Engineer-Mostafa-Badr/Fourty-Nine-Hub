@@ -91,7 +91,9 @@ class ShareTheAppViewBody extends StatelessWidget {
     required num gift,
   }) {
     return InkWell(
-      onTap: () => context.push(Routes.WALLET),
+      onTap: () {
+        ManageVibration.vibrate();
+         context.push(Routes.WALLET);},
       child: Row(
         children: [
           Expanded(

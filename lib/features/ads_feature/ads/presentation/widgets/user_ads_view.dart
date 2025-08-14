@@ -55,7 +55,7 @@ class UserAdsView extends StatelessWidget {
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             dynamic data = await context.push(Routes.FILTERADS,
                                 extra: FilterAdsParams(
                                   categorization: CategorizationEntity(
@@ -86,7 +86,7 @@ class UserAdsView extends StatelessWidget {
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             dynamic data = await context.push(
                                 Routes.GOVERNORATEFILTERADS,
                                 extra: CategorizationEntity(

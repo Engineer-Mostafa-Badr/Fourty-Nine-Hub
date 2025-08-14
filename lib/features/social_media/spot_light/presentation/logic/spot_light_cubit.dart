@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/s
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/upload_media_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/repos/spotlight_repo.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -15,11 +16,12 @@ part 'spot_light_state.dart';
 class SpotlightCubit extends Cubit<SpotLightState> {
   final SpotlightRepository repository;
 
-  // Cache for profiles and media
+  // Cache for profiles, media and friends stories
   SpotlightProfileEntity? _myProfile;
   final Map<String, SpotlightProfileEntity> _userProfiles = {};
   final Map<String, List<SpotlightMediaEntity>> _userMediaCache = {};
   List<SpotlightMediaEntity> _myMediaCache = [];
+  FriendsStoriesEntity? _friendsStoriesCache;
 
   SpotlightCubit({required this.repository}) : super(SpotLightInitial());
 
@@ -60,6 +62,27 @@ class SpotlightCubit extends Cubit<SpotLightState> {
       (profile) {
         _userProfiles[userId] = profile;
         emit(SpotlightProfileLoaded(profile: profile, isMyProfile: false));
+      },
+    );
+  }
+
+  // Friends Stories Methods
+  Future<void> getFriendsStories({bool forceRefresh = false, int page = 1, int limit = 50}) async {
+    if (_friendsStoriesCache != null && !forceRefresh && page == 1) {
+      emit(SpotlightFriendsStoriesLoaded(friendsStories: _friendsStoriesCache!));
+      return;
+    }
+
+    if (page == 1) {
+      emit(SpotlightFriendsStoriesLoading());
+    }
+
+    final result = await repository.getFriendsStories(page: page, limit: limit);
+    result.fold(
+      (failure) => emit(SpotlightError(failureMessage: failure)),
+      (friendsStories) {
+        _friendsStoriesCache = friendsStories;
+        emit(SpotlightFriendsStoriesLoaded(friendsStories: friendsStories));
       },
     );
   }
@@ -334,6 +357,7 @@ class SpotlightCubit extends Cubit<SpotLightState> {
     _userProfiles.clear();
     _userMediaCache.clear();
     _myMediaCache.clear();
+    _friendsStoriesCache = null;
   }
 
   void refreshData() {
