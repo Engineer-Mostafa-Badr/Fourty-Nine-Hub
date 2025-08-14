@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +26,7 @@ import '../dialogs/please_login_dialog.dart';
 import '../stateless/labels/label.dart';
 import 'bottom_painter.dart';
 
-class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
+class BottomNavigator extends StatefulWidget implements PreferredSizeWidget {
   final int mainCategory;
   final int index;
   final ScrollController scrollController;
@@ -38,8 +41,31 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    List<BottomItemModel> pages = <BottomItemModel>[
+  State<BottomNavigator> createState() => _BottomNavigatorState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(75);
+}
+
+class _BottomNavigatorState extends State<BottomNavigator> {
+  late List<BottomItemModel> pages;
+  Timer? _shuffleTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePages();
+
+    // Shuffle every 5 seconds
+    _shuffleTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      setState(() {
+        pages.shuffle(Random());
+      });
+    });
+  }
+
+  void _initializePages() {
+    pages = [
       BottomItemModel(
         icon: FontAwesomeIcons.bowlFood,
         label: LocaleKeys.ads.localize,
@@ -58,22 +84,18 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.plus,
-        // Change to a health-related icon
         label: LocaleKeys.health.localize,
         cacheKey: 'healthCount',
         image: Assets.health,
         index: 2,
-        // Ensure this index matches the health item
         route: Routes.VISITA,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.plus,
-        // Change to a health-related icon
         label: LocaleKeys.notifications.localize,
         cacheKey: 'notificationsCount',
         image: Assets.bell,
         index: 3,
-        // Ensure this index matches the health item
         route: Routes.NOTIFICATIONS,
       ),
       BottomItemModel(
@@ -85,18 +107,26 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         route: Routes.RIDE_HOME,
       ),
     ];
+  }
 
+  @override
+  void dispose() {
+    _shuffleTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return CustomBottomNavigationBar(
-      currentIndex: index,
+      currentIndex: widget.index,
       onTap: (index) {
         ManageVibration.vibrate();
 
-        if (index == 4) {
+        if (pages[index].index == 4) {
           Scaffold.of(context).openDrawer();
-        } else if (index == 0) {
-          // soonDialog(context);
+        } else if (pages[index].index == 0) {
           context.push(pages[index].route);
-        } else if (index == 3) {
+        } else if (pages[index].index == 3) {
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
           }
@@ -114,13 +144,10 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       items: pages,
-      scrollController: scrollController,
-      isScrollingDown: isScrollingDown,
+      scrollController: widget.scrollController,
+      isScrollingDown: widget.isScrollingDown,
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(75);
 }
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -128,7 +155,6 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final ValueChanged<int> onTap;
   final List<BottomItemModel> items;
   final ScrollController scrollController;
-
   bool isScrollingDown;
 
   CustomBottomNavigationBar({
@@ -153,7 +179,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   final ScrollController scrollController;
   bool isScrollingDown;
 
-  double bottomNavBarHeight = 75; // Initial height of the bottom bar
+  double bottomNavBarHeight = 75;
   bool _isDisposed = false;
 
   _CustomBottomNavigationBarState({
@@ -165,7 +191,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   void initState() {
     super.initState();
     isScrollingDown = widget.isScrollingDown;
-
     scrollController.addListener(_scrollListener);
   }
 
@@ -176,23 +201,21 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.dispose();
   }
 
-
   void _scrollListener() {
-    // Check if the widget is disposed or not mounted before calling setState
     if (_isDisposed || !mounted) return;
 
     if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (!isScrollingDown && scrollController.offset > 20) {
         setState(() {
           isScrollingDown = true;
-          bottomNavBarHeight = 0.0; // Hide the bottom bar
+          bottomNavBarHeight = 0.0;
         });
       }
     } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (isScrollingDown) {
         setState(() {
           isScrollingDown = false;
-          bottomNavBarHeight = 75; // Show the bottom bar
+          bottomNavBarHeight = 75;
         });
       }
     }
@@ -202,107 +225,99 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 0),
-      height: bottomNavBarHeight, // Use the dynamic height
+      height: bottomNavBarHeight,
       color: Colors.transparent,
       child: CustomPaint(
-        painter: BottomBarPainter(
-          color: Colors.transparent,
-        ),
+        painter: BottomBarPainter(color: Colors.transparent),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Container(
-            // padding: const EdgeInsets.only(bottom: 20, top: 10),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
-                BoxShadow(
-                    color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
               ],
             ),
-            child:bottomNavBarHeight==75?Row(
+            child: bottomNavBarHeight == 75
+                ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: List.generate(widget.items.length, (index) {
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (index != 2) {
                         widget.onTap(index);
                       }
                     },
                     child: Padding(
                       padding: EdgeInsetsDirectional.zero,
-                      child: isScrollingDown ? Container():ClickableWidget(
-                        child: index == 3
+                      child: isScrollingDown
+                          ? Container()
+                          : ClickableWidget(
+                        child: widget.items[index].index == 3
                             ? Builder(
-                                builder: (context) {
-                                  final getUnreadNotificationsCountCubit =
-                                      context.watch<
-                                          GetUnreadNotificationsCountCubit>();
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      CustomNotificationWidget(
-                                        icon: Image.asset(
-                                          Assets.notification,
-                                          // height: widget.items[index].height,
-                                          // width: widget.items[index].height - 4,
-                                          color: context.isDarkMode
-                                              ? Colors.white
-                                              : AppColors.PRIMARY_COLOR,
-                                        ),
-                                        height: widget.items[index].height-5,
-
-                                        unreadCount: !context
-                                                .read<UserCubit>()
-                                                .isLoggedIn
-                                            ? 0
-                                            : getUnreadNotificationsCountCubit
-                                                    .unreadNotificationsCountEntity
-                                                    ?.total ??
-                                                0,
-                                      ),
-                                      Expanded(
-                                        child: Label(
-                                          text: widget.items[index].label,
-                                          style: Styles.smallText(),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              )
-                            : index != 2
-                                ? Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16.0),
-                                    child: Column(
-                                      children: [
-                                        SvgPicture.asset(
-                                          widget.items[index].image!,
-                                          height: widget.items[index].height,
-                                          width: widget.items[index].height,
-                                          color: context.isDarkMode
-                                              ? Colors.white
-                                              : AppColors.PRIMARY_COLOR,
-                                        ),
-                                        Label(
-                                          text: widget.items[index].label,
-                                          style: Styles.smallText(),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : Container(),
+                          builder: (context) {
+                            final getUnreadNotificationsCountCubit =
+                            context.watch<GetUnreadNotificationsCountCubit>();
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CustomNotificationWidget(
+                                  icon: Image.asset(
+                                    Assets.notification,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                  ),
+                                  height: widget.items[index].height - 5,
+                                  unreadCount: !context.read<UserCubit>().isLoggedIn
+                                      ? 0
+                                      : getUnreadNotificationsCountCubit
+                                      .unreadNotificationsCountEntity
+                                      ?.total ??
+                                      0,
+                                ),
+                                Expanded(
+                                  child: Label(
+                                    text: widget.items[index].label,
+                                    style: Styles.smallText(),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        )
+                            : widget.items[index].index != 2
+                            ? Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(
+                                widget.items[index].image!,
+                                height: widget.items[index].height,
+                                width: widget.items[index].height,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.PRIMARY_COLOR,
+                              ),
+                              Label(
+                                text: widget.items[index].label,
+                                style: Styles.smallText(),
+                              ),
+                            ],
+                          ),
+                        )
+                            : Container(),
                       ),
                     ),
                   ),
                 );
               }),
-            ):Container(),
+            )
+                : Container(),
           ),
         ),
       ),
