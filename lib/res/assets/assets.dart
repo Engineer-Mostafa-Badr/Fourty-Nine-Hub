@@ -280,6 +280,9 @@ abstract class Assets {
 //   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String bookingImage = 'assets/images/bookingImage.png';
+  static String gamesImage = 'assets/images/gamesImage.jpg';
+  static String moneyExchangeImage = 'assets/images/moneyExchangeImage.png';
   static String status = 'assets/images/status.png';
   static String hand_dark = 'assets/icons/handshakeIconDark.png';
   static String status_dark = 'assets/icons/statusIconDark.png';

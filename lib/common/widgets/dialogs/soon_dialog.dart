@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
 import '../../../core/utils/custom_show_dialog.dart';
@@ -34,8 +36,8 @@ void soonDialog(BuildContext context) {
               label: LocaleKeys.ok.localize,
               onPressed: () {
       ManageVibration.vibrate();
-
-                Navigator.pop(context);
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      currentContext.pop();
               })
         ],
       ),

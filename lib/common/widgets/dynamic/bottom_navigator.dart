@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
@@ -117,7 +118,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       index: 2,
       route: Routes.VISITA,
     ),
-    BottomItemModel(icon: FontAwesomeIcons.plus, label: LocaleKeys.chat.localize, cacheKey: 'chatCount', image: Assets.whatsApp, index: 3, route: Routes.CHAT, height: 20),
+    BottomItemModel(icon: FontAwesomeIcons.plus, label: LocaleKeys.chat.localize,
+        cacheKey: 'chatCount', image: Assets.whatsApp, index: 3, route: Routes.CHAT, height: 20),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
       label: LocaleKeys.book.localize,
@@ -180,7 +182,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   Widget build(BuildContext context) {
     return CustomBottomNavigationBar(
       currentIndex: widget.index,
-      onTap: (index) {
+      onTap: (index) async {
         ManageVibration.vibrate();
 
         if (pages[index].index == 4) {
@@ -188,13 +190,13 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         } else if (pages[index].index == 0) {
           context.push(pages[index].route);
         } else if (pages[index].index == 3) {
+          ManageVibration.vibrate();
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
           }
-          final selectedItem = pages[index];
-          if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
-            selectedItem.action(context);
-          }
+          await context.read<UserCubit>().resetUnreadedChatsCounter();
+          HandleCashback.setCount('chatCount', context);
+          context.push(context.read<UserCubit>().isLoggedIn?Routes.CHAT:Routes.FirstLoginScreen, extra: ChatsViewParams());
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         } else {
           final selectedItem = pages[index];

@@ -166,6 +166,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
@@ -269,6 +270,70 @@ class GridBlocksWidget extends StatelessWidget {
         image: Assets.marriage,
         title: LocaleKeys.marriage.localize,
       ),
+      _buildStarWidget(
+        context,
+        onTap: () {
+          ManageVibration.vibrate();
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          context.push(Routes.CHANCE);
+        },
+        shadowColor: const Color(0xFFFFE76B).withValues(alpha: 0.9),
+        image: Assets.chanceImage,
+        title: LocaleKeys.chance.localize,
+      ),
+      _buildStarWidget(
+        context,
+        onTap: () {
+          ManageVibration.vibrate();
+          soonDialog(context);
+          // AdInterstitialTop.loadIntersitialAd();
+          // AdInterstitialTop.showInterstitialAd();
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
+        },
+        shadowColor: const Color(0xFF161F68).withValues(alpha: 0.9),
+        image: Assets.bookingImage,
+        title: LocaleKeys.book.localize,
+      ),
+      _buildStarWidget(
+        context,
+        onTap: () {
+          ManageVibration.vibrate();
+          soonDialog(context);
+          // AdInterstitialTop.loadIntersitialAd();
+          // AdInterstitialTop.showInterstitialAd();
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
+        },
+        shadowColor: Colors.pinkAccent.withValues(alpha: 0.9),
+        image: Assets.moneyExchangeImage,
+        title: context.isArabic?'عملات':'Exchange',
+      ),
+      _buildStarWidget(
+        context,
+        onTap: () {
+          ManageVibration.vibrate();
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          context.push(Routes.MAZADAT);
+        },
+        shadowColor: Colors.green.withValues(alpha: 0.9),
+        image: Assets.bidImage,
+        title: context.isArabic?'مزاد':'Auction',
+      ),
+
+      _buildStarWidget(
+        context,
+        onTap: () {
+          ManageVibration.vibrate();
+          soonDialog(context);
+          // AdInterstitialTop.loadIntersitialAd();
+          // AdInterstitialTop.showInterstitialAd();
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
+        },
+        shadowColor: Colors.grey.withValues(alpha: 0.9),
+        image: Assets.gamesImage,
+        title: context.isArabic?'العاب':'Games',
+      ),
     ];
 
     return Directionality(
@@ -326,7 +391,7 @@ class GridBlocksWidget extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Container(color: Colors.black12),
+            Container(color: Colors.black45),
             Label(
               text: title,
               style: Styles.mediumText(
