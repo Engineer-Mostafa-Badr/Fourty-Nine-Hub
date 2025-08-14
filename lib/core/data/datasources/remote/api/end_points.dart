@@ -580,6 +580,7 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels-explore';
+  static const getGlobalReels = '/reels-explore/global-reel';
   static const snap = '/categories/main/snap-filters';
   static const fetchReelsForFollowers =
       '/reels/followers?subCategory=66684135dbb427ee42aa0141';
@@ -885,7 +886,7 @@ class EndPoints {
   }
 
   static String reactOnPost(String postId) {
-    return '/facebook/post/react/$postId?subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/posts/$postId/reactions?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String reactOnComment(String postId) {
@@ -992,11 +993,11 @@ class EndPoints {
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
@@ -1008,7 +1009,7 @@ class EndPoints {
   }
 
   static String deletePost(String postId) {
-    return '/facebook/post/$postId?subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/posts/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteComment(String commentId) {

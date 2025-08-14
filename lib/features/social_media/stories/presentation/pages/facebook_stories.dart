@@ -137,7 +137,7 @@ class Stories extends StatelessWidget {
           //
           // ),
           // const Sizer(),
-          _buildYourStory(context),
+          if(UserCubit.to.isLoggedIn)_buildYourStory(context),
           const Sizer(
             width: 8,
           ),
@@ -181,7 +181,7 @@ class Stories extends StatelessWidget {
               // TODO: implement listener
             },
             builder: (context, state) {
-              if (state.mutedStoriesResponse != null) {
+              if (state.mutedStoriesResponse != null&&UserCubit.to.isLoggedIn) {
                 return _buildMutedStories(context);
               }
               return const SizedBox(

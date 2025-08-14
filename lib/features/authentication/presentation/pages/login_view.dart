@@ -253,6 +253,7 @@ class _LoginViewState extends State<LoginView> {
                         children: [
                           chooseAuthWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               setState(() {
                                 widget.authType = AuthType.LOGIN;
                               });
@@ -271,6 +272,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           chooseAuthWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               setState(() {
                                 widget.authType = AuthType.REGISTER;
                               });
@@ -425,6 +427,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           obscureText: obsecure,
           prefixIcon: GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               setState(() {
                 obsecure = !obsecure;
               });
@@ -766,6 +769,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Expanded(
                               child: BadgedLabel(
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     registerCubit.isMale = true;
 
                                     setState(() {});
@@ -787,6 +791,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Expanded(
                             child: BadgedLabel(
                               onTap: () {
+                                ManageVibration.vibrate();
                                 registerCubit.isMale = false;
 
                                 setState(() {});
@@ -820,6 +825,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         obsecure = !obsecure;
                       });
@@ -850,6 +856,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         obsecure = !obsecure;
                       });
@@ -908,6 +915,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     ClickableWidget(
                       onTap: () {
+                        ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         context.push(Routes.POLICY, extra: true);

@@ -96,8 +96,11 @@ class _MobileAdCardState extends State<MobileAdCard> {
                               if (index == 3)
                                 Positioned.fill(
                                     child: InkWell(
-                                  onTap: () => context.push(Routes.ADdetails,
-                                      extra: widget.item.id),
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    context.push(Routes.ADdetails,
+                                        extra: widget.item.id);
+                                  },
                                   child: Container(
                                     color: Colors.black.withOpacity(0.8),
                                     alignment: AlignmentDirectional.center,
@@ -130,8 +133,10 @@ class _MobileAdCardState extends State<MobileAdCard> {
                       padding:
                           EdgeInsetsDirectional.symmetric(horizontal: 15.w),
                       child: InkWell(
-                        onTap: () => context.push(Routes.ADdetails,
-                            extra: widget.item.id),
+                        onTap: () {
+                          ManageVibration.vibrate();
+                           context.push(Routes.ADdetails,
+                            extra: widget.item.id);},
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +161,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                                           : Icons.favorite,
                                       color: AppColors.SECONDARY_COLOR,
                                       onPressed: () async {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         if (widget.item.isFavourite == false) {
                                           var result = await widget
                                               .onFav(widget.item.id);
@@ -242,7 +247,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 5),
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           showModalBottomSheet(
                             backgroundColor: context.isDarkMode
                                 ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)

@@ -45,6 +45,6 @@ class NewPhoneNumberTextFormField extends MainTextFormField {
               validator?.call(v) ?? (isRequired ? validatorPhone(v) : null),
           hintText: LocaleKeys.phoneNumber.localize + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          inputFormatters: inputFormatter ?? [FilteringTextInputFormatter.digitsOnly],
         );
 }

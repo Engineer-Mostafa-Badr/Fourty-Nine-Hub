@@ -277,6 +277,7 @@ abstract class Routes {
 
   // Change Password
   static const CHANGEPASSWORD = '/ChangePassword';
+  static const CHANCE = '/CHANCE';
   static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
   static const VERIFICATION = '/Verification';
   static const registerVerifyPhoneOTP = '/RegisterVerifyPhoneOTP';
@@ -576,6 +577,7 @@ abstract class Paths {
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';
+  static const CHANCE = 'CHANCE';
   static const CHANGEPASSWORDSECOND = 'ChangePasswordSecond';
   static const VERIFICATION = 'Verification';
 

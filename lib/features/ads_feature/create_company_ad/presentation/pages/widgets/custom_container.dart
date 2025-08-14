@@ -65,7 +65,7 @@ class CustomContainerAdvertise extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             function();
           },
           child: Container(
@@ -102,17 +102,16 @@ class CustomContainerAdvertise extends StatelessWidget {
                   ),
                 if (numberOfAdvertises > 0)
                   IconButton(
-                  onPressed: () {
-
-      ManageVibration.vibrate();
-                  },
-                  icon: Icon(
-                    Icons.check_circle,
-                    color: numberOfAdvertises > 0
-                        ? AppColors.SECONDARY_COLOR
-                        : Colors.transparent,
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                    },
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: numberOfAdvertises > 0
+                          ? AppColors.SECONDARY_COLOR
+                          : Colors.transparent,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

@@ -18,20 +18,37 @@ class NetworkConnectivityCubit extends Cubit<NetworkConnectivityState> {
 
   void _initializeNetworkMonitoring() {
     _networkSubscription = _networkManager.onStatusChange.listen((isConnected) {
-      if (isConnected) {
-        emit(NetworkConnectivityState.connected);
-        _handleReconnection();
-      } else {
-        _saveCurrentRoute();
-        emit(NetworkConnectivityState.disconnected);
+      try {
+        if (isConnected) {
+          // Only emit if state actually changed to prevent unnecessary rebuilds
+          if (state != NetworkConnectivityState.connected) {
+            emit(NetworkConnectivityState.connected);
+            _handleReconnection();
+          }
+        } else {
+          // Only emit if state actually changed to prevent unnecessary rebuilds
+          if (state != NetworkConnectivityState.disconnected) {
+            _saveCurrentRoute();
+            emit(NetworkConnectivityState.disconnected);
+          }
+        }
+      } catch (e) {
+        print('Error in network status change handler: $e');
+        // Don't emit new states on error to prevent widget tree corruption
       }
     });
     
     // Initial check
     _networkManager.checkActualInternetAccess().then((isConnected) {
-      if (!isConnected) {
-        emit(NetworkConnectivityState.disconnected);
+      try {
+        if (!isConnected && state != NetworkConnectivityState.disconnected) {
+          emit(NetworkConnectivityState.disconnected);
+        }
+      } catch (e) {
+        print('Error in initial network check: $e');
       }
+    }).catchError((e) {
+      print('Failed to perform initial network check: $e');
     });
   }
 
@@ -54,13 +71,27 @@ class NetworkConnectivityCubit extends Cubit<NetworkConnectivityState> {
       try {
         final context = navigatorKey.currentContext;
         if (context != null) {
-          // Navigate back to the last route and reinitialize
           final router = GoRouter.of(context);
-          router.go(_lastRoute!);
+          final currentRoute = router.routerDelegate.currentConfiguration.uri.toString();
+          
+          // Only navigate if we're not already on the target route to prevent unnecessary rebuilds
+          if (currentRoute != _lastRoute) {
+            // Use a small delay to ensure the network is stable before navigation
+            Future.delayed(const Duration(milliseconds: 500), () {
+              try {
+                final currentContext = navigatorKey.currentContext;
+                if (currentContext != null) {
+                  final currentRouter = GoRouter.of(currentContext);
+                  currentRouter.go(_lastRoute!);
+                }
+              } catch (e) {
+                print('Could not navigate to last route during reconnection: $e');
+              }
+            });
+          }
         }
       } catch (e) {
-        // Handle case where context is not available
-        print('Could not navigate to last route: $e');
+        print('Could not handle reconnection: $e');
       } finally {
         _lastRoute = null;
       }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../res/style/app_colors.dart';
 
@@ -390,6 +391,7 @@ class ExampleUsage extends StatelessWidget {
               subtitle: Text('وصف العنصر رقم ${index + 1}'),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
+                ManageVibration.vibrate();
                 // معالجة النقر
               },
             ),

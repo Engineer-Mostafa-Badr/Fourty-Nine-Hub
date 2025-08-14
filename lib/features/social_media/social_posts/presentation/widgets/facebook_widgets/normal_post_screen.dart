@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -193,57 +195,91 @@ class NormalPostScreen extends StatelessWidget {
                 // Comment button
                 ClickableWidget(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                    }
+                    print("postEntity.id ${postEntity.id}");
                     bottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.94,
+                        ),
                         widget: BlocProvider.value(
                           value: serviceLocator<SocialPostsCubit>()
                             ..loadPostCommentsData(
                                 context: context, postId: postEntity.id),
-                          child: FacebookPostComments(
-                            postId: postEntity.id,
-                            onAddComment: (PostCommentParams params) {
-                              // return controller.onPostComment(
-                              //     params: params, from: 'feed');
-                            },
-                            onCommentReply: (ReplyOnCommentParams params) {
-                              // return controller.replyOnComment(
-                              //   params: ReplyOnCommentParams(
-                              //       postId: params.postId,
-                              //       content: params.content,
-                              //       commentId:
-                              //       params.commentId),
-                              //   from: 'feed',
-                              // );
-                            },
-                            onDeleteComment: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
-                              // print(result);
-                            },
-                            onDeleteReply: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
-                            },
-                            from: 'feed',
-                            onEditComment: (PostCommentParams params) async {
-                              // var result = await controller
-                              //     .editComment(params: params);
-                              // return result;
-                            },
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: AlignmentDirectional.center,
+                                child: Container(
+                                  width: 40,
+                                  height: 4.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.getTextColor(context),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
+                              ),
+                              Sizer(),
+                              Align(
+                                alignment: AlignmentDirectional.topStart,
+                                child: Text(
+                                  context.isArabic?'الأكثر شيوعا':"Most Relevant",
+                                  style: TextStyle(
+                                    color: AppColors.getTextColor(context),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Sizer(),
+                              Expanded(
+                                child: FacebookPostComments(
+                                  postId: postEntity.id,
+                                  onAddComment: (PostCommentParams params) {
+                                    return context.read<SocialPostsCubit>().onPostComment(
+                                        params: params, from: 'feed');
+                                  },
+                                  onCommentReply: (ReplyOnCommentParams params) {
+                                    return context.read<SocialPostsCubit>().replyOnComment(
+                                      params: ReplyOnCommentParams(
+                                          postId: params.postId,
+                                          content: params.content,
+                                          commentId:
+                                          params.commentId),
+                                      from: 'feed',
+                                    );
+                                  },
+                                  onDeleteComment: (String id) async {
+                                    return await context.read<SocialPostsCubit>()
+                                        .deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: postEntity.id,
+                                        from: 'feed');
+                                    // print(result);
+                                  },
+                                  onDeleteReply: (String id) async {
+                                    return await context.read<SocialPostsCubit>()
+                                        .deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: postEntity.id,
+                                        from: 'feed');
+                                  },
+                                  from: 'feed',
+                                  onEditComment: (PostCommentParams params) async {
+                                    var result = await context.read<SocialPostsCubit>()
+                                        .editComment(params: params);
+                                    return result;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ));
                   },
@@ -268,44 +304,62 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(width: 16), // Space between buttons
 
                 // Send button
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      Assets.sendIcon,
-                      color: context.isDarkMode ? Colors.white : null,
-                    ),
-                    // Send Icon
-                    SizedBox(width: 8.w),
-                    // Space between icon and text
-                    Label(
-                      text: LocaleKeys.send.localize,
-                      style: TextStyle(
-                          color: AppColors.getTextColor(context),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    // Send Text
-                  ],
+                ClickableWidget(
+                  onTap: (){
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                      pleaseLoginDialog(context);
+                      return;
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        Assets.sendIcon,
+                        color: context.isDarkMode ? Colors.white : null,
+                      ),
+                      // Send Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
+                      Label(
+                        text: LocaleKeys.send.localize,
+                        style: TextStyle(
+                            color: AppColors.getTextColor(context),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // Send Text
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 16), // Space between buttons
 
                 // Share button
-                Row(
-                  children: [
-                    SvgPicture.asset(Assets.shareIcon,
-                        color: context.isDarkMode ? Colors.white : null),
-                    // Share Icon
-                    SizedBox(width: 8.w),
-                    // Space between icon and text
-                    Label(
-                      text: LocaleKeys.share.localize,
-                      style: TextStyle(
-                          color: AppColors.getTextColor(context),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    // Share Text
-                  ],
+                ClickableWidget(
+                  onTap: (){
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                      pleaseLoginDialog(context);
+                      return;
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(Assets.shareIcon,
+                          color: context.isDarkMode ? Colors.white : null),
+                      // Share Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
+                      Label(
+                        text: LocaleKeys.share.localize,
+                        style: TextStyle(
+                            color: AppColors.getTextColor(context),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // Share Text
+                    ],
+                  ),
                 ),
               ],
             ),

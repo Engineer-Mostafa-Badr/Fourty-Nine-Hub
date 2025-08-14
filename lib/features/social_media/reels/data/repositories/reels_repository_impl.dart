@@ -31,6 +31,12 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
+  Future<Either<Failure, ReelsResponse>> getGlobalReels(
+      PaginationParams params) {
+    return _reelsRemoteDataSource.getGlobalReels(params);
+  }
+
+  @override
   Future<Either<Failure, bool>> createReel(CreateReelParams params) {
     return _reelsRemoteDataSource.createReel(params);
   }

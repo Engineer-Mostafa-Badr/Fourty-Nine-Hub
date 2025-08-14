@@ -100,7 +100,7 @@ class MyTextField extends StatelessWidget {
             }
           },
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (onTap != null) {
           onTap!();
         }

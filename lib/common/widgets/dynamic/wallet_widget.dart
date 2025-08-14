@@ -484,6 +484,7 @@ class _WalletWidgetState extends State<WalletWidget> {
       Expanded(
         child: InkWell(
           onTap: () {
+            ManageVibration.vibrate();
             function();
           },
           child: Column(

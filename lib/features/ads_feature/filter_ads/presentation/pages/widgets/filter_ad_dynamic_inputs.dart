@@ -449,7 +449,7 @@ class _FilterAdDynamicInputWidgetState
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   widget.onChanged(widget.property.values[index]);
                   value = widget.property.values[index];
                   setState(() {});

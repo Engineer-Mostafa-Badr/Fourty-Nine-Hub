@@ -208,7 +208,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                   title: LocaleKeys.regularRequest.localize,
                   color: AppColors.PRIMARY_COLOR,
                   onTap: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     await createCarPool();
                   },
                 ),
@@ -278,10 +278,8 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           duration:
               getPriceCarpoolCubit.carpoolRouteInfoModel?.duration?.toInt(),
           firstMidpoint: [
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?[0] ??
-                0,
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?[1] ??
-                0
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?[0] ?? 0,
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?[1] ?? 0
           ],
           locationForFirstMidpoint: getPriceCarpoolCubit
               .carpoolRouteInfoModel?.locationForFirstMidpoint,
@@ -291,12 +289,8 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
               getPriceCarpoolCubit.carpoolRouteInfoModel?.originAddress,
           priceForEveryUser: finalPrice.toInt(),
           secondMidpoint: [
-            getPriceCarpoolCubit
-                    .carpoolRouteInfoModel?.secondMidpoint?[0] ??
-                0,
-            getPriceCarpoolCubit
-                    .carpoolRouteInfoModel?.secondMidpoint?[1] ??
-                0
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.secondMidpoint?[0] ?? 0,
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.secondMidpoint?[1] ?? 0
           ],
           startLocation:
               getPriceCarpoolCubit.carpoolRouteInfoModel?.startLocation,

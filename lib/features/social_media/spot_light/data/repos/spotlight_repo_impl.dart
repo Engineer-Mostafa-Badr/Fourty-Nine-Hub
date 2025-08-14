@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/data_source/spotlight_data_source.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/upload_request_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/paginated_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_media_entity.dart';
@@ -77,6 +78,26 @@ class SpotlightRepositoryImpl implements SpotlightRepository {
       page: page,
       limit: limit,
     );
+    return result.fold(
+      (failure) => Left(failure),
+      (model) => Right(model),
+    );
+  }
+
+  @override
+
+  Future<Either<Failure, FriendsStoriesEntity>> getFriendsStories({
+    int page = 1,
+    int limit = 50,
+  }) async {
+    if (page < 1) {
+      return Left(const ValidationFailure('Page must be greater than 0'));
+    }
+    if (limit < 1 || limit > 100) {
+      return Left(const ValidationFailure('Limit must be between 1 and 100'));
+    }
+    
+    final result = await dataSource.getFriendsStories(page: page, limit: limit);
     return result.fold(
       (failure) => Left(failure),
       (model) => Right(model),

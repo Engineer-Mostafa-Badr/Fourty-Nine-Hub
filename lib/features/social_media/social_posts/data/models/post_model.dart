@@ -86,7 +86,7 @@ class PostModel extends PostEntity {
     }
 
     return PostModel(
-      id: json['_id']?.toString() ?? '',
+      id: json['id']?.toString()??json['_id']?.toString() ?? '',
       content: json['content']?.toString(),
       location: json['location'] is Map ? LocationModel.fromJson(json['location']) : null,
       photo: user.image,
@@ -109,7 +109,7 @@ class PostModel extends PostEntity {
       isShared: json['isShared'] == true,
       isDocumentation: json['twitter_documentation'] == true,
       isLove: json['isLove'] == true,
-      isLikes: json['isLikes'] == true,
+      isLikes: json['isLike']??json['isLikes']??false,
       isWow: json['isWow'] == true,
       isSad: json['isSad'] == true,
       isAngry: json['isAngry'] == true,

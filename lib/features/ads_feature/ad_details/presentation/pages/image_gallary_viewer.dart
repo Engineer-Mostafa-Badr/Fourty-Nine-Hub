@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -40,7 +41,10 @@ class ImageGalleryPage extends StatelessWidget {
                 splashColor: Colors.transparent,
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onTap: () => context.pop(),
+                onTap: () {
+                  ManageVibration.vibrate();
+                  context.pop();
+                },
                 child: Icon(
                   Icons.arrow_back,
                   color: Colors.white,

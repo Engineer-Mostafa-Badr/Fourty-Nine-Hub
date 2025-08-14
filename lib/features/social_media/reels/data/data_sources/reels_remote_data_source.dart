@@ -22,6 +22,8 @@ import '../../domain/use_case/upload_video_reel_use_case.dart';
 abstract class ReelsRemoteDataSource {
   Future<Either<Failure, ReelsResponse>> getExploreReels(
       PaginationParams params);
+  Future<Either<Failure, ReelsResponse>> getGlobalReels(
+      PaginationParams params);
 
   Future<Either<Failure, ReelsResponse>> getFollowingReels(int page);
 
@@ -63,6 +65,19 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       PaginationParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getExploreReels,
+      queryParameters: params.toJson(),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(ReelsResponse.fromJson(response)),
+    );
+  }
+
+  @override
+  Future<Either<Failure, ReelsResponse>> getGlobalReels(
+      PaginationParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getGlobalReels,
       queryParameters: params.toJson(),
     );
     return response.fold(

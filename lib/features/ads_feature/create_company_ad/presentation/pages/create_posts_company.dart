@@ -33,14 +33,16 @@ class CreatePostCompanyParams {
   final String type;
   final num totalPrice;
 
-  CreatePostCompanyParams({required this.text, required this.picture, required this.title, required this.type, required this.totalPrice});
-
+  CreatePostCompanyParams(
+      {required this.text,
+      required this.picture,
+      required this.title,
+      required this.type,
+      required this.totalPrice});
 }
 
 class CreatePostCompany extends StatefulWidget {
-  const CreatePostCompany(
-      {super.key,
-      required this.params});
+  const CreatePostCompany({super.key, required this.params});
 
   final CreatePostCompanyParams params;
 
@@ -97,7 +99,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     label: context.isArabic ? 'إلغاء' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -106,25 +108,19 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     label: context.isArabic ? 'متابعة' : 'Continue',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () async {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       showLoadingDialog(context);
                       await context
-                          .read<
-                          CreateCompanyAdCubit>()
+                          .read<CreateCompanyAdCubit>()
                           .addPostCompanyAdvertise(
-                        type:
-                        widget.params.type,
-                        post: widget
-                            .params.text
-                            ? postContentTextController
-                            .text
-                            : null,
-                        totalPrice: widget
-                            .params.totalPrice,
-                        context:
-                        context,
-                      );
+                            type: widget.params.type,
+                            post: widget.params.text
+                                ? postContentTextController.text
+                                : null,
+                            totalPrice: widget.params.totalPrice,
+                            context: context,
+                          );
                     }),
               ],
             ),
@@ -132,14 +128,14 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           ],
         ));
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
-      listener: (BuildContext context, state) {
-      },
+      listener: (BuildContext context, state) {},
       builder: (BuildContext context, CreateCompanyAdState state) {
         var controller = context.read<CreateCompanyAdCubit>();
-        String photo = state.image?.file.path??'';
+        String photo = state.image?.file.path ?? '';
         return CustomScaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(30),
@@ -149,101 +145,103 @@ class _CreatePostViewState extends State<CreatePostCompany> {
             ),
           ),
           body: GestureDetector(
-            onTap: ()=>FocusNode().unfocus(),
+            onTap: () => FocusNode().unfocus(),
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
                 child: BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
-                  builder: (context,state) {
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: GestureDetector(
-                                onTap: () {
-      ManageVibration.vibrate();
-                                  if(formKey.currentState!.validate()){
-                                    if(state.files==null||(state.files?.isEmpty??false)){
-                                      showErrorMessage(context, context.isArabic?'الصورة مطلوبة':'Image is required');
-                                    }else{
-                                      bool inArabic = context.isArabic;
-                                      showSubscribeDialog(context);
-                                    }
+                    builder: (context, state) {
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                if (formKey.currentState!.validate()) {
+                                  if (state.files == null ||
+                                      (state.files?.isEmpty ?? false)) {
+                                    showErrorMessage(
+                                        context,
+                                        context.isArabic
+                                            ? 'الصورة مطلوبة'
+                                            : 'Image is required');
+                                  } else {
+                                    bool inArabic = context.isArabic;
+                                    showSubscribeDialog(context);
                                   }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 32),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 2,
-                                        color: Theme.of(context).primaryColor,
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 32),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20.r)),
+                                child: Label(text: LocaleKeys.save.localize),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (widget.params.text) _buildCreatePost(),
+                      if (widget.params.picture)
+                        Column(
+                          children: [
+                            if (state.files != null &&
+                                (state.files?.isNotEmpty ?? false))
+                              _buildMediaCard(photo),
+                            GestureDetector(
+                              onTap: () async {
+                                ManageVibration.vibrate();
+                                await controller.uploadPhoto(
+                                    hasLoading: false,
+                                    isGallery: true,
+                                    context: context);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(10),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(30.r),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        Assets.uploadImage,
+                                        width: 40.h,
+                                        height: 40.h,
+                                        fit: BoxFit.cover,
                                       ),
-                                      borderRadius:
-                                      BorderRadius.circular(20.r)),
-                                  child:
-                                  Label(text: LocaleKeys.save.localize),
+                                      SizedBox(
+                                        width: 8.w,
+                                      ),
+                                      Text(
+                                        LocaleKeys.uploadImage.localize,
+                                        style: Styles.headerText(
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        if (widget.params.text) _buildCreatePost(),
-                        if (widget.params.picture)
-                          Column(
-                            children: [
-                              if (state.files!=null&&(state.files?.isNotEmpty??false))
-                                _buildMediaCard(photo),
-                              GestureDetector(
-                                onTap: () async {
-      ManageVibration.vibrate();
-                                  await controller.uploadPhoto(
-                                      hasLoading: false,
-                                      isGallery: true,
-                                      context: context);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.all(10),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(30.r),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          Assets.uploadImage,
-                                          width: 40.h,
-                                          height: 40.h,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        SizedBox(
-                                          width: 8.w,
-                                        ),
-                                        Text(
-                                          LocaleKeys.uploadImage.localize,
-                                          style: Styles.headerText(
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                      ],
-                    );
-                  }
-                ),
+                    ],
+                  );
+                }),
               ),
             ),
           ),
@@ -300,15 +298,15 @@ class _CreatePostViewState extends State<CreatePostCompany> {
           padding: const EdgeInsets.all(10),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: state.files?.length == 1 ? 1 : 2,
-            childAspectRatio: state.files?.length == 1 ? 1:1 ,
+            childAspectRatio: state.files?.length == 1 ? 1 : 1,
           ),
           itemCount: state.files!.length < 4 ? state.files!.length : 4,
           itemBuilder: (context, index) => ClickableWidget(
             // Handle image interactions
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (index != 3 || (index == 3 && state.files!.length == 4)) {
-                List<XFile> files = state.files??[];
+                List<XFile> files = state.files ?? [];
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -325,7 +323,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   builder: (context) {
                     List<XFile> files = state.files ?? [];
                     List<String> mediaIds = state.mediaIds ?? [];
-                    List<UploadFileEntity> images = List.generate(files.length, (index) {
+                    List<UploadFileEntity> images =
+                        List.generate(files.length, (index) {
                       return UploadFileEntity(
                         file: files[index],
                         mediaId: index < mediaIds.length ? mediaIds[index] : '',
@@ -334,9 +333,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     return ShowAllImages(
                       onRemoveImage: (UploadFileEntity image) {
                         controller.removePhoto(image.file, image.mediaId);
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                       images: images,
                     );
@@ -349,8 +346,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                 Stack(
                   children: [
                     Container(
-                      margin: const EdgeInsetsDirectional.only(
-                          end: 10, bottom: 10),
+                      margin:
+                          const EdgeInsetsDirectional.only(end: 10, bottom: 10),
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
@@ -383,14 +380,15 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                       ),
                   ],
                 ),
-                if(state.files!.length >4?index<3:index<4)
+                if (state.files!.length > 4 ? index < 3 : index < 4)
                   PositionedDirectional(
                     end: 15,
                     top: 5,
                     child: ClickableWidget(
                       onTap: () {
-      ManageVibration.vibrate();
-                        controller.removePhoto(state.files?[index], state.mediaIds?[index]);
+                        ManageVibration.vibrate();
+                        controller.removePhoto(
+                            state.files?[index], state.mediaIds?[index]);
                       },
                       child: const Icon(
                         Icons.close,

@@ -21,6 +21,8 @@ class ImageFromInternet extends StatelessWidget {
     this.isSvg = false,
     this.fit,
     this.border,
+    this.firstChar,
+    this.charPadding=10,
     this.isMale = true,
   });
   final String image;
@@ -34,6 +36,8 @@ class ImageFromInternet extends StatelessWidget {
   final BoxFit? fit;
   final Border? border;
   final bool isMale;
+  final String? firstChar;
+  final double? charPadding;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -58,33 +62,64 @@ class ImageFromInternet extends StatelessWidget {
                 border: border,
               ),
             ),
-      errorWidget: (context, url, error) => Container(
+      errorWidget: (context, url, error) => SizedBox(
         height: height,
         width: width,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
-          color: AppColors.PRIMARY_COLOR,
-          image: fromFile == true
-              ? DecorationImage(
-                  image: FileImage(File(image)),
+
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
+                color: Colors.transparent,
+                border: Border.all(color:AppColors.LIGHT_GRAY_COLOR),
+                image: fromFile == true
+                    ? DecorationImage(
+                        image: FileImage(File(image)),
+                        fit: BoxFit.fill,
+                      )
+                    : defaultLogo == true
+                        ? DecorationImage(
+                            image: AssetImage(Assets.logo),
+                            fit: BoxFit.fill,
+                          )
+                        : isMale
+                            ?  DecorationImage(
+                  image: AssetImage(Assets.manIcon),
                   fit: BoxFit.fill,
                 )
-              : defaultLogo == true
-                  ? DecorationImage(
-                      image: AssetImage(Assets.logo),
-                      fit: BoxFit.fill,
-                    )
-                  : isMale
-                      ? const DecorationImage(
-                          image: NetworkImage(UIConst.profilePlaceHolder),
-                          fit: BoxFit.fill,
-                        )
-                      : DecorationImage(
-                          image: AssetImage(Assets.womanPlaceHolder),
-                          fit: BoxFit.fill,
-                        ),
+                            : DecorationImage(
+                                image: AssetImage(Assets.womanIcon),
+                                fit: BoxFit.fill,
+                              ),
+              ),
+            ),
+            if(firstChar!=null&&(firstChar?.isNotEmpty??false))PositionedDirectional(
+              bottom: 0,
+              // end: 0,
+              child: Container(
+                width: 60,
+                padding: EdgeInsets.all(charPadding??2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black, width: 0.5),
+                ),
+                alignment: Alignment.center,
+                child: Text(firstChar??'',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+
+                    color: AppColors.PRIMARY_COLOR,
+                    fontSize: 8),),
+              ),
+            )
+
+          ],
         ),
       ),
       placeholder: (context, url) => Container(
@@ -93,7 +128,7 @@ class ImageFromInternet extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
-          color: AppColors.PRIMARY_COLOR,
+          color: Colors.transparent,
           border: border,
           shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           image: DecorationImage(

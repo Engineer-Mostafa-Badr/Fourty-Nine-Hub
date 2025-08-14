@@ -6,13 +6,17 @@ import 'package:fourtyninehub/features/social_media/spot_light/data/models/spotl
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/spotlight_profile_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/upload_confirm_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/upload_request_model.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 
 
 abstract class SpotlightDataSource {
+  // Profile methods
   Future<Either<Failure, SpotlightProfileModel>> getMySpotlightProfile();
   Future<Either<Failure, SpotlightProfileModel>> getSpotlightProfileForUser(String userId);
+  
+  // Media methods
   Future<Either<Failure, PaginatedResponseModel<SpotlightMediaModel>>> getMySpotlightMedia({
     int page = 1,
     int limit = 10,
@@ -22,6 +26,14 @@ abstract class SpotlightDataSource {
     int page = 1,
     int limit = 10,
   });
+  
+  // Friends Stories methods
+  Future<Either<Failure, FriendsStoriesModel>> getFriendsStories({
+    int page = 1,
+    int limit = 50,
+  });
+  
+  // Upload methods
   Future<Either<Failure, UploadRequestModel>> requestUploadMedia({
     required String mediaType,
     required String fileName,
@@ -37,6 +49,8 @@ abstract class SpotlightDataSource {
     required String fileKey,
     String? caption,
   });
+  
+  // Action methods
   Future<Either<Failure, bool>> likeMedia(String mediaId);
   Future<Either<Failure, bool>> unlikeMedia(String mediaId);
   Future<Either<Failure, bool>> deleteMedia(String mediaId);
@@ -133,6 +147,31 @@ class SpotlightDataSourceImpl implements SpotlightDataSource {
             (json) => SpotlightMediaModel.fromJson(json),
           );
           return Right(paginatedResponse);
+        } catch (e) {
+          return Left(UnknownFailure(e.toString()));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, FriendsStoriesModel>> getFriendsStories({
+    int page = 1,
+    int limit = 50,
+  }) async {
+    final result = await api.get(
+      '/api/v1/stories/friends',
+      queryParameters: {
+        'page': page,
+        'limit': limit,
+      },
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        try {
+          final friendsStories = FriendsStoriesModel.fromJson(response['data']);
+          return Right(friendsStories);
         } catch (e) {
           return Left(UnknownFailure(e.toString()));
         }

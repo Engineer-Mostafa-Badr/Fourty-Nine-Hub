@@ -39,7 +39,6 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
 
   Future<void> getAdDetails({required String adId}) async {
     final userId = UserCubit.to.state.data?.id;
-    print("objectUserIdddddddd$userId");
     final response = await _getAdDetailsUseCase(
         GetAdDetailsParams(adId: adId, userId: userId ?? ''));
 

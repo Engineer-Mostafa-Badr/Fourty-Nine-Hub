@@ -167,6 +167,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -237,6 +238,7 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
                     ],
                   ),
                   onTap: () {
+                    ManageVibration.vibrate();
                     setState(() {
                       flag = !flag;
                     });
@@ -295,16 +297,19 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
         ), // Link style
         recognizer: TapGestureRecognizer()
           ..onTapDown = (_) {
+            ManageVibration.vibrate();
             setState(() {
               isLinkPressed = true; // Change style on press
             });
           }
           ..onTapCancel = () {
+            ManageVibration.vibrate();
             setState(() {
               isLinkPressed = false; // Revert style if tap is canceled
             });
           }
           ..onTap = () {
+            ManageVibration.vibrate();
             _launchURL(url); // Launch the URL on tap
             setState(() {
               isLinkPressed = false; // Revert style after tap
