@@ -86,6 +86,79 @@ class _CommentCardState extends State<CommentCard> {
     });
   }
 
+  void handleCommentReact(CommentEntity comment, String newReaction) {
+    String? currentReaction;
+    if (comment.isLikes == true) {
+      currentReaction = 'like';
+    } else if (comment.isWow == true) {
+      currentReaction = 'wow';
+    } else if (comment.isHaha == true) {
+      currentReaction = 'haha';
+    } else if (comment.isLove == true) {
+      currentReaction = 'love';
+    } else if (comment.isSad == true) {
+      currentReaction = 'sad';
+    } else if (comment.isAngry == true) {
+      currentReaction = 'angry';
+    }
+    if (currentReaction == newReaction) {
+      _decrementReactionCount(comment, newReaction);
+      return;
+    }
+    if (currentReaction != null) {
+      _decrementReactionCount(comment, currentReaction);
+    }
+    _incrementReactionCount(comment, newReaction);
+  }
+
+  void _incrementReactionCount(CommentEntity comment, String reaction) {
+    switch (reaction) {
+      case 'like':
+      case 'likes':
+        comment.likesCount = (comment.likesCount ?? 0) + 1;
+        break;
+      case 'wow':
+        comment.wowCount = (comment.wowCount ?? 0) + 1;
+        break;
+      case 'haha':
+        comment.hahaCount = (comment.hahaCount ?? 0) + 1;
+        break;
+      case 'love':
+        comment.loveCount = (comment.loveCount ?? 0) + 1;
+        break;
+      case 'sad':
+        comment.sadCount = (comment.sadCount ?? 0) + 1;
+        break;
+      case 'angry':
+        comment.angryCount = (comment.angryCount ?? 0) + 1;
+        break;
+    }
+  }
+
+  void _decrementReactionCount(CommentEntity comment, String reaction) {
+    switch (reaction) {
+      case 'like':
+      case 'likes':
+        comment.likesCount = (comment.likesCount ?? 0) - 1;
+        break;
+      case 'wow':
+        comment.wowCount = (comment.wowCount ?? 0) - 1;
+        break;
+      case 'haha':
+        comment.hahaCount = (comment.hahaCount ?? 0) - 1;
+        break;
+      case 'love':
+        comment.loveCount = (comment.loveCount ?? 0) - 1;
+        break;
+      case 'sad':
+        comment.sadCount = (comment.sadCount ?? 0) - 1;
+        break;
+      case 'angry':
+        comment.angryCount = (comment.angryCount ?? 0) - 1;
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
@@ -93,7 +166,7 @@ class _CommentCardState extends State<CommentCard> {
     final bool hasMoreReplies = (widget.comment.remainingRepliesCount ?? 0) > 0;
     // Sizing tuned to resemble Facebook comments
     final double mainAvatarSize = 36.w;
-    final double replyAvatarSize = 28.w; // keep in sync with ReplyCard
+// keep in sync with ReplyCard
     final double avatarContentGap = 12.w;
     final double threadX = mainAvatarSize / 2; // center of avatar
     // Length from the replies' start edge to the vertical thread line
@@ -113,8 +186,9 @@ class _CommentCardState extends State<CommentCard> {
       }
     }
 
+    num totalReactions = (widget.comment.likesCount??0) + (widget.comment.hahaCount??0) + (widget.comment.loveCount??0) + (widget.comment.wowCount??0) + (widget.comment.sadCount??0) +(widget.comment.angryCount??0);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 2.h),
       child: Stack(
         key: _stackKey,
         children: [
@@ -128,7 +202,7 @@ class _CommentCardState extends State<CommentCard> {
                 child: Container(
                   width: 2.w,
                   decoration: BoxDecoration(
-                    color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                    color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(1.r),
                   ),
                 ),
@@ -147,7 +221,7 @@ class _CommentCardState extends State<CommentCard> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           spreadRadius: 1,
                           blurRadius: 3,
                           offset: const Offset(0, 1),
@@ -184,11 +258,11 @@ class _CommentCardState extends State<CommentCard> {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                             decoration: BoxDecoration(
-                              color: context.isDarkMode ? AppColors.QUANTITY_COLOR.withOpacity(0.8) : const Color(0xFFF0F2F5),
+                              color: context.isDarkMode ? AppColors.QUANTITY_COLOR.withValues(alpha: 0.8) : const Color(0xFFF0F2F5),
                               borderRadius: BorderRadius.circular(18.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.03),
+                                  color: Colors.black.withValues(alpha: 0.03),
                                   spreadRadius: 1,
                                   blurRadius: 3,
                                   offset: const Offset(0, 1),
@@ -214,11 +288,11 @@ class _CommentCardState extends State<CommentCard> {
                                 ),
                                 SizedBox(height: 4.h),
                                 Text(
-                                  widget.comment.content ?? '',
+                                  widget.comment.content ,
                                   style: TextStyle(
                                     fontSize: 14,
                                     height: 1.3,
-                                    color: context.isDarkMode ? Colors.white.withOpacity(0.9) : const Color(0xFF1C1E21),
+                                    color: context.isDarkMode ? Colors.white.withValues(alpha: 0.9) : const Color(0xFF1C1E21),
                                   ),
                                 ),
                               ],
@@ -247,6 +321,12 @@ class _CommentCardState extends State<CommentCard> {
                                       from: 'comments',
                                       showTitle: true,
                                       showIcon: false,
+                                        handleReaction: (String reaction) {
+                                          handleCommentReact(widget.comment, reaction);
+                                          setState(() {
+
+                                          });
+                                        }
                                     ),
                                     SizedBox(width: 20.w),
                                     GestureDetector(
@@ -284,75 +364,35 @@ class _CommentCardState extends State<CommentCard> {
                                   ),
                                 ],
                               ),
-                              if((widget.comment.sadCount??0)>0)Row(
-                                children: [
-                                  Text('${widget.comment.sadCount??0}',style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                                  ),),
-                                  Image.asset(
-                                      Assets.sad,
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ],
+                              if(totalReactions>0)Text('$totalReactions',style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                              ),),
+                              if((widget.comment.sadCount??0)>0)Image.asset(
+                                  Assets.sad,
+                                width: 20,
+                                height: 20,
                               ),
-                              if((widget.comment.wowCount??0)>0)Row(
-                                children: [
-                                  Text('${widget.comment.wowCount??0}',style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                                  ),),
-                                  Image.asset(
-                                      Assets.wow,
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ],
+                              if((widget.comment.wowCount??0)>0)Image.asset(
+                                  Assets.wow,
+                                width: 20,
+                                height: 20,
                               ),
-                              if((widget.comment.loveCount??0)>0)Row(
-                                children: [
-                                  Text('${widget.comment.loveCount??0}',style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                                  ),),
-                                  Image.asset(
-                                      Assets.heart,
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ],
+                              if((widget.comment.loveCount??0)>0)Image.asset(
+                                  Assets.heart,
+                                width: 20,
+                                height: 20,
                               ),
-                              if((widget.comment.hahaCount??0)>0)Row(
-                                children: [
-                                  Text('${widget.comment.hahaCount??0}',style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                                  ),),
-                                  Image.asset(
-                                      Assets.haha,
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ],
+                              if((widget.comment.hahaCount??0)>0)Image.asset(
+                                  Assets.haha,
+                                width: 20,
+                                height: 20,
                               ),
-                              if((widget.comment.likesCount??0)>0)Row(
-                                children: [
-                                  Text('${widget.comment.likesCount??0}',style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                                  ),),
-                                  Image.asset(
-                                      Assets.like,
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ],
+                              if((widget.comment.likesCount??0)>0)Image.asset(
+                                  Assets.like,
+                                width: 20,
+                                height: 20,
                               ),
                             ],
                           ),
@@ -360,9 +400,10 @@ class _CommentCardState extends State<CommentCard> {
                         // Edit comment input
                         if (widget.comment.edit == true)
                           Container(
-                            margin: EdgeInsets.only(
-                              bottom: 16.h,
-                              left: mainAvatarSize + avatarContentGap + 4.w,
+                            margin: EdgeInsetsDirectional.only(
+                              bottom: 4.h,
+                              top: 4.h,
+                              start:  avatarContentGap + 4.w,
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                             decoration: BoxDecoration(
@@ -376,7 +417,7 @@ class _CommentCardState extends State<CommentCard> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
+                                        color: Colors.black.withValues(alpha: 0.1),
                                         spreadRadius: 1,
                                         blurRadius: 2,
                                       ),
@@ -436,9 +477,10 @@ class _CommentCardState extends State<CommentCard> {
                         // Reply input
                         if (widget.comment.makeReply == true)
                           Container(
-                            margin: EdgeInsets.only(
-                              bottom: 16.h,
-                              left: mainAvatarSize + avatarContentGap + 4.w,
+                            margin: EdgeInsetsDirectional.only(
+                              bottom: 4.h,
+                              top: 4.h,
+                              start: mainAvatarSize + avatarContentGap + 4.w,
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                             decoration: BoxDecoration(
@@ -452,7 +494,7 @@ class _CommentCardState extends State<CommentCard> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
+                                        color: Colors.black.withValues(alpha: 0.1),
                                         spreadRadius: 1,
                                         blurRadius: 2,
                                       ),
@@ -496,7 +538,7 @@ class _CommentCardState extends State<CommentCard> {
                                       var data =
                                           await widget.onAddReply(ReplyOnCommentParams(postId: widget.comment.post, commentId: widget.comment.id, content: replyController.text));
                                       if (data != null) {
-                                        if (widget.comment.replies?.isNotEmpty ?? false) {
+                                        if (widget.comment.replies!=null&&(widget.comment.replies?.isNotEmpty ?? false)) {
                                           (widget.comment.replies ?? []).insert(
                                             0,
                                             CommentEntity(
@@ -530,7 +572,7 @@ class _CommentCardState extends State<CommentCard> {
                                           );
                                         }
                                         replyController.clear();
-                                        if (widget.comment.replies?.isEmpty ?? false) widget.comment.remainingRepliesCount = (widget.comment.remainingRepliesCount ?? 0) + 1;
+                                        if (widget.comment.replies==null ||(widget.comment.replies?.isEmpty ?? false)) widget.comment.remainingRepliesCount = (widget.comment.remainingRepliesCount ?? 0) + 1;
                                         widget.comment.makeReply = false;
                                       }
                                       setState(() {});
@@ -572,7 +614,7 @@ class _CommentCardState extends State<CommentCard> {
                                   height: elbowRadius + connectorStroke,
                                   child: CustomPaint(
                                     painter: _ConnectorPainter(
-                                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withValues(alpha: 0.3),
                                       strokeWidth: connectorStroke,
                                       radius: elbowRadius,
                                       isRtl: Directionality.of(context) == TextDirection.rtl,
@@ -624,7 +666,7 @@ class _CommentCardState extends State<CommentCard> {
                           height: elbowRadius + connectorStroke,
                           child: CustomPaint(
                             painter: _ConnectorPainter(
-                              color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withOpacity(0.3),
+                              color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR.withValues(alpha: 0.3),
                               strokeWidth: connectorStroke,
                               radius: elbowRadius,
                               isRtl: Directionality.of(context) == TextDirection.rtl,
@@ -696,7 +738,7 @@ class _CommentCardState extends State<CommentCard> {
               title: LocaleKeys.typeYourComment.localize,
               subTitle: LocaleKeys.youWillReportComment.localize,
               onTap: () async {
-                ManageVibration.vibrate();
+                // ManageVibration.vibrate();
                 Future.delayed(const Duration(milliseconds: 200), () {
                   bottomSheet(
                       context: context,
@@ -714,7 +756,7 @@ class _CommentCardState extends State<CommentCard> {
               title: LocaleKeys.deleteComment.localize,
               subTitle: LocaleKeys.youWillDeleteComment.localize,
               onTap: () {
-                ManageVibration.vibrate();
+                // ManageVibration.vibrate();
                 widget.onDeleteComment(widget.comment.id);
               },
             ),
@@ -725,7 +767,7 @@ class _CommentCardState extends State<CommentCard> {
               title: LocaleKeys.editComment.localize,
               subTitle: LocaleKeys.youWillEditComment.localize,
               onTap: () {
-                ManageVibration.vibrate();
+                // ManageVibration.vibrate();
                 widget.comment.edit = !widget.comment.edit!;
                 if (widget.comment.makeReply == true) {
                   widget.comment.makeReply = false;
@@ -772,7 +814,7 @@ class _CommentCardState extends State<CommentCard> {
           padding: EdgeInsets.all(8.w),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: (iconColor ?? Theme.of(context).primaryColor).withOpacity(0.1),
+            color: (iconColor ?? Theme.of(context).primaryColor).withValues(alpha: 0.1),
           ),
           child: Icon(
             icon,

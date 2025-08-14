@@ -580,6 +580,7 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels-explore';
+  static const getGlobalReels = '/reels-explore/global-reel';
   static const snap = '/categories/main/snap-filters';
   static const fetchReelsForFollowers =
       '/reels/followers?subCategory=66684135dbb427ee42aa0141';

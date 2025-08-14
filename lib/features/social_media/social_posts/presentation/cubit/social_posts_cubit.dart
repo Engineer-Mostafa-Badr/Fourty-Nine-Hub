@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_f
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_explore_reels_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_global_reels_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/facebook_feed_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/react_entity.dart';
@@ -65,6 +66,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final GetPostCommentsUseCase _getPostCommentsUseCase;
   final PostCommentUseCase _postCommentUseCase;
   final GetExploreReelsUseCase _getExploreReelsUseCase;
+  final GetGlobalReelsUseCase _getGlobalReelsUseCase;
   final DeletePostUseCase _deletePostUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
   final HidePostUseCase _hidePostUseCase;
@@ -120,7 +122,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._deleteFriendUseCase,
     this._getGlobalFeedUseCase,
     this._viewProfileUseCase,
-    this._searchUsersUsecase, this._getExploreReelsUseCase,
+    this._searchUsersUsecase,
+      this._getExploreReelsUseCase,
+      this._getGlobalReelsUseCase,
   ) : super(const SocialPostsState());
 
   final shareFormKey = GlobalKey<FormState>();
@@ -185,18 +189,21 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     //       comment: comment);
     // });
   // }
-
+  bool onLoadingPostDetails = false;
   void loadPostDetails(BuildContext context, String postId,
       {CommentEntity? comment}) async {
+    onLoadingPostDetails=true;
     print("objectCOOOMMM$comment");
     await getPostDetails(postId);
-    // await getPostComments(
-    //     context: context, postId: postId, page: 1, comment: comment);
-    // commentsPagingController.addPageRequestListener((pageKey) {
-    //   print("initStatePageKey : $pageKey");
-    //   getPostComments(
-    //       context: context, postId: postId, comment: comment, page: pageKey);
-    // });
+    loadPostComments=true;
+    postComments.clear();
+    postCommentsPage = 1;
+    hasMorePostCommentsData = true;
+    await getPostComments(
+        context: context, postId: postId, page: 1, comment: comment);
+    loadPostComments=false;
+    onLoadingPostDetails=false;
+    emit(state.copyWith(status: StateStatus.updated));
   }
 
   void onRefresh() async {
@@ -449,6 +456,22 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     );
     return reels;
   }
+  Future<List<Reel>> fetchGlobalReels() async {
+    List<Reel> reels = [];
+    emit(state.copyWith(status: StateStatus.loading));
+    final result = await _getGlobalReelsUseCase(
+        PaginationParams(page: facePage, limit: 4));
+
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+          (data) {
+            reels.addAll(data.data.reels);
+            emit(state.copyWith(status: StateStatus.success));
+      },
+    );
+    return reels;
+  }
   // get global feed posts
   Future<void> getGlobalFeed() async {
     print("hasMoreFaceData $hasMoreFaceData");
@@ -466,6 +489,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {
           // if(facePage.isEven&&(facePage % 3 != 0)){
+              reels = await fetchGlobalReels();
           // reels = await fetchReels();
           // }
 
@@ -1135,12 +1159,14 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) async {
-              print("comment?.replies?.length ${comment?.replies?.length}");
+              if(comment?.replies==null||(comment?.replies?.isEmpty??false)){
+                comment?.replies =[];
+                comment?.replies?.addAll(data);
+              }
               for(var element in data){
                 if(comment?.replies?.any((e)=>e.id==element.id)??false){
                 }else{
                   comment?.replies?.add(element);
-
                 }
               }
               if((comment?.remainingRepliesCount??0)<=4){
@@ -1159,49 +1185,6 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
           emit(state.copyWith(status: StateStatus.initial));
         });
   }
-
-  // Future<void> getCommentReplies(
-  //     {required BuildContext context,
-  //     required String commentId,
-  //     CommentEntity? comment,
-  //     required int page}) async {
-  //   final response = await _getPostCommentRepliesUseCase(
-  //     PostCommentsParams(
-  //       page: page,
-  //       limit: pageSize,
-  //       postId: commentId,
-  //     ),
-  //   );
-  //   response.fold(
-  //       (failure) =>
-  //           emit(state.copyWith(failure: failure, status: StateStatus.error)),
-  //       (data) {
-  //     List<CommentEntity> list =
-  //         data.where((element) => element.id != comment?.id).toList();
-  //     final isLastPage = data.length < pageSize;
-  //     if (page == 1) {
-  //       print("page == 1 $page");
-  //       repliesPagingController.itemList = [];
-  //       if (comment != null) {
-  //         print("objectadadsadsa");
-  //         repliesPagingController.itemList?.insert(0, comment);
-  //       }
-  //     }
-  //     if (isLastPage) {
-  //       print("isLastPage = $isLastPage");
-  //       repliesPagingController.appendLastPage(list);
-  //     } else {
-  //       print("isNotLastPage = $isLastPage");
-  //       final nextPageKey = page + 1;
-  //       repliesPagingController.appendPage(list, nextPageKey);
-  //     }
-  //     emit(
-  //       state.copyWith(
-  //         status: StateStatus.success,
-  //       ),
-  //     );
-  //   });
-  // }
 
   Future<void> deletePost(
       {required BuildContext context, required String postId}) async {

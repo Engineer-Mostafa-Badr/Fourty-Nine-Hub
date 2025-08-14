@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -91,12 +92,12 @@ class _FaceBookViewState extends State<FaceBookView>
               Column(
                 children: [
                   const CreatePostBanner(),
-                  Container(
+                  if(UserCubit.to.isLoggedIn)Container(
                     width: double.infinity,
                     height: 5.h,
                     color: AppColors.LIGHT_GRAY_COLOR,
                   ),
-                  const Stories(),
+                  if(UserCubit.to.isLoggedIn)const Stories(),
                 ],
               ),
               // BuildPeopleYouMayKnow(),
@@ -129,9 +130,13 @@ class _FaceBookViewState extends State<FaceBookView>
                                     itemCount: post.posts?.length ?? 0,
                                     itemBuilder: (context, i) {
                                       return ClickableWidget(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                                            value: serviceLocator<SocialPostsCubit>()
+                                        onTap: ()async{
+                                          ManageVibration.vibrate();
+                                          if(!context.read<UserCubit>().isLoggedIn){
+                                            return;
+                                          }
+                                          var model = await Navigator.push(context, MaterialPageRoute(builder: (_)=>BlocProvider(
+                                            create:(context)=> serviceLocator<SocialPostsCubit>()
                                               ..loadPostDetails(context, post.posts?[i].id??''),
                                             child: PostDetailsPage(
                                               comments: const [],
@@ -179,6 +184,11 @@ class _FaceBookViewState extends State<FaceBookView>
                                               },
                                             ),
                                           )));
+                                          print("modelmodelmodelmodel ${model}");
+                                          if(model!=null)post.posts![i] = model;
+                                          setState(() {
+
+                                          });
                                         },
                                         child: NormalPostScreen(
                                           postEntity: post.posts![i],
