@@ -28,7 +28,6 @@ import '../../../ads_feature/create_ad/domain/entities/categorization_entity.dar
 import '../../../fourty_nine/domain/entities/main_category_entity.dart';
 import '../../domain/entities/sub_category_entity.dart';
 import '../cubit/subcategories_cubit.dart';
-import '../widgets/floating_add_button.dart';
 import '../widgets/search_bar_widget.dart';
 import '../widgets/subcategory_card.dart';
 import 'ads_request_log_view.dart';
@@ -48,6 +47,7 @@ class SubCategoriesView extends StatefulWidget {
 class _SubCategoriesViewState extends State<SubCategoriesView> {
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
+
   // bool isSearchOpen = false;
 
   late Debouncer _debounce;
@@ -353,9 +353,12 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
         },
       ),
       floatingActionButton: isFloatingButtonVisible
-          ? buildFloatingAction(context, () {
-              _showDropdownMenu(context);
-            })
+          ? Container(
+              child: Label(text: 'text'),
+            )
+          // buildFloatingAction(context, () {
+          //         _showDropdownMenu(context);
+          //       })
           : null,
     );
   }

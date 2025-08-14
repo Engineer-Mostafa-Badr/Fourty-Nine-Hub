@@ -22,7 +22,7 @@ class GetUnreadNotificationsCountCubit
     emit(GetUnreadNotificationsCountLoading());
     final response = await getUnreadNotificationsCountUseCase.call();
     response.fold(
-      (Failure failure) {
+      (failure) {
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
