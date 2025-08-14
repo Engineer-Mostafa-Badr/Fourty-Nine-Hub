@@ -339,7 +339,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               'Scrolled to currentIndex $currentIndex'); // <-- Here you can detect scroll
 
                           // Trigger something when scrolling forward
-                          if (index > currentIndex) {
+                          if (index < currentIndex) {
                             print('User scrolled forward');
                             _isScrollingDown = false;
                           } else {
