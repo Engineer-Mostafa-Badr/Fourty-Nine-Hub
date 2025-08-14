@@ -449,6 +449,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       ),
                     )
                   : Container(),
+
               Material(
                 color: Colors.transparent,
                 child: ClickableWidget(
