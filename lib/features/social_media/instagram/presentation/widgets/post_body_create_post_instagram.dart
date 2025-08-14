@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class PostBodyCreatePostInstagram extends StatelessWidget {
   const PostBodyCreatePostInstagram({
     super.key,
@@ -103,8 +105,7 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  context
-                      .read<CreatePostInstagramCubit>()
+                  serviceLocator<CreatePostInstagramCubit>()
                       .changeMultiSelectGalleryPost();
                 },
                 child: BlocBuilder<CreatePostInstagramCubit,
@@ -171,7 +172,7 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () async {
-                  context.read<CreatePostInstagramCubit>().pickImage();
+                  serviceLocator<CreatePostInstagramCubit>().pickImage();
                 },
                 child: Container(
                   width: 30,
@@ -199,9 +200,8 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
             builder: (context, state) {
               return PostBodyCreatePostInstagramGridView(
                 galleryPost:
-                    context.read<CreatePostInstagramCubit>().state.galleryPost,
-                multiSelect: context
-                    .read<CreatePostInstagramCubit>()
+                    serviceLocator<CreatePostInstagramCubit>().state.galleryPost,
+                multiSelect: serviceLocator<CreatePostInstagramCubit>()
                     .state
                     .multiSelectGalleryPost,
                 // selectedMeda:

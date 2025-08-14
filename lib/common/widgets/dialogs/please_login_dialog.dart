@@ -47,7 +47,7 @@ void pleaseLoginDialog(BuildContext context) {
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
                     onPressed: () {
-                      context.go(Routes.LOGIN);
+                      context.push(Routes.FirstLoginScreen);
                     }),
               ),
               const Sizer(),

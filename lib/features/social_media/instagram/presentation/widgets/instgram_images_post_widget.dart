@@ -34,7 +34,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
       return Column(
         children: [
           if (MediaHelper.getMediaTypeFromExtension(
-                  widget.instagramPostEntity.medias[0]) !=
+                  widget.instagramPostEntity.medias[0].url) !=
               MediaType.video)
             HeaderPostInstagram(
               imageUrl: widget.instagramPostEntity.profilePictureUrl ?? '',
@@ -42,7 +42,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                   '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
               userTags: widget.instagramPostEntity.userTags,
               isReel: MediaHelper.getMediaTypeFromExtension(
-                      widget.instagramPostEntity.medias[0]) ==
+                      widget.instagramPostEntity.medias[0].url) ==
                   MediaType.video,
               country: widget.instagramPostEntity.locationName,
               userId: widget.instagramPostEntity.userId,
@@ -70,11 +70,11 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
               itemCount: widget.instagramPostEntity.medias.length,
               itemBuilder: (context, index) {
                 print(MediaHelper.getMediaTypeFromExtension(
-                    widget.instagramPostEntity.medias[index]));
+                    widget.instagramPostEntity.medias[index].url));
                 return Column(
                   children: [
                     if (MediaHelper.getMediaTypeFromExtension(
-                            widget.instagramPostEntity.medias[index]) !=
+                            widget.instagramPostEntity.medias[index].url) !=
                         MediaType.video)
                       HeaderPostInstagram(
                         imageUrl:
@@ -83,7 +83,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                             '${widget.instagramPostEntity.firstName} ${widget.instagramPostEntity.lastName}',
                         userTags: widget.instagramPostEntity.userTags,
                         isReel: MediaHelper.getMediaTypeFromExtension(
-                                widget.instagramPostEntity.medias[index]) ==
+                                widget.instagramPostEntity.medias[index].url) ==
                             MediaType.video,
                         country: widget.instagramPostEntity.locationName,
                         userId: widget.instagramPostEntity.userId,

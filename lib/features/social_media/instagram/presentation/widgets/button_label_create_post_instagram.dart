@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -12,7 +13,7 @@ class ButtonLabelCreatePostInstagram extends StatelessWidget {
     required this.iconAction,
     required this.onPressed,
     required this.labelColor,
-    // required this.onPressedActionButton,
+    this.onPressedActionButton,
   });
 
   final String svgIcon;
@@ -20,7 +21,7 @@ class ButtonLabelCreatePostInstagram extends StatelessWidget {
   final IconData iconAction;
   final void Function()? onPressed;
   final Color? labelColor;
-  // final void Function()? onPressedActionButton;
+  final void Function()? onPressedActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +37,28 @@ class ButtonLabelCreatePostInstagram extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Label(
-                text: title,
-                style: Styles.headerText(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w400,
-                  color: labelColor,
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 500.w),
+                child: Label(
+                  text: title,
+                  overflow: TextOverflow.ellipsis,
+                  style: Styles.headerText(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w400,
+                    color: labelColor,
+                  ),
                 ),
               ),
               const Spacer(),
-              Icon(
-                iconAction,
-                size: 12,
-                color: context.isDarkMode
-                    ? const Color(0xff808080)
-                    : const Color(0x80000000),
+              IconButton(
+                onPressed: onPressedActionButton,
+                icon: Icon(
+                  iconAction,
+                  size: 12,
+                  color: context.isDarkMode
+                      ? const Color(0xff808080)
+                      : const Color(0x80000000),
+                ),
               ),
               // IconButton(
               //   icon: Icon(

@@ -40,7 +40,7 @@ class PostAdInstagram extends StatelessWidget {
           userTags: instagramPostEntity.userTags,
           userName: '${instagramPostEntity.firstName} ${instagramPostEntity.lastName}',
           isReel: MediaHelper.getMediaTypeFromExtension(
-                  instagramPostEntity.medias.first) ==
+                  instagramPostEntity.medias.first.url) ==
               MediaType.video,
           country: instagramPostEntity.locationName,
           // songName: instagramPostEntity,

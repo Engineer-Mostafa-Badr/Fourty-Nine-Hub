@@ -20,6 +20,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class CreatePostInstagramViewBody extends StatelessWidget {
   const CreatePostInstagramViewBody({super.key});
 
@@ -109,14 +111,12 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                 return Column(
                   children: [
                     AppBarCreatePostInstagram(
-                      postIndex: context
-                          .read<CreatePostInstagramCubit>()
+                      postIndex: serviceLocator<CreatePostInstagramCubit>()
                           .postTypes[state.postTypeSelectedIndex]
                           .index,
                       onPressed: () {
                         if (state.postTypeSelectedIndex == 0) {
-                          bool isGalleryPostEmpty = context
-                              .read<CreatePostInstagramCubit>()
+                          bool isGalleryPostEmpty = serviceLocator<CreatePostInstagramCubit>()
                               .state
                               .selectedGalleryPost
                               .isEmpty;
@@ -128,7 +128,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           } else {
                             context.pushNamed(
                               Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                              extra: context.read<CreatePostInstagramCubit>(),
+                              extra: serviceLocator<CreatePostInstagramCubit>(),
                             );
                             // context
                             //     .read<CreatePostInstagramCubit>()
@@ -244,7 +244,7 @@ class _ReelBodyCreatePostInstagramState
 
   @override
   void initState() {
-    context.read<CreatePostInstagramCubit>().fetchVideos(context);
+    serviceLocator<CreatePostInstagramCubit>().fetchVideos(context);
     super.initState();
   }
 
@@ -325,8 +325,7 @@ class _ReelBodyCreatePostInstagramState
                       return InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-                          context
-                              .read<CreatePostInstagramCubit>()
+                          serviceLocator<CreatePostInstagramCubit>()
                               .changeMultiSelectGalleryReel();
                         },
                         child: Material(
@@ -383,14 +382,14 @@ class _ReelBodyCreatePostInstagramState
 
   Widget _buildVideoThumbnail(AssetEntity assets) {
     return GestureDetector(
-      onTap: () => context.read<CreatePostInstagramCubit>().onTapGalleryReel(
+      onTap: () => serviceLocator<CreatePostInstagramCubit>().onTapGalleryReel(
             itemOfGallery: assets,
           ),
       onLongPress: () {
-        context.read<CreatePostInstagramCubit>().onTapGalleryReel(
+        serviceLocator<CreatePostInstagramCubit>().onTapGalleryReel(
               itemOfGallery: assets,
             );
-        context.read<CreatePostInstagramCubit>().changeMultiSelectGalleryReel();
+        serviceLocator<CreatePostInstagramCubit>().changeMultiSelectGalleryReel();
       },
       child: Stack(
         alignment: Alignment.center,
@@ -426,8 +425,7 @@ class _ReelBodyCreatePostInstagramState
           // ),
 
           // مؤشر إذا كان هذا الفيديو هو المحدد حاليًا
-          if (context
-              .read<CreatePostInstagramCubit>()
+          if (serviceLocator<CreatePostInstagramCubit>()
               .state
               .selectedGalleryReels
               .contains(assets))
@@ -442,8 +440,7 @@ class _ReelBodyCreatePostInstagramState
                 ),
               ),
             ),
-          if (context
-              .read<CreatePostInstagramCubit>()
+          if (serviceLocator<CreatePostInstagramCubit>()
               .state
               .multiSelectGalleryReel)
             PositionedDirectional(
@@ -461,8 +458,7 @@ class _ReelBodyCreatePostInstagramState
                         width: 1,
                       ),
                     )),
-                child: context
-                        .read<CreatePostInstagramCubit>()
+                child: serviceLocator<CreatePostInstagramCubit>()
                         .state
                         .selectedGalleryReels
                         .contains(assets)
@@ -476,7 +472,7 @@ class _ReelBodyCreatePostInstagramState
                         alignment: Alignment.center,
                         child: Label(
                           text:
-                              '${context.read<CreatePostInstagramCubit>().state.selectedGalleryReels.indexOf(assets) + 1}',
+                              '${serviceLocator<CreatePostInstagramCubit>().state.selectedGalleryReels.indexOf(assets) + 1}',
                           style: Styles.smallText(
                             fontSize: 32,
                             color: Colors.white,

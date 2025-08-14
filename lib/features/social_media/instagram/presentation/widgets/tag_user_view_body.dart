@@ -10,13 +10,15 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class TagUserViewBody extends StatelessWidget {
   const TagUserViewBody({
     super.key,
-    required this.onTap,
+    required this.onSearchTap,
   });
 
-  final void Function() onTap;
+  final void Function(Offset tapPosition, int imageIndex) onSearchTap;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +32,14 @@ class TagUserViewBody extends StatelessWidget {
                   SizedBox(
                     height: MediaQuery.sizeOf(context).height * 0.4,
                     width: double.infinity,
-                    child: ShowImageTagPeopleWidget(onTap: onTap),
+                    child: ShowImageTagPeopleWidget(
+                      onTap: onSearchTap,
+                    ),
                   ),
-                  const SizedBox(
-                    height: 12,
-                  ),
+                  const SizedBox(height: 12),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                    },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -58,119 +61,68 @@ class TagUserViewBody extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: TextField(
-                  //     decoration: InputDecoration(
-                  //       labelText: LocaleKeys.searchForAUser.localize,
-                  //       border: const OutlineInputBorder(),
-                  //     ),
-                  //     onChanged: (value) {
-                  //       // context.read<TagUsersCubit>().searchUsersTag(value);
-                  //     },
-                  //   ),
-                  // ),
-                  // if (state.status.isLoading)
-                  //   const CustomLoading()
-                  // else if (state.status.isError)
-                  //   Label(
-                  //     text: getFailureMessage(state.failure!, context),
-                  //     style: Styles.headerText(),
-                  //   )
-                  // else if (state.status.isSuccess)
-                  //     Expanded(
-                  //       child: ListView.builder(
-                  //         itemCount: state
-                  //             .users.length, // Replace with the actual number of users
-                  //         itemBuilder: (context, index) {
-                  //           final user = state.users[index];
-                  //           return ListTile(
-                  //             leading: ImageFromInternet(
-                  //               image: user.imageUrl,
-                  //               isCircle: true,
-                  //               height: 40,
-                  //               width: 40,
-                  //               fit: BoxFit.cover,
-                  //             ),
-                  //             title:
-                  //             Text(user.username), // Replace with actual user data
-                  //             trailing: const Icon(
-                  //               Icons.add_box_outlined,
-                  //               color: AppColors.c1B2781,
-                  //             ),
-                  //             onTap: () {
-                  //               log('user tapped ----------------------------------------------------------------');
-                  //               log(user.id);
-                  //             },
-                  //           );
-                  //         },
-                  //       ),
-                  //     ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
-            context.read<CreatePostInstagramCubit>().state.usersTag.isEmpty
+            serviceLocator<CreatePostInstagramCubit>().state.usersTag.isEmpty
                 ? SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 80),
-                      child: Center(
-                        child: Label(
-                          text: LocaleKeys.tapPhotoToTagPeople.localize,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 80),
+                child: Center(
+                  child: Label(
+                    text: LocaleKeys.tapPhotoToTagPeople.localize,
+                    style: Styles.mediumText(
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : Colors.black.withValues(alpha: 128),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            )
+                : BlocBuilder<CreatePostInstagramCubit,
+                CreatePostInstagramState>(
+              buildWhen: (previous, current) =>
+              previous.usersTag != current.usersTag,
+              builder: (context, state) {
+                return SliverList.builder(
+                    itemCount: serviceLocator<CreatePostInstagramCubit>()
+                        .state
+                        .usersTag
+                        .length,
+                    itemBuilder: (context, index) {
+                      final user = serviceLocator<CreatePostInstagramCubit>()
+                          .state
+                          .usersTag[index];
+                      return ListTile(
+                        leading: ImageFromInternet(
+                          image: user.imageUrl,
+                          isCircle: true,
+                          height: 40,
+                          width: 40,
+                        ),
+                        title: Label(
+                          text: user.username,
                           style: Styles.mediumText(
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : Colors.black.withValues(alpha: 128),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
+                            height: 1.29,
                           ),
                         ),
-                      ),
-                    ),
-                  )
-                : BlocBuilder<CreatePostInstagramCubit,
-                    CreatePostInstagramState>(
-                    buildWhen: (previous, current) =>
-                        previous.usersTag != current.usersTag,
-                    builder: (context, state) {
-                      return SliverList.builder(
-                          itemCount: context
-                              .read<CreatePostInstagramCubit>()
-                              .state
-                              .usersTag
-                              .length,
-                          itemBuilder: (context, index) {
-                            final user = context
-                                .read<CreatePostInstagramCubit>()
-                                .state
-                                .usersTag[index];
-                            return ListTile(
-                              leading: ImageFromInternet(
-                                image: user.imageUrl,
-                                isCircle: true,
-                                height: 40,
-                                width: 40,
-                              ),
-                              title: Label(
-                                text: user.username,
-                                style: Styles.mediumText(
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.29,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                  onPressed: () {
-                                    context
-                                        .read<CreatePostInstagramCubit>()
-                                        .removeUserTag(user);
-                                  },
-                                  icon: const Icon(Icons.close_rounded)),
-                            );
-                          });
-                    },
-                  ),
+                        subtitle: user.imageIndex != null
+                            ? context.isArabic? Text('صورة ${user.imageIndex! + 1}') : Text('Image ${user.imageIndex! + 1}')
+                            : null,
+                        trailing: IconButton(
+                            onPressed: () {
+                              serviceLocator<CreatePostInstagramCubit>()
+                                  .removeUserTag(user);
+                            },
+                            icon: const Icon(Icons.close_rounded)),
+                      );
+                    });
+              },
+            ),
           ],
         );
       },

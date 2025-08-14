@@ -195,6 +195,9 @@ class _CustomReserveRideBottomSheetState
                                                       style: TextStyle(
                                                         fontSize: 20,
                                                         fontWeight: FontWeight.bold,
+                                                        color: selectedGridIndex == index
+                                                            ? Colors.white
+                                                            : Colors.black,
                                                       ),
                                                     ),
                                                     if(index == 1)
@@ -208,13 +211,17 @@ class _CustomReserveRideBottomSheetState
                                                     if(index == 3)
                                                       SizedBox(width: 6,),
                                                     if(index == 3)
-                                                    Icon(Icons.autorenew, size: 20,),
+                                                    Icon(Icons.autorenew, size: 20,color: selectedGridIndex == index
+                                                        ? Colors.white
+                                                        : Colors.black,),
                                                   ],
                                                 ),
                                               ),
                                                Text(
                                                 "${FormatNumbers().convertNumberToLocalizedString(price.toString(), isArabic: context.isArabic)} ${context.isArabic ? "ج.م" : "EGP"}",
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(fontWeight: FontWeight.bold, color: selectedGridIndex == index
+                                                    ? context.isDarkMode? Colors.white : Colors.black
+                                                    : Colors.black,),
                                               ),
                                             ],
                                           ),

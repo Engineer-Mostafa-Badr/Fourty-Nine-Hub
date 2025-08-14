@@ -15,6 +15,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class CreatePostDetailsInstagramScreen extends StatelessWidget {
   CreatePostDetailsInstagramScreen({super.key, required this.images});
   final List<File> images;
@@ -212,8 +214,7 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            context
-                                .read<CreatePostInstagramCubit>()
+                            serviceLocator<CreatePostInstagramCubit>()
                                 .create(content: content.text, images: images);
                           },
                           child: Container(

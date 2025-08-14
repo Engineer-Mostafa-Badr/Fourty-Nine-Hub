@@ -2,6 +2,16 @@ import 'package:fourtyninehub/features/social_media/instagram/data/models/commen
 
 import 'last_like_enyity.dart';
 
+class InstagramPostMediaUrlEntity{
+  final String url;
+  final String id;
+
+  InstagramPostMediaUrlEntity({
+    required this.url,
+    required this.id,
+  });
+}
+
 class InstagramPostEntity {
   final String id;
   final String content;
@@ -12,7 +22,7 @@ class InstagramPostEntity {
   final String? locationName;
   final String? profilePictureUrl;
   final bool verifiedBadge;
-  final List<String> medias;
+  final List<InstagramPostMediaUrlEntity> medias;
   final List<CommentInstagramModel> comments;
   final List<InstagramPostUserTagEntity> userTags;
   final List<String> hashtags;
@@ -64,7 +74,7 @@ class InstagramPostEntity {
     String? locationName,
     String? profilePictureUrl,
     bool? verifiedBadge,
-    List<String>? medias,
+    List<InstagramPostMediaUrlEntity>? medias,
     List<CommentInstagramModel>? comments,
     List<InstagramPostUserTagEntity>? userTags,
     List<String>? hashtags,

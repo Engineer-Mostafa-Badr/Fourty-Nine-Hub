@@ -7,6 +7,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class PostBodyCreatePostInstagramGridView extends StatelessWidget {
   const PostBodyCreatePostInstagramGridView({
     super.key,
@@ -34,16 +36,14 @@ class PostBodyCreatePostInstagramGridView extends StatelessWidget {
           itemBuilder: (context, index) {
             // إذا وصلنا للعنصر الأخير وهناك المزيد، نعرض مؤشر تحميل ونحمل المزيد
             if (index == state.galleryPost.length && state.hasMoreImages) {
-              context
-                  .read<CreatePostInstagramCubit>()
+              serviceLocator<CreatePostInstagramCubit>()
                   .loadMoreImages(); // استدعاء دالة تحميل المزيد
               return const Center(child: CustomCircularProgressIndicator());
             }
             if (index < state.galleryPost.length) {
               return GestureDetector(
                 onTap: () {
-                  context
-                      .read<CreatePostInstagramCubit>()
+                  serviceLocator<CreatePostInstagramCubit>()
                       .onTapGalleryPost(itemOfGallery: galleryPost[index]);
                 },
                 child:

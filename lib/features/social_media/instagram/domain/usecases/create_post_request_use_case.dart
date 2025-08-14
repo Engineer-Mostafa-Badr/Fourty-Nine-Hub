@@ -18,12 +18,14 @@ class CreatePostRequestInstagramParams {
   final List<MediaCreatePostInstagramParams> media;
   final LocationCreatePostInstagramParams? location;
   final List<String>? userTagIds;
+  final List<Map<String, dynamic>>? userTags; // إضافة التاجز مع المواقع
 
   CreatePostRequestInstagramParams({
     required this.content,
     required this.media,
     this.location,
     this.userTagIds,
+    this.userTags,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,6 +34,7 @@ class CreatePostRequestInstagramParams {
       'media': media.map((e) => e.toJson()).toList(),
       if (location != null) 'location': location!.toJson(),
       if (userTagIds != null) 'userTagIds': userTagIds,
+      if (userTags != null) 'userTags': userTags,
     };
   }
 }

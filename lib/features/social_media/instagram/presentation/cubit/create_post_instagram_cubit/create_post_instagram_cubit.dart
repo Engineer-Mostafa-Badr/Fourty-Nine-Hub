@@ -19,7 +19,7 @@ part 'create_post_instagram_state.dart';
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   CreatePostInstagramCubit(
       this.createPostInstagramUseCase, this.postConfirmWebhookUseCase)
-      : super(const CreatePostInstagramState());
+      : super( CreatePostInstagramState());
 
   final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
   final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
@@ -156,13 +156,91 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     return 0;
   }
 
+  // إضافة هذه الطرق إلى CreatePostInstagramCubit
+
+  // void addUserTag(UserTagEntity user, {Offset? position, int? imageIndex}) {
+  //   final updatedTags = List<UserTagEntity>.from(state.usersTag);
+  //
+  //   // التحقق من عدم وجود المستخدم مسبقاً
+  //   final alreadyExists = updatedTags.any((u) => u.id == user.id);
+  //
+  //   if (!alreadyExists) {
+  //     final userWithPositionAndIndex = user.copyWith(
+  //       position: position != null
+  //           ? TagPosition(x: position.dx, y: position.dy)
+  //           : null,
+  //       imageIndex: imageIndex,
+  //     );
+  //
+  //     updatedTags.add(userWithPositionAndIndex);
+  //     emit(state.copyWith(usersTag: updatedTags));
+  //   }
+  // }
+
+  void removeUserTag(UserTagEntity user) {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag)
+      ..removeWhere((u) => u.id == user.id);
+    emit(state.copyWith(usersTag: updatedTags));
+  }
+
+  void removeAllUserTag() {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag)..clear();
+    emit(state.copyWith(usersTag: updatedTags));
+  }
+
+  // تحديث دالة createPost لتشمل معلومات التاج
+  // أضف هذه الطريقة إلى CreatePostInstagramCubit
+
+  void addUserTag(UserTagEntity user, {Offset? position, int? imageIndex}) {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag);
+
+    // التحقق من عدم وجود المستخدم مسبقاً
+    final alreadyExists = updatedTags.any((u) => u.id == user.id);
+
+    if (!alreadyExists) {
+      print('Adding user tag with position: $position, imageIndex: $imageIndex');
+
+      final userWithPositionAndIndex = user.copyWith(
+        position: position != null
+            ? TagPosition(x: position.dx, y: position.dy)
+            : null,
+        imageIndex: imageIndex,
+      );
+
+      updatedTags.add(userWithPositionAndIndex);
+      print('Total tags after adding: ${updatedTags.length}');
+
+      emit(state.copyWith(usersTag: updatedTags));
+    } else {
+      print('User already exists in tags');
+    }
+  }
+
+// تحديث دالة createPost
   Future<void> createPost({required String caption}) async {
-    List<AssetEntity> uploadMedia=[];
-    if(state.selectedGalleryPost.isNotEmpty){
+    List<AssetEntity> uploadMedia = [];
+    if (state.selectedGalleryPost.isNotEmpty) {
       uploadMedia.addAll(state.selectedGalleryPost);
-    }else if(state.selectedGalleryReels.isNotEmpty){
+    } else if (state.selectedGalleryReels.isNotEmpty) {
       uploadMedia.addAll(state.selectedGalleryReels);
     }
+
+    // تحضير بيانات التاجز
+    List<Map<String, dynamic>> userTags = state.usersTag
+        .where((user) => user.position != null && user.imageIndex != null)
+        .map((user) => {
+      'id': user.id,
+      'imageId': (user.imageIndex! + 1).toString() ,
+      'position': {
+        'x': user.position!.x,
+        'y': user.position!.y,
+      },
+    })
+        .toList();
+
+    print('Sending userTags: $userTags');
+    print('Total userTags count: ${userTags.length}');
+
     await createRequestPost(
       CreatePostRequestInstagramParams(
         content: caption,
@@ -170,12 +248,14 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
           uploadMedia.map((AssetEntity e) async {
             final num size = await _getAssetFileSize(e);
             return MediaCreatePostInstagramParams(
-              itemId: (uploadMedia.indexOf(e)+1).toString(),
+              itemId: (uploadMedia.indexOf(e) + 1 ).toString(),
               type: e.mimeType ?? '',
               size: size,
             );
           }).toList(),
         ),
+        userTagIds: state.usersTag.map((user) => user.id).toList(),
+        userTags: userTags, // إضافة التاجز مع المواقع
       ),
       await Future.wait(
         uploadMedia.map((AssetEntity e) async {
@@ -285,36 +365,39 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   void addLocation(LocationInstagramEntity location) {
     emit(state.copyWith(
       location: location,
+      clearLocation: false,
     ));
   }
 
   void removeLocation() {
+    state.location = null;
     emit(state.copyWith(
-      location: null,
+      clearLocation: true,
+      status: CreatePostInstagramStates.success,
     ));
   }
 
-  void addUserTag(UserTagEntity user) {
-    final updatedTags = List<UserTagEntity>.from(state.usersTag);
-
-    final alreadyExists = updatedTags.any((u) => u.id == user.id);
-
-    if (!alreadyExists) {
-      updatedTags.add(user);
-      emit(state.copyWith(usersTag: updatedTags));
-    }
-  }
-
-  void removeUserTag(UserTagEntity user) {
-    final updatedTags = List<UserTagEntity>.from(state.usersTag)
-      ..removeWhere((u) => u.id == user.id);
-    emit(state.copyWith(usersTag: updatedTags));
-  }
-
-  void removeAllUserTag() {
-    final updatedTags = List<UserTagEntity>.from(state.usersTag)..clear();
-    emit(state.copyWith(usersTag: updatedTags));
-  }
+  // void addUserTag(UserTagEntity user) {
+  //   final updatedTags = List<UserTagEntity>.from(state.usersTag);
+  //
+  //   final alreadyExists = updatedTags.any((u) => u.id == user.id);
+  //
+  //   if (!alreadyExists) {
+  //     updatedTags.add(user);
+  //     emit(state.copyWith(usersTag: updatedTags));
+  //   }
+  // }
+  //
+  // void removeUserTag(UserTagEntity user) {
+  //   final updatedTags = List<UserTagEntity>.from(state.usersTag)
+  //     ..removeWhere((u) => u.id == user.id);
+  //   emit(state.copyWith(usersTag: updatedTags));
+  // }
+  //
+  // void removeAllUserTag() {
+  //   final updatedTags = List<UserTagEntity>.from(state.usersTag)..clear();
+  //   emit(state.copyWith(usersTag: updatedTags));
+  // }
 
   Future<void> pickImage() async {
     var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);

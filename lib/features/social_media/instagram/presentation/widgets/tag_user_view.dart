@@ -18,6 +18,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class TagUserView extends StatefulWidget {
   const TagUserView({super.key});
 
@@ -31,6 +33,11 @@ class _TagUserViewState extends State<TagUserView> {
   late final FocusNode _focusNode;
   final Debouncer _debouncer = Debouncer();
 
+  // متغيرات لحفظ معلومات الضغط
+  Offset? pendingTapPosition;
+  int? pendingImageIndex;
+  bool isSearchClicked = false;
+
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(_onScroll);
@@ -42,7 +49,7 @@ class _TagUserViewState extends State<TagUserView> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<TagUsersCubit>().searchUsersTag(searchController.text);
+      serviceLocator<TagUsersCubit>().searchUsersTag(searchController.text);
     }
   }
 
@@ -55,282 +62,210 @@ class _TagUserViewState extends State<TagUserView> {
 
   void _handleTextFieldChange(String value) {
     _debouncer.run(() {
-      context.read<TagUsersCubit>().loadInitialData(value);
+      serviceLocator<TagUsersCubit>().loadInitialData(value);
     });
   }
 
-  bool isSearchClicked = false;
+  // دالة لحفظ معلومات الضغط
+  void _handleImageTap(Offset tapPosition, int imageIndex) {
+    setState(() {
+      pendingTapPosition = tapPosition;
+      pendingImageIndex = imageIndex;
+      isSearchClicked = true;
+    });
+    _focusNode.requestFocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TagUsersCubit, TagUsersState>(
       builder: (context, state) {
         return CustomScaffold(
-          // appBar: AppBar(
-          //   title: isSearchClicked
-          //       ? Container(
-          //           height: 40,
-          //           decoration: BoxDecoration(
-          //             color: const Color(0xffF0F0F0),
-          //             borderRadius: BorderRadius.circular(6),
-          //           ),
-          //           child: TextField(
-          //             controller: searchController,
-          //             focusNode: _focusNode,
-          //             onChanged: (value) {
-          //               _handleTextFieldChange(value);
-          //             },
-          //             decoration: InputDecoration(
-          //               contentPadding:
-          //                   const EdgeInsets.fromLTRB(16, 20, 16, 12),
-          //               border: InputBorder.none,
-          //               focusedBorder: InputBorder.none,
-          //               enabledBorder: InputBorder.none,
-          //               disabledBorder: InputBorder.none,
-          //               errorBorder: InputBorder.none,
-          //               focusedErrorBorder: InputBorder.none,
-          //               prefixIcon: const Icon(
-          //                 Icons.search_rounded,
-          //                 color: Color(0x80000000),
-          //               ),
-          //               suffixIcon: IconButton(
-          //                   onPressed: () {
-          //                     isSearchClicked = false;
-          //                     _focusNode.unfocus();
-          //                     setState(() {});
-          //                   },
-          //                   icon: const Icon(Icons.close)),
-          //               hintText: LocaleKeys.searchForAUser.localize,
-          //               hintStyle: Styles.mediumText(
-          //                 color: Colors.black.withValues(alpha: 128),
-          //                 fontSize: 32,
-          //               ),
-          //             ),
-          //           ),
-          //         )
-          //       : Label(
-          //           text: LocaleKeys.tagPeople.localize,
-          //           style: Styles.headerText(),
-          //         ),
-          //   leading: isSearchClicked
-          //       ? Container()
-          //       : IconButton(
-          //           onPressed: () {
-          //             Navigator.pop(context);
-          //           },
-          //           icon: const Icon(Icons.close_rounded),
-          //         ),
-          //   actions: isSearchClicked
-          //       ? null
-          //       : [
-          //           IconButton(
-          //             onPressed: () {},
-          //             icon: const Icon(
-          //               Icons.check,
-          //               color: Color(0xffFF3308),
-          //             ),
-          //           ),
-          //         ],
-          // ),
           body: SafeArea(
             child: Column(
               children: [
                 isSearchClicked
                     ? Container(
-                        height: 40,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        // decoration: BoxDecoration(
-                        //   color: context.isDarkMode
-                        //       ? Colors.grey[700]
-                        //       : const Color(0xffF0F0F0),
-                        //   borderRadius: BorderRadius.circular(6),
-                        // ),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
+                  height: 40,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: TextField(
+                    controller: searchController,
+                    focusNode: _focusNode,
+                    onChanged: (value) {
+                      _handleTextFieldChange(value);
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: context.isDarkMode
+                          ? const Color(0xFF1B1B1B)
+                          : const Color(0xffF0F0F0),
+                      contentPadding:
+                      const EdgeInsets.symmetric(vertical: 11),
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      prefixIcon: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: Center(
+                          child: SvgPicture.asset(context.isDarkMode
+                              ? Assets.instagramSearchIconDark
+                              : Assets.instagramSearchIcon),
                         ),
-                        child: TextField(
-                          controller: searchController,
-                          focusNode: _focusNode,
-                          onChanged: (value) {
-                            _handleTextFieldChange(value);
-                          },
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: context.isDarkMode
-                                ? const Color(0xFF1B1B1B)
-                                : const Color(0xffF0F0F0),
-                            // contentPadding:
-                            //     const EdgeInsets.fromLTRB(16, 20, 16, 12),
-                            contentPadding:
-                                const EdgeInsets.symmetric(vertical: 11),
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            focusedErrorBorder: InputBorder.none,
-                            // prefixIcon: const Icon(
-                            //   Icons.search_rounded,
-                            //   color: Color(0x80000000),
-                            // ),
-                            prefixIcon: SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: Center(
-                                child: SvgPicture.asset(context.isDarkMode
-                                    ? Assets.instagramSearchIconDark
-                                    : Assets.instagramSearchIcon),
-                              ),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                isSearchClicked = false;
-                                _focusNode.unfocus();
-                                searchController.clear();
-                                setState(() {});
-                              },
-                              icon: Icon(
-                                Icons.close,
-                                color: context.isDarkMode
-                                    ? const Color(0x80FFFFFF)
-                                    : const Color(0x80000000),
-                              ),
-                            ),
-                            hintText: LocaleKeys.searchForAUser.localize,
-                            hintStyle: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? const Color(0x80FFFFFF)
-                                  : const Color(0x80000000),
-                            ),
-                            // hintStyle: Styles.mediumText(
-                            //   color: Colors.black.withValues(alpha: 128),
-                            //   fontSize: 32,
-                            // ),
-                          ),
-                        ),
-                      )
-                    : Row(
-                        children: [
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.close_rounded),
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          ),
-                          Label(
-                            text: LocaleKeys.tagPeople.localize,
-                            style: Styles.headerText(),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.check,
-                              color: Color(0xffFF3308),
-                            ),
-                          ),
-                        ],
                       ),
-                const SizedBox(
-                  height: 12,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          isSearchClicked = false;
+                          _focusNode.unfocus();
+                          searchController.clear();
+                          // إعادة تعيين معلومات الضغط
+                          pendingTapPosition = null;
+                          pendingImageIndex = null;
+                          setState(() {});
+                        },
+                        icon: Icon(
+                          Icons.close,
+                          color: context.isDarkMode
+                              ? const Color(0x80FFFFFF)
+                              : const Color(0x80000000),
+                        ),
+                      ),
+                      hintText: LocaleKeys.searchForAUser.localize,
+                      hintStyle: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? const Color(0x80FFFFFF)
+                            : const Color(0x80000000),
+                      ),
+                    ),
+                  ),
+                )
+                    : Row(
+                  children: [
+                    const SizedBox(width: 5),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                    const SizedBox(width: 24),
+                    Label(
+                      text: LocaleKeys.tagPeople.localize,
+                      style: Styles.headerText(),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.check,
+                        color: Color(0xffFF3308),
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 12),
                 searchController.text.isNotEmpty
                     ? Expanded(
-                        child: Builder(
-                          builder: (context) {
-                            // if (state.status.isInitial) {
-                            //   return Container();
-                            // }
-                            if (state.status.isLoading ||
-                                state.status.isInitial) {
-                              return const CustomLoading();
-                            }
-                            if (state.status.isError) {
-                              return CustomError(
-                                errMessage:
-                                    getFailureMessage(state.failure!, context),
+                  child: Builder(
+                    builder: (context) {
+                      if (state.status.isLoading ||
+                          state.status.isInitial) {
+                        return const CustomLoading();
+                      }
+                      if (state.status.isError) {
+                        return CustomError(
+                          errMessage:
+                          getFailureMessage(state.failure!, context),
+                        );
+                      }
+                      return ListView.builder(
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: serviceLocator<TagUsersCubit>()
+                            .users
+                            .length +
+                            (serviceLocator<TagUsersCubit>().isLoadingMore
+                                ? 1
+                                : 0),
+                        itemBuilder: (context, index) {
+                          if (index ==
+                              serviceLocator<TagUsersCubit>()
+                                  .users
+                                  .length) {
+                            return const Center(
+                                child: CustomCircularProgressIndicator());
+                          }
+                          final user =
+                          serviceLocator<TagUsersCubit>().users[index];
+                          return BlocBuilder<CreatePostInstagramCubit,
+                              CreatePostInstagramState>(
+                            buildWhen: (previous, current) =>
+                            previous.usersTag != current.usersTag,
+                            builder: (context, state) {
+                              return ListTile(
+                                leading: ImageFromInternet(
+                                  image: user.imageUrl,
+                                  isCircle: true,
+                                  height: 40,
+                                  width: 40,
+                                  fit: BoxFit.cover,
+                                ),
+                                title: Label(
+                                  text: user.username,
+                                  style: Styles.mediumText(
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.29,
+                                  ),
+                                ),
+                                trailing: serviceLocator<CreatePostInstagramCubit>()
+                                    .state
+                                    .usersTag
+                                    .any((u) => u.id == user.id)
+                                    ? const Icon(
+                                  Icons
+                                      .check_circle_outline_rounded,
+                                  color: Colors.green,
+                                )
+                                    : null,
+                                onTap: () {
+                                  // إضافة المستخدم مع معلومات الضغط المحفوظة
+                                  print('Adding user tag:');
+                                  print('User ID: ${user.id}');
+                                  print('Position: $pendingTapPosition');
+                                  print('Image Index: $pendingImageIndex');
+
+                                  serviceLocator<CreatePostInstagramCubit>()
+                                      .addUserTag(
+                                    user,
+                                    position: pendingTapPosition,
+                                    imageIndex: pendingImageIndex,
+                                  );
+
+                                  // العودة للشاشة السابقة
+                                  Navigator.pop(context);
+                                },
                               );
-                            }
-                            return ListView.builder(
-                              controller: _scrollController,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: context
-                                      .read<TagUsersCubit>()
-                                      .users
-                                      .length +
-                                  (context.read<TagUsersCubit>().isLoadingMore
-                                      ? 1
-                                      : 0),
-                              itemBuilder: (context, index) {
-                                if (index ==
-                                    context
-                                        .read<TagUsersCubit>()
-                                        .users
-                                        .length) {
-                                  return const Center(
-                                      child: CustomCircularProgressIndicator());
-                                }
-                                final user =
-                                    context.read<TagUsersCubit>().users[index];
-                                return BlocBuilder<CreatePostInstagramCubit,
-                                    CreatePostInstagramState>(
-                                  buildWhen: (previous, current) =>
-                                      previous.usersTag != current.usersTag,
-                                  builder: (context, state) {
-                                    return ListTile(
-                                      leading: ImageFromInternet(
-                                        image: user.imageUrl,
-                                        isCircle: true,
-                                        height: 40,
-                                        width: 40,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      title: Label(
-                                        text: user.username,
-                                        style: Styles.mediumText(
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.29,
-                                        ),
-                                      ),
-                                      trailing: context
-                                              .read<CreatePostInstagramCubit>()
-                                              .state
-                                              .usersTag
-                                              .any((u) => u.id == user.id)
-                                          ? const Icon(
-                                              Icons
-                                                  .check_circle_outline_rounded,
-                                              color: Colors.green,
-                                            )
-                                          : null,
-                                      onTap: () {
-                                        context
-                                            .read<CreatePostInstagramCubit>()
-                                            .addUserTag(user);
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      )
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                )
                     : Expanded(
-                        child: TagUserViewBody(
-                          onTap: () {
-                            _focusNode.requestFocus();
-                            isSearchClicked = true;
-                            setState(() {});
-                          },
-                        ),
-                      ),
+                  child: TagUserViewBody(
+                    onSearchTap: _handleImageTap,
+                  ),
+                ),
               ],
             ),
           ),

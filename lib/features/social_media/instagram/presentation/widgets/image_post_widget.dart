@@ -19,23 +19,23 @@ class ImagePostWidget extends StatelessWidget {
 
   bool _mediaIsVideo() =>
       (MediaHelper.getMediaTypeFromExtension(
-          instagramPostEntity.medias[currentIndex])) ==
+          instagramPostEntity.medias[currentIndex].url)) ==
       MediaType.video;
 
   @override
   Widget build(BuildContext context) {
     if (_mediaIsVideo()) {
       return AutoplayVideoWidget(
-        videoUrl: instagramPostEntity.medias[currentIndex],
+        videoUrl: instagramPostEntity.medias[currentIndex].url,
         videoId:
-            instagramPostEntity.medias[currentIndex], // استخدام رابط الفيديو كمعرّف
+            instagramPostEntity.medias[currentIndex].url, // استخدام رابط الفيديو كمعرّف
         showControls: true,
         isReel: _mediaIsVideo(),
         instagramPostEntity: instagramPostEntity,
       );
     }
     return ImageFromInternet(
-      image: instagramPostEntity.medias[currentIndex],
+      image: instagramPostEntity.medias[currentIndex].url,
       height: 400,
       width: double.infinity,
     );
