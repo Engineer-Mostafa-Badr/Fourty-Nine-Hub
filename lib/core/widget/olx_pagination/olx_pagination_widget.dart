@@ -122,6 +122,6 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
             ),
           ),
       ],
-    );
+    ));
   }
 }
