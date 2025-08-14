@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/error/custom_error.dart';
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/extensions/context_extension.dart';
-import '../../../../../core/extensions/string_extension.dart';
-import '../../../../../core/loading/custom_loading.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/messages/messages.dart';
-import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'app_bar_create_post_instagram.dart';
-import 'floating_action_button_create_post_instagram.dart';
-import 'post_body_create_post_instagram.dart';
-import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/error/custom_error.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/app_bar_create_post_instagram.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/floating_action_button_create_post_instagram.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import '../../../../../helpers/manage_vibration.dart';
+
+import '../../../../../service_locator/service_locator.dart';
 
 class CreatePostInstagramViewBody extends StatelessWidget {
   const CreatePostInstagramViewBody({super.key});
@@ -110,15 +111,12 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                 return Column(
                   children: [
                     AppBarCreatePostInstagram(
-                      postIndex: context
-                          .read<CreatePostInstagramCubit>()
+                      postIndex: serviceLocator<CreatePostInstagramCubit>()
                           .postTypes[state.postTypeSelectedIndex]
                           .index,
                       onPressed: () {
-      ManageVibration.vibrate();
                         if (state.postTypeSelectedIndex == 0) {
-                          bool isGalleryPostEmpty = context
-                              .read<CreatePostInstagramCubit>()
+                          bool isGalleryPostEmpty = serviceLocator<CreatePostInstagramCubit>()
                               .state
                               .selectedGalleryPost
                               .isEmpty;
@@ -130,7 +128,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           } else {
                             context.pushNamed(
                               Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                              extra: context.read<CreatePostInstagramCubit>(),
+                              extra: serviceLocator<CreatePostInstagramCubit>(),
                             );
                             // context
                             //     .read<CreatePostInstagramCubit>()
@@ -246,7 +244,7 @@ class _ReelBodyCreatePostInstagramState
 
   @override
   void initState() {
-    context.read<CreatePostInstagramCubit>().fetchVideos(context);
+    serviceLocator<CreatePostInstagramCubit>().fetchVideos(context);
     super.initState();
   }
 
@@ -327,9 +325,7 @@ class _ReelBodyCreatePostInstagramState
                       return InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-      ManageVibration.vibrate();
-                          context
-                              .read<CreatePostInstagramCubit>()
+                          serviceLocator<CreatePostInstagramCubit>()
                               .changeMultiSelectGalleryReel();
                         },
                         child: Material(
@@ -386,14 +382,14 @@ class _ReelBodyCreatePostInstagramState
 
   Widget _buildVideoThumbnail(AssetEntity assets) {
     return GestureDetector(
-      onTap: () => context.read<CreatePostInstagramCubit>().onTapGalleryReel(
+      onTap: () => serviceLocator<CreatePostInstagramCubit>().onTapGalleryReel(
             itemOfGallery: assets,
           ),
       onLongPress: () {
-        context.read<CreatePostInstagramCubit>().onTapGalleryReel(
+        serviceLocator<CreatePostInstagramCubit>().onTapGalleryReel(
               itemOfGallery: assets,
             );
-        context.read<CreatePostInstagramCubit>().changeMultiSelectGalleryReel();
+        serviceLocator<CreatePostInstagramCubit>().changeMultiSelectGalleryReel();
       },
       child: Stack(
         alignment: Alignment.center,
@@ -429,8 +425,7 @@ class _ReelBodyCreatePostInstagramState
           // ),
 
           // مؤشر إذا كان هذا الفيديو هو المحدد حاليًا
-          if (context
-              .read<CreatePostInstagramCubit>()
+          if (serviceLocator<CreatePostInstagramCubit>()
               .state
               .selectedGalleryReels
               .contains(assets))
@@ -445,8 +440,7 @@ class _ReelBodyCreatePostInstagramState
                 ),
               ),
             ),
-          if (context
-              .read<CreatePostInstagramCubit>()
+          if (serviceLocator<CreatePostInstagramCubit>()
               .state
               .multiSelectGalleryReel)
             PositionedDirectional(
@@ -464,8 +458,7 @@ class _ReelBodyCreatePostInstagramState
                         width: 1,
                       ),
                     )),
-                child: context
-                        .read<CreatePostInstagramCubit>()
+                child: serviceLocator<CreatePostInstagramCubit>()
                         .state
                         .selectedGalleryReels
                         .contains(assets)
@@ -479,7 +472,7 @@ class _ReelBodyCreatePostInstagramState
                         alignment: Alignment.center,
                         child: Label(
                           text:
-                              '${context.read<CreatePostInstagramCubit>().state.selectedGalleryReels.indexOf(assets) + 1}',
+                              '${serviceLocator<CreatePostInstagramCubit>().state.selectedGalleryReels.indexOf(assets) + 1}',
                           style: Styles.smallText(
                             fontSize: 32,
                             color: Colors.white,

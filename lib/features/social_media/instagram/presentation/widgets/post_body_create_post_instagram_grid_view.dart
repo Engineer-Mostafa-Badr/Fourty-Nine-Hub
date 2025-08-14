@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import '../../../../../core/widget/custom_circular_progress_indicator.dart';
-import '../../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+
+import '../../../../../service_locator/service_locator.dart';
 
 class PostBodyCreatePostInstagramGridView extends StatelessWidget {
   const PostBodyCreatePostInstagramGridView({
@@ -35,17 +36,14 @@ class PostBodyCreatePostInstagramGridView extends StatelessWidget {
           itemBuilder: (context, index) {
             // إذا وصلنا للعنصر الأخير وهناك المزيد، نعرض مؤشر تحميل ونحمل المزيد
             if (index == state.galleryPost.length && state.hasMoreImages) {
-              context
-                  .read<CreatePostInstagramCubit>()
+              serviceLocator<CreatePostInstagramCubit>()
                   .loadMoreImages(); // استدعاء دالة تحميل المزيد
               return const Center(child: CustomCircularProgressIndicator());
             }
             if (index < state.galleryPost.length) {
               return GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
-                  context
-                      .read<CreatePostInstagramCubit>()
+                  serviceLocator<CreatePostInstagramCubit>()
                       .onTapGalleryPost(itemOfGallery: galleryPost[index]);
                 },
                 child:
@@ -151,7 +149,6 @@ class PostBodyCreatePostInstagramGridView extends StatelessWidget {
               //         snapshot.data != null) {
               //       return GestureDetector(
               //           onTap: () {
-      ManageVibration.vibrate();
               //             context
               //                 .read<CreatePostInstagramCubit>()
               //                 .onTapImage(index);

@@ -2,6 +2,19 @@ import 'comment_instagram_model.dart';
 import 'last_like_model.dart';
 import '../../domain/entities/instagram_post_entity.dart';
 
+class InstagramPostMediaUrlModel extends InstagramPostMediaUrlEntity {
+  InstagramPostMediaUrlModel({
+    required super.url,
+    required super.id,
+  });
+
+  factory InstagramPostMediaUrlModel.fromJson(Map<String, dynamic> json) {
+    return InstagramPostMediaUrlModel(
+      url: json['url']?.toString() ?? '',
+      id: json['id']?.toString() ?? '',
+    );
+  }
+}
 
 class InstagramPostModel extends InstagramPostEntity {
   InstagramPostModel({
@@ -47,9 +60,11 @@ class InstagramPostModel extends InstagramPostEntity {
       verifiedBadge: json['owner']?['verifiedBadge'] ?? false,
       // Default to false if null
       medias: json['mediaUrls'] != null
-          ? List<String>.from(json['mediaUrls']
-              .map((x) => x ?? '')
-              .toList()) // Handle null in mediaUrls
+          ? List<InstagramPostMediaUrlEntity>.from(
+              json['mediaUrls']
+                  .map((x) => InstagramPostMediaUrlModel.fromJson(x))
+                  .toList(),
+            )
           : [],
       comments: json['comments'] != null
           ? List<CommentInstagramModel>.from(

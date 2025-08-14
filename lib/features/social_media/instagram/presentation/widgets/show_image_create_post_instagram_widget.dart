@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import '../../../../../res/assets/assets.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import '../../../../../helpers/manage_vibration.dart';
+
+import '../../../../../service_locator/service_locator.dart';
 
 class ShowImageCreatePostInstagramWidget extends StatefulWidget {
   const ShowImageCreatePostInstagramWidget({
@@ -97,7 +99,6 @@ class _ShowImageCreatePostInstagramWidgetState
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-      ManageVibration.vibrate();
                         if (_currentIndex > 0) {
                           _pageController.previousPage(
                             duration: const Duration(milliseconds: 300),
@@ -112,8 +113,8 @@ class _ShowImageCreatePostInstagramWidgetState
                           color: Colors.black.withOpacity(0.5),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
+                        child:  Icon(
+                          context.isArabic? Icons.arrow_forward_ios : Icons.arrow_back_ios_new,
                           color: Colors.white,
                           size: 20,
                         ),
@@ -130,7 +131,6 @@ class _ShowImageCreatePostInstagramWidgetState
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-      ManageVibration.vibrate();
                         if (_currentIndex < state.selectedGalleryPost.length - 1) {
                           _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
@@ -145,8 +145,8 @@ class _ShowImageCreatePostInstagramWidgetState
                           color: Colors.black.withOpacity(0.5),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
+                        child:  Icon(
+                          context.isArabic? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
                           color: Colors.white,
                           size: 20,
                         ),
@@ -198,9 +198,7 @@ class _ShowImageCreatePostInstagramWidgetState
                 bottom: 0,
                 child: GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
-                    context
-                        .read<CreatePostInstagramCubit>()
+                    serviceLocator<CreatePostInstagramCubit>()
                         .changeCoverImage();
                   },
                   child: Container(

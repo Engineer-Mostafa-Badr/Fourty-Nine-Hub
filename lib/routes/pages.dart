@@ -1370,8 +1370,8 @@ class AppPages {
                   final cubit = state.extra as CreatePostInstagramCubit;
                   return MultiBlocProvider(
                     providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<TagUsersCubit>(),
+                      BlocProvider.value(
+                        value: serviceLocator<TagUsersCubit>(),
                       ),
                       BlocProvider.value(
                         value: cubit,

@@ -175,7 +175,7 @@ class InstagramServiceLocator {
           serviceLocator(),
         ));
 
-    serviceLocator.registerFactory<CreatePostInstagramCubit>(
+    serviceLocator.registerLazySingleton<CreatePostInstagramCubit>(
       () => CreatePostInstagramCubit(
         serviceLocator<CreateRequestPostInstagramUseCase>(),
         serviceLocator<PostConfirmWebhookUseCase>(),
