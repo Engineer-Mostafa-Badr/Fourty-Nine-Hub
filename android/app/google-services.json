@@ -12,7 +12,20 @@
           "package_name": "com.fourtyninehub.fourtynine"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "361206050719-tjft7usie6bna7tov26vlfdpar0s0vls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourtyninehub.fourtynine",
+            "certificate_hash": "ca4b51184f61a9f9605feeb6b77220c7051eaffc"
+          }
+        },
+        {
+          "client_id": "361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyACecBTljJZl7XCzfDsaHjYDTMYcVULV9M"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fourtyninehub.fourtynine"
+              }
+            }
+          ]
         }
       }
     }

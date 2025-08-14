@@ -1,5 +1,6 @@
 // email_search_field.dart
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UserSearchField extends StatelessWidget {
   // المتغيرات التي ستمرر من الخارج
@@ -49,7 +50,10 @@ class UserSearchField extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(suggestions[index]),
-                  onTap: () => onEmailSelected(suggestions[index]),
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    onEmailSelected(suggestions[index]);
+                  },
                 );
               },
             ),

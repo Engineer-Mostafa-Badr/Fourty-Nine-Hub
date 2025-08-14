@@ -81,7 +81,7 @@ class CompetitionsSection extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   showAnimatedDialog(
                     context,
                     CompetitionsPopUpItems(
@@ -123,7 +123,7 @@ class CompetitionsSection extends StatelessWidget {
                 luckyWheel: luckyWheel,
                 currency: currency,
                 onPressed: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   showLoadingDialog(context);
                   await context.read<GiftTwoCubit>().requestTransferLuckyWheel(
                         context,
@@ -138,7 +138,7 @@ class CompetitionsSection extends StatelessWidget {
               luckyWheel: null,
               currency: currency,
               onPressed: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 showLoadingDialog(context);
                 await context.read<GiftTwoCubit>().requestTransferCompetition(
                       context,

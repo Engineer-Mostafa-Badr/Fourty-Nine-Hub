@@ -93,7 +93,9 @@ class ListItemCard extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ListTile(
-          onTap: () => context.push(Routes.OTHERSACCOUNT, extra: user.id),
+          onTap: () {
+            ManageVibration.vibrate();
+             context.push(Routes.OTHERSACCOUNT, extra: user.id);},
           leading: const Icon(Icons.person),
           title: Label(
               text:

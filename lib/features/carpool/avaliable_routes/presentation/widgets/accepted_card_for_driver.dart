@@ -155,7 +155,7 @@ class AcceptedCardForDriver extends StatelessWidget {
                 title: LocaleKeys.viewRoute.localize,
                 color: AppColors.PRIMARY_COLOR,
                 onTap: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   await openGoogleMapsWithRoute(entity.polyline ?? "");
                 },
               ),
@@ -246,7 +246,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
         children: [
           GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               String otpSaved = "";
 
               final parentContext = context;
@@ -338,7 +338,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
                                               title:
                                                   LocaleKeys.confirm.localize,
                                               onTap: () async {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 try {
                                                   await BlocProvider.of<
                                                               VerifyCompleteDriverCubit>(
@@ -396,7 +396,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
                                             : AppColors.GREY_DARK_COLOR,
                                         title: LocaleKeys.reached.localize,
                                         onTap: () async {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           await BlocProvider.of<
                                                       VerifyCompleteDriverCubit>(
                                                   parentContext)

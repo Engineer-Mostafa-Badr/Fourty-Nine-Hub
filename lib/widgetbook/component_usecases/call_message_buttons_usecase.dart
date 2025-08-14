@@ -552,7 +552,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -572,7 +572,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Mock Premium Call Started')),
@@ -606,7 +606,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
           ),
           TextButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -647,7 +647,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
           ),
           TextButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Mock Report Submitted')),
@@ -673,7 +673,7 @@ class _MockCallMessageButtonsState extends State<MockCallMessageButtons> {
           ),
           TextButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

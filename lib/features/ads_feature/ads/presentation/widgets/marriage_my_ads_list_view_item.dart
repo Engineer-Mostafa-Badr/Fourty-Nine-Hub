@@ -30,7 +30,7 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: marriageAds.id);
       },
       child: Container(
@@ -118,7 +118,7 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
                   color: AppColors.SECONDARY_COLOR_DARK2,
                   radius: 15,
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     // TODO: delete request
                   },
                 ),

@@ -214,7 +214,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       children: [
                         InkWell(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.pop();
                           },
                           child: Container(
@@ -232,7 +232,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         Spacer(),
                         InkWell(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (state.ad!.isFavourite == true) {
                               context
                                   .read<AdvertisementCubit>()
@@ -347,7 +347,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             height: 38,
             backColor: AppColors.c0B1035,
             onPressed: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.ADRequests,
                   extra: AdRequestParams(id: widget.id, userName: ''));
             },
@@ -365,7 +365,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             height: 38,
             backColor: AppColors.SECONDARY_COLOR_DARK2,
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               bottomSheet(
                   context: context,
                   isFloating: true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../core/enums/call_enums_manager.dart';
 import '../../../core/utils/logging_service.dart';
 import '../domain/entities/call_data.dart';
@@ -214,7 +215,6 @@ class BuildBottomBtns extends StatelessWidget {
                         title: "Share Screen",
                         icon: Icons.mobile_screen_share_rounded,
                         onTap: (){
-
                         }),
                         SizedBox(height: 30),
                          _buildTaplistTile(
@@ -239,6 +239,7 @@ class BuildBottomBtns extends StatelessWidget {
       required Function onTap}) {
     return InkWell(
       onTap: () {
+        ManageVibration.vibrate();
         onTap();
       },
       child: Row(

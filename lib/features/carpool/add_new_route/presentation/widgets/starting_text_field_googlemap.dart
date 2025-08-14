@@ -118,7 +118,7 @@ class _StartTextFieldAndFindButonState
             CustomButton(
               title: LocaleKeys.searchFind.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (formKey.currentState!.validate()) {
                   getLatAndLongCubit.getLatAndLong(
                       context: context,

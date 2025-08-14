@@ -82,7 +82,7 @@ class RequestButton extends StatelessWidget {
                       isLoading:
                           controller.state.requestStatus == AdsStates.loading,
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (controller.formKey.currentState!.validate()) {
                           await controller.makeAdRequest(id: adId);
                           //     .then((value) {
@@ -365,7 +365,7 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
 
             InkWell(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 focusNode.unfocus();
                 context.pop();
               },

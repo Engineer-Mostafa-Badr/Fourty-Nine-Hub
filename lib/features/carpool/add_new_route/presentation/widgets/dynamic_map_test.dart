@@ -188,9 +188,8 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
 
   @override
   Widget build(BuildContext context) {
-    List<LatLng> polylinePoints = widget.polylineString != null
-        ? widget.polylineString!
-        : [];
+    List<LatLng> polylinePoints =
+        widget.polylineString != null ? widget.polylineString! : [];
 
     return CustomScaffold(
       showNavBAr: widget.showNavBar,
@@ -282,7 +281,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                 children: [
                   GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       setState(() {
                         _currentZoom++;
                         _mapController.move(_center, _currentZoom);
@@ -304,7 +303,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       setState(() {
                         _currentZoom--;
                         _mapController.move(_center, _currentZoom);

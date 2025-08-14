@@ -86,7 +86,7 @@ class ExpandableSubscription extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   bottomSheet(
                       context: context,
                       isFloating: true,
@@ -114,7 +114,7 @@ class ExpandableSubscription extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
                           wallets: [

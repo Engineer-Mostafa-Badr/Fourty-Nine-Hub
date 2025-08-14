@@ -15,6 +15,8 @@ final class SpotlightProfileLoading extends SpotLightState {}
 
 final class SpotlightMediaLoading extends SpotLightState {}
 
+final class SpotlightFriendsStoriesLoading extends SpotLightState {}
+
 final class SpotlightUploadLoading extends SpotLightState {
   final double progress;
   final String status;
@@ -73,6 +75,15 @@ class SpotlightMediaLoaded extends SpotLightState {
   @override
   List<Object?> get props =>
       [mediaResponse, allMedia, isLoadingMore, hasReachedMax, userId];
+}
+
+class SpotlightFriendsStoriesLoaded extends SpotLightState {
+  final FriendsStoriesEntity friendsStories;
+
+  const SpotlightFriendsStoriesLoaded({required this.friendsStories});
+
+  @override
+  List<Object?> get props => [friendsStories];
 }
 
 class SpotlightUploadSuccess extends SpotLightState {

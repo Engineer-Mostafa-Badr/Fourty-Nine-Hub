@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -326,6 +327,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     if (widget.canRegister) {
       return GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
           log('88888888888888888888888888');
           widget.onRegister?.call();
         },
@@ -658,6 +660,7 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
     if (widget.canRegister) {
       return GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
             log('88888888888888888888888888');
             widget.onRegister?.call();
           },
