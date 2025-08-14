@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -15,9 +14,6 @@ import '../../../../twitter/presentation/widgets/report_view.dart';
 import '../../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../helpers/manage_vibration.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -48,12 +44,82 @@ class ReplyCard extends StatefulWidget {
 class _ReplyCardState extends State<ReplyCard> {
   final editTextController = TextEditingController();
 
+  void handleCommentReact(CommentEntity comment, String newReaction) {
+    String? currentReaction;
+    if (comment.isLikes == true) currentReaction = 'like';
+    else if (comment.isWow == true) currentReaction = 'wow';
+    else if (comment.isHaha == true) currentReaction = 'haha';
+    else if (comment.isLove == true) currentReaction = 'love';
+    else if (comment.isSad == true) currentReaction = 'sad';
+    else if (comment.isAngry == true) currentReaction = 'angry';
+    if (currentReaction == newReaction) {
+      _decrementReactionCount(comment, newReaction);
+      return;
+    }
+    if (currentReaction != null) {
+      _decrementReactionCount(comment, currentReaction);
+    }
+    _incrementReactionCount(comment, newReaction);
+  }
+
+  void _incrementReactionCount(CommentEntity comment, String reaction) {
+    switch (reaction) {
+      case 'like':
+      case 'likes':
+        comment.likesCount = (comment.likesCount ?? 0) + 1;
+        break;
+      case 'wow':
+        comment.wowCount = (comment.wowCount ?? 0) + 1;
+        break;
+      case 'haha':
+        comment.hahaCount = (comment.hahaCount ?? 0) + 1;
+        break;
+      case 'love':
+        comment.loveCount = (comment.loveCount ?? 0) + 1;
+        break;
+      case 'sad':
+        comment.sadCount = (comment.sadCount ?? 0) + 1;
+        break;
+      case 'angry':
+        comment.angryCount = (comment.angryCount ?? 0) + 1;
+        break;
+    }
+  }
+
+  void _decrementReactionCount(CommentEntity comment, String reaction) {
+    switch (reaction) {
+      case 'like':
+      case 'likes':
+        comment.likesCount = (comment.likesCount ?? 0) - 1;
+        break;
+      case 'wow':
+        comment.wowCount = (comment.wowCount ?? 0) - 1;
+        break;
+      case 'haha':
+        comment.hahaCount = (comment.hahaCount ?? 0) - 1;
+        break;
+      case 'love':
+        comment.loveCount = (comment.loveCount ?? 0) - 1;
+        break;
+      case 'sad':
+        comment.sadCount = (comment.sadCount ?? 0) - 1;
+        break;
+      case 'angry':
+        comment.angryCount = (comment.angryCount ?? 0) - 1;
+        break;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     // Keep sizes synced with CommentCard so the connector lines align visually
+    final double mainAvatarSize = 36.w;
     final double replyAvatarSize = 28.w;
     final double avatarContentGap = 12.w;
+    num totalReactions = (widget.reply.likesCount??0) + (widget.reply.hahaCount??0) + (widget.reply.loveCount??0) + (widget.reply.wowCount??0) + (widget.reply.sadCount??0) +(widget.reply.angryCount??0);
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 8.h),
       margin: EdgeInsets.only(left: 0.w),
@@ -179,93 +245,50 @@ class _ReplyCardState extends State<ReplyCard> {
                                   from: 'comments',
                                   showTitle: true,
                                   showIcon: false,
+                                  handleReaction: (reaction){
+                                    handleCommentReact(widget.reply, reaction);
+                                    setState(() {
+
+                                    });
+                                  },
                                 ),
                               ],
                             ),
                           ),
-                          if((widget.reply.angryCount??0)>0)Row(
-                            children: [
-                              Text('${widget.reply.angryCount??0}',style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                              ),),
-                              Image.asset(
-                                Assets.angry,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
+                          if(totalReactions>0)Text('$totalReactions',style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                          ),),
+                          if((widget.reply.angryCount??0)>0)Image.asset(
+                            Assets.angry,
+                            width: 20,
+                            height: 20,
                           ),
-                          if((widget.reply.sadCount??0)>0)Row(
-                            children: [
-                              Text('${widget.reply.sadCount??0}',style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                              ),),
-                              Image.asset(
-                                Assets.sad,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
+                          if((widget.reply.sadCount??0)>0)Image.asset(
+                            Assets.sad,
+                            width: 20,
+                            height: 20,
                           ),
-                          if((widget.reply.wowCount??0)>0)Row(
-                            children: [
-                              Text('${widget.reply.wowCount??0}',style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                              ),),
-                              Image.asset(
-                                Assets.wow,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
+                          if((widget.reply.wowCount??0)>0)Image.asset(
+                            Assets.wow,
+                            width: 20,
+                            height: 20,
                           ),
-                          if((widget.reply.loveCount??0)>0)Row(
-                            children: [
-                              Text('${widget.reply.loveCount??0}',style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                              ),),
-                              Image.asset(
-                                Assets.heart,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
+                          if((widget.reply.loveCount??0)>0)Image.asset(
+                            Assets.heart,
+                            width: 20,
+                            height: 20,
                           ),
-                          if((widget.reply.hahaCount??0)>0)Row(
-                            children: [
-                              Text('${widget.reply.hahaCount??0}',style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                              ),),
-                              Image.asset(
-                                Assets.haha,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
+                          if((widget.reply.hahaCount??0)>0)Image.asset(
+                            Assets.haha,
+                            width: 20,
+                            height: 20,
                           ),
-                          if((widget.reply.likesCount??0)>0)Row(
-                            children: [
-                              Text('${widget.reply.likesCount??0}',style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                              ),),
-                              Image.asset(
-                                Assets.like,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
+                          if((widget.reply.likesCount??0)>0)Image.asset(
+                            Assets.like,
+                            width: 20,
+                            height: 20,
                           ),
 
                         ],
@@ -280,21 +303,16 @@ class _ReplyCardState extends State<ReplyCard> {
           // Edit reply input
           if (widget.reply.edit == true)
             Container(
-              margin: EdgeInsets.only(top: 12.h, left: 40.w),
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: context.isDarkMode
-                    ? AppColors.QUANTITY_COLOR.withOpacity(0.8)
-                    : const Color(0xFFF0F2F5),
-                borderRadius: BorderRadius.circular(18.r),
-                border: Border.all(
-                  color: context.isDarkMode
-                      ? AppColors.SECONDARY_COLOR.withOpacity(0.3)
-                      : AppColors.PRIMARY_COLOR.withOpacity(0.3),
-                  width: 1,
-                ),
+              margin: EdgeInsetsDirectional.only(
+                bottom: 4.h,
+                top: 4.h,
+                start: mainAvatarSize + avatarContentGap + 4.w,
               ),
-              child: Row(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              decoration: BoxDecoration(
+                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(25),
+              ),              child: Row(
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -323,27 +341,18 @@ class _ReplyCardState extends State<ReplyCard> {
                       onChanged: (v) {
                         setState(() {});
                       },
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: context.isDarkMode
-                            ? Colors.white.withOpacity(0.9)
-                            : const Color(0xFF1C1E21),
-                      ),
+                      style: const TextStyle(fontSize: 13),
                       decoration: InputDecoration(
                         hintText: context.isArabic ? 'تعديل الرد...' : 'Edit reply...',
-                        hintStyle: TextStyle(
-                          color: context.isDarkMode
-                              ? Colors.white60
-                              : const Color(0xFF65676B),
-                          fontSize: 13.sp,
-                        ),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
+                        fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         focusedErrorBorder: InputBorder.none,
                         isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 6.h),
+                        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                       ),
                     ),
                   ),
@@ -361,19 +370,10 @@ class _ReplyCardState extends State<ReplyCard> {
                         }
                         setState(() {});
                       },
-                      child: Container(
-                        padding: EdgeInsets.all(6.w),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.isDarkMode
-                              ? AppColors.SECONDARY_COLOR
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                        child: Icon(
-                          Icons.send,
-                          size: 14.sp,
-                          color: Colors.white,
-                        ),
+                      child: Icon(
+                        Icons.send,
+                        size: 18,
+                        color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
                       ),
                     ),
                 ],

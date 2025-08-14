@@ -19,7 +19,10 @@ class DurationHelper {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
-    if (difference.inMinutes < 60) {
+    if (difference.inMinutes < 1) {
+      // أقل من دقيقة → حالا
+      return currentContext.isArabic ? "حالًا" : "Just now";
+    } else if (difference.inMinutes < 60) {
       // أقل من ساعة → دقايق
       return currentContext.isArabic
           ? "${difference.inMinutes}دقيقة"
@@ -29,8 +32,13 @@ class DurationHelper {
       return currentContext.isArabic
           ? "${difference.inHours}ساعة"
           : "${difference.inHours}h";
+    } else if (difference.inDays <= 6) {
+      // من يوم لحد 6 أيام
+      return currentContext.isArabic
+          ? "${difference.inDays}ي"
+          : "${difference.inDays}d";
     } else {
-      // أكتر من 24 ساعة → التاريخ
+      // أكتر من 6 أيام → التاريخ
       return "${dateTime.year.toString().padLeft(4, '0')}-"
           "${dateTime.month.toString().padLeft(2, '0')}-"
           "${dateTime.day.toString().padLeft(2, '0')}";

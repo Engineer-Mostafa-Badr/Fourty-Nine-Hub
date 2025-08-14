@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
@@ -16,6 +19,7 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BuildFacebookHeader extends StatelessWidget {
   const BuildFacebookHeader(
@@ -39,7 +43,24 @@ class BuildFacebookHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // if (user != null && user.image != null)
-        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.image),
+        user.hasStory==true?ClickableWidget(
+          onTap: (){
+            ManageVibration.vibrate();
+            if(!context.read<UserCubit>().isLoggedIn){
+              pleaseLoginDialog(context);
+              return;
+            }
+          },
+          child: GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,
+              firstChar:user.firstName[0].toUpperCase()
+          ),
+        ):ClickableWidget(onTap: (){
+          ManageVibration.vibrate();
+          if(!context.read<UserCubit>().isLoggedIn){
+            pleaseLoginDialog(context);
+            return;
+          }
+        },
           child: Stack(
             // alignment: Alignment.center,
             children: [
@@ -52,26 +73,6 @@ class BuildFacebookHeader extends StatelessWidget {
                 firstChar: user.firstName[0].toUpperCase(),
                 charPadding:0
               ),
-              // PositionedDirectional(
-              //   bottom: 0,
-              //   start: 0,
-              //   end: 0,
-              //   child: Container(
-              //     width: 10,
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.white,
-              //       border: Border.all(color: Colors.black, width: 0.5),
-              //     ),
-              //     alignment: Alignment.center,
-              //     child: Text(user.firstName[0].toUpperCase(),style: TextStyle(
-              //
-              //         fontWeight: FontWeight.w500,
-              //
-              //         color: AppColors.PRIMARY_COLOR,
-              //         fontSize: 8),),
-              //   ),
-              // )
             ],
           ),
         ),
@@ -288,9 +289,25 @@ class BuildFacebookHeader extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(Icons.more_horiz_outlined,color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,size: 24,),
+            ClickableWidget(
+                onTap: (){
+                  ManageVibration.vibrate();
+                  if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                  }
+                },
+                child: Icon(Icons.more_horiz_outlined,color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,size: 24,)),
             SizedBox(width: 12.0),
-            Icon(Icons.close,color: AppColors.getRedColor(context),size: 24,),
+            ClickableWidget(
+                onTap: (){
+                  ManageVibration.vibrate();
+                  if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                  }
+                },
+                child: Icon(Icons.close,color: AppColors.getRedColor(context),size: 24,)),
           ],
         ),
       ],

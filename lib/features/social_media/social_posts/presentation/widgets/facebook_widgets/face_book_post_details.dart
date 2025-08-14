@@ -1,6 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_header.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -76,6 +85,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
+    print("state.postDetails!.createdAt }");
 
     return CustomScaffold(
       appBar: AppBar(
@@ -91,14 +101,17 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
       body: BlocConsumer<SocialPostsCubit, SocialPostsState>(
           listener: (context, state) {},
           builder: (context, state) {
+            print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
             final controller = context.read<SocialPostsCubit>();
 
             if (state.status == StateStatus.loading) {
+              print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
               return const Center(
                 child: CustomCircularProgressIndicator(),
               );
             } else if (state.status == StateStatus.error ||
                 state.postDetails == null) {
+              print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
               return Center(
                 child: Label(
                   text: getFailureMessage(
@@ -108,6 +121,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                 ),
               );
             } else {
+              print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
               return Column(
                 children: [
                   Expanded(
@@ -118,170 +132,59 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                           SliverToBoxAdapter(
                             child: Column(
                               children: [
-                                FacebookPostCard(
-                                  post: state.postDetails!,
-                                  onReact: (params) async {
-                                    var result = await controller.onReact(
-                                        params: params, from: 'posts');
-                                    return result;
-                                  },
-                                  deletePost: (postId) => controller.deletePost(
-                                      context: context, postId: postId),
-                                  hidePost: (String postId) =>
-                                      controller.hidePost(
-                                          context: context, postId: postId),
-                                  showPostComments: (String v) {
-                                    // bottomSheet(
-                                    //     context: context,
-                                    //     isScrollControlled: true,
-                                    //     widget: BlocProvider.value(
-                                    //       value:
-                                    //           serviceLocator<SocialPostsCubit>()
-                                    //             ..loadComments(context, v),
-                                    //       child: FacebookPostComments(
-                                    //         postId: v,
-                                    //         onAddComment:
-                                    //             (PostCommentParams params) {
-                                    //           return controller.onPostComment(
-                                    //               params: params, from: 'feed');
-                                    //         },
-                                    //         onCommentReply:
-                                    //             (ReplyOnCommentParams params) {
-                                    //           return controller.replyOnComment(
-                                    //             params: ReplyOnCommentParams(
-                                    //                 postId: params.postId,
-                                    //                 content: params.content,
-                                    //                 commentId:
-                                    //                     params.commentId),
-                                    //             from: 'feed',
-                                    //           );
-                                    //         },
-                                    //         onDeleteComment: (String id) async {
-                                    //           return await controller
-                                    //               .deleteComment(
-                                    //                   context: context,
-                                    //                   commentId: id,
-                                    //                   postId: state.postDetails
-                                    //                           ?.id ??
-                                    //                       '',
-                                    //                   from: 'feed');
-                                    //           // print(result);
-                                    //         },
-                                    //         onDeleteReply: (String id) async {
-                                    //           return await controller
-                                    //               .deleteComment(
-                                    //                   context: context,
-                                    //                   commentId: id,
-                                    //                   postId: state.postDetails
-                                    //                           ?.id ??
-                                    //                       '',
-                                    //                   from: 'feed');
-                                    //         },
-                                    //         from: 'feed',
-                                    //         onEditComment: (PostCommentParams
-                                    //             params) async {
-                                    //           var result = await controller
-                                    //               .editComment(params: params);
-                                    //           return result;
-                                    //         },
-                                    //       ),
-                                    //     ));
-                                  },
-                                  showPostDetails: (PostEntity post) =>
-                                      bottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          widget: BlocProvider.value(
-                                            value: serviceLocator<
-                                                SocialPostsCubit>()
-                                              ..loadPostDetails(
-                                                  context,
-                                                  state.postDetails?.isShared ==
-                                                          true
-                                                      ? state.postDetails
-                                                              ?.mainPost?.id ??
-                                                          ''
-                                                      : state.postDetails?.id ??
-                                                          ''),
-                                            child: PostDetailsPage(
-                                              comments: const [],
-                                              postId:
-                                                  state.postDetails?.id ?? '',
-                                              deletePost: (String postId) =>
-                                                  controller.deletePost(
-                                                      context: context,
-                                                      postId: postId),
-                                              hidePost: (String postId) =>
-                                                  controller.hidePost(
-                                                      context: context,
-                                                      postId: postId),
-                                              onAddComment:
-                                                  (PostCommentParams params) =>
-                                                      controller.onPostComment(
-                                                          params: params,
-                                                          from: 'details'),
-                                              onReact: (params) =>
-                                                  controller.onReact(
-                                                      params: params,
-                                                      from: 'posts'),
-                                              showPostComments: (postId) {},
-                                              showPostDetails:
-                                                  (PostEntity post) {},
-                                              // post: controller.feedPagingController.itemList![index],
-
-                                              onCommentReply:
-                                                  (ReplyOnCommentParams
-                                                      params) {
-                                                return controller
-                                                    .replyOnComment(
-                                                  params: ReplyOnCommentParams(
-                                                      postId: params.postId,
-                                                      content: params.content,
-                                                      commentId:
-                                                          params.commentId),
-                                                  from: 'details',
-                                                );
-                                              },
-                                              onDeleteComment:
-                                                  (String id) async {
-                                                return await controller
-                                                    .deleteComment(
-                                                        context: context,
-                                                        commentId: id,
-                                                        postId: state
-                                                                .postDetails
-                                                                ?.id ??
-                                                            '',
-                                                        from: 'feed');
-                                                // print(result);
-                                              },
-                                              onDeleteReply: (String id) async {
-                                                return await controller
-                                                    .deleteComment(
-                                                        context: context,
-                                                        commentId: id,
-                                                        postId: state
-                                                                .postDetails
-                                                                ?.id ??
-                                                            '',
-                                                        from: 'feed');
-                                              },
-                                              onEditComment: (PostCommentParams
-                                                  params) async {
-                                                var result = await controller
-                                                    .editComment(
-                                                        params: params);
-                                                return result;
-                                              },
-                                            ),
-                                          )),
-                                  onShare: (String id) {},
-                                  from: 'details',
-                                  isMyPost:
-                                      user?.id == state.postDetails?.user.id,
-                                  index: 0,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                                  child: BuildFacebookHeader(
+                                    user: state.postDetails!.user,
+                                    sinceTime:
+                                    context.isArabic
+                                        ? DateFormat('d MMM, h:mm a', 'ar')
+                                        .format(state.postDetails!.createdAt!)
+                                        : DateFormat('MMM d, h:mm a').format(state.postDetails!.createdAt!),
+                                    activity: state.postDetails!.activity,
+                                    feeling: state.postDetails!.feeling,
+                                    users: state.postDetails!.users,
+                                    location: state.postDetails!.location,
+                                  ),
                                 ),
-                                const Divider(),
+                                // const SizedBox(height: 8.0),
+
+                                // if (postEntity.images?.isNotEmpty??false)
+                                Column(
+                                  children: [
+                                    if (state.postDetails!.content?.isNotEmpty ?? false)
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(right: 10, left: 10, bottom: 16),
+                                        child: ReadMoreLabel(
+                                          text: state.postDetails!.content ?? '',
+                                          // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.getTextColor(context)),
+                                        ),
+                                      ),
+                                    // if(state.postDetails!.type=="live_event_post")FacebookLifeEventWidget(state.postDetails!: state.postDetails!,),
+                                    if (state.postDetails!.type == "gif_post" &&
+                                        state.postDetails!.gifUrl != null &&
+                                        state.postDetails!.gifUrl!.isNotEmpty)
+                                      ImageFromInternet(
+                                        image: state.postDetails!.gifUrl ?? '',
+                                        width: double.infinity,
+                                        height: 256,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    if (state.postDetails!.images.isNotEmpty &&
+                                        state.postDetails!.type == "normal_post")
+                                      SizedBox(
+                                        height: 256,
+                                        width: double.infinity,
+                                        child: _buildImageGrid(context, state.postDetails!.images ?? []),
+                                      ),
+                                  ],
+                                ),
+
                               ],
                             ),
                           ),
@@ -456,6 +359,257 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
             }
           }),
     );
+  }
+  Widget _buildImageGrid(BuildContext context, List<String> media) {
+    if (media.length == 1) {
+      return GestureDetector(
+        onTap: () {
+          ManageVibration.vibrate();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImageGalleryPage(
+                images: media,
+                initialIndex: 0,
+              ),
+            ),
+          );
+        },
+        child: CachedNetworkImage(
+          imageUrl: media[0],
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+          const Center(child: CustomCircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+      );
+    } else if (media.length == 2) {
+      return Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: media[0],
+                fit: BoxFit.cover,
+                height: double.infinity,
+              ),
+            ),
+          ),
+          const SizedBox(width: 3),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 1,
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: media[1],
+                fit: BoxFit.cover,
+                height: double.infinity,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else if (media.length == 3) {
+      return Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: media[0],
+                fit: BoxFit.cover,
+                height: 256,
+              ),
+            ),
+          ),
+          const SizedBox(width: 3.5),
+          Column(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGalleryPage(
+                          images: media,
+                          initialIndex: 1,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: media[1],
+                    fit: BoxFit.cover,
+                    width: 150,
+                    height: double.infinity,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 3),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGalleryPage(
+                          images: media,
+                          initialIndex: 2,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: media[2],
+                    fit: BoxFit.cover,
+                    width: 150,
+                    height: double.infinity,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: media[0],
+                fit: BoxFit.cover,
+                height: 256,
+              ),
+            ),
+          ),
+          const SizedBox(width: 3.5),
+          Expanded(
+            flex: 1,
+            child: Column(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageGalleryPage(
+                            images: media,
+                            initialIndex: 1,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: media[1],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ShowAllImages(
+                            images: [],
+                            imagesUrls: media,
+                            onRemoveImage: (image) {},
+                          );
+                        },
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: CachedNetworkImage(
+                            imageUrl: media[2],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+                        if (media.length > 3)
+                          Container(
+                            color: Colors.black54,
+                            child: Center(
+                              child: Text(
+                                "+${media.length - 3}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   showReplies() {
