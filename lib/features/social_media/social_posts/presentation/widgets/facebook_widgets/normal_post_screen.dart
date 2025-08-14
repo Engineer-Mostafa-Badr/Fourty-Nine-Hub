@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -193,8 +195,12 @@ class NormalPostScreen extends StatelessWidget {
                 // Comment button
                 ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                    }
                     print("postEntity.id ${postEntity.id}");
-      ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -298,44 +304,62 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(width: 16), // Space between buttons
 
                 // Send button
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      Assets.sendIcon,
-                      color: context.isDarkMode ? Colors.white : null,
-                    ),
-                    // Send Icon
-                    SizedBox(width: 8.w),
-                    // Space between icon and text
-                    Label(
-                      text: LocaleKeys.send.localize,
-                      style: TextStyle(
-                          color: AppColors.getTextColor(context),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    // Send Text
-                  ],
+                ClickableWidget(
+                  onTap: (){
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                      pleaseLoginDialog(context);
+                      return;
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        Assets.sendIcon,
+                        color: context.isDarkMode ? Colors.white : null,
+                      ),
+                      // Send Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
+                      Label(
+                        text: LocaleKeys.send.localize,
+                        style: TextStyle(
+                            color: AppColors.getTextColor(context),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // Send Text
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 16), // Space between buttons
 
                 // Share button
-                Row(
-                  children: [
-                    SvgPicture.asset(Assets.shareIcon,
-                        color: context.isDarkMode ? Colors.white : null),
-                    // Share Icon
-                    SizedBox(width: 8.w),
-                    // Space between icon and text
-                    Label(
-                      text: LocaleKeys.share.localize,
-                      style: TextStyle(
-                          color: AppColors.getTextColor(context),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    // Share Text
-                  ],
+                ClickableWidget(
+                  onTap: (){
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                      pleaseLoginDialog(context);
+                      return;
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(Assets.shareIcon,
+                          color: context.isDarkMode ? Colors.white : null),
+                      // Share Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
+                      Label(
+                        text: LocaleKeys.share.localize,
+                        style: TextStyle(
+                            color: AppColors.getTextColor(context),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // Share Text
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
@@ -18,11 +22,12 @@ import 'package:lottie/lottie.dart';
 
 class BuildReactionsButtons extends StatefulWidget {
   const BuildReactionsButtons(
-      {super.key, required this.post, required this.from,this.showIcon=true,this.showTitle});
+      {super.key, required this.post, required this.from,this.handleReaction,this.showIcon=true,this.showTitle});
   final dynamic post;
   final String from;
   final bool? showTitle;
   final bool? showIcon;
+  final Function(String reaction)? handleReaction;
 
   @override
   State<BuildReactionsButtons> createState() => _BuildReactionsButtonsState();
@@ -53,12 +58,16 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           boxColor: Colors.white,
           boxRadius: 10,
           onReactionChanged: (Reaction<String>? reaction) async {
+            ManageVibration.vibrate();
+            if(!context.read<UserCubit>().isLoggedIn){
+              pleaseLoginDialog(context);
+              return;
+            }
             if (reaction != null) {
               await _handleReactionChange(reaction, controller);
             }
           },
           toggle: false,
-          // direction: ReactionsBoxAlignment.ltr,
           animateBox: false,
           placeholder: Reaction<String>(
             value: null,
@@ -82,6 +91,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
 
   Future<void> _handleReactionChange(
       Reaction<String> reaction, SocialPostsCubit controller) async {
+    if(widget.handleReaction!=null)widget.handleReaction!(reaction.value??'');
     if ((reaction.value == 'like' || reaction.value == 'likes') &&
         widget.post.isLikes == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'

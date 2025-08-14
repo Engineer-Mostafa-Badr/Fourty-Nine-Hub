@@ -41,12 +41,12 @@ class PostEntity {
   final int commentPrivacy;
   final int commentsCount;
   final int sharesCount;
-  final int likesCount;
-  final int loveCount;
-  final int hahaCount;
-  final int wowCount;
-  final int sadCount;
-  final int angryCount;
+  int? likesCount;
+  int? loveCount;
+  int? hahaCount;
+  int? wowCount;
+  int? sadCount;
+  int? angryCount;
   final int totalCount;
   final String? backgroundColor;
   final String? name;

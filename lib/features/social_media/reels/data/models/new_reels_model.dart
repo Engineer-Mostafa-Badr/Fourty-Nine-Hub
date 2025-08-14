@@ -17,9 +17,9 @@ class ReelsResponse {
 
 class ReelsData {
   final List<Reel> reels;
-  final Pagination pagination;
+  final Pagination? pagination;
 
-  ReelsData({required this.reels, required this.pagination});
+  ReelsData({required this.reels, this.pagination});
 
   factory ReelsData.fromJson(Map<String, dynamic> json) {
     var list = json['reels'] as List;
@@ -27,7 +27,7 @@ class ReelsData {
 
     return ReelsData(
       reels: reelsList,
-      pagination: Pagination.fromJson(json['pagination']),
+      // pagination: Pagination.fromJson(json['pagination']),
     );
   }
 }

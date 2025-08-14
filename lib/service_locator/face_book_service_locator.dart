@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_global_reels_use_case.dart';
+
 import '../features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import '../features/social_media/create_post/data/repositories/create_post_repo_impl.dart';
 import '../features/social_media/create_post/domain/repositories/create_post_repo.dart';
@@ -256,6 +258,10 @@ class FaceBookServiceLocator {
         .registerLazySingleton<GetProfileGovernoratesUseCase>(() => GetProfileGovernoratesUseCase(
               serviceLocator(),
             ));
+ serviceLocator
+        .registerLazySingleton<GetGlobalReelsUseCase>(() => GetGlobalReelsUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
@@ -276,6 +282,7 @@ class FaceBookServiceLocator {
         ));
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

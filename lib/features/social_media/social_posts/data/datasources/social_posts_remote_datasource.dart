@@ -136,7 +136,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
     return response.fold((l) {
       return Left(l);
     }, (data) {
-      return Right(PostModel.fromJson(data['data'][0]));
+      return Right(PostModel.fromJson(data['data']));
     });
   }
 

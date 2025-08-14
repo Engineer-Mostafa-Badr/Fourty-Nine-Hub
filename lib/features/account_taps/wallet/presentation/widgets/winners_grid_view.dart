@@ -144,6 +144,8 @@ class WinnersGridViewItem extends StatelessWidget {
                 height: 80.25,
                 image: winner.image,
                 isCircle: true,
+                firstChar: winner.name[0].toUpperCase(),
+                charPadding: 3,
               ),
               Positioned(
                 top: -25,

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -16,16 +17,19 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/utils/custom_show_dialog.dart';
@@ -83,279 +87,403 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           width: 600.w,
           child: SafeArea(
             child: SingleChildScrollView(
-              child: Column(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // context
-                  //     .read<UserCubit>()
-                  //     .isLoggedIn
-                  //     ? _buildAccountHeader(
-                  //   context: context,
-                  //   user: state.data,
-                  // )
-                  //     : _buildLoginWidget(context: context),
-                  context.read<UserCubit>().isLoggedIn
-                      ? accountWidget(context: context, user: state.data)
-                      : _buildLoginWidget(context: context),
-                  Divider(
-                    color: context.isDarkMode
-                        ? Color(0xff333333)
-                        : Color(0xffD9D9D9),
-                  ),
-                  IntrinsicHeight(
-                    child: Row(
+                  Expanded(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              competitionSubscription(context: context),
-                              drawerListTile(
-                                  image: Assets.customPage,
-                                  label: LocaleKeys.customPage.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    if (!context.read<UserCubit>().isLoggedIn) {
-                                      return pleaseLoginDialog(context);
-                                    }
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const EditPage(),
-                                      ),
-                                    );
-                                  }),
-                              drawerListTile(
-                                  image: Assets.quran,
-                                  label: LocaleKeys.quraan.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    context.pop();
-                                    return context.push(Routes.QURAAN);
-                                  }),
-                              drawerListTile(
-                                  image: Assets.azkar,
-                                  label: LocaleKeys.azkar.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    context.pop();
-
-                                    return context.push(Routes.AZKAAR);
-                                  }),
-                              drawerListTile(
-                                  // icon: Icons.settings,
-                                  image: Assets.settings_icon,
-                                  label: LocaleKeys.settings.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    context.pop();
-                                    context.push(Routes.SETTINGS);
-                                  }),
-                              // drawerListTile(
-                              //     // icon: Icons.privacy_tip,
-                              //     image: Assets.privacy_icon,
-                              //     label: LocaleKeys.privacy.localize,
-                              //     onTap: () {
-
-                              //       if (!context.read<UserCubit>().isLoggedIn) {
-                              //         return pleaseLoginDialog(context);
-                              //       } else {
-                              //         AdInterstitialTop.loadIntersitialAd();
-                              //         AdInterstitialTop.showInterstitialAd();
-                              //
-                              //         context.pop();
-                              //         context.push(Routes.PRIVACY);
-                              //       }
-                              //     },),
-                              drawerListTile(
-                                  image: Assets.policy,
-                                  label: LocaleKeys.policies.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    context.pop();
-                                    return context.push(Routes.POLICY,
-                                        extra: false);
-                                  }),
-                              drawerListTile(
-                                  // icon: Icons.share,
-                                  image: Assets.share_app_icon,
-                                  label: LocaleKeys.shareApp.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    if (!context.read<UserCubit>().isLoggedIn) {
-                                      return pleaseLoginDialog(context);
-                                    }
-                                    context.pop();
-                                    context.push(Routes.SHAREAPP);
-                                  }),
-                              drawerListTile(
-                                  // icon: Icons.message,
-                                  image: Assets.contact_us_icon,
-                                  label: LocaleKeys.contactUs.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    if (!context.read<UserCubit>().isLoggedIn) {
-                                      return pleaseLoginDialog(context);
-                                    }
-                                    context.pop();
-                                    context.push(Routes.CONTACTUS);
-                                  }),
-                              drawerListTile(
-                                  // icon: Icons.logout,
-                                  image: Assets.sign_out_icon,
-                                  requireLogin: true,
-                                  label: LocaleKeys.logout.localize,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    showAnimatedDialog(
-                                      context,
-                                      AlertDialog(
-                                        backgroundColor: Theme.of(context)
-                                            .drawerTheme
-                                            .backgroundColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        content: const LogoutWidget(),
-                                      ),
-                                    );
-                                  }),
-                            ],
-                          ),
+                        // context
+                        //     .read<UserCubit>()
+                        //     .isLoggedIn
+                        //     ? _buildAccountHeader(
+                        //   context: context,
+                        //   user: state.data,
+                        // )
+                        //     : _buildLoginWidget(context: context),
+                        context.read<UserCubit>().isLoggedIn
+                            ? accountWidget(context: context, user: state.data)
+                            : _buildLoginWidget(context: context),
+                        Divider(
+                          color: context.isDarkMode
+                              ? Color(0xff333333)
+                              : Color(0xffD9D9D9),
                         ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(end: 12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              drawerRollWidget(
-                                  label: LocaleKeys.ride.localize,
-                                  image: Assets.rideIcon,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    context.pop();
-                                    context.push(Routes.RIDE_HOME);
-                                  }),
-                              // drawerRollWidget(
-                              //   label: LocaleKeys.loading.localize,
-                              //   image: Assets.loading,
-                              //   // onTap: () {},
-                              //   onTap: () {
-                              //     context.pop();
-                              //     context
-                              //         .push(Routes.createLoadingTripScreen);
-                              //   },
-                              // ),
-                              drawerRollWidget(
-                                label: LocaleKeys.health.localize,
-                                image: Assets.healthIcon,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.pop();
-                                  context.push(Routes.VISITA);
-                                },
-                              ),
-                              drawerRollWidget(
-                                label: LocaleKeys.meal.localize,
-                                image: Assets.meal,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.pop();
-                                  context.push(Routes.FOOD);
-                                },
-                              ),
-                              drawerRollWidget(
-                                label: LocaleKeys.marriage.localize,
-                                image: Assets.married,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.pop();
-                                  context.push(Routes.MARRIAGESUBCATEGORIES);
-                                },
-                              ),
-                              drawerRollWidget(
-                                label: LocaleKeys.find.localize,
-                                image: Assets.find,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.pop();
-                                  context.push(Routes.Tinder);
-                                },
-                              ),
-                              drawerRollWidget(
-                                label: LocaleKeys.reel.localize,
-                                image: Assets.reel,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.pop();
-                                  context.push(Routes.REELS);
-                                },
-                              ),
-                              drawerRollWidget(
-                                label: LocaleKeys.spotlight.localize,
-                                image: Assets.spotlight,
+                        Column(
+                          children: [
+                            competitionSubscription(context: context),
+                            drawerListTile(
+                                image: Assets.customPage,
+                                label: LocaleKeys.customPage.localize,
                                 onTap: () {
                                   ManageVibration.vibrate();
                                   if (!context.read<UserCubit>().isLoggedIn) {
                                     return pleaseLoginDialog(context);
                                   }
-                                  context.pop();
-                                  context.push(Routes.SPOTLIGHT);
-                                },
-                              ),
-                              // drawerRollWidget(
-                              //   label: LocaleKeys.meet.localize,
-                              //   image: Assets.meet,
-                              //   onTap: () {
+                                  AdInterstitialTop.loadIntersitialAd();
+                                  AdInterstitialTop.showInterstitialAd();
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const EditPage(),
+                                    ),
+                                  );
+                                }),
+                            if (context.read<UserCubit>().isLoggedIn)drawerListTile(
+                                image: Assets.changePassword,
+                                label: LocaleKeys.changePassword.localize,
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  context.push(Routes.CHANGEPASSWORDSECOND);
+                                }),
 
-                              //     context.pop();
-                              //     context.push(Routes.MEETINGROOM);
-                              //   },
-                              // ),
-                              drawerRollWidget(
-                                label: LocaleKeys.live.localize,
-                                image: Assets.liveIcon,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  if (!context.read<UserCubit>().isLoggedIn) {
-                                    return pleaseLoginDialog(context);
-                                  }
-                                  context.pop();
-                                  context.push(Routes.LIVE);
-                                },
-                              ),
-                              // drawerRollWidget(
-                              //   label: LocaleKeys.snap.localize,
-                              //   image: Assets.snap,
-                              //   onTap: () {
-                              //     context.pop();
-                              //     context.push(Routes.SNAP);
-                              //   },
-                              // ),
+                            // drawerListTile(
+                            //   // icon: Icons.settings,
+                            //     image: Assets.settings_icon,
+                            //     label: LocaleKeys.settings.localize,
+                            //     onTap: () {
+                            //       ManageVibration.vibrate();
+                            //       context.pop();
+                            //       context.push(Routes.SETTINGS);
+                            //     }),
+                            // drawerListTile(
+                            //     // icon: Icons.privacy_tip,
+                            //     image: Assets.privacy_icon,
+                            //     label: LocaleKeys.privacy.localize,
+                            //     onTap: () {
 
-                              drawerRollWidget(
-                                label: LocaleKeys.chat.localize,
-                                image: Assets.whatsApp,
+                            //       if (!context.read<UserCubit>().isLoggedIn) {
+                            //         return pleaseLoginDialog(context);
+                            //       } else {
+                            //         AdInterstitialTop.loadIntersitialAd();
+                            //         AdInterstitialTop.showInterstitialAd();
+                            //
+                            //         context.pop();
+                            //         context.push(Routes.PRIVACY);
+                            //       }
+                            //     },),
+                            drawerListTile(
+                                image: Assets.privacy_icon,
+                                label: LocaleKeys.privacy.localize,
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  AdInterstitialTop.loadIntersitialAd();
+                                  AdInterstitialTop.showInterstitialAd();
+
+                                  context.pop();
+                                  context.push(context.read<UserCubit>().isLoggedIn?Routes.PRIVACY:Routes.FirstLoginScreen);
+
+                                }),
+
+                            drawerListTile(
+                                image: Assets.policy,
+                                label: LocaleKeys.policies.localize,
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  AdInterstitialTop.loadIntersitialAd();
+                                  AdInterstitialTop.showInterstitialAd();
+                                  context.pop();
+                                  return context.push(Routes.POLICY,
+                                      extra: false);
+                                }),
+                            drawerListTile(
+                              // icon: Icons.share,
+                                image: Assets.share_app_icon,
+                                label: LocaleKeys.shareApp.localize,
                                 onTap: () {
                                   ManageVibration.vibrate();
                                   if (!context.read<UserCubit>().isLoggedIn) {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
-                                  context.push(Routes.CHAT,
-                                      extra: ChatsViewParams());
-                                },
-                              ),
-                            ],
-                          ),
+                                  context.push(Routes.SHAREAPP);
+                                }),
+                            drawerListTile(
+                              // icon: Icons.message,
+                                image: Assets.contact_us_icon,
+                                label: LocaleKeys.contactUs.localize,
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  if (!context.read<UserCubit>().isLoggedIn) {
+                                    return pleaseLoginDialog(context);
+                                  }
+                                  context.pop();
+                                  context.push(Routes.CONTACTUS);
+                                }),
+                            drawerListTile(
+                              // icon: Icons.logout,
+                                image: Assets.sign_out_icon,
+                                requireLogin: true,
+                                label: LocaleKeys.logout.localize,
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  showAnimatedDialog(
+                                    context,
+                                    AlertDialog(
+                                      backgroundColor: Theme.of(context)
+                                          .drawerTheme
+                                          .backgroundColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(20),
+                                      ),
+                                      content: const LogoutWidget(),
+                                    ),
+                                  );
+                                }),
+                            drawerListTile(
+                              // icon: Icons.logout,
+                                image: Assets.deleteAccount,
+                                requireLogin: true,
+                                label: LocaleKeys.deleteAccount.localize,
+                                onTap: () async {
+                                  ManageVibration.vibrate();
+                                  context.read<SettingCubit>().deleteAccount();
+                                  final prefs = await SharedPreferences.getInstance();
+                                  await prefs.setBool("ISLOGIN", false);
+                                  context.go(Routes.HOME);
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        drawerRollWidget(
+                            image: Assets.quran,
+                            label: LocaleKeys.quraan.localize,
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              context.pop();
+                              context.push(Routes.QURAAN);
+                            }),
+                        drawerRollWidget(
+                            image: Assets.azkar,
+                            label: LocaleKeys.azkar.localize,
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              context.pop();
+                              context.push(Routes.AZKAAR);
+                            }),
+                        drawerRollWidget(
+                            label: LocaleKeys.ride.localize,
+                            image: Assets.rideIcon,
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              context.pop();
+                              context.push(Routes.RIDE_HOME);
+                            }),
+                        drawerRollWidget(
+                            label: LocaleKeys.tripJoin.localize,
+                            image: Assets.newTripJoin,
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              HandleCashback.setCount('tripJoinCount', context);
+                              context.push(context.read<UserCubit>().isLoggedIn?
+                              Routes.newRideModeScreen:
+                              Routes.FirstLoginScreen
+                              );
+                            }),
+                        // drawerRollWidget(
+                        //   label: LocaleKeys.loading.localize,
+                        //   image: Assets.loading,
+                        //   // onTap: () {},
+                        //   onTap: () {
+                        //     context.pop();
+                        //     context
+                        //         .push(Routes.createLoadingTripScreen);
+                        //   },
+                        // ),
+                        drawerRollWidget(
+                          label: LocaleKeys.health.localize,
+                          image: Assets.healthIcon,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            context.push(Routes.VISITA);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.meal.localize,
+                          image: Assets.meal,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            context.push(Routes.FOOD);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.marriage.localize,
+                          image: Assets.married,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            context.push(Routes.MARRIAGESUBCATEGORIES);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.tube.localize,
+                          image: Assets.tube1,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('beAStarCount', context);
+                            context.push(Routes.BE_STAR);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.book.localize,
+                          image: Assets.booking,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('bookingCount', context);
+                            soonDialog(context);
+                            // context.push(Routes.BE_STAR);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.find.localize,
+                          image: Assets.find,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            context.push(Routes.Tinder);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.reel.localize,
+                          image: Assets.reel,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            context.push(Routes.REELS);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.spotlight.localize,
+                          image: Assets.spotlight,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            context.push(Routes.SPOTLIGHT);
+                          },
+                        ),
+                        // drawerRollWidget(
+                        //   label: LocaleKeys.meet.localize,
+                        //   image: Assets.meet,
+                        //   onTap: () {
+
+                        //     context.pop();
+                        //     context.push(Routes.MEETINGROOM);
+                        //   },
+                        // ),
+                        drawerRollWidget(
+                          label: LocaleKeys.live.localize,
+                          image: Assets.liveIcon,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            context.push(Routes.LIVE);
+                          },
+                        ),
+                        // drawerRollWidget(
+                        //   label: LocaleKeys.snap.localize,
+                        //   image: Assets.snap,
+                        //   onTap: () {
+                        //     context.pop();
+                        //     context.push(Routes.SNAP);
+                        //   },
+                        // ),
+
+                        drawerRollWidget(
+                          label: LocaleKeys.chat.localize,
+                          image: Assets.whatsApp,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            context.push(Routes.CHAT,
+                                extra: ChatsViewParams());
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: context.isArabic?'العاب':"Games",
+                          image: Assets.gamesIcon,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            soonDialog(context);
+                            // context.push(Routes.CHAT,
+                            //     extra: ChatsViewParams());
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.ads.localize,
+                          image: Assets.spcialAdsIcon,
+                          isSvg: true,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            context.push(Routes.CREATECOMPANYAD);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: context.isArabic?'المزاد':"Auction",
+                          image: Assets.bidIcon,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            context.push(Routes.MAZADAT);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: LocaleKeys.chance.localize,
+                          image: Assets.chanceIcon,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            context.push(Routes.CHANCE);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: context.isArabic?'عملات':"Exchange",
+                          image: Assets.moneyExchange,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            soonDialog(context);
+                          },
                         ),
                       ],
                     ),
@@ -449,8 +577,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               Label(
                   text: context.isArabic
-                      ? "تفعيل وضع الاهتزاز"
-                      : "Enable Vibration"),
+                      ? "اهتزاز"
+                      : "Vibration"),
             ],
           ),
         ],
@@ -604,7 +732,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       return const SizedBox();
     }
     return Padding(
-      padding: EdgeInsets.only(top: 10.h),
+      padding: EdgeInsets.only(top: 5.h),
       child: InkWell(
         onTap: () {
           ManageVibration.vibrate();
@@ -612,7 +740,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         },
         child: Padding(
           padding: const EdgeInsetsDirectional.only(
-              top: 12.0, bottom: 12.0, start: 16),
+              top: 12.0, bottom: 5.0, start: 16),
           child: Row(
             children: [
               image != null && icon == null
@@ -688,22 +816,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget drawerRollWidget(
       {required String label,
-      required String image,
+      required String image, bool? isSvg=false,
       required void Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Column(
         children: [
-          Image.asset(
+          if(isSvg!=true)Image.asset(
             image,
-            width: 40.h,
-            height: 40.h,
+            width: 35.h,
+            height: 35.h,
+            fit: BoxFit.cover,
+          ),
+          if(isSvg==true)SvgPicture.asset(
+            image,
+            width: 35.h,
+            height: 35.h,
             fit: BoxFit.cover,
           ),
           Label(
             text: label,
             style: Styles.mediumText(
               fontWeight: FontWeight.w400,
+              fontSize: 24,
               color: context.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
@@ -856,7 +991,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     // context.read<GetWalletCubit>();
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(top:8.0,left: 8,right: 8),
       child: Column(
         children: [
           Row(
@@ -1125,142 +1260,194 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ],
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        context.push(Routes.EDITPROFILE);
+                        // context.push(
+                        //   Routes.WALLET,
+                        // );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.edit,
+                            size: 25.w,
+                          ),
+                          const Sizer(),
+                          Expanded(
+                            child: Label(
+                              text: LocaleKeys.edit.localize,
+                              // text: '${user?.wallet ?? 0}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                decoration: TextDecoration.underline,
+                                decorationColor: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomSwitchButton(
-                value:
-                    context.read<CustomPageCubit>().state.activate!.customPage,
-                onChanged: (value) async {
-                  showAnimatedDialog(
-                    context,
-                    AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Label(
-                              text: LocaleKeys.restartToApply.localize,
-                              style: Styles.headerText(
-                                  fontWeight: FontWeight.w400)),
-                          const Sizer(),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AppButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  label: LocaleKeys.cancel.localize,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomSwitchButton(
+                      value:
+                          context.read<CustomPageCubit>().state.activate!.customPage,
+                      onChanged: (value) async {
+                        showAnimatedDialog(
+                          context,
+                          AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Label(
+                                    text: LocaleKeys.restartToApply.localize,
+                                    style: Styles.headerText(
+                                        fontWeight: FontWeight.w400)),
+                                const Sizer(),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        label: LocaleKeys.cancel.localize,
+                                      ),
+                                    ),
+                                    const Sizer(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: AppButton(
+                                        backColor: AppColors.PRIMARY_COLOR,
+                                        onPressed: () {
+                                          context
+                                              .read<CustomPageCubit>()
+                                              .updateActivate(value);
+                                          Restart.restartApp();
+                                        },
+                                        label: LocaleKeys.restart.localize,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const Sizer(
-                                width: 16,
-                              ),
-                              Expanded(
-                                child: AppButton(
-                                  backColor: AppColors.PRIMARY_COLOR,
-                                  onPressed: () {
-                                    context
-                                        .read<CustomPageCubit>()
-                                        .updateActivate(value);
-                                    Restart.restartApp();
-                                  },
-                                  label: LocaleKeys.restart.localize,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    Label(text: context.isArabic?"مخصصه":"Custom"),
+                  ],
+                ),
               ),
-              SizedBox(
-                width: 4.w,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+                      builder: (context, state) {
+                        var floatingNavigatorCubit =
+                            context.read<FloatingNavigatorCubit>();
+                        return CustomSwitchButton(
+                          value: floatingNavigatorCubit.floatingNavigatorEnable,
+                          onChanged: (value) async {
+                            Navigator.pop(context);
+                            floatingNavigatorCubit.changeFloatingNavigatorEnable();
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    Label(text: context.isArabic?"تحكم":"Control"),
+                  ],
+                ),
               ),
-              Label(text: LocaleKeys.customPage.localize),
             ],
           ),
+
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
-                builder: (context, state) {
-                  var floatingNavigatorCubit =
-                      context.read<FloatingNavigatorCubit>();
-                  return CustomSwitchButton(
-                    value: floatingNavigatorCubit.floatingNavigatorEnable,
-                    onChanged: (value) async {
-                      Navigator.pop(context);
-                      floatingNavigatorCubit.changeFloatingNavigatorEnable();
-                    },
-                  );
-                },
+              Expanded(
+                child:Row(
+                  children: [
+                    BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
+                      builder: (context, state) {
+                        var choiceRulerCubit = ChoiceRulerCubit.get(context);
+                        return CustomSwitchButton(
+                          value: choiceRulerCubit.choiceRulerEnabled,
+                          onChanged: (value) async {
+                            Navigator.pop(context);
+                            choiceRulerCubit.changeChoiceRulerEnabled();
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    Label(
+                      text: context.isArabic?"مسطره":"Ruler",
+                    ),
+                  ],
+                ),
+
               ),
-              SizedBox(
-                width: 4.w,
-              ),
-              Label(text: LocaleKeys.floatingNavigator.localize),
-            ],
-          ),
-          Row(
-            children: [
-              BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
-                builder: (context, state) {
-                  var choiceRulerCubit = ChoiceRulerCubit.get(context);
-                  return CustomSwitchButton(
-                    value: choiceRulerCubit.choiceRulerEnabled,
-                    onChanged: (value) async {
-                      Navigator.pop(context);
-                      choiceRulerCubit.changeChoiceRulerEnabled();
-                    },
-                  );
-                },
-              ),
-              SizedBox(
-                width: 4.w,
-              ),
-              Label(
-                text: LocaleKeys.choiceRuler.localize,
-              ),
-            ],
-          ),
-          BlocBuilder<ThemeCubit, ThemeStates>(
-            builder: (BuildContext context, theme) {
-              var themeCubit = context.read<ThemeCubit>();
-              return Row(
-                children: [
-                  CustomSwitchButton(
-                    value: themeCubit.isDarkTheme,
-                    onChanged: (value) {
-                      if (theme is LightThemeModeStates) {
-                        ThemeCubit.get(context).darkThemeMode();
-                      }
-                      if (theme is DarkThemeModeStates) {
-                        ThemeCubit.get(context).lightThemeMode();
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    width: 4.w,
-                  ),
-                  themeCubit.isDarkTheme
-                      ? Label(
-                          text: LocaleKeys.lightMode.localize,
-                        )
-                      : Label(
-                          text: LocaleKeys.darkMode.localize,
+              Expanded(
+                child: BlocBuilder<ThemeCubit, ThemeStates>(
+                  builder: (BuildContext context, theme) {
+                    var themeCubit = context.read<ThemeCubit>();
+                    return Row(
+                      children: [
+                        CustomSwitchButton(
+                          value: themeCubit.isDarkTheme,
+                          onChanged: (value) {
+                            if (theme is LightThemeModeStates) {
+                              ThemeCubit.get(context).darkThemeMode();
+                            }
+                            if (theme is DarkThemeModeStates) {
+                              ThemeCubit.get(context).lightThemeMode();
+                            }
+                          },
                         ),
-                ],
-              );
-            },
+                        SizedBox(
+                          width: 4.w,
+                        ),
+                        themeCubit.isDarkTheme
+                            ? Label(
+                                text: context.isArabic?"فاتح":"Light",
+                              )
+                            : Label(
+                                text: context.isArabic?"غامق":"Dark",
+                              ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -1279,10 +1466,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               Label(
                   text: context.isArabic
-                      ? "تفعيل وضع الاهتزاز"
-                      : "Enable Vibration"),
+                      ? "اهتزاز"
+                      : "Vibration"),
             ],
-          ),
+          )
         ],
       ),
     );

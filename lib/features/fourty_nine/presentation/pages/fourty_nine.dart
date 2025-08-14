@@ -304,7 +304,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 2),
+                            horizontal: 0, vertical: 2),
                         child: HomeMainCategoryBanner(
                           category: state.data![index],
                           // imageHeight: MediaQuery.sizeOf(context).height * 0.10,
@@ -320,36 +320,39 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       ),
                     ),
                   );
-                  return CarouselSlider(
-                    options: CarouselOptions(
-                      height: MediaQuery.of(context).size.height * (0.5),
-                      autoPlay: true,
-                      enlargeCenterPage: false,
-                      enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                      viewportFraction: 1 / 5,
-                      enableInfiniteScroll: true,
-                      autoPlayInterval: const Duration(seconds: 3),
-                      scrollDirection: Axis.vertical,
-                      onPageChanged: (index, reason) {
-                        print(
-                            'Scrolled to index $index'); // <-- Here you can detect
-                        print(
-                            'Scrolled to currentIndex $currentIndex'); // <-- Here you can detect scroll
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * (0.5),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        height: MediaQuery.of(context).size.height * (0.5),
+                        autoPlay: true,
+                        enlargeCenterPage: false,
+                        enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                        viewportFraction: 1 / 5,
+                        enableInfiniteScroll: true,
+                        autoPlayInterval: const Duration(seconds: 3),
+                        scrollDirection: Axis.vertical,
+                        onPageChanged: (index, reason) {
+                          print(
+                              'Scrolled to index $index'); // <-- Here you can detect
+                          print(
+                              'Scrolled to currentIndex $currentIndex'); // <-- Here you can detect scroll
 
-                        // Trigger something when scrolling forward
-                        if (index > currentIndex) {
-                          print('User scrolled forward');
-                          _isScrollingDown = false;
-                        } else {
-                          print('User scrolled backward');
-                          _isScrollingDown = true;
-                        }
-                        setState(() => currentIndex = index);
-                      },
+                          // Trigger something when scrolling forward
+                          if (index < currentIndex) {
+                            print('User scrolled forward');
+                            _isScrollingDown = false;
+                          } else {
+                            print('User scrolled backward');
+                            _isScrollingDown = true;
+                          }
+                          setState(() => currentIndex = index);
+                        },
+                      ),
+                      items: items.map((item) {
+                        return item;
+                      }).toList(),
                     ),
-                    items: items.map((item) {
-                      return item;
-                    }).toList(),
                   );
                   /* return Container(
                     margin: EdgeInsets.only(bottom: 40),

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
@@ -29,22 +31,21 @@ class UserProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return ClickableWidget(
       onTap: () {
       ManageVibration.vibrate();
         if (fromProfile == false && context.read<UserCubit>().isLoggedIn) {
           context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
       },
-      child: CircleAvatar(
-        radius: withBorder ? size + 2 : size,
-        backgroundColor: borderColor,
-        child: CircleAvatar(
-          radius: size,
-          backgroundColor: Colors.white,
-          backgroundImage: CachedNetworkImageProvider(
-              imageURL ?? UIConst.profilePlaceHolder),
-        ),
+      child: ImageFromInternet(
+          image: imageURL??'',
+          isCircle: true,
+          defaultLogo: false,
+          width: 40,
+          height: 40,
+          firstChar: UserCubit.to.state.data?.firstName[0].toUpperCase(),
+          charPadding:0
       ),
     );
   }

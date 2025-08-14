@@ -469,8 +469,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     // await getActivities();
     // await getFeelings();
     // getLifeEventCategories();
-    loadInitialActivities();
-    loadInitialFeelings();
+    if(UserCubit.to.isLoggedIn)loadInitialActivities();
+    if(UserCubit.to.isLoggedIn)loadInitialFeelings();
 
     // await Future.wait([
     //   loadInitialActivities(),
