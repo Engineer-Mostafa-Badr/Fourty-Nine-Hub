@@ -5,22 +5,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/file_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/service/get_file_size_format.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/message_card.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/recived_contacts.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/file_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/service/get_file_size_format.dart';
+import '../../domain/entities/message_entity.dart';
+import '../controllers/chat_room_cubit/chat_room_cubit.dart';
+import '../widgets/chat_room_widgets/message_card.dart';
+import '../widgets/widgets_contacts/recived_contacts.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class AttachementsView extends StatefulWidget {
   const AttachementsView({super.key, required this.chatRoomCubit});
@@ -52,6 +53,7 @@ class AttachementsViewState extends State<AttachementsView> {
               ),
               leading: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 icon: const Icon(
@@ -264,6 +266,7 @@ class LinkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (linkUrl != null) {
           _launchURL(linkUrl!); // Launch the URL on tap
         }
@@ -560,6 +563,7 @@ class _AttachmentsFileCardState extends State<AttachmentsFileCard> {
           children: [
             GestureDetector(
               onTap: () async {
+      ManageVibration.vibrate();
                 log("Downloading...");
                 await downloadAndOpenFile(
                   fileUrl: widget.messageEntity.media[0].url,

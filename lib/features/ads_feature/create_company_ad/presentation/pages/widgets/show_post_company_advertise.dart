@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
@@ -39,6 +40,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
           label: LocaleKeys.myPosts.localize,
           leading: IconButton(
             onPressed: () {
+      ManageVibration.vibrate();
               context.pop();
               context.pop();
               context.push(Routes.CREATECOMPANYAD);
@@ -110,6 +112,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
     bool selected = _selectedType == type;
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         setState(() {
           _selectedType = type;
         });

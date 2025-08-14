@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../domain/entities/post_user_entity.dart';
+import '../cubit/create_post_cubit.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';

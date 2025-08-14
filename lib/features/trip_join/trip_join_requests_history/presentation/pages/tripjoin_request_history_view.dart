@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/trip_join_request_history_builder.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../widgets/trip_join_request_history_builder.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 

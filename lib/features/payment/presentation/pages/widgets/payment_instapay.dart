@@ -15,6 +15,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../domain/entities/cache_out_entity/list_bank_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PaymentInstapay extends StatefulWidget {
   const PaymentInstapay({super.key});
@@ -262,6 +263,7 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                   const Sizer(),
                   InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       _submitForm(context);
                     },
                     child: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class AvailablePickMeCard extends StatefulWidget {
   const AvailablePickMeCard({
@@ -42,17 +43,21 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        controller: _scrollController,
-        itemCount: 20,
-        itemBuilder: (context,index){
-          return  Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 10.h,
-            ),
-            child:SizedBox(),
-          );
-        });
+    return GlowingOverscrollIndicator(
+      color: AppColors.SECONDARY_COLOR,
+        axisDirection: AxisDirection.down,
+      child: ListView.builder(
+          controller: _scrollController,
+          itemCount: 20,
+          itemBuilder: (context,index){
+            return  Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 10.h,
+              ),
+              child:SizedBox(),
+            );
+          }),
+    );
   }
 
 

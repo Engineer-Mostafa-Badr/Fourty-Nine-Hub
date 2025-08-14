@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_contacts_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthCardButtonsSection extends StatelessWidget {
   const HealthCardButtonsSection({
@@ -30,7 +31,10 @@ class HealthCardButtonsSection extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               title: buttonTitle??'',
               color:isSubscribed? AppColors.SECONDARY_COLOR:AppColors.SECONDARY_COLOR.withOpacity(0.4),
-              onTap:isSubscribed? onTap:(){},
+              onTap:isSubscribed? onTap:(){
+
+      ManageVibration.vibrate();
+              },
               radius: 15,
             ),
           ),

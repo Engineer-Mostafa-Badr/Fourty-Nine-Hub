@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
+import '../../domain/entities/activity_entity.dart';
 
 class ActivityModel extends ActivityEntity {
   ActivityModel({required super.id, required super.name, required super.image, required super.nameEn,super.mainId,super.mainActivity});

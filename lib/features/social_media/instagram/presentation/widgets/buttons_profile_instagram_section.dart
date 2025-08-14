@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ButtonsProfileInstagramSection extends StatelessWidget {
   const ButtonsProfileInstagramSection({super.key});
@@ -35,6 +36,7 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   height: 1.22,
                 ),
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.push(Routes.EDITPROFILE);
                 },
               ),
@@ -53,7 +55,10 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   fontSize: 32,
                   height: 1.22,
                 ),
-                onPressed: () {},
+                onPressed: () {
+
+      ManageVibration.vibrate();
+                },
               ),
             ),
           ],
@@ -77,7 +82,10 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   fontSize: 32,
                   height: 1.22,
                 ),
-                onPressed: () {},
+                onPressed: () {
+
+      ManageVibration.vibrate();
+                },
               ),
             ),
             const SizedBox(width: 12),
@@ -94,7 +102,10 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   fontSize: 32,
                   height: 1.22,
                 ),
-                onPressed: () {},
+                onPressed: () {
+
+      ManageVibration.vibrate();
+                },
               ),
             ),
           ],

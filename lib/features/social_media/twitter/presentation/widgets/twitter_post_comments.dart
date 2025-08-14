@@ -2,21 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_post_comment_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_card.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_replied.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../data/models/twitter_post_comment_model.dart';
+import '../../data/models/twitter_user_model.dart';
+import '../../domain/entities/twitter_post_comment_entity.dart';
+import '../../domain/usecases/comment_react_usecase.dart';
+import '../../domain/usecases/comment_reply_usecase.dart';
+import '../../domain/usecases/post_comment_usecase.dart';
+import '../../domain/usecases/twitter_report_usecase.dart';
+import '../bloc/twitter_bloc.dart';
+import 'twitter_comment_card.dart';
+import 'twitter_comment_replied.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -26,6 +26,7 @@ import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TwitterPostComments extends StatefulWidget {
   final List<TwitterPostCommentEntity> comments;
@@ -179,6 +180,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                           isCircle: true,
                           size: 20,
                           onPressed: () async {
+      ManageVibration.vibrate();
                             TwitterPostCommentModel data =
                                 await widget.onAddComment(
                               TwitterPostCommentParams(

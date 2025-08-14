@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../../res/style/styles.dart';
 
 class SuggestedForYouInstagramScreen extends StatelessWidget {
   const SuggestedForYouInstagramScreen({super.key});

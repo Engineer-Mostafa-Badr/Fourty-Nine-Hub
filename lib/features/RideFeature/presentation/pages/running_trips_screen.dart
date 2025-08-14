@@ -39,6 +39,7 @@ class RunningTripScreen extends StatefulWidget {
 
 class _RunningTripScreenState extends State<RunningTripScreen> {
   late ScrollController _scrollController;
+  late ScrollController newScrollController;
   int page = 1;
   final int limit = 10;
   bool isFetching = false;
@@ -46,6 +47,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
   @override
   void initState() {
     super.initState();
+    newScrollController = ScrollController();
     _scrollController = ScrollController()..addListener(_onScroll);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -141,7 +143,7 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
                             // );
                             return TripCard(trip: trip);
                 }
-                    ),
+                    ), scrollController: newScrollController,
                   );
                   // return ListView.builder(
                   //   controller: _scrollController,

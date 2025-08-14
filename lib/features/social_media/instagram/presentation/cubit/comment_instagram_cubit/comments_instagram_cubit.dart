@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/comment_instagram_entity.dart';
+import '../../../domain/usecases/add_comment_use_case.dart';
+import '../../../domain/usecases/delete_comment_use_case.dart';
+import '../../../domain/usecases/get_comment_use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/delete_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_comment_use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'comments_instagram_state.dart';
 
@@ -23,6 +26,10 @@ class CommentsInstagramCubit extends Cubit<CommentsInstagramState> {
     final result = await _getCommentUseCase(postId);
     result.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: CommentsInstagramStatus.failure,
           failure: failure,
@@ -48,6 +55,10 @@ class CommentsInstagramCubit extends Cubit<CommentsInstagramState> {
     ));
     result.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(
           state.copyWith(
             addStatus: CommentsAddStatus.failure,
@@ -75,6 +86,10 @@ class CommentsInstagramCubit extends Cubit<CommentsInstagramState> {
     ));
     result.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(
           state.copyWith(
             deleteStatus: CommentsDeleteStatus.failure,

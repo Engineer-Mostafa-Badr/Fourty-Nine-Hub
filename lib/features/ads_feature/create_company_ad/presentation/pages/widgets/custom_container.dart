@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -64,6 +65,7 @@ class CustomContainerAdvertise extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
+            ManageVibration.vibrate();
             function();
           },
           child: Container(
@@ -100,14 +102,16 @@ class CustomContainerAdvertise extends StatelessWidget {
                   ),
                 if (numberOfAdvertises > 0)
                   IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.check_circle,
-                    color: numberOfAdvertises > 0
-                        ? AppColors.SECONDARY_COLOR
-                        : Colors.transparent,
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                    },
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: numberOfAdvertises > 0
+                          ? AppColors.SECONDARY_COLOR
+                          : Colors.transparent,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

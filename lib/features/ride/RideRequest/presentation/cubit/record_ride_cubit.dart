@@ -10,7 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class RecordRideCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   final record = AudioRecorder();
@@ -70,7 +72,12 @@ class RecordRideCubit extends Cubit<RiderState> {
       type: type,
     );
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) {
         sendBinaryFileData(
             file: XFile(path),
@@ -124,7 +131,12 @@ class RecordRideCubit extends Cubit<RiderState> {
   confirmUpload({required String mediaId, required String tripId}) async {
     var response = await repository.confirmUpload(mediaId: mediaId);
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) {
         uploadVice(tripId: tripId, mediaId: mediaId);
       },

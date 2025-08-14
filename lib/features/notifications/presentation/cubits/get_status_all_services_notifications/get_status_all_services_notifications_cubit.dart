@@ -4,7 +4,9 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../domain/entities/status_all_services_entity.dart';
 import '../../../domain/usecases/get_status_all_services_usecase.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'get_status_all_services_notifications_state.dart';
 
 class GetStatusAllServicesNotificationsCubit
@@ -21,7 +23,13 @@ class GetStatusAllServicesNotificationsCubit
     emit(GetUserTripsNotificationsLoading());
     final result = await getStatusAllServicesUseCase(const NoParams());
     result.fold(
-        (l) => emit(GetUserTripsNotificationsFailed(Labels.errorHappened)),
+        (l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+          emit(GetUserTripsNotificationsFailed(Labels.errorHappened));
+        },
         (r) {
       status = [
         {

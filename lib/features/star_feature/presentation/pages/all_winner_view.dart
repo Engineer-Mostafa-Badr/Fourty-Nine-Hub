@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/date_time.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/date_time.dart';
+import '../../../../core/widget/custom_scaffold.dart';
+import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../domain/entity/star_winner_entity.dart';
+import '../controller/cubit/star_cubit.dart';
+import '../controller/cubit/star_state.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 
 import '../../../../core/loading/custom_loading.dart';
 import '../../../../res/assets/assets.dart';
 import 'widgets/all_winner_grid_view.dart';
+import '../../../../helpers/manage_vibration.dart';
 // import '../../../../../core/widget/custom_scaffold.dart';
 
 class AllWinnerView extends StatefulWidget {
@@ -114,6 +115,7 @@ class _AllWinnerViewState extends State<AllWinnerView> {
         children: [
           InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               // context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
             },
             child: ImageFromInternet(

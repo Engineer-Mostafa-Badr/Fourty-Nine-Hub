@@ -24,6 +24,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OfferRideOfferScreen extends StatefulWidget {
   final String type;
@@ -226,6 +227,7 @@ class ClientOfferWidget extends StatelessWidget {
         children: [
           ClickableWidget(
             onTap: () {
+      ManageVibration.vibrate();
               context.push(
                 Routes.allDriverRatingScreen,
                 extra:offers?.id,
@@ -415,6 +417,7 @@ class ClientOfferWidget extends StatelessWidget {
                             radius: 15,
                             label: LocaleKeys.Accept.tr(),
                             onPressed: () {
+      ManageVibration.vibrate();
                               modeType=='ride'?context.read<ClientTripsCubit>().acceptClientTrip(offers?.id ?? ""):context.read<ClientTripsCubit>().acceptClientShippingTrip(offers?.id ?? "");
                               onRefuseOffer(offers?.id??"");
                             },
@@ -430,6 +433,7 @@ class ClientOfferWidget extends StatelessWidget {
                             style: Styles.mediumText(
                                 color: Colors.white, fontSize: 23),
                             onPressed: () async{
+      ManageVibration.vibrate();
                               modeType=='ride'?await context.read<ClientTripsCubit>().refuseClientTrip(offers?.id ?? ""):await context.read<ClientTripsCubit>().refuseClientShippingTrip(offers?.id ?? "",context);
                                 onRefuseOffer(offers?.id??"");
 

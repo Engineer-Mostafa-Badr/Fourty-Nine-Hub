@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
+import '../entities/profile_instagram_data_entity.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';

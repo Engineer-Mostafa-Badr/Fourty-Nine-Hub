@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../doctor_details/domain/entities/doctor_entity.dart';
@@ -14,12 +16,6 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   final HealthSharedData _healthSharedData;
   final GetDoctorListUseCase _getDoctorListUseCase;
   final GetSubCategoryDoctorsListUseCase _getSubCategoryDoctorsListUseCase;
-
-  DoctorsListCubit(
-    this._getDoctorListUseCase,
-    this._healthSharedData,
-    this._getSubCategoryDoctorsListUseCase,
-  ) : super(const DoctorsListState());
 
   // void loadData() async {
   //   emit(state.copyWith(status: DoctorsListStates.loading));
@@ -69,19 +65,17 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   // }
 
   List<DoctorEntity> doctors = [];
+
   List<MostBookingEntity> doctorsList = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
-
-  void loadInitialData(String subCategory) async {
-    emit(state.copyWith(status: DoctorsListStates.loading));
-    doctorsList.clear();
-    currentPage = 1;
-    hasMoreData = true;
-    await getDoctorsFromSubCategory(subCategory);
-  }
+  DoctorsListCubit(
+    this._getDoctorListUseCase,
+    this._healthSharedData,
+    this._getSubCategoryDoctorsListUseCase,
+  ) : super(const DoctorsListState());
 
   getDoctorsFromSubCategory(String subCategory) async {
     print("object");
@@ -90,13 +84,17 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
     isLoadingMore = true;
 
-    final response = await _getDoctorListUseCase.call(
-        GetDoctorListParams(
-            subCategoryId: subCategory, page: currentPage, limit: pageSize));
+    final response = await _getDoctorListUseCase.call(GetDoctorListParams(
+        subCategoryId: subCategory, page: currentPage, limit: pageSize));
 
     response.fold(
-      (failure) => emit(
-          state.copyWith(failure: failure, status: DoctorsListStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: DoctorsListStates.error));
+      },
       (data) {
         doctorsList.addAll(data);
 
@@ -107,9 +105,18 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(status: DoctorsListStates.success, doctorsList: data));
+        emit(state.copyWith(
+            status: DoctorsListStates.success, doctorsList: data));
       },
     );
+  }
+
+  void loadInitialData(String subCategory) async {
+    emit(state.copyWith(status: DoctorsListStates.loading));
+    doctorsList.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getDoctorsFromSubCategory(subCategory);
   }
 }
 /*

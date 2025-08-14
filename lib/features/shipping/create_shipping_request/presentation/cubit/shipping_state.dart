@@ -1,12 +1,12 @@
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_statistice_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_driver_data_model/get_driver_data_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/trip_by_user_model.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../requests_history/data/models/shipping_request_model/shipping_request_model.dart';
+import '../../data/models/all_trip_model/all_trip_model.dart';
+import '../../data/models/banner_model/banner_model.dart';
+import '../../data/models/driver_statistice_model.dart';
+import '../../data/models/get_driver_data_model/get_driver_data_model.dart';
+import '../../data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
+import '../../data/models/trip_by_user_model.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 
 class ShippingState {}
 

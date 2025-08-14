@@ -13,6 +13,7 @@ import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
 import '../pick_location.dart';
 import 'bottom_sheet/custom_bottom_sheet.dart';
 import 'dialog_widget/show_custom_dialog_trip.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class PickUpLocationCard extends StatefulWidget {
   final Color? firstColor;
   final ClientTripsCubit cubit;
@@ -213,6 +214,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                       final cityName = (getLang() == "ar" ? city.nameAr : city.nameEn) ?? "";
                       return GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           resultCity = cityName;
                           final fullAddress = "$resultGovernorate, $resultCity";
                           // final fullAddress = "$resultGovernorate, $resultCity, Egypt";
@@ -245,6 +247,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
                       final governorateName = (getLang() == "ar" ? governorate.nameAr : governorate.nameEn) ?? "";
                       return GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           resultGovernorate = governorateName;
                           widget.cubit.getCities(governorate.id);
                         },
@@ -372,4 +375,3 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
     );
   }
 }
-

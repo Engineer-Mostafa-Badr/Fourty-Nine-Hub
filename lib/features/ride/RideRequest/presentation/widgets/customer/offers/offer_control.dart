@@ -7,6 +7,7 @@ import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../createOrder/cancel_order.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OfferControl extends StatelessWidget {
   const OfferControl({
@@ -29,7 +30,10 @@ class OfferControl extends StatelessWidget {
           Row(
             children: [
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  },
                   child: Label(
                       text: '+3',
                       style: Styles.mediumText(color: Colors.white))),
@@ -37,7 +41,10 @@ class OfferControl extends StatelessWidget {
                   child:
                       Label(text: '${'20'} EGP', style: Styles.mediumText())),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  },
                   child: Label(
                       text: '-3',
                       style: Styles.mediumText(color: Colors.white))),
@@ -46,13 +53,17 @@ class OfferControl extends StatelessWidget {
           const Sizer(),
           AppButton(
               label: 'Raise fare',
-              onPressed: () {},
+              onPressed: () {
+
+      ManageVibration.vibrate();
+              },
               backColor: Colors.grey[100] ?? Colors.grey,
               textColor: true ? Colors.green : Colors.grey),
           const Sizer(),
           AppButton(
               label: 'Cancel Request',
               onPressed: () {
+      ManageVibration.vibrate();
                 bottomSheet(
                     widget: const CancelOrder(id: 'ride.sId'),
                     isScrollControlled: true,

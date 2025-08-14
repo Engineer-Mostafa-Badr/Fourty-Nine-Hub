@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 import '../../../../../../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomEffectGridItem<T> {
@@ -149,6 +150,7 @@ class _ZegoLiveAudioRoomEffectGridState
   Widget gridItem(ZegoLiveAudioRoomEffectGridItem item, Size buttonSize) {
     return ZegoTextIconButton(
       onPressed: () {
+      ManageVibration.vibrate();
         widget.model.selectedID.value = item.id;
         item.onPressed.call();
 

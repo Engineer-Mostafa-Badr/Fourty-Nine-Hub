@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class GiftView extends StatelessWidget {
   const GiftView({super.key});
@@ -25,6 +26,7 @@ class GiftView extends StatelessWidget {
           actions: [
             CustomWinnerAppbar(
               onPressed: () {
+      ManageVibration.vibrate();
                 context.push(Routes.WINNERSGift);
               },
             ),

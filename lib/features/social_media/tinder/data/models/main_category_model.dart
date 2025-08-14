@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../../fourty_nine/data/models/main_category_model.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
 
 class MainCategoryResponse {
   final bool status;

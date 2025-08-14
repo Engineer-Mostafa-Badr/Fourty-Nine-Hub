@@ -11,6 +11,7 @@ import 'deprecated/deprecated_340.dart';
 import 'inner_text.dart';
 import 'pk/layout/layout.dart';
 import 'swiping/config.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Project imports:
 

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_entity.dart';
+import '../../../domain/entities/tripjoin_request_entity.dart';
 
 import 'category_id.dart';
 import 'user_id.dart';

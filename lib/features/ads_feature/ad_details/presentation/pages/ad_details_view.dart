@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/widgets/are_yo
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
@@ -213,6 +214,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                       children: [
                         InkWell(
                           onTap: () {
+                            ManageVibration.vibrate();
                             context.pop();
                           },
                           child: Container(
@@ -230,6 +232,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         Spacer(),
                         InkWell(
                           onTap: () {
+                            ManageVibration.vibrate();
                             if (state.ad!.isFavourite == true) {
                               context
                                   .read<AdvertisementCubit>()
@@ -344,6 +347,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             height: 38,
             backColor: AppColors.c0B1035,
             onPressed: () async {
+              ManageVibration.vibrate();
               context.push(Routes.ADRequests,
                   extra: AdRequestParams(id: widget.id, userName: ''));
             },
@@ -361,6 +365,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             height: 38,
             backColor: AppColors.SECONDARY_COLOR_DARK2,
             onPressed: () {
+              ManageVibration.vibrate();
               bottomSheet(
                   context: context,
                   isFloating: true,
@@ -659,6 +664,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         //           : const NeverScrollableScrollPhysics(),
         //       itemBuilder: (context, index) => InkWell(
         //         onTap: () {
+      ManageVibration.vibrate();
         //           Navigator.push(
         //             context,
         //             MaterialPageRoute(

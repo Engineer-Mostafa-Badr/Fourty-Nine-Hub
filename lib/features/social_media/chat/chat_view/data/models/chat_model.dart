@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import '../../../chat_room/data/models/message_model.dart';
+import '../../../chat_room/domain/usecases/get_lables_usecase.dart';
+import '../../domain/entities/chat_entity.dart';
 
 class ChatModel extends ChatEntity {
   ChatModel({

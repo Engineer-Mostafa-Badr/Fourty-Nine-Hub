@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MainCategoriesCardsParams {
   final List<MainCategoryEntity>? data;
@@ -150,6 +151,7 @@ class _MainCategoriesFlipCardsViewState
                         (context, index, percentThresholdX, percentThresholdY) {
                       return GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           final item = mainCategories[index];
                           print('item id is ${item.id}');
                           // print('item id is ${item}');

@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/account_taps/wallet/data/models/pagination_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/reel_model.dart';
+import '../../../../account_taps/wallet/data/models/pagination_model.dart';
+import '../../domain/entities/reel_instagram_data_entity.dart';
+import '../../../reels/data/models/reel_model.dart';
 
 class ReelInstagramDataModel extends ReelInstagramDataEntity {
   ReelInstagramDataModel({

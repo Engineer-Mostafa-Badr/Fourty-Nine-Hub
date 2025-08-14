@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -34,6 +35,7 @@ class BuildItemAuctionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: item.id);
       },
       child: Container(
@@ -151,7 +153,10 @@ class BuildItemAuctionCard extends StatelessWidget {
           title: Label(
             text: label,
           ),
-          onTap: () => onTap(),
+          onTap: () {
+            ManageVibration.vibrate();
+            onTap();
+          },
         ),
       ],
     );
@@ -223,6 +228,7 @@ class BuildItemAuctionCard extends StatelessWidget {
             )),
         InkWell(
           onTap: () {
+            ManageVibration.vibrate();
             bottomSheet(
                 context: context,
                 isScrollControlled: true,

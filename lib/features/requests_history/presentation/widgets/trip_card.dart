@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/requests_history/data/models/request_hist
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripCard extends StatelessWidget {
   final RequestHistoryRideModel trip;
@@ -20,6 +21,7 @@ class TripCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         showModalBottomSheet(
             context: context,
             isDismissible: false,
@@ -41,6 +43,7 @@ class TripCard extends StatelessWidget {
                               Row(children: [
                                 GestureDetector(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       Navigator.pop(context);
                                     },
                                     child: const Icon(Icons.arrow_back_ios)),

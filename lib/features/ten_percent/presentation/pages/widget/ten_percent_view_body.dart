@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
-import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
-import 'package:fourtyninehub/features/ten_percent/presentation/pages/widget/bill_value_field.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
+import '../../cubit/ten_percent_cubit.dart';
+import 'bill_value_field.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TenPercentViewBody extends StatefulWidget {
   const TenPercentViewBody({
@@ -91,6 +92,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                             ),
                       label: LocaleKeys.uploadBill.localize,
                       onPressed: () async {
+      ManageVibration.vibrate();
                         await context
                             .read<TenPercentCubit>()
                             .uploadTrafficBill(context: context);
@@ -168,6 +170,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                             ),
                       label: LocaleKeys.uploadBill.localize,
                       onPressed: () async {
+      ManageVibration.vibrate();
                         await context
                             .read<TenPercentCubit>()
                             .uploadElectricityBill(context: context);
@@ -244,6 +247,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                             ),
                       label: LocaleKeys.uploadBill.localize,
                       onPressed: () async {
+      ManageVibration.vibrate();
                         await context
                             .read<TenPercentCubit>()
                             .uploadMobileBill(context: context);
@@ -307,6 +311,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                   : CustomButtonWalletAndGiftAndCashback(
                       title: LocaleKeys.sendRequest.localize,
                       onPressed: () {
+      ManageVibration.vibrate();
                         // if (state.mobileId == null &&
                         //     state.electricityId == null &&
                         //     state.trafficId == null) {

@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/error/failure.dart';
+import '../datasources/create_post_remote_datasource.dart';
+import '../../domain/entities/activity_entity.dart';
+import '../../domain/entities/life_event_entity.dart';
+import '../../domain/entities/feeling_entity.dart';
+import '../../domain/entities/place_entity.dart';
+import '../../domain/entities/post_user_entity.dart';
+import '../../domain/usecases/creat_twitter_usecase.dart';
+import '../../domain/usecases/friends-followers_usecase.dart';
 import '../../domain/repositories/create_post_repo.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
+import '../../domain/usecases/get_sub_activities_usecase.dart';
 
 class CreatePostRepoImpl implements CreatePostRepo {
   final CreatePostRemoteDataSource _remoteDataSource;

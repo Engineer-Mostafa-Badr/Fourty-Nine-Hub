@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: da0d9209ca76bde579f2da330aeb9df62b6319c834fa7baae052021b0462401f
+      sha256: e55636ed79578b9abca5fecf9437947798f5ef7456308b5cb85720b793eac92f
       url: "https://pub.dev"
     source: hosted
-    version: "85.0.0"
+    version: "82.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: analyzer
-      sha256: f6154230675c44a191f2e20d16eeceb4aa18b30ca732db4efaf94c6a7d43cfa6
+      sha256: "904ae5bb474d32c38fb9482e2d925d5454cda04ddd0e55d2e6826bc72f6ba8c0"
       url: "https://pub.dev"
     source: hosted
-    version: "7.5.2"
+    version: "7.4.5"
   animated_cards_carousel:
     dependency: "direct main"
     description:
@@ -93,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: asn1lib
-      sha256: "9a8f69025044eb466b9b60ef3bc3ac99b4dc6c158ae9c56d25eeccf5bc56d024"
+      sha256: "1c296cd268f486cabcc3930e9b93a8133169305f18d722916e675959a88f6d2c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.5"
+    version: "1.5.9"
   async:
     dependency: transitive
     description:
@@ -125,58 +125,58 @@ packages:
     dependency: "direct main"
     description:
       name: audioplayers
-      sha256: e653f162ddfcec1da2040ba2d8553fff1662b5c2a5c636f4c21a3b11bee497de
+      sha256: a5341380a4f1d3a10a4edde5bb75de5127fe31e0faa8c4d860e64d2f91ad84c7
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "6.4.0"
   audioplayers_android:
     dependency: transitive
     description:
       name: audioplayers_android
-      sha256: "60a6728277228413a85755bd3ffd6fab98f6555608923813ce383b190a360605"
+      sha256: f8c90823a45b475d2c129f85bbda9c029c8d4450b172f62e066564c6e170f69a
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.1"
+    version: "5.2.0"
   audioplayers_darwin:
     dependency: transitive
     description:
       name: audioplayers_darwin
-      sha256: "0811d6924904ca13f9ef90d19081e4a87f7297ddc19fc3d31f60af1aaafee333"
+      sha256: "405cdbd53ebdb4623f1c5af69f275dad4f930ce895512d5261c07cd95d23e778"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.2.0"
   audioplayers_linux:
     dependency: transitive
     description:
       name: audioplayers_linux
-      sha256: f75bce1ce864170ef5e6a2c6a61cd3339e1a17ce11e99a25bae4474ea491d001
+      sha256: "7e0d081a6a527c53aef9539691258a08ff69a7dc15ef6335fbea1b4b03ebbef0"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1"
+    version: "4.2.0"
   audioplayers_platform_interface:
     dependency: transitive
     description:
       name: audioplayers_platform_interface
-      sha256: "0e2f6a919ab56d0fec272e801abc07b26ae7f31980f912f24af4748763e5a656"
+      sha256: "77e5fa20fb4a64709158391c75c1cca69a481d35dc879b519e350a05ff520373"
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.1"
+    version: "7.1.0"
   audioplayers_web:
     dependency: transitive
     description:
       name: audioplayers_web
-      sha256: "1c0f17cec68455556775f1e50ca85c40c05c714a99c5eb1d2d57cc17ba5522d7"
+      sha256: bd99d8821114747682a2be0adcdb70233d4697af989b549d3a20a0f49f6c9b13
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "5.1.0"
   audioplayers_windows:
     dependency: transitive
     description:
       name: audioplayers_windows
-      sha256: "4048797865105b26d47628e6abb49231ea5de84884160229251f37dfcbe52fd7"
+      sha256: "871d3831c25cd2408ddc552600fd4b32fba675943e319a41284704ee038ad563"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1"
+    version: "4.2.0"
   auto_scroll_text:
     dependency: "direct overridden"
     description:
@@ -341,10 +341,10 @@ packages:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "71dacf6c30aee386617c2b72ad46517706f8ef625aa637313c0d4dc93ddd8d76"
+      sha256: ca244564876d5a76f2126bca501aec25243cad23ba1784819242aea2fd25cf70
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.20+1"
+    version: "0.9.19+2"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -533,10 +533,10 @@ packages:
     dependency: transitive
     description:
       name: device_frame
-      sha256: a58796a9a2efc0fd8a7903cee0eed2e2d111f4a7d81fa2319ab89430b020f624
+      sha256: d031a06f5d6f4750009672db98a5aa1536aa4a231713852469ce394779a23d75
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.2.0"
   device_info_plus:
     dependency: "direct main"
     description:
@@ -1151,10 +1151,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_pdfview
-      sha256: c402ad1f51ba8ea73b9fb04c003ca0a9286118ba5ac9787ee2aa58956b3fcf8a
+      sha256: "51413e36ab3f1a2fe0edf97ebfa770e20182ea4a066bc9f292920330d9245c9d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1+1"
+    version: "1.4.0+1"
   flutter_phoenix:
     dependency: "direct main"
     description:
@@ -1295,10 +1295,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: cd57f7969b4679317c17af6fd16ee233c1e60a82ed209d8a475c54fd6fd6f845
+      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -1513,10 +1513,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_maps_flutter
-      sha256: e1805e5a5885bd14a1c407c59229f478af169bf4d04388586b19f53145a5db3a
+      sha256: d7e4704e6b9f3452c7cd9eb6efc226e1f9e8273c28da47b0a1e7451916d71005
       url: "https://pub.dev"
     source: hosted
-    version: "2.12.3"
+    version: "2.12.2"
   google_maps_flutter_android:
     dependency: transitive
     description:
@@ -1529,10 +1529,10 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_ios
-      sha256: d03678415da9de8ce7208c674b264fc75946f326e696b4b7f84c80920fc58df6
+      sha256: c7433645c4c9b61c587938cb06072f3dad601239e596b090c0f8f206c1f2ade7
       url: "https://pub.dev"
     source: hosted
-    version: "2.15.4"
+    version: "2.15.2"
   google_maps_flutter_platform_interface:
     dependency: transitive
     description:
@@ -1545,10 +1545,10 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_web
-      sha256: ce2cac714e5462bf761ff2fdfc3564c7e5d7ed0578268dccb0a54dbdb1e6214e
+      sha256: a45786ea6691cc7cdbe2cf3ce2c2daf4f82a885745666b4a36baada3a4e12897
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.12+2"
+    version: "0.5.12"
   google_mobile_ads:
     dependency: "direct main"
     description:
@@ -1833,10 +1833,10 @@ packages:
     dependency: transitive
     description:
       name: iris_method_channel
-      sha256: "62e02acf04621796bc92b5a0dbcb3346733ce3c38988254c05e05cd05e397914"
+      sha256: "99143ae77073ee8fd6c19d8f56ec59ba6c332000d8bea46bb9b6a89d83feca5c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.2"
   js:
     dependency: transitive
     description:
@@ -2481,10 +2481,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "6323a5b0fa688b6a010df4905a56b00181479e6d10534cecfecede2aa55add61"
+      sha256: f0d7856b6ca1887cfa6d1d394056a296ae33489db914e365e2044fdada449e62
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.3"
+    version: "6.0.2"
   pretty_dio_logger:
     dependency: "direct main"
     description:
@@ -2601,10 +2601,10 @@ packages:
     dependency: transitive
     description:
       name: record_platform_interface
-      sha256: c1ad38f51e4af88a085b3e792a22c685cb3e7c23fc37aa7ce44c4cf18f25fe89
+      sha256: "8a575828733d4c3cb5983c914696f40db8667eab3538d4c41c50cbb79e722ef4"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.2.0"
   record_web:
     dependency: transitive
     description:
@@ -2762,6 +2762,30 @@ packages:
     description:
       name: shimmer
       sha256: "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  sign_in_with_apple:
+    dependency: "direct main"
+    description:
+      name: sign_in_with_apple
+      sha256: "8bd875c8e8748272749eb6d25b896f768e7e9d60988446d543fe85a37a2392b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.1"
+  sign_in_with_apple_platform_interface:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_platform_interface
+      sha256: "981bca52cf3bb9c3ad7ef44aace2d543e5c468bb713fd8dda4275ff76dfa6659"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  sign_in_with_apple_web:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_web
+      sha256: f316400827f52cafcf50d00e1a2e8a0abc534ca1264e856a81c5f06bd5b10fed
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
@@ -3174,10 +3198,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: a4f059dc26fc8295b5921376600a194c4ec7d55e72f2fe4c7d2831e103d461e6
+      sha256: "44cc7104ff32563122a929e4620cf3efd584194eec6d1d913eb5ba593dbcf6de"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.19"
+    version: "1.1.18"
   vector_graphics_codec:
     dependency: transitive
     description:
@@ -3318,10 +3342,10 @@ packages:
     dependency: transitive
     description:
       name: watcher
-      sha256: "0b7fd4a0bbc4b92641dbf20adfd7e3fd1398fe17102d94b674234563e110088a"
+      sha256: "69da27e49efa56a15f8afe8f4438c4ec02eff0a117df1b22ea4aad194fe1c104"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.1"
   web:
     dependency: "direct overridden"
     description:
@@ -3406,18 +3430,18 @@ packages:
     dependency: "direct main"
     description:
       name: widgetbook_annotation
-      sha256: "41662c48c2a0e82cac676a83727203d863621a5f6fb2505395287b8789afdf38"
+      sha256: b58cf08d21c36e946da510d7a8ee0307c4ec597c270d402e7b4edf4a4840c872
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.0"
   widgetbook_generator:
     dependency: "direct dev"
     description:
       name: widgetbook_generator
-      sha256: "38320c313a425e5a354bfdf6d2922efd69b5c3e9c0bf414d3ba7f947c303448a"
+      sha256: "361f28ae26a4eb9c74625ff1e53eb6a783c8f0e6032baed80de4489da778f955"
       url: "https://pub.dev"
     source: hosted
-    version: "3.13.0"
+    version: "3.14.0"
   win32:
     dependency: transitive
     description:
@@ -3478,10 +3502,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_express_engine
-      sha256: "5d7e446196b5836e395765cd298b96265d9f04c56f6da8a21dc60bbfef721e32"
+      sha256: "6639d0c1dc27343fbb31142038d27c2b196fc4add268dfb4b5df978ccfbcafd5"
       url: "https://pub.dev"
     source: hosted
-    version: "3.21.0"
+    version: "3.20.5"
   zego_plugin_adapter:
     dependency: transitive
     description:

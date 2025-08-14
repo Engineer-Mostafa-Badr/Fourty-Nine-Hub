@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_button_and_info.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_image_popup.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'upload_button_and_info.dart';
+import 'upload_image_popup.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class UploadImageButtonSheet extends StatelessWidget {
   const UploadImageButtonSheet({
@@ -30,6 +31,7 @@ class UploadImageButtonSheet extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.pop();
                 },
               ),
@@ -40,6 +42,7 @@ class UploadImageButtonSheet extends StatelessWidget {
               number: 1,
               isSuccess: true,
               onTap: () {
+      ManageVibration.vibrate();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -56,6 +59,7 @@ class UploadImageButtonSheet extends StatelessWidget {
               number: 2,
               isSuccess: true,
               onTap: () {
+      ManageVibration.vibrate();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -71,6 +75,7 @@ class UploadImageButtonSheet extends StatelessWidget {
               isCarImage: true,
               number: 3,
               onTap: () {
+      ManageVibration.vibrate();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -86,6 +91,7 @@ class UploadImageButtonSheet extends StatelessWidget {
               isCarImage: true,
               number: 4,
               onTap: () {
+      ManageVibration.vibrate();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -99,6 +105,7 @@ class UploadImageButtonSheet extends StatelessWidget {
             ),
             UploadButtonAndInfo(
               onTap: () {
+      ManageVibration.vibrate();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {

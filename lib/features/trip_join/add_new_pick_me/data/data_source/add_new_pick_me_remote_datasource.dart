@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_pick_me/data/models/add_new_pick_me_model.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_pick_me/domain/entities/add_new_pick_me_param.dart';
-import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../models/add_new_pick_me_model.dart';
+import '../../domain/entities/add_new_pick_me_param.dart';
+import '../../../helpers/print_helper.dart';
 
 abstract class AddNewPickMeRemoteDatasource {
   Future<Either<Failure, AddNewPickMeModel>> addNewPickMeTrip({

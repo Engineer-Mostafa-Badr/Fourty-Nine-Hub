@@ -1,5 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/states/basic_state.dart';
 import '../../domain/usecases/create_auction_usecase.dart';
@@ -18,8 +22,13 @@ class CreateAuctionCubit extends Cubit<BasicState<bool>> {
           startPrice: startPrice ?? '',
           minimumIncrease: minimumIncrease ?? '',
           description: description ?? ''));
-      response.fold(
-          (l) => emit(state.copyWith(status: StateStatus.error, failure: l)),
+      response.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: StateStatus.error, failure: failure));
+      },
           (r) => emit(state.copyWith(
                 status: StateStatus.success,
               )));

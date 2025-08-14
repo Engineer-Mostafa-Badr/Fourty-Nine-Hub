@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -90,7 +91,9 @@ class ShareTheAppViewBody extends StatelessWidget {
     required num gift,
   }) {
     return InkWell(
-      onTap: () => context.push(Routes.WALLET),
+      onTap: () {
+        ManageVibration.vibrate();
+         context.push(Routes.WALLET);},
       child: Row(
         children: [
           Expanded(
@@ -197,6 +200,7 @@ class ShareTheAppViewBody extends StatelessWidget {
           radius: 15,
           height: 52,
           onPressed: () async {
+      ManageVibration.vibrate();
             if (referralId.isNotEmpty) {
               await Share.share("""
 سجل للحصول على $referralGift جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً

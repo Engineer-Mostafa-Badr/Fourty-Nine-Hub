@@ -37,6 +37,7 @@ class ExpiredTripsScreen extends StatefulWidget {
 
 class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
   late ScrollController _scrollController;
+  late ScrollController newScrollController;
   int page = 1;
   final int limit = 10;
   bool isFetching = false;
@@ -44,6 +45,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
   @override
   void initState() {
     super.initState();
+    newScrollController = ScrollController();
     _scrollController = ScrollController()..addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.params.rideCubit.fetchAllCompletedTrips(limit: limit, page: page);
@@ -140,7 +142,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
                             // );
                             return TripCard(trip: trip);
                           },
-                    ),
+                    ), scrollController: newScrollController,
 
                   );
 

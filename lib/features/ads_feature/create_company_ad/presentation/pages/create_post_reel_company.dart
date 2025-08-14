@@ -18,6 +18,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreatePostReelCompany extends StatefulWidget {
   const CreatePostReelCompany({super.key, required this.totalPrice});
@@ -116,6 +117,7 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                     label: context.isArabic ? 'إلغاء' : 'Close',
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
+                      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                     }),
                 const SizedBox(width: 16),
@@ -124,18 +126,16 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                     label: context.isArabic ? 'متابعة' : 'Continue',
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () async {
+                      ManageVibration.vibrate();
                       Navigator.of(context).pop();
                       showLoadingDialog(context);
                       await context
-                          .read<
-                          CreateCompanyAdCubit>()
+                          .read<CreateCompanyAdCubit>()
                           .addPostCompanyAdvertise(
-                        type:
-                        'reel',
-                        totalPrice: widget.totalPrice,
-                        context:
-                        context,
-                      );
+                            type: 'reel',
+                            totalPrice: widget.totalPrice,
+                            context: context,
+                          );
                     }),
               ],
             ),
@@ -147,116 +147,128 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
-      builder: (context,state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(LocaleKeys.createPost.localize),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Video selection container
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: GestureDetector(
-                        onTap: () {
-                            if(state.video==null||(state.video?.isEmpty??false)){
-                              showErrorMessage(context, context.isArabic?'يرجى اختيار فيديو':'Please select a video');
-                            }else{
-                              bool inArabic = context.isArabic;
-                              showSubscribeDialog(context);
-                            }
-
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 32),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 2,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              borderRadius:
-                              BorderRadius.circular(20.r)),
-                          child:
-                          Label(text: LocaleKeys.save.localize),
+        builder: (context, state) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(LocaleKeys.createPost.localize),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Video selection container
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        if (state.video == null ||
+                            (state.video?.isEmpty ?? false)) {
+                          showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى اختيار فيديو'
+                                  : 'Please select a video');
+                        } else {
+                          bool inArabic = context.isArabic;
+                          showSubscribeDialog(context);
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 32),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            borderRadius: BorderRadius.circular(20.r)),
+                        child: Label(text: LocaleKeys.save.localize),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  UploadFile().uploadVideo(
+                      subCategoryId: Constants.companyAdsSubCategory,
+                      onUploaded: (data) {
+                        print("data.mediaId ${data.mediaId}");
+                        print("data.file ${data.file}");
+                        context
+                            .read<CreateCompanyAdCubit>()
+                            .onUploadVideo(data.mediaId);
+                        setState(() {
+                          _videoFile = File(data.file.path);
+                          _initializeVideoPlayer();
+                        });
+                      },
+                      context: context);
+                },
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.video_library, size: 50, color: Colors.grey),
+                        SizedBox(height: 8),
+                        Text(
+                          'Tap to select a video',
+                          style: TextStyle(color: Colors.grey),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: (){
-                    UploadFile().uploadVideo(subCategoryId: Constants.companyAdsSubCategory, onUploaded: (data) {
-                      print("data.mediaId ${data.mediaId}");
-                      print("data.file ${data.file}");
-                      context.read<CreateCompanyAdCubit>().onUploadVideo(data.mediaId);
-                      setState(() {
-                        _videoFile = File(data.file.path);
-                        _initializeVideoPlayer();
-                      });
-                    }, context: context);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(16),
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1,
-                      ),
-                    ),
-                    child:Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.video_library, size: 50, color: Colors.grey),
-                          SizedBox(height: 8),
-                          Text(
-                            'Tap to select a video',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    )
-                    ,
                   ),
                 ),
+              ),
 
-                // Video preview section
-                if (_chewieController != null && _chewieController!.videoPlayerController.value.isInitialized)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: SizedBox(
-                      height: 600.h,
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            height: 600.h,
-                            width: double.infinity,
-                            child: AspectRatio(
-                              aspectRatio: _chewieController?.aspectRatio??0,
-                              child: Chewie(controller: _chewieController!),
-                            ),
+              // Video preview section
+              if (_chewieController != null &&
+                  _chewieController!.videoPlayerController.value.isInitialized)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SizedBox(
+                    height: 600.h,
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: 600.h,
+                          width: double.infinity,
+                          child: AspectRatio(
+                            aspectRatio: _chewieController?.aspectRatio ?? 0,
+                            child: Chewie(controller: _chewieController!),
                           ),
-                          PositionedDirectional(
-                            start: 20.w,
-                            top: 15.h,
-                            child: ClickableWidget(
-                              onTap: (){
-                                _removeVideo();
-                                context.read<CreateCompanyAdCubit>().onRemoveVideo();
-                              },
-                              child: Container(
-                                width: 60.w,
-                                height: 60.w,
-                                decoration: BoxDecoration(
+                        ),
+                        PositionedDirectional(
+                          start: 20.w,
+                          top: 15.h,
+                          child: ClickableWidget(
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              _removeVideo();
+                              context
+                                  .read<CreateCompanyAdCubit>()
+                                  .onRemoveVideo();
+                            },
+                            child: Container(
+                              width: 60.w,
+                              height: 60.w,
+                              decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.whiteColor,
                                   boxShadow: [
@@ -264,25 +276,27 @@ class _CreatePostReelCompanyState extends State<CreatePostReelCompany> {
                                       color: Colors.grey.withOpacity(0.5),
                                       spreadRadius: 2,
                                       blurRadius: 5,
-                                      offset: Offset(0, 3), // changes position of shadow
+                                      offset: Offset(
+                                          0, 3), // changes position of shadow
                                     ),
-                                  ]
-                                ),
-                                alignment: Alignment.center,
-                                child: Icon(Icons.close,size: 30.w,color: AppColors.SECONDARY_COLOR,),
+                                  ]),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.close,
+                                size: 30.w,
+                                color: AppColors.SECONDARY_COLOR,
                               ),
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-
-              ],
-            ),
+                ),
+            ],
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }

@@ -4,18 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../cubit/create_menu_cubit/create_menu_cubit.dart';
+import '../../../cubit/create_resturant_cubit.dart';
+import '../../../../restaurants_list/data/models/restaurant_mneu_model.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 import '../photo/restaurant_photo_picker.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 // استورد/انسخ هذه الدالة أو اجعلها في ملف:
 
@@ -146,6 +147,7 @@ class ShowMneu extends StatelessWidget {
                                           maximumSize: const Size(100, 40),
                                         ),
                                         onPressed: () {
+      ManageVibration.vibrate();
                                           menuCubit.removeMenuItem(context, e);
                                         },
                                         child:  Text(
@@ -197,6 +199,7 @@ class ShowMneu extends StatelessWidget {
                             flex: 2,
                             child: GestureDetector(
                               onTap: () async {
+      ManageVibration.vibrate();
                                 // استدعاء اختيار الصورة
                                 await menuCubit.uploadMealImage(
                                   context,
@@ -224,6 +227,7 @@ class ShowMneu extends StatelessWidget {
                                             ? null
                                             : XFile(imagePath),
                                         onTap: () async {
+      ManageVibration.vibrate();
                                           // نفس onTap أعلاه
                                           await menuCubit.uploadMealImage(
                                               context,
@@ -394,6 +398,7 @@ class ShowMneu extends StatelessWidget {
                                         child: IconButton(
                                           visualDensity: VisualDensity.compact,
                                           onPressed: () {
+      ManageVibration.vibrate();
                                             final foodName =
                                                 foodNameController.text;
                                             final price = double.tryParse(

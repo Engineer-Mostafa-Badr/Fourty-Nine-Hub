@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/assets/assets.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoCardWidget extends StatefulWidget {

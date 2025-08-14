@@ -28,6 +28,7 @@ import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveStreamingTopBar extends StatefulWidget {
@@ -111,6 +112,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                               shape: const CircleBorder(),
                               backgroundColor: Colors.grey.withOpacity(0.7)),
                           onPressed: () async {
+      ManageVibration.vibrate();
                             for (var user in ZegoUIKit().getAllUsers()) {
                               await ZegoUIKit().removeUserFromRoom([user.id]);
                             }
@@ -216,6 +218,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                     onPressed: () {
+      ManageVibration.vibrate();
                       print(ZegoUIKit.instance.getRoom().id);
                       context.pop();
                     },
@@ -291,6 +294,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                           Expanded(child: Container()),
                           InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               showTopBar.value = !showTopBar.value;
                               print(
                                   'show top bar state is ${showTopBar.value}');
@@ -316,6 +320,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                       if (widget.config.role == ZegoLiveStreamingRole.host)
                         InkWell(
                           onTap: () async {
+      ManageVibration.vibrate();
                             final users = ZegoUIKit().getAllUsers();
                             for (var user in users) {
                               await ZegoUIKit().removeUserFromRoom([user.id]);
@@ -352,6 +357,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                       ),
                       InkWell(
                         onTap: () async {
+      ManageVibration.vibrate();
                           Navigator.of(context).pop();
                           // Navigator.of(context).pop();
                         },
@@ -439,6 +445,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
               height: 68.zR,
               child: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                   // Navigator.of(context).pop(true);
                 },

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../create_post/presentation/widgets/image_details.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ShowPostsImages extends StatefulWidget {
   const ShowPostsImages(
@@ -38,6 +39,7 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
           itemCount: widget.images.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () {
+      ManageVibration.vibrate();
               print("object");
               // context.push(Routes.TWITTER);
 

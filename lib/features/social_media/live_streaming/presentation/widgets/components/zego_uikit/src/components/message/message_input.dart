@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 import '../../../../../../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ZegoInRoomMessageInput extends StatefulWidget {
   const ZegoInRoomMessageInput({
@@ -179,6 +180,7 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
         return ZegoTextIconButton(
           unclickableBackgroundColor: Colors.white,
           onPressed: () {
+      ManageVibration.vibrate();
             if (!isEmpty) send();
           },
           icon: ButtonIcon(

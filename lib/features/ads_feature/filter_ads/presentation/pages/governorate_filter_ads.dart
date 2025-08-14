@@ -18,7 +18,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class GovernorateFilterAdsView extends StatefulWidget {
@@ -192,6 +192,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                   width: double.infinity,
                   label: LocaleKeys.filter.localize,
                   onPressed: () {
+      ManageVibration.vibrate();
                     controller.filterGovernorateAds(
                         categorize: widget.categorization, context: context);
                   }),

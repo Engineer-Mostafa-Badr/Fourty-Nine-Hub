@@ -8,7 +8,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../../core/localization/locales.dart';
 import '../../../../../../core/utils/hex_color_helper.dart';
 import '../../../domain/entities/favourite_subcategory_entity.dart';
@@ -34,6 +34,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         // context.push(
         //   Routes.ADS,
         //   extra: AdsViewParams(
@@ -110,6 +111,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                           : AppColors.PRIMARY_COLOR,
                       size: 40.h,
                       onPressed: () {
+      ManageVibration.vibrate();
                         // if (AuthHelper().isLoggedIn()) {
                         //   context.push(Routes.CREATEAD,
                         //       extra: CategorizationEntity(

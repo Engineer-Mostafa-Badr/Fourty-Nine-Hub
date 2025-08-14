@@ -259,7 +259,12 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         ),
                         SizedBox(height: 8.h),
                         if (!(myRoute))
-                          SvgPicture.asset(Assets.bookedMan),
+                          CircleAvatar(
+                            radius: 30.w,
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                                    UIConst.profilePlaceHolder),
+                          ),
                         if (myRoute)
                           CircleAvatar(
                             radius: 30.w,
@@ -274,7 +279,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       children: [
                         Text(
                           ((widget.model?.availableSeats ?? 0) >= 2)
-                              ? LocaleKeys.free.localize
+                              ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                               : LocaleKeys.booked.localize,
                           style: TextStyle(
                             fontSize: 20.sp,
@@ -450,7 +455,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                           padding: const EdgeInsets.only(left: 13),
                           child: Text(
                             ((widget.model?.availableSeats ?? 0) >= 1)
-                                ? LocaleKeys.free.localize
+                                ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                                 : LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
@@ -622,23 +627,13 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ),
                     Column(
                       children: [
-                        Text(
-                          '',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : AppColors.PRIMARY_COLOR,
-                          ),
-                        ),
                         Padding(
-                          padding: EdgeInsets.only(top: 15.h, left: 8.h),
+                          padding: EdgeInsets.only(top: 0.h, left: 8.h),
                           child: SizedBox(
-                            width: 55.w,
+                            // width: 60.w,
                             child: Text(
                               getBookingStatus(widget.statusDriver ?? ""),
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.end,
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
@@ -649,6 +644,9 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 60.h,
+                        )
                       ],
                     ),
                   ],

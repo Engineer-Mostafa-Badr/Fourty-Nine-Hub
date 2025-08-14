@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import '../../../../core/enums/wallet_types_enums.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class WalletsWedgit extends StatelessWidget {
   final List<WalletTypes> wallets;
@@ -13,7 +14,10 @@ class WalletsWedgit extends StatelessWidget {
         return Card(
           child: ListTile(
             title: Text(wallets[index].translatedName),
-            onTap: () {},
+            onTap: () {
+      ManageVibration.vibrate();
+
+            },
           ),
         );
       },

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import '../cubit/subcategories_cubit.dart';
+import 'my_ad_card.dart';
+import '../../../../res/style/styles.dart';
 
 import '../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
@@ -42,10 +42,10 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id);
+    // }
 
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
@@ -78,6 +78,7 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
         );
       }
       return OlxPaginationWidget(
+        scrollController: _scrollController,
         itemsPerPage: 2,
         loadPage: (page) =>
             context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),

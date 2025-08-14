@@ -8,6 +8,7 @@ import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SpecialAdsView extends StatelessWidget {
   const SpecialAdsView({super.key});
@@ -23,6 +24,7 @@ class SpecialAdsView extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Winners()),

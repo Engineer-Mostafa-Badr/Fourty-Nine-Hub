@@ -11,6 +11,7 @@ import '../../../../../res/style/styles.dart';
 import '../cubit/installment_list_cubit.dart';
 import '../widgets/installment_ad_card.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class InstallmentView extends StatelessWidget {
   const InstallmentView({super.key});

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/presentation/cubits/fetch_my_pick_me_trips/cubit/fetch_my_pick_me_trips_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/presentation/cubits/cubit/get_requests_pick_me_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/cubits/delete_trips/delete_trips_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/cubits/fetch_my_trip_join_ads/fetch_my_trip_join_ads_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/trip_join_request_body.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
+import '../../../fetch_my_pick_me_trips/presentation/cubits/fetch_my_pick_me_trips/cubit/fetch_my_pick_me_trips_cubit.dart';
+import '../../../get_requests_pick_me/presentation/cubits/cubit/get_requests_pick_me_cubit.dart';
+import '../cubits/delete_trips/delete_trips_cubit.dart';
+import '../cubits/fetch_my_trip_join_ads/fetch_my_trip_join_ads_cubit.dart';
+import '../widgets/trip_join_request_body.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 class TripJoinRequestView extends StatelessWidget {
   const TripJoinRequestView({super.key});

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
-import 'package:fourtyninehub/core/utils/logging_service.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/widgets/call_control_button.dart';
-import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
-import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
-import 'package:fourtyninehub/main.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import '../../../core/enums/call_enums_manager.dart';
+import '../../../core/utils/logging_service.dart';
+import '../domain/entities/call_data.dart';
+import '../presentation/controller/call_controller/call_cubit.dart';
+import '../presentation/controller/call_controller/call_state.dart';
+import 'call_control_button.dart';
+import 'minimized_call_overlay.dart';
+import '../../../helpers/call_helpers/call_helper/call_with_notification_helper.dart';
+import '../../../main.dart';
+import '../../../res/style/app_colors.dart';
+import '../../../service_locator/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:fourtyninehub/features/call/services/call_timer_service.dart';
+import '../services/call_timer_service.dart';
 
 class BuildBottomBtns extends StatelessWidget {
   final HasCall? state;
@@ -214,7 +215,6 @@ class BuildBottomBtns extends StatelessWidget {
                         title: "Share Screen",
                         icon: Icons.mobile_screen_share_rounded,
                         onTap: (){
-
                         }),
                         SizedBox(height: 30),
                          _buildTaplistTile(
@@ -239,6 +239,7 @@ class BuildBottomBtns extends StatelessWidget {
       required Function onTap}) {
     return InkWell(
       onTap: () {
+        ManageVibration.vibrate();
         onTap();
       },
       child: Row(

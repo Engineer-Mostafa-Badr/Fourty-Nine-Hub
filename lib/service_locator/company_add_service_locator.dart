@@ -1,8 +1,8 @@
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/datasources/company_advertise_data_source.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/repositories/company_advertise_repository_impl.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repositories/company_advertise_repository.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/get_price_use_case.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
+import '../features/ads_feature/create_company_ad/data/datasources/company_advertise_data_source.dart';
+import '../features/ads_feature/create_company_ad/data/repositories/company_advertise_repository_impl.dart';
+import '../features/ads_feature/create_company_ad/domain/repositories/company_advertise_repository.dart';
+import '../features/ads_feature/create_company_ad/domain/usecases/get_price_use_case.dart';
+import '../features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/ads_feature/create_company_ad/domain/usecases/delete_company_ad_use_case.dart';

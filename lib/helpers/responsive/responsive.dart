@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/routes/pages.dart';
+import '../../routes/pages.dart';
 
 class Responsive {
   final BuildContext context;

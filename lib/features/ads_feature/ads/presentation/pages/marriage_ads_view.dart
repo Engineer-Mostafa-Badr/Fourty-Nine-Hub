@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cat
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -127,6 +128,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                       title:
                           "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (AuthHelper().isLoggedIn()) {
                           context.push(
                             Routes.CREATEAD,

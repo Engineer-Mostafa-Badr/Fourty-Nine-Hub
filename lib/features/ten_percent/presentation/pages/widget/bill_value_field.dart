@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/abstract/main_text_form_field.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/validator.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/form/text_fields/abstract/main_text_form_field.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/validator.dart';
+import '../../../../../res/style/app_colors.dart';
 
 class BillValueTextFormField extends MainTextFormField {
   @override

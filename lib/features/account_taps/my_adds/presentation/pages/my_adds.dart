@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
@@ -90,6 +91,7 @@ class _MyAddsViewState extends State<MyAddsView>
                   TabBar(
                     controller: _tabController,
                     onTap: (index) {
+                      ManageVibration.vibrate();
                       // Explicitly fetch data only if the user taps the tab
                       _fetchTabData(index);
                     },

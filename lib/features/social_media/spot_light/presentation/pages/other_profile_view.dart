@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/posts_grid.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../widgets/posts_grid.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SpotLightOtherProfileScreen extends StatelessWidget {
   const SpotLightOtherProfileScreen({super.key});
@@ -133,7 +134,10 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
     IconData icon,
   ) {
     return ClickableWidget(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 30.h),
         decoration: BoxDecoration(

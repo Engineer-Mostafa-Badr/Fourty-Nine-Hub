@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ClickableWidget extends StatelessWidget {
-  const ClickableWidget({super.key, this.onTap, required this.child});
+  const ClickableWidget({super.key, this.onTap,this.onLongPress, required this.child});
   final GestureTapCallback? onTap;
+  final GestureTapCallback? onLongPress;
   final Widget child;
   @override
   Widget build(BuildContext context) {
@@ -11,6 +12,7 @@ class ClickableWidget extends StatelessWidget {
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
       onTap: onTap,
+      onLongPress: onLongPress,
       child: child,
     );
   }

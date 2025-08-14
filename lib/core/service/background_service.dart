@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 abstract class BackgroundService {
-  static const _platform = MethodChannel('com.app.fourtynine/websocket');
+  static const _platform = MethodChannel('com.fourtyninehub.fourtynine/websocket');
 
   static Future<void> startWebSocketService(String? token) async {
     // try {

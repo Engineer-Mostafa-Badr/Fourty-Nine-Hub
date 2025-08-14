@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
+import '../../../domain/entities/pickme_entity.dart';
 
 import 'trip.dart';
 

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/competition_list_view_item.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../domain/entities/gift_competitions_entity.dart';
@@ -80,6 +81,7 @@ class CompetitionsSection extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
+                  ManageVibration.vibrate();
                   showAnimatedDialog(
                     context,
                     CompetitionsPopUpItems(
@@ -121,6 +123,7 @@ class CompetitionsSection extends StatelessWidget {
                 luckyWheel: luckyWheel,
                 currency: currency,
                 onPressed: () async {
+                  ManageVibration.vibrate();
                   showLoadingDialog(context);
                   await context.read<GiftTwoCubit>().requestTransferLuckyWheel(
                         context,
@@ -135,6 +138,7 @@ class CompetitionsSection extends StatelessWidget {
               luckyWheel: null,
               currency: currency,
               onPressed: () async {
+                ManageVibration.vibrate();
                 showLoadingDialog(context);
                 await context.read<GiftTwoCubit>().requestTransferCompetition(
                       context,

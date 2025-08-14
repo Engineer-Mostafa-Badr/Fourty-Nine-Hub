@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/wallet_datasource.dart';
-import 'package:fourtyninehub/features/authentication/data/repositories/wallet_repository.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_by_user_id_usecase.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
+import 'package:fourtyninehub/features/authentication/domain/repositories/social_auth_service.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_sign_in_use_case.dart';
+import '../features/authentication/data/data_sources/remote_data_source/wallet_datasource.dart';
+import '../features/authentication/data/repositories/wallet_repository.dart';
+import '../features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
+import '../features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
+import '../features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
+import '../features/authentication/domain/use_cases/get_profile_views_by_user_id_usecase.dart';
+import '../features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 // import 'package:fourtyninehub/features/authentication/domain/use_cases/get_unreaded_chats_counter_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
@@ -88,10 +90,15 @@ class AuthServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<SocialAuthService>(
+      () => SocialAuthService(),
+    );
     serviceLocator.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+
       ),
     );
 
@@ -145,6 +152,7 @@ class AuthServiceLocator {
     serviceLocator
         .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GoogleSignInUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => FacebookSignInUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => AppleSignInUseCase(serviceLocator()));
     // serviceLocator
     //     .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
@@ -187,8 +195,11 @@ class AuthServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator<SignInAsGuestUseCase>(),
+          serviceLocator(),
+          serviceLocator(),
           googleSignIn: googleSignIn,
           firebaseAuth: firebaseAuth,
+
         );
       },
     );
@@ -196,6 +207,7 @@ class AuthServiceLocator {
       UserCubit(
         serviceLocator(),
         serviceLocator(),
+
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -256,5 +268,6 @@ class AuthServiceLocator {
         serviceLocator(),
       ),
     );
+     
   }
 }

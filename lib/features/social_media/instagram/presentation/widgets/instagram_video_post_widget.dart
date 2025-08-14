@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_review_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'instagram_post_buttom_sheet_without_mention_widget.dart';
+import 'instagram_post_review_widget.dart';
+import 'post_instagram_widget.dart';
+import 'instagram_user_info_with_mention_post_widget.dart';
+import 'instagram_users_mention_bottom_sheet_widget.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramVideoPostWidget extends StatelessWidget {
   const InstagramVideoPostWidget({
@@ -47,6 +48,7 @@ class InstagramVideoPostWidget extends StatelessWidget {
                     const Spacer(),
                     GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           showModalBottomSheet(
                             backgroundColor: Colors.white,
                             context: context,
@@ -73,6 +75,7 @@ class InstagramVideoPostWidget extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         showModalBottomSheet(
                           context: context,
                           backgroundColor: Colors.white,

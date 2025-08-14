@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SubcategoryListTitle extends StatelessWidget {
   final SubCategoryEntity specialty;
@@ -27,6 +28,7 @@ class SubcategoryListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             specialty;
         if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==

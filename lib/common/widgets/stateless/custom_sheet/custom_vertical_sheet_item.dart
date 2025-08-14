@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import 'sheet_vertical_item.dart';
@@ -27,6 +28,7 @@ class CustomVerticalSheetItem {
               style: Styles.headerText(),
             ),
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
             },
           ),
@@ -70,6 +72,7 @@ class CustomVerticalSheetItem {
                     ],
                   ),
                   onPressed: () async {
+      ManageVibration.vibrate();
                     Navigator.pop(context, e.value);
                   },
                 );

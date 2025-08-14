@@ -30,6 +30,7 @@ import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'widgets/ride_details_rating_widget.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideDashboardNonSocketDetailsScreen extends StatefulWidget {
   const RideDashboardNonSocketDetailsScreen({super.key, required this.tripEntity,});
@@ -183,6 +184,7 @@ class _RideDashboardNonSocketDetailsScreenState
           ),
           TextButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -431,6 +433,7 @@ class _RideDashboardNonSocketDetailsScreenState
                           height: 50,
                           child: state.isLoadingSubmitRequest? const Center(child: CircularProgressIndicator()): ElevatedButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
                                 if(form.currentState!.validate()){
                                   cubit.requestEmergencySupport(context: context, clientId: widget.tripEntity.clientDetails?.id??'', driverId: widget.tripEntity.driverDetails?.id??'', tripId: widget.tripEntity.tripDetails?.id??'', userType: 'driver',tripType: 'nonTracking');
@@ -494,6 +497,7 @@ class _RideDashboardNonSocketDetailsScreenState
                         const SizedBox(height: 30),
                         isLoading? const Center(child: CircularProgressIndicator()): ElevatedButton.icon(
                           onPressed: () async {
+      ManageVibration.vibrate();
                             setState(() => isLoading = true);
                             final path = await _generatePdf(details:state.supportDetails,lat:31.2802705,lng: 31.6775629);
                             setState(() {

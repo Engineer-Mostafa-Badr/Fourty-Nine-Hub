@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/service/connectivity_service.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NetworkErrorScreen extends StatelessWidget {
   const NetworkErrorScreen({super.key});
@@ -62,6 +63,7 @@ class NetworkErrorScreen extends StatelessWidget {
                 // Retry button
                 ElevatedButton.icon(
                   onPressed: () {
+      ManageVibration.vibrate();
                     // Trigger network check by refreshing the NetworkManager
                     NetworkManager().initialize();
                     // Also trigger a manual check

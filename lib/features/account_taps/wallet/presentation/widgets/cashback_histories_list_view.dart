@@ -7,14 +7,15 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/history_wallet_list_view_item.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CashbackHistoriesListView extends StatefulWidget {
+  final List<BalanceHistoryEntity> histories;
+
   const CashbackHistoriesListView({
     super.key,
     required this.histories,
   });
-
-  final List<BalanceHistoryEntity> histories;
 
   @override
   State<CashbackHistoriesListView> createState() =>
@@ -23,6 +24,46 @@ class CashbackHistoriesListView extends StatefulWidget {
 
 class _CashbackHistoriesListViewState extends State<CashbackHistoriesListView> {
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.histories.isEmpty) {
+      return CustomEmptyWidget(
+        label: LocaleKeys.noHistoryAvailable.localize,
+      );
+    } else {
+      return GlowingOverscrollIndicator(
+        axisDirection: AxisDirection.down,
+        color: AppColors.SECONDARY_COLOR,
+        child: ListView.builder(
+          controller: _scrollController,
+          // physics: const BouncingScrollPhysics(),
+          itemCount: context.read<CashbackCubit>().state.hasReachedMax
+              ? widget.histories.length
+              : widget.histories.length + 1,
+          itemBuilder: (context, index) {
+            if (index < widget.histories.length) {
+              final history = widget.histories[index];
+              return HistoryWalletListViewItem(
+                isReceived: history.received,
+                amount: history.transactionAmount.toString(),
+                date: history.createdAt,
+              );
+            } else {
+              return const CustomLoading();
+            }
+          },
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -37,41 +78,5 @@ class _CashbackHistoriesListViewState extends State<CashbackHistoriesListView> {
         }
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(() {});
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.histories.isEmpty) {
-      return CustomEmptyWidget(
-        label: LocaleKeys.noHistoryAvailable.localize,
-      );
-    } else {
-      return ListView.builder(
-        controller: _scrollController,
-        physics: const BouncingScrollPhysics(),
-        itemCount: context.read<CashbackCubit>().state.hasReachedMax
-            ? widget.histories.length
-            : widget.histories.length + 1,
-        itemBuilder: (context, index) {
-          if (index < widget.histories.length) {
-            final history = widget.histories[index];
-            return HistoryWalletListViewItem(
-              isReceived: history.received,
-              amount: history.transactionAmount.toString(),
-              date: history.createdAt,
-            );
-          } else {
-            return const CustomLoading();
-          }
-        },
-      );
-    }
   }
 }

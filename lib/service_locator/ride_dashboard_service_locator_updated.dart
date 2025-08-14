@@ -1,29 +1,29 @@
 
 
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/finalize_trip_by_rider.dart.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_client_coming_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_rate_client_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/arrived_to_client_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/delete_emergency_contact_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/complete_ride_trip_with_price_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/driver_rate_client_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/emergency_support_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/finalize_trip_by_rider.dart.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_emergency_contacts_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_running_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/going_to_client_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_client_coming_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
+import '../features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/watching_trips_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/update_driver_rate_client_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/RideFeature/data/datasources/dashboard_remote_data_source.dart';
@@ -58,9 +58,9 @@ import '../features/RideFeature/domain/usecases/dashboards/update_driver_rating_
 import '../features/RideFeature/domain/usecases/dashboards/update_driver_settings_use_case.dart';
 import '../features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/add_emergency_contacts_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/edit_emergency_contacts_usecase.dart';
+import '../features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
+import '../features/RideFeature/domain/usecases/dashboards/add_emergency_contacts_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/edit_emergency_contacts_usecase.dart';
 
 class RideDashboardServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {

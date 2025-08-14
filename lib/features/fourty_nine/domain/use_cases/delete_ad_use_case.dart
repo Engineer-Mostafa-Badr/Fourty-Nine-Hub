@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../repositories/fourty_nine_repository.dart';
 
 class DeleteAdUseCase extends UseCase<bool, String> {
   final FourtyNineRepository _repo;

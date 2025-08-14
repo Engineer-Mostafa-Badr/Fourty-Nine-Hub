@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Package imports:
 
@@ -7,7 +8,6 @@ import '../../../zego_uikit/src/services/uikit_service.dart';
 import '../minimizing/defines.dart';
 import '../minimizing/overlay_machine.dart';
 import 'logout_notifier.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Project imports:
 

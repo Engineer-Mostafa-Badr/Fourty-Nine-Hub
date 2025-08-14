@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
+import '../../../../../common/functions/global/upload_file.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../create_post/presentation/widgets/image_details.dart';
+import '../../../social_posts/presentation/pages/show_post_images.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/user_image.dart';
+import '../../domain/entities/twitter_post_entity.dart';
+import '../../domain/usecases/post_comment_usecase.dart';
+import '../../domain/usecases/twitter_report_usecase.dart';
+import '../pages/twitter_post_details.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {
@@ -181,6 +182,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.comment,
               label: '${post.commentsCount}'.toArabicNumbers(context),
               onTap: () {
+      ManageVibration.vibrate();
                 if (context.read<UserCubit>().isLoggedIn) {
                   return widget.showPostComments(widget.post.id);
                 } else {
@@ -196,6 +198,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: FontAwesomeIcons.retweet,
               label: "${widget.post.sharesCount}".toArabicNumbers(context),
               onTap: () {
+      ManageVibration.vibrate();
                 if (context.read<UserCubit>().isLoggedIn) {
                   widget.onShare();
                   if (widget.shareSuccess == true &&
@@ -218,6 +221,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     : Icons.favorite,
                 label: "${post.loveCount}".toArabicNumbers(context),
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.read<UserCubit>().isLoggedIn) {
                     widget.onReact();
                   } else {
@@ -292,6 +296,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             itemCount: myImages.length < 4 ? myImages.length : 4,
             itemBuilder: (context, index) => InkWell(
               onTap: () {
+      ManageVibration.vibrate();
                 if (index != 3 || (index == 3 && myImages!.length == 4)) {
                   showDialog(
                       context: context,
@@ -412,6 +417,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             icon: Icons.clear,
             size: 40.w,
             onPressed: () {
+      ManageVibration.vibrate();
               bottomSheet(
                 context: context,
                 widget: _buildPostOptions(
@@ -437,6 +443,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
+      ManageVibration.vibrate();
                   widget.deletePost(widget.post.id);
                   // context.pop();
                   // if(fromDetails==true){
@@ -448,6 +455,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
+      ManageVibration.vibrate();
                 widget.hidePost(widget.post.id);
                 // context.pop();
                 // if(fromDetails==true){
@@ -467,6 +475,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -574,6 +583,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.clear,
               size: 40.w,
               onPressed: () {
+      ManageVibration.vibrate();
                 bottomSheet(
                     context: context,
                     widget: _buildPostOptions(

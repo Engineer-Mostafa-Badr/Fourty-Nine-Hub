@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<true/>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>$(DEVELOPMENT_LANGUAGE)</string>
+		<key>CFBundleDisplayName</key>
+		<string>Fourtyninehub</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>fourtyninehub</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>$(FLUTTER_BUILD_NAME)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<!-- <key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf</string>
+					<string>fb892486282359942</string>
+				</array>
+			</dict>
+		</array> -->
+		<!-- Google Sign-in Section -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>fb660212443761468</string>
+					<!-- TODO Replace this value: -->
+					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+					<string>com.googleusercontent.apps.361206050719-6go2s7r10d1pckpo715rmc21jne7fddo</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-in Section -->
+		<key>FacebookAppID</key>
+		<string>660212443761468</string>
+		<key>FacebookClientToken</key>
+		<string>255815a3e684d4212c43e057a063712a</string>
+		<key>FacebookDisplayName</key>
+		<string>Fourtyninehub</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>fbapi</string>
+			<string>fb-messenger-share-api</string>
+		</array>
+		<key>CFBundleVersion</key>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-3940256099942544~3347511713</string>
+		<key>GIDClientID</key>
+		<string>361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com</string>
+		<!-- <key>GIDServerClientID</key>
+		<string>361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com</string> -->
+		<key>LSRequiresIPhoneOS</key>
+		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>$(PRODUCT_NAME) Camera Usage!</string>
+		<key>NSContactsUsageDescription</key>
+		<string>Reason we need access to the contact list</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Why is my app authenticating using face id?</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>This app needs access to your location to show your current position.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>This app needs access to your location to show your current position.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>We need to access to the microphone to record audio file</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>We need access to your photo library to save the videos.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to your photo library to save the videos.</string>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>processing</string>
+			<string>remote-notification</string>
+		</array>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+	</dict>
+</plist>

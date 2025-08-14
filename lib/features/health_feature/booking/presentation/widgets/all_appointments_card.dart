@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/app
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AllAppointmentsCard extends StatelessWidget {
   const AllAppointmentsCard({super.key, required this.appointment});
@@ -80,6 +81,7 @@ class AllAppointmentsCard extends StatelessWidget {
                     backColor: AppColors.PRIMARY_COLOR,
                     padding: 30.w,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<AllAppointmentsCubit>()
                           .acceptAppointment(appointment.id, context);
@@ -94,6 +96,7 @@ class AllAppointmentsCard extends StatelessWidget {
                     backColor: AppColors.SECONDARY_COLOR,
                     padding: 30.w,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<AllAppointmentsCubit>()
                           .rejectAppointment(appointment.id, context);
@@ -115,6 +118,7 @@ class AllAppointmentsCard extends StatelessWidget {
               backColor: AppColors.PRIMARY_COLOR,
               padding: 30.w,
               onPressed: () {
+      ManageVibration.vibrate();
                 context
                     .read<AllAppointmentsCubit>()
                     .cancelAppointment(appointment.bookingId, context);

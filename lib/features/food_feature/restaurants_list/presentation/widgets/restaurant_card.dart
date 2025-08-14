@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+import '../../domain/entities/restaurant.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';

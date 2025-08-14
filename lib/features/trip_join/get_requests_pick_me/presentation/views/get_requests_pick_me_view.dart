@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/models/get_requests_pick_me_model.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/pick_me_request_history_card.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../data/models/get_requests_pick_me_model.dart';
+import '../../../trip_join_requests_history/presentation/widgets/pick_me_request_history_card.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 

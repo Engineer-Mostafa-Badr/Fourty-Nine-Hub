@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import 'add_about_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ChatProfileView extends StatelessWidget {
   const ChatProfileView({super.key});
@@ -96,6 +97,7 @@ class ChatProfileView extends StatelessWidget {
                     const Sizer(),
                     TextButton(
                       onPressed: () {
+      ManageVibration.vibrate();
                         onSave(controller.text.trim());
                         context.pop();
                       },
@@ -197,6 +199,7 @@ class ChatProfileView extends StatelessWidget {
                               radius: 16,
                               child: InkWell(
                                 onTap: () async {
+      ManageVibration.vibrate();
                                   showModalBottomSheet(
                                     context: context,
                                     backgroundColor: context.isDarkMode
@@ -227,6 +230,7 @@ class ChatProfileView extends StatelessWidget {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
+      ManageVibration.vibrate();
                                                     context.pop();
                                                   },
                                                   child: Icon(
@@ -257,6 +261,7 @@ class ChatProfileView extends StatelessWidget {
                                               children: [
                                                 InkWell(
                                                   onTap: () async {
+      ManageVibration.vibrate();
                                                     Navigator.pop(context);
                                                     await context
                                                         .read<UserCubit>()
@@ -294,6 +299,7 @@ class ChatProfileView extends StatelessWidget {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
+      ManageVibration.vibrate();
                                                     Navigator.pop(context);
                                                     await context
                                                         .read<UserCubit>()
@@ -450,6 +456,7 @@ class ChatProfileView extends StatelessWidget {
                                   : AppColors.DARK_GRAY_COLOR,
                             ),
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -468,6 +475,7 @@ class ChatProfileView extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () async {
+      ManageVibration.vibrate();
                         await context
                             .read<UserCubit>()
                             .getProfileView(isProfile: true);
@@ -552,6 +560,7 @@ class ChatProfileView extends StatelessWidget {
                                             itemBuilder: (context, index) {
                                               return InkWell(
                                                 onTap: () async {
+      ManageVibration.vibrate();
                                                   await context
                                                       .read<UserCubit>()
                                                       .getProfileViewByUserId(
@@ -820,6 +829,7 @@ class ChatProfileView extends StatelessWidget {
                     // const SizedBox(height: 1.0), // Space between containers
                     InkWell(
                       onTap: () async {
+      ManageVibration.vibrate();
                         await context
                             .read<UserCubit>()
                             .getProfileView(isProfile: false);
@@ -895,6 +905,7 @@ class ChatProfileView extends StatelessWidget {
                                             itemBuilder: (context, index) {
                                               return InkWell(
                                                 onTap: () async {
+      ManageVibration.vibrate();
                                                   await context
                                                       .read<UserCubit>()
                                                       .getProfileViewByUserId(

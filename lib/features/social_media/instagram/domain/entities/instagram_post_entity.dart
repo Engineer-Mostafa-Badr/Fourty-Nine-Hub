@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
+import '../../data/models/comment_instagram_model.dart';
 
 import 'last_like_enyity.dart';
 

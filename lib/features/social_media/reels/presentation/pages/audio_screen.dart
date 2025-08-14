@@ -5,19 +5,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import 'recording/recording_shared.dart';
+import '../widgets/comments.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../routes/routes.dart';
@@ -28,6 +28,7 @@ import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
@@ -131,6 +132,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
             size: 50.h,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             Navigator.pop(context);
           },
         ),
@@ -273,6 +275,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
+      ManageVibration.vibrate();
                       setState(() {
                         if (_player.playing) {
                           _player.stop();
@@ -341,6 +344,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                             ? const Color(0xFF2E2E2E)
                             : const Color(0xFFF1F1F2),
                         onPressed: () {
+      ManageVibration.vibrate();
                           setState(() {
                             isSave = !isSave;
                             context
@@ -412,6 +416,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
+      ManageVibration.vibrate();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -478,6 +483,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   Flexible(
                     child: GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         _player.dispose();
                       Navigator.push(
                           context,
@@ -522,6 +528,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   Flexible(
                     child: GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         _player.dispose();
                       Navigator.push(
                           context,

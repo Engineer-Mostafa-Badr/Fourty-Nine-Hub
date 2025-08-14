@@ -5,38 +5,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reels.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_suggest_people.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../../common/widgets/stateless/images/social_image_viewer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../cubit/instagram_cubit.dart';
+import 'insta_reel_card.dart';
+import 'insta_reels.dart';
+import 'instagram_post_comments.dart';
+import 'instagram_suggest_people.dart';
+import '../../../social_posts/domain/entities/post_entity.dart';
+import '../../../social_posts/domain/usecases/add_reply_usecase.dart';
+import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
+import '../../../social_posts/domain/usecases/post_react_usecase.dart';
+import '../../../social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramPosts extends StatefulWidget {
   const InstagramPosts({
@@ -347,6 +348,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                           ? Icons.favorite
                                           : Icons.favorite_border,
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         var reacted = await controller.onReact(
                                           params: PostReactParams(
                                             postId: controller
@@ -407,6 +409,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     IconAppButton(
                                       icon: FontAwesomeIcons.comment,
                                       onPressed: () {
+      ManageVibration.vibrate();
                                         // if (!serviceLocator<UserCubit>()
                                         //     .isLoggedIn) {
                                         //   context.push(Routes.LOGIN);
@@ -439,6 +442,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                 behavior:
                                                     HitTestBehavior.opaque,
                                                 onTap: () {
+      ManageVibration.vibrate();
                                                   FocusScope.of(context)
                                                       .unfocus();
                                                 },
@@ -574,6 +578,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     text: WidgetSpan(
                                         child: GestureDetector(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         setState(() {
                                           _isExpanded = !_isExpanded;
                                         });
@@ -982,6 +987,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                           ? Icons.favorite
                                           : Icons.favorite_border,
                                       onPressed: () async {
+      ManageVibration.vibrate();
                                         var reacted = await controller.onReact(
                                           params: PostReactParams(
                                             postId: controller
@@ -1042,6 +1048,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     IconAppButton(
                                       icon: FontAwesomeIcons.comment,
                                       onPressed: () {
+      ManageVibration.vibrate();
                                         // if (!serviceLocator<UserCubit>()
                                         //     .isLoggedIn) {
                                         //   context.push(Routes.LOGIN);
@@ -1074,6 +1081,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                 behavior:
                                                     HitTestBehavior.opaque,
                                                 onTap: () {
+      ManageVibration.vibrate();
                                                   FocusScope.of(context)
                                                       .unfocus();
                                                 },
@@ -1206,6 +1214,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     text: WidgetSpan(
                                         child: GestureDetector(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         setState(() {
                                           _isExpanded = !_isExpanded;
                                         });
@@ -1282,6 +1291,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
       children: [
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
@@ -1302,6 +1312,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
               children: [
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
                   },
                   child: TextAppButton(
@@ -1310,6 +1321,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           fontSize: 30.sp),
                       label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
+      ManageVibration.vibrate();
                         context.push(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);
                       }),

@@ -54,7 +54,6 @@ class IconAppButton extends StatelessWidget {
         child: Icon(
           icon,
           shadows: shadows,
-
           size: size ?? 50.h,
           color: color,
         ),

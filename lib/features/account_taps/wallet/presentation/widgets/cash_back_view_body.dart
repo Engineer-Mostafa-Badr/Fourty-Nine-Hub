@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/request_cashback_button.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_failure_widget.dart';
 
@@ -107,6 +108,7 @@ class CashbackViewBody extends StatelessWidget {
               title: state.messageFailure ??
                   LocaleKeys.somethingWentWrong.localize,
               onPressed: () {
+      ManageVibration.vibrate();
                 context
                     .read<CashbackCubit>()
                     .getCashback(context, isRefresh: true);

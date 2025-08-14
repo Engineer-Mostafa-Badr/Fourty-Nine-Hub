@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/ch
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import '../../../../subscripe/presentation/widgets/amounts.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ChargeWalletButtonBloc extends StatelessWidget {
   const ChargeWalletButtonBloc({
@@ -44,6 +45,7 @@ class ChargeWalletButtonBloc extends StatelessWidget {
             title: LocaleKeys.chargeWallet.localize,
             activeColor: const Color(0xff61DE76),
             onPressed: () async {
+      ManageVibration.vibrate();
               context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
                     walletType: WalletTypes.mainWallet,
                   );

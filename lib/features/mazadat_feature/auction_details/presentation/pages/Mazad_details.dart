@@ -23,6 +23,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../auction_list/domain/entities/auction_entity.dart';
 import '../widgets/DetailsCounterWidget.dart';
 import '../widgets/PlaceBidding.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MazadDetails extends StatefulWidget {
   final String id;
@@ -77,6 +78,7 @@ class _MazadDetailsState extends State<MazadDetails> {
                       margin: 10,
                       label: Labels.biddings,
                       onPressed: () {
+      ManageVibration.vibrate();
                         controller.showAuctionRequests(
                             id: widget.id, context: context);
                       })
@@ -85,6 +87,7 @@ class _MazadDetailsState extends State<MazadDetails> {
                       margin: 10,
                       label: Labels.placeBidding,
                       onPressed: () {
+      ManageVibration.vibrate();
                         bottomSheet(
                             context: context,
                             widget: PlaceBidding(

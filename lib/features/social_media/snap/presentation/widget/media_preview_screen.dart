@@ -6,20 +6,21 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../utils/filters.dart';
+import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MediaPreview extends StatefulWidget {
   String mediaPath;
@@ -206,6 +207,7 @@ class _MediaPreviewState extends State<MediaPreview> {
             padding: EdgeInsets.symmetric(vertical: 90.h, horizontal: 10.w),
             child: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.clear)),
@@ -218,6 +220,7 @@ class _MediaPreviewState extends State<MediaPreview> {
   Widget buildSaveButton(BuildContext context, filePath, mediaType) {
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         await _captureFilteredImage(_currentIndex);
       },
       child: Column(
@@ -236,6 +239,7 @@ class _MediaPreviewState extends State<MediaPreview> {
   Widget buildStoryButton(context, {selectedFile}) {
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         final file = selectedFile;
         final fileType = _determineFileType(file!.path);
         final fileSize = await file.length();
@@ -266,6 +270,7 @@ class _MediaPreviewState extends State<MediaPreview> {
       margin: const EdgeInsets.only(right: 20),
       child: ElevatedButton.icon(
         onPressed: () {
+      ManageVibration.vibrate();
           // Handle Send action
         },
         icon: const Icon(Icons.send, color: Colors.black),

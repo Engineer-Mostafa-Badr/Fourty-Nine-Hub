@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_history_entity.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/cubits/get_request/get_request_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/trip_join_request_history_card.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/trip_join_request_history_card_loading.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/report_view_trip_join.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../domain/entities/tripjoin_request_history_entity.dart';
+import '../cubits/get_request/get_request_cubit.dart';
+import 'trip_join_request_history_card.dart';
+import 'trip_join_request_history_card_loading.dart';
+import '../../../view_all_trip_join/presentation/views/widgets/report_view_trip_join.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class TripJoinRequestHistoryBuilder extends StatefulWidget {

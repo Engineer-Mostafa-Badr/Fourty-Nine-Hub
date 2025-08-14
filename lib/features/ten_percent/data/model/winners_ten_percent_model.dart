@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/ten_percent/domain/entities/winners_ten_percent_entity.dart';
+import '../../domain/entities/winners_ten_percent_entity.dart';
 
 class WinnersTenPercentModel extends WinnersTenPercentEntity {
   WinnersTenPercentModel({

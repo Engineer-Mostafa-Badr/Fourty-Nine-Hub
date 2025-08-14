@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
+import '../../domain/entities/scheduled_meeting.dart';
 
 class ScheduledMeetingModel extends ScheduledMeeting {
   const ScheduledMeetingModel({

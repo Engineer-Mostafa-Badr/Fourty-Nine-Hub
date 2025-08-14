@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../domain/entities/main_category_entity.dart';
 
 class FourtyNineSharedData {
   FourtyNineSharedData._privateConstructor();

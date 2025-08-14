@@ -11,6 +11,7 @@ import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class GiveOffer extends StatelessWidget {
   final formState = GlobalKey<FormState>();
@@ -78,6 +79,7 @@ class GiveOffer extends StatelessWidget {
               AppButton(
                   label: 'Done',
                   onPressed: () {
+      ManageVibration.vibrate();
                     if (formState.currentState!.validate()) {
                       context.pop();
                     }

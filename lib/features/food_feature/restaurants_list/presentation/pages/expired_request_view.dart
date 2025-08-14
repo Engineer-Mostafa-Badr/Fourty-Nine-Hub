@@ -2,17 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import '../../data/models/expired_requests_model.dart';
+import '../../../../social_media/tinder/data/shared/shared.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
@@ -41,10 +41,10 @@ class _RestaurantExpiredRequestsScreenState
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().getExpiredOrders();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().getExpiredOrders();
+    // }
   }
 
   @override
@@ -115,6 +115,7 @@ class _RestaurantExpiredRequestsScreenState
           return SizedBox(
             height: MediaQuery.of(context).size.height * .7,
             child: OlxPaginationWidget(
+              scrollController: _scrollController,
               itemsPerPage: 2,
               loadPage: (page) async {},
               banners: bannersList,

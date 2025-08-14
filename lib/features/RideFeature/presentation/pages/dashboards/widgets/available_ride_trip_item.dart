@@ -351,6 +351,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                             label: context.isArabic?'رجوع':'Back',
                                             backColor: AppColors.PRIMARY_COLOR,
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               Navigator.of(context).pop();
                                             }),
                                       ),
@@ -361,6 +362,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                             label: context.isArabic?'نعم':'Yes',
                                             backColor: AppColors.SECONDARY_COLOR_DARK2,
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               Navigator.of(context).pop();
                                               onRefuseTrip(tripEntity.id);
                                             }),

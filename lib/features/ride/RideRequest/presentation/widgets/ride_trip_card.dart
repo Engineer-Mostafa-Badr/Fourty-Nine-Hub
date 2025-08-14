@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/accep
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_offer_by_driver_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideTripCard extends StatelessWidget {
   RideTripCard({super.key, required this.model});
@@ -113,6 +114,7 @@ class RideTripCard extends StatelessWidget {
           const Sizer(),
           AppButton(
             onPressed: () {
+      ManageVibration.vibrate();
               if ((model.isPremium ?? false) || (model.autoAccept ?? false)) {
                 if (model.id != null) {
                   context
@@ -148,6 +150,7 @@ class RideTripCard extends StatelessWidget {
                           const Spacer(),
                           AppButton(
                             onPressed: () {
+      ManageVibration.vibrate();
                               if (model.price != null && model.id != null) {
                                 context.read<SendOfferByDriverCubit>().send(
                                     id: model.id ?? "",

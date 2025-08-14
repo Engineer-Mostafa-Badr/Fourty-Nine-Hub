@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/validation_error_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ExpirationDateDriverLicenseCardRegisterWidget extends StatefulWidget {
   const ExpirationDateDriverLicenseCardRegisterWidget(
@@ -70,6 +71,7 @@ class _ExpirationDateDriverLicenseCardRegisterWidgetState
                   const Sizer(),
                   GestureDetector(
                     onTap: () async {
+      ManageVibration.vibrate();
                       var pickedDate = await showDatePicker(
                           context: context,
                           firstDate: DateTime(1800),

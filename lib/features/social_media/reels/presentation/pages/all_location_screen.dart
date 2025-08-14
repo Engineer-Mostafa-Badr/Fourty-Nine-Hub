@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../screen/widget/all_location_body.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AllLocationScreen extends StatelessWidget {
   const AllLocationScreen({super.key});
@@ -16,6 +17,7 @@ class AllLocationScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
           icon: Icon(

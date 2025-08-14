@@ -15,6 +15,7 @@ import '../defines.dart';
 import '../pop_up_manager.dart';
 import '../pop_up_sheet_menu.dart';
 import '../toast.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 typedef ZegoLiveAudioRoomMemberListSheetMoreButtonPressed = void Function(
@@ -170,6 +171,7 @@ class _ZegoLiveAudioRoomMemberListSheetState
                       builder: (context, _, __) {
                         return GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             widget.seatManager.events.memberList.onClicked
                                 ?.call(user);
                           },
@@ -206,6 +208,7 @@ class _ZegoLiveAudioRoomMemberListSheetState
         children: [
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.of(
                 context,
                 rootNavigator: widget.seatManager.config.rootNavigator,
@@ -313,6 +316,7 @@ class _ZegoLiveAudioRoomMemberListSheetState
             text: widget.innerText.memberListDisagreeButton,
             backgroundColor: const Color(0xffA7A6B7),
             onPressed: () {
+      ManageVibration.vibrate();
               ZegoUIKit()
                   .getSignalingPlugin()
                   .refuseInvitation(inviterID: user.id, data: '')
@@ -338,6 +342,7 @@ class _ZegoLiveAudioRoomMemberListSheetState
               end: Alignment.bottomRight,
             ),
             onPressed: () {
+      ManageVibration.vibrate();
               ZegoUIKit()
                   .getSignalingPlugin()
                   .acceptInvitation(
@@ -405,6 +410,7 @@ class _ZegoLiveAudioRoomMemberListSheetState
         ),
       ),
       onPressed: () {
+      ManageVibration.vibrate();
         /// product manager say close sheet together
         Navigator.of(
           context,

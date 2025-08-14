@@ -4,6 +4,9 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'charge_wallet_state.dart';
 
@@ -22,6 +25,10 @@ class ChargeWalletCubit extends Cubit<ChargeWalletState> {
         await _getActiveSubscriptionAmountsUseCase(const NoParams());
     response.fold(
       (l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(l, currentContext));
         emit(ChargeWalletFailure(message: l.toString()));
       },
       (data) {

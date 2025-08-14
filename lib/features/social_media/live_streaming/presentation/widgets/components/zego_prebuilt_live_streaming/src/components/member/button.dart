@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // Package imports:
 
@@ -86,6 +87,7 @@ class _ZegoLiveStreamingMemberButtonState
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         showMemberListSheet(
           context: context,
           config: widget.config,

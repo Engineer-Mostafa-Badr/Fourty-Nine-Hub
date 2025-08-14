@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
+import '../../domain/entities/banner.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'banner_model.g.dart';

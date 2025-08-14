@@ -7,6 +7,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AddNewRouteView extends StatelessWidget {
   const AddNewRouteView({super.key});
@@ -24,6 +25,7 @@ class AddNewRouteView extends StatelessWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
+      ManageVibration.vibrate();
                 context.pushReplacement(Routes.AVAILABLE_TRIPS);
               },
             ),

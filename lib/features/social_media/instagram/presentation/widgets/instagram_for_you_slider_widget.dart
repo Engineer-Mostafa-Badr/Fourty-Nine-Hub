@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/suggested_for_you_instagram_screen.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../pages/suggested_for_you_instagram_screen.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramForYouSliderWidget extends StatelessWidget {
   const InstagramForYouSliderWidget({super.key});
@@ -23,6 +24,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

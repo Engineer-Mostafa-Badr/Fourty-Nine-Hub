@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import '../entities/comment_entity.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -18,6 +18,7 @@ class GetPostCommentsUseCase
 
 class PostCommentsParams {
   final int? page;
+  final String? id;
   final int? limit;
   final String? postId;
   final String? userId;
@@ -26,6 +27,7 @@ class PostCommentsParams {
     this.limit,
     this.userId,
     this.postId,
+    this.id,
   });
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {};

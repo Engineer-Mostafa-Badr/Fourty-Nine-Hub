@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import '../../../instagram/presentation/cubit/instagram_cubit.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -8,6 +8,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class MyAccountView extends StatelessWidget {
   const MyAccountView({super.key});
@@ -138,10 +139,16 @@ class MyAccountView extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: AppButton(label: 'Edit Profile', onPressed: () {})),
+                  child: AppButton(label: 'Edit Profile', onPressed: () {
+
+      ManageVibration.vibrate();
+                  })),
               const Sizer(),
               Expanded(
-                  child: AppButton(label: 'Share Profile', onPressed: () {})),
+                  child: AppButton(label: 'Share Profile', onPressed: () {
+
+      ManageVibration.vibrate();
+                  })),
             ],
           )
         ],

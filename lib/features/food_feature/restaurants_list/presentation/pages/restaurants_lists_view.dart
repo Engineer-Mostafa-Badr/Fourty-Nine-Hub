@@ -68,10 +68,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().fetchRestaurants();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().fetchRestaurants();
+    // }
   }
 
   @override
@@ -198,6 +198,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                           ? SizedBox(
                               height: MediaQuery.sizeOf(context).height * .7,
                               child: OlxPaginationWidget(
+                                scrollController: _scrollController,
                                 itemsPerPage: 2,
                                 loadPage: (page) async {},
                                 banners: bannersList,

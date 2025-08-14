@@ -5,16 +5,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../domain/entity/custom_page_categories_entity.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CustomPageCategoryCard extends StatefulWidget {
   final CustomPageCategoriesEntity category;
@@ -112,6 +113,7 @@ class _MainCategoryBannerState extends State<CustomPageCategoryCard> {
                                       ? Icons.favorite_outline
                                       : Icons.favorite,
                                   onPressed: () async {
+      ManageVibration.vibrate();
                                     final result = await widget.onFavorite();
                                     print("resutlt=$result");
                                     print(result);
@@ -184,6 +186,7 @@ class _MainCategoryBannerState extends State<CustomPageCategoryCard> {
                         children: [
                           InkWell(
                             onTap: () async {
+      ManageVibration.vibrate();
                               final result = await widget.onFavorite();
                               if (result != null &&
                                   result != widget.isSelected) {
@@ -345,6 +348,7 @@ class _MainCategoryBannerState extends State<CustomPageCategoryCard> {
     if (widget.canRegister) {
       return TextButton(
         onPressed: () {
+      ManageVibration.vibrate();
           log('88888888888888888888888888');
           widget.onRegister?.call();
         },

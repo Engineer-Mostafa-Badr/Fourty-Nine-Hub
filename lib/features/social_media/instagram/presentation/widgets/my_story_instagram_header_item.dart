@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_story_instagram_header.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/stores_instagram_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import 'image_story_instagram_header.dart';
+import 'stores_instagram_widget.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 class MyStoryInstagramHeaderItem extends StatelessWidget {
   const MyStoryInstagramHeaderItem({

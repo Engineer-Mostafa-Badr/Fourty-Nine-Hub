@@ -7,6 +7,7 @@ import '../../../../../common/widgets/stateless/labels/info_text.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/create_trip_rider_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateTripRider extends StatelessWidget {
   CreateTripRider({super.key});
@@ -133,6 +134,7 @@ class CreateTripRider extends StatelessWidget {
                         label: Labels.premiumRequest,
                         style: Styles.headerText(color: Colors.white),
                         onPressed: () {
+      ManageVibration.vibrate();
                           // Perform actions for Premium Request
                         },
                       ),
@@ -145,6 +147,7 @@ class CreateTripRider extends StatelessWidget {
                         label: Labels.request,
                         style: Styles.headerText(color: Colors.white),
                         onPressed: () async {
+      ManageVibration.vibrate();
                           context
                               .read<CreateTripRiderCubit>()
                               .validateAndSubmitForm();

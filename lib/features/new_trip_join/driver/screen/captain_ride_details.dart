@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CaptainRideDetails extends StatelessWidget {
   const CaptainRideDetails({super.key});
@@ -22,6 +23,7 @@ class CaptainRideDetails extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
         ),
@@ -183,7 +185,10 @@ class CaptainRideDetails extends StatelessWidget {
                     backgroundColor: AppColors.getButtonPrimaryColor(context),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  },
                   child: Text(
                       context.isArabic
                           ? "طلب الدعم في حالات الطوارئ"

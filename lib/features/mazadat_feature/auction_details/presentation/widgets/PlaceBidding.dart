@@ -14,6 +14,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PlaceBidding extends StatefulWidget {
   final AuctionEntity auction;
@@ -134,6 +135,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
               style: Styles.headerText(color: Colors.white),
               label: Labels.placeBidding,
               onPressed: () {
+      ManageVibration.vibrate();
                 if (bidding > widget.auction.currentPrice) {
                   if (AuthHelper().isLoggedIn()) {
                     widget.onPlaced(bidding);

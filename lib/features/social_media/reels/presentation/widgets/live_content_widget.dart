@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/live_card_widget.dart';
+import 'live_card_widget.dart';
 
 class LiveContentWidget extends StatelessWidget {
   const LiveContentWidget({super.key});

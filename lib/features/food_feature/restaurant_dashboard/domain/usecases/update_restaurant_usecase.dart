@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
 
 import '../repositories/restaurant_dashboard_repo.dart';
 

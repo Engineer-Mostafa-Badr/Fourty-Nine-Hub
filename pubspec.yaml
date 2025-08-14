@@ -132,6 +132,7 @@ dependencies:
   share_plus: ^7.2.0
   shared_preferences: ^2.0.6
   shimmer: ^3.0.0
+  sign_in_with_apple: ^7.0.1
   slide_countdown: null
   snacknload: ^1.0.9
   snapping_bottom_sheet: ^1.0.4

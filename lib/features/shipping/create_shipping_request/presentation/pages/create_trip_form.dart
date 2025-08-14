@@ -3,32 +3,33 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/select_cateogry_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/info_text.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../../../ride/RideRequest/presentation/cubit/rider_state.dart';
+import '../../../../ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+import '../../../../ride/RideRequest/presentation/cubit/select_cateogry_cubit.dart';
+import '../../data/models/banner_model/sub_category.dart';
+import '../../data/models/request_model.dart';
+import '../cubit/create_shipping_request_cubit.dart';
+import '../cubit/create_trip_cubit.dart';
+import '../cubit/shipping_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../subcategories/presentation/widgets/subcategory_card_selected.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreateTripForm extends StatefulWidget {
   const CreateTripForm({super.key, this.selectedId, required this.formKey});
@@ -228,6 +229,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       condition: time == null);
                                 },
                                 onTap: () async {
+      ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     TimeOfDay? pickedTime =
                                         await showTimePicker(
@@ -266,6 +268,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       condition: date == null);
                                 },
                                 onTap: () async {
+      ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     DateTime? pickedDate = await showDatePicker(
                                       context: context,
@@ -448,7 +451,10 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 height: 40,
                                 label: LocaleKeys.premiumRequest.tr(),
                                 style: Styles.headerText(color: Colors.white),
-                                onPressed: () {},
+                                onPressed: () {
+
+      ManageVibration.vibrate();
+                                },
                               ),
                             ),
                             // const Gap(6),
@@ -460,6 +466,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 label: LocaleKeys.request.tr(),
                                 style: Styles.headerText(color: Colors.white),
                                 onPressed: () async {
+      ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     if (widget.formKey.currentState!
                                         .validate()) {
@@ -567,6 +574,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     //   });
                     // },
                     onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     List<SubCategoryEntity> workingList =
                         category.subcategories!.map((e) {

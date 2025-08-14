@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MarriageMyAdsListViewItem extends StatelessWidget {
   const MarriageMyAdsListViewItem({
@@ -29,6 +30,7 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
+        ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: marriageAds.id);
       },
       child: Container(
@@ -116,6 +118,7 @@ class MarriageMyAdsListViewItem extends StatelessWidget {
                   color: AppColors.SECONDARY_COLOR_DARK2,
                   radius: 15,
                   onTap: () {
+                    ManageVibration.vibrate();
                     // TODO: delete request
                   },
                 ),

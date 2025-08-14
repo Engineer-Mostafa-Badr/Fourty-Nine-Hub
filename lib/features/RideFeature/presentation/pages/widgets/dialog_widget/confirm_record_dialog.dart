@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../font_manager.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class ConfirmRecordDialog extends StatelessWidget {
   const ConfirmRecordDialog({super.key});
 
@@ -41,6 +42,7 @@ class ConfirmRecordDialog extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
@@ -62,6 +64,7 @@ class ConfirmRecordDialog extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(

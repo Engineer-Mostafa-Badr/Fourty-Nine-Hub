@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/last_like_enyity.dart';
+import 'last_like_enyity.dart';
 
 class SinglePostInstagramEntity {
   final String id;

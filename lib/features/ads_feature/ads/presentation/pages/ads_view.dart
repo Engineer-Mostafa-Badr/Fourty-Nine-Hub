@@ -24,6 +24,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_floating_action_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -156,6 +157,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     indicatorSize: TabBarIndicatorSize.tab,
                     labelStyle: Styles.headerText(),
                     onTap: (i) {
+                      ManageVibration.vibrate();
                       if (i == 1) {
                         state.city = '';
                         state.governorate = '';
@@ -272,6 +274,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       floatingActionButton: isFloatingButtonVisible
           ? CustomFloatingActionButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
                   context.push(Routes.CREATEAD,
                       extra: CategorizationEntity(
@@ -293,6 +296,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   Widget buildFloatingAction(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
+      ManageVibration.vibrate();
         if (context.isUserLoggedIn) {
           context.push(Routes.CREATEAD,
               extra: CategorizationEntity(

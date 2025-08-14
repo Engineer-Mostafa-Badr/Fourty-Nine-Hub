@@ -5,24 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../domain/domain/user_data_tinder_entity.dart';
+import '../cubit/tinder_cubit.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../chat/chat_view/domain/entities/chat_entity.dart';
 import '../../../chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import '../../../chat/chat_view/presentation/pages/chats_view.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TinderCardStack extends StatefulWidget {
   const TinderCardStack({super.key});
@@ -583,6 +584,7 @@ class ChatBottomSheet extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           ChatEntity? chat = await context
                               .read<UserCubit>()
@@ -616,6 +618,7 @@ class ChatBottomSheet extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () async {
+      ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           log("are friends : ${cardUser.areFriends}");
                           if (cardUser.areFriends == true) {
@@ -793,6 +796,7 @@ Widget _buildChatOptionCard(
     height: 150.h,
     child: ElevatedButton(
         onPressed: () {
+      ManageVibration.vibrate();
           onPressed();
         },
         style: ElevatedButton.styleFrom(
@@ -868,6 +872,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                           icon: Icons.visibility_off,
                           label: LocaleKeys.chat_alert_dialog_anonymous.tr(),
                           onPressed: () async {
+      ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               log("Are Friends : ${cardUser.areFriends}");
                               ChatEntity? chat = await context
@@ -898,6 +903,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                           icon: Icons.visibility,
                           label: LocaleKeys.chat_alert_dialog_regular.tr(),
                           onPressed: () async {
+      ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               log("Are Friends : ${cardUser.areFriends}");
                               if (cardUser.areFriends == true) {

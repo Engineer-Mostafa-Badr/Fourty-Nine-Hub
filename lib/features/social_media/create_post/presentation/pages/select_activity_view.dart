@@ -2,19 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_sub_activity_view.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../../domain/entities/activity_entity.dart';
+import '../cubit/create_post_cubit.dart';
+import 'select_sub_activity_view.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SelectActivity extends StatefulWidget {
   final List<ActivityEntity> activities;
@@ -67,6 +68,7 @@ class _SelectActivityState extends State<SelectActivity> {
                     print("item.image ${item.image} ${context.isArabic ? item.name : item.nameEn}");
                     return InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         // widget.onSelected(item);
                         Navigator.pop(context, item);
                         bottomSheet(

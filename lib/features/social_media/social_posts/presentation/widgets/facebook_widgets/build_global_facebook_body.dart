@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../../../../../../service_locator/service_locator.dart';
 
 class FacebookGlobalBody extends StatelessWidget {
   const FacebookGlobalBody({super.key, required this.scrollController});

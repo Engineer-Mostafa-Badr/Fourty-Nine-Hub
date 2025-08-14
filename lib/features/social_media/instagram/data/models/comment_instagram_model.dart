@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_entity.dart';
+import '../../domain/entities/comment_instagram_entity.dart';
 
 class CommentInstagramModel extends CommentInstagramEntity {
   CommentInstagramModel({

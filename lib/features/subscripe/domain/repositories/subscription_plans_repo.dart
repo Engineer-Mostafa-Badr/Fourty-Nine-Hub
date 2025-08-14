@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
+import '../entities/subscription_amount_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import '../entities/subscription_plans_entity.dart';

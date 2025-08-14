@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
-import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import 'package:fourtyninehub/features/settings/presentation/pages/widgets/dialog_verification_widget.dart';
-import 'package:fourtyninehub/features/settings/presentation/pages/widgets/label_and_text_form_field.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
+import '../../../../authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
+import 'dialog_verification_widget.dart';
+import 'label_and_text_form_field.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../authentication/domain/entities/forget_password_questions_entity.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class VerificationViewBody extends StatefulWidget {
   const VerificationViewBody({
@@ -94,6 +95,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                   child: CustomFloatingActionButton(
                     text: LocaleKeys.confirm.localize,
                     onPressed: () {
+      ManageVibration.vibrate();
                       forgotPasswordCubit.verifyQuestions(
                         context,
                         userId: widget.questions.userId,

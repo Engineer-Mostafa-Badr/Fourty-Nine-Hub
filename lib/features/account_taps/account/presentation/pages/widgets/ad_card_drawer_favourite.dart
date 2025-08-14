@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -59,6 +60,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
         final controller = context.read<AdvertisementCubit>();
         return InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             context.push(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
@@ -144,6 +146,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                             //     : Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
                             onPressed: () {
+      ManageVibration.vibrate();
                               widget.onRemoveFav();
                             }),
                       ),

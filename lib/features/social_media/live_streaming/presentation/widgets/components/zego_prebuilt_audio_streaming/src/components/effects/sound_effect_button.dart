@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import '../defines.dart';
 import '../pop_up_manager.dart';
 import 'sound_effect_sheet.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomSoundEffectButton extends StatefulWidget {
@@ -52,6 +53,7 @@ class _ZegoLiveAudioRoomSoundEffectButtonState
     final sizeBoxSize = widget.iconSize ?? Size(56.zR, 56.zR);
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         showSoundEffectSheet(
           context,
           innerText: widget.innerText,

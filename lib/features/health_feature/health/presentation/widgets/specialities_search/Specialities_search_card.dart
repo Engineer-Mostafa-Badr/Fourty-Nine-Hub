@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SpecialitiesSearchCard extends StatefulWidget {
   final HealthSubcategoryEntity subCategory;
@@ -19,7 +20,10 @@ class _SpecialitiesSearchCardState extends State<SpecialitiesSearchCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){},
+      onTap: (){
+
+      ManageVibration.vibrate();
+      },
       child: Container(
         height: 140.h,
         decoration: BoxDecoration(

@@ -17,6 +17,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CarPoolBody extends StatefulWidget {
   const CarPoolBody({super.key});
@@ -31,7 +32,6 @@ class _CarPoolBodyState extends State<CarPoolBody>
   void _printCurrentLocation() async {
     try {
       Position position = await GetCurrentLocationDriver.getCurrentPosition();
-      print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
       GetCurrentLocationDriver.position = position;
     } catch (e) {
       print('Error: $e');
@@ -293,6 +293,7 @@ class _CarPoolBodyState extends State<CarPoolBody>
                   ),
                   CarpoolFloatingActionButton(
                     onPressed: () {
+      ManageVibration.vibrate();
                       context.read<UserCubit>().isLoggedIn
                           ? context.pushReplacement(Routes.ADD_NEW_ROUTE)
                           : pleaseLoginDialog(context);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/styles.dart';
 
 class CaptionTextFieldCreateSecondPost extends StatelessWidget {
   const CaptionTextFieldCreateSecondPost({

@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
-import '../../../../../core/error/failure.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
 import '../../data/models/driver_statistics_model.dart';
 import '../../domain/usecases/accept_ride_usecase.dart';
@@ -23,36 +25,44 @@ class DriverDashboardCubit extends Cubit<DriverDashboardState> {
       this._createRiderOfferUseCase)
       : super(const DriverDashboardState());
 
-  void loadData() async {
-    final response = await _getDriverNewTripsUseCase.call(const NoParams());
-    response.fold(
-        (l) => emit(state.copyWith(
-              failure: l,
-              status: DriverDashboardStates.error,
-            )), (trips) async {
-      emit(state.copyWith(trips: trips));
-    });
+  void acceptRide({required String id}) async {
+    final response = await _acceptRideUseCase(id);
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: DriverDashboardStates.error));
+    }, (data) {});
   }
 
   void changeConnectState({required bool v}) {
     emit(state.copyWith(connected: v));
   }
 
-  void acceptRide({required String id}) async {
-    final response = await _acceptRideUseCase(id);
-    response.fold(
-        (l) => emit(
-            state.copyWith(failure: l, status: DriverDashboardStates.error)),
-        (data) {});
-  }
-
   void createOffer({required CreateRiderOfferParams params}) async {
     final response = await _createRiderOfferUseCase(params);
-    response.fold(
-        (l) => emit(
-            state.copyWith(failure: l, status: DriverDashboardStates.error)),
-        (data) {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: DriverDashboardStates.error));
+    }, (data) {
       emit(state.copyWith(status: DriverDashboardStates.success));
+    });
+  }
+
+  void loadData() async {
+    final response = await _getDriverNewTripsUseCase.call(const NoParams());
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(
+        failure: l,
+        status: DriverDashboardStates.error,
+      ));
+    }, (trips) async {
+      emit(state.copyWith(trips: trips));
     });
   }
 }

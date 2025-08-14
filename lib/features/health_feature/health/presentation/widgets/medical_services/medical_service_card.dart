@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class HealthMedicalServiceCard extends StatefulWidget {
   final HealthSubcategoryEntity subCategory;
@@ -32,6 +33,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         print('subCategory: ${widget.subCategory.id}');
         print(
             'mainCategory: ${context.read<HealthCubit>().state.mainCategory!.id}');
@@ -81,6 +83,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                             : Icons.favorite_border,
                         color: Colors.red),
                     onPressed: () {
+      ManageVibration.vibrate();
                       setState(() {
                         isFavorite = !isFavorite;
                       });
@@ -119,6 +122,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                         : Colors.white,
                     backColor: AppColors.getButtonPrimaryWhiteColor(context),
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (context.read<HealthCubit>().state.mainCategory !=
                               null &&
                           UserCubit.to.isLoggedIn) {

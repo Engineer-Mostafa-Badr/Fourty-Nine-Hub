@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/contact_entity.dart';
+import '../../domain/entities/contact_entity.dart';
 
 class ContactModel extends ContactEntity {
   ContactModel({super.sId, super.avatar, super.name});

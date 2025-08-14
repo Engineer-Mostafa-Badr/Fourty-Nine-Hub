@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 // import '../../../../../common/widgets/dynamic/sizer,.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -140,8 +141,9 @@ class CompetitionCard extends StatelessWidget {
                         competitionsWalletEntity.maxRequests &&
                     competitionsWalletEntity.isWinner == true
                 ? () {
-                    onTap();
-                  }
+                  ManageVibration.vibrate();
+                  onTap();
+                }
                 : () {},
           ),
         ],

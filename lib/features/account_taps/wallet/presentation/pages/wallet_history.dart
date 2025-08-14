@@ -10,6 +10,7 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/wallet_history_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class WalletHistory extends StatelessWidget {
   final List<WalletHistoryEntity> list;
@@ -48,6 +49,7 @@ class WalletHistory extends StatelessWidget {
             ),
             MaterialButton(
               onPressed: () async {
+      ManageVibration.vibrate();
                 // if (await LocalAuth().checkBiometrics()) {
                 //   context.push(Routes.PAYMENT);
                 // }
@@ -84,7 +86,10 @@ class WalletHistory extends StatelessWidget {
           return walletActionRow(
               title: '${item.amount}',
               subTitle: item.description,
-              onTap: () {},
+              onTap: () {
+
+      ManageVibration.vibrate();
+              },
               icon: FontAwesomeIcons.check);
         },
         separatorBuilder: (context, index) => Container(),

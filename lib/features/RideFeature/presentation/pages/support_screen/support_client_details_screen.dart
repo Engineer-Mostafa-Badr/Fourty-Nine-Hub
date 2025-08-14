@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_sc
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SupportClientDetailsScreen extends StatelessWidget {
   SupportClientDetailsScreen({super.key});
@@ -51,6 +52,7 @@ class SupportClientDetailsScreen extends StatelessWidget {
               SizedBox(height: 30),
               ElevatedButton.icon(
                 onPressed: () {
+      ManageVibration.vibrate();
                   context.push(Routes.emergencyContactsScreen);
                 },
                 icon: Icon(Icons.download, color: Colors.white),

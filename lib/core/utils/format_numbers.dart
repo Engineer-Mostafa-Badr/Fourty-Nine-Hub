@@ -34,16 +34,39 @@ class FormatNumbers {
       formattedNumber = roundDown
           ? '${_roundDown(dividedValue, decimals)} M'
           : '${dividedValue.toStringAsFixed(decimals)} M';
-    } else if (number >= 1000000000) {
+    } else if (number >= 1000000000 && number < 1000000000000) {
       double dividedValue = number / 1000000000;
       formattedNumber = roundDown
           ? '${_roundDown(dividedValue, decimals)} B'
           : '${dividedValue.toStringAsFixed(decimals)} B';
+    } else if (number >= 1000000000000 && number < 1000000000000000) {
+      double dividedValue = number / 1000000000000;
+      formattedNumber = roundDown
+          ? '${_roundDown(dividedValue, decimals)} T'
+          : '${dividedValue.toStringAsFixed(decimals)} T';
+    } else if (number >= 1000000000000000 && number < 1000000000000000000) {
+      double dividedValue = number / 1000000000000000;
+      formattedNumber = roundDown
+          ? '${_roundDown(dividedValue, decimals)} Qa'
+          : '${dividedValue.toStringAsFixed(decimals)} Qa';
+    } else if (number >= 1000000000000000000) {
+      double dividedValue = number / 1000000000000000000;
+      formattedNumber = roundDown
+          ? '${_roundDown(dividedValue, decimals)} Qi'
+          : '${dividedValue.toStringAsFixed(decimals)} Qi';
     } else {
       formattedNumber = number.floor().toString();
     }
 
     if (useArabicNumerals) {
+      if (formattedNumber.contains('Qa')) {
+        return convertToArabicNumerals(
+            formattedNumber.replaceAll('Qa', 'كوادريليون '));
+      }
+      if (formattedNumber.contains('Qi')) {
+        return convertToArabicNumerals(
+            formattedNumber.replaceAll('Qi', 'كوينتليون '));
+      }
       return convertToArabicNumerals(formattedNumber);
     }
     return formattedNumber;
@@ -57,6 +80,15 @@ class FormatNumbers {
 
   String convertNumberToLocalizedString(String number,
       {required bool isArabic}) {
+    if (number.contains('Qa')) {
+      return isArabic
+          ? convertToArabicNumerals(number.replaceAll('Qa', 'كوادريليون '))
+          : number;
+    }  if (number.contains('Qi')) {
+      return isArabic
+          ? convertToArabicNumerals(number.replaceAll('Qi', 'كوينتليون '))
+          : number;
+    }
     return isArabic
         ? convertToArabicNumerals(number.toString())
         : number.toString();
@@ -79,6 +111,7 @@ class FormatNumbers {
       'K': 'ألف ',
       'M': 'مليون ',
       'B': 'مليار ',
+      'T': 'تريليون ',
     };
 
     return input.split('').map((char) => numeralsMap[char] ?? char).join('');

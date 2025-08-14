@@ -77,6 +77,7 @@ bottomSheet({
   required BuildContext context,
   required Widget widget,
   Color? backColor,
+  BoxConstraints? constraints,
   bool isFloating = false,
   bool isScrollControlled = false,
   bool asAlertDialog = false,
@@ -88,6 +89,7 @@ bottomSheet({
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor: Colors.transparent,
+      constraints: constraints,
       builder: (context) {
         return AnimatedBottomSheet(
           backgroundColor: backColor,

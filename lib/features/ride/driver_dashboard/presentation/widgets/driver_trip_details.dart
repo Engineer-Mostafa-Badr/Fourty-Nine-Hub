@@ -14,6 +14,7 @@ import '../../../../../common/widgets/stateless/buttons/progress_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../requests_history/data/models/trip_model.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DriverTripDetails extends StatelessWidget {
   final TripModel trip;
@@ -141,6 +142,7 @@ class DriverTripDetails extends StatelessWidget {
                       label:
                           '${(trip.price) + offerIncreaseValue(price: trip.price)} L.E',
                       onPressed: () {
+      ManageVibration.vibrate();
                         createOffer(CreateRiderOfferParams(
                             tripId: trip.id,
                             price: (trip.price) +
@@ -154,6 +156,7 @@ class DriverTripDetails extends StatelessWidget {
                       label:
                           '${(trip.price) + offerIncreaseValue(price: trip.price) * 2} L.E',
                       onPressed: () {
+      ManageVibration.vibrate();
                         createOffer(CreateRiderOfferParams(
                             tripId: trip.id,
                             price: (trip.price) +
@@ -167,6 +170,7 @@ class DriverTripDetails extends StatelessWidget {
                       label:
                           '${(trip.price) + offerIncreaseValue(price: trip.price) * 3} L.E',
                       onPressed: () {
+      ManageVibration.vibrate();
                         createOffer(CreateRiderOfferParams(
                             tripId: trip.id,
                             price: (trip.price) +

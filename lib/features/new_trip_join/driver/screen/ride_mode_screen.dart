@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/widget/trip_join_sliders.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -85,7 +86,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
       builder: (context, state) {
         var cubit = context.read<CaptainShareDashboardCubit>();
         if(state.isLoading){
-          return Expanded(child: Center(child: CustomCircularProgressIndicator()));
+          return Center(child: CustomCircularProgressIndicator());
         }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +105,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                 isApproved: state.setting?.data.isApproved ?? false,
                 hasActiveTrip:cubit.activeTrip!=null
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 10.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,6 +139,8 @@ class _RideModeTabsState extends State<RideModeTabs> {
                 ),
               ],
             ),
+            const SizedBox(height: 10,),
+            Expanded(child: TripJoinSliders())
           ],
         );
       },

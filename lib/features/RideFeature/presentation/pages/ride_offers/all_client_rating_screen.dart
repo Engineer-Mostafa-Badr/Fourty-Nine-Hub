@@ -13,6 +13,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../domain/entities/client/client_all_rating_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AllClientRatingScreen extends StatelessWidget {
   const AllClientRatingScreen({super.key});
@@ -66,7 +67,10 @@ class AllClientRatingScreen extends StatelessWidget {
                     width: double.infinity,
                     child: AppButton(
                       backColor: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
-                      onPressed: () {},
+                      onPressed: () {
+
+      ManageVibration.vibrate();
+                      },
                       label:LocaleKeys.trip.localize,
                     ),
                   ),
@@ -201,4 +205,3 @@ class ReviewCard extends StatelessWidget {
     );
   }
 }
-

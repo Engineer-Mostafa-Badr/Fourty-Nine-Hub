@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class AddStoryAndSoundButton extends StatelessWidget {
   const AddStoryAndSoundButton({
@@ -20,6 +21,7 @@ class AddStoryAndSoundButton extends StatelessWidget {
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () {
+      ManageVibration.vibrate();
                 context.pushNamed(Routes.AddStoryScreen);
               },
               style: ButtonStyle(
@@ -45,7 +47,9 @@ class AddStoryAndSoundButton extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: OutlinedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+      ManageVibration.vibrate();
+          },
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Color(0xffFF3308)),
                 side: WidgetStateProperty.all(

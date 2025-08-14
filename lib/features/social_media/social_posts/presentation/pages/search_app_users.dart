@@ -2,20 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../account_taps/lists/domain/entities/user_friend_entity.dart';
+import '../cubit/social_posts_cubit.dart';
+import '../widgets/facebook_widgets/user_image.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SearchAppUsers extends StatefulWidget {
   const SearchAppUsers({super.key});
@@ -43,6 +44,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                   children: [
                     InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           context.pop();
                         },
                         child: const Icon(Icons.arrow_back)),

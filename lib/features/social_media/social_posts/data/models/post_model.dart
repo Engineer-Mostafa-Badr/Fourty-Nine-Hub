@@ -1,11 +1,11 @@
-import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
-import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/audio_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+import '../../../create_post/data/models/activity_model.dart';
+import '../../../create_post/data/models/feeling_model.dart';
+import '../../../instagram/data/models/instagram_post_model.dart';
+import 'audio_model.dart';
+import 'location_model.dart';
+import 'main_post_model.dart';
+import '../../domain/entities/post_entity.dart';
+import '../../../twitter/data/models/twitter_user_model.dart';
 
 import 'life_event_post_model.dart';
 
@@ -86,7 +86,7 @@ class PostModel extends PostEntity {
     }
 
     return PostModel(
-      id: json['_id']?.toString() ?? '',
+      id: json['id']?.toString()??json['_id']?.toString() ?? '',
       content: json['content']?.toString(),
       location: json['location'] is Map ? LocationModel.fromJson(json['location']) : null,
       photo: user.image,
@@ -109,7 +109,7 @@ class PostModel extends PostEntity {
       isShared: json['isShared'] == true,
       isDocumentation: json['twitter_documentation'] == true,
       isLove: json['isLove'] == true,
-      isLikes: json['isLikes'] == true,
+      isLikes: json['isLike']??json['isLikes']??false,
       isWow: json['isWow'] == true,
       isSad: json['isSad'] == true,
       isAngry: json['isAngry'] == true,

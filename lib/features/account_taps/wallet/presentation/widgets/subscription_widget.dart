@@ -15,6 +15,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SubscriptionWidget extends StatelessWidget {
   final WalletSubscriptionEntity subscription;
@@ -151,6 +152,7 @@ class SubscriptionWidget extends StatelessWidget {
   }) =>
       GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
           function();
         },
         child: Container(

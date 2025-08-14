@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/life_event_post_entity.dart';
+import '../../domain/entities/life_event_post_entity.dart';
 
 class LifeEventPostModel extends LifeEventPostEntity {
   LifeEventPostModel({required super.id, required super.title, required super.desc, required super.date, required super.mainCatTitleAr, required super.mainCatTitleEn, required super.subCatTitleAr, required super.subCatTitleEn, required super.mainCatImage, required super.subCatImages});

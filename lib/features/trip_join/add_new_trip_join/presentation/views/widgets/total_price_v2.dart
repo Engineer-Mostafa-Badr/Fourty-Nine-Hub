@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
+import '../../cubits/trip_join_view/trip_join_view_cubit.dart';
+import '../../../../../../res/style/styles.dart';
 
 class TotalPriceV2 extends StatelessWidget {
   const TotalPriceV2({

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RequestWalletButton extends StatelessWidget {
   const RequestWalletButton({
@@ -41,7 +42,10 @@ class RequestWalletButton extends StatelessWidget {
             color: context.isDarkMode ? Colors.black : Colors.white,
             fontSize: 32,
           ),
-          onPressed: () {},
+          onPressed: () {
+      ManageVibration.vibrate();
+          },
+            
           backColor: const Color(0xB3F33D49),
         );
       } else {
@@ -56,6 +60,7 @@ class RequestWalletButton extends StatelessWidget {
                   ? const Color(0xB3F45560)
                   : const Color(0xB3F33D49),
           onPressed: () {
+      ManageVibration.vibrate();
             if (amount >= target) {
               // اذا كان المبلغ الخاص بي اكبر من اقل سحب
               if (UserCubit.to.state.data?.phone == null ||

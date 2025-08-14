@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-import 'package:fourtyninehub/features/subcategories/domain/repositories/subcategories_repo.dart';
+import '../../../../core/error/failure.dart';
+import '../../../ads_feature/ads/data/models/Ad_model.dart';
+import '../repositories/subcategories_repo.dart';
 import '../../../../core/abstract/use_case.dart';
 
 class SearchAdsUseCase extends UseCase<List<AdModel>, SearchAdsParams> {

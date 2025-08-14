@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import '../../../../../../common/models/public/pagination_params.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/instagram_post_entity.dart';
+import '../../../domain/usecases/get_posts_use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_posts_use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'posts_instagram_state.dart';
 
@@ -34,6 +37,10 @@ class PostsInstagramCubit extends Cubit<PostsInstagramState> {
     ));
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(state.copyWith(
           status: PostsInstagramStatus.failure,
           errMessage: getFailureMessage(l, context),

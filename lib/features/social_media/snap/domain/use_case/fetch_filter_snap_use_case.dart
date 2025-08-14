@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/snap/domain/entity/filter_entity.dart';
-import 'package:fourtyninehub/features/social_media/snap/domain/repository/snap_repository.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../entity/filter_entity.dart';
+import '../repository/snap_repository.dart';
 
 class FetchFilterSnapUseCase extends UseCase<List<FilterEntity>, NoParams> {
   final SnapRepository _repository;

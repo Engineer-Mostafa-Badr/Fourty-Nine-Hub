@@ -73,13 +73,13 @@ class EndPoints {
   static const verifyOTP = '/auth/verify/email';
   static const VerifyPhoneOTP = '/auth/verify/phone-number';
   static const getWelcomeGift = '/auth/welcome-gift';
-  static const socialLogin = '/auth/social/login';
+  static const socialLogin = '/oauth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh/token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
-  static const addRateRestaurant = '/restaurant/rating-restaurant/';
+  static const addRateRestaurant = '/restaurant/rating-restaurant/';  
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
@@ -580,6 +580,7 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels-explore';
+  static const getGlobalReels = '/reels-explore/global-reel';
   static const snap = '/categories/main/snap-filters';
   static const fetchReelsForFollowers =
       '/reels/followers?subCategory=66684135dbb427ee42aa0141';
@@ -783,7 +784,7 @@ class EndPoints {
   }
 
   static String getGlobalFeed(TwitterFeedParams params) {
-    return '/facebook/feed/general?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/feed/global?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getInstagramPosts(TwitterFeedParams params) {
@@ -885,7 +886,7 @@ class EndPoints {
   }
 
   static String reactOnPost(String postId) {
-    return '/facebook/post/react/$postId?subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/posts/$postId/reactions?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String reactOnComment(String postId) {
@@ -992,11 +993,11 @@ class EndPoints {
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
@@ -1008,7 +1009,7 @@ class EndPoints {
   }
 
   static String deletePost(String postId) {
-    return '/facebook/post/$postId?subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/posts/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteComment(String commentId) {
@@ -1711,4 +1712,26 @@ class EndPoints {
       '/loading/trip/rating/driver';
   static const addRateToClientWithDriverLoadingNonSocket =
       '/loading/trip/rating/';
+
+      //! Spot Light
+    // Spotlight Profile Endpoints
+    static const getMySpotlightProfile = '/spotlight/profile/me';
+    static String getSpotlightProfileForUser(String userId) => '/spotlight/profile/$userId';
+  
+  // Spotlight Media Endpoints  
+  static String getMySpotlightMedia({int page = 1, int limit = 10}) => 
+      '/spotlight/media/me?page=$page&limit=$limit';
+  
+  static String getSpotlightMediaForUser(String userId, {int page = 1, int limit = 10}) => 
+      '/spotlight/media/$userId?page=$page&limit=$limit';
+  
+  // Media Upload Endpoints
+  static const requestUploadMedia = '/spotlight/media/upload/request';
+  static const confirmUploadMedia = '/spotlight/media/upload/confirm';
+  static const uploadMedia = '/spotlight/media/upload';
+
+  // Additional endpoints that might be useful
+  static const likeMedia = '/spotlight/media/like';
+  static const unlikeMedia = '/spotlight/media/unlike';
+  static const deleteMedia = '/spotlight/media/delete'; 
 }

@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_followers_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
+import 'user_profile_followers_model.dart';
+import '../../domain/entities/user_profile_entity.dart';
 
 class UserProfileModel extends UserProfileEntity {
   UserProfileModel({

@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../Register/widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TechnicalExaminationNonSocketScreen extends StatelessWidget {
   const TechnicalExaminationNonSocketScreen({super.key});
@@ -95,6 +96,7 @@ class TechnicalExaminationNonSocketScreen extends StatelessWidget {
                           UploadFileWidget(
                             title: LocaleKeys.technicalExamination.localize,
                             onTap: (){
+      ManageVibration.vibrate();
                               cubit.onUploadPersonalTechnicalExaminationPicture(context);
 
                             },
@@ -142,6 +144,7 @@ class TechnicalExaminationNonSocketScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     print("object");
                     if(context.read<DashboardsCubit>().state.personalTechnicalExaminationPicture==null){
                       showErrorMessage(context, "Please select technical examination");

@@ -29,6 +29,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/close_widget.dart';
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideFeatureRegisterParams {
   final bool isSocket;
@@ -139,6 +140,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 UploadFileWidget(
                                   title: LocaleKeys.personalPicture.localize,
                                   onTap: () {
+      ManageVibration.vibrate();
                                     cubit.onUploadPersonalPicture(context);
                                   },
                                   imageUrl: state.personalPicture,
@@ -416,6 +418,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     ),
                                     ClickableWidget(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         showAddNewBrandDialog(
                                             context: context,
                                             onBrandAdded: (String brandName) {
@@ -465,6 +468,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       Sizer(),
                                       ClickableWidget(
                                         onTap: () {
+      ManageVibration.vibrate();
                                           cubit.removeNewBrand();
                                         },
                                         child: const Icon(
@@ -560,6 +564,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                           ),
                                           ClickableWidget(
                                             onTap: () {
+      ManageVibration.vibrate();
                                               if (state.newBrand == null ||
                                                   (state.newBrand?.id.isEmpty ??
                                                       true)) {
@@ -660,6 +665,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                             Sizer(),
                                             ClickableWidget(
                                               onTap: () {
+      ManageVibration.vibrate();
                                                 cubit.removeNewModel();
                                               },
                                               child: const Icon(
@@ -981,6 +987,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             // const Sizer(),
                             InkWell(
                               onTap: () {
+      ManageVibration.vibrate();
                                 state.isShipping == true
                                     ? cubit.onLoadingRegister(
                                         context,
@@ -1092,6 +1099,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'الغاء' : 'Close',
                           backColor: AppColors.SECONDARY_COLOR_DARK2,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.pop();
                             // cubit
                           }),
@@ -1101,6 +1109,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'تأكيد' : 'Confirm',
                           backColor: AppColors.PRIMARY_COLOR,
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (cubit.modelFormKey.currentState!.validate()) {
                               context.pop();
                               onModelAdded(cubit.modelNameController.text);
@@ -1171,6 +1180,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'الغاء' : 'Close',
                           backColor: AppColors.SECONDARY_COLOR_DARK2,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.pop();
                             // cubit
                           }),
@@ -1180,6 +1190,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'تأكيد' : 'Confirm',
                           backColor: AppColors.PRIMARY_COLOR,
                           onPressed: () {
+      ManageVibration.vibrate();
                             if (cubit.modelFormKey.currentState!.validate()) {
                               context.pop();
                               onBrandAdded(cubit.brandNameController.text);

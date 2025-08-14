@@ -4,8 +4,13 @@
         <package android:name="com.facebook.katana" />
         <!-- Facebook Messenger app -->
         <package android:name="com.facebook.orca" />
+        <!-- Facebook Lite -->
+        <package android:name="com.facebook.lite" />
         <!-- Instagram app (if needed for Instagram login) -->
         <package android:name="com.instagram.android" />
+    </queries>
+    <queries>
+        <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -95,6 +100,22 @@
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
+        
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                    "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

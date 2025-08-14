@@ -9,6 +9,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
   const CreateDoctorIDExpiryDatePicker(
@@ -34,7 +35,10 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
       controller: TextEditingController(),
       hintText: LocaleKeys.idExpiryDate.localize,
       keyboardType: TextInputType.datetime,
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
     );
     return FormField(
       validator: validator,

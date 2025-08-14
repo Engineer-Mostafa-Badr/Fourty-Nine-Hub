@@ -4,26 +4,27 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/loading/custom_loading.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/pages.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import '../../domain/entities/edit_profile_entity.dart';
+import '../cubit/edit_profile_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/pages.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/stateful/picker/date_picker.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/gover_dropdown.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({
@@ -554,6 +555,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ? const CustomLoading()
                       : InkWell(
                           onTap: () async {
+      ManageVibration.vibrate();
                             DateFormat format = DateFormat("dd/MM/yyyy");
                             DateTime dateTime =
                                 format.parse(birthDateTextController.text);

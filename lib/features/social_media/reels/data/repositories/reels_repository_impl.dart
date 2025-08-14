@@ -1,23 +1,23 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/repositories/reels_repository.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../models/add_comments_model.dart';
+import '../models/audio_reels_model.dart';
+import '../models/get_comments_model.dart';
+import '../models/like_model.dart';
+import '../models/new_reels_model.dart';
+import '../models/save_reel_model.dart';
+import '../models/share_reel_model.dart';
+import '../../domain/repositories/reels_repository.dart';
+import '../../domain/use_case/add_reel_comment_use_case.dart';
+import '../../domain/use_case/add_reel_reply_use_case.dart';
+import '../../domain/use_case/create_advertisement_use_case.dart';
+import '../../domain/use_case/create_reel_use_case.dart';
+import '../../domain/use_case/reels_with_same_audia_use_case.dart';
+import '../../domain/use_case/upload_reel_use_case.dart';
+import '../../domain/use_case/upload_video_reel_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
+import '../data_sources/reels_remote_data_source.dart';
 
 class ReelsRepositoryImpl extends ReelsRepository {
   final ReelsRemoteDataSource _reelsRemoteDataSource;
@@ -28,6 +28,12 @@ class ReelsRepositoryImpl extends ReelsRepository {
   Future<Either<Failure, ReelsResponse>> getExploreReels(
       PaginationParams params) {
     return _reelsRemoteDataSource.getExploreReels(params);
+  }
+
+  @override
+  Future<Either<Failure, ReelsResponse>> getGlobalReels(
+      PaginationParams params) {
+    return _reelsRemoteDataSource.getGlobalReels(params);
   }
 
   @override

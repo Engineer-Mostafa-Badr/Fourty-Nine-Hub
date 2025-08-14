@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_request_use_case.dart';
+import '../../../../common/functions/global/upload_file.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
+import '../../domain/usecases/send_bill_request_use_case.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/error/failure.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 part 'ten_percent_state.dart';
 
 class TenPercentCubit extends Cubit<TenPercentState> {
@@ -96,6 +100,10 @@ class TenPercentCubit extends Cubit<TenPercentState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         showErrorMessage(context, getFailureMessage(failure, context));
 
         emit(state.copyWith(failure: failure, status: TenPercentStates.error));

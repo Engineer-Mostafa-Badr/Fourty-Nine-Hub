@@ -11,6 +11,7 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AddStopsWidget extends StatefulWidget {
   const AddStopsWidget({super.key, required this.rideCubit});
@@ -75,6 +76,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     color: Colors.blue,
                     text: state.wayPointOne?.address,
                     onPressed: () async {
+      ManageVibration.vibrate();
                       context.push(Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
@@ -219,4 +221,3 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
     );
   }
 }
-

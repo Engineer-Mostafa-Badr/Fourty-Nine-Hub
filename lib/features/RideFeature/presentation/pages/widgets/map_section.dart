@@ -13,6 +13,7 @@ import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.
 import '../../../../carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import '../../../../ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
 import 'custom_ride_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MapSection extends StatefulWidget {
   const MapSection({super.key});
@@ -31,7 +32,6 @@ class _MapSectionState extends State<MapSection> {
   void _setUserCurrentLocation() async {
     try {
       Position position = await GetCurrentLocationDriver.getCurrentPosition();
-      print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
       StartTextFieldAndFindWidget.startingPoint.text = "Your location";
       // await context.read<GetStartingPointRideCubit>().getStartingPoint(
       //       address: "",
@@ -65,6 +65,7 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
+      ManageVibration.vibrate();
               if(context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.rideModeScreen, extra: const RideModeParams(modeType: 'truk'));
               }else {
@@ -80,6 +81,7 @@ class _MapSectionState extends State<MapSection> {
               //               radius: 15,
               //               label: LocaleKeys.ride.tr(),
               //               onPressed: () {
+      ManageVibration.vibrate();
               //                 context.push(Routes.welcomeRideRegister);
               //               },
               //               backColor: AppColors.PRIMARY_COLOR,
@@ -88,6 +90,7 @@ class _MapSectionState extends State<MapSection> {
               //               radius: 15,
               //               label: LocaleKeys.shipping.tr(),
               //               onPressed: () {},
+      ManageVibration.vibrate();
               //               backColor: AppColors.PRIMARY_COLOR,
               //               width: double.infinity),
               //         ],

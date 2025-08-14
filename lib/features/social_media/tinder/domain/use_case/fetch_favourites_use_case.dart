@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../../data/models/get_fav_sub_category_model.dart';
+import '../repositories/tinder_repository.dart';
 
 class GetTinderFavouritesUseCase
     extends UseCase<SubFavoritesResponse, NoParams> {

@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
 
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
@@ -16,6 +16,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../cubit/restaurants_list_cubit.dart';
 import 'log_details_screen.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantRequestLogsScreen extends StatefulWidget {
   const RestaurantRequestLogsScreen({super.key, this.onClose});
@@ -40,10 +41,10 @@ class _RestaurantRequestLogsScreenState
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantsCubit>().getReqLogs();
-    }
+    // if (_scrollController.position.pixels >=
+    //     _scrollController.position.maxScrollExtent - 200) {
+    //   context.read<RestaurantsCubit>().getReqLogs();
+    // }
   }
 
   @override
@@ -91,6 +92,7 @@ class _RestaurantRequestLogsScreenState
 
           if (!state.isLoading) {
             return OlxPaginationWidget(
+              scrollController: _scrollController,
               itemsPerPage: 2,
               loadPage: (page) async {},
               banners: bannersList,
@@ -164,6 +166,7 @@ class TripLogRequestCard extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: InkWell(
                   onTap: () async {
+      ManageVibration.vibrate();
                     if (orderData.seen == false) {
                       context
                           .read<RestaurantsCubit>()

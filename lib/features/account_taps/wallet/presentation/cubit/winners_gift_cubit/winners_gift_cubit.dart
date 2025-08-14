@@ -3,6 +3,9 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/data_winners_gift_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_winners_gift_use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'winners_gift_state.dart';
 
@@ -22,10 +25,13 @@ class WinnersGiftCubit extends Cubit<WinnersGiftState> {
     );
 
     response.fold(
-      (f) {
+      (f) {var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
           status: WinnersGiftStates.failure,
-          errMessage: getFailureMessage(f, context),
+          errMessage: getFailureMessage(f, currentContext),
         ));
       },
       (newData) {

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/government.dart';
+import '../../domain/entities/government.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'government_model.g.dart';

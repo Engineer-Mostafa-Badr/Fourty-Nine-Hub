@@ -4,7 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/assets/assets.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripOptionWidget extends StatelessWidget {
   final String imagePath;
@@ -31,7 +33,10 @@ class TripOptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        ManageVibration.vibrate();
+        onTap?.call();
+        },
       child: Column(
         children: [
           SizedBox(height: 8.h),

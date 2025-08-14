@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/snap/presentation/widget/filter.dart';
-import 'package:fourtyninehub/features/social_media/snap/presentation/widget/media_preview_screen.dart';
-import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../widget/filter.dart';
+import '../widget/media_preview_screen.dart';
+import '../../utils/filters.dart';
+import '../../../social_posts/presentation/pages/search_app_users.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,13 +20,14 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../routes/routes.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class SnapView extends StatelessWidget {
   const SnapView({super.key});
@@ -388,6 +389,7 @@ class _AdvancedSnapchatCameraScreenState
 
                                 return GestureDetector(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     if (selectedFilterIndex == index) {
                                       _showOverlay(context);
                                       _capturePng().then((value) {
@@ -463,6 +465,7 @@ class _AdvancedSnapchatCameraScreenState
                               ],
                             ),
                             onPressed: () {
+      ManageVibration.vibrate();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -496,6 +499,7 @@ class _AdvancedSnapchatCameraScreenState
             children: [
               GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
@@ -528,6 +532,7 @@ class _AdvancedSnapchatCameraScreenState
           ),
           IconButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 showDialog(
                     context: context, builder: (_) => const SearchAppUsers());
               },

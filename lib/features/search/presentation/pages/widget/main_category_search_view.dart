@@ -14,6 +14,7 @@ import '../../../../../common/widgets/stateful/banners/main_category_banner.dart
 import '../../../../../core/utils/handle_cashback.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 //MainCategorySearchView
 
@@ -115,6 +116,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
               padding: const EdgeInsets.all(16),
               child: InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount(
@@ -170,6 +172,5 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
   }
 
 }
-
 
 

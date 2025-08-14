@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -9,6 +9,7 @@ import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class MessagesAreEndToEndEncrypted extends StatelessWidget {
   const MessagesAreEndToEndEncrypted({
@@ -42,6 +43,7 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
     ];
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         bottomSheet(
           context: context,
           widget: Column(

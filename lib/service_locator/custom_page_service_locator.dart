@@ -1,7 +1,7 @@
-import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_activate_use_case.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/update_activate_use_case.dart';
-import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
+import '../features/custom_page/domain/use_case/fetch_activate_use_case.dart';
+import '../features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
+import '../features/custom_page/domain/use_case/update_activate_use_case.dart';
+import '../features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/custom_page/data/data_source/custom_page_remote_data_source.dart';

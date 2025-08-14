@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/enums/gender_type.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_premium_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/book_regular_appointment.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'book_doctor_appointment_state.dart';
 
@@ -30,17 +33,14 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   late DoctorEntity _doctor;
   late AppointmentEntity _appointment;
 
-  void init(DoctorDetailsCubit doctorDetailsCubit) {
-    _doctor = doctorDetailsCubit.state.doctor!;
-    _appointment = doctorDetailsCubit.selectedAppointment;
-    _params.appointmentId = _appointment.id;
-    _params.subCategoryId = _doctor.subCategory.id;
-  }
-
   BookDoctorAppointmentCubit(
     this._bookRegularAppointmentUseCase,
     this._bookPremiumAppointmentUseCase,
   ) : super(BookDoctorAppointmentInitialState());
+
+  AppointmentEntity get appointment => _appointment;
+
+  DoctorEntity get doctor => _doctor;
 
   @override
   Future<void> close() {
@@ -56,6 +56,28 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     return super.close();
   }
 
+  void init(DoctorDetailsCubit doctorDetailsCubit) {
+    _doctor = doctorDetailsCubit.state.doctor!;
+    _appointment = doctorDetailsCubit.selectedAppointment;
+    _params.appointmentId = _appointment.id;
+    _params.subCategoryId = _doctor.subCategory.id;
+  }
+
+  Future<void> premiumBook() async {
+    _validate(afterValidation: () async {
+      emit(BookDoctorAppointmentStartLoadingState());
+      final response = await _bookPremiumAppointmentUseCase.call(_params);
+      emit(BookDoctorAppointmentEndLoadingState());
+      response.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(BookDoctorAppointmentErrorState(Labels.errorHappened));
+      }, (data) => emit(BookDoctorAppointmentSuccessState()));
+    });
+  }
+
   Future<void> regularBooking() async {
     print(phoneNumberTextController.text);
     print(nameTextController.text);
@@ -64,30 +86,18 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
       emit(BookDoctorAppointmentStartLoadingState());
       final response = await _bookRegularAppointmentUseCase.call(_params);
       emit(BookDoctorAppointmentEndLoadingState());
-      response.fold(
-          (failure) =>
-              emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
-          (data) => emit(BookDoctorAppointmentSuccessState()));
+      response.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(BookDoctorAppointmentErrorState(Labels.errorHappened));
+      }, (data) => emit(BookDoctorAppointmentSuccessState()));
     });
   }
 
-  Future<void> premiumBook() async {
-    _validate(afterValidation: () async {
-      emit(BookDoctorAppointmentStartLoadingState());
-      final response = await _bookPremiumAppointmentUseCase.call(_params);
-      emit(BookDoctorAppointmentEndLoadingState());
-      response.fold(
-          (failure) =>
-              emit(BookDoctorAppointmentErrorState(Labels.errorHappened)),
-          (data) => emit(BookDoctorAppointmentSuccessState()));
-    });
-  }
-
-  void _validate({required void Function() afterValidation}) {
-    if (formKey.currentState!.validate()) {
-      _saveText();
-      afterValidation();
-    }
+  void selectGender(GenderType gender) {
+    _params.gender = gender;
   }
 
   void _saveText() {
@@ -97,11 +107,10 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     // _params.age = ageController.text;
   }
 
-  void selectGender(GenderType gender) {
-    _params.gender = gender;
+  void _validate({required void Function() afterValidation}) {
+    if (formKey.currentState!.validate()) {
+      _saveText();
+      afterValidation();
+    }
   }
-
-  DoctorEntity get doctor => _doctor;
-
-  AppointmentEntity get appointment => _appointment;
 }

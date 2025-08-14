@@ -1,7 +1,7 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
+import '../../../domain/entities/call_data.dart';
 
 abstract class CallState extends Equatable {}
 

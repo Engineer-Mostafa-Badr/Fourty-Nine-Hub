@@ -1,24 +1,33 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../domain/usecases/post_react_usecase.dart';
+import '../../cubit/social_posts_cubit.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:lottie/lottie.dart';
 
 class BuildReactionsButtons extends StatefulWidget {
   const BuildReactionsButtons(
-      {super.key, required this.post, required this.from});
+      {super.key, required this.post, required this.from,this.handleReaction,this.showIcon=true,this.showTitle});
   final dynamic post;
   final String from;
+  final bool? showTitle;
+  final bool? showIcon;
+  final Function(String reaction)? handleReaction;
 
   @override
   State<BuildReactionsButtons> createState() => _BuildReactionsButtonsState();
@@ -49,13 +58,16 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           boxColor: Colors.white,
           boxRadius: 10,
           onReactionChanged: (Reaction<String>? reaction) async {
-            print(reaction?.value);
+            ManageVibration.vibrate();
+            if(!context.read<UserCubit>().isLoggedIn){
+              pleaseLoginDialog(context);
+              return;
+            }
             if (reaction != null) {
               await _handleReactionChange(reaction, controller);
             }
           },
           toggle: false,
-          // direction: ReactionsBoxAlignment.ltr,
           animateBox: false,
           placeholder: Reaction<String>(
             value: null,
@@ -79,7 +91,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
 
   Future<void> _handleReactionChange(
       Reaction<String> reaction, SocialPostsCubit controller) async {
-    print("reaction.${reaction.value}");
+    if(widget.handleReaction!=null)widget.handleReaction!(reaction.value??'');
     if ((reaction.value == 'like' || reaction.value == 'likes') &&
         widget.post.isLikes == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
@@ -250,6 +262,14 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     bool? isAngry,
   }) {
     setState(() {
+      widget.post.isLikes=false;
+      widget.post.isHaha=false;
+      widget.post.isLove=false;
+      widget.post.isWow=false;
+      widget.post.isSad=false;
+      widget.post.isAngry=false;
+    });
+    setState(() {
       if (isLikes != null) {
         widget.post.isLikes = isLikes;
       }
@@ -386,14 +406,14 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        (widget.showIcon==false && from == 'view')?SizedBox():SizedBox(
           height: from == 'view' ? 28 : 28,
           width: from == 'view' ? 28 : 28,
           child: from == 'view'
               ? Image.asset(
                   item.imageAsset(),
                   fit: BoxFit.fill,
-              color: context.isDarkMode?Colors.white:null
+              // color: context.isDarkMode?Colors.white:null
                 )
               : Lottie.asset(
                   item.lottieAsset(),
@@ -401,8 +421,9 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
                   onLoaded: (loaded) {},
                 ),
         ),
-        if (widget.from == 'posts' && from == 'view') ...[
-          Label(text: name, style: Styles.mediumText(color: Colors.grey)),
+        if ((widget.from == 'posts' && from == 'view')||(widget.showTitle==true&& from == 'view')) ...[
+          Label(text: name, style: Styles.mediumText(color:item.name=='like'?AppColors.c3897F0:(item.name=='wow'||item.name=='haha'||item.name=='sad')?AppColors.ACCENT_COLOR:AppColors.SECONDARY_COLOR)
+          ),
         ],
       ],
     );
@@ -412,10 +433,10 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SvgPicture.asset(Assets.likeIcon,color:AppColors.getTextColor(context)),
-        SizedBox(width: 8.w), // Space between icon and text
+        if(widget.showIcon==true)...[SvgPicture.asset(Assets.likeIcon,color:context.isDarkMode?AppColors.whiteColor:null),
+        SizedBox(width: 8.w)], // Space between icon and text
         Label(
-          text: LocaleKeys.like.localize,
+          text: "${LocaleKeys.like.localize}.",
           style: TextStyle(
               color:AppColors.getTextColor(context),
               fontSize: 14,

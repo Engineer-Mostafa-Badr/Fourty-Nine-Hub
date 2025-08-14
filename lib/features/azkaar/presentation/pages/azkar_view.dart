@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/features/azkaar/domain/entity/azkar_entity.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,32 +29,6 @@ class _AzkarViewState extends State<AzkarView> {
   late ScrollController _scrollController;
   late AzkarCubit _cubit;
   final FocusNode _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit = context.read<AzkarCubit>();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
-    });
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchAzkar();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,27 +96,32 @@ class _AzkarViewState extends State<AzkarView> {
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                  itemCount: isSearching
-                      ? state.azkarSearch!.length
-                      : state.akar!.length,
-                  itemBuilder: (context, index) {
-                    final items =
-                        isSearching ? state.azkarSearch! : state.akar!;
+                child: GlowingOverscrollIndicator(
+                  color: AppColors.SECONDARY_COLOR,
+                  axisDirection: AxisDirection.down,
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                    itemCount: isSearching
+                        ? state.azkarSearch!.length
+                        : state.akar!.length,
+                    itemBuilder: (context, index) {
+                      final items =
+                          isSearching ? state.azkarSearch! : state.akar!;
 
-                    if (index >= items.length) {
-                      return const Center(child: CustomLoadingSearchWidget());
-                    }
+                      if (index >= items.length) {
+                        return const Center(child: CustomLoadingSearchWidget());
+                      }
 
-                    return _buildAzkarItem(context, items[index], isSearching);
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 10.h);
-                  },
+                      return _buildAzkarItem(
+                          context, items[index], isSearching);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 10.h);
+                    },
+                  ),
                 ),
               ),
             ],
@@ -151,10 +131,30 @@ class _AzkarViewState extends State<AzkarView> {
     );
   }
 
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<AzkarCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadInitialData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
+
   Widget _buildAzkarItem(
       BuildContext context, AzkarEntity item, bool isSearch) {
     return InkWell(
       onTap: () {
+        ManageVibration.vibrate();
         context.push(
           Routes.AZKAARDETAILS,
           extra: item.name,
@@ -190,5 +190,12 @@ class _AzkarViewState extends State<AzkarView> {
         ),
       ),
     );
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchAzkar();
+    }
   }
 }

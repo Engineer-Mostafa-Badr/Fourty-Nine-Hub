@@ -15,6 +15,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EmergencyCard extends StatelessWidget {
   final EmergencyEntity emergency;
@@ -46,6 +47,7 @@ class EmergencyCard extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
                         backColor: cardDarkColor(context),
@@ -96,6 +98,7 @@ class EmergencyCard extends StatelessWidget {
                 backColor: AppColors.PRIMARY_COLOR,
                 padding: 30.w,
                 onPressed: () {
+      ManageVibration.vibrate();
                   LaunchURLHelper().call(phone: emergency.phone);
                 },
                 style: Styles.mediumText(color: Colors.white),
