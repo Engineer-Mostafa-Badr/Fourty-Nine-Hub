@@ -98,7 +98,6 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
         isFloatingButtonVisible = false;
       } else {
         isFloatingButtonVisible = true;
-
       }
       setState(() {});
     });

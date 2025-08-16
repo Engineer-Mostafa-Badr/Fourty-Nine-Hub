@@ -16,6 +16,8 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+
 class InstagramAddLocationView extends StatelessWidget {
   const InstagramAddLocationView({super.key});
 
@@ -31,7 +33,7 @@ class InstagramAddLocationView extends StatelessWidget {
           showLoadingDialog(context);
         }
         if (state.status.isSuccess) {
-          context.read<CreatePostInstagramCubit>().addLocation(state.location!);
+          serviceLocator<CreatePostInstagramCubit>().addLocation(state.location!);
           context.pop();
         }
         if (state.status.isFailure) {
@@ -135,8 +137,7 @@ class InstagramAddLocationView extends StatelessWidget {
                           context
                               .read<InstagramAddLocationCubit>()
                               .removeLocation();
-                          context
-                              .read<CreatePostInstagramCubit>()
+                          serviceLocator<CreatePostInstagramCubit>()
                               .removeLocation();
                         },
                         child: Material(

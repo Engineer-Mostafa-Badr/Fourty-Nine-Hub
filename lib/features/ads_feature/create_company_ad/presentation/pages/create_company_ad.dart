@@ -8,10 +8,10 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/fo
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/corporate_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/retail_ads.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
@@ -108,7 +108,6 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView>
                           style: Styles.headerText(
                             fontSize: FontSize.s25,
                             fontWeight: FontWeight.w700,
-                            height: 1.83,
                           ),
                         ),
                       ],
@@ -157,7 +156,6 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView>
                           style: Styles.headerText(
                             fontSize: FontSize.s25,
                             fontWeight: FontWeight.w700,
-                            height: 1.83,
                           ),
                         ),
                       ],

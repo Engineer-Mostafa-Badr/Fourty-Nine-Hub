@@ -1500,7 +1500,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ),
                                   );
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  context.push(Routes.FirstLoginScreen);
                                 }
                               },
                             )
@@ -1530,7 +1530,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ),
                                   );
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  context.push(Routes.FirstLoginScreen);
                                 }
                               },
                             )
@@ -1554,7 +1554,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                             final state = rideCubit.state;
 
                                             if (!context.isUserLoggedIn) {
-                                              context.push(Routes.LOGIN);
+                                              context.push(Routes.FirstLoginScreen);
                                               return;
                                             }
 
@@ -1656,11 +1656,28 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 context.isArabic ?'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة' : "Please enter a direct contact number for the service provider.",
                                                               ),
                                                               // const SizedBox(height: 20),
+                                                              // NewPhoneNumberTextFormField(
+                                                              //   currentController: rideCubit.phoneNumberController,
+                                                              //   keyboardType: TextInputType.number,
+                                                              //   isRequired: true,
+                                                              //   validator: validatorEgyptPhone,
+                                                              // ),
                                                               NewPhoneNumberTextFormField(
                                                                 currentController: rideCubit.phoneNumberController,
                                                                 keyboardType: TextInputType.number,
                                                                 isRequired: true,
-                                                                validator: validatorEgyptPhone,
+                                                                validator: (value) {
+                                                                  // تحويل الأرقام العربية إلى إنجليزية قبل الفاليديشن
+                                                                  String normalized = value?.replaceAllMapped(
+                                                                    RegExp(r'[٠-٩]'),
+                                                                        (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                                                                  ) ?? '';
+
+                                                                  return validatorEgyptPhone(normalized);
+                                                                },
+                                                                inputFormatter: [
+                                                                  ArabicNumberFormatter(isArabic: context.isArabic),
+                                                                ],
                                                               ),
                                                               // const SizedBox(height: 20),
                                                               Text(
@@ -1747,7 +1764,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           ManageVibration.vibrate();
 
                                           if (!context.isUserLoggedIn) {
-                                            context.push(Routes.LOGIN);
+                                            context.push(Routes.FirstLoginScreen);
                                             return;
                                           }
 
@@ -1825,7 +1842,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                             currentController: rideCubit.phoneNumberController,
                                                             keyboardType: TextInputType.number,
                                                             isRequired: true,
-                                                            validator: validatorEgyptPhone,
+                                                            validator: (value) {
+                                                              // تحويل الأرقام العربية إلى إنجليزية قبل الفاليديشن
+                                                              String normalized = value?.replaceAllMapped(
+                                                                RegExp(r'[٠-٩]'),
+                                                                    (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                                                              ) ?? '';
+
+                                                              return validatorEgyptPhone(normalized);
+                                                            },
+                                                            inputFormatter: [
+                                                              ArabicNumberFormatter(isArabic: context.isArabic),
+                                                            ],
                                                           ),
                                                           // const SizedBox(height: 20),
                                                           Text(
@@ -1945,45 +1973,49 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           flex: 9,
           child: SizedBox(
             height: 46,
-            child: ListView.builder(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              itemCount: subCategories.length,
-              itemBuilder: (context, index) {
-                final subCategory = subCategories[index];
-                final bool isSelected = serviceLocator<RideCubit>().selectedCategoryType == type && serviceLocator<RideCubit>().selectedCategoryIndex == index;
-                return GestureDetector(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
-                    context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
-                    context.read<ClientTripsCubit>().makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
-                    context.read<ClientTripsCubit>().makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
-                    serviceLocator<RideCubit>().onChangeCategoriesType(type);
-                    setState(() {
-                      if (context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null) {
-                        if (serviceLocator<UserCubit>().state.data?.gender == "male" && subCategory.subCategoryNameEn.trim().toLowerCase() == "lady") {
-                          showErrorMessage(context, context.isArabic ? "أنت رجل, لا يمكنك استخدام هذه الخدمة" : "You are a man, you can't use this service");
-                          return;
+            child: GlowingOverscrollIndicator(
+              axisDirection: AxisDirection.right,
+              color: AppColors.SECONDARY_COLOR,
+              child: ListView.builder(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                itemCount: subCategories.length,
+                itemBuilder: (context, index) {
+                  final subCategory = subCategories[index];
+                  final bool isSelected = serviceLocator<RideCubit>().selectedCategoryType == type && serviceLocator<RideCubit>().selectedCategoryIndex == index;
+                  return GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
+                      context.read<ClientTripsCubit>().initData(subCategories[index]?.subCategoryId ?? '');
+                      context.read<ClientTripsCubit>().makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
+                      context.read<ClientTripsCubit>().makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
+                      serviceLocator<RideCubit>().onChangeCategoriesType(type);
+                      setState(() {
+                        if (context.isUserLoggedIn && serviceLocator<UserCubit>().state.data?.gender != null) {
+                          if (serviceLocator<UserCubit>().state.data?.gender == "male" && subCategory.subCategoryNameEn.trim().toLowerCase() == "lady") {
+                            showErrorMessage(context, context.isArabic ? "أنت رجل, لا يمكنك استخدام هذه الخدمة" : "You are a man, you can't use this service");
+                            return;
+                          }
                         }
-                      }
-                      if (serviceLocator<RideCubit>().selectedCategoryType == type && serviceLocator<RideCubit>().selectedCategoryIndex == index) {
-                        // serviceLocator<RideCubit>().selectedCategoryType = null;
-                        // serviceLocator<RideCubit>().selectedCategoryIndex = null;
-                      } else {
-                        serviceLocator<RideCubit>().selectedCategoryType = type;
-                        serviceLocator<RideCubit>().selectedCategoryIndex = 0;
-                        subCategories.insert(0, subCategories.removeAt(index));
-                        if(!serviceLocator<RideCubit>().selectedCategoryIsSocket && type == "ride") serviceLocator<RideCubit>().returnToSoketFromSwitch();
-                      }
-                      serviceLocator<RideCubit>().subCategoryId = subCategory.subCategoryId;
-                      serviceLocator<RideCubit>().checkSelectedCategoryIsSocket(subCategory.subCategoryId);
-                    });
-                    _scrollToStart(controller); // Pass the controller directly
-                  },
-                  child: _categoryItem(context.isArabic ? subCategory.subCategoryNameAr : subCategory.subCategoryNameEn, subCategory.picture, isSelected),
-                );
-              },
+                        if (serviceLocator<RideCubit>().selectedCategoryType == type && serviceLocator<RideCubit>().selectedCategoryIndex == index) {
+                          // serviceLocator<RideCubit>().selectedCategoryType = null;
+                          // serviceLocator<RideCubit>().selectedCategoryIndex = null;
+                        } else {
+                          serviceLocator<RideCubit>().selectedCategoryType = type;
+                          serviceLocator<RideCubit>().selectedCategoryIndex = 0;
+                          subCategories.insert(0, subCategories.removeAt(index));
+                          if(!serviceLocator<RideCubit>().selectedCategoryIsSocket && type == "ride") serviceLocator<RideCubit>().returnToSoketFromSwitch();
+                        }
+                        serviceLocator<RideCubit>().subCategoryId = subCategory.subCategoryId;
+                        serviceLocator<RideCubit>().checkSelectedCategoryIsSocket(subCategory.subCategoryId);
+                      });
+                      _scrollToStart(controller); // Pass the controller directly
+                    },
+                    child: _categoryItem(context.isArabic ? subCategory.subCategoryNameAr : subCategory.subCategoryNameEn, subCategory.picture, isSelected),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -2486,6 +2518,35 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> with Single
           ],
         );
       },
+    );
+  }
+}
+
+
+class ArabicNumberFormatter extends TextInputFormatter {
+  final bool isArabic;
+  ArabicNumberFormatter({required this.isArabic});
+
+  static const englishNumbers = ['0','1','2','3','4','5','6','7','8','9'];
+  static const arabicNumbers  = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    String text = newValue.text;
+
+    if (isArabic) {
+      for (int i = 0; i < 10; i++) {
+        text = text.replaceAll(englishNumbers[i], arabicNumbers[i]);
+      }
+    } else {
+      for (int i = 0; i < 10; i++) {
+        text = text.replaceAll(arabicNumbers[i], englishNumbers[i]);
+      }
+    }
+
+    return newValue.copyWith(
+      text: text,
+      selection: newValue.selection,
     );
   }
 }

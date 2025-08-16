@@ -1,22 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
-import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
+import '../../routes/pages.dart';
+import '../../routes/routes.dart';
+import '../utils/shared_pref.dart';
 
-class FirstLoginScreen extends StatelessWidget {
-  const FirstLoginScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    bool isActivate = false;
+    bool isShowOnboarding = false;
+    print('will go onBoardingScreen ${!isShowOnboarding}');
+
+    Future.delayed(const Duration(seconds: 5), () {}).then((value) async {
+      isActivate = await CacheManager.getActivation() ?? false;
+      isShowOnboarding = await CacheManager.getShowOnboarding();
+      final initialRoute = !isShowOnboarding
+          ? Routes.ChooseLangScreen
+          : isActivate
+              ? Routes.PAGEPREVIEW
+              : Routes.HOME;
+      AppPages.initializeRouter(initialRoute);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,49 +108,9 @@ class FirstLoginScreen extends StatelessWidget {
                     fontFamily: 'Tangerine',
                   ),
                 ),
-                const Spacer(),
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * .4,
-                  height: 50,
-                  child: DefaultButton(
-                    backgroundColor: themeCubit.isDarkTheme
-                        ? AppColors.whiteColor
-                        : AppColors.PRIMARY_COLOR,
-                    width: double.infinity,
-                    label: LocaleKeys.login.localize,
-                    labelStyle: TextStyle(
-                        fontSize: 32.sp,
-                        color: themeCubit.isDarkTheme
-                            ? AppColors.PRIMARY_COLOR
-                            : AppColors.AUTH_CONTAINER_COLOR),
-                    onPressed: () {
-                      ManageVibration.vibrate();
-                      context.go(Routes.LOGIN);
-                    },
-                  ),
+                const Spacer(
+                  flex: 3,
                 ),
-                const Spacer(),
-                SizedBox(
-                  height: 50,
-                  width: MediaQuery.sizeOf(context).width * .4,
-                  child: DefaultButton(
-                    backgroundColor: themeCubit.isDarkTheme
-                        ? AppColors.whiteColor
-                        : AppColors.PRIMARY_COLOR,
-                    width: double.infinity,
-                    label: LocaleKeys.register.localize,
-                    labelStyle: TextStyle(
-                        fontSize: 35.sp,
-                        color: themeCubit.isDarkTheme
-                            ? AppColors.PRIMARY_COLOR
-                            : AppColors.AUTH_CONTAINER_COLOR),
-                    onPressed: () {
-                      ManageVibration.vibrate();
-                      context.go(Routes.REGISTER);
-                    },
-                  ),
-                ),
-                const Spacer(),
                 Label(
                   text: '© 49 HUB FOR PROGRAMMING',
                   style: Styles.mediumText(
