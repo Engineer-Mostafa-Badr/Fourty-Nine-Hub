@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
@@ -34,7 +37,12 @@ class _SplashScreenState extends State<SplashScreen> {
           : isActivate
               ? Routes.PAGEPREVIEW
               : Routes.HOME;
-      AppPages.initializeRouter(initialRoute);
+      // AppPages.initializeRouter(initialRoute);
+
+      if (mounted) {
+        log(initialRoute);
+        context.goNamed(initialRoute);
+      }
     });
   }
 

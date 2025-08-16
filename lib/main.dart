@@ -115,12 +115,14 @@ void main() async {
   // final initialRoute = Routes.ChooseLangScreen;
   isActivate = await CacheManager.getActivation() ?? false;
   isShowOnboarding = await CacheManager.getShowOnboarding();
-  // final initialRoute = Routes.splash;
-  final initialRoute = !isShowOnboarding
-      ? Routes.ChooseLangScreen
-      : isActivate
-          ? Routes.PAGEPREVIEW
-          : Routes.HOME;
+  //!
+  final initialRoute = Routes.SPLASH;
+  //!
+  // final initialRoute = !isShowOnboarding
+  //     ? Routes.ChooseLangScreen
+  //     : isActivate
+  //         ? Routes.PAGEPREVIEW
+  //         : Routes.HOME;
   AppPages.initializeRouter(initialRoute);
   await LocationServiceWatcher().start();
   runApp(
