@@ -21,7 +21,7 @@ class FollowBroadcastCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.BROADCAST),
+      onTap: () => context.pushNamed(Routes.BROADCAST),
       child: Container(
         padding: const EdgeInsets.only(right: 12, left: 12, top: 16),
         margin: const EdgeInsets.only(left: 16),

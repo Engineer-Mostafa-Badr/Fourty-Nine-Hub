@@ -47,7 +47,7 @@
 //
 //   Widget _buildPersonInfo({required BuildContext context}) {
 //     return InkWell(
-//       onTap: () => context.push(Routes.OTHERSACCOUNT),
+//       onTap: () => context.pushNamed(Routes.OTHERSACCOUNT),
 //       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.end,
 //         children: [

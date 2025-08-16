@@ -193,7 +193,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
         if (state.status.isLoading || state.status.isInitial) {
           return const CustomLoading();
         }
-        if (state.errMessage == "Unauthorized" ) {
+        if (state.errMessage == "Unauthorized") {
           return CustomFailureWidget(
             title: 'Please login',
             buttonTitle: "Login",
@@ -201,7 +201,6 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
               ManageVibration.vibrate();
               pleaseLoginDialog(context);
             },
-
           );
         }
         if (state.status.isFailure) {
@@ -554,7 +553,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                       }
                       // يقوم بتحويلك لصفحة الملف الشخصي
                       if (index == 2) {
-                        context.push(
+                        context.pushNamed(
                           Routes.INSTAGRAMPROFILE,
                           extra: UserCubit.to.state.data?.id ?? '',
                         );
@@ -639,8 +638,8 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
       //         if (i == 1) {
       //           print(context.read<UserCubit>().token);
       //           !context.read<UserCubit>().isTokenAttached
-      //               ? context.push(Routes.LOGIN)
-      //               : context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
+      //               ? context.pushNamed(Routes.LOGIN)
+      //               : context.pushNamed(Routes.INSTAGRAMPROFILE, extra: user?.id);
       //         }
       //       },
       //       child: Container(

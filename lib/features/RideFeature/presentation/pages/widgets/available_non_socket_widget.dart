@@ -79,7 +79,7 @@ class AvailableNonSocketWidget extends StatelessWidget {
             ClickableWidget(
               onTap: () {
                 ManageVibration.vibrate();
-                context.push(
+                context.pushNamed(
                   Routes.allClientRatingScreen,
                   extra: offers?.clientDetails?.id,
                 );

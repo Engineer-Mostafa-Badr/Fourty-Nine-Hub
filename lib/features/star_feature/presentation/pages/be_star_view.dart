@@ -318,7 +318,7 @@ class _BeStarViewState extends State<BeStarView> {
                           );
                         },
                         child: Label(
-                         text: 'Assets.idea',
+                          text: 'Assets.idea',
                         ),
                       ),
                     ],
@@ -365,7 +365,7 @@ class _BeStarViewState extends State<BeStarView> {
           InkWell(
             onTap: () {
               ManageVibration.vibrate();
-              context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
+              context.pushNamed(Routes.OTHERSACCOUNT, extra: star.user.id);
             },
             child: ImageFromInternet(
               image: star.user.image,
@@ -382,7 +382,7 @@ class _BeStarViewState extends State<BeStarView> {
               InkWell(
                 onTap: () {
                   ManageVibration.vibrate();
-                  context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
+                  context.pushNamed(Routes.OTHERSACCOUNT, extra: star.user.id);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,7 +393,8 @@ class _BeStarViewState extends State<BeStarView> {
                           color: Theme.of(context).primaryColor),
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
+                        context.pushNamed(Routes.OTHERSACCOUNT,
+                            extra: star.user.id);
                       },
                     ),
                     RichText(
@@ -480,7 +481,7 @@ class _BeStarViewState extends State<BeStarView> {
               if (!context.read<UserCubit>().isLoggedIn) {
                 pleaseLoginDialog(context);
               } else {
-                context.push(
+                context.pushNamed(
                   Routes.MY_TALENT,
                 );
               }

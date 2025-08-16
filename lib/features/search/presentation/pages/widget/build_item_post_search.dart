@@ -97,19 +97,14 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
     }, builder: (context, state) {
       final controller = context.read<SearchCubit>();
       if (widget.from == 'posts') {
-        if (controller
-                .postsSearch[widget.index].type ==
-            'advertisement') {
+        if (controller.postsSearch[widget.index].type == 'advertisement') {
           return FacebookAdvertisementCard(
-            post:
-                controller.postsSearch[widget.index],
+            post: controller.postsSearch[widget.index],
           );
-        } else if (controller
-                .postsSearch[widget.index].type ==
+        } else if (controller.postsSearch[widget.index].type ==
             'twitter_post') {
           return FacebookTweetCard(
-            post:
-                controller.postsSearch[widget.index],
+            post: controller.postsSearch[widget.index],
           );
         } else {
           var myPost = widget.from == 'details'
@@ -117,8 +112,8 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               : controller.postsSearch[widget.index];
           return InkWell(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
-                ? () => widget.showPostDetails(controller
-                    .postsSearch[widget.index])
+                ? () =>
+                    widget.showPostDetails(controller.postsSearch[widget.index])
                 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,22 +180,22 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount??0, image: Assets.like),
+                            value: myPost.likesCount ?? 0, image: Assets.like),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount??0, image: Assets.haha),
+                            value: myPost.hahaCount ?? 0, image: Assets.haha),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount??0, image: Assets.heart),
+                            value: myPost.loveCount ?? 0, image: Assets.heart),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount??0, image: Assets.wow),
+                            value: myPost.wowCount ?? 0, image: Assets.wow),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount??0, image: Assets.sad),
+                            value: myPost.sadCount ?? 0, image: Assets.sad),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount??0, image: Assets.angry),
+                            value: myPost.angryCount ?? 0, image: Assets.angry),
                       const Spacer(),
                       InkWell(
                         onTap: () => widget.showPostComments(myPost.id),
@@ -404,8 +399,8 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
             : controller.postsSearch[widget.index];
         return InkWell(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
-              ? () => widget.showPostDetails(controller
-                  .postsSearch[widget.index])
+              ? () =>
+                  widget.showPostDetails(controller.postsSearch[widget.index])
               : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,22 +417,22 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount??0, image: Assets.like),
+                          value: myPost.likesCount ?? 0, image: Assets.like),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount??0, image: Assets.haha),
+                          value: myPost.hahaCount ?? 0, image: Assets.haha),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount??0, image: Assets.heart),
+                          value: myPost.loveCount ?? 0, image: Assets.heart),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount??0, image: Assets.wow),
+                          value: myPost.wowCount ?? 0, image: Assets.wow),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount??0, image: Assets.sad),
+                          value: myPost.sadCount ?? 0, image: Assets.sad),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount??0, image: Assets.angry),
+                          value: myPost.angryCount ?? 0, image: Assets.angry),
                     const Spacer(),
                     InkWell(
                       onTap: () => widget.showPostComments(myPost.id),
@@ -613,7 +608,8 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               InkWell(
                 onTap: () {
                   if (widget.fromProfile == false) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                    context.pushNamed(Routes.OTHERSACCOUNT,
+                        extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -631,7 +627,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     InkWell(
                       onTap: () {
                         if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT,
+                          context.pushNamed(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       },
@@ -644,7 +640,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                               style: Styles.headerText(fontSize: 32),
                               onPressed: () {
                                 if (widget.fromProfile == false) {
-                                  context.push(Routes.OTHERSACCOUNT,
+                                  context.pushNamed(Routes.OTHERSACCOUNT,
                                       extra: post.user.id);
                                 }
                               }),
@@ -727,7 +723,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
           InkWell(
             onTap: () {
               if (widget.fromProfile == false) {
-                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
             },
             child: ImageFromInternet(
@@ -745,7 +741,8 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               InkWell(
                 onTap: () {
                   if (widget.fromProfile == false) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                    context.pushNamed(Routes.OTHERSACCOUNT,
+                        extra: post.user.id);
                   }
                 },
                 child: Column(
@@ -759,7 +756,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                             color: Theme.of(context).primaryColor),
                         onPressed: () {
                           if (widget.fromProfile == false) {
-                            context.push(Routes.OTHERSACCOUNT,
+                            context.pushNamed(Routes.OTHERSACCOUNT,
                                 extra: post.user.id);
                           }
                         }),
@@ -988,7 +985,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.push(Routes.OTHERSACCOUNT,
+                    context.pushNamed(Routes.OTHERSACCOUNT,
                         extra: post.users[0].id);
                   },
                   child: Label(

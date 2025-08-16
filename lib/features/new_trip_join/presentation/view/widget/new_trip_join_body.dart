@@ -23,8 +23,8 @@ class NewTripJoinBody extends StatelessWidget {
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? 'مشاركة كابتن' : 'Captain Share',
                 onTap: () {
-      ManageVibration.vibrate();
-                  context.push(Routes.captainShareScreen);
+                  ManageVibration.vibrate();
+                  context.pushNamed(Routes.captainShareScreen);
                 },
               ),
               TripOptionWidget(
@@ -32,16 +32,14 @@ class NewTripJoinBody extends StatelessWidget {
                 title: context.isArabic ? "جاي معاك" : "Trip Join",
                 icon: Assets.car,
                 onTap: () {
-
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                 },
               ),
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "وصلني معاك" : "Pick me",
                 onTap: () {
-
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                 },
                 icon: Assets.pickMeImage,
               ),

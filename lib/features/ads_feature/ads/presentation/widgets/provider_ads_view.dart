@@ -58,13 +58,14 @@ class ProviderAdsView extends StatelessWidget {
                           textColor: AppColors.getReversedTextColor(context),
                           onTap: () async {
                             ManageVibration.vibrate();
-                            dynamic data = await context.push(Routes.FILTERADS,
-                                extra: FilterAdsParams(
-                                  categorization: CategorizationEntity(
-                                      mainCategory: params.mainCategory,
-                                      subCategory: params.subCategory),
-                                  userType: userType,
-                                ));
+                            dynamic data =
+                                await context.pushNamed(Routes.FILTERADS,
+                                    extra: FilterAdsParams(
+                                      categorization: CategorizationEntity(
+                                          mainCategory: params.mainCategory,
+                                          subCategory: params.subCategory),
+                                      userType: userType,
+                                    ));
                             if (data != null) {
                               print("objectsdaa");
                               // Future.delayed(const Duration(seconds: 1), () =>
@@ -95,7 +96,7 @@ class ProviderAdsView extends StatelessWidget {
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
                             ManageVibration.vibrate();
-                            dynamic data = await context.push(
+                            dynamic data = await context.pushNamed(
                                 Routes.GOVERNORATEFILTERADS,
                                 extra: CategorizationEntity(
                                     mainCategory: params.mainCategory,

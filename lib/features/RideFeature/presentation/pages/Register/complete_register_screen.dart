@@ -23,40 +23,44 @@ class CompleteRegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (v,c){
+      onPopInvokedWithResult: (v, c) {
         showAnimatedDialog(
           context,
           AlertDialog(
-            backgroundColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.AUTH_CONTAINER_COLOR,
+            backgroundColor: context.isDarkMode
+                ? AppColors.GREY_DARK_COLOR
+                : AppColors.AUTH_CONTAINER_COLOR,
             contentPadding:
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Label(
-                  text:
-                  LocaleKeys.areYouSureYouWantToCloseThisWindow.localize,
+                  text: LocaleKeys.areYouSureYouWantToCloseThisWindow.localize,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   style: Styles.headerText(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const Sizer(height: 30,),
+                const Sizer(
+                  height: 30,
+                ),
                 Row(
                   children: [
                     Expanded(
                       child: AppButton(
                         label: LocaleKeys.cancel.localize,
-                        style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
+                        style: Styles.headerText(
+                            color: AppColors.AUTH_CONTAINER_COLOR),
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           context.pop();
                           // Navigator.popAndPushNamed(context, Routes.welcomeRideRegister);
                         },
                         radius: 15,
                         backColor:
-                        AppColors.PRIMARY_COLOR.withValues(alpha: .75),
+                            AppColors.PRIMARY_COLOR.withValues(alpha: .75),
                         color: Colors.white,
                       ),
                     ),
@@ -64,10 +68,11 @@ class CompleteRegisterScreen extends StatelessWidget {
                     Expanded(
                       child: AppButton(
                         label: LocaleKeys.close.localize,
-                        style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
-                        onPressed: (){
-      ManageVibration.vibrate();
-                          context.go(Routes.RIDE_HOME);
+                        style: Styles.headerText(
+                            color: AppColors.AUTH_CONTAINER_COLOR),
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                          context.goNamed(Routes.RIDE_HOME);
                         },
                         radius: 15,
                         backColor: AppColors.PRIMARY_COLOR,
@@ -102,28 +107,31 @@ class CompleteRegisterScreen extends StatelessWidget {
                 Label(
                   text: LocaleKeys.thankYouWeWillRespondWithin24Hours.localize,
                   style: Styles.mediumText(
-                      fontSize: 32, fontWeight: FontWeight.w800,
-                    color: context.isDarkMode?Colors.white:Colors.black
-
-                  ),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                      color: context.isDarkMode ? Colors.white : Colors.black),
                 ),
                 const Sizer(),
                 Label(
-                  text:
-                      LocaleKeys.pleaseNoteThatRequestProcessingTakesPlaceDuringBusinessHours.localize,
+                  text: LocaleKeys
+                      .pleaseNoteThatRequestProcessingTakesPlaceDuringBusinessHours
+                      .localize,
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: Styles.mediumText(
-                      fontSize: 32, fontWeight: FontWeight.w500,
-                      color: context.isDarkMode?Colors.white:Colors.black
-                  ),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      color: context.isDarkMode ? Colors.white : Colors.black),
                 ),
-                const Sizer(height: 75,),
+                const Sizer(
+                  height: 75,
+                ),
                 AppButton(
                   label: LocaleKeys.completeRegistration.localize,
                   onPressed: () {
-      ManageVibration.vibrate();
-                    context.pushReplacement(Routes.UploadRiderImages,extra: params);
+                    ManageVibration.vibrate();
+                    context.pushReplacement(Routes.UploadRiderImages,
+                        extra: params);
                   },
                   backColor: AppColors.PRIMARY_COLOR,
                   color: AppColors.AUTH_CONTAINER_COLOR,

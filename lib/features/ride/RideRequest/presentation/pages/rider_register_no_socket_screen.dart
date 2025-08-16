@@ -251,14 +251,14 @@ class _RiderRegisterNoSocketScreenState
                           ),
                           label: Labels.submit,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             log("message");
                             if (context.isUserLoggedIn) {
                               registerRider.registerTow(context);
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                             }
                           },
                         ),

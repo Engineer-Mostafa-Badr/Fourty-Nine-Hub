@@ -38,8 +38,8 @@ class DoctorStatisticsView extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
-                        // context.push(Routes.ALLDOCTORRESERVATIONS);
+                        ManageVibration.vibrate();
+                        // context.pushNamed(Routes.ALLDOCTORRESERVATIONS);
                       },
                       child: DoctorHistoryCard(
                         title: 'Total Appointments',

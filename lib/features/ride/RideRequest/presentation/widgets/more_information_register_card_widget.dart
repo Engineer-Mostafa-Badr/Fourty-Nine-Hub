@@ -245,7 +245,7 @@ class _MoreInformationRegisterCardWidgetState
                           } else {
                             return pleaseLoginDialog(context);
 
-                            // context.push(Routes.LOGIN);
+                            // context.pushNamed(Routes.LOGIN);
                           }
                         });
                       },
@@ -269,7 +269,7 @@ class _MoreInformationRegisterCardWidgetState
                           } else {
                             return pleaseLoginDialog(context);
 
-                            // context.push(Routes.LOGIN);
+                            // context.pushNamed(Routes.LOGIN);
                           }
                         });
                       },

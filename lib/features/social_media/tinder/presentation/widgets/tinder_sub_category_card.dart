@@ -43,8 +43,8 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
-        context.push(Routes.ADS,
+        ManageVibration.vibrate();
+        context.pushNamed(Routes.ADS,
             extra: AdsViewParams(
                 subCategory: widget.subCategoryCardData,
                 mainCategory: widget.mainCategory));
@@ -87,7 +87,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                                 ? Colors.redAccent
                                 : Colors.grey,
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               context
                                   .read<TinderViewCubit>()
                                   .addFavoriteCategory(
@@ -125,8 +125,8 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                         margin: 0,
                         isCircle: true,
                         onPressed: () {
-      ManageVibration.vibrate();
-                          context.push(Routes.CREATEAD,
+                          ManageVibration.vibrate();
+                          context.pushNamed(Routes.CREATEAD,
                               extra: CategorizationEntity(
                                   mainCategory: widget.mainCategory,
                                   subCategory: widget.subCategoryCardData));
@@ -181,7 +181,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                         ? Colors.redAccent
                         : Colors.grey,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context
                           .read<TinderViewCubit>()
                           .addFavoriteCategory(categoryId: subCategoryId)

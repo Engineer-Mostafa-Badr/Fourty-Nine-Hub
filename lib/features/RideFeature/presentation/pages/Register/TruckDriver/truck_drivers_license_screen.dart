@@ -47,7 +47,10 @@ class TruckDriversLicenseScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
+                    closeWidget(
+                        context: context,
+                        onAcceptSaveData: () {},
+                        closeRemoveData: () {}),
                     Label(
                       text: LocaleKeys.driversLicense.localize,
                       style: Styles.headerText(
@@ -93,7 +96,7 @@ class TruckDriversLicenseScreen extends StatelessWidget {
           ),
           RegisterNextRow(
             index: 2,
-            onTap: () => context.push(Routes.truckPersonalDocumentsScreen),
+            onTap: () => context.pushNamed(Routes.truckPersonalDocumentsScreen),
           ),
         ],
       ),

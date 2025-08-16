@@ -58,7 +58,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 16),
                   child: InkWell(
                     onTap: () async {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (index == 1) {
                         context.read<UserCubit>().isLoggedIn
                             ? await Navigator.push(
@@ -68,14 +68,14 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                                 ),
                               )
                             : pleaseLoginDialog(context);
-                        // context.push(Routes.LOGIN);
+                        // context.pushNamed(Routes.LOGIN);
                         if (!context.mounted) return;
                         BlocProvider.of<StoryCubit>(context)
                           ..fetchStories()
                           ..getMutedStories();
                       } else if (index == 2) {
                         context.read<UserCubit>().isLoggedIn
-                            // ?context.go(Paths.REELS)
+                            // ?context.goNamed(Paths.REELS)
                             // ? await Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
@@ -91,13 +91,13 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const ReelsRecordingScreen(
-                                          voiceMediaId:'',
-                                          voiceSignedUrl: '',
-                                      ),
+                                    voiceMediaId: '',
+                                    voiceSignedUrl: '',
+                                  ),
                                 ),
                               )
                             : pleaseLoginDialog(context);
-                        // context.push(Paths.REELS);
+                        // context.pushNamed(Paths.REELS);
                       } else {
                         serviceLocator<CreatePostInstagramCubit>()
                             .changePostType(index);

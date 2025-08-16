@@ -9,25 +9,20 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-
 class SafetyCard extends StatelessWidget {
   const SafetyCard({super.key});
 
-
-
-
   @override
   Widget build(BuildContext context) {
-
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration:  BoxDecoration(
-        color:Theme.of(context).scaffoldBackgroundColor, // Colors.white,
-        borderRadius:const BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor, // Colors.white,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
-        boxShadow:const [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 10,
@@ -40,24 +35,31 @@ class SafetyCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const SizedBox(width: 4,),
+              const SizedBox(
+                width: 4,
+              ),
               const Spacer(),
               Text(
                 LocaleKeys.safetyFeatures.localize,
-                style: const TextStyle(fontSize: FontSize.s16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: FontSize.s16, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
               Container(
                 height: 35,
                 width: 35,
                 alignment: Alignment.center,
-                decoration:const BoxDecoration(
+                decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.DIVIDER_GRAY_COLOR
+                    color: AppColors.DIVIDER_GRAY_COLOR),
+                child: const Icon(
+                  Icons.close,
+                  color: AppColors.black,
                 ),
-                child:const Icon(Icons.close,color: AppColors.black,),
               ),
-              const SizedBox(width: 4,),
+              const SizedBox(
+                width: 4,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -66,26 +68,30 @@ class SafetyCard extends StatelessWidget {
             children: [
               Expanded(
                   flex: 2,
-                  child: _buildFeatureButton(Icons.share, LocaleKeys.shareMyRide.localize, (){
-                    context.push(Routes.rideFindingScreen);
-                  },context)),
+                  child: _buildFeatureButton(
+                      Icons.share, LocaleKeys.shareMyRide.localize, () {
+                    context.pushNamed(Routes.rideFindingScreen);
+                  }, context)),
               Expanded(
                   flex: 2,
-                  child: _buildFeatureButton(Icons.support_agent, LocaleKeys.support.localize, (){
-                    context.push(Routes.rideFindingScreen);
-                  },context)),
+                  child: _buildFeatureButton(
+                      Icons.support_agent, LocaleKeys.support.localize, () {
+                    context.pushNamed(Routes.rideFindingScreen);
+                  }, context)),
               Expanded(
                   flex: 2,
-                  child: _buildFeatureButton(Icons.contacts, LocaleKeys.emergencyContacts.localize, (){
-                    context.push(Routes.rideFindingScreen);
-                  },context)),
+                  child: _buildFeatureButton(
+                      Icons.contacts, LocaleKeys.emergencyContacts.localize,
+                      () {
+                    context.pushNamed(Routes.rideFindingScreen);
+                  }, context)),
             ],
           ),
           const SizedBox(height: 16),
           ElevatedButton.icon(
-            onPressed: (){
-      ManageVibration.vibrate();
-              context.push(Routes.rideFindingScreen);
+            onPressed: () {
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.rideFindingScreen);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
@@ -95,13 +101,17 @@ class SafetyCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            icon:  Image.asset(Assets.emergencyIcon,width: 30,),
-            label:  Text(LocaleKeys.call_emergency.localize),
+            icon: Image.asset(
+              Assets.emergencyIcon,
+              width: 30,
+            ),
+            label: Text(LocaleKeys.call_emergency.localize),
           ),
           SizedBox(
-            height: MediaQuery.sizeOf(context).height*.58,
+            height: MediaQuery.sizeOf(context).height * .58,
             child: Padding(
-              padding: const EdgeInsets.only(top: 16.0,bottom: 16,left: 6,right: 6),
+              padding: const EdgeInsets.only(
+                  top: 16.0, bottom: 16, left: 6, right: 6),
               child: GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -122,26 +132,31 @@ class SafetyCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureButton(IconData icon, String label, VoidCallback onTap,BuildContext context) {
+  Widget _buildFeatureButton(
+      IconData icon, String label, VoidCallback onTap, BuildContext context) {
     return Card(
       elevation: 0,
-      color:context.isDarkMode?Theme.of(context).primaryColor.withOpacity(.2): AppColors.DIVIDER_GRAY_COLOR,
+      color: context.isDarkMode
+          ? Theme.of(context).primaryColor.withOpacity(.2)
+          : AppColors.DIVIDER_GRAY_COLOR,
       child: Container(
-        padding:const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8)
-        ),
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
         child: Column(
           children: [
             IconButton(
-              icon: Icon(icon, size: 28, ),
+              icon: Icon(
+                icon,
+                size: 28,
+              ),
               onPressed: onTap,
             ),
             SizedBox(
                 height: 40,
-                child: Center(child: Text(label,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: FontSize.s12)))),
+                child: Center(
+                    child: Text(label,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: FontSize.s12)))),
           ],
         ),
       ),
@@ -150,26 +165,44 @@ class SafetyCard extends StatelessWidget {
   }
 }
 
-
-
-
-
 class ProtectionItem {
   final String title;
   final IconData icon;
   final String? image;
   final Color color;
 
-  ProtectionItem({required this.title, required this.icon, this.image, required this.color});
+  ProtectionItem(
+      {required this.title,
+      required this.icon,
+      this.image,
+      required this.color});
 }
 
 List<ProtectionItem> items = [
-  ProtectionItem(title: LocaleKeys.beforeTheTrip.localize, icon: Icons.info, color: Colors.red),
-  ProtectionItem(title: LocaleKeys.identityVerification.localize, icon: Icons.verified_user, color: Colors.blue),
-  ProtectionItem(title: LocaleKeys.securityFeatures.localize, icon: Icons.security, color: Colors.green),
-  ProtectionItem(title: LocaleKeys.emergencyChat.localize, icon: Icons.chat, color: Colors.orange),
-  ProtectionItem(title: LocaleKeys.carInspection.localize, icon: Icons.directions_car, color: Colors.redAccent),
-  ProtectionItem(title: LocaleKeys.secureCommunications.localize, icon: Icons.message, color: Colors.purple),
+  ProtectionItem(
+      title: LocaleKeys.beforeTheTrip.localize,
+      icon: Icons.info,
+      color: Colors.red),
+  ProtectionItem(
+      title: LocaleKeys.identityVerification.localize,
+      icon: Icons.verified_user,
+      color: Colors.blue),
+  ProtectionItem(
+      title: LocaleKeys.securityFeatures.localize,
+      icon: Icons.security,
+      color: Colors.green),
+  ProtectionItem(
+      title: LocaleKeys.emergencyChat.localize,
+      icon: Icons.chat,
+      color: Colors.orange),
+  ProtectionItem(
+      title: LocaleKeys.carInspection.localize,
+      icon: Icons.directions_car,
+      color: Colors.redAccent),
+  ProtectionItem(
+      title: LocaleKeys.secureCommunications.localize,
+      icon: Icons.message,
+      color: Colors.purple),
 ];
 
 class ProtectionCard extends StatelessWidget {

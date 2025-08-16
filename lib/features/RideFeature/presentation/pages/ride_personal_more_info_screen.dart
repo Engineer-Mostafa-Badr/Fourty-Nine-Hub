@@ -30,15 +30,12 @@ import '../controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'widgets/pickup_target_location_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-
 class RidePersonalMoreInfoScreen extends StatefulWidget {
   final String subCategoryId;
   final String type;
 
   const RidePersonalMoreInfoScreen(
-      {super.key,
-      required this.subCategoryId,
-      required this.type});
+      {super.key, required this.subCategoryId, required this.type});
 
   @override
   State<RidePersonalMoreInfoScreen> createState() =>
@@ -59,7 +56,7 @@ class _RidePersonalMoreInfoScreenState
         MakeNonTrackingRequestTripUsecaseParam();
     context.read<ClientTripsCubit>().makeLoadingTripParam =
         MakeLoadingRequestTripUsecaseParam();
-    if (widget.type=="shipping") {
+    if (widget.type == "shipping") {
       cubit.makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
       log(cubit.makeLoadingTripParam.toJson().toString());
     } else {
@@ -375,7 +372,9 @@ class _RidePersonalMoreInfoScreenState
           if (failure is ServerFailure) {
             if (failure.errors != null && failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
-              context.read<ClientTripsCubit>().clearError(); // ✅ clear after showing
+              context
+                  .read<ClientTripsCubit>()
+                  .clearError(); // ✅ clear after showing
               return;
             }
 
@@ -383,17 +382,25 @@ class _RidePersonalMoreInfoScreenState
               showDebtDialog(
                 context,
                 widget.subCategoryId,
-                context.isArabic ? "من فضلك ادفع الدين" : 'Please pay the Debt for more trips',
+                context.isArabic
+                    ? "من فضلك ادفع الدين"
+                    : 'Please pay the Debt for more trips',
               );
             } else if (errorName == 'SubscribeError') {
-              showSubscribeDialog(context, widget.subCategoryId,
-               title: context.isArabic ? "من فضلك ادفع الدين" : 'Please pay the Debt for more trips',
+              showSubscribeDialog(
+                context,
+                widget.subCategoryId,
+                title: context.isArabic
+                    ? "من فضلك ادفع الدين"
+                    : 'Please pay the Debt for more trips',
               );
             } else {
               showErrorMessage(context, getFailureMessage(failure, context));
             }
 
-            context.read<ClientTripsCubit>().clearError(); // ✅ clear after handling
+            context
+                .read<ClientTripsCubit>()
+                .clearError(); // ✅ clear after handling
           }
         }
 
@@ -642,7 +649,7 @@ class _RidePersonalMoreInfoScreenState
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (cubit.selectedDate.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -764,7 +771,7 @@ class _RidePersonalMoreInfoScreenState
                             cubit.selectedTime =
                                 formatTimeWithLocale(selectedTime, context);
 
-                            if (widget.type=="shipping") {
+                            if (widget.type == "shipping") {
                               cubit.makeLoadingTripParam.date =
                                   selectedDateTime;
                             } else {
@@ -934,16 +941,19 @@ class _RidePersonalMoreInfoScreenState
 
                       cubit.passengerController.value = TextEditingValue(
                         text: formatted,
-                        selection: TextSelection.collapsed(offset: selectionIndex),
+                        selection:
+                            TextSelection.collapsed(offset: selectionIndex),
                       );
 
-                      final englishValue = convertDigits(formatted, toArabic: false);
-                      cubit.makeNonTrackingTripParam.passengers = int.tryParse(englishValue);
+                      final englishValue =
+                          convertDigits(formatted, toArabic: false);
+                      cubit.makeNonTrackingTripParam.passengers =
+                          int.tryParse(englishValue);
                     } else {
                       cubit.passengerController.text = value;
-                      cubit.makeNonTrackingTripParam.passengers = int.tryParse(value);
+                      cubit.makeNonTrackingTripParam.passengers =
+                          int.tryParse(value);
                     }
-
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -989,7 +999,8 @@ class _RidePersonalMoreInfoScreenState
                     return null;
                   },
                   maxLines: 4,
-                  hintText: context.isArabic ? 'وصف الشحنة' : 'Cargo Description',
+                  hintText:
+                      context.isArabic ? 'وصف الشحنة' : 'Cargo Description',
                 ),
               const SizedBox(height: 8),
               //phone
@@ -1010,7 +1021,8 @@ class _RidePersonalMoreInfoScreenState
                         : 'Phone number must be exactly 11 digits.';
                   }
 
-                  if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
+                  if (!['010', '011', '012', '015']
+                      .any(numericValue.startsWith)) {
                     return context.isArabic
                         ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
                         : 'Phone number must start with 010, 011, 012, or 015.';
@@ -1069,9 +1081,9 @@ class _RidePersonalMoreInfoScreenState
                               radius: 15,
                               label: LocaleKeys.premiumRequest.tr(),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (!context.isUserLoggedIn) {
-                                  context.push(Routes.LOGIN);
+                                  context.pushNamed(Routes.LOGIN);
                                   return;
                                 }
                                 final price =
@@ -1114,26 +1126,24 @@ class _RidePersonalMoreInfoScreenState
                                   final tripParams = CreateLoadingTripParams(
                                     subcategoryId: widget.subCategoryId,
                                     fromTitle:
-                                    cubit.makeLoadingTripParam.fromTitle ??
-                                        '',
+                                        cubit.makeLoadingTripParam.fromTitle ??
+                                            '',
                                     toTitle:
-                                    cubit.makeLoadingTripParam.toTitle ??
-                                        '',
+                                        cubit.makeLoadingTripParam.toTitle ??
+                                            '',
                                     price: price,
                                     date: cubit.makeLoadingTripParam.date!,
                                     phone:
-                                    cubit.makeLoadingTripParam.phone ?? '',
+                                        cubit.makeLoadingTripParam.phone ?? '',
                                     passengers: passengerCount,
                                     isPremium: true,
-                                    description: cubit
-                                        .makeLoadingTripParam.desc ??
-                                        '',
+                                    description:
+                                        cubit.makeLoadingTripParam.desc ?? '',
                                     desc: cubit.descController.text,
                                   );
 
                                   cubit.createShippingTrip(
                                       params: tripParams, context: context);
-
                                 } else {
                                   if (passengerCount > 1000) {
                                     showErrorMessage(
@@ -1186,10 +1196,10 @@ class _RidePersonalMoreInfoScreenState
                               radius: 15,
                               label: LocaleKeys.request.tr(),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 print("normal price ${cubit.offerPrice}");
                                 if (!context.isUserLoggedIn) {
-                                  context.push(Routes.LOGIN);
+                                  context.pushNamed(Routes.LOGIN);
                                   return;
                                 }
 
@@ -1216,7 +1226,7 @@ class _RidePersonalMoreInfoScreenState
                                   return;
                                 }
 
-                                if (widget.type=="shipping") {
+                                if (widget.type == "shipping") {
                                   cubit.makeLoadingTripParam
                                     ..isPremium = false
                                     ..price = price
@@ -1260,9 +1270,8 @@ class _RidePersonalMoreInfoScreenState
                                         cubit.makeLoadingTripParam.phone ?? '',
                                     passengers: passengerCount,
                                     isPremium: false,
-                                    description: cubit
-                                            .makeLoadingTripParam.desc ??
-                                        '',
+                                    description:
+                                        cubit.makeLoadingTripParam.desc ?? '',
                                     desc: cubit.descController.text,
                                   );
 
@@ -1341,7 +1350,6 @@ class _RidePersonalMoreInfoScreenState
         param.price > 0.0;
   }
 
-
   bool _validateRequiredFields(var p) {
     return p.date != null &&
         p.phone != null &&
@@ -1355,6 +1363,7 @@ class _RidePersonalMoreInfoScreenState
         p.toTitle != null &&
         p.toTitle!.isNotEmpty;
   }
+
   bool _validateRequiredShippingFields(var p, double price) {
     print('price $price');
     print('p.date ${p.date}');
@@ -1374,7 +1383,6 @@ class _RidePersonalMoreInfoScreenState
         p.toTitle!.isNotEmpty;
   }
 
-
 /*
   bool _validateRequiredFields(var p, double price) {
     return p.date != null &&
@@ -1389,7 +1397,6 @@ class _RidePersonalMoreInfoScreenState
         p.toTitle!.isNotEmpty;
   }
 */
-
 
   void _showOfferFareBottomSheet(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -1457,7 +1464,7 @@ class _RidePersonalMoreInfoScreenState
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               cubit.offerPriceController.clear();
                               Navigator.pop(context);
                             },
@@ -1564,7 +1571,7 @@ class _RidePersonalMoreInfoScreenState
                       radius: 15,
                       backColor: AppColors.PRIMARY_COLOR,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
                           setState(() {

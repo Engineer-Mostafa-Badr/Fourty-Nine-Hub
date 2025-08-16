@@ -31,15 +31,15 @@ class MealBanner extends StatelessWidget {
         }
         if (state.mainCategory != null) {
           return MainCategoryBanner(
-            fromHome:false,
+            fromHome: false,
             category: state.mainCategory!,
             canRegister: state.isResturant == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.CREATERESTURANT);
+                context.pushNamed(Routes.CREATERESTURANT);
               } else {
                 return pleaseLoginDialog(context);
-                // context.push(Routes.REGISTER);
+                // context.pushNamed(Routes.REGISTER);
               }
             },
             onFavorite: () {

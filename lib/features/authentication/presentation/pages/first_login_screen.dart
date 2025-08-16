@@ -105,7 +105,7 @@ class FirstLoginScreen extends StatelessWidget {
                             : AppColors.AUTH_CONTAINER_COLOR),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.go(Routes.LOGIN);
+                      context.goNamed(Routes.LOGIN);
                     },
                   ),
                 ),
@@ -126,7 +126,7 @@ class FirstLoginScreen extends StatelessWidget {
                             : AppColors.AUTH_CONTAINER_COLOR),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.go(Routes.REGISTER);
+                      context.goNamed(Routes.REGISTER);
                     },
                   ),
                 ),

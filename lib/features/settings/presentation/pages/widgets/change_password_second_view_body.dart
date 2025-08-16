@@ -156,7 +156,7 @@ class _ChangePasswordSecondViewBodyState
                         return CustomFloatingActionButton(
                           text: LocaleKeys.confirm.localize,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (forgotPasswordCubit.odlPasswordController.text.isEmpty ||
                                 forgotPasswordCubit
                                     .newPasswordController.text.isEmpty ||
@@ -195,7 +195,7 @@ class _ChangePasswordSecondViewBodyState
                               return;
                             }
                             forgotPasswordCubit.changePassword(context);
-                            // context.push(Routes.VERIFICATION);
+                            // context.pushNamed(Routes.VERIFICATION);
                           },
                         );
                       },

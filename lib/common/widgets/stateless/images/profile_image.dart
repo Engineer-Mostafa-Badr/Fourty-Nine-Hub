@@ -36,7 +36,7 @@ class ProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (fromProfile == false && userId.isNotEmpty) {
           if (context.isUserLoggedIn) {
             context.read<UserCubit>().updateProfileView(
@@ -44,18 +44,17 @@ class ProfileImage extends StatelessWidget {
                   userId: userId,
                 );
           }
-          context.push(Routes.OTHERSACCOUNT, extra: userId);
+          context.pushNamed(Routes.OTHERSACCOUNT, extra: userId);
         }
       },
       child: ImageFromInternet(
-          image: imageURL??'',
+          image: imageURL ?? '',
           isCircle: true,
           defaultLogo: false,
           width: 40,
           height: 40,
           // firstChar: user.firstName[0].toUpperCase(),
-          charPadding:0
-          ),
+          charPadding: 0),
     );
   }
 }

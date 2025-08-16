@@ -24,7 +24,7 @@ class _HealthBannerState extends State<HealthBanner> {
       builder: (context, state) {
         if (state.mainCategory != null || state.banner != null) {
           return MainCategoryBanner(
-            fromHome:false,
+            fromHome: false,
             category: state.mainCategory != null
                 ? MainCategoryEntity(
                     id: state.mainCategory?.id ?? "",
@@ -48,10 +48,10 @@ class _HealthBannerState extends State<HealthBanner> {
             canRegister: state.isDoctor == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.CREATEDOCTOR);
+                context.pushNamed(Routes.CREATEDOCTOR);
               } else {
                 return pleaseLoginDialog(context);
-                // context.push(Routes.REGISTER);
+                // context.pushNamed(Routes.REGISTER);
               }
             },
             onFavorite: () {

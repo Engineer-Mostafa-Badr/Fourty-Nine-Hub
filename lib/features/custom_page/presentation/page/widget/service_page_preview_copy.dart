@@ -161,9 +161,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                   print('category.id ${category.id}');
                   print('category $category');
                   if (category.id == '62c8b5b09332225799fe335e') {
-                    context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
+                    context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                        extra: category);
                   } else {
-                    context.push(
+                    context.pushNamed(
                       Routes.CustomPageSubCategoriesView,
                       extra: CustomPageSubCategoriesParams(
                           mainCategory: category, isCustomPage: true),
@@ -434,7 +435,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
-        onTap: () => context.go(Routes.MAZADAT),
+        onTap: () => context.goNamed(Routes.MAZADAT),
         child: SizedBox(
           height: kToolbarHeight * .9.h,
           child: Stack(
@@ -712,9 +713,9 @@ class _MainCategoriesListViewState extends State<MainCategoriesListView> {
             print('category.id ${category.id}');
             print('category $category');
             if (category.id == '62c8b5b09332225799fe335e') {
-              context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
+              context.pushNamed(Routes.MARRIAGESUBCATEGORIES, extra: category);
             } else {
-              context.push(
+              context.pushNamed(
                 Routes.CustomPageSubCategoriesView,
                 extra: CustomPageSubCategoriesParams(
                     mainCategory: category, isCustomPage: true),

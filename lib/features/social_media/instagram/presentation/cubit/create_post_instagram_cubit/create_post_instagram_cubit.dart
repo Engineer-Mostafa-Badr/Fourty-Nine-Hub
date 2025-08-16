@@ -19,7 +19,7 @@ part 'create_post_instagram_state.dart';
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   CreatePostInstagramCubit(
       this.createPostInstagramUseCase, this.postConfirmWebhookUseCase)
-      : super( CreatePostInstagramState());
+      : super(CreatePostInstagramState());
 
   final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
   final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
@@ -30,12 +30,12 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   // void nextPage(BuildContext context) {
   //   log('nextPage ------------------------------------------------------------');
   //   if (state.postTypeSelectedIndex == 0) {
-  //     context.push(
+  //     context.pushNamed(
   //       Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
   //       extra: state.selectedGalleryPost,
   //     );
   //   } else if (state.postTypeSelectedIndex == 2) {
-  //     context.push(
+  //     context.pushNamed(
   //       Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
   //       extra: state.selectedGalleryReels,
   //     );
@@ -198,7 +198,8 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     final alreadyExists = updatedTags.any((u) => u.id == user.id);
 
     if (!alreadyExists) {
-      print('Adding user tag with position: $position, imageIndex: $imageIndex');
+      print(
+          'Adding user tag with position: $position, imageIndex: $imageIndex');
 
       final userWithPositionAndIndex = user.copyWith(
         position: position != null
@@ -229,13 +230,13 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     List<Map<String, dynamic>> userTags = state.usersTag
         .where((user) => user.position != null && user.imageIndex != null)
         .map((user) => {
-      'id': user.id,
-      'imageId': (user.imageIndex! + 1).toString() ,
-      'position': {
-        'x': user.position!.x,
-        'y': user.position!.y,
-      },
-    })
+              'id': user.id,
+              'imageId': (user.imageIndex! + 1).toString(),
+              'position': {
+                'x': user.position!.x,
+                'y': user.position!.y,
+              },
+            })
         .toList();
 
     print('Sending userTags: $userTags');
@@ -248,7 +249,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
           uploadMedia.map((AssetEntity e) async {
             final num size = await _getAssetFileSize(e);
             return MediaCreatePostInstagramParams(
-              itemId: (uploadMedia.indexOf(e) + 1 ).toString(),
+              itemId: (uploadMedia.indexOf(e) + 1).toString(),
               type: e.mimeType ?? '',
               size: size,
             );
@@ -733,9 +734,9 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     //     assets.add(asset);
     //     // _file = path[0];
     //   }
-      // if (asset.type == AssetType.image) {
-      //
-      // }
+    // if (asset.type == AssetType.image) {
+    //
+    // }
     // }
     return assets;
     // final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(

@@ -141,8 +141,8 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
               onPressed: () {
                 ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
-                  context.push(Routes.FOODCART);
-                }else{
+                  context.pushNamed(Routes.FOODCART);
+                } else {
                   return pleaseLoginDialog(context);
 
                   // ScaffoldMessenger.of(context).showSnackBar(
@@ -159,8 +159,8 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                   //       label: LocaleKeys.login.localize,
                   //       textColor: Colors.white,
                   //       onPressed: () {
-      ManageVibration.vibrate();
-                  //        // context.push(Routes.LOGIN);
+                  ManageVibration.vibrate();
+                  //        // context.pushNamed(Routes.LOGIN);
                   //       },
                   //     ),
                   //   ),
@@ -186,7 +186,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                     ),
                   ),
                   const Sizer(),
-                   Icon(
+                  Icon(
                     Icons.shopping_cart_rounded,
                     color: AppColors.getReversedTextColor(context),
                   ),

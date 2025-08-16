@@ -106,13 +106,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 bool isCustomPage = await CacheManager.getActivation() ?? false;
                 if (isCustomPage) {
                   if (!isCurrentRoute(context, Routes.PAGEPREVIEW)) {
-                    context.go(
+                    context.goNamed(
                       Routes.PAGEPREVIEW,
                     );
                   }
                 } else {
                   if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.go(
+                    context.goNamed(
                       Routes.HOME,
                     );
                   }
@@ -130,13 +130,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             borderRadius: BorderRadius.circular(40.r),
             onTap: () {
               ManageVibration.vibrate();
-              context.push(Routes.SEARCH);
+              context.pushNamed(Routes.SEARCH);
             },
             child: Icon(
               Icons.search,
               size: 25,
               color:
-              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
           // if (showLanguage)
@@ -145,7 +145,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isWithBackArrow)
             Expanded(
               child: IconAppButton(
-                onPressed: () => onBackPressed != null ? onBackPressed!() : context.pop(),
+                onPressed: () =>
+                    onBackPressed != null ? onBackPressed!() : context.pop(),
                 icon: Icons.arrow_back_ios,
                 size: 20,
               ),
@@ -211,7 +212,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           //           return;
           //         }
           //         HandleCashback.setCount('chatCount', context);
-          //         context.push(Routes.CHAT, extra: ChatsViewParams());
+          //         context.pushNamed(Routes.CHAT, extra: ChatsViewParams());
           //       },
           //       child: Container(
           //         padding: const EdgeInsets.all(12),
@@ -234,15 +235,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           Builder(
             builder: (context) {
               final getUnreadNotificationsCountCubit =
-              context.watch<GetUnreadNotificationsCountCubit>();
+                  context.watch<GetUnreadNotificationsCountCubit>();
               return ClickableWidget(
-                onTap: (){
+                onTap: () {
                   ManageVibration.vibrate();
                   if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
                     return;
                   }
                   HandleCashback.setCount('notificationCount', context);
-                  context.push(
+                  context.pushNamed(
                     context.read<UserCubit>().isLoggedIn
                         ? Routes.NOTIFICATIONS
                         : Routes.FirstLoginScreen,
@@ -261,16 +262,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     unreadCount: !context.read<UserCubit>().isLoggedIn
                         ? 0
                         : getUnreadNotificationsCountCubit
-                        .unreadNotificationsCountEntity
-                        ?.total ??
-                        0,
+                                .unreadNotificationsCountEntity?.total ??
+                            0,
                   ),
                 ),
               );
             },
           ),
           ClickableWidget(
-            onTap: (){
+            onTap: () {
               ManageVibration.vibrate();
               HandleCashback.setCount('drawerCount', context);
               Scaffold.of(context).openDrawer();
@@ -279,9 +279,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsetsDirectional.only(end: 12),
               child: SvgPicture.asset(
                 Assets.menuSvg,
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR,
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               ),
             ),
           ),
@@ -298,7 +297,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           //       return;
           //     }
           //     HandleCashback.setCount('notificationCount', context);
-          //     context.push(
+          //     context.pushNamed(
           //       context.read<UserCubit>().isLoggedIn
           //           ? Routes.NOTIFICATIONS
           //           : Routes.LOGIN,

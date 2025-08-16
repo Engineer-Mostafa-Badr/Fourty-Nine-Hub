@@ -21,8 +21,8 @@ class ResturantDashboardButton extends StatelessWidget {
     final state = context.watch<RestaurantsCubit>().state;
     return InkWell(
       onTap: () async {
-      ManageVibration.vibrate();
-        var result = await context.push(Routes.RestaurantDashboard,
+        ManageVibration.vibrate();
+        var result = await context.pushNamed(Routes.RestaurantDashboard,
             extra: state.isResturant!.restaurantId!);
         if (result == true) {
           context.read<RestaurantsCubit>().loadData();

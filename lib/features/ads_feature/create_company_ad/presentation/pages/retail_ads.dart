@@ -34,7 +34,8 @@ class _RetailAdsState extends State<RetailAds> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(builder: (context, state) {
+    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
+        builder: (context, state) {
       if (state.status == StateStatus.loading) {
         return const Center(child: CustomCircularProgressIndicator());
       }
@@ -45,7 +46,8 @@ class _RetailAdsState extends State<RetailAds> {
             width: double.infinity,
             child: DropdownButtonFormField<MainCategoryEntity>(
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: const BorderSide(
@@ -71,16 +73,25 @@ class _RetailAdsState extends State<RetailAds> {
                   ),
                 ),
               ),
-              hint: Text(context.isArabic ? 'اختر القسم' : 'Select Main Category'),
+              hint: Text(
+                  context.isArabic ? 'اختر القسم' : 'Select Main Category'),
               value: null,
               onChanged: (MainCategoryEntity? newValue) {
-                context.read<CreateCompanyAdCubit>().onSelectMainCategory(newValue);
+                context
+                    .read<CreateCompanyAdCubit>()
+                    .onSelectMainCategory(newValue);
               },
-              dropdownColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-              items: state.mainCategories?.map<DropdownMenuItem<MainCategoryEntity>>((MainCategoryEntity mainCategory) {
+              dropdownColor:
+                  context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+              items: state.mainCategories
+                  ?.map<DropdownMenuItem<MainCategoryEntity>>(
+                      (MainCategoryEntity mainCategory) {
                 return DropdownMenuItem<MainCategoryEntity>(
                   value: mainCategory,
-                  child: Text(getLang() == 'ar' ? mainCategory.name ?? '' : mainCategory.nameEn ?? ''), // Change to city.nameAr for Arabic
+                  child: Text(getLang() == 'ar'
+                      ? mainCategory.name ?? ''
+                      : mainCategory.nameEn ??
+                          ''), // Change to city.nameAr for Arabic
                 );
               }).toList(),
             ),
@@ -90,13 +101,15 @@ class _RetailAdsState extends State<RetailAds> {
           ),
           state.status == StateStatus.loadingSubCategories
               ? const Center(child: CustomCircularProgressIndicator())
-              : state.subCategories == null || (state.subCategories?.isEmpty ?? false)
+              : state.subCategories == null ||
+                      (state.subCategories?.isEmpty ?? false)
                   ? const SizedBox()
                   : SizedBox(
                       width: double.infinity,
                       child: DropdownButtonFormField<SubCategoryEntity>(
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 12),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: const BorderSide(
@@ -122,16 +135,27 @@ class _RetailAdsState extends State<RetailAds> {
                             ),
                           ),
                         ),
-                        hint: Text(context.isArabic ? 'اختر القسم' : 'Select Sub Category'),
+                        hint: Text(context.isArabic
+                            ? 'اختر القسم'
+                            : 'Select Sub Category'),
                         value: null,
                         onChanged: (SubCategoryEntity? newValue) {
-                          context.read<CreateCompanyAdCubit>().onSelectSubCategory(newValue);
+                          context
+                              .read<CreateCompanyAdCubit>()
+                              .onSelectSubCategory(newValue);
                         },
-                        dropdownColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-                        items: state.subCategories?.map<DropdownMenuItem<SubCategoryEntity>>((SubCategoryEntity mainCategory) {
+                        dropdownColor: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.white,
+                        items: state.subCategories
+                            ?.map<DropdownMenuItem<SubCategoryEntity>>(
+                                (SubCategoryEntity mainCategory) {
                           return DropdownMenuItem<SubCategoryEntity>(
                             value: mainCategory,
-                            child: Text(getLang() == 'ar' ? mainCategory.nameAr ?? '' : mainCategory.nameEn ?? ''), // Change to city.nameAr for Arabic
+                            child: Text(getLang() == 'ar'
+                                ? mainCategory.nameAr ?? ''
+                                : mainCategory.nameEn ??
+                                    ''), // Change to city.nameAr for Arabic
                           );
                         }).toList(),
                       ),
@@ -139,14 +163,25 @@ class _RetailAdsState extends State<RetailAds> {
           Spacer(),
           DefaultButton(
             onPressed: () {
-      ManageVibration.vibrate();
-              if(state.selectedMainCategories==null){
-                showErrorMessage(context, context.isArabic?'يرجى اختيار القسم':'Please select main category');
-              }else if(state.selectedSubCategories==null){
-                showErrorMessage(context, context.isArabic?'يرجى اختيار القسم':'Please select sub category');
-              }
-              else if (state.selectedMainCategories!=null && state.selectedSubCategories!=null){
-                context.push(Routes.CREATEAD,extra: CategorizationEntity(mainCategory: state.selectedMainCategories!,subCategory: state.selectedSubCategories!));
+              ManageVibration.vibrate();
+              if (state.selectedMainCategories == null) {
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'يرجى اختيار القسم'
+                        : 'Please select main category');
+              } else if (state.selectedSubCategories == null) {
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'يرجى اختيار القسم'
+                        : 'Please select sub category');
+              } else if (state.selectedMainCategories != null &&
+                  state.selectedSubCategories != null) {
+                context.pushNamed(Routes.CREATEAD,
+                    extra: CategorizationEntity(
+                        mainCategory: state.selectedMainCategories!,
+                        subCategory: state.selectedSubCategories!));
               }
             },
             label: LocaleKeys.createAd.localize,

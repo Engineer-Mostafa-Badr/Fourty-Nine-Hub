@@ -48,7 +48,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
   late Timer _timer;
   late int _remainingTime;
 
-
   @override
   void initState() {
     super.initState();
@@ -132,7 +131,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
             size: 50.h,
           ),
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             Navigator.pop(context);
           },
         ),
@@ -205,7 +204,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                  onTap: () => context.push(Routes.OTHERSACCOUNT,
+                  onTap: () => context.pushNamed(Routes.OTHERSACCOUNT,
                       extra: widget.reel.user.id),
                   child: Row(
                     children: [
@@ -275,7 +274,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       setState(() {
                         if (_player.playing) {
                           _player.stop();
@@ -287,24 +286,23 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     icon: Icon(_player.playing ? Icons.stop : Icons.play_arrow),
                   ),
                   FutureBuilder(
-  future: getAudioDuration(widget.audio.audioSignedUrl),
-  builder: (context, snapshot) {
-    if (snapshot.hasData) {
-      if (_player.playing) {
-        startCountdown(snapshot.data!);
-        return Text(
-          "$_remainingTime",
-        );
-      }
-      return snapshot.data != null
-          ? Text(getFormattedDuration(snapshot.data!))
-          : const CustomCircularProgressIndicator();
-    } else {
-      return Container();
-    }
-  },
-),
-
+                    future: getAudioDuration(widget.audio.audioSignedUrl),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (_player.playing) {
+                          startCountdown(snapshot.data!);
+                          return Text(
+                            "$_remainingTime",
+                          );
+                        }
+                        return snapshot.data != null
+                            ? Text(getFormattedDuration(snapshot.data!))
+                            : const CustomCircularProgressIndicator();
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                   const Sizer(),
                   Container(
                     height: 15,
@@ -344,7 +342,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                             ? const Color(0xFF2E2E2E)
                             : const Color(0xFFF1F1F2),
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           setState(() {
                             isSave = !isSave;
                             context
@@ -416,7 +414,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -483,17 +481,16 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   Flexible(
                     child: GestureDetector(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         _player.dispose();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReelsRecordingScreen(
-                              voiceMediaId: widget.reel.audioMedia,
-                              voiceSignedUrl: widget.audio.audioSignedUrl,
-                            ),
-                          ));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReelsRecordingScreen(
+                                voiceMediaId: widget.reel.audioMedia,
+                                voiceSignedUrl: widget.audio.audioSignedUrl,
+                              ),
+                            ));
                       },
                       child: Container(
                         height: 50,
@@ -514,7 +511,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                             ),
                             const Sizer(),
                             Text(
-                              context.isArabic ? "أضف إلى القصة" : "Add to Story",
+                              context.isArabic
+                                  ? "أضف إلى القصة"
+                                  : "Add to Story",
                               style: Styles.mediumText(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600),
@@ -528,17 +527,16 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   Flexible(
                     child: GestureDetector(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         _player.dispose();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReelsRecordingScreen(
-                              voiceMediaId: widget.reel.audioMedia,
-                              voiceSignedUrl: widget.audio.audioSignedUrl,
-                            ),
-                          ));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReelsRecordingScreen(
+                                voiceMediaId: widget.reel.audioMedia,
+                                voiceSignedUrl: widget.audio.audioSignedUrl,
+                              ),
+                            ));
                       },
                       child: Container(
                         height: 50,
@@ -600,18 +598,18 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
     }
   }
 
-void startCountdown(Duration duration) {
-  _remainingTime = duration.inSeconds;
-  _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    if (_remainingTime > 0) {
-      setState(() {
-        _remainingTime--;
-      });
-    } else {
-      _timer.cancel();
-    }
-  });
-}
+  void startCountdown(Duration duration) {
+    _remainingTime = duration.inSeconds;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingTime > 0) {
+        setState(() {
+          _remainingTime--;
+        });
+      } else {
+        _timer.cancel();
+      }
+    });
+  }
 
   String reelText(int reelCount) {
     if (reelCount == 0) {

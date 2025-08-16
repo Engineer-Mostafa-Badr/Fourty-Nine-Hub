@@ -837,7 +837,8 @@ class ProfileHeader extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () => context.push(Routes.OTHERSACCOUNT, extra: reel.user.id),
+          onTap: () =>
+              context.pushNamed(Routes.OTHERSACCOUNT, extra: reel.user.id),
           child: CircleAvatar(
             radius: 70.h,
             backgroundColor: reel.user.story == true

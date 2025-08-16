@@ -22,7 +22,10 @@ import '../../../../../routes/routes.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
 class TripJoinView extends StatefulWidget {
-  const TripJoinView({super.key,required this.initialIndex,});
+  const TripJoinView({
+    super.key,
+    required this.initialIndex,
+  });
   final int initialIndex;
   @override
   State<TripJoinView> createState() => _TripJoinViewState();
@@ -30,7 +33,7 @@ class TripJoinView extends StatefulWidget {
 
 class _TripJoinViewState extends State<TripJoinView>
     with TickerProviderStateMixin {
-  late int selectedIndex ;
+  late int selectedIndex;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _positionAnimation;
@@ -40,7 +43,7 @@ class _TripJoinViewState extends State<TripJoinView>
   @override
   void initState() {
     super.initState();
-    selectedIndex=widget.initialIndex;
+    selectedIndex = widget.initialIndex;
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       setState(() {});
@@ -102,7 +105,9 @@ class _TripJoinViewState extends State<TripJoinView>
 
   @override
   Widget build(BuildContext context) {
-    return SharedScaffold(mainCategoryId: 1,isWithBackArrow: true,
+    return SharedScaffold(
+      mainCategoryId: 1,
+      isWithBackArrow: true,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -111,7 +116,9 @@ class _TripJoinViewState extends State<TripJoinView>
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.h),
               child: Column(children: [
-                const Sizer(height: 30,),
+                const Sizer(
+                  height: 30,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,8 +136,11 @@ class _TripJoinViewState extends State<TripJoinView>
                       },
                       icon: getIconForIndex(index),
                       borderColor: index == selectedIndex ? Colors.red : null,
-                      containerColor:
-                          index == selectedIndex ? context.isDarkMode?AppColors.Scaffold_Color_DARK:Colors.white : null,
+                      containerColor: index == selectedIndex
+                          ? context.isDarkMode
+                              ? AppColors.Scaffold_Color_DARK
+                              : Colors.white
+                          : null,
                       iconColor: index == selectedIndex
                           ? AppColors.getRedColor(context)
                           : AppColors.getButtonPrimaryColor(context),
@@ -177,11 +187,11 @@ class _TripJoinViewState extends State<TripJoinView>
             //     onTap: () {
             //       switch (selectedIndex) {
             //         case 0:
-            //           context.push(Routes.captainShareInfoScreen);
+            //           context.pushNamed(Routes.captainShareInfoScreen);
             //         case 1:
-            //           context.push(Routes.tripJoinInfoScreen);
+            //           context.pushNamed(Routes.tripJoinInfoScreen);
             //         case 2:
-            //           context.push(Routes.pickMeInfoScreen);
+            //           context.pushNamed(Routes.pickMeInfoScreen);
             //
             //         default:
             //           () {};
@@ -201,50 +211,52 @@ class _TripJoinViewState extends State<TripJoinView>
             //     ),
             //   ),
             // ),
-            if(selectedIndex!=0&&selectedIndex!=1)PositionedDirectional(
-                bottom: 30.h,
-                end: 10,
-                start: 10,
-                // textDirection:
-                // context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ManageVibration.vibrate();
-                        switch (selectedIndex) {
-                          case 0:
-                            context.push(Routes.captainShareInfoScreen);
-                          case 1:
-                            context.push(Routes.tripJoinInfoScreen);
-                          case 2:
-                            context.push(Routes.pickMeInfoScreen);
+            if (selectedIndex != 0 && selectedIndex != 1)
+              PositionedDirectional(
+                  bottom: 30.h,
+                  end: 10,
+                  start: 10,
+                  // textDirection:
+                  // context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          switch (selectedIndex) {
+                            case 0:
+                              context.pushNamed(Routes.captainShareInfoScreen);
+                            case 1:
+                              context.pushNamed(Routes.tripJoinInfoScreen);
+                            case 2:
+                              context.pushNamed(Routes.pickMeInfoScreen);
 
-                          default:
-                                () {};
-                        }
-                      },
-                      child: Container(
-                        height: 48.h,
-                        width: 48.h,
-                        decoration: BoxDecoration(
-                            color: AppColors.getButtonPrimaryColor(context),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Icon(
-                          size: 19,
-                          Icons.question_mark,
-                          color: context.isDarkMode?AppColors.black:Colors.white,
+                            default:
+                              () {};
+                          }
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                    getFloatingActionButtonContent(selectedIndex),
-                  ],
-                )),
+                      getFloatingActionButtonContent(selectedIndex),
+                    ],
+                  )),
           ],
         ),
       ),
-
     );
   }
 
@@ -259,7 +271,7 @@ class _TripJoinViewState extends State<TripJoinView>
         return Container(
           key: const ValueKey(1),
           child: BlocProvider(
-              create: (context)=>serviceLocator<ViewAllTripJoinCubit>(),
+              create: (context) => serviceLocator<ViewAllTripJoinCubit>(),
               child: const TripJoinContent()),
         );
       case 2:
@@ -279,7 +291,7 @@ class _TripJoinViewState extends State<TripJoinView>
           title: LocaleKeys.createRoute.localize,
           onTap: () {
             ManageVibration.vibrate();
-            context.push(Routes.newRouteScreen);
+            context.pushNamed(Routes.newRouteScreen);
           },
         );
       case 1:
@@ -289,7 +301,7 @@ class _TripJoinViewState extends State<TripJoinView>
             title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
             onTap: () {
               ManageVibration.vibrate();
-              context.push(Routes.TRIP_JOIN);
+              context.pushNamed(Routes.TRIP_JOIN);
             },
           ),
         );
@@ -300,7 +312,7 @@ class _TripJoinViewState extends State<TripJoinView>
             title: context.isArabic ? "انشر رحلتك" : "Post your ride",
             onTap: () {
               ManageVibration.vibrate();
-              context.push(Routes.AddNewPickMe);
+              context.pushNamed(Routes.AddNewPickMe);
             },
           ),
         );

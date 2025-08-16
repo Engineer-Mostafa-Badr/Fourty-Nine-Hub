@@ -19,7 +19,12 @@ class SupportRideParams {
   final String driverId;
   final String clientId;
 
-  SupportRideParams({required this.tripId, required this.driverId, required this.clientId, required this.tripType, required this.userType});
+  SupportRideParams(
+      {required this.tripId,
+      required this.driverId,
+      required this.clientId,
+      required this.tripType,
+      required this.userType});
 }
 
 class SupportRideScreen extends StatefulWidget {
@@ -49,12 +54,13 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
         title: Text(LocaleKeys.support.localize),
         leadingWidth: 50.w,
       ),
-      body: BlocBuilder<DashboardsCubit, DashboardsState>(builder: (context, state) {
+      body: BlocBuilder<DashboardsCubit, DashboardsState>(
+          builder: (context, state) {
         var cubit = context.read<DashboardsCubit>();
         if (state.isLoading) {
           return const Center(child: CustomCircularProgressIndicator());
         }
-        if(state.supportStatus == RequestEmergencyStatus.approved.status){
+        if (state.supportStatus == RequestEmergencyStatus.approved.status) {
           return SingleChildScrollView(
             padding: EdgeInsets.all(20.h),
             child: Column(
@@ -63,26 +69,47 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                 Center(
                   child: Text(
                     LocaleKeys.clientDetails.localize,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 20),
                 _buildLabel(LocaleKeys.clientName.localize),
-                CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourName.localize, controller: TextEditingController(text: state.supportDetails?.name??'')),
+                CustomSupportTextField(
+                    enabled: false,
+                    validator: (String? value) {},
+                    hintText: LocaleKeys.enterYourName.localize,
+                    controller: TextEditingController(
+                        text: state.supportDetails?.name ?? '')),
                 const SizedBox(height: 16),
                 _buildLabel(LocaleKeys.clientPhone.localize),
-                CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourPhoneNumber.localize, controller: TextEditingController(text: state.supportDetails?.phone??'')),
+                CustomSupportTextField(
+                    enabled: false,
+                    validator: (String? value) {},
+                    hintText: LocaleKeys.enterYourPhoneNumber.localize,
+                    controller: TextEditingController(
+                        text: state.supportDetails?.phone ?? '')),
                 const SizedBox(height: 16),
                 _buildLabel(LocaleKeys.email.localize),
-                CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourEmail.localize, controller: TextEditingController(text: state.supportDetails?.email??'')),
+                CustomSupportTextField(
+                    enabled: false,
+                    validator: (String? value) {},
+                    hintText: LocaleKeys.enterYourEmail.localize,
+                    controller: TextEditingController(
+                        text: state.supportDetails?.email ?? '')),
                 const SizedBox(height: 16),
                 _buildLabel(LocaleKeys.deviceID.localize),
-                CustomSupportTextField(enabled: false,validator: (String? value) {  },hintText: LocaleKeys.enterYourDeviceID.localize, controller: TextEditingController(text: state.supportDetails?.deviceId??'')),
+                CustomSupportTextField(
+                    enabled: false,
+                    validator: (String? value) {},
+                    hintText: LocaleKeys.enterYourDeviceID.localize,
+                    controller: TextEditingController(
+                        text: state.supportDetails?.deviceId ?? '')),
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
-      ManageVibration.vibrate();
-                    // context.push(Routes.emergencyContactsScreen);
+                    ManageVibration.vibrate();
+                    // context.pushNamed(Routes.emergencyContactsScreen);
                   },
                   icon: const Icon(Icons.download, color: Colors.white),
                   label: Text(LocaleKeys.locationLog.localize),
@@ -108,63 +135,93 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
               children: [
                 CustomSupportTextField(
                   hintText: LocaleKeys.writeYourProblem.localize,
-                  enabled: state.supportStatus == RequestEmergencyStatus.noRequest.status,
-                  controller: cubit.supportDescriptionController, validator: (String? value) {
+                  enabled: state.supportStatus ==
+                      RequestEmergencyStatus.noRequest.status,
+                  controller: cubit.supportDescriptionController,
+                  validator: (String? value) {
                     if (value!.isEmpty) {
-                      return context.isArabic? 'الرجاء ادخال المشكلة' : 'Please enter your problem';
+                      return context.isArabic
+                          ? 'الرجاء ادخال المشكلة'
+                          : 'Please enter your problem';
                     }
                     return null;
-                },
+                  },
                 ),
                 SizedBox(height: 16.h),
                 CustomSupportTextField(
                   hintText: LocaleKeys.writeYourPhoneNumber.localize,
-                  enabled: state.supportStatus == RequestEmergencyStatus.noRequest.status,
+                  enabled: state.supportStatus ==
+                      RequestEmergencyStatus.noRequest.status,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  controller: cubit.supportPhoneController, validator: (String? value) {
+                  controller: cubit.supportPhoneController,
+                  validator: (String? value) {
                     if (value!.isEmpty) {
-                      return context.isArabic? 'الرجاء ادخال رقم الهاتف' : 'Please enter your phone number';
+                      return context.isArabic
+                          ? 'الرجاء ادخال رقم الهاتف'
+                          : 'Please enter your phone number';
                     }
                     return null;
-                },
+                  },
                 ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: state.isLoadingSubmitRequest? const Center(child: CustomCircularProgressIndicator()): ElevatedButton(
-                    onPressed: () {
-      ManageVibration.vibrate();
-                      if(state.supportStatus == RequestEmergencyStatus.noRequest.status){
-                        if(form.currentState!.validate()){
-                          cubit.requestEmergencySupport(context: context, clientId: widget.params.clientId, driverId: widget.params.driverId, tripId: widget.params.tripId,userType: widget.params.userType, tripType: widget.params.tripType);
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: state.supportStatus == RequestEmergencyStatus.pending.status ? AppColors.PRIMARY_COLOR.withOpacity(.7) : AppColors.PRIMARY_COLOR,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: Text(
-                      state.supportStatus == RequestEmergencyStatus.pending.status ? LocaleKeys.requestSent.localize : LocaleKeys.requestEmergencySupport.localize,
-                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  child: state.isLoadingSubmitRequest
+                      ? const Center(child: CustomCircularProgressIndicator())
+                      : ElevatedButton(
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            if (state.supportStatus ==
+                                RequestEmergencyStatus.noRequest.status) {
+                              if (form.currentState!.validate()) {
+                                cubit.requestEmergencySupport(
+                                    context: context,
+                                    clientId: widget.params.clientId,
+                                    driverId: widget.params.driverId,
+                                    tripId: widget.params.tripId,
+                                    userType: widget.params.userType,
+                                    tripType: widget.params.tripType);
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: state.supportStatus ==
+                                    RequestEmergencyStatus.pending.status
+                                ? AppColors.PRIMARY_COLOR.withOpacity(.7)
+                                : AppColors.PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Text(
+                            state.supportStatus ==
+                                    RequestEmergencyStatus.pending.status
+                                ? LocaleKeys.requestSent.localize
+                                : LocaleKeys.requestEmergencySupport.localize,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                 ),
                 const SizedBox(
                   height: 6,
                 ),
-                if (state.supportStatus == RequestEmergencyStatus.pending.status)
+                if (state.supportStatus ==
+                    RequestEmergencyStatus.pending.status)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
                         Text(
                           LocaleKeys.waitingApproval.localize,
-                          style: const TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -176,6 +233,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
       }),
     );
   }
+
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),

@@ -50,18 +50,18 @@ class FacebookPostCard extends StatefulWidget {
 
   const FacebookPostCard(
       {super.key,
-        required this.post,
-        required this.onReact,
-        this.showOptions = true,
-        this.isMyPost = false,
-        this.fromProfile = false,
-        required this.deletePost,
-        required this.hidePost,
-        required this.showPostDetails,
-        required this.showPostComments,
-        required this.onShare,
-        required this.from,
-        required this.index});
+      required this.post,
+      required this.onReact,
+      this.showOptions = true,
+      this.isMyPost = false,
+      this.fromProfile = false,
+      required this.deletePost,
+      required this.hidePost,
+      required this.showPostDetails,
+      required this.showPostComments,
+      required this.onShare,
+      required this.from,
+      required this.index});
 
   @override
   State<FacebookPostCard> createState() => _FacebookPostCardState();
@@ -84,16 +84,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget build(BuildContext context) {
     return BlocConsumer<SocialPostsCubit, SocialPostsState>(
         listener: (context, state) {
-          if (state.status == StateStatus.error) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure ?? UnknownFailure(''),
-                context,
-              ),
-            );
-          }
-        }, builder: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure ?? UnknownFailure(''),
+            context,
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       return Container();
       // if (widget.from == 'posts') {
@@ -267,7 +267,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                             categoryId: ChatCategoriesIds.social,
       //                           );
       //                           context.pop();
-      //                           context.push(
+      //                           context.pushNamed(
       //                             Routes.CHAT,
       //                             extra: ChatsViewParams(
       //                               isFromStartChat: true,
@@ -283,7 +283,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                             categoryId: ChatCategoriesIds.greet,
       //                           );
       //                           context.pop();
-      //                           context.push(
+      //                           context.pushNamed(
       //                             Routes.CHAT,
       //                             extra: ChatsViewParams(
       //                               isFromStartChat: true,
@@ -293,7 +293,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                           );
       //                         }
       //                       } else {
-      //                         context.push(Routes.LOGIN);
+      //                         context.pushNamed(Routes.LOGIN);
       //                       }
       //                     },
       //                     anonymousPress: () async {
@@ -304,7 +304,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                           otherId: widget.post.user.id,
       //                         );
       //                         context.pop();
-      //                         context.push(
+      //                         context.pushNamed(
       //                           Routes.CHAT,
       //                           extra: ChatsViewParams(
       //                             isFromStartChat: true,
@@ -313,7 +313,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                           ),
       //                         );
       //                       } else {
-      //                         context.push(Routes.LOGIN);
+      //                         context.pushNamed(Routes.LOGIN);
       //                       }
       //                     },
       //                   ),
@@ -606,7 +606,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }) {
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         showCustomBottomSheet(context);
         // bottomSheet(
         //   context: context,
@@ -621,7 +621,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //           children: [
         //             IconButton(
         //               onPressed: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         //                 Navigator.pop(context);
         //               },
         //               icon: const Icon(Icons.arrow_back),
@@ -636,7 +636,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //            // const Spacer(),
         //             IconButton(
         //                 onPressed: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         //                   showDialog(
         //                       context: context,
         //                       builder: (_) =>
@@ -653,9 +653,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //           children: [
         //             ClickableWidget(
         //               onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         //                 if (widget.fromProfile == false) {
-        //                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+        //                   context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
         //                 }
         //               },
         //               child: Stack(
@@ -681,9 +681,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //             const Sizer(),
         //             ClickableWidget(
         //               onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         //                 if (widget.fromProfile == false) {
-        //                   context.push(Routes.OTHERSACCOUNT,
+        //                   context.pushNamed(Routes.OTHERSACCOUNT,
         //                       extra: post.user.id);
         //                 }
         //               },
@@ -767,7 +767,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //             //           : LocaleKeys
         //             //           .addFriend.localize,
         //             //       onPressed: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         //             //         onAddFriend();
         //             //       }),
         //             // )
@@ -806,7 +806,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 title: LocaleKeys.reportPost.localize,
                 subTitle: LocaleKeys.youWillReportPost.localize,
                 onTap: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
                         context: context,
@@ -823,7 +823,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   widget.deletePost(post.id);
                   if (fromDetails == true) {
                     context.pop();
@@ -835,7 +835,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 widget.hidePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
@@ -848,14 +848,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget listTile(
       {required IconData icon,
-        Color? iconColor,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -884,9 +884,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             children: [
               ClickableWidget(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (widget.fromProfile == false) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                    context.pushNamed(Routes.OTHERSACCOUNT,
+                        extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -900,9 +901,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               Expanded(
                 child: ClickableWidget(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     if (widget.fromProfile == false) {
-                      context.push(Routes.OTHERSACCOUNT,
+                      context.pushNamed(Routes.OTHERSACCOUNT,
                           extra: post.user.id);
                     }
                   },
@@ -910,38 +911,35 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextAppButton(
-                          label:
-                          "${post.user.firstName} ${post.user.lastName}",
+                          label: "${post.user.firstName} ${post.user.lastName}",
                           style: Styles.headerText(fontSize: 32),
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (widget.fromProfile == false) {
-                              context.push(Routes.OTHERSACCOUNT,
+                              context.pushNamed(Routes.OTHERSACCOUNT,
                                   extra: post.user.id);
                             }
                           }),
                       _buildActivityFeelingWidget(post),
                       RichText(
                           text: TextSpan(children: [
-                            // TextSpan(
-                            //     text: "${post.sinceTime}.",
-                            //     style: Styles.mediumText(color: Colors.grey)),
-                            const WidgetSpan(
-                                child: Sizer()),
+                        // TextSpan(
+                        //     text: "${post.sinceTime}.",
+                        //     style: Styles.mediumText(color: Colors.grey)),
+                        const WidgetSpan(child: Sizer()),
 
-                            WidgetSpan(
-                                child: ClickableWidget(
-                                  onTap: (){
-
-      ManageVibration.vibrate();
-                                  },
-                                  child: const Icon(
-                                    Icons.group,
-                                    size: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ))
-                          ])),
+                        WidgetSpan(
+                            child: ClickableWidget(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                          },
+                          child: const Icon(
+                            Icons.group,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
+                        ))
+                      ])),
                     ],
                   ),
                 ),
@@ -950,7 +948,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               IconAppButton(
                 icon: Icons.more_horiz_outlined,
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   bottomSheet(
                     backColor: Theme.of(context).scaffoldBackgroundColor,
                     context: context,
@@ -968,14 +966,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               padding: const EdgeInsetsDirectional.only(start: 40.0),
               child: ClickableWidget(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   showDialog(
                       context: context,
                       builder: (_) => CustomScaffold(
-                        body: FacebookUserOnMap(
-                          location: post.location!,
-                        ),
-                      ));
+                            body: FacebookUserOnMap(
+                              location: post.location!,
+                            ),
+                          ));
                 },
                 child: Row(
                   children: [
@@ -985,9 +983,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     ),
                     Expanded(
                         child: Label(
-                          text: post.location?.place ?? '',
-                          style: Styles.mediumText(),
-                        ))
+                      text: post.location?.place ?? '',
+                      style: Styles.mediumText(),
+                    ))
                   ],
                 ),
               ),
@@ -1007,9 +1005,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           ClickableWidget(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (widget.fromProfile == false) {
-                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
             },
             child: ImageFromInternet(
@@ -1023,71 +1021,72 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           const Sizer(),
           Expanded(
               child: Row(
-                children: [
-                  ClickableWidget(
-                    onTap: () {
-      ManageVibration.vibrate();
-                      if (widget.fromProfile == false) {
-                        context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                      }
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClickableWidget(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  if (widget.fromProfile == false) {
+                    context.pushNamed(Routes.OTHERSACCOUNT,
+                        extra: post.user.id);
+                  }
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            TextAppButton(
-                              // style: TextStyle(color: Theme.of(context).primaryColor),
-                                label: "${post.user.firstName} ${post.user.lastName} . ",
-                                style: Styles.headerText(
-                                    fontSize: 32,
-                                    color: Theme.of(context).primaryColor),
-                                onPressed: () {
-      ManageVibration.vibrate();
-                                  if (widget.fromProfile == false) {
-                                    context.push(Routes.OTHERSACCOUNT,
-                                        extra: post.user.id);
-                                  }
-                                }),
+                        TextAppButton(
+                            // style: TextStyle(color: Theme.of(context).primaryColor),
+                            label:
+                                "${post.user.firstName} ${post.user.lastName} . ",
+                            style: Styles.headerText(
+                                fontSize: 32,
+                                color: Theme.of(context).primaryColor),
+                            onPressed: () {
+                              ManageVibration.vibrate();
+                              if (widget.fromProfile == false) {
+                                context.pushNamed(Routes.OTHERSACCOUNT,
+                                    extra: post.user.id);
+                              }
+                            }),
 
-                            TextAppButton(
-                              // style: TextStyle(color: Theme.of(context).primaryColor),
-                                label: "Follow",
-                                style: Styles.headerText(
-                                    fontSize: 32,
-                                    color: AppColors.LIGHT_BLUE),
-                                onPressed: () {
-      ManageVibration.vibrate();
-                                  // if (widget.fromProfile == false) {
-                                  //   context.push(Routes.OTHERSACCOUNT,
-                                  //       extra: post.user.id);
-                                  // }
-                                }),
-                            // Expanded(child: RichText(text: TextSpan(children: [
-                            //   TextSpan(
-                            //       text: post.sinceTime,
-                            //       style: Styles.mediumText(color: Colors.grey)),
-                            // ]))),
-                          ],
-                        ),
-                        RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: post.sinceTime,
-                                  style: Styles.mediumText(color: Colors.grey)),
-                              const WidgetSpan(
-                                  child: Icon(
-                                    Icons.group,
-                                    size: 14,
-                                    color: Colors.grey,
-                                  ))
-                            ]))
+                        TextAppButton(
+                            // style: TextStyle(color: Theme.of(context).primaryColor),
+                            label: "Follow",
+                            style: Styles.headerText(
+                                fontSize: 32, color: AppColors.LIGHT_BLUE),
+                            onPressed: () {
+                              ManageVibration.vibrate();
+                              // if (widget.fromProfile == false) {
+                              //   context.pushNamed(Routes.OTHERSACCOUNT,
+                              //       extra: post.user.id);
+                              // }
+                            }),
+                        // Expanded(child: RichText(text: TextSpan(children: [
+                        //   TextSpan(
+                        //       text: post.sinceTime,
+                        //       style: Styles.mediumText(color: Colors.grey)),
+                        // ]))),
                       ],
                     ),
-                  ),
-                  // _buildActivityFeelingWidget(post),
-                ],
-              )),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: post.sinceTime,
+                          style: Styles.mediumText(color: Colors.grey)),
+                      const WidgetSpan(
+                          child: Icon(
+                        Icons.group,
+                        size: 14,
+                        color: Colors.grey,
+                      ))
+                    ]))
+                  ],
+                ),
+              ),
+              // _buildActivityFeelingWidget(post),
+            ],
+          )),
         ],
       ),
     );
@@ -1095,227 +1094,227 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget _buildContentWidget(
       {String? backgroundColor,
-        required String content,
-        List<String>? images,
-        bool? share = false}) {
+      required String content,
+      List<String>? images,
+      bool? share = false}) {
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
-        images!.isEmpty &&
-        content.isNotEmpty
+            images!.isEmpty &&
+            content.isNotEmpty
         ? Container(
-      width: double.infinity,
-      height: 500.h,
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-      decoration: BoxDecoration(
-        color: images.isEmpty
-            ? Color(int.parse(backgroundColor.substring(1), radix: 16))
-            : Colors.white,
-        borderRadius: BorderRadius.circular((share == true ? 10 : 0).r),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ReadMoreLabel(
-            text: content,
-            textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
-            style: Styles.headerText(
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
-          ),
-        ],
-      ),
-    )
-        : Container(
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (content.isNotEmpty) ...[
-            ReadMoreLabel(
-              text: content,
-              textAlign:
-              isArabic(content) ? TextAlign.right : TextAlign.left,
-              style: Styles.headerText(
-                  color: Theme.of(context).primaryColor),
+            width: double.infinity,
+            height: 500.h,
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
+            decoration: BoxDecoration(
+              color: images.isEmpty
+                  ? Color(int.parse(backgroundColor.substring(1), radix: 16))
+                  : Colors.white,
+              borderRadius: BorderRadius.circular((share == true ? 10 : 0).r),
             ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ReadMoreLabel(
+                  text: content,
+                  textAlign:
+                      isArabic(content) ? TextAlign.right : TextAlign.left,
+                  style: Styles.headerText(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor),
+                ),
+              ],
+            ),
+          )
+        : Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (content.isNotEmpty) ...[
+                  ReadMoreLabel(
+                    text: content,
+                    textAlign:
+                        isArabic(content) ? TextAlign.right : TextAlign.left,
+                    style: Styles.headerText(
+                        color: Theme.of(context).primaryColor),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  )
+                ],
+                if ((images?.isNotEmpty ?? false))
+                  StaggeredGrid.count(
+                    crossAxisCount:
+                        (images?.length ?? 0) > 4 ? 4 : images?.length ?? 0,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                    children: List.generate(
+                      (images?.length ?? 0) > 4 ? 4 : images?.length ?? 0,
+                      (index) {
+                        // Define layout pattern dynamically
+                        int crossAxisCellCount;
+                        int mainAxisCellCount;
 
-            SizedBox(
-              height: 10.h,
-            )
-          ],
-          if ((images?.isNotEmpty ?? false))
-            StaggeredGrid.count(
-              crossAxisCount: (images?.length??0)>4?4:images?.length??0,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              children: List.generate(
-                (images?.length??0)>4?4:images?.length??0,
-                    (index) {
-                  // Define layout pattern dynamically
-                  int crossAxisCellCount;
-                  int mainAxisCellCount;
+                        if (index % 5 == 0) {
+                          crossAxisCellCount = 2;
+                          mainAxisCellCount = 2;
+                        } else if (index % 5 == 1) {
+                          crossAxisCellCount = 2;
+                          mainAxisCellCount = 1;
+                        } else {
+                          crossAxisCellCount = 1;
+                          mainAxisCellCount = 1;
+                        }
 
-                  if (index % 5 == 0) {
-                    crossAxisCellCount = 2;
-                    mainAxisCellCount = 2;
-                  } else if (index % 5 == 1) {
-                    crossAxisCellCount = 2;
-                    mainAxisCellCount = 1;
-                  } else {
-                    crossAxisCellCount = 1;
-                    mainAxisCellCount = 1;
-                  }
-
-                  return StaggeredGridTile.count(
-                    crossAxisCellCount: crossAxisCellCount,
-                    mainAxisCellCount: mainAxisCellCount,
-                    child: ClickableWidget(
-                      onTap: () {
-      ManageVibration.vibrate();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ImageGalleryPage(
-                              images: images??[],
-                              initialIndex: index,
+                        return StaggeredGridTile.count(
+                          crossAxisCellCount: crossAxisCellCount,
+                          mainAxisCellCount: mainAxisCellCount,
+                          child: ClickableWidget(
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ImageGalleryPage(
+                                    images: images ?? [],
+                                    initialIndex: index,
+                                  ),
+                                ),
+                              );
+                              // if (index != 3 ||
+                              //     (index == 3 && (images?.length??0) == 4)) {
+                              //   showDialog(
+                              //       context: context,
+                              //       builder: (context) => ImageDetailsScreen(
+                              //         image: images?[index]??'',
+                              //         fromPost: true,
+                              //         onRemoveImage: () {
+                              //           // controller
+                              //           //     .removePhoto(images![index]);
+                              //           context.pop();
+                              //         },
+                              //       ));
+                              // } else {
+                              //   showDialog(
+                              //       context: context,
+                              //       builder: (context) {
+                              //         return ShowPostsImages(
+                              //           images: images??[],
+                              //           onRemoveImage:
+                              //               (UploadFileEntity image) {
+                              //             // controller.removePhoto(image);
+                              //           },
+                              //         );
+                              //       });
+                              // }
+                            },
+                            child: Stack(
+                              children: [
+                                Stack(
+                                  children: [
+                                    ImageFromInternet(
+                                      image: images?[index] ?? '',
+                                      defaultLogo: true,
+                                    ),
+                                    if (index == 3 && (images?.length ?? 0) > 4)
+                                      Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.5),
+                                        ),
+                                        child: Center(
+                                          child: Label(
+                                            text:
+                                                "+${(images?.length ?? 0) - 4}",
+                                            style: Styles.headerText(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         );
-                        // if (index != 3 ||
-                        //     (index == 3 && (images?.length??0) == 4)) {
-                        //   showDialog(
-                        //       context: context,
-                        //       builder: (context) => ImageDetailsScreen(
-                        //         image: images?[index]??'',
-                        //         fromPost: true,
-                        //         onRemoveImage: () {
-                        //           // controller
-                        //           //     .removePhoto(images![index]);
-                        //           context.pop();
-                        //         },
-                        //       ));
-                        // } else {
-                        //   showDialog(
-                        //       context: context,
-                        //       builder: (context) {
-                        //         return ShowPostsImages(
-                        //           images: images??[],
-                        //           onRemoveImage:
-                        //               (UploadFileEntity image) {
-                        //             // controller.removePhoto(image);
-                        //           },
-                        //         );
-                        //       });
-                        // }
                       },
-                      child: Stack(
-                        children: [
-                          Stack(
-                            children: [
-                              ImageFromInternet(
-                                image: images?[index]??'',
-                                defaultLogo: true,
-                              ),
-                              if (index == 3 && (images?.length??0) > 4)
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color:
-                                    Colors.black.withOpacity(0.5),
-                                  ),
-                                  child: Center(
-                                    child: Label(
-                                      text: "+${(images?.length??0) - 4}",
-                                      style: Styles.headerText(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
-                      ),
                     ),
-                  );
-                },
-              ),
-
+                  ),
+                // SizedBox(
+                //   child: GridView.builder(
+                //       padding: const EdgeInsets.all(10),
+                //       shrinkWrap: true,
+                //       physics: const NeverScrollableScrollPhysics(),
+                //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //           crossAxisCount: images!.length == 1 ? 1 : 2),
+                //       itemCount: images.length < 4 ? images.length : 4,
+                //       itemBuilder: (context, index) => ClickableWidget(
+                //             onTap: () {
+                //               if (index != 3 ||
+                //                   (index == 3 && images.length == 4)) {
+                //                 showDialog(
+                //                     context: context,
+                //                     builder: (context) => ImageDetailsScreen(
+                //                           image: images[index],
+                //                           fromPost: true,
+                //                           onRemoveImage: () {
+                //                             // controller
+                //                             //     .removePhoto(images![index]);
+                //                             context.pop();
+                //                           },
+                //                         ));
+                //               } else {
+                //                 showDialog(
+                //                     context: context,
+                //                     builder: (context) {
+                //                       return ShowPostsImages(
+                //                         images: images,
+                //                         onRemoveImage:
+                //                             (UploadFileEntity image) {
+                //                           // controller.removePhoto(image);
+                //                         },
+                //                       );
+                //                     });
+                //               }
+                //             },
+                //             child: Stack(
+                //               children: [
+                //                 Stack(
+                //                   children: [
+                //                     ImageFromInternet(
+                //                       image: images[index],
+                //                       defaultLogo: true,
+                //                     ),
+                //                     if (index == 3 && images.length > 4)
+                //                       Container(
+                //                         alignment: Alignment.center,
+                //                         decoration: BoxDecoration(
+                //                           color:
+                //                               Colors.black.withOpacity(0.5),
+                //                         ),
+                //                         child: Center(
+                //                           child: Label(
+                //                             text: "+${images.length - 4}",
+                //                             style: Styles.headerText(
+                //                               color: Colors.white,
+                //                             ),
+                //                           ),
+                //                         ),
+                //                       ),
+                //                   ],
+                //                 ),
+                //               ],
+                //             ),
+                //           )),
+                // ),
+              ],
             ),
-          // SizedBox(
-          //   child: GridView.builder(
-          //       padding: const EdgeInsets.all(10),
-          //       shrinkWrap: true,
-          //       physics: const NeverScrollableScrollPhysics(),
-          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //           crossAxisCount: images!.length == 1 ? 1 : 2),
-          //       itemCount: images.length < 4 ? images.length : 4,
-          //       itemBuilder: (context, index) => ClickableWidget(
-          //             onTap: () {
-          //               if (index != 3 ||
-          //                   (index == 3 && images.length == 4)) {
-          //                 showDialog(
-          //                     context: context,
-          //                     builder: (context) => ImageDetailsScreen(
-          //                           image: images[index],
-          //                           fromPost: true,
-          //                           onRemoveImage: () {
-          //                             // controller
-          //                             //     .removePhoto(images![index]);
-          //                             context.pop();
-          //                           },
-          //                         ));
-          //               } else {
-          //                 showDialog(
-          //                     context: context,
-          //                     builder: (context) {
-          //                       return ShowPostsImages(
-          //                         images: images,
-          //                         onRemoveImage:
-          //                             (UploadFileEntity image) {
-          //                           // controller.removePhoto(image);
-          //                         },
-          //                       );
-          //                     });
-          //               }
-          //             },
-          //             child: Stack(
-          //               children: [
-          //                 Stack(
-          //                   children: [
-          //                     ImageFromInternet(
-          //                       image: images[index],
-          //                       defaultLogo: true,
-          //                     ),
-          //                     if (index == 3 && images.length > 4)
-          //                       Container(
-          //                         alignment: Alignment.center,
-          //                         decoration: BoxDecoration(
-          //                           color:
-          //                               Colors.black.withOpacity(0.5),
-          //                         ),
-          //                         child: Center(
-          //                           child: Label(
-          //                             text: "+${images.length - 4}",
-          //                             style: Styles.headerText(
-          //                               color: Colors.white,
-          //                             ),
-          //                           ),
-          //                         ),
-          //                       ),
-          //                   ],
-          //                 ),
-          //               ],
-          //             ),
-          //           )),
-          // ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget _buildReactionPlaceHolder({
@@ -1396,13 +1395,13 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
-                    context.push(Routes.OTHERSACCOUNT,
+                    ManageVibration.vibrate();
+                    context.pushNamed(Routes.OTHERSACCOUNT,
                         extra: post.users[0].id);
                   },
                   child: Label(
                     text:
-                    "${post.users[0].firstName} ${post.users[0].lastName} ",
+                        "${post.users[0].firstName} ${post.users[0].lastName} ",
                     style: Styles.smallText(
                         decoration: TextDecoration.underline,
                         color: AppColors.GREY_NORMAL_COLOR),
@@ -1411,12 +1410,12 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(
-                              users: post.users,
-                            ));
+                                  users: post.users,
+                                ));
                       },
                       child: Label(
                         text: '+${post.users.length - 1}',
@@ -1465,7 +1464,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       children: [
                         IconButton(
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             Navigator.pop(context);
                           },
                           icon: const Icon(Icons.arrow_back),
@@ -1479,7 +1478,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         ),
                         IconButton(
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             showDialog(
                               context: context,
                               builder: (_) => const SearchAppUsers(),
@@ -1523,16 +1522,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       child: TabBarView(
                         children: Reaction.values.map((reaction) {
                           final users =
-                          getUsersForReaction(reaction, state.posts![0]);
+                              getUsersForReaction(reaction, state.posts![0]);
                           return ListView.separated(
                             itemBuilder: (context, userIndex) => Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 ClickableWidget(
                                   onTap: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     if (widget.fromProfile == false) {
-                                      context.push(
+                                      context.pushNamed(
                                         Routes.OTHERSACCOUNT,
                                         extra: users[userIndex].id,
                                       );
@@ -1563,9 +1562,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                 const Sizer(),
                                 ClickableWidget(
                                   onTap: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     if (widget.fromProfile == false) {
-                                      context.push(
+                                      context.pushNamed(
                                         Routes.OTHERSACCOUNT,
                                         extra: users[userIndex].id,
                                       );
@@ -1775,7 +1774,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 //                               ClickableWidget(
 //                                 onTap: () {
 //                                   if (widget.fromProfile == false) {
-//                                     context.push(Routes.OTHERSACCOUNT,
+//                                     context.pushNamed(Routes.OTHERSACCOUNT,
 //                                         extra: state.posts![index].likedUsers![index].id);
 //                                   }
 //                                 },
@@ -1805,7 +1804,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 //                               ClickableWidget(
 //                                 onTap: () {
 //                                   if (widget.fromProfile == false) {
-//                                     context.push(Routes.OTHERSACCOUNT,
+//                                     context.pushNamed(Routes.OTHERSACCOUNT,
 //                                         extra: state.posts![index].likedUsers![index].id);
 //                                   }
 //                                 },

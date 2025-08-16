@@ -157,9 +157,9 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                         : Colors.white,
                   ),
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     if (groupValue != null) {
-                      context.push(Routes.PAYMENT,
+                      context.pushNamed(Routes.PAYMENT,
                           extra: PaymobLink(
                               amountId: newIndex,
                               // providerId: "667331f44fbaddc4357d612b",
@@ -183,7 +183,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     fontSize: 36,
                   ),
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.pop();
                   },
                 ),

@@ -40,7 +40,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                 if (!(state.model.mainCategory?.isDriverApproved ?? false)) {
                   return GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (state.model.mainCategory?.isDriverApproved == false &&
                           state.model.mainCategory?.isDriver == true) {
                         context.pop();
@@ -50,7 +50,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                                 ? "في انتظار الموافقة"
                                 : "Waiting for approve");
                       } else {
-                        context.push(Routes.SHIPPING_REGISTER);
+                        context.pushNamed(Routes.SHIPPING_REGISTER);
                       }
                     },
                     child: Stack(
@@ -116,7 +116,7 @@ class RideShippingButtonSheet extends StatelessWidget {
           if (!(model.mainCategory?.isDriverApproved ?? false))
             GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (model.mainCategory?.isDriverApproved == false &&
                     model.mainCategory?.isDriver == true) {
                   context.pop();
@@ -126,7 +126,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                           ? "في انتظار الموافقة"
                           : "Waiting for approve");
                 } else {
-                  context.push(Routes.RIDERREGISTER);
+                  context.pushNamed(Routes.RIDERREGISTER);
                 }
               },
               child: Stack(

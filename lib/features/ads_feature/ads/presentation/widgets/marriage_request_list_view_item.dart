@@ -27,8 +27,8 @@ class MarriageRequestListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
-        context.push(Routes.ADdetails, extra: marriageAds.adId);
+        ManageVibration.vibrate();
+        context.pushNamed(Routes.ADdetails, extra: marriageAds.adId);
       },
       child: Container(
         // margin: EdgeInsets.only(bottom: 20.h),

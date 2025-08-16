@@ -50,8 +50,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       numerOfDays: days,
                       label: LocaleKeys.subscription.localize,
                       onTap: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
                     );
                   },
@@ -65,11 +64,11 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                     days = state.info?.remainingDaysToExpiryId.toString() ?? '';
                     return _Item(
                       numerOfDays: days,
-                      label: LocaleKeys.id.localize, onTap: () {
-
-      ManageVibration.vibrate();
+                      label: LocaleKeys.id.localize,
+                      onTap: () {
+                        ManageVibration.vibrate();
                       },
-                      // onTap: () => context.push(Routes.EDITDOCTORDOCS),
+                      // onTap: () => context.pushNamed(Routes.EDITDOCTORDOCS),
                     );
                   },
                 ),
@@ -86,10 +85,9 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       numerOfDays: days,
                       label: LocaleKeys.practiceCertification.localize,
                       onTap: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
-                      // onTap: () => context.push(Routes.EDITDOCTORDOCS),
+                      // onTap: () => context.pushNamed(Routes.EDITDOCTORDOCS),
                     );
                   },
                 ),
@@ -116,7 +114,7 @@ class _Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap();
       },
       child: Column(

@@ -111,14 +111,19 @@ class _CreatePostViewState extends State<CreatePostView> {
 
     // Get address from latitude and longitude
     String address = await getAddress(position.latitude, position.longitude);
-    PlaceEntity selectedPlace = PlaceEntity(formattedAddress: address, name: address, lat: position.latitude,lng: position.longitude);
+    PlaceEntity selectedPlace = PlaceEntity(
+        formattedAddress: address,
+        name: address,
+        lat: position.latitude,
+        lng: position.longitude);
     return selectedPlace;
   }
 
   Future<String> getAddress(double latitude, double longitude) async {
     try {
       // Get the placemark (address) from coordinates
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
       // context.pop();
 
       // If there are placemarks (addresses) available
@@ -150,7 +155,7 @@ class _CreatePostViewState extends State<CreatePostView> {
     } catch (e) {
       print(e);
       context.pop();
-      return PlaceEntity(formattedAddress: '', name: '', lat:0, lng: 0);
+      return PlaceEntity(formattedAddress: '', name: '', lat: 0, lng: 0);
     }
   }
 
@@ -166,11 +171,11 @@ class _CreatePostViewState extends State<CreatePostView> {
           canPop: false,
           onPopInvoked: (didPop) {
             print(controller.handlePopAction());
-            if(controller.handlePopAction()==true){
-              context.go(Routes.SOCIAL,
+            if (controller.handlePopAction() == true) {
+              context.goNamed(Routes.SOCIAL,
                   extra: SocialParams(
                       userId: UserCubit.to.state.data?.id ?? '', index: 0));
-            }else{
+            } else {
               controller.handleBack(context);
             }
           },
@@ -187,12 +192,16 @@ class _CreatePostViewState extends State<CreatePostView> {
                     children: [
                       BuildCreatePostAppBar(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           controller.createPost(
-                              context: context,);
+                            context: context,
+                          );
                         },
                       ),
-                      BuildCreatePostHeader(sheetController:sheetController,controller:controller,state:state),
+                      BuildCreatePostHeader(
+                          sheetController: sheetController,
+                          controller: controller,
+                          state: state),
                       const Sizer(),
                       BuildCreatePost(
                         onChange: (c) {
@@ -235,30 +244,41 @@ class _CreatePostViewState extends State<CreatePostView> {
                                 PositionedDirectional(
                                     top: 8,
                                     end: 8,
-                                    child:ClickableWidget(
-                                  onTap: (){
-      ManageVibration.vibrate();
-                                    context.read<CreatePostCubit>().removeGif();
-                                  },
-                                  child: Container(
-                                      height: 35,
-                                      width: 35,
-                                      decoration: const BoxDecoration(
-                                          color: AppColors.PRIMARY_COLOR,
-                                          shape: BoxShape.circle
-                                      ),
-                                      alignment: Alignment.center,
-                                      child:const Icon(Icons.close,size: 18,color: Colors.white,)
-                                  ),
-                                ))
+                                    child: ClickableWidget(
+                                      onTap: () {
+                                        ManageVibration.vibrate();
+                                        context
+                                            .read<CreatePostCubit>()
+                                            .removeGif();
+                                      },
+                                      child: Container(
+                                          height: 35,
+                                          width: 35,
+                                          decoration: const BoxDecoration(
+                                              color: AppColors.PRIMARY_COLOR,
+                                              shape: BoxShape.circle),
+                                          alignment: Alignment.center,
+                                          child: const Icon(
+                                            Icons.close,
+                                            size: 18,
+                                            color: Colors.white,
+                                          )),
+                                    ))
                               ],
                             ),
                           const Sizer(),
                           if (state.images != null && state.images!.isNotEmpty)
                             BuildMediaCard(),
                           const Sizer(),
-                          if (state.selectedLifeEvent != null&&state.selectedLifeEvent!.id.isNotEmpty)const BuildLifeEventView(),
-                           if((state.selectedLifeEvent==null||state.selectedLifeEvent!.id.isEmpty)&&(state.gifImage==null||(state.gifImage?.isEmpty??false))&&(state.images==null||state.images!.isEmpty)) const BuildColorsBallet(),
+                          if (state.selectedLifeEvent != null &&
+                              state.selectedLifeEvent!.id.isNotEmpty)
+                            const BuildLifeEventView(),
+                          if ((state.selectedLifeEvent == null ||
+                                  state.selectedLifeEvent!.id.isEmpty) &&
+                              (state.gifImage == null ||
+                                  (state.gifImage?.isEmpty ?? false)) &&
+                              (state.images == null || state.images!.isEmpty))
+                            const BuildColorsBallet(),
                         ],
                       )
                       // const Sizer(),
@@ -271,7 +291,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                     child: SnappingBottomSheet(
                       controller: sheetController,
                       duration: const Duration(milliseconds: 500),
-                      color:context.isDarkMode?AppColors.getFillColor(context):Colors.white,
+                      color: context.isDarkMode
+                          ? AppColors.getFillColor(context)
+                          : Colors.white,
                       shadowColor: Colors.black26,
                       elevation: 0,
                       maxWidth: MediaQuery.of(context).size.width,
@@ -291,34 +313,47 @@ class _CreatePostViewState extends State<CreatePostView> {
                               width: double.infinity,
                               height: 10.h,
                               margin: const EdgeInsets.only(bottom: 30),
-                              color: context.isDarkMode?AppColors.getFillColor(context):Colors.white,
+                              color: context.isDarkMode
+                                  ? AppColors.getFillColor(context)
+                                  : Colors.white,
                               child: Center(
                                 child: Icon(
                                   Icons.keyboard_arrow_up,
-                                  color:AppColors.getTextColor(context),
+                                  color: AppColors.getTextColor(context),
                                 ),
                               )),
                           const Divider(),
-                          if((state.gifImage==null||(state.gifImage?.isEmpty??false))&&(state.selectedLifeEvent==null||(state.selectedLifeEvent?.id.isEmpty??false)))BuildSheetItem(
-                              icon: Assets.imageIcon,
-                              title:context.isArabic?'صورة/فيديو': "Photo/video",
-                              onTap: () async {
-      ManageVibration.vibrate();
-                                await controller.uploadPhoto(context: context);
-                                sheetController.collapse();
-                              },
-                              hasDivider: true),
+                          if ((state.gifImage == null ||
+                                  (state.gifImage?.isEmpty ?? false)) &&
+                              (state.selectedLifeEvent == null ||
+                                  (state.selectedLifeEvent?.id.isEmpty ??
+                                      false)))
+                            BuildSheetItem(
+                                icon: Assets.imageIcon,
+                                title: context.isArabic
+                                    ? 'صورة/فيديو'
+                                    : "Photo/video",
+                                onTap: () async {
+                                  ManageVibration.vibrate();
+                                  await controller.uploadPhoto(
+                                      context: context);
+                                  sheetController.collapse();
+                                },
+                                hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.tagIcon,
-                              title: context.isArabic?'اشارة لأشخاص':"Tag people",
+                              title: context.isArabic
+                                  ? 'اشارة لأشخاص'
+                                  : "Tag people",
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 sheetController.collapse();
                                 bottomSheet(
                                     isScrollControlled: true,
                                     context: context,
                                     widget: BuildSearchFriends(
-                                      controller: context.read<CreatePostCubit>(),
+                                      controller:
+                                          context.read<CreatePostCubit>(),
                                       onSelectUser: (user) => context
                                           .read<CreatePostCubit>()
                                           .selectUsers(user),
@@ -327,54 +362,71 @@ class _CreatePostViewState extends State<CreatePostView> {
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.feelingIcon,
-                              title: context.isArabic?'شعور':"Feeling",
+                              title: context.isArabic ? 'شعور' : "Feeling",
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 sheetController.collapse();
                                 bottomSheet(
                                     isScrollControlled: true,
                                     context: context,
                                     widget: SelectFeelingView(
                                       feelings: context
-                                          .read<CreatePostCubit>()
-                                          .state.feelings ?? [],
-                                      onSelected: (FeelingEntity item) => context
-                                          .read<CreatePostCubit>()
-                                          .selectedFeeling(item: item),
+                                              .read<CreatePostCubit>()
+                                              .state
+                                              .feelings ??
+                                          [],
+                                      onSelected: (FeelingEntity item) =>
+                                          context
+                                              .read<CreatePostCubit>()
+                                              .selectedFeeling(item: item),
                                     ));
                               },
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.feelingIcon,
-                              title: context.isArabic?'نشاط':"Activity",
+                              title: context.isArabic ? 'نشاط' : "Activity",
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 sheetController.collapse();
                                 bottomSheet(
                                     isScrollControlled: true,
                                     context: context,
                                     widget: SelectActivity(
                                       activities: context
-                                          .read<CreatePostCubit>().state.activities ?? [],
-                                      onSelected: (ActivityEntity item) => context
-                                          .read<CreatePostCubit>()
-                                          .selectActivity(item: item),
+                                              .read<CreatePostCubit>()
+                                              .state
+                                              .activities ??
+                                          [],
+                                      onSelected: (ActivityEntity item) =>
+                                          context
+                                              .read<CreatePostCubit>()
+                                              .selectActivity(item: item),
                                     ));
                               },
                               hasDivider: true),
                           BuildSheetItem(
                               icon: Assets.locationIcon,
-                              title:state.place!=null||(state.place?.name.isEmpty??false)?context.isArabic?'ازالة الموقع':"Remove Location":context.isArabic?'موقع':"Check in",
-                              onTap: () async{
-      ManageVibration.vibrate();
+                              title: state.place != null ||
+                                      (state.place?.name.isEmpty ?? false)
+                                  ? context.isArabic
+                                      ? 'ازالة الموقع'
+                                      : "Remove Location"
+                                  : context.isArabic
+                                      ? 'موقع'
+                                      : "Check in",
+                              onTap: () async {
+                                ManageVibration.vibrate();
                                 // if(state.place!=null||(state.place?.name.isEmpty??false)){
                                 //   context.read<CreatePostCubit>().removeAddress();
                                 // }else{
-                                  PlaceEntity address = await fetchLocationAndAddress();
-                                  if(address.name.isNotEmpty){
-                                    context.read<CreatePostCubit>().setAddress(address);
-                                    sheetController.collapse();
-                                  }
+                                PlaceEntity address =
+                                    await fetchLocationAndAddress();
+                                if (address.name.isNotEmpty) {
+                                  context
+                                      .read<CreatePostCubit>()
+                                      .setAddress(address);
+                                  sheetController.collapse();
+                                }
                                 // }
                               },
                               hasDivider: true),
@@ -383,68 +435,88 @@ class _CreatePostViewState extends State<CreatePostView> {
                           //     title: "Live video",
                           //     onTap: () {},
                           //     hasDivider: true),
-                          if((state.gifImage==null&&(state.gifImage?.isEmpty??false))&&state.selectedLifeEvent==null&&(state.selectedLifeEvent?.id.isEmpty??false))BuildSheetItem(
-                              icon: Assets.backgroundIcon,
-                              title: context.isArabic?'لون الخلفية':"Background color",
-                              onTap: () {
-      ManageVibration.vibrate();
-                                controller.showRemoveBalletColors();
-                                sheetController.collapse();
-                              },
-                              hasDivider: true),
-                          if((state.gifImage==null||(state.gifImage?.isEmpty??false))&&(state.selectedLifeEvent==null||(state.selectedLifeEvent?.id.isEmpty??false)))BuildSheetItem(
-                              icon: Assets.cameraIcon,
-                              title: context.isArabic?'كاميرا':"Camera",
-                              color: context.isDarkMode?Colors.white:null,
-                              onTap: () async {
-      ManageVibration.vibrate();
-                                await controller.uploadPhoto(
-                                    context: context, isGallery: false);
-                                sheetController.collapse();
-                              },
-                              hasDivider: true),
-                          if((state.images==null||(state.images?.isEmpty??false))&&(state.selectedLifeEvent==null||(state.selectedLifeEvent?.id.isEmpty??false)))
+                          if ((state.gifImage == null &&
+                                  (state.gifImage?.isEmpty ?? false)) &&
+                              state.selectedLifeEvent == null &&
+                              (state.selectedLifeEvent?.id.isEmpty ?? false))
                             BuildSheetItem(
-                              icon: Assets.gifIcon,
-                              title: context.isArabic?'صورة متحركة':"GIF",
-                              onTap: () async {
-      ManageVibration.vibrate();
-                                print(state.images);
-                                print(state.images?.length);
-                                print(state.selectedLifeEvent);
-                                print(state.selectedLifeEvent?.id);
-                                sheetController.collapse();
-                                final gif = await GiphyGet.getGif(
-                                  context: context,
-                                  apiKey:
-                                      "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
-                                  lang: context.isArabic
-                                      ? GiphyLanguage.arabic
-                                      : GiphyLanguage.english,
-                                  randomID: "",
-                                  searchText: context.isArabic?'بحث عن صورة متحركة':"Search GIF",
-                                  tabColor: Colors.blue,
-                                );
-
-                                if (gif != null) {
+                                icon: Assets.backgroundIcon,
+                                title: context.isArabic
+                                    ? 'لون الخلفية'
+                                    : "Background color",
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  controller.showRemoveBalletColors();
                                   sheetController.collapse();
-                                  controller.onSelectGif(
-                                      gif.images?.original?.url ?? '');
-                                  print(gif.images?.original?.url);
-                                  // controller.onGifSelected(gif.images.original!.url);
-                                }
-                              },
-                              hasDivider: true),
-                          if((state.images==null||(state.images?.isEmpty??false))&&(state.gifImage==null||(state.gifImage?.isEmpty??false)))
-                          BuildSheetItem(
-                              icon: Assets.lifeEventIcon,
-                              title: context.isArabic?'حدث':"Life event",
-                              onTap: () {
-      ManageVibration.vibrate();
-                                sheetController.collapse();
-                                context.push(Routes.LIFEEVENT);
-                              },
-                              hasDivider: true),
+                                },
+                                hasDivider: true),
+                          if ((state.gifImage == null ||
+                                  (state.gifImage?.isEmpty ?? false)) &&
+                              (state.selectedLifeEvent == null ||
+                                  (state.selectedLifeEvent?.id.isEmpty ??
+                                      false)))
+                            BuildSheetItem(
+                                icon: Assets.cameraIcon,
+                                title: context.isArabic ? 'كاميرا' : "Camera",
+                                color: context.isDarkMode ? Colors.white : null,
+                                onTap: () async {
+                                  ManageVibration.vibrate();
+                                  await controller.uploadPhoto(
+                                      context: context, isGallery: false);
+                                  sheetController.collapse();
+                                },
+                                hasDivider: true),
+                          if ((state.images == null ||
+                                  (state.images?.isEmpty ?? false)) &&
+                              (state.selectedLifeEvent == null ||
+                                  (state.selectedLifeEvent?.id.isEmpty ??
+                                      false)))
+                            BuildSheetItem(
+                                icon: Assets.gifIcon,
+                                title: context.isArabic ? 'صورة متحركة' : "GIF",
+                                onTap: () async {
+                                  ManageVibration.vibrate();
+                                  print(state.images);
+                                  print(state.images?.length);
+                                  print(state.selectedLifeEvent);
+                                  print(state.selectedLifeEvent?.id);
+                                  sheetController.collapse();
+                                  final gif = await GiphyGet.getGif(
+                                    context: context,
+                                    apiKey:
+                                        "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
+                                    lang: context.isArabic
+                                        ? GiphyLanguage.arabic
+                                        : GiphyLanguage.english,
+                                    randomID: "",
+                                    searchText: context.isArabic
+                                        ? 'بحث عن صورة متحركة'
+                                        : "Search GIF",
+                                    tabColor: Colors.blue,
+                                  );
+
+                                  if (gif != null) {
+                                    sheetController.collapse();
+                                    controller.onSelectGif(
+                                        gif.images?.original?.url ?? '');
+                                    print(gif.images?.original?.url);
+                                    // controller.onGifSelected(gif.images.original!.url);
+                                  }
+                                },
+                                hasDivider: true),
+                          if ((state.images == null ||
+                                  (state.images?.isEmpty ?? false)) &&
+                              (state.gifImage == null ||
+                                  (state.gifImage?.isEmpty ?? false)))
+                            BuildSheetItem(
+                                icon: Assets.lifeEventIcon,
+                                title: context.isArabic ? 'حدث' : "Life event",
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  sheetController.collapse();
+                                  context.pushNamed(Routes.LIFEEVENT);
+                                },
+                                hasDivider: true),
                           // BuildSheetItem(
                           //     icon: Assets.musicIcon,
                           //     title: "Music",

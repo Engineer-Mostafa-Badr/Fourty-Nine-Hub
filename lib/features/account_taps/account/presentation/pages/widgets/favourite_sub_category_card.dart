@@ -34,8 +34,8 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
-        // context.push(
+        ManageVibration.vibrate();
+        // context.pushNamed(
         //   Routes.ADS,
         //   extra: AdsViewParams(
         //     mainCategory: widget.mainCategory,
@@ -111,15 +111,15 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                           : AppColors.PRIMARY_COLOR,
                       size: 40.h,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // if (AuthHelper().isLoggedIn()) {
-                        //   context.push(Routes.CREATEAD,
+                        //   context.pushNamed(Routes.CREATEAD,
                         //       extra: CategorizationEntity(
                         //           mainCategory: widget.mainCategory,
                         //           subCategory: widget.item));
                         // } else {
                         //   return pleaseLoginDialog(context);
-                        //   // context.push(Routes.LOGIN);
+                        //   // context.pushNamed(Routes.LOGIN);
                         // }
                       })
                 ],

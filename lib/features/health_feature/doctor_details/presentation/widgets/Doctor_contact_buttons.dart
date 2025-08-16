@@ -38,24 +38,25 @@ class DoctorContactButtons extends StatelessWidget {
                   backColor: AppColors.PRIMARY_COLOR,
                   textColor: Colors.white,
                   // onPressed: () {},
-                  onPressed:(){ 
-      ManageVibration.vibrate();
+                  onPressed: () {
+                    ManageVibration.vibrate();
                     !context.read<UserCubit>().isLoggedIn
-                      ? () {
-                    pleaseLoginDialog(context);
-                    // context.push(Routes.LOGIN);
-                  }
-                      : state.enabled == true
-                          ? () {
-                              LaunchURLHelper()
-                                  .call(phone: state.doctor?.phone ?? '');
-                            }
-                          : () async {
-                              SubscriptionMethod().subscribe(
-                                  subscribeId:
-                                      state.doctor?.subCategory.id ?? '',
-                                  title: LocaleKeys.ads.localize);
-                            };},
+                        ? () {
+                            pleaseLoginDialog(context);
+                            // context.pushNamed(Routes.LOGIN);
+                          }
+                        : state.enabled == true
+                            ? () {
+                                LaunchURLHelper()
+                                    .call(phone: state.doctor?.phone ?? '');
+                              }
+                            : () async {
+                                SubscriptionMethod().subscribe(
+                                    subscribeId:
+                                        state.doctor?.subCategory.id ?? '',
+                                    title: LocaleKeys.ads.localize);
+                              };
+                  },
                 ),
               ),
               const Sizer(),
@@ -68,9 +69,9 @@ class DoctorContactButtons extends StatelessWidget {
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
-                    pleaseLoginDialog(context);
-                    // context.push(Routes.LOGIN);
-                  }
+                          pleaseLoginDialog(context);
+                          // context.pushNamed(Routes.LOGIN);
+                        }
                       : state.enabled == true
                           ? () {
                               LaunchURLHelper()
@@ -88,7 +89,7 @@ class DoctorContactButtons extends StatelessWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     bottomSheet(
                         context: context,
                         widget: ReportView(
@@ -153,13 +154,14 @@ class DoctorContactButtons extends StatelessWidget {
                                 const Sizer(
                                   height: 17,
                                 ),
+
                                 /// on close Button
                                 Row(
                                   children: [
                                     const Spacer(),
                                     InkWell(
                                         onTap: () async {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           Navigator.of(context).pop();
                                         },
                                         child: CircleAvatar(
@@ -181,8 +183,7 @@ class DoctorContactButtons extends StatelessWidget {
                                     color: AppColors.whiteColor,
                                     backColor: AppColors.PRIMARY_COLOR,
                                     onPressed: () {
-
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                     }),
                                 const Sizer(
                                   height: 30,
@@ -193,8 +194,7 @@ class DoctorContactButtons extends StatelessWidget {
                                     color: AppColors.black,
                                     backColor: AppColors.BG_GRAY_COLOR,
                                     onPressed: () {
-
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                     })
                               ],
                             ),
@@ -203,7 +203,7 @@ class DoctorContactButtons extends StatelessWidget {
                       },
                     ),
                     // !context.read<UserCubit>().isLoggedIn
-                    //     ? () => context.push(Routes.LOGIN)
+                    //     ? () => context.pushNamed(Routes.LOGIN)
                     //     : state.enabled == true
                     //         ? () {
                     //             LaunchURLHelper()
@@ -222,9 +222,9 @@ class DoctorContactButtons extends StatelessWidget {
                   child: InkWell(
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-                      pleaseLoginDialog(context);
-                      // context.push(Routes.LOGIN);
-                    }
+                            pleaseLoginDialog(context);
+                            // context.pushNamed(Routes.LOGIN);
+                          }
                         : state.enabled == true
                             ? () {}
                             : () async {
@@ -241,7 +241,7 @@ class DoctorContactButtons extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       bottomSheet(
                           context: context,
                           widget: ReportView(

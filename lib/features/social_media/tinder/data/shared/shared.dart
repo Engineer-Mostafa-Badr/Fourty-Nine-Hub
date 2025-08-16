@@ -272,18 +272,20 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 
     Navigator.pop(context);
 
-    showAnimatedDialog(context, AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-          title: title == LocaleKeys.gift_body_gift_sent.tr()
-              ? const SizedBox.shrink()
-              : _buildDialogTitle(icon, title, primaryColor),
-          content: title == LocaleKeys.gift_body_gift_sent.tr()
-              ? _buildGiftContent(gift!, message)
-              : _buildMessageContent(message),
-          actions: _buildDialogActions(context, isError, buttonColor),
-          actionsAlignment: MainAxisAlignment.end,
-        ),
+    showAnimatedDialog(
+      context,
+      AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+        title: title == LocaleKeys.gift_body_gift_sent.tr()
+            ? const SizedBox.shrink()
+            : _buildDialogTitle(icon, title, primaryColor),
+        content: title == LocaleKeys.gift_body_gift_sent.tr()
+            ? _buildGiftContent(gift!, message)
+            : _buildMessageContent(message),
+        actions: _buildDialogActions(context, isError, buttonColor),
+        actionsAlignment: MainAxisAlignment.end,
+      ),
     );
   }
 
@@ -375,7 +377,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       if (isError)
         TextButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             serviceLocator<SubscriptionController>()
                 .showActiveSubscriptionAmounts(walletType: WalletTypes.balance);
           },
@@ -403,7 +405,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       {String? receiverId, required void Function(GiftData) selectGift}) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         // context.read<StreamCubit>().selectGift(gift);
         // print(
         //     'selected ${context.read<StreamCubit>().state.selectedGifts.toString()}');
@@ -528,7 +530,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                                       Colors.grey.withOpacity(0.9)),
                             ),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               serviceLocator<SubscriptionController>()
                                   .showActiveSubscriptionAmounts(
                                       walletType: WalletTypes.balance);
@@ -611,9 +613,9 @@ pleaseLoginWidget(context) {
       child: Center(
         child: OutlinedButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             return pleaseLoginDialog(context);
-            // context.push(Routes.LOGIN);
+            // context.pushNamed(Routes.LOGIN);
           },
           style: ButtonStyle(
               foregroundColor: WidgetStatePropertyAll(

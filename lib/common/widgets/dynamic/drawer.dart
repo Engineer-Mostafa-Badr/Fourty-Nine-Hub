@@ -130,13 +130,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     ),
                                   );
                                 }),
-                            if (context.read<UserCubit>().isLoggedIn)drawerListTile(
-                                image: Assets.changePassword,
-                                label: LocaleKeys.changePassword.localize,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.push(Routes.CHANGEPASSWORDSECOND);
-                                }),
+                            if (context.read<UserCubit>().isLoggedIn)
+                              drawerListTile(
+                                  image: Assets.changePassword,
+                                  label: LocaleKeys.changePassword.localize,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    context
+                                        .pushNamed(Routes.CHANGEPASSWORDSECOND);
+                                  }),
 
                             // drawerListTile(
                             //   // icon: Icons.settings,
@@ -145,7 +147,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //     onTap: () {
                             //       ManageVibration.vibrate();
                             //       context.pop();
-                            //       context.push(Routes.SETTINGS);
+                            //       context.pushNamed(Routes.SETTINGS);
                             //     }),
                             // drawerListTile(
                             //     // icon: Icons.privacy_tip,
@@ -160,7 +162,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //         AdInterstitialTop.showInterstitialAd();
                             //
                             //         context.pop();
-                            //         context.push(Routes.PRIVACY);
+                            //         context.pushNamed(Routes.PRIVACY);
                             //       }
                             //     },),
                             drawerListTile(
@@ -172,8 +174,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   AdInterstitialTop.showInterstitialAd();
 
                                   context.pop();
-                                  context.push(context.read<UserCubit>().isLoggedIn?Routes.PRIVACY:Routes.FirstLoginScreen);
-
+                                  context.pushNamed(
+                                      context.read<UserCubit>().isLoggedIn
+                                          ? Routes.PRIVACY
+                                          : Routes.FirstLoginScreen);
                                 }),
 
                             drawerListTile(
@@ -184,11 +188,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   AdInterstitialTop.loadIntersitialAd();
                                   AdInterstitialTop.showInterstitialAd();
                                   context.pop();
-                                  return context.push(Routes.POLICY,
+                                  return context.pushNamed(Routes.POLICY,
                                       extra: false);
                                 }),
                             drawerListTile(
-                              // icon: Icons.share,
+                                // icon: Icons.share,
                                 image: Assets.share_app_icon,
                                 label: LocaleKeys.shareApp.localize,
                                 onTap: () {
@@ -197,10 +201,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
-                                  context.push(Routes.SHAREAPP);
+                                  context.pushNamed(Routes.SHAREAPP);
                                 }),
                             drawerListTile(
-                              // icon: Icons.message,
+                                // icon: Icons.message,
                                 image: Assets.contact_us_icon,
                                 label: LocaleKeys.contactUs.localize,
                                 onTap: () {
@@ -209,10 +213,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
-                                  context.push(Routes.CONTACTUS);
+                                  context.pushNamed(Routes.CONTACTUS);
                                 }),
                             drawerListTile(
-                              // icon: Icons.logout,
+                                // icon: Icons.logout,
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
@@ -225,24 +229,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .drawerTheme
                                           .backgroundColor,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
                                       content: const LogoutWidget(),
                                     ),
                                   );
                                 }),
                             drawerListTile(
-                              // icon: Icons.logout,
+                                // icon: Icons.logout,
                                 image: Assets.deleteAccount,
                                 requireLogin: true,
                                 label: LocaleKeys.deleteAccount.localize,
                                 onTap: () async {
                                   ManageVibration.vibrate();
                                   context.read<SettingCubit>().deleteAccount();
-                                  final prefs = await SharedPreferences.getInstance();
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
                                   await prefs.setBool("ISLOGIN", false);
-                                  context.go(Routes.HOME);
+                                  context.goNamed(Routes.HOME);
                                 }),
                           ],
                         ),
@@ -262,7 +266,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               context.pop();
-                              context.push(Routes.QURAAN);
+                              context.pushNamed(Routes.QURAAN);
                             }),
                         drawerRollWidget(
                             image: Assets.azkar,
@@ -272,7 +276,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               context.pop();
-                              context.push(Routes.AZKAAR);
+                              context.pushNamed(Routes.AZKAAR);
                             }),
                         drawerRollWidget(
                             label: LocaleKeys.ride.localize,
@@ -280,7 +284,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             onTap: () {
                               ManageVibration.vibrate();
                               context.pop();
-                              context.push(Routes.RIDE_HOME);
+                              context.pushNamed(Routes.RIDE_HOME);
                             }),
                         drawerRollWidget(
                             label: LocaleKeys.tripJoin.localize,
@@ -290,10 +294,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount('tripJoinCount', context);
-                              context.push(context.read<UserCubit>().isLoggedIn?
-                              Routes.newRideModeScreen:
-                              Routes.FirstLoginScreen
-                              );
+                              context.pushNamed(
+                                  context.read<UserCubit>().isLoggedIn
+                                      ? Routes.newRideModeScreen
+                                      : Routes.FirstLoginScreen);
                             }),
                         // drawerRollWidget(
                         //   label: LocaleKeys.loading.localize,
@@ -311,7 +315,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.push(Routes.VISITA);
+                            context.pushNamed(Routes.VISITA);
                           },
                         ),
                         drawerRollWidget(
@@ -320,7 +324,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.push(Routes.FOOD);
+                            context.pushNamed(Routes.FOOD);
                           },
                         ),
                         drawerRollWidget(
@@ -329,7 +333,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.push(Routes.MARRIAGESUBCATEGORIES);
+                            context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
                           },
                         ),
                         drawerRollWidget(
@@ -340,7 +344,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             AdInterstitialTop.loadIntersitialAd();
                             AdInterstitialTop.showInterstitialAd();
                             HandleCashback.setCount('beAStarCount', context);
-                            context.push(Routes.BE_STAR);
+                            context.pushNamed(Routes.BE_STAR);
                           },
                         ),
                         drawerRollWidget(
@@ -352,7 +356,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             AdInterstitialTop.showInterstitialAd();
                             HandleCashback.setCount('bookingCount', context);
                             soonDialog(context);
-                            // context.push(Routes.BE_STAR);
+                            // context.pushNamed(Routes.BE_STAR);
                           },
                         ),
                         drawerRollWidget(
@@ -361,7 +365,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.push(Routes.Tinder);
+                            context.pushNamed(Routes.Tinder);
                           },
                         ),
                         drawerRollWidget(
@@ -370,7 +374,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.push(Routes.REELS);
+                            context.pushNamed(Routes.REELS);
                           },
                         ),
                         drawerRollWidget(
@@ -382,7 +386,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.SPOTLIGHT);
+                            context.pushNamed(Routes.SPOTLIGHT);
                           },
                         ),
                         // drawerRollWidget(
@@ -391,7 +395,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         //   onTap: () {
 
                         //     context.pop();
-                        //     context.push(Routes.MEETINGROOM);
+                        //     context.pushNamed(Routes.MEETINGROOM);
                         //   },
                         // ),
                         drawerRollWidget(
@@ -403,7 +407,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.LIVE);
+                            context.pushNamed(Routes.LIVE);
                           },
                         ),
                         // drawerRollWidget(
@@ -411,7 +415,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         //   image: Assets.snap,
                         //   onTap: () {
                         //     context.pop();
-                        //     context.push(Routes.SNAP);
+                        //     context.pushNamed(Routes.SNAP);
                         //   },
                         // ),
 
@@ -424,18 +428,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.CHAT,
+                            context.pushNamed(Routes.CHAT,
                                 extra: ChatsViewParams());
                           },
                         ),
                         drawerRollWidget(
-                          label: context.isArabic?'العاب':"Games",
+                          label: context.isArabic ? 'العاب' : "Games",
                           image: Assets.gamesIcon,
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
                             soonDialog(context);
-                            // context.push(Routes.CHAT,
+                            // context.pushNamed(Routes.CHAT,
                             //     extra: ChatsViewParams());
                           },
                         ),
@@ -446,11 +450,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.push(Routes.CREATECOMPANYAD);
+                            context.pushNamed(Routes.CREATECOMPANYAD);
                           },
                         ),
                         drawerRollWidget(
-                          label: context.isArabic?'المزاد':"Auction",
+                          label: context.isArabic ? 'المزاد' : "Auction",
                           image: Assets.bidIcon,
                           onTap: () {
                             ManageVibration.vibrate();
@@ -458,7 +462,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.MAZADAT);
+                            context.pushNamed(Routes.MAZADAT);
                           },
                         ),
                         drawerRollWidget(
@@ -470,11 +474,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.CHANCE);
+                            context.pushNamed(Routes.CHANCE);
                           },
                         ),
                         drawerRollWidget(
-                          label: context.isArabic?'عملات':"Exchange",
+                          label: context.isArabic ? 'عملات' : "Exchange",
                           image: Assets.moneyExchange,
                           onTap: () {
                             ManageVibration.vibrate();
@@ -521,7 +525,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           : AppColors.PRIMARY_COLOR,
                       onPressed: () {
                         context.pop();
-                        context.push(Routes.LOGIN);
+                        context.pushNamed(Routes.LOGIN);
                       },
                     ),
                     Label(
@@ -547,7 +551,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             : AppColors.PRIMARY_COLOR,
                         onPressed: () {
                           context.pop();
-                          context.push(Routes.REGISTER);
+                          context.pushNamed(Routes.REGISTER);
                         }),
                     Label(
                       text: LocaleKeys.register.localize,
@@ -575,10 +579,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               SizedBox(
                 width: 4.w,
               ),
-              Label(
-                  text: context.isArabic
-                      ? "اهتزاز"
-                      : "Vibration"),
+              Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
           ),
         ],
@@ -816,24 +817,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget drawerRollWidget(
       {required String label,
-      required String image, bool? isSvg=false,
+      required String image,
+      bool? isSvg = false,
       required void Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Column(
         children: [
-          if(isSvg!=true)Image.asset(
-            image,
-            width: 35.h,
-            height: 35.h,
-            fit: BoxFit.cover,
-          ),
-          if(isSvg==true)SvgPicture.asset(
-            image,
-            width: 35.h,
-            height: 35.h,
-            fit: BoxFit.cover,
-          ),
+          if (isSvg != true)
+            Image.asset(
+              image,
+              width: 35.h,
+              height: 35.h,
+              fit: BoxFit.cover,
+            ),
+          if (isSvg == true)
+            SvgPicture.asset(
+              image,
+              width: 35.h,
+              height: 35.h,
+              fit: BoxFit.cover,
+            ),
           Label(
             text: label,
             style: Styles.mediumText(
@@ -855,7 +859,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         AdInterstitialTop.showInterstitialAd();
         if (context.read<UserCubit>().isLoggedIn) {
           Navigator.pop(context);
-          context.go(Routes.LUCKYWHEEL);
+          context.goNamed(Routes.LUCKYWHEEL);
         } else {
           return pleaseLoginDialog(context);
 
@@ -991,7 +995,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     // context.read<GetWalletCubit>();
     return Padding(
-      padding: const EdgeInsets.only(top:8.0,left: 8,right: 8),
+      padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
       child: Column(
         children: [
           Row(
@@ -1232,7 +1236,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     GestureDetector(
                       onTap: () {
                         ManageVibration.vibrate();
-                        // context.push(
+                        // context.pushNamed(
                         //   Routes.WALLET,
                         // );
                       },
@@ -1263,8 +1267,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     GestureDetector(
                       onTap: () {
                         ManageVibration.vibrate();
-                        context.push(Routes.EDITPROFILE);
-                        // context.push(
+                        context.pushNamed(Routes.EDITPROFILE);
+                        // context.pushNamed(
                         //   Routes.WALLET,
                         // );
                       },
@@ -1306,8 +1310,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CustomSwitchButton(
-                      value:
-                          context.read<CustomPageCubit>().state.activate!.customPage,
+                      value: context
+                          .read<CustomPageCubit>()
+                          .state
+                          .activate!
+                          .customPage,
                       onChanged: (value) async {
                         showAnimatedDialog(
                           context,
@@ -1357,7 +1364,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     SizedBox(
                       width: 4.w,
                     ),
-                    Label(text: context.isArabic?"مخصصه":"Custom"),
+                    Label(text: context.isArabic ? "مخصصه" : "Custom"),
                   ],
                 ),
               ),
@@ -1373,7 +1380,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           value: floatingNavigatorCubit.floatingNavigatorEnable,
                           onChanged: (value) async {
                             Navigator.pop(context);
-                            floatingNavigatorCubit.changeFloatingNavigatorEnable();
+                            floatingNavigatorCubit
+                                .changeFloatingNavigatorEnable();
                           },
                         );
                       },
@@ -1381,17 +1389,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     SizedBox(
                       width: 4.w,
                     ),
-                    Label(text: context.isArabic?"تحكم":"Control"),
+                    Label(text: context.isArabic ? "تحكم" : "Control"),
                   ],
                 ),
               ),
             ],
           ),
-
           Row(
             children: [
               Expanded(
-                child:Row(
+                child: Row(
                   children: [
                     BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
                       builder: (context, state) {
@@ -1409,11 +1416,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       width: 4.w,
                     ),
                     Label(
-                      text: context.isArabic?"مسطره":"Ruler",
+                      text: context.isArabic ? "مسطره" : "Ruler",
                     ),
                   ],
                 ),
-
               ),
               Expanded(
                 child: BlocBuilder<ThemeCubit, ThemeStates>(
@@ -1437,10 +1443,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ),
                         themeCubit.isDarkTheme
                             ? Label(
-                                text: context.isArabic?"فاتح":"Light",
+                                text: context.isArabic ? "فاتح" : "Light",
                               )
                             : Label(
-                                text: context.isArabic?"غامق":"Dark",
+                                text: context.isArabic ? "غامق" : "Dark",
                               ),
                       ],
                     );
@@ -1464,10 +1470,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               SizedBox(
                 width: 4.w,
               ),
-              Label(
-                  text: context.isArabic
-                      ? "اهتزاز"
-                      : "Vibration"),
+              Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
           )
         ],

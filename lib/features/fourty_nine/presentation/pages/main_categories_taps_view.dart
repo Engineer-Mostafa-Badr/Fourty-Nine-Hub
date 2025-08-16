@@ -84,7 +84,6 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
           isFloatingButtonVisible = false;
         } else {
           isFloatingButtonVisible = true;
-
         }
         setState(() {});
       });
@@ -93,7 +92,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     //   stateSubCategories: [],
     // );
     context.read<MainCategoriesTapsCubit>().scrollController.addListener(() {
-      if (context.read<MainCategoriesTapsCubit>().scrollController.position.userScrollDirection ==
+      if (context
+              .read<MainCategoriesTapsCubit>()
+              .scrollController
+              .position
+              .userScrollDirection ==
           ScrollDirection.reverse) {
         isFloatingButtonVisible = false;
       } else {
@@ -222,7 +225,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         onTap: () {
                           if (context.isUserLoggedIn) {
                             Navigator.pop(context);
-                            context.push(Routes.CREATEAD,
+                            context.pushNamed(Routes.CREATEAD,
                                 extra: CategorizationEntity(
                                     mainCategory: context
                                         .read<MainCategoriesTapsCubit>()
@@ -231,7 +234,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           } else {
                             return pleaseLoginDialog(context);
 
-                            // context.push(Routes.LOGIN);
+                            // context.pushNamed(Routes.LOGIN);
                           }
                         },
                       ),
@@ -313,7 +316,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               print(labelName);
                               // if (controller.mainCategories[i].id ==
                               //     '62c8b5b09332225799fe335e') {
-                              //   context.push(Routes.MARRIAGESUBCATEGORIES,
+                              //   context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
                               //       extra: controller.mainCategories[i]);
                               // }
                             },
@@ -474,7 +477,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isMyAdsOpen');
                               }
-                              // context.push(Routes.MYADDS);
+                              // context.pushNamed(Routes.MYADDS);
                             },
                           ),
                         ),
@@ -767,7 +770,7 @@ class _MainCategoriesGridViewCustomPageState
                           onTap: () {
                             if (context.isUserLoggedIn) {
                               Navigator.pop(context);
-                              context.push(
+                              context.pushNamed(
                                 Routes.CREATEAD,
                                 extra: CategorizationEntity(
                                   mainCategory: context
@@ -779,7 +782,7 @@ class _MainCategoriesGridViewCustomPageState
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                             }
                           },
                         ),
@@ -858,7 +861,7 @@ class _MainCategoriesGridViewCustomPageState
                               print(labelName);
                               // if (controller.mainCategories[i].id ==
                               //     '62c8b5b09332225799fe335e') {
-                              //   context.push(Routes.MARRIAGESUBCATEGORIES,
+                              //   context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
                               //       extra: controller.mainCategories[i]);
                               // }
                             },
@@ -1019,7 +1022,7 @@ class _MainCategoriesGridViewCustomPageState
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isMyAdsOpen');
                               }
-                              // context.push(Routes.MYADDS);
+                              // context.pushNamed(Routes.MYADDS);
                             },
                           ),
                         ),
@@ -1231,12 +1234,12 @@ class _MainCategoriesGrideViewSectionState
                         HandleCashback.setCount('mainCategoriesCount', context);
                         if (widget.state.customPage![index].id ==
                             '62c8b5b09332225799fe335e') {
-                          context.push(Routes.MARRIAGESUBCATEGORIES,
+                          context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
                               extra: widget.state.customPage![index]);
                         } else {
                           print(
                               'mainCategory.id ${widget.state.customPage![index].id} in gredview');
-                          context.push(Routes.CustomPageSubCategoriesView,
+                          context.pushNamed(Routes.CustomPageSubCategoriesView,
                               extra: CustomPageSubCategoriesParams(
                                 mainCategory: widget.state.customPage![index],
                                 isCustomPage: true,

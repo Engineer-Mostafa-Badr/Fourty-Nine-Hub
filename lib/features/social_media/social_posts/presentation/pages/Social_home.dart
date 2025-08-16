@@ -176,7 +176,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: InkWell(
-        onTap: () => context.push(Routes.GIFT),
+        onTap: () => context.pushNamed(Routes.GIFT),
         child: Label(
           text: LocaleKeys.socialExplain.localize,
           style: Styles.headerText(
@@ -214,12 +214,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
           label: context.isArabic ? 'فيس' : LocaleKeys.Face.localize,
         ),
         if (widget.params?.hideAppBar == false)
-        _buildTab(
-          icon: context.isDarkMode
-              ? Assets.instagramAppBarIconDark
-              : Assets.instagramAppBarIcon,
-          label: LocaleKeys.Insta.localize,
-        ),
+          _buildTab(
+            icon: context.isDarkMode
+                ? Assets.instagramAppBarIconDark
+                : Assets.instagramAppBarIcon,
+            label: LocaleKeys.Insta.localize,
+          ),
         _buildTab(
           icon: context.isDarkMode
               ? Assets.twitterAppBarIconDark
@@ -251,7 +251,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 right: 0,
                 child: InkWell(
                   onTap: () {
-      manageVibration.ManageVibration.vibrate();
+                    manageVibration.ManageVibration.vibrate();
                     setState(() {
                       isShowExplain = !isShowExplain;
                     });
@@ -323,8 +323,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
     );
   }
 
-
-
   Widget _buildInstagramTab() {
     return MultiBlocProvider(
       providers: [
@@ -381,10 +379,10 @@ class _SocialHomeViewState extends State<SocialHomeView>
     final isSelected = index == 0;
     return GestureDetector(
       onTap: () {
-      manageVibration.ManageVibration.vibrate();
+        manageVibration.ManageVibration.vibrate();
         if (index == 1) {
           context.read<UserCubit>().isLoggedIn
-              ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
+              ? context.pushNamed(Routes.OTHERSACCOUNT, extra: user?.id)
               : pleaseLoginDialog(context);
         }
       },

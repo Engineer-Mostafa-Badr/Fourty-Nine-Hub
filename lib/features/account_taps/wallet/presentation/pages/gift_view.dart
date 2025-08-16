@@ -26,8 +26,8 @@ class GiftView extends StatelessWidget {
           actions: [
             CustomWinnerAppbar(
               onPressed: () {
-      ManageVibration.vibrate();
-                context.push(Routes.WINNERSGift);
+                ManageVibration.vibrate();
+                context.pushNamed(Routes.WINNERSGift);
               },
             ),
           ],
@@ -35,8 +35,7 @@ class GiftView extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) =>
-        serviceLocator<GiftTwoCubit>()
-          ..getAllData(context),
+            serviceLocator<GiftTwoCubit>()..getAllData(context),
         child: const GiftViewBody(),
       ),
     );

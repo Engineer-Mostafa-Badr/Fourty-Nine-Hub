@@ -59,7 +59,7 @@ class _AdCardState extends State<AdCard> {
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+        onTap: () => context.pushNamed(Routes.ADdetails, extra: widget.item.id),
         child: Container(
           width: kToolbarHeight * 2.5,
           height: 600.h,

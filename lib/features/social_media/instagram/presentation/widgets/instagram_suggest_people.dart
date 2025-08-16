@@ -65,18 +65,17 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
-      ManageVibration.vibrate();
-                              context.push(Routes.InstagramSuggestPeople);
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              context.pushNamed(Routes.InstagramSuggestPeople);
                             },
                             child: Label(
                               text: LocaleKeys.viewAll.localize,
                               style: Styles.headerText(
-                                decoration: TextDecoration.underline,
-                                decorationThickness: 1.w,
-                                fontSize: 28,
-                                color: AppColors.SECONDARY_COLOR
-                              ),
+                                  decoration: TextDecoration.underline,
+                                  decorationThickness: 1.w,
+                                  fontSize: 28,
+                                  color: AppColors.SECONDARY_COLOR),
                             ),
                           )
                         ],
@@ -120,8 +119,9 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                         .itemList![index];
                                     return InkWell(
                                       onTap: () {
-      ManageVibration.vibrate();
-                                        context.push(Routes.INSTAGRAMPROFILE,
+                                        ManageVibration.vibrate();
+                                        context.pushNamed(
+                                            Routes.INSTAGRAMPROFILE,
                                             extra: controller
                                                 .suggestUserPagingController
                                                 .itemList?[index]
@@ -138,7 +138,8 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                           border: Border.all(
-                                              color: AppColors.DIVIDER_GRAY_COLOR),
+                                              color:
+                                                  AppColors.DIVIDER_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
@@ -149,7 +150,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                   AlignmentDirectional.topEnd,
                                               child: InkWell(
                                                 onTap: () async {
-      ManageVibration.vibrate();
+                                                  ManageVibration.vibrate();
                                                   bool data = await controller
                                                       .removeSuggestUser(
                                                           context: context,
@@ -303,7 +304,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                       Expanded(
                                                                                         child: InkWell(
                                                                                           onTap: () async {
-      ManageVibration.vibrate();
+                                                                                            ManageVibration.vibrate();
                                                                                             if (messageController.text.isNotEmpty) {
                                                                                               var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                               if (result == true) {
@@ -333,7 +334,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                       Expanded(
                                                                                         child: TextButton(
                                                                                           onPressed: () {
-      ManageVibration.vibrate();
+                                                                                            ManageVibration.vibrate();
                                                                                             Navigator.of(context).pop(); // Close the dialog
                                                                                           },
                                                                                           child: Label(

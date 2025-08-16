@@ -67,7 +67,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               print(serviceLocator<UserCubit>().state.data.toString());
 
               Navigator.pop(context);
-              context.push(Routes.HOME);
+              context.pushNamed(Routes.HOME);
 
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
@@ -109,7 +109,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                         horizontal: 8),
                                     child: ElevatedButton(
                                       onPressed: () {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         Navigator.of(context).pop();
                                       },
                                       style: ElevatedButton.styleFrom(

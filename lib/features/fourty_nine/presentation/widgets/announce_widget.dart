@@ -61,7 +61,7 @@ class AnnounceWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         child: InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }
@@ -69,13 +69,13 @@ class AnnounceWidget extends StatelessWidget {
             print(item.titleEn);
             if (UserCubit.to.isLoggedIn == false) {
               return pleaseLoginDialog(context);
-              // context.push(Routes.LOGIN);
+              // context.pushNamed(Routes.LOGIN);
               // return;
             }
             if (item.id == '67700fc734004152c40f8b71') {
-              context.push(Routes.GIFT);
+              context.pushNamed(Routes.GIFT);
             } else if (item.id == '6770102e34004152c40f8b9a') {
-              context.push(Routes.CASHBACK);
+              context.pushNamed(Routes.CASHBACK);
             } else if (item.id == '67700f4934004152c40f8b48') {
               Navigator.push(
                 context,
@@ -96,7 +96,7 @@ class AnnounceWidget extends StatelessWidget {
               // ),
               // );
             }
-            // context.push(Routes.GIFT);
+            // context.pushNamed(Routes.GIFT);
           },
           child: Stack(
             children: [

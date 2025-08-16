@@ -527,8 +527,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
             label: LocaleKeys.book.localize,
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
-      ManageVibration.vibrate();
-              // context.push(Routes.RESTAURANTDETAILS, extra: item);
+              ManageVibration.vibrate();
+              // context.pushNamed(Routes.RESTAURANTDETAILS, extra: item);
             },
           ),
         ],
@@ -600,7 +600,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                 backColor: AppColors.PRIMARY_COLOR,
                                 color: AppColors.whiteColor,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   // _showFreeCallBottomSheet(context, item);
                                 },
@@ -610,7 +610,7 @@ class CallMessageReportButtons extends StatelessWidget {
                                 backColor: AppColors.cD9D9D9,
                                 color: AppColors.black,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   _showRegularCallBottomSheet(
                                       context, item); // Open second
@@ -659,7 +659,7 @@ class CallMessageReportButtons extends StatelessWidget {
             icon: const Icon(Icons.report),
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -787,7 +787,7 @@ class CallMessageReportButtons extends StatelessWidget {
                       color: AppColors.whiteColor,
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         final enteredNumber = phoneController.text.trim();
                         if (isBookingForAnotherClient) {
                           if (enteredNumber.isEmpty) {

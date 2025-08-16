@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.INSTALLMENTDETAILS),
+      onTap: () => context.pushNamed(Routes.INSTALLMENTDETAILS),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

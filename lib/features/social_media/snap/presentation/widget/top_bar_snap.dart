@@ -165,13 +165,13 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
             children: [
               GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
-                    context.push(Routes.OTHERSACCOUNT,
+                    context.pushNamed(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
                   } else {
                     return pleaseLoginDialog(context);
-                    // context.go(Routes.LOGIN);
+                    // context.goNamed(Routes.LOGIN);
                   }
                 },
                 child: CircleAvatar(
@@ -191,8 +191,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
               ),
               IconButton(
                   onPressed: () {
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   },
                   icon: const Icon(
                     FontAwesomeIcons.shareNodes,

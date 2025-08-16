@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'widgets/map_section.dart';
 
-
-
 class RideRequestScreen extends StatelessWidget {
   const RideRequestScreen({super.key});
 
@@ -29,10 +27,10 @@ class RideRequestScreen extends StatelessWidget {
           //       price: 150,
           //       driverImage: "https://maps.gstatic.com/tactile/pane/default_geocode-2x.png",
           //       onAccept: () {
-          //         context.push(Routes.RideStatusScreen);
+          //         context.pushNamed(Routes.RideStatusScreen);
           //       },
           //       onRefuse: () {
-          //         context.push(Routes.RideStatusScreen);
+          //         context.pushNamed(Routes.RideStatusScreen);
           //
           //       },
           //     ),
@@ -49,7 +47,6 @@ class RideRequestScreen extends StatelessWidget {
           //     },
           //   ),
           // ),
-
         ],
       ),
     );

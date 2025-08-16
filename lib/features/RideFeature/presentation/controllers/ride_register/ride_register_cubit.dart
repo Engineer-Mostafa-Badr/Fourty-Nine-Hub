@@ -1048,12 +1048,12 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onRemoveDriverData(BuildContext context) async {
     await Storage().removeDriverEntity();
-    context.push(Routes.RIDE_HOME);
+    context.pushNamed(Routes.RIDE_HOME);
   }
 
   onRemoveLoaderData(BuildContext context) async {
     await Storage().removeLoaderEntity();
-    context.push(Routes.RIDE_HOME);
+    context.pushNamed(Routes.RIDE_HOME);
   }
 
   onRemoveModel() {
@@ -1065,7 +1065,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onRemoveNoSocketData(BuildContext context) async {
     await Storage().removeDriverNoSocketEntity();
-    context.push(Routes.RIDE_HOME);
+    context.pushNamed(Routes.RIDE_HOME);
   }
 
   onSaveRegisterData(BuildContext context, List<String> subCategories) async {
@@ -1095,7 +1095,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         subcategoryIds: subCategories);
     await Storage().saveDriverEntity(params);
     await Storage().removeDriverNoSocketEntity();
-    context.push(Routes.RIDE_HOME);
+    context.pushNamed(Routes.RIDE_HOME);
   }
 
   onSaveRegisterLoaderData(
@@ -1114,7 +1114,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       vehicleYear: rideVehicleProductionYearController.text,
     );
     await Storage().saveLoaderEntity(params);
-    context.push(Routes.RIDE_HOME);
+    context.pushNamed(Routes.RIDE_HOME);
   }
 
   onSaveRegisterNoSocketData(
@@ -1139,7 +1139,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     RegisterRideNotSpecialEntity? data =
         await Storage().getDriverNoSocketEntity();
     print("data?.papappa${data?.toJson()}");
-    context.push(Routes.RIDE_HOME);
+    context.pushNamed(Routes.RIDE_HOME);
   }
 
   onSelectBrand(String brand, BuildContext context,
@@ -1412,7 +1412,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   onSubmitSelectShippingSubCategories(BuildContext context) async {
     emit(state.copyWith(registerType: 'noSocket', isShipping: true));
-    context.push(Routes.personalInformationScreen,
+    context.pushNamed(Routes.personalInformationScreen,
         extra: RideFeatureRegisterParams(
             isSocket: false,
             isShipping: true,
@@ -1444,14 +1444,14 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           .toList();
       emit(state.copyWith(registerType: 'socket', isShipping: false));
       print("selectedSubCategories $selectedSubCategories");
-      context.push(Routes.personalInformationScreen,
+      context.pushNamed(Routes.personalInformationScreen,
           extra: RideFeatureRegisterParams(
               isSocket: true,
               isShipping: false,
               subCategoriesId: selectedSubCategories));
     } else {
       emit(state.copyWith(registerType: 'noSocket', isShipping: false));
-      context.push(Routes.personalInformationScreen,
+      context.pushNamed(Routes.personalInformationScreen,
           extra: RideFeatureRegisterParams(
               isSocket: false,
               isShipping: false,

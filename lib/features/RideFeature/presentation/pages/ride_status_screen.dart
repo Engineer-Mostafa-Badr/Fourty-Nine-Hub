@@ -70,10 +70,10 @@ class RideStatusScreen extends StatelessWidget {
                               driverRating: 12.2,
                               driverName: driverName,
                               onContactDriver: () {
-                                context.push(Routes.ratingClientScreen);
+                                context.pushNamed(Routes.ratingClientScreen);
                               },
                               onSafety: () {
-                                context.push(Routes.rideArrivedScreen);
+                                context.pushNamed(Routes.rideArrivedScreen);
                               },
                               is_show_message: true,
                               onMessage: () {},
@@ -106,7 +106,7 @@ class RideStatusScreen extends StatelessWidget {
                               },
                               fromLocation: 'أول العاشر من رمضان',
                               toLocation:
-                              'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                                  'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               onGoogleMap: () {},
                               showOTP: false,
                               showCancelButton: false,
@@ -170,7 +170,7 @@ class ActionButtonsWidget extends StatelessWidget {
           ),
           _buildActionCircle(
             icon: Icons.phone,
-            label: context.isArabic?'اتصل بالعميل':'Contact Client',
+            label: context.isArabic ? 'اتصل بالعميل' : 'Contact Client',
             onTap: onContactDriver,
           ),
           _buildActionCircle(
@@ -243,8 +243,8 @@ Widget buildDriverCircle({
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child:ImageFromInternet(
-                image:driverImageUrl??'',
+              child: ImageFromInternet(
+                image: driverImageUrl ?? '',
                 fit: BoxFit.cover,
               ),
             ),
@@ -261,7 +261,7 @@ Widget buildDriverCircle({
                 right: -16,
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -277,7 +277,9 @@ Widget buildDriverCircle({
                   child: Row(
                     children: [
                       Text(
-                        FormatNumbers().convertNumberToLocalizedString(driverRating.toStringAsFixed(1), isArabic: context.isArabic),
+                        FormatNumbers().convertNumberToLocalizedString(
+                            driverRating.toStringAsFixed(1),
+                            isArabic: context.isArabic),
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,

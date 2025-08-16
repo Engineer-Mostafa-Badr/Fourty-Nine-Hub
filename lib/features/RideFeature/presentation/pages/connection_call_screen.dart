@@ -29,7 +29,6 @@ class ConnectionCallScreen extends StatelessWidget {
 }
 
 class CallCard extends StatelessWidget {
-
   final driverName = 'Mohamed';
   final driverRating = 8.2;
   final driverImage =
@@ -67,17 +66,20 @@ class CallCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    alignment: Alignment.center,
-                    decoration:const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.DIVIDER_GRAY_COLOR
-                    ),
-                    child: const Icon(Icons.close,color: AppColors.black,),
-                  )
-                ],),
+                    Container(
+                      height: 30,
+                      width: 30,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.DIVIDER_GRAY_COLOR),
+                      child: const Icon(
+                        Icons.close,
+                        color: AppColors.black,
+                      ),
+                    )
+                  ],
+                ),
               ),
               const Expanded(
                 child: Text(
@@ -86,13 +88,15 @@ class CallCard extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-
-              buildDriverCircle(driverImageUrl: driverImage,driverName: driverName, driverRating: driverRating, context: context,),
-
+              buildDriverCircle(
+                driverImageUrl: driverImage,
+                driverName: driverName,
+                driverRating: driverRating,
+                context: context,
+              ),
             ],
           ),
           const SizedBox(height: 8),
-
           const SizedBox(height: 16),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -104,11 +108,10 @@ class CallCard extends StatelessWidget {
               ),
             ),
             onPressed: () {
-      ManageVibration.vibrate();
-              context.push(Routes.safetyRideScreen);
-
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.safetyRideScreen);
             },
-            child:  Center(child: Text(LocaleKeys.freeCall.localize)),
+            child: Center(child: Text(LocaleKeys.freeCall.localize)),
           ),
           const SizedBox(height: 14),
           ElevatedButton(
@@ -121,10 +124,10 @@ class CallCard extends StatelessWidget {
               ),
             ),
             onPressed: () {
-      ManageVibration.vibrate();
-              context.push(Routes.safetyRideScreen);
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.safetyRideScreen);
             },
-            child:  Center(child: Text(LocaleKeys.regularCall.localize)),
+            child: Center(child: Text(LocaleKeys.regularCall.localize)),
           ),
         ],
       ),

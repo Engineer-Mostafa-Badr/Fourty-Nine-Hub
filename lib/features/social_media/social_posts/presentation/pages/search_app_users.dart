@@ -44,7 +44,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                   children: [
                     InkWell(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           context.pop();
                         },
                         child: const Icon(Icons.arrow_back)),
@@ -56,7 +56,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                           controller: searchController,
                           onChanged: (v) {
                             if (v.isNotEmpty) {
-                              controller.loadUsersSearchData(search:v);
+                              controller.loadUsersSearchData(search: v);
                             } else {
                               controller.usersSearch = [];
                             }
@@ -126,7 +126,8 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: InkWell(
-                onTap: () => context.push(Routes.OTHERSACCOUNT, extra: item.id),
+                onTap: () =>
+                    context.pushNamed(Routes.OTHERSACCOUNT, extra: item.id),
                 child: Row(
                   children: [
                     UserProfileImage(

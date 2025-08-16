@@ -40,7 +40,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (c, v) => context.push(Routes.RIDE_HOME),
+      onPopInvokedWithResult: (c, v) => context.pushNamed(Routes.RIDE_HOME),
       child: RefreshIndicator(
         onRefresh: () => context
             .read<RideRegisterCubit>()
@@ -70,26 +70,26 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                         state.isShipping == true
                             ? loadingUploadImages(cubit, state, widget.params!)
                             : rideUploadImages(state, widget.params!),
-                        // UploadImageRow(title: "ID",onTap: ()=>context.push(Routes.personalDocumentsScreen),disableUpload: state.isUploadDriverId!=null&&(state.isUploadDriverId==true),),
+                        // UploadImageRow(title: "ID",onTap: ()=>context.pushNamed(Routes.personalDocumentsScreen),disableUpload: state.isUploadDriverId!=null&&(state.isUploadDriverId==true),),
                         // const SizedBox(
                         //   height: 40,
                         // ),
-                        // UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: state.isUploadDriverLicense!=null&&(state.isUploadDriverLicense==true),),
+                        // UploadImageRow(title: "Driver License",onTap: ()=>context.pushNamed(Routes.driversLicenseScreen),disableUpload: state.isUploadDriverLicense!=null&&(state.isUploadDriverLicense==true),),
                         // const SizedBox(
                         //   height: 40,
                         // ),
-                        // UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: state.isUploadCarLicense!=null&&(state.isUploadCarLicense==true),),
+                        // UploadImageRow(title: "Car Image/License",onTap: ()=>context.pushNamed(Routes.vehicleInformationScreen),disableUpload: state.isUploadCarLicense!=null&&(state.isUploadCarLicense==true),),
                         // const SizedBox(
                         //   height: 40,
                         // ),
-                        // if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
+                        // if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.pushNamed(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
                         // const SizedBox(
                         //   height: 40,
                         // )],
-                        // if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
+                        // if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.pushNamed(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
                         //   height: 40,
                         // )],
-                        // if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
+                        // if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.pushNamed(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
                       ],
                     ),
                   );
@@ -127,7 +127,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.personalDocumentsScreen);
+          // context.pushNamed(Routes.personalDocumentsScreen);
         },
         disableUpload: state.loaderInfo?.isUploadDriverImage == true,
       ),
@@ -151,7 +151,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.personalDocumentsScreen);
+          // context.pushNamed(Routes.personalDocumentsScreen);
         },
         disableUpload: state.loaderInfo?.isUploadDriverId == true,
       ),
@@ -175,7 +175,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.driversLicenseScreen);
+          // context.pushNamed(Routes.driversLicenseScreen);
         },
         disableUpload: state.loaderInfo?.isUploadDriverLicense == true,
       ),
@@ -186,7 +186,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
         title: LocaleKeys.vehicleInformation.localize,
         onTap: () async {
           ManageVibration.vibrate();
-          // context.push(Routes.vehicleInformationScreen);
+          // context.pushNamed(Routes.vehicleInformationScreen);
           await Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => BlocProvider.value(
                   value: serviceLocator<RideRegisterCubit>(),
@@ -227,7 +227,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.personalDocumentsScreen);
+          // context.pushNamed(Routes.personalDocumentsScreen);
         },
         disableUpload: state.driverInfo?.isUploadDriverImage == true,
       ),
@@ -251,7 +251,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.personalDocumentsScreen);
+          // context.pushNamed(Routes.personalDocumentsScreen);
         },
         disableUpload: (state.driverInfo?.isUploadDriverId == true),
       ),
@@ -275,7 +275,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.driversLicenseScreen);
+          // context.pushNamed(Routes.driversLicenseScreen);
         },
         disableUpload: (state.driverInfo?.isUploadDriverLicense == true),
       ),
@@ -299,7 +299,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               : context
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
-          // context.push(Routes.vehicleInformationScreen);
+          // context.pushNamed(Routes.vehicleInformationScreen);
         },
         disableUpload: (state.driverInfo?.isUploadCarLicense == true &&
             state.driverInfo?.isUploadCarImage == true),
@@ -314,7 +314,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           title: LocaleKeys.criminalRecord.localize,
           onTap: () async {
             ManageVibration.vibrate();
-            // context.push(Routes.criminalRecordScreen);
+            // context.pushNamed(Routes.criminalRecordScreen);
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                     value: serviceLocator<RideRegisterCubit>(),
@@ -340,7 +340,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           title: LocaleKeys.dragAnalysis.localize,
           onTap: () async {
             ManageVibration.vibrate();
-            // context.push(Routes.drugAnalysisScreen);
+            // context.pushNamed(Routes.drugAnalysisScreen);
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                     value: serviceLocator<RideRegisterCubit>(),
@@ -402,7 +402,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           title: LocaleKeys.technicalExamination.localize,
           onTap: () async {
             ManageVibration.vibrate();
-            // context.push(Routes.technicalExaminationScreen);
+            // context.pushNamed(Routes.technicalExaminationScreen);
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                     value: serviceLocator<RideRegisterCubit>(),

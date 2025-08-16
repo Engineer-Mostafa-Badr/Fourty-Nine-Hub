@@ -73,11 +73,11 @@ class _MyAdCardState extends State<MyAdCard> {
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (widget.item.userId != userId) {
               serviceLocator<AdvertisementCubit>().adViewToAds(widget.item.id);
             }
-            context.push(Routes.ADdetails, extra: widget.item.id);
+            context.pushNamed(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
             // REMOVED IntrinsicHeight and Column wrapper
@@ -384,7 +384,7 @@ class _MyAdCardState extends State<MyAdCard> {
                                 height: 1.60,
                               ),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 bottomSheet(
                                     context: context,
                                     isFloating: true,
@@ -460,10 +460,10 @@ class _MyAdCardState extends State<MyAdCard> {
               height: 30,
               backColor: AppColors.SECONDARY_COLOR_DARK2,
               onPressed: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (!context.read<UserCubit>().isLoggedIn) {
                   return pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
+                  // context.pushNamed(Routes.LOGIN);
                 } else {
                   bottomSheet(
                     context: context,

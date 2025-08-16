@@ -117,7 +117,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     onTap: widget.post.isShared == true
                         ? () {
                             print("objectH");
-                            // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
+                            // context.pushNamed(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
                             bottomSheet(
                                 context: context,
@@ -182,13 +182,13 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.comment,
               label: '${post.commentsCount}'.toArabicNumbers(context),
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (context.read<UserCubit>().isLoggedIn) {
                   return widget.showPostComments(widget.post.id);
                 } else {
                   return pleaseLoginDialog(context);
 
-                  // context.push(Routes.LOGIN);
+                  // context.pushNamed(Routes.LOGIN);
                 }
               },
             ),
@@ -198,7 +198,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: FontAwesomeIcons.retweet,
               label: "${widget.post.sharesCount}".toArabicNumbers(context),
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (context.read<UserCubit>().isLoggedIn) {
                   widget.onShare();
                   if (widget.shareSuccess == true &&
@@ -209,7 +209,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 } else {
                   return pleaseLoginDialog(context);
 
-                  // context.push(Routes.LOGIN);
+                  // context.pushNamed(Routes.LOGIN);
                 }
               },
             ),
@@ -221,13 +221,13 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     : Icons.favorite,
                 label: "${post.loveCount}".toArabicNumbers(context),
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (context.read<UserCubit>().isLoggedIn) {
                     widget.onReact();
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 iconColor: post.isReact == false ? Colors.grey : Colors.red),
@@ -254,7 +254,10 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             color: iconColor ?? Colors.grey,
           ),
           const Sizer(),
-          Label(text: label, style: Styles.mediumText(color: Colors.grey,fontSize: context.isArabic?32:28)),
+          Label(
+              text: label,
+              style: Styles.mediumText(
+                  color: Colors.grey, fontSize: context.isArabic ? 32 : 28)),
         ],
       ),
     );
@@ -296,7 +299,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             itemCount: myImages.length < 4 ? myImages.length : 4,
             itemBuilder: (context, index) => InkWell(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (index != 3 || (index == 3 && myImages!.length == 4)) {
                   showDialog(
                       context: context,
@@ -417,7 +420,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             icon: Icons.clear,
             size: 40.w,
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               bottomSheet(
                 context: context,
                 widget: _buildPostOptions(
@@ -443,7 +446,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   widget.deletePost(widget.post.id);
                   // context.pop();
                   // if(fromDetails==true){
@@ -455,7 +458,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 widget.hidePost(widget.post.id);
                 // context.pop();
                 // if(fromDetails==true){
@@ -475,7 +478,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -530,18 +533,21 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             // text: post.isShared == true
                             //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
                             //     : "${post.user!.firstName} ${post.user!.lastName}",
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.w500,fontSize: 32)),
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.w500, fontSize: 32)),
                         if (post.user?.isDocumented == true &&
                                 post.isShared == false ||
                             (post.user?.isDocumented == true &&
-                                post.isShared == true))
-                          ...[const Sizer(width: 8,),
-                            Icon(
+                                post.isShared == true)) ...[
+                          const Sizer(
+                            width: 8,
+                          ),
+                          Icon(
                             Icons.verified,
                             color: Theme.of(context).primaryColor,
                             size: 30.h,
-                          ),]
+                          ),
+                        ]
                       ],
                     ),
                     Label(
@@ -552,7 +558,10 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   ],
                 ),
               ),
-              Label(text: date.toArabicNumbers(context), maxLines: 1, style: Styles.mediumText(fontSize: 32)),
+              Label(
+                  text: date.toArabicNumbers(context),
+                  maxLines: 1,
+                  style: Styles.mediumText(fontSize: 32)),
 
               // Sizer(),
             ],
@@ -583,7 +592,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.clear,
               size: 40.w,
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 bottomSheet(
                     context: context,
                     widget: _buildPostOptions(

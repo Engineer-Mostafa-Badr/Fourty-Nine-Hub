@@ -30,12 +30,12 @@ class OfferRideOfferScreen extends StatefulWidget {
   final String type;
 
   const OfferRideOfferScreen({
-    super.key,required this.type,
+    super.key,
+    required this.type,
   });
 
   @override
-  State<OfferRideOfferScreen> createState() =>
-      _OfferRideOfferScreenState();
+  State<OfferRideOfferScreen> createState() => _OfferRideOfferScreenState();
 }
 
 class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
@@ -44,27 +44,29 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   @override
   void initState() {
     super.initState();
-    if(widget.type=='shipping') {
+    if (widget.type == 'shipping') {
       // context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
-    context.read<ClientTripsCubit>().listenToUpdateOfferTripShipping();
+      context.read<ClientTripsCubit>().listenToUpdateOfferTripShipping();
     }
-    if(widget.type=='ride') {
+    if (widget.type == 'ride') {
       // context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-    context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
+      context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
     }
     _scrollController = ScrollController()..addListener(_onScroll);
-      // if (!dashboardCubit.isClosed) {
-      // // dashboardCubit.getAvailableNonSocketTrips(),
-      // dashboardCubit.listenToRemoveUntrackedTrip(),
-      // dashboardCubit.listenToNewTripNonSocket()
-      // // }
+    // if (!dashboardCubit.isClosed) {
+    // // dashboardCubit.getAvailableNonSocketTrips(),
+    // dashboardCubit.listenToRemoveUntrackedTrip(),
+    // dashboardCubit.listenToNewTripNonSocket()
+    // // }
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientOfferTrips();
-      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientOfferShippingTrips();
+      if (widget.type == 'ride')
+        context.read<ClientTripsCubit>().getClientOfferTrips();
+      if (widget.type == 'shipping')
+        context.read<ClientTripsCubit>().getClientOfferShippingTrips();
     }
   }
 
@@ -74,7 +76,6 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +93,8 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
             );
             // Reset showSnackbar so it doesn’t show again
             context.read<ClientTripsCubit>().emit(
-              state.copyWith(showSnackbar: false),
-            );
+                  state.copyWith(showSnackbar: false),
+                );
           }
           if (state.status == ClientTripsStates.error) {
             final failure = state.failure;
@@ -103,7 +104,8 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
               showErrorMessage(context, failure.errors!.first);
               return;
             }
-            showErrorMessage(context, getFailureMessage(state.failure!, context));
+            showErrorMessage(
+                context, getFailureMessage(state.failure!, context));
           }
         },
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
@@ -116,34 +118,43 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                             text: LocaleKeys.errorHappen.localize,
                             style: const TextStyle(color: Colors.red)),
                       )
-                    : context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
-                        ?  Center(
+                    : context
+                            .read<ClientTripsCubit>()
+                            .clientOfferTripsData
+                            .isEmpty
+                        ? Center(
                             child: Label(
-                                text: LocaleKeys.youDontHaveAvailableOffer.localize,
-                                // style:
-                                //     TextStyle(color: Colors.red, fontSize: 18)
+                              text:
+                                  LocaleKeys.youDontHaveAvailableOffer.localize,
+                              // style:
+                              //     TextStyle(color: Colors.red, fontSize: 18)
                             ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context.read<ClientTripsCubit>().clientOfferTripsData.isEmpty
+                            child: context
+                                    .read<ClientTripsCubit>()
+                                    .clientOfferTripsData
+                                    .isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
                                     itemBuilder: (context, index) =>
                                         ClientOfferWidget(
-                                          offers: context.read<ClientTripsCubit>().clientOfferTripsData[index],
+                                          offers: context
+                                              .read<ClientTripsCubit>()
+                                              .clientOfferTripsData[index],
                                           modeType: widget.type,
-                                          onRefuseOffer: (String id){
+                                          onRefuseOffer: (String id) {
                                             // context.read<ClientTripsCubit>().refuseClientShippingTrip(id,context);
-                                            setState(() {
-
-                                            });
+                                            setState(() {});
                                           },
                                         ),
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 5),
-                                    itemCount:
-                                    context.read<ClientTripsCubit>().clientOfferTripsData.length),
+                                    itemCount: context
+                                        .read<ClientTripsCubit>()
+                                        .clientOfferTripsData
+                                        .length),
                           );
           },
         ),
@@ -157,7 +168,11 @@ class ClientOfferWidget extends StatelessWidget {
   final ClientOfferTripEntity? offers;
   final Function(String id) onRefuseOffer;
 
-  const ClientOfferWidget({super.key,required this.modeType, this.offers,required this.onRefuseOffer});
+  const ClientOfferWidget(
+      {super.key,
+      required this.modeType,
+      this.offers,
+      required this.onRefuseOffer});
 
   // Helper method to convert digits based on locale
   String _formatNumber(String input, BuildContext context) {
@@ -179,14 +194,14 @@ class ClientOfferWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
-    DateTime dateTime = DateTime.parse(
-        offers?.tripDetails?.date ?? '2025-03-11T21:50:21.998Z');
+    DateTime dateTime =
+        DateTime.parse(offers?.tripDetails?.date ?? '2025-03-11T21:50:21.998Z');
 
     // Format date with Arabic digits if needed
     final formattedDate = isArabic
         ? _formatNumber(
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
-        context)
+            "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+            context)
         : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
 
     // Format time with Arabic digits if needed
@@ -199,7 +214,8 @@ class ClientOfferWidget extends StatelessWidget {
     final ratingCount = _formatNumber(
         offers?.driverDetails?.rating?.count?.toString() ?? '0', context);
     final ratingAverage = _formatNumber(
-        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1), context);
+        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1),
+        context);
 
     // Format passengers count
     final passengersCount = _formatNumber(
@@ -211,26 +227,28 @@ class ClientOfferWidget extends StatelessWidget {
         : offers?.price ?? 300;
     final priceText = _formatNumber(price.toString(), context);
 
-
     final screenWidth = MediaQuery.of(context).size.width;
-    final avatarSize = screenWidth * 0.2; // 20% of screen width, tweak as needed
+    final avatarSize =
+        screenWidth * 0.2; // 20% of screen width, tweak as needed
     final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
-    final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
+    final badgeEndOffset =
+        avatarSize * 0.0; // 0% from right edge (or tweak slightly)
 
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-          color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
+          color:
+              context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
           borderRadius: BorderRadius.circular(20)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClickableWidget(
             onTap: () {
-      ManageVibration.vibrate();
-              context.push(
+              ManageVibration.vibrate();
+              context.pushNamed(
                 Routes.allDriverRatingScreen,
-                extra:offers?.id,
+                extra: offers?.id,
               );
             },
             child: Column(children: [
@@ -243,18 +261,17 @@ class ClientOfferWidget extends StatelessWidget {
                         // height: 75,
                         width: avatarSize,
                         height: avatarSize,
-                        decoration:
-                        const BoxDecoration(shape: BoxShape.circle),
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: offers?.driverDetails?.pictureUrl == null ||
-                            offers!.driverDetails!.pictureUrl!.isEmpty
+                                offers!.driverDetails!.pictureUrl!.isEmpty
                             ? Image.asset(
-                          Assets.maleImagePlaceholder,
-                          fit: BoxFit.cover,
-                        )
+                                Assets.maleImagePlaceholder,
+                                fit: BoxFit.cover,
+                              )
                             : ImageFromInternet(
-                          image: offers!.driverDetails!.pictureUrl!,
-                        )),
+                                image: offers!.driverDetails!.pictureUrl!,
+                              )),
                   ),
                   PositionedDirectional(
                       top: badgeTopOffset,
@@ -267,7 +284,7 @@ class ClientOfferWidget extends StatelessWidget {
                           ),
                           child: Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Row(children: [
                                 SvgPicture.asset(Assets.star2,
                                     width: 8, height: 8),
@@ -283,15 +300,16 @@ class ClientOfferWidget extends StatelessWidget {
                   text: offers?.driverDetails?.firstName ?? '',
                   style: Styles.mediumText()),
               Label(
-                  text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
+                  text: context.isArabic
+                      ? offers?.driverDetails!.vehicleDetails?.brandAr ?? ''
+                      : offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
                   style: Styles.mediumText()),
               Label(
-                  text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
-                  offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
+                  text: context.isArabic
+                      ? offers?.driverDetails!.vehicleDetails?.modelAr ?? ''
+                      : offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
                   style: Styles.mediumText()),
-              Label(
-                  text: '($ratingAverage)',
-                  style: Styles.smallText())
+              Label(text: '($ratingAverage)', style: Styles.smallText())
             ]),
           ),
           const Sizer(width: 32),
@@ -323,7 +341,7 @@ class ClientOfferWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                         text: offers?.tripDetails?.location
-                                            ?.fromTitle ??
+                                                ?.fromTitle ??
                                             'Cairo International Airport',
                                         style: Styles.headerText()))
                               ],
@@ -339,17 +357,17 @@ class ClientOfferWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                         text: offers?.tripDetails?.location
-                                            ?.toTitle ??
+                                                ?.toTitle ??
                                             'Cairo International Airport',
                                         style: Styles.mediumText(
                                             fontWeight: FontWeight.w300)))
                               ],
                             ),
-                            if(modeType =='ride')
-                            Label(
-                                text:
-                                '${LocaleKeys.passenger.localize}  $passengersCount',
-                                style: Styles.mediumText())
+                            if (modeType == 'ride')
+                              Label(
+                                  text:
+                                      '${LocaleKeys.passenger.localize}  $passengersCount',
+                                  style: Styles.mediumText())
                           ],
                         ),
                       ),
@@ -358,19 +376,19 @@ class ClientOfferWidget extends StatelessWidget {
                           child: Column(
                             children: [
                               ImageFromInternet(
-                                  image:
-                                  offers!.tripDetails!.subcategory!.pictureUrl!,
+                                  image: offers!
+                                      .tripDetails!.subcategory!.pictureUrl!,
                                   width: 40,
                                   height: 40,
                                   fit: BoxFit.contain),
                               Label(
                                   text: isArabic
-                                      ? (offers
-                                      ?.tripDetails?.subcategory?.nameAr ??
-                                      '')
-                                      : (offers
-                                      ?.tripDetails?.subcategory?.nameEn ??
-                                      ''),
+                                      ? (offers?.tripDetails?.subcategory
+                                              ?.nameAr ??
+                                          '')
+                                      : (offers?.tripDetails?.subcategory
+                                              ?.nameEn ??
+                                          ''),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
@@ -380,7 +398,13 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                        text: formatPrice(offers?.isFromSocket == true ? offers?.newOfferPrice ?? offers?.newOfferPrice ?? 300 : offers?.newOfferPrice ?? 300, context),
+                        text: formatPrice(
+                            offers?.isFromSocket == true
+                                ? offers?.newOfferPrice ??
+                                    offers?.newOfferPrice ??
+                                    300
+                                : offers?.newOfferPrice ?? 300,
+                            context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const Sizer(width: 4),
@@ -395,13 +419,15 @@ class ClientOfferWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: formatTimeOnly(offers?.tripDetails?.date,context),
+                        text:
+                            formatTimeOnly(offers?.tripDetails?.date, context),
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Label(
-                        text: formatPickupDate(offers?.tripDetails?.date, context),
+                        text: formatPickupDate(
+                            offers?.tripDetails?.date, context),
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
@@ -417,12 +443,18 @@ class ClientOfferWidget extends StatelessWidget {
                             radius: 15,
                             label: LocaleKeys.Accept.tr(),
                             onPressed: () {
-      ManageVibration.vibrate();
-                              modeType=='ride'?context.read<ClientTripsCubit>().acceptClientTrip(offers?.id ?? ""):context.read<ClientTripsCubit>().acceptClientShippingTrip(offers?.id ?? "");
-                              onRefuseOffer(offers?.id??"");
+                              ManageVibration.vibrate();
+                              modeType == 'ride'
+                                  ? context
+                                      .read<ClientTripsCubit>()
+                                      .acceptClientTrip(offers?.id ?? "")
+                                  : context
+                                      .read<ClientTripsCubit>()
+                                      .acceptClientShippingTrip(
+                                          offers?.id ?? "");
+                              onRefuseOffer(offers?.id ?? "");
                             },
-                            backColor: AppColors.PRIMARY_COLOR
-                        ),
+                            backColor: AppColors.PRIMARY_COLOR),
                       ),
                       const Sizer(),
                       Expanded(
@@ -432,15 +464,19 @@ class ClientOfferWidget extends StatelessWidget {
                             label: LocaleKeys.refuse.tr(),
                             style: Styles.mediumText(
                                 color: Colors.white, fontSize: 23),
-                            onPressed: () async{
-      ManageVibration.vibrate();
-                              modeType=='ride'?await context.read<ClientTripsCubit>().refuseClientTrip(offers?.id ?? ""):await context.read<ClientTripsCubit>().refuseClientShippingTrip(offers?.id ?? "",context);
-                                onRefuseOffer(offers?.id??"");
-
+                            onPressed: () async {
+                              ManageVibration.vibrate();
+                              modeType == 'ride'
+                                  ? await context
+                                      .read<ClientTripsCubit>()
+                                      .refuseClientTrip(offers?.id ?? "")
+                                  : await context
+                                      .read<ClientTripsCubit>()
+                                      .refuseClientShippingTrip(
+                                          offers?.id ?? "", context);
+                              onRefuseOffer(offers?.id ?? "");
                             },
-                            backColor: AppColors.SECONDARY_COLOR_DARK2
-
-                        ),
+                            backColor: AppColors.SECONDARY_COLOR_DARK2),
                       ),
                     ],
                   ),

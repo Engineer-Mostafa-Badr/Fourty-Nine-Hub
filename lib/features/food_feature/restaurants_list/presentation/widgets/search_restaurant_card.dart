@@ -24,10 +24,10 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
     final hasSubscription = widget.restaurant?.isPremium;
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         // context.pushNamed(Routes.RESTAURANTDETAILS,
         //     extra: widget.restaurant?.id);
-        context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant);
+        context.pushNamed(Routes.RESTAURANTDETAILS, extra: widget.restaurant);
       },
       child: Card(
         color: Colors.white,
@@ -47,7 +47,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
                 child: Text(
-                  widget.restaurant!.subscriptionType!.ar! ,
+                  widget.restaurant!.subscriptionType!.ar!,
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontSize: 18,

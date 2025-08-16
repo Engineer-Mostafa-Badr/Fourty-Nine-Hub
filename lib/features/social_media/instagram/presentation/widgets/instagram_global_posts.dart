@@ -213,7 +213,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
                                             onPressed: () async {
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                               if (context
                                                   .read<UserCubit>()
                                                   .isLoggedIn) {
@@ -262,9 +262,11 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                   // }
                                                 }
                                                 setState(() {});
-                                              } else {                                  return pleaseLoginDialog(context);
+                                              } else {
+                                                return pleaseLoginDialog(
+                                                    context);
 
-                                                // context.push(Routes.LOGIN);
+                                                // context.pushNamed(Routes.LOGIN);
                                               }
                                             },
                                             color: controller
@@ -294,7 +296,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             icon: Icons
                                                 .chat_bubble_outline_rounded,
                                             onPressed: () {
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                               if (context
                                                   .read<UserCubit>()
                                                   .isLoggedIn) {
@@ -405,9 +407,11 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                         },
                                                       ),
                                                     ));
-                                              } else {                                  return pleaseLoginDialog(context);
+                                              } else {
+                                                return pleaseLoginDialog(
+                                                    context);
 
-                                              // context.push(Routes.LOGIN);
+                                                // context.pushNamed(Routes.LOGIN);
                                               }
                                             },
                                             color: Colors.grey,
@@ -452,10 +456,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                   .itemList![index].content!.isEmpty) ...[
                                 InkWell(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       pleaseLoginDialog(context);
-                                      // context.push(Routes.LOGIN);
-                                      },
+                                      // context.pushNamed(Routes.LOGIN);
+                                    },
                                     child: Label(
                                         text: LocaleKeys.showComments.localize))
                               ],
@@ -470,11 +474,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       text:
                                           '${controller.globalFeedPagingController.itemList?[index].firstComment?.firstName} ${controller.globalFeedPagingController.itemList?[index].firstComment?.lastName}\t\t',
                                       recognizer: TapGestureRecognizer()
-                                        ..onTap =
-                                            () {
-                                              pleaseLoginDialog(context);
-                                              // context.push(Routes.LOGIN);
-                                            },
+                                        ..onTap = () {
+                                          pleaseLoginDialog(context);
+                                          // context.pushNamed(Routes.LOGIN);
+                                        },
                                       style: Styles.mediumText(
                                         color: context.isDarkMode
                                             ? AppColors.SECONDARY_COLOR
@@ -560,12 +563,13 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       children: [
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (context.read<UserCubit>().isLoggedIn) {
-              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-            } else {                                  return pleaseLoginDialog(context);
+              context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+            } else {
+              return pleaseLoginDialog(context);
 
-              // context.push(Routes.LOGIN);
+              // context.pushNamed(Routes.LOGIN);
             }
           },
           child: CircleAvatar(
@@ -584,26 +588,28 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
               children: [
                 InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     if (context.read<UserCubit>().isLoggedIn) {
-                      context.push(Routes.INSTAGRAMPROFILE,
+                      context.pushNamed(Routes.INSTAGRAMPROFILE,
                           extra: post.user.id);
-                    } else {                                  return pleaseLoginDialog(context);
+                    } else {
+                      return pleaseLoginDialog(context);
 
-                      // context.push(Routes.LOGIN);
+                      // context.pushNamed(Routes.LOGIN);
                     }
                   },
                   child: TextAppButton(
                       style: TextStyle(color: Theme.of(context).primaryColor),
                       label: post.user.firstName,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
-                          context.push(Routes.INSTAGRAMPROFILE,
+                          context.pushNamed(Routes.INSTAGRAMPROFILE,
                               extra: post.user.id);
-                        } else {                                  return pleaseLoginDialog(context);
+                        } else {
+                          return pleaseLoginDialog(context);
 
-                          // context.push(Routes.LOGIN);
+                          // context.pushNamed(Routes.LOGIN);
                         }
                       }),
                 ),

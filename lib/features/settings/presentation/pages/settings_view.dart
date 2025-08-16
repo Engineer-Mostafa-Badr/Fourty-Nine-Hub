@@ -45,7 +45,7 @@ class SettingsView extends StatelessWidget {
                 LocaleKeys.deleteSuccessfully.localize,
               );
               controller.logout(context);
-              context.push(Routes.HOME);
+              context.pushNamed(Routes.HOME);
             }
             if (state.status == SettingStates.success1) {
               showSuccessMessage(
@@ -53,7 +53,7 @@ class SettingsView extends StatelessWidget {
                 LocaleKeys.disableAccount.localize,
               );
               controller.logout(context);
-              context.push(Routes.HOME);
+              context.pushNamed(Routes.HOME);
             }
           },
           builder: (BuildContext context, state) {
@@ -68,14 +68,15 @@ class SettingsView extends StatelessWidget {
                       trailing:
                           Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                       label: LocaleKeys.editProfile.localize,
-                      onTap: () => context.push(Routes.EDITPROFILE)),
+                      onTap: () => context.pushNamed(Routes.EDITPROFILE)),
                 if (context.read<UserCubit>().isLoggedIn)
                   listTileWidget(context,
                       image: Assets.changePassword,
                       trailing:
                           Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                       label: LocaleKeys.changePassword.localize,
-                      onTap: () => context.push(Routes.CHANGEPASSWORDSECOND)),
+                      onTap: () =>
+                          context.pushNamed(Routes.CHANGEPASSWORDSECOND)),
                 // if (context.read<UserCubit>().isLoggedIn)
                 //   listTileWidget(
                 //       image: Assets.disableAccount,
@@ -89,7 +90,7 @@ class SettingsView extends StatelessWidget {
                 //             // if (state.able?.isDisabled == false) {
                 //             //   final prefs = await SharedPreferences.getInstance();
                 //             //   await prefs.setBool("ISLOGIN", false);
-                //             //   context.go(Routes.HOME);
+                //             //   context.goNamed(Routes.HOME);
                 //             return context
                 //                 .read<SettingCubit>()
                 //                 .disableAccount();
@@ -106,14 +107,16 @@ class SettingsView extends StatelessWidget {
                     trailing:
                         Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                     label: LocaleKeys.privacy.localize,
-                      onTap: () {
-                        ManageVibration.vibrate();
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
 
-                          context.pop();
-                          context.push(context.read<UserCubit>().isLoggedIn?Routes.PRIVACY:Routes.FirstLoginScreen);
-                      },
+                      context.pop();
+                      context.pushNamed(context.read<UserCubit>().isLoggedIn
+                          ? Routes.PRIVACY
+                          : Routes.FirstLoginScreen);
+                    },
                   ),
                 if (context.read<UserCubit>().isLoggedIn)
                   listTileWidget(
@@ -131,7 +134,7 @@ class SettingsView extends StatelessWidget {
                         context.read<SettingCubit>().deleteAccount();
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setBool("ISLOGIN", false);
-                        context.go(Routes.HOME);
+                        context.goNamed(Routes.HOME);
                       },
                       context: context,
                     ),

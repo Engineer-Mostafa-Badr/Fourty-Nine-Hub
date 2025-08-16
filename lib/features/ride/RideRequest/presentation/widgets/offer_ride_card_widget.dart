@@ -133,8 +133,8 @@ class OfferRideCardWidget extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-      ManageVibration.vibrate();
-                                  context.push(Routes.TripRideRating,
+                                  ManageVibration.vibrate();
+                                  context.pushNamed(Routes.TripRideRating,
                                       extra: ReviewRideTripModel(
                                         comments:
                                             model.driverId?.review?.comments ??
@@ -190,7 +190,7 @@ class OfferRideCardWidget extends StatelessWidget {
                               child: AppButton(
                                 label: LocaleKeys.decline.tr(),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   context
                                       .read<DeclineOfferNoSocketCubit>()
                                       .decline(id: model.id ?? "");
@@ -204,7 +204,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                 backColor: AppColors.PRIMARY_COLOR,
                                 label: LocaleKeys.Accept.tr(),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   context
                                       .read<AcceptOfferNoSocketCubit>()
                                       .accept(id: model.id ?? "");
@@ -235,7 +235,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                         ? AppColors.PRIMARY_COLOR
                                         : AppColors.DARK_GRAY_COLOR,
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       if (callState.data &&
                                           (model.isAccepted ?? false)) {
                                         launchUrlString(
@@ -258,8 +258,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                     style: Styles.mediumText(
                                         fontSize: 15, color: Colors.white),
                                     onPressed: () {
-
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                     },
                                   ),
                                 ),
@@ -272,7 +271,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                     style: Styles.mediumText(
                                         fontSize: 18, color: Colors.white),
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       // tripCubit.report(
                                       //     loadingTripId: widget.model.id ?? "");
                                       showBottomSheet(
@@ -302,7 +301,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                     icon: Icons.call,
                                     backColor: AppColors.DARK_GRAY_COLOR,
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       // launchUrlString(
                                       //     "tel://${model.driverId?.phone}");
                                     },
@@ -319,8 +318,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                     style: Styles.mediumText(
                                         fontSize: 18, color: Colors.white),
                                     onPressed: () {
-
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                     },
                                   ),
                                 ),
@@ -333,7 +331,7 @@ class OfferRideCardWidget extends StatelessWidget {
                                     style: Styles.mediumText(
                                         fontSize: 15, color: Colors.white),
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       showBottomSheet(
                                         context: context,
                                         builder: (context) => const ReportView(

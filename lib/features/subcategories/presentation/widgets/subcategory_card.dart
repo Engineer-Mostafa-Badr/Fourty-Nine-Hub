@@ -38,7 +38,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS,
+      onTap: () => context.pushNamed(Routes.ADS,
           extra: AdsViewParams(
               mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
@@ -69,7 +69,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                               ? Icons.favorite_outline
                               : Icons.favorite,
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             var result = await widget.onFav();
                             if (result == true) {
                               widget.item.isFavorite = !widget.item.isFavorite!;
@@ -88,14 +88,14 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                     size: 40.h,
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (AuthHelper().isLoggedIn()) {
-                        context.push(Routes.CREATEAD,
+                        context.pushNamed(Routes.CREATEAD,
                             extra: CategorizationEntity(
                                 mainCategory: widget.mainCategory,
                                 subCategory: widget.item));
                       } else {
-                        // context.push(Routes.LOGIN);
+                        // context.pushNamed(Routes.LOGIN);
 
                         return pleaseLoginDialog(context);
                       }

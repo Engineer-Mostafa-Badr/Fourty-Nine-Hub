@@ -141,7 +141,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   @override
   Widget build(BuildContext context) {
-    // context.push(Routes.REELS);
+    // context.pushNamed(Routes.REELS);
     return
         // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
         //   listener: (context, state) {
@@ -295,10 +295,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                         HandleCashback.setCount('mainCategoriesCount', context);
                         if (state.data![index].id ==
                             '62c8b5b09332225799fe335e') {
-                          context.push(Routes.MARRIAGESUBCATEGORIES,
+                          context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
                               extra: state.data![index]);
                         } else {
-                          context.push(Routes.SUBCATEGORIES,
+                          context.pushNamed(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         }
                       },
@@ -389,10 +389,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                                 'mainCategoriesCount', context);
                             if (state.data![index].id ==
                                 '62c8b5b09332225799fe335e') {
-                              context.push(Routes.MARRIAGESUBCATEGORIES,
+                              context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
                                   extra: state.data![index]);
                             } else {
-                              context.push(Routes.SUBCATEGORIES,
+                              context.pushNamed(Routes.SUBCATEGORIES,
                                   extra: state.data![index]);
                             }
                           },
@@ -492,11 +492,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ManageVibration.vibrate();
         onTab();
         if (routeName == Routes.MAINCATEGORIESCARDS) {
-          context.push(routeName,
+          context.pushNamed(routeName,
               extra:
                   MainCategoriesCardsParams(data: extra, isCustomPage: false));
         } else {
-          context.push(routeName, extra: extra);
+          context.pushNamed(routeName, extra: extra);
         }
       },
       child: Container(

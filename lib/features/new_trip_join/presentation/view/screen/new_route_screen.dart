@@ -92,7 +92,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                       onPressed: () async {
                         ManageVibration.vibrate();
                         if (context.isUserLoggedIn) {
-                          context.push(
+                          context.pushNamed(
                             Routes.GoogleMapsSearchAndPick,
                             extra: RideGoogleMapSearchAndPickParams(
                               minDistanceReferencePoint:
@@ -130,7 +130,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                             ),
                           );
                         } else {
-                          context.push(Routes.LOGIN);
+                          context.pushNamed(Routes.LOGIN);
                         }
                       },
                     ),
@@ -146,7 +146,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                       onPressed: () async {
                         ManageVibration.vibrate();
                         if (context.isUserLoggedIn) {
-                          context.push(
+                          context.pushNamed(
                             Routes.GoogleMapsSearchAndPick,
                             extra: RideGoogleMapSearchAndPickParams(
                               minDistanceReferencePoint:
@@ -187,7 +187,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                             ),
                           );
                         } else {
-                          context.push(Routes.LOGIN);
+                          context.pushNamed(Routes.LOGIN);
                         }
                       },
                     ),

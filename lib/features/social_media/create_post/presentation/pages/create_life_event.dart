@@ -28,11 +28,15 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
   var formKey = GlobalKey<FormState>();
   @override
   initState() {
-    if(context.read<CreatePostCubit>().state.selectedLifeEvent==null||context.read<CreatePostCubit>().state.selectedLifeEvent?.id!=widget.lifeEventData.id){
+    if (context.read<CreatePostCubit>().state.selectedLifeEvent == null ||
+        context.read<CreatePostCubit>().state.selectedLifeEvent?.id !=
+            widget.lifeEventData.id) {
       context.read<CreatePostCubit>().onChangePage(0);
     }
-    context.read<CreatePostCubit>().titleController.text = widget.lifeEventData.title??'';
-    context.read<CreatePostCubit>().descriptionController.text = widget.lifeEventData.desc??'';
+    context.read<CreatePostCubit>().titleController.text =
+        widget.lifeEventData.title ?? '';
+    context.read<CreatePostCubit>().descriptionController.text =
+        widget.lifeEventData.desc ?? '';
     super.initState();
   }
 
@@ -48,33 +52,52 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ClickableWidget(
-                onTap: (){
-      ManageVibration.vibrate();
-                  if(formKey.currentState!.validate()){
-                    if(context.read<CreatePostCubit>().state.pickedDate!=null){
-                      print("context.read<CreatePostCubit>().titleController.text${context.read<CreatePostCubit>().titleController.text}");
-                      print(context.read<CreatePostCubit>().descriptionController.text);
+                onTap: () {
+                  ManageVibration.vibrate();
+                  if (formKey.currentState!.validate()) {
+                    if (context.read<CreatePostCubit>().state.pickedDate !=
+                        null) {
+                      print(
+                          "context.read<CreatePostCubit>().titleController.text${context.read<CreatePostCubit>().titleController.text}");
+                      print(context
+                          .read<CreatePostCubit>()
+                          .descriptionController
+                          .text);
                       LifeEventEntity selected = LifeEventEntity(
                           id: widget.lifeEventData.id,
                           titleAr: widget.lifeEventData.titleAr,
                           titleEn: widget.lifeEventData.titleEn,
                           image: widget.lifeEventData.image,
-                          media: context.read<CreatePostCubit>().state.lifeEventImages??[],
-                          liveEventMainCategoryId: widget.lifeEventData.liveEventMainCategoryId,
+                          media: context
+                                  .read<CreatePostCubit>()
+                                  .state
+                                  .lifeEventImages ??
+                              [],
+                          liveEventMainCategoryId:
+                              widget.lifeEventData.liveEventMainCategoryId,
                           mainCat: widget.lifeEventData.mainCat,
-                        date: context.read<CreatePostCubit>().state.pickedDate,
-                        desc: context.read<CreatePostCubit>().descriptionController.text,
-                        title: context.read<CreatePostCubit>().titleController.text
-                      );
+                          date:
+                              context.read<CreatePostCubit>().state.pickedDate,
+                          desc: context
+                              .read<CreatePostCubit>()
+                              .descriptionController
+                              .text,
+                          title: context
+                              .read<CreatePostCubit>()
+                              .titleController
+                              .text);
                       context.read<CreatePostCubit>().setLifeEvent(selected);
 
-                      context.push(Routes.CREATEPOST, extra: 'lifeEvent');
-                    }else{
+                      context.pushNamed(Routes.CREATEPOST, extra: 'lifeEvent');
+                    } else {
                       showErrorMessage(context, "Please select a date");
                     }
                   }
                 },
-                child: Text('Next',style: Styles.headerText(color: AppColors.PRIMARY_COLOR),)),
+                child: Text(
+                  'Next',
+                  style: Styles.headerText(color: AppColors.PRIMARY_COLOR),
+                )),
           )
         ],
         centerTitle: true,
@@ -94,11 +117,8 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
                   _buildTitleField(),
                   const SizedBox(height: 16),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildDateSelector(context)
-                    ]
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [_buildDateSelector(context)]),
                   const SizedBox(height: 16),
                   _buildDescriptionField(),
                 ],
@@ -111,124 +131,180 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
   }
 
   Widget _buildImageContainer(BuildContext context) {
-    return  SizedBox(
+    return SizedBox(
         height: 250,
-        child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              GestureDetector(
-                onTap: (){
-      ManageVibration.vibrate();
-                  context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
-                },
-                child:Container(
-                  height: 250,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.GREYBG,
-                    borderRadius: BorderRadius.circular(20),
-
-                  ),
-                  child:(context.read<CreatePostCubit>().state.lifeEventImages==null&&(context.read<CreatePostCubit>().state.lifeEventImages?.isEmpty??false))?Container(
-                    alignment: Alignment.center,
-                    child:Center(child: Text("Add Image",style: Styles.headerText(color: AppColors.PRIMARY_COLOR),)),
-                  ):
-                  PageView.builder(
-                    itemCount: (context.read<CreatePostCubit>().state.lifeEventImages?.length??0),
-                    itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          Container(
-                            height: 250,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: FileImage(
-                                  File(context.read<CreatePostCubit>().state.lifeEventImages?[index].file.path ?? ''),
+        child: Stack(clipBehavior: Clip.none, children: [
+          GestureDetector(
+            onTap: () {
+              ManageVibration.vibrate();
+              context
+                  .read<CreatePostCubit>()
+                  .uploadLifeEventPhoto(context: context);
+            },
+            child: Container(
+                height: 250,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.GREYBG,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: (context.read<CreatePostCubit>().state.lifeEventImages ==
+                            null &&
+                        (context
+                                .read<CreatePostCubit>()
+                                .state
+                                .lifeEventImages
+                                ?.isEmpty ??
+                            false))
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Center(
+                            child: Text(
+                          "Add Image",
+                          style:
+                              Styles.headerText(color: AppColors.PRIMARY_COLOR),
+                        )),
+                      )
+                    : PageView.builder(
+                        itemCount: (context
+                                .read<CreatePostCubit>()
+                                .state
+                                .lifeEventImages
+                                ?.length ??
+                            0),
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              Container(
+                                height: 250,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: FileImage(
+                                      File(context
+                                              .read<CreatePostCubit>()
+                                              .state
+                                              .lifeEventImages?[index]
+                                              .file
+                                              .path ??
+                                          ''),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          if(context.read<CreatePostCubit>().state.lifeEventImages!=null&&context.read<CreatePostCubit>().state.lifeEventImages!.isNotEmpty)PositionedDirectional(top: 8,start: 8,
-                              child: GestureDetector(
-                                  onTap: (){
-      ManageVibration.vibrate();
-                                    context.read<CreatePostCubit>().onRemoveLifeEventImages(index);
-                                  },
-                                  child:Container(
-                                      height: 44,
-                                      width: 44,
-                                      decoration: const BoxDecoration(
-                                          color: AppColors.GREYICON,
-                                          shape: BoxShape.circle
-                                      ),
-                                      alignment: Alignment.center,
-                                      child:const Icon(
-                                        Icons.close,color: Colors.white,size: 24,
-                                      )
-                                  )
-                              )
-                          ),
-                        ],
-                      );
-                    },
-                    onPageChanged: (index) {
-                      // context.read<CreatePostCubit>().onChangePage(index);
-                    }
-                  )
-                ),
-              ),
-
-              PositionedDirectional(top: 224,start: 147,
-                  child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: const BoxDecoration(
-                          color: AppColors.PRIMARY_COLOR,
-                          shape: BoxShape.circle
+                              if (context
+                                          .read<CreatePostCubit>()
+                                          .state
+                                          .lifeEventImages !=
+                                      null &&
+                                  context
+                                      .read<CreatePostCubit>()
+                                      .state
+                                      .lifeEventImages!
+                                      .isNotEmpty)
+                                PositionedDirectional(
+                                    top: 8,
+                                    start: 8,
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          ManageVibration.vibrate();
+                                          context
+                                              .read<CreatePostCubit>()
+                                              .onRemoveLifeEventImages(index);
+                                        },
+                                        child: Container(
+                                            height: 44,
+                                            width: 44,
+                                            decoration: const BoxDecoration(
+                                                color: AppColors.GREYICON,
+                                                shape: BoxShape.circle),
+                                            alignment: Alignment.center,
+                                            child: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 24,
+                                            )))),
+                            ],
+                          );
+                        },
+                        onPageChanged: (index) {
+                          // context.read<CreatePostCubit>().onChangePage(index);
+                        })),
+          ),
+          PositionedDirectional(
+              top: 224,
+              start: 147,
+              child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: const BoxDecoration(
+                      color: AppColors.PRIMARY_COLOR, shape: BoxShape.circle),
+                  alignment: Alignment.center,
+                  child: SvgPicture.network(
+                    widget.lifeEventData.mainCat?.image ?? '',
+                    height: 32,
+                    width: 32,
+                    color: Colors.white,
+                  ))),
+          if (context.read<CreatePostCubit>().state.lifeEventImages == null &&
+              (context.read<CreatePostCubit>().state.lifeEventImages?.isEmpty ??
+                  false))
+            PositionedDirectional(
+              top: 110,
+              start: 123,
+              child: GestureDetector(
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    context
+                        .read<CreatePostCubit>()
+                        .uploadLifeEventPhoto(context: context);
+                  },
+                  child: const Text(
+                    "Photos / Vidos",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  )),
+            ),
+          PositionedDirectional(
+            top: 8,
+            end: 8,
+            child: GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  context
+                      .read<CreatePostCubit>()
+                      .uploadLifeEventPhoto(context: context);
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.GREYICON,
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    alignment: Alignment.center,
+                    child: Row(children: [
+                      SvgPicture.asset(
+                        Assets.addImage,
+                        height: 20,
+                        width: 20,
                       ),
-                      alignment: Alignment.center,
-                      child:SvgPicture.network(widget.lifeEventData.mainCat?.image??'',height: 32,width: 32,color: Colors.white,)
-                  )
-              ),
-              if(context.read<CreatePostCubit>().state.lifeEventImages==null&&(context.read<CreatePostCubit>().state.lifeEventImages?.isEmpty??false))PositionedDirectional(top: 110,start: 123,
-                  child:
-                  GestureDetector(
-                    onTap: (){
-      ManageVibration.vibrate();
-                      context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
-                    },
-                    child:const Text("Photos / Vidos",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
-                  ),
-              ),
-              PositionedDirectional(top: 8,end: 8,
-                  child:GestureDetector(
-                      onTap: (){
-      ManageVibration.vibrate();
-                        context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
-                      },
-                      child:Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColors.GREYICON,
-                            borderRadius: BorderRadius.circular(22),
-                          ),
-                          alignment: Alignment.center,
-                          child:Row(
-                              children:[
-                                SvgPicture.asset(Assets.addImage,height: 20,width: 20,),
-                                const SizedBox(width: 8,),
-                                const Text("Photos / Vidos",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: Colors.white),)
-                              ]
-                          )
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Text(
+                        "Photos / Vidos",
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
                       )
-                  ),
-              ),
-            ]
-        )
-    );
+                    ]))),
+          ),
+        ]));
   }
 
   Widget _buildTitleField() {
@@ -257,7 +333,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
   Widget _buildDateSelector(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: selectedDate,
@@ -321,14 +397,18 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
       height: 50,
       child: ElevatedButton(
         onPressed: () {
-
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.PRIMARY_COLOR,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        child: const Text("Post", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white)),
+        child: const Text("Post",
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.white)),
       ),
     );
   }

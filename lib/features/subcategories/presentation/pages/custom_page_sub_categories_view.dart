@@ -122,12 +122,12 @@
 //                           onTap: () {
 //                             if (context.isUserLoggedIn) {
 //                               Navigator.pop(context);
-//                               context.push(Routes.CREATEAD,
+//                               context.pushNamed(Routes.CREATEAD,
 //                                   extra: CategorizationEntity(
 //                                       mainCategory: widget.mainCategory,
 //                                       subCategory: item));
 //                             } else {
-//                               context.push(Routes.LOGIN);
+//                               context.pushNamed(Routes.LOGIN);
 //                             }
 //                           },
 //                         ),
@@ -481,7 +481,7 @@ class _CustomPageSubCategoriesViewState
                               .read<SubcategoriesCubit>()
                               .toggleMyAds('isMyAdsOpen');
                         }
-                        // context.push(Routes.MYADDS);
+                        // context.pushNamed(Routes.MYADDS);
                       },
                     ),
                   ),
@@ -722,14 +722,14 @@ class _CustomPageSubCategoriesViewState
                             ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               Navigator.pop(context);
-                              context.push(Routes.CREATEAD,
+                              context.pushNamed(Routes.CREATEAD,
                                   extra: CategorizationEntity(
                                       mainCategory: widget.params.mainCategory,
                                       subCategory: item));
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                             }
                           },
                         ),

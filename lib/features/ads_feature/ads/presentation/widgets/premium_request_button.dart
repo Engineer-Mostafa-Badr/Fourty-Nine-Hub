@@ -40,7 +40,6 @@ class PremiumRequestButton extends StatefulWidget {
 }
 
 class _PremiumRequestButtonState extends State<PremiumRequestButton> {
-
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -48,6 +47,7 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
     _focusNode.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
@@ -101,7 +101,8 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
                       onTap: () async {
                         ManageVibration.vibrate();
                         if (controller.formKey.currentState!.validate()) {
-                          await controller.makeAdPremiumRequest(id: widget.adId);
+                          await controller.makeAdPremiumRequest(
+                              id: widget.adId);
                           //     .then((value) {
                           //   if (value == true) {
                           //     context.pop();
@@ -225,7 +226,7 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
           } else {
             return pleaseLoginDialog(context);
 
-            // context.push(Routes.LOGIN);
+            // context.pushNamed(Routes.LOGIN);
           }
         },
       );
@@ -367,7 +368,7 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
       //         );
       //       }
       //     } else {
-      //       context.push(Routes.LOGIN);
+      //       context.pushNamed(Routes.LOGIN);
       //     }
       //   },
       // );

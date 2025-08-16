@@ -74,7 +74,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   //   if (_isFilterApplied) return; // Prevent duplicate execution
   //   _isFilterApplied = true;
   //
-  //   dynamic data = await context.push(
+  //   dynamic data = await context.pushNamed(
   //     Routes.GOVERNORATEFILTERADS,
   //     extra: CategorizationEntity(
   //       mainCategory: controller.state.mainCategory!,
@@ -128,9 +128,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                       title:
                           "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (AuthHelper().isLoggedIn()) {
-                          context.push(
+                          context.pushNamed(
                             Routes.CREATEAD,
                             extra: CategorizationEntity(
                               mainCategory: state.mainCategory!,
@@ -144,7 +144,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                           );
                         } else {
                           return pleaseLoginDialog(context);
-                          // context.push(Routes.LOGIN);
+                          // context.pushNamed(Routes.LOGIN);
                         }
                       },
                     )),
@@ -162,7 +162,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //     floatingActionButton: CustomFloatingActionButton(
       //       onPressed: () {
       //         if (AuthHelper().isLoggedIn()) {
-      //           context.push(Routes.CREATEAD,
+      //           context.pushNamed(Routes.CREATEAD,
       //               extra: CategorizationEntity(
       //                   mainCategory: state.mainCategory!,
       //                   // mainCategory: widget.mainCategory,
@@ -172,7 +172,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                       0],
       //                   fromMarriage: true));
       //         } else {
-      //           context.push(Routes.LOGIN);
+      //           context.pushNamed(Routes.LOGIN);
       //         }
       //       },
       //       text:
@@ -195,7 +195,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                         icon: Icons.filter_alt_rounded,
       //                         iconLeading: Icons.arrow_drop_down,
       //                         onTap: () async {
-      //                           dynamic data = await context.push(
+      //                           dynamic data = await context.pushNamed(
       //                               Routes.FILTERADS,
       //                               extra: CategorizationEntity(
       //                                 mainCategory: state.mainCategory!,
@@ -227,7 +227,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                             vertical: 15.h, horizontal: 5.w),
       //                         iconLeading: Icons.arrow_drop_down,
       //                         onTap: () async {
-      //                           dynamic data = await context.push(
+      //                           dynamic data = await context.pushNamed(
       //                               Routes.GOVERNORATEFILTERADS,
       //                               extra: CategorizationEntity(
       //                                   mainCategory: state.mainCategory!,
@@ -326,7 +326,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                     physics: const BouncingScrollPhysics(),
       //                     itemBuilder: (context, index) => ClickableWidget(
       //                           onTap: () {
-      //                             context.push(Routes.ADdetails,
+      //                             context.pushNamed(Routes.ADdetails,
       //                                 extra: state.ads?[index].id);
       //                           },
       //                           child: Container(

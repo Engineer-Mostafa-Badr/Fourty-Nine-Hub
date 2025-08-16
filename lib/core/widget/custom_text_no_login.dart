@@ -18,9 +18,9 @@ class CustomTextNoLogin extends StatelessWidget {
       child: SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             return pleaseLoginDialog(context);
-            // context.push(Routes.LOGIN);
+            // context.pushNamed(Routes.LOGIN);
           },
           child: Container(
             padding: EdgeInsets.all(12.w),
@@ -49,8 +49,9 @@ class CustomTextNoLogin extends StatelessWidget {
     );
   }
 }
+
 class CustomTextNoLoginNew extends StatelessWidget {
-   const CustomTextNoLoginNew({super.key});
+  const CustomTextNoLoginNew({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +59,9 @@ class CustomTextNoLoginNew extends StatelessWidget {
       child: SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             return pleaseLoginDialog(context);
-            // context.push(Routes.LOGIN);
+            // context.pushNamed(Routes.LOGIN);
           },
           child: Center(
             child: Text(
@@ -80,6 +81,7 @@ class CustomTextNoLoginNew extends StatelessWidget {
     );
   }
 }
+
 class CustomNotLogged extends StatelessWidget {
   const CustomNotLogged({super.key});
 

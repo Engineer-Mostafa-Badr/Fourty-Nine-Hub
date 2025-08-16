@@ -66,7 +66,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 validator: (value) {
@@ -92,7 +92,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                 setState(() {});
               } else {
                 return pleaseLoginDialog(context);
-                // context.push(Routes.LOGIN);
+                // context.pushNamed(Routes.LOGIN);
               }
             },
             suggestionsCallback: (search) async {
@@ -134,7 +134,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                     riderCubit.pickModel(value);
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 validator: (value) {
@@ -161,7 +161,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
               } else {
                 return pleaseLoginDialog(context);
 
-                // context.push(Routes.LOGIN);
+                // context.pushNamed(Routes.LOGIN);
               }
             },
             suggestionsCallback: (search) async {
@@ -198,7 +198,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
               );
@@ -219,7 +219,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
               } else {
                 return pleaseLoginDialog(context);
 
-                // context.push(Routes.LOGIN);
+                // context.pushNamed(Routes.LOGIN);
               }
             },
             suggestionsCallback: (search) {

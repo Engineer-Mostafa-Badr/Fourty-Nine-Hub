@@ -33,7 +33,7 @@ class MealBanner extends StatelessWidget {
           );
         }
         return MainCategoryBanner(
-          fromHome:false,
+          fromHome: false,
           category: state.mainCategory != null
               ? MainCategoryEntity(
                   id: state.mainCategory?.id ?? "",
@@ -68,10 +68,10 @@ class MealBanner extends StatelessWidget {
                       ),
                     ),
                   ));
-              // context.push(Routes.CREATERESTURANT);
+              // context.pushNamed(Routes.CREATERESTURANT);
             } else {
               return pleaseLoginDialog(context);
-              // context.push(Routes.REGISTER);
+              // context.pushNamed(Routes.REGISTER);
             }
           },
           onFavorite: () {

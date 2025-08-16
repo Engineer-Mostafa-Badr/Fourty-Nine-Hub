@@ -111,11 +111,11 @@ class _TinderScreen1State extends State<TinderScreen1> {
               ],
             ),
             title: ClickableWidget(
-              onTap: ()=>context.push(Routes.FindMyProfileScreen),
+                onTap: () => context.pushNamed(Routes.FindMyProfileScreen),
                 child: Image.asset(
-              Assets.male_profile,
-              width: 70.w,
-            )),
+                  Assets.male_profile,
+                  width: 70.w,
+                )),
             centerTitle: true,
             actions: [
               // The text behind the icon
@@ -137,7 +137,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
               ),
               IconButton(
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   // setState(() {
                   //   isMaleSelected = !isMaleSelected!; // Toggle the state
                   //   final tinderCubit = context.read<TinderViewCubit>();

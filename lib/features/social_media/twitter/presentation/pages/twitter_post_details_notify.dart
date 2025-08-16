@@ -129,7 +129,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                     } else {
                       return pleaseLoginDialog(context);
 
-                      // context.push(Routes.LOGIN);
+                      // context.pushNamed(Routes.LOGIN);
                     }
                   },
                   showPostComments: (i) {
@@ -203,7 +203,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                     } else {
                       return pleaseLoginDialog(context);
 
-                      // context.push(Routes.LOGIN);
+                      // context.pushNamed(Routes.LOGIN);
                     }
                   },
                   onShare: () {
@@ -212,7 +212,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                     } else {
                       return pleaseLoginDialog(context);
 
-                      // context.push(Routes.LOGIN);
+                      // context.pushNamed(Routes.LOGIN);
                     }
                   },
                   getPost: () {},

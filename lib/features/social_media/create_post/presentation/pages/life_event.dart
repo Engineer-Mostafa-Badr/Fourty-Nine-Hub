@@ -167,7 +167,7 @@
 //                           return ClickableWidget(
 //                             onTap: () {
 //       ManageVibration.vibrate();
-//                               context.push(Routes.LIFEEVENTSub,
+//                               context.pushNamed(Routes.LIFEEVENTSub,
 //                                   extra: cubit.lifeEventCategories[index]);
 //                             },
 //                             child: Container(
@@ -221,12 +221,13 @@
 // }
 
 ///! to run widgtetbook run this command
+library;
 
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart'; 
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -488,7 +489,7 @@ class _LifeEventState extends State<LifeEvent> {
                           print(cubit.lifeEventCategories[index].image);
                           return ClickableWidget(
                             onTap: () {
-                              context.push(Routes.LIFEEVENTSub,
+                              context.pushNamed(Routes.LIFEEVENTSub,
                                   extra: cubit.lifeEventCategories[index]);
                             },
                             child: Container(

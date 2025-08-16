@@ -52,7 +52,7 @@ class RequestButton extends StatelessWidget {
                 context.pop();
                 return pleaseLoginDialog(context);
 
-                // context.push(Routes.LOGIN);
+                // context.pushNamed(Routes.LOGIN);
               }
             // : subscriptionStatus == 'not subscribed'
             //     ? null
@@ -108,7 +108,7 @@ class RequestButton extends StatelessWidget {
                         }
                         // else {
                         //   return pleaseLoginDialog(context);
-                        //   // context.go(Routes.LOGIN);
+                        //   // context.goNamed(Routes.LOGIN);
                         // }
                       },
                     );
@@ -142,7 +142,7 @@ class RequestButton extends StatelessWidget {
       //   onTap: !context.read<UserCubit>().isLoggedIn
       //       ? () {
       //           context.pop();
-      //           context.push(Routes.LOGIN);
+      //           context.pushNamed(Routes.LOGIN);
       //         }
       //       : subscriptionStatus == 'premium'
       //           ? null
@@ -243,7 +243,7 @@ class RequestButton extends StatelessWidget {
       //                                           }
       //                                         });
       //                                       } else {
-      //                                         context.go(Routes.LOGIN);
+      //                                         context.goNamed(Routes.LOGIN);
       //                                       }
       //                                     },
       //                                     child: Container(

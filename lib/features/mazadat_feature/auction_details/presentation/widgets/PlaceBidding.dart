@@ -135,14 +135,14 @@ class _PlaceBiddingState extends State<PlaceBidding> {
               style: Styles.headerText(color: Colors.white),
               label: Labels.placeBidding,
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (bidding > widget.auction.currentPrice) {
                   if (AuthHelper().isLoggedIn()) {
                     widget.onPlaced(bidding);
 
                     context.pop();
                   } else {
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                     return pleaseLoginDialog(context);
                   }
                 }

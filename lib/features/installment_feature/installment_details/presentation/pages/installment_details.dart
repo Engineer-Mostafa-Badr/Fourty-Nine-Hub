@@ -82,12 +82,12 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                           label:
                               '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.month}',
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (AuthHelper().isLoggedIn()) {
                               controller.buyWithInstallment(
                                   installmentId: widget.installmentId);
                             } else {
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                               return pleaseLoginDialog(context);
                             }
                           }),

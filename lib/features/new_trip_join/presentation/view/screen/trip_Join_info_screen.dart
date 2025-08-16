@@ -19,8 +19,8 @@ class TripJoinInfoScreen extends StatelessWidget {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
-      ManageVibration.vibrate();
-          context.push(Routes.AVAILABLE_TRIPS);
+          ManageVibration.vibrate();
+          context.pushNamed(Routes.AVAILABLE_TRIPS);
         },
         child: Container(
           width: 300.w,
@@ -34,14 +34,15 @@ class TripJoinInfoScreen extends StatelessWidget {
               context.isArabic ? "بدء الرحلة!" : "Start Journey!",
               style: TextStyle(
                 fontSize: 32.sp,
-                color: context.isDarkMode?AppColors.black:Colors.white,
+                color: context.isDarkMode ? AppColors.black : Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
       ),
-      body: const TripJoinInfoInfoBody(), mainCategoryId: 1,
+      body: const TripJoinInfoInfoBody(),
+      mainCategoryId: 1,
     );
   }
 }
@@ -64,11 +65,16 @@ class TripJoinInfoInfoBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20.h),
-        context.isDarkMode?Image.asset(Assets.tripDarkInfoIcon,height: MediaQuery.of(context).size.height*0.4,fit: BoxFit.cover,):SvgPicture.asset(Assets.tripInfoIcon),
+        context.isDarkMode
+            ? Image.asset(
+                Assets.tripDarkInfoIcon,
+                height: MediaQuery.of(context).size.height * 0.4,
+                fit: BoxFit.cover,
+              )
+            : SvgPicture.asset(Assets.tripInfoIcon),
         SizedBox(height: 30.h),
         RowTextWidget(
-          text:
-              context.isArabic ? "أنت مالك السيارة." : 'You are a car Owner.',
+          text: context.isArabic ? "أنت مالك السيارة." : 'You are a car Owner.',
         ),
         SizedBox(height: 15.h),
         RowTextWidget(

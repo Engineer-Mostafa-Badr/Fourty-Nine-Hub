@@ -26,7 +26,7 @@ import '../../../../../res/style/const.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart'  as manageVibration;
+import 'package:fourtyninehub/helpers/manage_vibration.dart' as manageVibration;
 
 class EnhancedInputWidget extends StatefulWidget {
   const EnhancedInputWidget(
@@ -69,7 +69,7 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
                       : Colors.white,
                 ),
                 onPressed: () async {
-       manageVibration.ManageVibration.vibrate();
+                  manageVibration.ManageVibration.vibrate();
                   // Handle favorite button press
 
                   await BlocProvider.of<StoryCubit>(context)
@@ -104,7 +104,7 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
               child: IconButton(
                 icon: const Icon(Icons.send, color: Colors.white),
                 onPressed: () async {
-      manageVibration.ManageVibration.vibrate();
+                  manageVibration.ManageVibration.vibrate();
                   if (_messageController.text.trim().isEmpty) {
                     showErrorMessage(
                         context,
@@ -123,11 +123,11 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
                             chat: chat,
                             message: _messageController.text,
                           );
-                          showSuccessMessage(
-                        context,
-                        context.isArabic
-                            ? 'تم ارسال الرسالة بنجاح'
-                            : 'Successfully sent message');
+                      showSuccessMessage(
+                          context,
+                          context.isArabic
+                              ? 'تم ارسال الرسالة بنجاح'
+                              : 'Successfully sent message');
                     } else {
                       ChatEntity? greetChat =
                           await context.read<UserCubit>().createNormalChat(
@@ -140,16 +140,16 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
                               chat: greetChat,
                               message: _messageController.text,
                             );
-                            showSuccessMessage(
-                        context,
-                        context.isArabic
-                            ? 'تم ارسال الرسالة بنجاح'
-                            : 'Successfully sent message');
+                        showSuccessMessage(
+                            context,
+                            context.isArabic
+                                ? 'تم ارسال الرسالة بنجاح'
+                                : 'Successfully sent message');
                       }
                     }
 
                     _messageController.clear();
-                    
+
                     setState(() {});
                   }
                 },
@@ -236,7 +236,7 @@ class ReactionWidget extends StatelessWidget {
         final reaction = reactions[index];
         return FloatingActionButton.small(
           onPressed: () {
-      manageVibration.ManageVibration.vibrate();
+            manageVibration.ManageVibration.vibrate();
             debugPrint('Selected: ${reaction['label']}');
           },
           backgroundColor: Colors.transparent,
@@ -329,23 +329,23 @@ class StoryViewScreenState extends State<StoryViewScreen> {
             );
           }
           // if (widget.mutedStories.isNotEmpty) {
-            return PageView.builder(
-              controller: _pageController,
-              itemCount: widget.mutedStories?.length ?? 0,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentUserIndex = index;
-                });
-              },
-              itemBuilder: (context, index) {
-                return UserStoryView(
-                  currentUserId: serviceLocator<UserCubit>().state.data!.id,
-                  userStory: widget.mutedStories![index],
-                  onComplete: _navigateToNextUser,
-                  onPrevious: _navigateToPreviousUser,
-                );
-              },
-            );
+          return PageView.builder(
+            controller: _pageController,
+            itemCount: widget.mutedStories?.length ?? 0,
+            onPageChanged: (index) {
+              setState(() {
+                _currentUserIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              return UserStoryView(
+                currentUserId: serviceLocator<UserCubit>().state.data!.id,
+                userStory: widget.mutedStories![index],
+                onComplete: _navigateToNextUser,
+                onPrevious: _navigateToPreviousUser,
+              );
+            },
+          );
           // }
           return const Sizer();
         }),
@@ -453,7 +453,7 @@ class UserStoryViewState extends State<UserStoryView>
                   width: 0.1.sw,
                   child: InkWell(
                     onTap: () async {
-      manageVibration.ManageVibration.vibrate();
+                      manageVibration.ManageVibration.vibrate();
                       _storyController.pause();
                       await showViewerList(context, state.viewersResponse!);
                       _storyController.play();
@@ -716,8 +716,8 @@ class _UserInfoBarState extends State<UserInfoBar> {
 
   Widget _buildUserAvatar(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          context.push(Routes.OTHERSACCOUNT, extra: widget.userStory.user?.id),
+      onTap: () => context.pushNamed(Routes.OTHERSACCOUNT,
+          extra: widget.userStory.user?.id),
       child: CircleAvatar(
         minRadius: 22,
         backgroundImage:

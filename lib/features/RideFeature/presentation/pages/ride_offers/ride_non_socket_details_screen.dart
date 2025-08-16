@@ -190,7 +190,7 @@ class _RideNonSocketDetailsScreenState
           ),
           TextButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -206,8 +206,7 @@ class _RideNonSocketDetailsScreenState
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(
-        widget.tripEntity.tripDetails?.createdAt ??
-            '2025-03-11T21:50:21.998Z');
+        widget.tripEntity.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
     String formattedDate =
         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
     // String formattedTime =
@@ -464,19 +463,24 @@ class _RideNonSocketDetailsScreenState
                               ? const Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                                   onPressed: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     if (state.supportStatus ==
                                         RequestEmergencyStatus
                                             .noRequest.status) {
                                       if (form.currentState!.validate()) {
                                         cubit.requestEmergencySupport(
                                             context: context,
-                                            clientId: widget.tripEntity.clientDetails?.id ?? "",
-                                            driverId: widget.tripEntity.driverDetails?.id??'',
-                                            tripId:widget.tripEntity.tripDetails?.id??'',
+                                            clientId: widget.tripEntity
+                                                    .clientDetails?.id ??
+                                                "",
+                                            driverId: widget.tripEntity
+                                                    .driverDetails?.id ??
+                                                '',
+                                            tripId: widget.tripEntity
+                                                    .tripDetails?.id ??
+                                                '',
                                             userType: "client",
-                                            tripType: "nonTracking"
-                                        );
+                                            tripType: "nonTracking");
                                         // cubit.requestEmergencySupport(
                                         //     context: context,
                                         //     clientId: widget.tripEntity
@@ -590,7 +594,7 @@ class _RideNonSocketDetailsScreenState
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton.icon(
                                 onPressed: () async {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   setState(() => isLoading = true);
                                   final path = await _generatePdf(
                                       details: state.supportDetails,
@@ -604,7 +608,8 @@ class _RideNonSocketDetailsScreenState
                                   if (path != null) {
                                     _showPdfPreview(context, path);
                                   }
-                                  context.push(Routes.emergencyContactsScreen);
+                                  context.pushNamed(
+                                      Routes.emergencyContactsScreen);
                                 },
                                 icon: const Icon(Icons.download,
                                     color: Colors.white),

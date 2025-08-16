@@ -44,8 +44,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount:
                           cubit.rates.length > 2 ? 2 : cubit.rates.length,
-                      separatorBuilder: (context, index) =>
-                          const Sizer(),
+                      separatorBuilder: (context, index) => const Sizer(),
                       itemBuilder: (context, index) =>
                           UserDoctorRateCard(rate: cubit.rates[index]),
                     ),
@@ -54,8 +53,9 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                       AppButton(
                         label: LocaleKeys.viewAll.localize,
                         onPressed: () {
-      ManageVibration.vibrate();
-                          context.push(Routes.DOCTORREVIEWS, extra: doctorId);
+                          ManageVibration.vibrate();
+                          context.pushNamed(Routes.DOCTORREVIEWS,
+                              extra: doctorId);
                         },
                         style: Styles.headerText(color: Colors.white),
                       )

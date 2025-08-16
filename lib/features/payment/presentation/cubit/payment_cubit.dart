@@ -302,7 +302,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           instaPayStatus: StateStatus.success,
         ));
         showSuccessMessage(context, LocaleKeys.paymentSuccessful.localize);
-        context.go(Routes.HOME);
+        context.goNamed(Routes.HOME);
         print("InstaPay Data: ${data.message}");
       },
     );

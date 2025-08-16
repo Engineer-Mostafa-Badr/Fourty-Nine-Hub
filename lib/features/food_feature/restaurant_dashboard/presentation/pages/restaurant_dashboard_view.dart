@@ -62,7 +62,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
           cubit.loadDataPast(); // التبويب الخاص بـ Past
           break;
         case 2:
-        // إذا كان عندك تبويب ثالث (مثل الفلتر)، ضع ما يناسبك هنا
+          // إذا كان عندك تبويب ثالث (مثل الفلتر)، ضع ما يناسبك هنا
           break;
       }
     }
@@ -97,7 +97,9 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
             child: Label(
               text: text,
               style: Styles.mediumText(
-                color: isSelected ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context),
+                color: isSelected
+                    ? AppColors.getReversedTextColor(context)
+                    : AppColors.getTextColor(context),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -117,7 +119,8 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
           child: AnimatedContainer(
             height: 70.h,
             duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             decoration: BoxDecoration(
               color: isSelected
                   ? AppColors.getButtonPrimaryColor(context)
@@ -126,7 +129,9 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
             ),
             child: Icon(
               icon,
-              color: isSelected ? AppColors.getReversedTextColor(context): AppColors.getTextColor(context),
+              color: isSelected
+                  ? AppColors.getReversedTextColor(context)
+                  : AppColors.getTextColor(context),
             ),
           ),
         );
@@ -137,67 +142,83 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
-      child: BlocListener<RestaurantDashboardCubit, RestaurantDashboardState>(
-          listener: (context, state) {
-            // if (state.actionType == RideAction.download) {
-            //   showSuccessMessage(
-            //       context, state.downloadCompleted ?? "Download Successful");
-            //   context.read<ReviewHealthCubit>().emit(
-            //     state.copyWith(showSnackbar: false, actionType: RideAction.none),
-            //   );
-            // }
-          },
-          child:  CustomScaffold(
-            appBar: HomeAppbar(
-              isWithBackArrow: true,
-            ),
-            body: BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
-                listener: (context, state) {},
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                      const Sizer(),
-                      Align(alignment:AlignmentDirectional.topStart,child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: Text(LocaleKeys.restaurantMode.localize,style: Styles.headerText(fontSize: 40),),
-                      )),
-                      Container(
-                        height: 100.h,
-                        margin: const EdgeInsets.symmetric(horizontal: 2.0,),
-                        padding: const EdgeInsets.all(2.0),
-                        decoration: BoxDecoration(
-                          // color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
+        length: 3,
+        child: BlocListener<RestaurantDashboardCubit, RestaurantDashboardState>(
+            listener: (context, state) {
+              // if (state.actionType == RideAction.download) {
+              //   showSuccessMessage(
+              //       context, state.downloadCompleted ?? "Download Successful");
+              //   context.read<ReviewHealthCubit>().emit(
+              //     state.copyWith(showSnackbar: false, actionType: RideAction.none),
+              //   );
+              // }
+            },
+            child: CustomScaffold(
+              appBar: HomeAppbar(
+                isWithBackArrow: true,
+              ),
+              body: BlocConsumer<RestaurantDashboardCubit,
+                      RestaurantDashboardState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        const Sizer(),
+                        Align(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 6.0),
+                              child: Text(
+                                LocaleKeys.restaurantMode.localize,
+                                style: Styles.headerText(fontSize: 40),
+                              ),
+                            )),
+                        Container(
+                          height: 100.h,
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 2.0,
+                          ),
+                          padding: const EdgeInsets.all(2.0),
+                          decoration: BoxDecoration(
+                            // color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              spacing: 8,
+                              children: [
+                                _buildTab(
+                                    context.isArabic
+                                        ? 'طلبات متاحة'
+                                        : LocaleKeys.availableRequest.localize,
+                                    0),
+                                _buildTab(
+                                    context.isArabic
+                                        ? 'طلبات سابقة'
+                                        : LocaleKeys.pastRequests.localize,
+                                    1),
+                                _buildTabIcon(Icons.tune, 2),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            spacing: 8,
+                        Expanded(
+                          child: TabBarView(
+                            // physics: const NeverScrollableScrollPhysics(),
+                            controller: _tabController,
                             children: [
-                              _buildTab(context.isArabic?'طلبات متاحة':LocaleKeys.availableRequest.localize, 0),
-                              _buildTab(context.isArabic?'طلبات سابقة':LocaleKeys.pastRequests.localize, 1),
-                              _buildTabIcon(Icons.tune, 2),
+                              const AvailableRequestFood(),
+                              const PastRequestFood(),
+                              RestaurantSettingScreen(widget: widget),
                             ],
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          // physics: const NeverScrollableScrollPhysics(),
-                          controller: _tabController,
-                          children: [
-                            const AvailableRequestFood(),
-                            const PastRequestFood(),
-                            RestaurantSettingScreen(widget: widget),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-          )));
-
+                      ],
+                    );
+                  }),
+            )));
   }
 }
 
@@ -230,18 +251,19 @@ class RestaurantSettingScreen extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Label(
-                            text: state.isRestaurant?.isActive ?? false
-                                ? LocaleKeys.ready.localize
-                                : LocaleKeys.notAvailable.localize,
-                            style: Styles.headerText(),
-                          )),
+                        text: state.isRestaurant?.isActive ?? false
+                            ? LocaleKeys.ready.localize
+                            : LocaleKeys.notAvailable.localize,
+                        style: Styles.headerText(),
+                      )),
                       CustomSwitchButton(
                         value: state.isRestaurant?.isActive ?? false,
                         onChanged: (v) async {
                           showDialog(
                             context: context,
                             builder: (dialogContext) => AlertDialog(
-                              backgroundColor: AppColors.getFindFillColor(context),
+                              backgroundColor:
+                                  AppColors.getFindFillColor(context),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -276,36 +298,47 @@ class RestaurantSettingScreen extends StatelessWidget {
 
                                   // Buttons row
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       // Close button
                                       Expanded(
                                         child: AppButton(
                                           onPressed: () {
-      ManageVibration.vibrate();
-                                            Navigator.pop(dialogContext); // Close dialog
+                                            ManageVibration.vibrate();
+                                            Navigator.pop(
+                                                dialogContext); // Close dialog
                                           },
                                           label: LocaleKeys.cancel.localize,
-                                          backColor: AppColors.getRedColor(context),
-                                          color: AppColors.getReversedTextColor(context),
+                                          backColor:
+                                              AppColors.getRedColor(context),
+                                          color: AppColors.getReversedTextColor(
+                                              context),
                                           // variant: AppButtonVariant.outlined,
                                           // width: 100,
                                         ),
                                       ),
-                                      const SizedBox(width: 5,),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
                                       // Open button
                                       Expanded(
                                         child: AppButton(
-                                          backColor: AppColors.getButtonPrimaryColor(context),
+                                          backColor:
+                                              AppColors.getButtonPrimaryColor(
+                                                  context),
                                           onPressed: () async {
-      ManageVibration.vibrate();
-                                            Navigator.pop(dialogContext); // Close dialog
+                                            ManageVibration.vibrate();
+                                            Navigator.pop(
+                                                dialogContext); // Close dialog
                                             await context
-                                                .read<RestaurantDashboardCubit>()
+                                                .read<
+                                                    RestaurantDashboardCubit>()
                                                 .changeConnectivityStatus(v);
                                           },
-                                          label:  LocaleKeys.update.localize,
-                                          color:AppColors.getReversedTextColor(context) ,
+                                          label: LocaleKeys.update.localize,
+                                          color: AppColors.getReversedTextColor(
+                                              context),
                                           // width: 100,
                                         ),
                                       ),
@@ -319,66 +352,77 @@ class RestaurantSettingScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   if (state.info != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Label(text: LocaleKeys.myRating.localize,
+                        Label(
+                          text: LocaleKeys.myRating.localize,
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: AppColors.getButtonPrimaryWhiteColor(context)
-                          ),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: AppColors.getButtonPrimaryWhiteColor(
+                                  context)),
                         ),
                         Row(
                           children: [
-                            Label(text: "${state.info?.totalRating ?? 0}".toArabicNumbers(context),
-                            style:  Styles.mediumText(
-                                fontWeight: FontWeight.w700,
-                                color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                            Label(
+                              text: "${state.info?.totalRating ?? 0}"
+                                  .toArabicNumbers(context),
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w700,
+                                  color: context.isDarkMode
+                                      ? AppColors.whiteColor
+                                      : AppColors.PRIMARY_COLOR),
                             ),
-                          ),
-                            const Sizer(width: 8,),
+                            const Sizer(
+                              width: 8,
+                            ),
                             RatingBar(
-                              initialRating:state.info!.totalRating?.toDouble() ?? 0,
+                              initialRating:
+                                  state.info!.totalRating?.toDouble() ?? 0,
                               ignoreGestures: true,
                               allowHalfRating: true,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 3),
                               ratingWidget: RatingWidget(
                                 full: SvgPicture.asset(Assets.star1),
                                 half: SvgPicture.asset(Assets.halfStar),
-                                empty: SvgPicture.asset(Assets.starEmpty,color: AppColors.getTextColor(context),),
+                                empty: SvgPicture.asset(
+                                  Assets.starEmpty,
+                                  color: AppColors.getTextColor(context),
+                                ),
                               ),
                               itemSize: 13,
                               onRatingUpdate: (double value) {},
                             ),
-
                           ],
                         ),
                       ],
                     ),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // const Divider(),
                   const RestaurantStatisticsView(),
                   const Sizer(),
                   RestaurantPhotoPicker(
-                      subcategoryId: state.info
-                          ?.subcategoryId?.id ??
-                          ''
+                      subcategoryId: state.info?.subcategoryId?.id ?? ''),
+                  const Sizer(
+                    height: 50,
                   ),
-                  const Sizer(height: 50,),
                   AppButton(
                     label: LocaleKeys.editFood.localize,
                     onPressed: () {
-      ManageVibration.vibrate();
-                      context.push(Routes.EditFoodView,
+                      ManageVibration.vibrate();
+                      context.pushNamed(Routes.EditFoodView,
                           extra: EditFoodParams(
                               restaurantId: widget.restaurantId ?? '',
                               subCategoryId:
-                              state.info
-                                  ?.subcategoryId?.id ??
-                                  ''));
+                                  state.info?.subcategoryId?.id ?? ''));
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
@@ -393,34 +437,36 @@ class RestaurantSettingScreen extends StatelessWidget {
                       // });
                     },
                     backColor: AppColors.getButtonPrimaryColor(context),
-                    style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
+                    style: Styles.headerText(
+                        color: AppColors.getReversedTextColor(context)),
                   ),
-                  const SizedBox(height: 15,),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   AppButton(
                     label: LocaleKeys.deleteRegistration.localize,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       showConfirmationDialog(
                         context,
                         title: LocaleKeys.deleteRegistration.localize,
-                        message:
-                        LocaleKeys.sureRemoveRestaurant.localize,
+                        message: LocaleKeys.sureRemoveRestaurant.localize,
                         onConfirm: () async {
                           if (widget.restaurantId.isNotEmpty) {
                             await context
                                 .read<RestaurantDashboardCubit>()
                                 .deleteRestaurantById(context,
-                                id: widget.restaurantId,
-                                subCategoryId: state.info
-                                    ?.subcategoryId?.id ??
-                                    '');
+                                    id: widget.restaurantId,
+                                    subCategoryId:
+                                        state.info?.subcategoryId?.id ?? '');
                             context.pop(true);
                           }
                         },
                       );
                     },
                     backColor: AppColors.getRedColor(context),
-                    style: Styles.headerText(color:AppColors.getReversedTextColor(context)),
+                    style: Styles.headerText(
+                        color: AppColors.getReversedTextColor(context)),
                   ),
                   const Sizer(),
                 ],
@@ -432,8 +478,6 @@ class RestaurantSettingScreen extends StatelessWidget {
     );
   }
 }
-
-
 
 // class RestaurantSetting2Screen extends StatelessWidget {
 //   const RestaurantSetting2Screen({
@@ -662,8 +706,6 @@ class RestaurantSettingScreen extends StatelessWidget {
 //   }
 // }
 
-
-
 class CustomBottomSheet extends StatelessWidget {
   final String phone;
 
@@ -690,7 +732,7 @@ class CustomBottomSheet extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontSize: 18),
               onPressed: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 final Uri phoneUri = Uri(scheme: 'tel', path: phone);
                 if (await canLaunchUrl(phoneUri)) {
                   await launchUrl(phoneUri);
@@ -712,7 +754,7 @@ class CustomBottomSheet extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontSize: 18),
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 // You can implement another action for regular calls here
               },
             ),
@@ -722,6 +764,7 @@ class CustomBottomSheet extends StatelessWidget {
     );
   }
 }
+
 void showConfirmationDialog(
   BuildContext context, {
   required String title,
@@ -737,7 +780,9 @@ void showConfirmationDialog(
           child: Text(
             title,
             style: Styles.headerText(
-                color:context.isDarkMode ?AppColors.whiteColor:AppColors.PRIMARY_COLOR ,
+              color: context.isDarkMode
+                  ? AppColors.whiteColor
+                  : AppColors.PRIMARY_COLOR,
             ),
           ),
         ),
@@ -745,7 +790,9 @@ void showConfirmationDialog(
           message,
           style: Styles.mediumText(
             fontSize: 32,
-              color:context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+            color: context.isDarkMode
+                ? AppColors.whiteColor
+                : AppColors.PRIMARY_COLOR,
           ),
         ),
         actions: <Widget>[
@@ -753,18 +800,26 @@ void showConfirmationDialog(
             onPressed: onCancel ?? () => Navigator.of(context).pop(),
             child: Text(
               LocaleKeys.no.localize,
-              style: Styles.mediumText(color:AppColors.getTextColor(context),),
+              style: Styles.mediumText(
+                color: AppColors.getTextColor(context),
+              ),
             ),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom( backgroundColor: AppColors.getButtonPrimaryColor(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.getButtonPrimaryColor(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
-              ),),
+              ),
+            ),
             onPressed: onConfirm,
             child: Text(
               LocaleKeys.yes.localize,
-              style: Styles.mediumText(color: context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,),
+              style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.whiteColor,
+              ),
             ),
           ),
         ],
@@ -774,8 +829,13 @@ void showConfirmationDialog(
 void deleteItem(BuildContext context) {
   Navigator.of(context).pop();
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(LocaleKeys.deleteSuccessfully.localize,style: Styles.mediumText(
-      color: context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,
-    ),)),
+    SnackBar(
+        content: Text(
+      LocaleKeys.deleteSuccessfully.localize,
+      style: Styles.mediumText(
+        color:
+            context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.whiteColor,
+      ),
+    )),
   );
 }

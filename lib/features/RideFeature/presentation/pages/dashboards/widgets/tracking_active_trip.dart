@@ -62,229 +62,280 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    if(!_locationServiceEnabled){
+    if (!_locationServiceEnabled) {
       return Expanded(
         child: Center(
           child: Text(
-            context.isArabic?'يرجى تشغيل خدمة الموقع للتمكن من رؤية رحلتك الجارية':'Please enable location service to track your active trip',
+            context.isArabic
+                ? 'يرجى تشغيل خدمة الموقع للتمكن من رؤية رحلتك الجارية'
+                : 'Please enable location service to track your active trip',
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           ),
         ),
       );
     }
     return BlocBuilder<DashboardsCubit, DashboardsState>(
-      builder: (context,state) {
-        var cubit = context.read<DashboardsCubit>();
-        return Expanded(
-            child: Stack(
-              children: [
-                if (state.tripStatus == TripState.accepted.name ||
-                    state.tripStatus == TripState.goToClient.name ||
-                    state.tripStatus == TripState.completed.name ||
-                    state.tripStatus == TripState.inLocation.name ||
-                    state.tripStatus == TripState.started.name ||
-                    state.tripStatus == TripState.support.name)
-                  _buildTopMap(context, state),
-                if (state.tripStatus == TripState.goToClient.name &&
-                    cubit.activeTrip?.driverIsArrivingIn != null &&
-                    (cubit.activeTrip?.driverIsArrivingIn?.isNotEmpty ?? false) &&
-                    (DateTime.parse(cubit.activeTrip?.driverIsArrivingIn ?? '').toLocal().isAfter(DateTime.now())))
-                  PositionedDirectional(
-                      top: 20.h,
-                      start: 100.w,
-                      end: 100.w,
-                      child: CountdownTimerCard(
-                        targetTime: DateTime.parse(cubit.activeTrip?.driverIsArrivingIn ?? '').toLocal(),
-                      )),
-                if ((cubit.activeTrip == null || state.tripStatus == TripState.canceled.name || state.tripStatus == ''))
-                  Center(
-                      child: Text(context.isArabic ? 'لا يوجد لديك رحلة جارية في الوقت الحالي' : "You don't have active trip at the moment",
-                          style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 16))),
-                // DynamicMapWithPolyline(url: getMapUrl(context, type: "mapBox"), apiKey: getApiKey(context, type: "mapBox")),
-                if (state.tripStatus == TripState.goToClient.name)
-                  BuildDriverArrivedSheet(
-                      onPressed: (String message) {
-                        ManageVibration.vibrate();
-                        cubit.arrivedToClient(context, cubit.activeTrip?.tripId ?? '', message);
-                      },
-                      onSafety: () {
-                        ManageVibration.vibrate();
-                        cubit.showSafety(state.tripStatus ?? '');
-                      },
-                      onCancelTrip: (CancelTripByRiderUseCaseParams params) {
-                        ManageVibration.vibrate();
-                        cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params);
-                      },
-                      onReport: () {
-                        ManageVibration.vibrate();
-                        bottomSheet(
-                            context: context,
-                            widget: ReportView(
-                              id: cubit.activeTrip?.tripId ?? '',
-                              categoryId: cubit.activeTrip?.subCategoryId ?? '',
-                            ));
-                      },
-                      params: widget.params,
-                      activeTrip: cubit.activeTrip),
-                if (state.tripStatus == TripState.accepted.name)
-                  BuildGoToClientSheet(
-                    onGoingToClient: () {
-                      ManageVibration.vibrate();
-                      cubit.goingToClient(context, cubit.activeTrip?.tripId ?? '');
-                    },
-                    activeTrip: cubit.activeTrip,
-                    onSafety: () {
-                      ManageVibration.vibrate();
-                      cubit.showSafety(state.tripStatus ?? '');
-                    },
-                    onReport: () {
-                      ManageVibration.vibrate();
-                      bottomSheet(
-                          context: context,
-                          widget: ReportView(
-                            id: cubit.activeTrip?.tripId ?? '',
-                            categoryId: cubit.activeTrip?.subCategoryId ?? '',
-                          ));
-                    },
-                    onCancelTrip: (CancelTripByRiderUseCaseParams params) {
-                      ManageVibration.vibrate();
-                      cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params);
-                    },
-                    params: widget.params,
-                  ),
-                if (state.tripStatus == TripState.inLocation.name)
-                  BuildDriverOtpSheet(
-                    onPressed: (String otp) {
-                      ManageVibration.vibrate();
-                      cubit.startDriverTrip(context, cubit.activeTrip?.tripId ?? '', otp);
-                    },
-                    onCancelTrip: (CancelTripByRiderUseCaseParams params) {
-                      ManageVibration.vibrate();
-                      cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params);
-                    },
-                    onSafety: () {
-                      ManageVibration.vibrate();
-                      cubit.showSafety(state.tripStatus ?? '');
-                    },
-                    onTick: (Duration time) {
-                      DateTime future = DateTime.now().add(time);
-                      cubit.updateRemainingTime(future);
-                    },
-                    onFinalizeTrip: () {
-                      ManageVibration.vibrate();
-                      cubit.finalizeTripByRider(context: context, tripId: cubit.activeTrip?.tripId ?? '', params: widget.params);
-                    },
-                    onReport: () {
-                      ManageVibration.vibrate();
-                      print("object");
-                      bottomSheet(
-                          context: context,
-                          widget: ReportView(
-                            id: cubit.activeTrip?.tripId ?? '',
-                            categoryId: cubit.activeTrip?.subCategoryId ?? '',
-                          ));
-                    },
-                    remainingTime: state.remainingTime,
-                    activeTrip: cubit.activeTrip,
-                    params: widget.params,
-                  ),
-                if (state.tripStatus == TripState.started.name)
-                  BuildDriverCompleteTripSheet(
-                    activeTrip: cubit.activeTrip,
-                    onPressed: (String) {
-                      ManageVibration.vibrate();
-                    },
-                    onStartRecord: () {
-                      ManageVibration.vibrate();
-                      cubit.startRecord();
-                    },
-                    onStopRecord: () {
-                      ManageVibration.vibrate();
-                      cubit.stopRecord(context: context, subcategoryId: cubit.activeTrip?.subCategoryId ?? '', tripId: cubit.activeTrip?.tripId ?? '');
-                    },
-                    onCompleteRide: () {
-                      ManageVibration.vibrate();
-                      cubit.completeDriverTrip(context, cubit.activeTrip?.tripId ?? '', '');
-                    },
-                    onCompleteRideWithPrice: (String price) {
-                      ManageVibration.vibrate();
-                      cubit.completeDriverTripWithPrice(context, cubit.activeTrip?.tripId ?? '', price);
-                    },
-                    onCancelTrip: (CancelTripByRiderUseCaseParams params) {
-                      ManageVibration.vibrate();
-                      cubit.cancelDriverTrip(context: context, tripId: params.tripId, note: params.note, reasonId: params.reasonId, params: widget.params);
-                    },
-                    onSafety: () {
-                      ManageVibration.vibrate();
-                      cubit.showSafety(state.tripStatus ?? '');
-                    },
-                    onReport: () {
-                      ManageVibration.vibrate();
-                      bottomSheet(
-                          context: context,
-                          widget: ReportView(
-                            id: cubit.activeTrip?.tripId ?? '',
-                            categoryId: cubit.activeTrip?.subCategoryId ?? '',
-                          ));
-                    },
+        builder: (context, state) {
+      var cubit = context.read<DashboardsCubit>();
+      return Expanded(
+          child: Stack(
+        children: [
+          if (state.tripStatus == TripState.accepted.name ||
+              state.tripStatus == TripState.goToClient.name ||
+              state.tripStatus == TripState.completed.name ||
+              state.tripStatus == TripState.inLocation.name ||
+              state.tripStatus == TripState.started.name ||
+              state.tripStatus == TripState.support.name)
+            _buildTopMap(context, state),
+          if (state.tripStatus == TripState.goToClient.name &&
+              cubit.activeTrip?.driverIsArrivingIn != null &&
+              (cubit.activeTrip?.driverIsArrivingIn?.isNotEmpty ?? false) &&
+              (DateTime.parse(cubit.activeTrip?.driverIsArrivingIn ?? '')
+                  .toLocal()
+                  .isAfter(DateTime.now())))
+            PositionedDirectional(
+                top: 20.h,
+                start: 100.w,
+                end: 100.w,
+                child: CountdownTimerCard(
+                  targetTime:
+                      DateTime.parse(cubit.activeTrip?.driverIsArrivingIn ?? '')
+                          .toLocal(),
+                )),
+          if ((cubit.activeTrip == null ||
+              state.tripStatus == TripState.canceled.name ||
+              state.tripStatus == ''))
+            Center(
+                child: Text(
+                    context.isArabic
+                        ? 'لا يوجد لديك رحلة جارية في الوقت الحالي'
+                        : "You don't have active trip at the moment",
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        fontSize: 16))),
+          // DynamicMapWithPolyline(url: getMapUrl(context, type: "mapBox"), apiKey: getApiKey(context, type: "mapBox")),
+          if (state.tripStatus == TripState.goToClient.name)
+            BuildDriverArrivedSheet(
+                onPressed: (String message) {
+                  ManageVibration.vibrate();
+                  cubit.arrivedToClient(
+                      context, cubit.activeTrip?.tripId ?? '', message);
+                },
+                onSafety: () {
+                  ManageVibration.vibrate();
+                  cubit.showSafety(state.tripStatus ?? '');
+                },
+                onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                  ManageVibration.vibrate();
+                  cubit.cancelDriverTrip(
+                      context: context,
+                      tripId: params.tripId,
+                      note: params.note,
+                      reasonId: params.reasonId,
+                      params: widget.params);
+                },
+                onReport: () {
+                  ManageVibration.vibrate();
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: cubit.activeTrip?.tripId ?? '',
+                        categoryId: cubit.activeTrip?.subCategoryId ?? '',
+                      ));
+                },
+                params: widget.params,
+                activeTrip: cubit.activeTrip),
+          if (state.tripStatus == TripState.accepted.name)
+            BuildGoToClientSheet(
+              onGoingToClient: () {
+                ManageVibration.vibrate();
+                cubit.goingToClient(context, cubit.activeTrip?.tripId ?? '');
+              },
+              activeTrip: cubit.activeTrip,
+              onSafety: () {
+                ManageVibration.vibrate();
+                cubit.showSafety(state.tripStatus ?? '');
+              },
+              onReport: () {
+                ManageVibration.vibrate();
+                bottomSheet(
+                    context: context,
+                    widget: ReportView(
+                      id: cubit.activeTrip?.tripId ?? '',
+                      categoryId: cubit.activeTrip?.subCategoryId ?? '',
+                    ));
+              },
+              onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                ManageVibration.vibrate();
+                cubit.cancelDriverTrip(
+                    context: context,
+                    tripId: params.tripId,
+                    note: params.note,
+                    reasonId: params.reasonId,
+                    params: widget.params);
+              },
+              params: widget.params,
+            ),
+          if (state.tripStatus == TripState.inLocation.name)
+            BuildDriverOtpSheet(
+              onPressed: (String otp) {
+                ManageVibration.vibrate();
+                cubit.startDriverTrip(
+                    context, cubit.activeTrip?.tripId ?? '', otp);
+              },
+              onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                ManageVibration.vibrate();
+                cubit.cancelDriverTrip(
+                    context: context,
+                    tripId: params.tripId,
+                    note: params.note,
+                    reasonId: params.reasonId,
+                    params: widget.params);
+              },
+              onSafety: () {
+                ManageVibration.vibrate();
+                cubit.showSafety(state.tripStatus ?? '');
+              },
+              onTick: (Duration time) {
+                DateTime future = DateTime.now().add(time);
+                cubit.updateRemainingTime(future);
+              },
+              onFinalizeTrip: () {
+                ManageVibration.vibrate();
+                cubit.finalizeTripByRider(
+                    context: context,
                     tripId: cubit.activeTrip?.tripId ?? '',
-                    params: widget.params,
+                    params: widget.params);
+              },
+              onReport: () {
+                ManageVibration.vibrate();
+                print("object");
+                bottomSheet(
+                    context: context,
+                    widget: ReportView(
+                      id: cubit.activeTrip?.tripId ?? '',
+                      categoryId: cubit.activeTrip?.subCategoryId ?? '',
+                    ));
+              },
+              remainingTime: state.remainingTime,
+              activeTrip: cubit.activeTrip,
+              params: widget.params,
+            ),
+          if (state.tripStatus == TripState.started.name)
+            BuildDriverCompleteTripSheet(
+              activeTrip: cubit.activeTrip,
+              onPressed: (String) {
+                ManageVibration.vibrate();
+              },
+              onStartRecord: () {
+                ManageVibration.vibrate();
+                cubit.startRecord();
+              },
+              onStopRecord: () {
+                ManageVibration.vibrate();
+                cubit.stopRecord(
+                    context: context,
+                    subcategoryId: cubit.activeTrip?.subCategoryId ?? '',
+                    tripId: cubit.activeTrip?.tripId ?? '');
+              },
+              onCompleteRide: () {
+                ManageVibration.vibrate();
+                cubit.completeDriverTrip(
+                    context, cubit.activeTrip?.tripId ?? '', '');
+              },
+              onCompleteRideWithPrice: (String price) {
+                ManageVibration.vibrate();
+                cubit.completeDriverTripWithPrice(
+                    context, cubit.activeTrip?.tripId ?? '', price);
+              },
+              onCancelTrip: (CancelTripByRiderUseCaseParams params) {
+                ManageVibration.vibrate();
+                cubit.cancelDriverTrip(
+                    context: context,
+                    tripId: params.tripId,
+                    note: params.note,
+                    reasonId: params.reasonId,
+                    params: widget.params);
+              },
+              onSafety: () {
+                ManageVibration.vibrate();
+                cubit.showSafety(state.tripStatus ?? '');
+              },
+              onReport: () {
+                ManageVibration.vibrate();
+                bottomSheet(
+                    context: context,
+                    widget: ReportView(
+                      id: cubit.activeTrip?.tripId ?? '',
+                      categoryId: cubit.activeTrip?.subCategoryId ?? '',
+                    ));
+              },
+              tripId: cubit.activeTrip?.tripId ?? '',
+              params: widget.params,
+            ),
+          if (state.tripStatus == TripState.completed.name)
+            BuildDriverRateClientSheet(
+              onPressed: (message, rate) {
+                ManageVibration.vibrate();
+                print("message $message ||| rate $rate");
+                cubit.rateTheClient(
+                    context: context,
+                    tripId: cubit.activeTrip?.tripId ?? '',
+                    comment: message,
+                    rate: rate,
+                    params: widget.params);
+              },
+            ),
+          if (state.tripStatus == TripState.support.name)
+            BuildSafetySheet(
+              params: SupportRideParams(
+                  tripId: cubit.activeTrip?.tripId ?? '',
+                  tripType: 'tracing',
+                  userType: 'driver',
+                  driverId: cubit.activeTrip?.driverId ?? '',
+                  clientId: cubit.activeTrip?.clientId ?? ''),
+              onClose: () {
+                ManageVibration.vibrate();
+                cubit.closeSafety();
+              },
+              supportRideScreen: () {
+                ManageVibration.vibrate();
+                context.pushNamed(
+                  Routes.supportRideScreen,
+                  extra: SupportRideParams(
+                    tripId: cubit.activeTrip?.tripId ?? '',
+                    tripType: 'tracing',
+                    userType: 'driver',
+                    driverId: cubit.activeTrip?.driverId ?? '',
+                    clientId: cubit.activeTrip?.clientId ?? '',
                   ),
-                if (state.tripStatus == TripState.completed.name)
-                  BuildDriverRateClientSheet(
-                    onPressed: (message, rate) {
-                      ManageVibration.vibrate();
-                      print("message $message ||| rate $rate");
-                      cubit.rateTheClient(context: context, tripId: cubit.activeTrip?.tripId ?? '', comment: message, rate: rate, params: widget.params);
-                    },
-                  ),
-                if (state.tripStatus == TripState.support.name)
-                  BuildSafetySheet(
-                    params: SupportRideParams(
-                        tripId: cubit.activeTrip?.tripId ?? '',
-                        tripType: 'tracing',
-                        userType: 'driver',
-                        driverId: cubit.activeTrip?.driverId ?? '',
-                        clientId: cubit.activeTrip?.clientId ?? ''),
-                    onClose: () {
-                      ManageVibration.vibrate();
-                      cubit.closeSafety();
-                    },
-                    supportRideScreen: () {
-                      ManageVibration.vibrate();
-                      context.push(
-                        Routes.supportRideScreen,
-                        extra: SupportRideParams(
-                          tripId: cubit.activeTrip?.tripId ?? '',
-                          tripType: 'tracing',
-                          userType: 'driver',
-                          driverId: cubit.activeTrip?.driverId ?? '',
-                          clientId: cubit.activeTrip?.clientId ?? '',
-                        ),
-                      );
-                    },
-                    emergencyContactsScreen: () {
-                      ManageVibration.vibrate();
-                      context.push(Routes.emergencyContactsScreen);
-                    },
-                    rideFindingScreen: () {
-                      ManageVibration.vibrate();
-                      context.push(Routes.rideFindingScreen);
-                    },
-                  ),
-              ],
-            ));
-      }
-    );
+                );
+              },
+              emergencyContactsScreen: () {
+                ManageVibration.vibrate();
+                context.pushNamed(Routes.emergencyContactsScreen);
+              },
+              rideFindingScreen: () {
+                ManageVibration.vibrate();
+                context.pushNamed(Routes.rideFindingScreen);
+              },
+            ),
+        ],
+      ));
+    });
   }
+
   Widget _buildTopMap(BuildContext context, DashboardsState state) {
     String tripStatus = context.read<DashboardsCubit>().state.tripStatus ?? '';
     List<gmap.LatLng> routePoints = [];
     List<gmap.LatLng> driverRoutePoints = [];
-    routePoints = _convertPolylineToLatLng(context.read<DashboardsCubit>().activeTrip?.polyline ?? []);
-    driverRoutePoints = _convertPolylineToLatLng(context.read<DashboardsCubit>().activeTrip?.driverPolyline ?? []);
+    routePoints = _convertPolylineToLatLng(
+        context.read<DashboardsCubit>().activeTrip?.polyline ?? []);
+    driverRoutePoints = _convertPolylineToLatLng(
+        context.read<DashboardsCubit>().activeTrip?.driverPolyline ?? []);
 
     List<gmap.LatLng> clients = [];
     List<String> clientsAddress = [];
@@ -293,7 +344,9 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
         context.read<DashboardsCubit>().activeTrip?.wayPointOne?[1] != null &&
         context.read<DashboardsCubit>().activeTrip?.wayPointOne?[0] != 0 &&
         context.read<DashboardsCubit>().activeTrip?.wayPointOne?[1] != 0) {
-      clients.add(gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.wayPointOne![0], context.read<DashboardsCubit>().activeTrip!.wayPointOne![1]));
+      clients.add(gmap.LatLng(
+          context.read<DashboardsCubit>().activeTrip!.wayPointOne![0],
+          context.read<DashboardsCubit>().activeTrip!.wayPointOne![1]));
     }
 
     if (context.read<DashboardsCubit>().activeTrip?.wayPointTwo != null &&
@@ -301,17 +354,32 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
         context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[1] != null &&
         context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[0] != 0 &&
         context.read<DashboardsCubit>().activeTrip?.wayPointTwo?[1] != 0) {
-      clients.add(gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.wayPointTwo![0], context.read<DashboardsCubit>().activeTrip!.wayPointTwo![1]));
+      clients.add(gmap.LatLng(
+          context.read<DashboardsCubit>().activeTrip!.wayPointTwo![0],
+          context.read<DashboardsCubit>().activeTrip!.wayPointTwo![1]));
     }
 
-    if (context.read<DashboardsCubit>().activeTrip?.wayPointOneTitle?.isNotEmpty ?? false) {
-      clientsAddress.add(context.read<DashboardsCubit>().activeTrip?.wayPointOneTitle ?? '');
+    if (context
+            .read<DashboardsCubit>()
+            .activeTrip
+            ?.wayPointOneTitle
+            ?.isNotEmpty ??
+        false) {
+      clientsAddress.add(
+          context.read<DashboardsCubit>().activeTrip?.wayPointOneTitle ?? '');
     }
-    if (context.read<DashboardsCubit>().activeTrip?.wayPointTwoTitle?.isNotEmpty ?? false) {
-      clientsAddress.add(context.read<DashboardsCubit>().activeTrip?.wayPointTwoTitle ?? '');
+    if (context
+            .read<DashboardsCubit>()
+            .activeTrip
+            ?.wayPointTwoTitle
+            ?.isNotEmpty ??
+        false) {
+      clientsAddress.add(
+          context.read<DashboardsCubit>().activeTrip?.wayPointTwoTitle ?? '');
     }
 
-    print("context.read<DashboardsCubit>().activeTrip?.driverPolyline ${context.read<DashboardsCubit>().activeTrip?.driverPolyline}");
+    print(
+        "context.read<DashboardsCubit>().activeTrip?.driverPolyline ${context.read<DashboardsCubit>().activeTrip?.driverPolyline}");
     print("tripStatus11 $tripStatus");
     return Container(
       width: double.infinity,
@@ -324,49 +392,136 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
           // key: ValueKey('map_${DateTime.now().millisecondsSinceEpoch}'), // Force rebuild
           startLocation: tripStatus == TripState.inLocation.name
               ? null
-              : (tripStatus == TripState.goToClient.name || tripStatus == TripState.accepted.name)
-              ? ((context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverStartCoordinates == []))
-              ? null
-              : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.driverStartCoordinates![0], context.read<DashboardsCubit>().activeTrip!.driverStartCoordinates![1])
-              : ((context.read<DashboardsCubit>().activeTrip?.startCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.startCoordinates == []))
-              ? null
-              : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.startCoordinates![1], context.read<DashboardsCubit>().activeTrip!.startCoordinates![0]),
+              : (tripStatus == TripState.goToClient.name ||
+                      tripStatus == TripState.accepted.name)
+                  ? ((context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.driverStartCoordinates ==
+                              null) ||
+                          (context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.driverStartCoordinates ==
+                              []))
+                      ? null
+                      : gmap.LatLng(
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .driverStartCoordinates![0],
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .driverStartCoordinates![1])
+                  : ((context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.startCoordinates ==
+                              null) ||
+                          (context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.startCoordinates ==
+                              []))
+                      ? null
+                      : gmap.LatLng(
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .startCoordinates![1],
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .startCoordinates![0]),
           targetLocation: tripStatus == TripState.inLocation.name
               ? null
-              : (tripStatus == TripState.goToClient.name || tripStatus == TripState.accepted.name)
-              ? ((context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.driverTargetCoordinates == []))
-              ? null
-              : gmap.LatLng(
-              context.read<DashboardsCubit>().activeTrip!.driverTargetCoordinates![0], context.read<DashboardsCubit>().activeTrip!.driverTargetCoordinates![1])
-              : ((context.read<DashboardsCubit>().activeTrip?.targetCoordinates == null) || (context.read<DashboardsCubit>().activeTrip?.targetCoordinates == []))
-              ? null
-              : gmap.LatLng(context.read<DashboardsCubit>().activeTrip!.targetCoordinates![1], context.read<DashboardsCubit>().activeTrip!.targetCoordinates![0]),
+              : (tripStatus == TripState.goToClient.name ||
+                      tripStatus == TripState.accepted.name)
+                  ? ((context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.driverTargetCoordinates ==
+                              null) ||
+                          (context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.driverTargetCoordinates ==
+                              []))
+                      ? null
+                      : gmap.LatLng(
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .driverTargetCoordinates![0],
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .driverTargetCoordinates![1])
+                  : ((context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.targetCoordinates ==
+                              null) ||
+                          (context
+                                  .read<DashboardsCubit>()
+                                  .activeTrip
+                                  ?.targetCoordinates ==
+                              []))
+                      ? null
+                      : gmap.LatLng(
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .targetCoordinates![1],
+                          context
+                              .read<DashboardsCubit>()
+                              .activeTrip!
+                              .targetCoordinates![0]),
           polylinePoints: tripStatus == TripState.inLocation.name
               ? []
-              : (tripStatus == TripState.goToClient.name || tripStatus == TripState.accepted.name)
-              ? driverRoutePoints
-              : routePoints,
+              : (tripStatus == TripState.goToClient.name ||
+                      tripStatus == TripState.accepted.name)
+                  ? driverRoutePoints
+                  : routePoints,
           clientLocations: tripStatus == TripState.inLocation.name
               ? []
-              : (tripStatus == TripState.goToClient.name || tripStatus == TripState.accepted.name)
-              ? []
-              : clients,
+              : (tripStatus == TripState.goToClient.name ||
+                      tripStatus == TripState.accepted.name)
+                  ? []
+                  : clients,
           enableScrolling: true,
           fromClient: (context.read<DashboardsCubit>().activeTrip != null &&
-              (state.tripStatus == TripState.started.name || state.tripStatus == TripState.goToClient.name || state.tripStatus == TripState.inLocation.name)) ==
-              true
+                      (state.tripStatus == TripState.started.name ||
+                          state.tripStatus == TripState.goToClient.name ||
+                          state.tripStatus == TripState.inLocation.name)) ==
+                  true
               ? false
               : null,
           startAddress: context.read<DashboardsCubit>().activeTrip?.from,
           targetAddress: context.read<DashboardsCubit>().activeTrip?.to,
-          clientAddresses: (tripStatus == TripState.goToClient.name || tripStatus == TripState.accepted.name) ? [] : clientsAddress,
-          estimatedTime: (tripStatus == TripState.goToClient.name || tripStatus == TripState.inLocation.name)
-              ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.driverIsArrivingIn ?? '').toLocal())
+          clientAddresses: (tripStatus == TripState.goToClient.name ||
+                  tripStatus == TripState.accepted.name)
+              ? []
+              : clientsAddress,
+          estimatedTime: (tripStatus == TripState.goToClient.name ||
+                  tripStatus == TripState.inLocation.name)
+              ? DateFormat('h:mm a').format(DateTime.parse(context
+                          .read<DashboardsCubit>()
+                          .activeTrip
+                          ?.driverIsArrivingIn ??
+                      '')
+                  .toLocal())
               : tripStatus == TripState.started.name
-              ? DateFormat('h:mm a').format(DateTime.parse(context.read<DashboardsCubit>().activeTrip?.tripStartTime ?? '')
-              .toLocal()
-              .add(Duration(minutes: context.read<DashboardsCubit>().activeTrip?.duration ?? 0)))
-              : '',
+                  ? DateFormat('h:mm a').format(DateTime.parse(context
+                              .read<DashboardsCubit>()
+                              .activeTrip
+                              ?.tripStartTime ??
+                          '')
+                      .toLocal()
+                      .add(
+                          Duration(minutes: context.read<DashboardsCubit>().activeTrip?.duration ?? 0)))
+                  : '',
           status: tripStatus,
         ),
       ),
@@ -376,5 +531,4 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
   List<gmap.LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
     return polyline.map((point) => gmap.LatLng(point[1], point[0])).toList();
   }
-
 }

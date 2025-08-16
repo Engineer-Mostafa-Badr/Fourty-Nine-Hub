@@ -19,7 +19,7 @@ class FoodOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.RESTAURANTDETAILS),
+      onTap: () => context.pushNamed(Routes.RESTAURANTDETAILS),
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(

@@ -37,12 +37,19 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                padding: const EdgeInsets.only(
+                  bottom: 32,
+                  left: 16,
+                  right: 16,
+                ),
                 child: Column(
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
+                    closeWidget(
+                        context: context,
+                        onAcceptSaveData: () {},
+                        closeRemoveData: () {}),
                     Label(
                       text: LocaleKeys.personalDocuments.localize,
                       style: Styles.headerText(
@@ -51,7 +58,7 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
                     ),
                     const Sizer(),
                     SizedBox(
-                      height: MediaQuery.sizeOf(context).width*.35,
+                      height: MediaQuery.sizeOf(context).width * .35,
                       child: GridView.count(
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
@@ -70,14 +77,18 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
                     const Sizer(),
                     DefaultTextFormField(
                       currentController: idNumberController,
-                      fillColor: context.isDarkMode?Colors.grey.shade600 : AppColors.GREYBG,
+                      fillColor: context.isDarkMode
+                          ? Colors.grey.shade600
+                          : AppColors.GREYBG,
                       borderColor: Colors.transparent,
                       hint: LocaleKeys.licenseNumber.localize,
                     ),
                     const Sizer(),
                     DefaultTextFormField(
                       currentController: expirationDateController,
-                      fillColor: context.isDarkMode?Colors.grey.shade600 : AppColors.GREYBG,
+                      fillColor: context.isDarkMode
+                          ? Colors.grey.shade600
+                          : AppColors.GREYBG,
                       borderColor: Colors.transparent,
                       hint: LocaleKeys.expireDate.localize,
                     ),
@@ -88,7 +99,8 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
           ),
           RegisterNextRow(
             index: 3,
-            onTap: () => context.push(Routes.truckVehicleInformationScreen),
+            onTap: () =>
+                context.pushNamed(Routes.truckVehicleInformationScreen),
           ),
         ],
       ),

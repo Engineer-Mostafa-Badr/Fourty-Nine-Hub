@@ -15,7 +15,7 @@ class AdvertiseYourCompany extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.CREATECOMPANYAD),
+      onTap: () => context.pushNamed(Routes.CREATECOMPANYAD),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
         padding: const EdgeInsets.all(10),

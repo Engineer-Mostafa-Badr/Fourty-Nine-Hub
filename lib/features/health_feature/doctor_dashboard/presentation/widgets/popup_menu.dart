@@ -22,36 +22,36 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
-              context.push(Routes.DOCTORREVIEWS, extra: '');
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.DOCTORREVIEWS, extra: '');
             },
             child: Text(LocaleKeys.reviews.localize),
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
-              context.push(Routes.DOCTORSTATISTICS, extra: earnedMoney);
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.DOCTORSTATISTICS, extra: earnedMoney);
             },
             child: Text(LocaleKeys.history.localize),
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
-              context.push(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
             },
             child: Text(LocaleKeys.emergencyRequests.localize),
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
-              context.push(Routes.ALLAPPOINTMENTS);
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.ALLAPPOINTMENTS);
             },
             child: Text(LocaleKeys.allAppointments.localize),
           ),
         ];
       },
       onSelected: (value) {
-        context.push(value);
+        context.pushNamed(value);
       },
     );
   }

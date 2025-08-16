@@ -117,7 +117,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 premuimRequestOnTap: () async {
@@ -150,7 +150,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 requestOnTap: () async {
@@ -175,7 +175,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 callOnTap: () async {
@@ -192,7 +192,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 messageOnTap: () async {
@@ -202,9 +202,10 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       UIConst.chatNormalId,
                       LocaleKeys.chatSubscription.localize,
                     )) {}
-                  } else {                                  return pleaseLoginDialog(context);
+                  } else {
+                    return pleaseLoginDialog(context);
 
-                  // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 subscribeMessageOnTap: () async {
@@ -214,9 +215,10 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                       pickMeCardEntity.categoryId ?? '',
                       LocaleKeys.tripjoinPremuimSubscription.localize,
                     )) {}
-                  } else {                                  return pleaseLoginDialog(context);
+                  } else {
+                    return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
               );
@@ -241,7 +243,8 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
       // Await the completion of showSubscriptionPlans
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet,
+          pickMeCardEntity.paymentMethod?.toWalletType ??
+              WalletTypes.mainWallet,
         ],
         subCategoryId: subCategoryId,
         title: title,

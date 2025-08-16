@@ -194,7 +194,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         }, (data) {
           emit(CreateDoctorSuccess(
               "You are submit successfully. Please wait admin approve and approval."));
-          context.go(Routes.VISITA);
+          context.goNamed(Routes.VISITA);
         });
       } else {
         emit(CreateDoctorError(checkFilledMessage));

@@ -54,10 +54,10 @@ class _NewChatCardState extends State<NewChatCard> {
               ? AppColors.QUANTITY_COLOR
               : AppColors.LIGHT_GRAY_COLOR.withValues(alpha: 0.2),
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
               context.read<ChatsCubit>().selectChat = widget.chat!;
-              context.push(Routes.CHATROOM, extra: widget.chatsCubit);
+              context.pushNamed(Routes.CHATROOM, extra: widget.chatsCubit);
             } else {
               setState(() {
                 if (!widget.chat!.isSelected) {
@@ -161,14 +161,14 @@ class _NewChatCardState extends State<NewChatCard> {
       return Center(
         child: GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (widget.chat!.hasStory) {}
             if (widget.chat!.isAdmin != "admin") {
               if (context.isUserLoggedIn) {
                 context.read<UserCubit>().updateProfileView(
-                  isProfile: false,
-                  userId: widget.chat!.userId,
-                );
+                      isProfile: false,
+                      userId: widget.chat!.userId,
+                    );
                 _onPressedImageDialog();
               }
             }
@@ -322,7 +322,7 @@ class _NewChatCardState extends State<NewChatCard> {
                   widget.chat!.isBirthdayMonth)
                 InkWell(
                   onTap: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     await showGiftBottomSheet(
                       context,
                       receiverId: widget.chat!.userId,
@@ -435,17 +435,18 @@ class _NewChatCardState extends State<NewChatCard> {
                         ),
                       Expanded(
                         child: Label(
-                            text: widget.chat?.lastMessage?.text == null
-                                ? context.isArabic
-                                    ? "لا توجد رسائل حتي الان"
-                                    : "No messages until now"
-                                : '${widget.chat?.lastMessage?.text}',
-                            style: Styles.mediumText(
-                              fontSize: 28,
-                              color: context.isDarkMode
-                                  ? Colors.white54
-                                  : AppColors.DARK_GRAY_COLOR,
-                            ),),
+                          text: widget.chat?.lastMessage?.text == null
+                              ? context.isArabic
+                                  ? "لا توجد رسائل حتي الان"
+                                  : "No messages until now"
+                              : '${widget.chat?.lastMessage?.text}',
+                          style: Styles.mediumText(
+                            fontSize: 28,
+                            color: context.isDarkMode
+                                ? Colors.white54
+                                : AppColors.DARK_GRAY_COLOR,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -515,9 +516,8 @@ class _NewChatCardState extends State<NewChatCard> {
           if (widget.chat!.isAdmin != "admin")
             GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
-                
               child: Row(
                 children: [
                   Label(
@@ -533,7 +533,7 @@ class _NewChatCardState extends State<NewChatCard> {
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: InkWell(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // Call the getLastSeen function
                         print('widget.chat!.isAdmin ${widget.chat!.isAdmin}');
                         if (widget.chat!.isAdmin != "admin") {
@@ -630,7 +630,7 @@ class _NewChatCardState extends State<NewChatCard> {
                             widget.chat!.isBirthdayMonth)
                           InkWell(
                             onTap: () async {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               await showGiftBottomSheet(
                                 context,
                                 receiverId: widget.chat!.userId,
@@ -662,10 +662,10 @@ class _NewChatCardState extends State<NewChatCard> {
                               color: AppColors.SECONDARY_COLOR,
                             ),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               context.read<ChatsCubit>().selectChat =
                                   widget.chat!;
-                              context.push(Routes.CHATROOM,
+                              context.pushNamed(Routes.CHATROOM,
                                   extra: widget.chatsCubit);
                             },
                           ),
@@ -675,8 +675,7 @@ class _NewChatCardState extends State<NewChatCard> {
                               color: AppColors.SECONDARY_COLOR,
                             ),
                             onPressed: () {
-
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                             },
                           ),
                           IconButton(
@@ -685,8 +684,7 @@ class _NewChatCardState extends State<NewChatCard> {
                               color: AppColors.SECONDARY_COLOR,
                             ),
                             onPressed: () {
-
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                             },
                           ),
                           IconButton(
@@ -695,10 +693,10 @@ class _NewChatCardState extends State<NewChatCard> {
                               color: AppColors.SECONDARY_COLOR,
                             ),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               context.read<ChatsCubit>().selectChat =
                                   widget.chat!;
-                              context.push(Routes.VIEWCONTACT,
+                              context.pushNamed(Routes.VIEWCONTACT,
                                   extra: widget.chatsCubit);
                             },
                           ),

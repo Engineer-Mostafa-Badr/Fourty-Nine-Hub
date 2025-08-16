@@ -10,7 +10,7 @@ class MyBroadcastsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.BROADCAST),
+      onTap: () => context.pushNamed(Routes.BROADCAST),
       child: ListTile(
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(50),

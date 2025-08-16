@@ -65,19 +65,20 @@ class _TwitterViewState extends State<TwitterView> {
           end: 10,
           child: CustomElevatedButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.CREATEPOST, extra: 'twitter');
+                context.pushNamed(Routes.CREATEPOST, extra: 'twitter');
               } else {
                 return pleaseLoginDialog(context);
 
-                // context.push(Routes.LOGIN);
+                // context.pushNamed(Routes.LOGIN);
               }
             },
             backgoundColor: AppColors.getButtonPrimaryColor(context),
             child: Text(
               LocaleKeys.createPost.localize,
-              style: Styles.smallText(color: AppColors.getReversedTextColor(context)),
+              style: Styles.smallText(
+                  color: AppColors.getReversedTextColor(context)),
             ),
           ),
         ),

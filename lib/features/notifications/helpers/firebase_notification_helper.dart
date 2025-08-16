@@ -89,7 +89,7 @@ class FirebaseHelper {
       pr('status is success ');
       // pr(firebaseNotificationEntitiy.path);
       // pr(firebaseNotificationEntitiy.payload);
-      context.push(firebaseNotificationEntitiy.path ?? '',
+      context.pushNamed(firebaseNotificationEntitiy.path ?? '',
           extra: firebaseNotificationEntitiy.payload);
     }
   }

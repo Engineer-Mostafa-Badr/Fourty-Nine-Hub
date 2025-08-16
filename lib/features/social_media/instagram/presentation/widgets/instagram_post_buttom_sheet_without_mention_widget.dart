@@ -47,14 +47,17 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
                 final cubit = context.read<SavePostInstagramCubit>();
                 return GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     cubit.savePostInstagram(postId);
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
-                        const Icon(Icons.bookmark, size: 24,),
+                        const Icon(
+                          Icons.bookmark,
+                          size: 24,
+                        ),
                         const Sizer(),
                         Text(
                           LocaleKeys.save.localize,
@@ -69,15 +72,18 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
           ),
           // const Sizer(),
           GestureDetector(
-            onTap: (){
-      ManageVibration.vibrate();
-              context.push(Routes.INSTAGRAMPROFILE, extra: userId);
+            onTap: () {
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.INSTAGRAMPROFILE, extra: userId);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
                 children: [
-                  const Icon(Icons.person_pin, size: 24,),
+                  const Icon(
+                    Icons.person_pin,
+                    size: 24,
+                  ),
                   const Sizer(),
                   Text(
                     LocaleKeys.aboutThisAccount.localize,
@@ -94,17 +100,17 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
               builder: (context, state) {
                 return GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
-                    context
-                        .read<ProfileInstagramCubit>()
-                        .unFollowUser(userId);
+                    ManageVibration.vibrate();
+                    context.read<ProfileInstagramCubit>().unFollowUser(userId);
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
-                        const Icon(Icons.person_remove_alt_1, size: 24,),
+                        const Icon(
+                          Icons.person_remove_alt_1,
+                          size: 24,
+                        ),
                         const Sizer(),
                         Text(
                           LocaleKeys.unfollow.localize,
@@ -119,7 +125,7 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
           ),
           // const Sizer(),
           Container(
-            padding: const EdgeInsets.symmetric( horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: [
                 SvgPicture.asset(
@@ -137,17 +143,18 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
           ),
           // const Sizer(),
           GestureDetector(
-            onTap: (){
-      ManageVibration.vibrate();
+            onTap: () {
+              ManageVibration.vibrate();
               bottomSheet(
-                  context: context,
-                  widget: ReportView(
-                    id: postId,
-                    categoryId: '66b77e97bb35968b535dc945',
-                  ),);
+                context: context,
+                widget: ReportView(
+                  id: postId,
+                  categoryId: '66b77e97bb35968b535dc945',
+                ),
+              );
             },
             child: Container(
-              padding: const EdgeInsets.symmetric( horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
                 children: [
                   const Icon(

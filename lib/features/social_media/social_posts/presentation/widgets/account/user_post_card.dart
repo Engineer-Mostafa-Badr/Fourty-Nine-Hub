@@ -115,7 +115,7 @@ class _UserPostCardState extends State<UserPostCard> {
               images: myPost.images ?? []),
           GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (widget.post.isShared == true) {
                 bottomSheet(
                     context: context,
@@ -228,31 +228,32 @@ class _UserPostCardState extends State<UserPostCard> {
               children: [
                 if (myPost.likesCount != 0)
                   _buildCounterWidget(
-                      value: myPost.likesCount??0, image: Assets.like),
+                      value: myPost.likesCount ?? 0, image: Assets.like),
                 if (myPost.hahaCount != 0)
                   _buildCounterWidget(
-                      value: myPost.hahaCount??0, image: Assets.haha),
+                      value: myPost.hahaCount ?? 0, image: Assets.haha),
                 if (myPost.loveCount != 0)
                   _buildCounterWidget(
-                      value: myPost.loveCount??0, image: Assets.heart),
+                      value: myPost.loveCount ?? 0, image: Assets.heart),
                 if (myPost.wowCount != 0)
                   _buildCounterWidget(
-                      value: myPost.wowCount??0, image: Assets.wow),
+                      value: myPost.wowCount ?? 0, image: Assets.wow),
                 if (myPost.sadCount != 0)
                   _buildCounterWidget(
-                      value: myPost.sadCount??0, image: Assets.sad),
+                      value: myPost.sadCount ?? 0, image: Assets.sad),
                 if (myPost.angryCount != 0)
                   _buildCounterWidget(
-                      value: myPost.angryCount??0, image: Assets.angry),
+                      value: myPost.angryCount ?? 0, image: Assets.angry),
                 const Spacer(),
                 InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     if (context.read<UserCubit>().isLoggedIn) {
                       widget.showPostComments(myPost.id);
-                    } else {                                  return pleaseLoginDialog(context);
+                    } else {
+                      return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                      // context.pushNamed(Routes.LOGIN);
                     }
                   },
                   child: Row(
@@ -300,13 +301,13 @@ class _UserPostCardState extends State<UserPostCard> {
                           icon: FontAwesomeIcons.thumbsUp,
                           label: LocaleKeys.like.localize,
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               return widget.showPostComments(myPost.id);
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                             }
                           }),
                 ),
@@ -316,12 +317,13 @@ class _UserPostCardState extends State<UserPostCard> {
                         icon: FontAwesomeIcons.message,
                         label: LocaleKeys.comment.localize,
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (context.read<UserCubit>().isLoggedIn) {
                             return widget.showPostComments(myPost.id);
-                          } else {                                  return pleaseLoginDialog(context);
+                          } else {
+                            return pleaseLoginDialog(context);
 
-                            // context.push(Routes.LOGIN);
+                            // context.pushNamed(Routes.LOGIN);
                           }
                         }),
                   ),
@@ -330,7 +332,7 @@ class _UserPostCardState extends State<UserPostCard> {
                       icon: FontAwesomeIcons.share,
                       label: LocaleKeys.share.localize,
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           var result = await controller.onShare(
                               postId: myPost.isShared == true
@@ -340,9 +342,10 @@ class _UserPostCardState extends State<UserPostCard> {
                             showSuccessMessage(context,
                                 LocaleKeys.postSharedSuccessfully.localize);
                           }
-                        } else {                                  return pleaseLoginDialog(context);
+                        } else {
+                          return pleaseLoginDialog(context);
 
-                          // context.push(Routes.LOGIN);
+                          // context.pushNamed(Routes.LOGIN);
                         }
                       }),
                 ),
@@ -386,7 +389,7 @@ class _UserPostCardState extends State<UserPostCard> {
               title: LocaleKeys.deletePost.localize,
               subTitle: LocaleKeys.youWillDeletePost.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 widget.deletePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
@@ -397,7 +400,7 @@ class _UserPostCardState extends State<UserPostCard> {
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 widget.hidePost(post.id);
                 if (fromDetails == true) {
                   context.pop();
@@ -416,7 +419,7 @@ class _UserPostCardState extends State<UserPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -445,9 +448,10 @@ class _UserPostCardState extends State<UserPostCard> {
             children: [
               InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (user?.id != post.user.id) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                    context.pushNamed(Routes.OTHERSACCOUNT,
+                        extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -464,9 +468,9 @@ class _UserPostCardState extends State<UserPostCard> {
                   children: [
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (user?.id != post.user.id) {
-                          context.push(Routes.OTHERSACCOUNT,
+                          context.pushNamed(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       },
@@ -483,9 +487,9 @@ class _UserPostCardState extends State<UserPostCard> {
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.w700),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (user?.id != post.user.id) {
-                                  context.push(Routes.OTHERSACCOUNT,
+                                  context.pushNamed(Routes.OTHERSACCOUNT,
                                       extra: post.user.id);
                                 }
                               }),
@@ -515,7 +519,7 @@ class _UserPostCardState extends State<UserPostCard> {
                   padding: EdgeInsets.all(16.w),
                   child: IconAppButton(
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       bottomSheet(
                           context: context,
                           widget: ReportView(
@@ -534,7 +538,7 @@ class _UserPostCardState extends State<UserPostCard> {
                   child: IconAppButton(
                     icon: Icons.clear,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       bottomSheet(
                           context: context,
                           widget: _buildPostOptions(
@@ -574,9 +578,9 @@ class _UserPostCardState extends State<UserPostCard> {
       children: [
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (user?.id != post.user.id) {
-              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+              context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
           child: ImageFromInternet(
@@ -592,9 +596,9 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (user?.id != post.user.id) {
-                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
               child: Column(
@@ -606,9 +610,9 @@ class _UserPostCardState extends State<UserPostCard> {
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w700),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (user?.id != post.user.id) {
-                          context.push(Routes.OTHERSACCOUNT,
+                          context.pushNamed(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       }),
@@ -697,7 +701,7 @@ class _UserPostCardState extends State<UserPostCard> {
                               highlightColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
                                   showDialog(
@@ -820,8 +824,8 @@ class _UserPostCardState extends State<UserPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
-                    context.push(Routes.OTHERSACCOUNT,
+                    ManageVibration.vibrate();
+                    context.pushNamed(Routes.OTHERSACCOUNT,
                         extra: post.users[0].id);
                   },
                   child: Label(
@@ -834,7 +838,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 if (post.users.length > 1)
                   GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       showDialog(
                         context: context,
                         builder: (_) => BuildWithUsers(users: post.users),

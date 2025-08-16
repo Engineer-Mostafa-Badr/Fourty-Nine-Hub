@@ -61,16 +61,17 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     // Shuffle every 5 seconds
     _shuffleTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       setState(() {
-        if(pages.any((e)=>e.index==11)){
+        if (pages.any((e) => e.index == 11)) {
           pages = firstPages;
-        }else{
+        } else {
           pages = secondPages;
         }
       });
     });
   }
 
-  List<BottomItemModel> _shuffleButKeepIndex(int fixedIndex, List<BottomItemModel> items) {
+  List<BottomItemModel> _shuffleButKeepIndex(
+      int fixedIndex, List<BottomItemModel> items) {
     if (items.length <= fixedIndex) return items;
 
     // Keep a reference to the fixed item
@@ -118,8 +119,14 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       index: 2,
       route: Routes.VISITA,
     ),
-    BottomItemModel(icon: FontAwesomeIcons.plus, label: LocaleKeys.chat.localize,
-        cacheKey: 'chatCount', image: Assets.whatsApp, index: 3, route: Routes.CHAT, height: 20),
+    BottomItemModel(
+        icon: FontAwesomeIcons.plus,
+        label: LocaleKeys.chat.localize,
+        cacheKey: 'chatCount',
+        image: Assets.whatsApp,
+        index: 3,
+        route: Routes.CHAT,
+        height: 20),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
       label: LocaleKeys.book.localize,
@@ -139,11 +146,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       route: Routes.RIDE_HOME,
     ),
     BottomItemModel(
-        icon: FontAwesomeIcons.plus,
-        label: LocaleKeys.tripJoin.localize,
-        cacheKey: 'tripJoinCount',
-        image: Assets.tripJoinIcon2,
-        index: 12, route: Routes.newRideModeScreen,
+      icon: FontAwesomeIcons.plus,
+      label: LocaleKeys.tripJoin.localize,
+      cacheKey: 'tripJoinCount',
+      image: Assets.tripJoinIcon2,
+      index: 12,
+      route: Routes.newRideModeScreen,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
@@ -153,7 +161,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       index: 13,
       route: Routes.VISITA,
     ),
-
     BottomItemModel(
       icon: FontAwesomeIcons.car,
       label: LocaleKeys.meal.localize,
@@ -188,7 +195,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         if (pages[index].index == 4) {
           soonDialog(context);
         } else if (pages[index].index == 0) {
-          context.push(pages[index].route);
+          context.pushNamed(pages[index].route);
         } else if (pages[index].index == 3) {
           ManageVibration.vibrate();
           if (!context.read<UserCubit>().isLoggedIn) {
@@ -196,7 +203,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           }
           await context.read<UserCubit>().resetUnreadedChatsCounter();
           HandleCashback.setCount('chatCount', context);
-          context.push(context.read<UserCubit>().isLoggedIn?Routes.CHAT:Routes.FirstLoginScreen, extra: ChatsViewParams());
+          context.pushNamed(
+              context.read<UserCubit>().isLoggedIn
+                  ? Routes.CHAT
+                  : Routes.FirstLoginScreen,
+              extra: ChatsViewParams());
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         } else {
           final selectedItem = pages[index];
@@ -230,13 +241,15 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState(
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState(
         scrollController: scrollController,
         isScrollingDown: isScrollingDown,
       );
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with SingleTickerProviderStateMixin {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+    with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
   bool isScrollingDown;
 
@@ -265,14 +278,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   void _scrollListener() {
     if (_isDisposed || !mounted) return;
 
-    if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    if (scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
       if (!isScrollingDown && scrollController.offset > 20) {
         setState(() {
           isScrollingDown = true;
           bottomNavBarHeight = 0.0;
         });
       }
-    } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+    } else if (scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
       if (isScrollingDown) {
         setState(() {
           isScrollingDown = false;
@@ -295,9 +310,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
-                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 5, spreadRadius: 2),
               ],
             ),
             child: bottomNavBarHeight == 75
@@ -318,40 +335,75 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                             child: isScrollingDown
                                 ? Container()
                                 : ClickableWidget(
-                                    child: widget.items[index].index != 2&&
-                                        widget.items[index].index != 13
+                                    child: widget.items[index].index != 2 &&
+                                            widget.items[index].index != 13
                                         ? Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16.0),
                                             child: Column(
                                               children: [
-                                                (widget.items[index].index == 3 ||
-                                                        widget.items[index].index == 4 ||
-                                                        widget.items[index].index == 0 ||
-                                                        widget.items[index].index == 12 ||
-                                                        widget.items[index].index == 11 ||
-                                                        widget.items[index].index == 15 ||
-                                                        widget.items[index].index == 14 ||
-                                                        widget.items[index].index == 1)
+                                                (widget.items[index].index ==
+                                                            3 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            4 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            0 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            12 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            11 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            15 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            14 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            1)
                                                     ? Image.asset(
-                                                        widget.items[index].image!,
-                                                        height: widget.items[index].height,
-                                                        width: widget.items[index].height,
-                                                        color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                                        widget.items[index]
+                                                            .image!,
+                                                        height: widget
+                                                            .items[index]
+                                                            .height,
+                                                        width: widget
+                                                            .items[index]
+                                                            .height,
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
                                                       )
                                                     : SvgPicture.asset(
-                                                        widget.items[index].image!,
-                                                        height: widget.items[index].height,
-                                                        width: widget.items[index].height,
-                                                        color:
-                                                        context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                                                        widget.items[index]
+                                                            .image!,
+                                                        height: widget
+                                                            .items[index]
+                                                            .height,
+                                                        width: widget
+                                                            .items[index]
+                                                            .height,
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
                                                       ),
-                                                if (widget.items[index].index == 3)
+                                                if (widget.items[index].index ==
+                                                    3)
                                                   SizedBox(
                                                     height: 4.h,
                                                   ),
                                                 Expanded(
                                                   child: Label(
-                                                    text: widget.items[index].label,
+                                                    text: widget
+                                                        .items[index].label,
                                                     style: Styles.smallText(),
                                                   ),
                                                 ),
@@ -393,6 +445,6 @@ class BottomItemModel {
   });
 
   void action(BuildContext context) {
-    context.push(route);
+    context.pushNamed(route);
   }
 }

@@ -78,8 +78,8 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
             final user = cubit.facebookSuggestPeople[index];
             return GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
-                context.push(Routes.OTHERSACCOUNT, extra: user.id);
+                ManageVibration.vibrate();
+                context.pushNamed(Routes.OTHERSACCOUNT, extra: user.id);
               },
               child: Container(
                 margin: EdgeInsetsDirectional.all(5.w),
@@ -127,14 +127,14 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
                                   ? AppColors.getFillColor(context)
                                   : AppColors.getButtonPrimaryColor(context),
                               color: user.addedSuccessfully == true
-                                  ?AppColors.getTextColor(context):
-                              AppColors.getReversedTextColor(context),
+                                  ? AppColors.getTextColor(context)
+                                  : AppColors.getReversedTextColor(context),
                               padding: 15.w,
                               label: user.addedSuccessfully == true
                                   ? LocaleKeys.remove.localize
                                   : LocaleKeys.addFriend.localize,
                               onPressed: () async {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (user.addedSuccessfully == false) {
                                   bool result = await cubit.friendRequest(
                                       context: context, userId: user.id);
@@ -167,7 +167,7 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
                                 color: AppColors.getReversedTextColor(context),
                                 label: LocaleKeys.remove.localize,
                                 onPressed: () async {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   bool data = await cubit.removeSuggestUser(
                                       context: context, userId: user.id);
                                   if (data == true) {

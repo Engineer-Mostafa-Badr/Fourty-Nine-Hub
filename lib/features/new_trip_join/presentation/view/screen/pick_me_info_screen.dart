@@ -26,8 +26,8 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
-      ManageVibration.vibrate();
-          context.push(Routes.AddNewPickMe);
+          ManageVibration.vibrate();
+          context.pushNamed(Routes.AddNewPickMe);
         },
         child: Container(
           width: 300.w,
@@ -41,14 +41,15 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
               context.isArabic ? "بدء الرحلة!" : "Start Journey!",
               style: TextStyle(
                 fontSize: 32.sp,
-                color: context.isDarkMode?AppColors.black:Colors.white,
+                color: context.isDarkMode ? AppColors.black : Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
       ),
-      body: const PickMeInfoInfoBody(), mainCategoryId: 1,
+      body: const PickMeInfoInfoBody(),
+      mainCategoryId: 1,
     );
   }
 }

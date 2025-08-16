@@ -161,7 +161,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
   Widget drawerRollWidget({
     required String label,
     required String image,
-    bool? isSvg=false,
+    bool? isSvg = false,
     EdgeInsetsGeometry? padding,
     required void Function()? onTap,
   }) {
@@ -171,15 +171,17 @@ class _CustomScaffoldState extends State<CustomScaffold>
         width: 25.h,
         height: 25.h,
         padding: padding ?? const EdgeInsets.all(0),
-        child: isSvg!=true?Image.asset(
-          image,
-          fit: BoxFit.cover,
-          color: context.isDarkMode ? AppColors.whiteColor : null,
-        ):SvgPicture.asset(
-          image,
-          fit: BoxFit.cover,
-          color: context.isDarkMode ? AppColors.whiteColor : null,
-        ),
+        child: isSvg != true
+            ? Image.asset(
+                image,
+                fit: BoxFit.cover,
+                color: context.isDarkMode ? AppColors.whiteColor : null,
+              )
+            : SvgPicture.asset(
+                image,
+                fit: BoxFit.cover,
+                color: context.isDarkMode ? AppColors.whiteColor : null,
+              ),
       ),
     );
   }
@@ -240,36 +242,41 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                 label: LocaleKeys.quraan.localize,
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  floatingNavigatorCubit.changeFloatingNavigator();
-                                  context.push(Routes.QURAAN);
+                                  floatingNavigatorCubit
+                                      .changeFloatingNavigator();
+                                  context.pushNamed(Routes.QURAAN);
                                 }),
                             drawerRollWidget(
                                 image: Assets.azkar,
                                 label: LocaleKeys.azkar.localize,
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  floatingNavigatorCubit.changeFloatingNavigator();
-                                  context.push(Routes.AZKAAR);
+                                  floatingNavigatorCubit
+                                      .changeFloatingNavigator();
+                                  context.pushNamed(Routes.AZKAAR);
                                 }),
                             drawerRollWidget(
                                 label: LocaleKeys.ride.localize,
                                 image: Assets.rideIcon,
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  floatingNavigatorCubit.changeFloatingNavigator();
-                                  context.push(Routes.RIDE_HOME);
+                                  floatingNavigatorCubit
+                                      .changeFloatingNavigator();
+                                  context.pushNamed(Routes.RIDE_HOME);
                                 }),
                             drawerRollWidget(
                                 label: LocaleKeys.tripJoin.localize,
                                 image: Assets.newTripJoin,
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  HandleCashback.setCount('tripJoinCount', context);
-                                  floatingNavigatorCubit.changeFloatingNavigator();
-                                  context.push(context.read<UserCubit>().isLoggedIn?
-                                  Routes.newRideModeScreen:
-                                  Routes.FirstLoginScreen
-                                  );
+                                  HandleCashback.setCount(
+                                      'tripJoinCount', context);
+                                  floatingNavigatorCubit
+                                      .changeFloatingNavigator();
+                                  context.pushNamed(
+                                      context.read<UserCubit>().isLoggedIn
+                                          ? Routes.newRideModeScreen
+                                          : Routes.FirstLoginScreen);
                                 }),
                             // drawerRollWidget(
                             //   label: LocaleKeys.loading.localize,
@@ -286,8 +293,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.healthIcon,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.VISITA);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.VISITA);
                               },
                             ),
                             drawerRollWidget(
@@ -295,8 +303,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.meal,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.FOOD);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.FOOD);
                               },
                             ),
                             drawerRollWidget(
@@ -304,8 +313,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.married,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.MARRIAGESUBCATEGORIES);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
                               },
                             ),
                             drawerRollWidget(
@@ -313,9 +323,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.tube1,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                HandleCashback.setCount('beAStarCount', context);
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.BE_STAR);
+                                HandleCashback.setCount(
+                                    'beAStarCount', context);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.BE_STAR);
                               },
                             ),
                             drawerRollWidget(
@@ -323,10 +335,12 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.booking,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                HandleCashback.setCount('bookingCount', context);
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                HandleCashback.setCount(
+                                    'bookingCount', context);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 soonDialog(context);
-                                // context.push(Routes.BE_STAR);
+                                // context.pushNamed(Routes.BE_STAR);
                               },
                             ),
                             drawerRollWidget(
@@ -334,8 +348,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.find,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.Tinder);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.Tinder);
                               },
                             ),
                             drawerRollWidget(
@@ -343,8 +358,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.reel,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.REELS);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.REELS);
                               },
                             ),
                             drawerRollWidget(
@@ -352,8 +368,12 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.spotlight,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(context.read<UserCubit>().isLoggedIn?Routes.SPOTLIGHT:Routes.FirstLoginScreen);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(
+                                    context.read<UserCubit>().isLoggedIn
+                                        ? Routes.SPOTLIGHT
+                                        : Routes.FirstLoginScreen);
                               },
                             ),
                             // drawerRollWidget(
@@ -362,7 +382,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             //   onTap: () {
 
                             //     context.pop();
-                            //     context.push(Routes.MEETINGROOM);
+                            //     context.pushNamed(Routes.MEETINGROOM);
                             //   },
                             // ),
                             drawerRollWidget(
@@ -370,8 +390,12 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.liveIcon,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(context.read<UserCubit>().isLoggedIn?Routes.LIVE:Routes.FirstLoginScreen);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(
+                                    context.read<UserCubit>().isLoggedIn
+                                        ? Routes.LIVE
+                                        : Routes.FirstLoginScreen);
                               },
                             ),
                             // drawerRollWidget(
@@ -379,7 +403,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             //   image: Assets.snap,
                             //   onTap: () {
                             //     context.pop();
-                            //     context.push(Routes.SNAP);
+                            //     context.pushNamed(Routes.SNAP);
                             //   },
                             // ),
 
@@ -388,22 +412,25 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.whatsApp,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                if (!context.read<UserCubit>().isLoggedIn)context.push(Routes.FirstLoginScreen);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                if (!context.read<UserCubit>().isLoggedIn)
+                                  context.pushNamed(Routes.FirstLoginScreen);
                                 if (context.read<UserCubit>().isLoggedIn) {
-                                  context.push(Routes.CHAT,
-                                    extra: ChatsViewParams());
+                                  context.pushNamed(Routes.CHAT,
+                                      extra: ChatsViewParams());
                                 }
                               },
                             ),
                             drawerRollWidget(
-                              label: context.isArabic?'العاب':"Games",
+                              label: context.isArabic ? 'العاب' : "Games",
                               image: Assets.gamesIcon,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 soonDialog(context);
-                                // context.push(Routes.CHAT,
+                                // context.pushNamed(Routes.CHAT,
                                 //     extra: ChatsViewParams());
                               },
                             ),
@@ -413,17 +440,22 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               isSvg: true,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.CREATECOMPANYAD);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(Routes.CREATECOMPANYAD);
                               },
                             ),
                             drawerRollWidget(
-                              label: context.isArabic?'المزاد':"Auction",
+                              label: context.isArabic ? 'المزاد' : "Auction",
                               image: Assets.bidIcon,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(context.read<UserCubit>().isLoggedIn?Routes.MAZADAT:Routes.FirstLoginScreen);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(
+                                    context.read<UserCubit>().isLoggedIn
+                                        ? Routes.MAZADAT
+                                        : Routes.FirstLoginScreen);
                               },
                             ),
                             drawerRollWidget(
@@ -431,16 +463,21 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.chanceIcon,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(context.read<UserCubit>().isLoggedIn?Routes.CHANCE:Routes.FirstLoginScreen);
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
+                                context.pushNamed(
+                                    context.read<UserCubit>().isLoggedIn
+                                        ? Routes.CHANCE
+                                        : Routes.FirstLoginScreen);
                               },
                             ),
                             drawerRollWidget(
-                              label: context.isArabic?'عملات':"Exchange",
+                              label: context.isArabic ? 'عملات' : "Exchange",
                               image: Assets.moneyExchange,
                               onTap: () {
                                 ManageVibration.vibrate();
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 soonDialog(context);
                               },
                             ),
@@ -449,7 +486,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       ),
                     )
                   : Container(),
-
               Material(
                 color: Colors.transparent,
                 child: ClickableWidget(
@@ -606,7 +642,8 @@ class MainScaffold extends StatelessWidget {
                     floatingActionButton: floatingActionButton,
                     drawer: drawer,
                     onDrawerChanged: (value) {
-                      choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+                      choiceRulerCubit.changeChoiceRulerStatus(
+                          forceValue: !value);
                       print(
                           'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
                       print('onDrawerChanged open $value');
@@ -620,9 +657,10 @@ class MainScaffold extends StatelessWidget {
                     resizeToAvoidBottomInset: resizeToAvoidBottomInset,
                   ),
                   if ((choiceRulerCubit.choiceRulerStatus ||
-                      floatingNavigatorCubit.floatingNavigatorStatus) &&
+                          floatingNavigatorCubit.floatingNavigatorStatus) &&
                       showNavBAr)
-                    rulerWidget,                ],
+                    rulerWidget,
+                ],
               );
             }
           },

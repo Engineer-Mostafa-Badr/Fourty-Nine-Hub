@@ -22,17 +22,16 @@ class GovernorateListTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Label(text:context.isArabic ? governorate.nameAr : governorate.nameEn,
-
+      title: Label(
+        text: context.isArabic ? governorate.nameAr : governorate.nameEn,
         style: Styles.headerText(fontWeight: FontWeight.w600),
-
       ),
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.governorate =
             governorate;
 
-        context.push(Routes.FILTERDOCTORCITY, extra: type);
+        context.pushNamed(Routes.FILTERDOCTORCITY, extra: type);
       },
     );
   }

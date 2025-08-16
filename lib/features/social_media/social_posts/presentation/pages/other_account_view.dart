@@ -223,7 +223,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 } else {
                                   return pleaseLoginDialog(context);
 
-                                  // context.push(Routes.LOGIN);
+                                  // context.pushNamed(Routes.LOGIN);
                                 }
                               },
                               onAddFriend: () async {
@@ -257,7 +257,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 } else {
                                   return pleaseLoginDialog(context);
 
-                                  // context.push(Routes.LOGIN);
+                                  // context.pushNamed(Routes.LOGIN);
                                 }
                               },
                               onAcceptFriend: () async {
@@ -295,7 +295,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 return result;
                               },
                               editProfile: () async {
-                                await context.push(Routes.EDITPROFILE);
+                                await context.pushNamed(Routes.EDITPROFILE);
                                 controller.getUserProfile(id: widget.userId);
                               },
                               selectImageGallary: () {
@@ -310,10 +310,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadPhoto(
-                                                isGallery: true, context: context);
+                                                isGallery: true,
+                                                context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -322,10 +323,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadPhoto(
-                                                isGallery: false, context: context);
+                                                isGallery: false,
+                                                context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -346,10 +348,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
-                                                isGallery: true, context: context);
+                                                isGallery: true,
+                                                context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -358,10 +361,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
-                                                isGallery: false, context: context);
+                                                isGallery: false,
+                                                context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -377,8 +381,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: AppButton(
                                 label: LocaleKeys.editProfile.localize,
                                 onPressed: () async {
-      ManageVibration.vibrate();
-                                  await context.push(Routes.EDITPROFILE);
+                                  ManageVibration.vibrate();
+                                  await context.pushNamed(Routes.EDITPROFILE);
                                   controller.getUserProfile(id: widget.userId);
                                 },
                                 color: Colors.white,
@@ -392,12 +396,17 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       child: state.profileData?.isBlock == false &&
                               state.profileData?.blockMe == false
                           ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Sizer(),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Label(text: LocaleKeys.posts.localize,style: Styles.headerText(fontWeight: FontWeight.bold),),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Label(
+                                    text: LocaleKeys.posts.localize,
+                                    style: Styles.headerText(
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 )
                                 // TabBar(
                                 //     labelStyle: Styles.mediumText(),
@@ -515,7 +524,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           state.newCover != null
                               ? InkWell(
                                   onTap: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     showDialog(
                                         context: context,
                                         builder: (context) =>
@@ -539,7 +548,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 )
                               : InkWell(
                                   onTap: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     showDialog(
                                         context: context,
                                         builder: (context) =>
@@ -565,21 +574,24 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             top: 10,
                             start: 10,
                             child: ClickableWidget(
-                              onTap: ()=>context.pop(),
+                              onTap: () => context.pop(),
                               child: Container(
-                                padding:const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black.withValues(alpha: .6)
+                                    shape: BoxShape.circle,
+                                    color: Colors.black.withValues(alpha: .6)),
+                                child: Icon(
+                                  Icons.arrow_back_outlined,
+                                  color: Colors.white,
+                                  size: 45.h,
                                 ),
-                                child: Icon(Icons.arrow_back_outlined,color: Colors.white,size: 45.h,) ,
                               ),
                             ),
                           ),
                           if (loginUser?.id == user.id)
                             InkWell(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 selectCoverImage();
                               },
                               child: Container(
@@ -608,31 +620,41 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                 padding:const EdgeInsets.all(2),
+                                  padding: const EdgeInsets.all(2),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     gradient: LinearGradient(
-                                      colors: [context.isDarkMode?AppColors.Floating_Button_COLOR_DARK:Color(0xFF0B1035), Color(0xFFFF3308)],
+                                      colors: [
+                                        context.isDarkMode
+                                            ? AppColors
+                                                .Floating_Button_COLOR_DARK
+                                            : Color(0xFF0B1035),
+                                        Color(0xFFFF3308)
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     ),
                                   ),
                                   child: SizedBox(
                                     width: 180.w,
-                                    height:50.h,
+                                    height: 50.h,
                                     child: AppButton(
                                         // height: 120.h,
                                         width: kToolbarHeight * 1.5,
                                         backColor: user.isFollowed == true
-                                            ? AppColors.getFindFillColor(context)
-                                            : AppColors.getFindFillColor(context),
+                                            ? AppColors.getFindFillColor(
+                                                context)
+                                            : AppColors.getFindFillColor(
+                                                context),
                                         label: user.isFollowed == true
                                             ? LocaleKeys.unFollow.localize
                                             : LocaleKeys.follow.localize,
                                         style: Styles.mediumText(
-                                            color: AppColors.getTextColor(context), fontSize: 24),
+                                            color:
+                                                AppColors.getTextColor(context),
+                                            fontSize: 24),
                                         onPressed: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           onFollow();
                                         }),
                                   ),
@@ -734,7 +756,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         state.newImage != null
                             ? InkWell(
                                 onTap: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
@@ -751,14 +773,15 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 child: CircleAvatar(
                                   radius: 120.w,
                                   backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   child: Container(
                                     height: 250.h,
                                     width: 300.w,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: FileImage(File(state.newImage!.file.path)),
+                                        image: FileImage(
+                                            File(state.newImage!.file.path)),
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -773,7 +796,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               )
                             : GestureDetector(
                                 onTap: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     context.read<UserCubit>().updateProfileView(
                                         isProfile: false,
@@ -810,7 +833,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             bottom: 10.h,
                             child: InkWell(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 selectImageGallary();
                               },
                               child: Container(
@@ -888,7 +911,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //                 categoryId: ChatCategoriesIds.social,
                     //               );
                     //           context.pop();
-                    //           context.push(
+                    //           context.pushNamed(
                     //             Routes.CHAT,
                     //             extra: ChatsViewParams(
                     //               isFromStartChat: true,
@@ -904,7 +927,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //                 categoryId: ChatCategoriesIds.greet,
                     //               );
                     //           context.pop();
-                    //           context.push(
+                    //           context.pushNamed(
                     //             Routes.CHAT,
                     //             extra: ChatsViewParams(
                     //               isFromStartChat: true,
@@ -916,7 +939,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //       } else {
                     //         return pleaseLoginDialog(context);
                     //
-                    //         // context.push(Routes.LOGIN);
+                    //         // context.pushNamed(Routes.LOGIN);
                     //       }
                     //     },
                     //     anonymousPress: () async {
@@ -927,7 +950,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //               otherId: widget.userId,
                     //             );
                     //         context.pop();
-                    //         context.push(
+                    //         context.pushNamed(
                     //           Routes.CHAT,
                     //           extra: ChatsViewParams(
                     //             isFromStartChat: true,
@@ -938,7 +961,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //       } else {
                     //         return pleaseLoginDialog(context);
                     //
-                    //         // context.push(Routes.LOGIN);
+                    //         // context.pushNamed(Routes.LOGIN);
                     //       }
                     //     },
                     //   ),
@@ -953,7 +976,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 Sizer(
                   height: 4.h,
                 ),
-
                 if (user.bio.isNotEmpty && user.bio != 'Hidden')
                   Label(
                     text: user.bio,
@@ -1028,7 +1050,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.job.isNotEmpty && user.isDocument == true&&user.job!='Hidden') ...[
+                      if (user.job.isNotEmpty &&
+                          user.isDocument == true &&
+                          user.job != 'Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -1109,10 +1133,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         Sizer(
                           height: 5.h,
                         ),
-
                       ],
-
-
                     ],
                   ),
                 Row(
@@ -1146,7 +1167,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return RichText(
         text: TextSpan(children: [
       TextSpan(
-          text: value, style: Styles.mediumText(fontWeight: FontWeight.w500,color: Theme.of(context).textTheme.bodyMedium?.color)),
+          text: value,
+          style: Styles.mediumText(
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).textTheme.bodyMedium?.color)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

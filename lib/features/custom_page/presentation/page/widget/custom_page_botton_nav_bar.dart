@@ -185,7 +185,7 @@ class BottomItemModel {
   });
 
   void action(BuildContext context) {
-    context.push(route, extra: extra);
+    context.pushNamed(route, extra: extra);
   }
 }
 
@@ -277,7 +277,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 children: List.generate(widget.items.length, (index) {
                   return GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       widget.onTap(index);
                     },
                     child: Column(

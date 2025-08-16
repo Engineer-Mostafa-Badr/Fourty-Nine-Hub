@@ -27,7 +27,7 @@ class BuildWithUsers extends StatelessWidget {
             users.length,
             (index) => GestureDetector(
               onTap: () {
-                context.push(Routes.OTHERSACCOUNT, extra: users[index].id);
+                context.pushNamed(Routes.OTHERSACCOUNT, extra: users[index].id);
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

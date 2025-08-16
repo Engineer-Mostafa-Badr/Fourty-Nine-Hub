@@ -40,12 +40,12 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () async {
-          ManageVibration.vibrate();
+                ManageVibration.vibrate();
 
                 HandleCashback.setCount('socialCount', context);
                 if (changeView == 1) {
                   context.read<CreatePostCubit>().loadData();
-                  context.go(
+                  context.goNamed(
                     Routes.SOCIAL,
                     extra: SocialParams(
                       userId: UserCubit.to.state.data?.id ?? '',
@@ -56,11 +56,11 @@ class FloatingButton extends StatelessWidget {
                   bool isCustomPage =
                       await CacheManager.getActivation() ?? false;
                   if (isCustomPage) {
-                    context.go(
+                    context.goNamed(
                       Routes.PAGEPREVIEW,
                     );
                   } else {
-                    context.push(Routes.HOME);
+                    context.pushNamed(Routes.HOME);
                   }
                 }
               },

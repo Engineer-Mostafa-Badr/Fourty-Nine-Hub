@@ -61,7 +61,7 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
                   children: [
                     IconButton(
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context.pop();
                       },
                       icon: const Icon(Icons.arrow_back),
@@ -101,7 +101,7 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
                           // )
                           IconButton(
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               context.read<GetAllTripCubit>().getAllTrips();
                             },
                             icon: const Icon(Icons.update),
@@ -186,7 +186,7 @@ class NewTripWidget extends StatelessWidget {
                                       horizontal: 35),
                                   child: GestureDetector(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       //هتروح لي صفحه subscription
                                       serviceLocator<SubscriptionController>()
                                           .showActiveSubscriptionAmounts(
@@ -323,7 +323,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
           listener: (context, state) {
             if (state is SuccessDeleteDriver) {
               showSuccessMessage(context, state.message);
-              context.push(Routes.HOME);
+              context.pushNamed(Routes.HOME);
             }
           },
           child: BlocBuilder<DriverStatisticsCubit, ShippingState>(
@@ -342,8 +342,8 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.registrationForm.tr(),
                         onPressed: () {
-      ManageVibration.vibrate();
-                          context.push(Routes.EDITDRIVERSCREEN);
+                          ManageVibration.vibrate();
+                          context.pushNamed(Routes.EDITDRIVERSCREEN);
                         },
                         backColor: Colors.white,
                         color: AppColors.PRIMARY_COLOR,
@@ -370,10 +370,10 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineSubscription.tr(),
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           // serviceLocator<SubscriptionController>()
                           //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
-                          // context.push(Routes.)
+                          // context.pushNamed(Routes.)
                           showModalBottomSheet(
                             context: context,
                             builder: (context) {
@@ -411,7 +411,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                                         backColor: AppColors.PRIMARY_COLOR,
                                         label: LocaleKeys.addSubscription.tr(),
                                         onPressed: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           serviceLocator<
                                                   SubscriptionController>()
                                               .showSubscriptionPlans(
@@ -448,7 +448,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineSubscription.tr(),
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           log('message');
                           serviceLocator<SubscriptionController>()
                               .showSubscriptionPlans(subCategoryId: "");
@@ -477,8 +477,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineId.tr(),
                         onPressed: () {
-
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                         },
                         backColor: Colors.white,
                       ),
@@ -504,8 +503,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: LocaleKeys.deadlineDriverLicense.tr(),
                         onPressed: () {
-
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                         },
                         backColor: Colors.white,
                       ),
@@ -531,8 +529,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: "",
                         onPressed: () {
-
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                         },
                         backColor: Colors.white,
                       ),
@@ -558,8 +555,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: "",
                         onPressed: () {
-
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                         },
                         backColor: Colors.white,
                       ),
@@ -585,8 +581,8 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         label: "",
                         onPressed: () {
-      ManageVibration.vibrate();
-                          context.push(Routes.MyRating);
+                          ManageVibration.vibrate();
+                          context.pushNamed(Routes.MyRating);
                         },
                         backColor: Colors.white,
                       ),
@@ -596,7 +592,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                       AppButton(
                         label: LocaleKeys.deleteRegistration.tr(),
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           context.read<ShippingCubit>().deleteDriver();
                         },
                         color: Colors.white,

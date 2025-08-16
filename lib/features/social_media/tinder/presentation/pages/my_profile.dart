@@ -293,7 +293,8 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                   child: Stack(
                     children: [
                       ClickableWidget(
-                        onTap: () => context.push(Routes.EditProfileTinder),
+                        onTap: () =>
+                            context.pushNamed(Routes.EditProfileTinder),
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
@@ -438,9 +439,8 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                 ),
                 if (getMore)
                   Label(
-                    text: bottomText ?? (context.isArabic
-                            ? 'جمع المزيد'
-                            : 'Get More'),
+                    text: bottomText ??
+                        (context.isArabic ? 'جمع المزيد' : 'Get More'),
                     style: Styles.mediumText(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -483,8 +483,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
         if (trailing != null)
           ClickableWidget(
             onTap: () {
-
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
             },
             child: Row(
               children: [
@@ -558,8 +557,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
   }) {
     return ClickableWidget(
       onTap: () {
-
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
       },
       child: Container(
         width: double.infinity,

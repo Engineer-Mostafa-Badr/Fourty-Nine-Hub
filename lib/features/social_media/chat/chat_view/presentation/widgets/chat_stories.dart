@@ -580,7 +580,7 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           if (context.read<UserCubit>().isLoggedIn) {
             await Navigator.push(
               context,
@@ -590,7 +590,7 @@ class ChatStories extends StatelessWidget {
             );
           } else {
             return pleaseLoginDialog(context);
-            // context.push(Routes.LOGIN);
+            // context.pushNamed(Routes.LOGIN);
           }
 
           BlocProvider.of<StoryCubit>(context)
@@ -698,7 +698,7 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           if (context.read<UserCubit>().isLoggedIn) {
             await Navigator.push(
               context,
@@ -712,7 +712,7 @@ class ChatStories extends StatelessWidget {
           } else {
             return pleaseLoginDialog(context);
 
-            // context.push(Routes.LOGIN);
+            // context.pushNamed(Routes.LOGIN);
           }
 
           context.read<StoryCubit>()
@@ -761,7 +761,7 @@ class ChatStories extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () async {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           context.read<UserCubit>().isLoggedIn
               ? await Navigator.push(
                   context,

@@ -974,7 +974,8 @@ class _RideRequestViewState extends State<RideRequestView> {
                           ? Container(
                               padding: const EdgeInsets.all(8.0),
                               child: DashboardBanner(
-                                onTap: () => context.push(Routes.ALLTRIPRIDER),
+                                onTap: () =>
+                                    context.pushNamed(Routes.ALLTRIPRIDER),
                                 // onTap: () {
                                 // },
                                 title: LocaleKeys.rideDashboard.tr(),
@@ -994,7 +995,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                   //     .push(Routes.SHIPPING_REGISTER),
                                   onTap: () {
                                     ManageVibration.vibrate();
-                                    context.push(Routes.SHIPPING_REGISTER);
+                                    context.pushNamed(Routes.SHIPPING_REGISTER);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

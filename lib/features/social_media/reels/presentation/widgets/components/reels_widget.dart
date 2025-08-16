@@ -202,7 +202,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       //   onTap: () {
                       //     if (!serviceLocator<UserCubit>().isLoggedIn) {
                       //       context.read<PreloadBloc>().pauseTheVideo();
-                      //       context.push(Routes.LOGIN);
+                      //       context.pushNamed(Routes.LOGIN);
                       //     } else {
                       //       _showGiftBottomSheet(context);
                       //     }
@@ -229,13 +229,14 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   rotationController: _rotationController,
                 ),
               ),
-            Positioned(
+              Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
                     height: 60,
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     width: MediaQuery.of(context).size.width,
                     color: Colors.black,
                     child: Column(
@@ -243,30 +244,30 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // if (reel.audio.audioName.isNotEmpty)
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 30,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  reel.audio.audioName.isNotEmpty
-                                      ? reel.audio.audioName
-                                      : "No audio",
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 30,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                reel.audio.audioName.isNotEmpty
+                                    ? reel.audio.audioName
+                                    : "No audio",
+                                style: const TextStyle(
                                   color: Colors.white70,
-                                  size: 20,
+                                  fontSize: 14,
                                 ),
-                              ],
-                            ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
+                            ],
                           ),
+                        ),
                         SizedBox(height: 5),
                         CustomProgressBar(
                           videoPlayerController: widget.controller,

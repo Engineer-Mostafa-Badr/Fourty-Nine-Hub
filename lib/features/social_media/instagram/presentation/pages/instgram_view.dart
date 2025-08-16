@@ -17,8 +17,7 @@ class InstagramView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child:
-          MultiBlocProvider(
+      child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => PostsInstagramCubit(
@@ -259,8 +258,8 @@ class InstagramView extends StatelessWidget {
 //       //         if (i == 1) {
 //       //           print(context.read<UserCubit>().token);
 //       //           !context.read<UserCubit>().isTokenAttached
-//       //               ? context.push(Routes.LOGIN)
-//       //               : context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
+//       //               ? context.pushNamed(Routes.LOGIN)
+//       //               : context.pushNamed(Routes.INSTAGRAMPROFILE, extra: user?.id);
 //       //         }
 //       //       },
 //       //       child: Container(

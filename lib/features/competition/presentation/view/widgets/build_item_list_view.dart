@@ -36,7 +36,7 @@ class BuildItemListView extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                context.push(Routes.GIFT);
+                context.pushNamed(Routes.GIFT);
               },
               child: Text(
                 context.locale == Locales.english ? model.nameEn : model.nameAr,
@@ -54,7 +54,7 @@ class BuildItemListView extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  context.push(Routes.GIFT);
+                  context.pushNamed(Routes.GIFT);
                 },
                 child: CustomPaint(
                   size: const Size(40, 20),
@@ -72,8 +72,8 @@ class BuildItemListView extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.h, horizontal: 20.w),
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12.r),
@@ -88,9 +88,10 @@ class BuildItemListView extends StatelessWidget {
                     ),
                     SizedBox(height: 10.w),
                     Container(
-                     // height: 50,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15.h,),
+                      // height: 50,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 15.h,
+                      ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12.r),
@@ -125,7 +126,7 @@ class BuildItemListView extends StatelessWidget {
           padding: EdgeInsets.only(left: 5.w),
           child: GestureDetector(
             onTap: () {
-              context.push(Routes.GIFT);
+              context.pushNamed(Routes.GIFT);
             },
             child: Text(
               context.locale == Locales.english

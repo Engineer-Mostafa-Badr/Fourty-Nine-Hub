@@ -93,7 +93,8 @@ class _MainCategoriesFlipCardsViewState
     // var mainCategories = mainCategoriesCubit.state.customPage ?? [];
     // var mainCategories = widget.data!;
     var mainCategories = <MainCategoryEntity>[];
-    print('BuildContext data is ${widget.mainCategoriesCardsParams.data?.first.nameEn}');
+    print(
+        'BuildContext data is ${widget.mainCategoriesCardsParams.data?.first.nameEn}');
     if (widget.mainCategoriesCardsParams.data != null) {
       mainCategories = widget.mainCategoriesCardsParams.data!;
     } else if (mainCategoriesCubit.state.customPage != null) {
@@ -151,15 +152,15 @@ class _MainCategoriesFlipCardsViewState
                         (context, index, percentThresholdX, percentThresholdY) {
                       return GestureDetector(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           final item = mainCategories[index];
                           print('item id is ${item.id}');
                           // print('item id is ${item}');
                           if (item.id == '62c8b5b09332225799fe335e') {
-                            context.push(Routes.MARRIAGESUBCATEGORIES,
+                            context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
                                 extra: item);
                           } else {
-                            context.push(
+                            context.pushNamed(
                               Routes.CustomPageSubCategoriesView,
                               extra: CustomPageSubCategoriesParams(
                                 mainCategory: item,
@@ -273,10 +274,10 @@ class _MainCategoriesFlipCardsViewState
           //         onTap: () {
           //           if (mainCategories[index].id ==
           //               '62c8b5b09332225799fe335e') {
-          //             context.push(Routes.MARRIAGESUBCATEGORIES,
+          //             context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
           //                 extra: mainCategories[index]);
           //           } else {
-          //             context.push(
+          //             context.pushNamed(
           //               Routes.CustomPageSubCategoriesView,
           //               extra: mainCategories[index],
           //             );

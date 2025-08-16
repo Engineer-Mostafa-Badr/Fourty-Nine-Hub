@@ -64,7 +64,7 @@ class _ImageValidationState extends State<ImageValidation> {
               ),
             GestureDetector(
               onTap: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (widget.isAuthentcation) {
                   if (context.isUserLoggedIn) {
                     var pickedFlie = await ImagePicker()
@@ -78,7 +78,7 @@ class _ImageValidationState extends State<ImageValidation> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 } else {
                   var pickedFlie = await ImagePicker()

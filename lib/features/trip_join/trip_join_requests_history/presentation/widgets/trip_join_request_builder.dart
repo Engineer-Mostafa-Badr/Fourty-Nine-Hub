@@ -142,7 +142,7 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
               );
             },
             requestHistoryOnTap: () {
-              context.push(Routes.TRIP_JOIN_REQUEST_HISTORY,
+              context.pushNamed(Routes.TRIP_JOIN_REQUEST_HISTORY,
                   extra: {'id': fetchMyTripJoinAdsCubit.trips[index].id});
             },
           );
@@ -199,7 +199,7 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
 
             // Check if the trip was found and pass the requests list if available
             // if (requestsList != null) {
-            context.push(
+            context.pushNamed(
               Routes.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
               extra: requestsList, // Passing the requests list
             );

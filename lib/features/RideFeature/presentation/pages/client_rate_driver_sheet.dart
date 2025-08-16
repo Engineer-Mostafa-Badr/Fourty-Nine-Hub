@@ -13,16 +13,19 @@ import '../controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BuildClientRateDriverSheet extends StatefulWidget {
-  const BuildClientRateDriverSheet(
-      {super.key, required this.onPressed, });
-  final Function(String message , double rate ) onPressed;
+  const BuildClientRateDriverSheet({
+    super.key,
+    required this.onPressed,
+  });
+  final Function(String message, double rate) onPressed;
 
   @override
-  State<BuildClientRateDriverSheet> createState() => _BuildClientRateDriverSheetState();
+  State<BuildClientRateDriverSheet> createState() =>
+      _BuildClientRateDriverSheetState();
 }
 
-class _BuildClientRateDriverSheetState extends State<BuildClientRateDriverSheet> {
-
+class _BuildClientRateDriverSheetState
+    extends State<BuildClientRateDriverSheet> {
   TextEditingController otherController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   String? selectedTag;
@@ -31,42 +34,50 @@ class _BuildClientRateDriverSheetState extends State<BuildClientRateDriverSheet>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> FocusNode().unfocus(),
+      onTap: () => FocusNode().unfocus(),
       child: DraggableScrollableSheet(
         initialChildSize: 0.35,
         minChildSize: 0.2,
         maxChildSize: 0.6,
         builder: (context, scrollController) {
           return BlocProvider.value(
-            value: serviceLocator<RideCubit>(),
-            child:Builder(
-              builder: (context) {
+              value: serviceLocator<RideCubit>(),
+              child: Builder(builder: (context) {
                 return Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(16),
-                      ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
                     ),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(children: [
-                                const  SizedBox(width: 25,),
-                                const  Spacer(),
+                  ),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 25,
+                                ),
+                                const Spacer(),
                                 Text(
-                                  context.isArabic ? "تقييم السائق" : "Rate The Driver",
-                                  style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+                                  context.isArabic
+                                      ? "تقييم السائق"
+                                      : "Rate The Driver",
+                                  style: const TextStyle(
+                                      fontSize: FontSize.s20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 const Spacer(),
                                 GestureDetector(
-                                  onTap: ()async => await serviceLocator<RideCubit>().finishTripWithoutRating(context),
+                                  onTap: () async =>
+                                      await serviceLocator<RideCubit>()
+                                          .finishTripWithoutRating(context),
                                   child: Container(
                                     height: 25,
                                     width: 25,
@@ -74,78 +85,90 @@ class _BuildClientRateDriverSheetState extends State<BuildClientRateDriverSheet>
                                       shape: BoxShape.circle,
                                       color: Colors.grey.shade200,
                                     ),
-                                    child: const Icon(Icons.close,color: Colors.black,),
-                                  ),
-                                ),
-                              ],),
-                              const SizedBox(height: 8,),
-                              Text(
-                                getRatingText(_rating),
-                                style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 8),
-                              RatingBar.builder(
-                                initialRating: _rating,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: false,
-                                itemCount: 5,
-                                itemSize: 26,
-                                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                itemBuilder: (context, _) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  setState(() {
-                                    _rating = rating;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 16),
-                              RideFeedbackTags(
-                                isArabic: context.isArabic,
-                                controller: otherController, // Pass the controller
-                              ),
-                              const SizedBox(height: 16),
-                              DefaultTextFormField(
-                                currentController: otherController,
-                                fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
-                                borderColor: Colors.transparent,
-                                hint: context.isArabic ? 'اكتب رسالة شكر' : 'Write a thank-you message',
-                                // label: LocaleKeys.firstName.localize,
-
-                              ),
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.PRIMARY_COLOR,
-                                    foregroundColor: Colors.white,
-                                    padding:const EdgeInsets.symmetric(vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.black,
                                     ),
                                   ),
-                                  onPressed: () {
-      ManageVibration.vibrate();
-                                    widget.onPressed(otherController.text, _rating);
-                                    // context.push(Routes.connectionCallScreen);
-                                  },
-                                  child: Text(LocaleKeys.send.localize),
                                 ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              getRatingText(_rating),
+                              style: const TextStyle(
+                                  fontSize: FontSize.s20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 8),
+                            RatingBar.builder(
+                              initialRating: _rating,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              itemCount: 5,
+                              itemSize: 26,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
                               ),
-                            ],
-                          ),
+                              onRatingUpdate: (rating) {
+                                setState(() {
+                                  _rating = rating;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            RideFeedbackTags(
+                              isArabic: context.isArabic,
+                              controller:
+                                  otherController, // Pass the controller
+                            ),
+                            const SizedBox(height: 16),
+                            DefaultTextFormField(
+                              currentController: otherController,
+                              fillColor: context.isDarkMode
+                                  ? AppColors.GREY_DARK_COLOR
+                                  : AppColors.GREYBG,
+                              borderColor: Colors.transparent,
+                              hint: context.isArabic
+                                  ? 'اكتب رسالة شكر'
+                                  : 'Write a thank-you message',
+                              // label: LocaleKeys.firstName.localize,
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.PRIMARY_COLOR,
+                                  foregroundColor: Colors.white,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  ManageVibration.vibrate();
+                                  widget.onPressed(
+                                      otherController.text, _rating);
+                                  // context.pushNamed(Routes.connectionCallScreen);
+                                },
+                                child: Text(LocaleKeys.send.localize),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  );
-              }
-            )
-
-          );
+                  ),
+                );
+              }));
         },
       ),
     );
@@ -182,21 +205,21 @@ class _RideFeedbackTagsState extends State<RideFeedbackTags> {
   Widget build(BuildContext context) {
     final tags = widget.isArabic
         ? [
-      "نظيف وأنيق",
-      "موسيقى جيدة",
-      "قيادة حذرة",
-      "سائق مهذب",
-      "سيارة جميلة",
-      "وصل بسرعة",
-    ]
+            "نظيف وأنيق",
+            "موسيقى جيدة",
+            "قيادة حذرة",
+            "سائق مهذب",
+            "سيارة جميلة",
+            "وصل بسرعة",
+          ]
         : [
-      "Clean and elegant",
-      "Good music",
-      "Careful driving",
-      "Polite driver",
-      "Nice car",
-      "Arrived quickly",
-    ];
+            "Clean and elegant",
+            "Good music",
+            "Careful driving",
+            "Polite driver",
+            "Nice car",
+            "Arrived quickly",
+          ];
 
     return Directionality(
       textDirection: widget.isArabic ? TextDirection.rtl : TextDirection.ltr,
@@ -211,7 +234,7 @@ class _RideFeedbackTagsState extends State<RideFeedbackTags> {
           final isSelected = tag == selectedTag;
           return GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               setState(() {
                 selectedTag = tag;
                 widget.controller.text = tag; // Update the TextField

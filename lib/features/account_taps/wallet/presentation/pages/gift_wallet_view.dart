@@ -82,10 +82,10 @@ class GiftWalletView extends StatelessWidget {
                                 icon: Icons.star,
                                 iconSize: 50.h,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   HandleCashback.setCount(
                                       'tenPercentCount', context);
-                                  context.push(Routes.TenPercent);
+                                  context.pushNamed(Routes.TenPercent);
                                 }),
                           ),
                           Positioned(
@@ -266,7 +266,7 @@ class GiftWalletView extends StatelessWidget {
                           competitionsWalletEntity:
                               state.gift!.competitionsWallet[index],
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.read<GiftCubit>().requestWithdraw(
                                 state.gift!.competitionsWallet[index].id);
                           },
@@ -296,7 +296,7 @@ class GiftWalletView extends StatelessWidget {
       subtitle: Label(text: subTitle),
       trailing: MaterialButton(
         onPressed: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           ontap();
         },
         color: color,

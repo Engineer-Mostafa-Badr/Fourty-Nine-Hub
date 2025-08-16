@@ -62,7 +62,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                 label: LocaleKeys.logout.localize,
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   await controller.logout(context);
                   //Phoenix.rebirth(context);
                   // setState(() {});
@@ -77,7 +77,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                   // await DI.execute();
                   setLogOut();
                   // context.pop();
-                  // context.go(Routes.HOME);
+                  // context.goNamed(Routes.HOME);
 
                   // context.pushReplacement(Routes.HOME);
                   // await Restart.restartApp();

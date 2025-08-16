@@ -63,7 +63,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
             splashColor: Colors.transparent,
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+            onTap: () =>
+                context.pushNamed(Routes.ADdetails, extra: widget.item.id),
             child: IntrinsicHeight(
               child: Container(
                 // width: kToolbarHeight * 2.5,
@@ -88,9 +89,10 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                           views: widget.item.views ?? 0),
                     Expanded(
                       child: ImageAdsWidget(
-                        images: widget.item.images.map((e) => e.mediaKey).toList(),
+                        images:
+                            widget.item.images.map((e) => e.mediaKey).toList(),
                         // isFavourite: widget.item.isFavourite ?? false,
-                        isFavourite:  false,
+                        isFavourite: false,
                         // onPressedFavorite: () async {
                         //   if (widget.item.isFavourite == false) {
                         //     var result = await widget.onFav(widget.item.id);
@@ -105,7 +107,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                         //   }
                         //   setState(() {});
                         // },
-                        onPressedFavorite: () async{},
+                        onPressedFavorite: () async {},
                         isVerified: true, // widget.item.isVerified ?? false,
                       ),
                     ),
@@ -146,9 +148,9 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: widget.item.details
                                   .where((e) =>
-                              e.propId == '66ec666f12cfcdf9779dfcc5' ||
-                                  e.propId == '66ec666f12cfcdf9779dfd05' ||
-                                  e.propId == '66ec666f12cfcdf9779dfcc6')
+                                      e.propId == '66ec666f12cfcdf9779dfcc5' ||
+                                      e.propId == '66ec666f12cfcdf9779dfd05' ||
+                                      e.propId == '66ec666f12cfcdf9779dfcc6')
                                   .map((e) {
                                 return Row(
                                   children: [
@@ -229,13 +231,13 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                           const SizedBox(
                             height: 8,
                           ),
-                              _buildRequestsButton(
+                          _buildRequestsButton(
                             adId: widget.item.id,
                             userIdOfAd: widget.item.userId ?? '',
                             subcategoryId: widget.item.subCategoryId ?? '',
                             phone: widget.item.phone ?? '',
                             subscriptionStatus:
-                            'widget.item.userSubscriptionStatus' ?? '',
+                                'widget.item.userSubscriptionStatus' ?? '',
                           )
                         ],
                       ),
@@ -295,7 +297,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                               if (index == 3)
                                 Positioned.fill(
                                     child: InkWell(
-                                  onTap: () => context.push(Routes.ADdetails,
+                                  onTap: () => context.pushNamed(Routes.ADdetails,
                                       extra: widget.item.id),
                                   child: Container(
                                     color: Colors.black.withOpacity(0.8),
@@ -356,7 +358,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: () => context.push(Routes.ADdetails,
+                        onTap: () => context.pushNamed(Routes.ADdetails,
                             extra: widget.item.id),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,6 +539,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
       ),
     );
   }
+
   Widget _buildRequestsButton({
     required String userIdOfAd,
     required String subcategoryId,
@@ -546,11 +549,11 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
   }) {
     return Padding(
       padding: const EdgeInsets.only(
-        // left: 16,
-        // right: 16,
-        // bottom: 32,
-        // top: 8,
-      ),
+          // left: 16,
+          // right: 16,
+          // bottom: 32,
+          // top: 8,
+          ),
       child: Row(
         children: [
           Expanded(
@@ -561,7 +564,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
               onPressed: () async {
                 if (!context.read<UserCubit>().isLoggedIn) {
                   return pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
+                  // context.pushNamed(Routes.LOGIN);
                 } else {
                   bottomSheet(
                     context: context,
@@ -693,4 +696,3 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
     // regular
   }*/
 }
-

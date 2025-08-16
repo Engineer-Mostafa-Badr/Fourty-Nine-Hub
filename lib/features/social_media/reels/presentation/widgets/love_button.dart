@@ -71,7 +71,7 @@ class _LoveButtonState extends State<LoveButton>
   void toggleLove() {
     if (!serviceLocator<UserCubit>().isLoggedIn) {
       context.read<PreloadBloc>().pauseTheVideo();
-      context.push(Routes.LOGIN);
+      context.pushNamed(Routes.LOGIN);
     } else {
       setState(() {
         isLoved = !isLoved;
@@ -122,18 +122,18 @@ class _LoveButtonState extends State<LoveButton>
             builder: (context, child) {
               return Transform.scale(
                 scale: _scaleAnimation.value,
-                child: Icon(
-                  Icons.favorite,
-                  color: isLoved ? _colorAnimation.value : Colors.white,
-                  size: 28
-                  //  iconSize,
-                ),
+                child: Icon(Icons.favorite,
+                    color: isLoved ? _colorAnimation.value : Colors.white,
+                    size: 28
+                    //  iconSize,
+                    ),
               );
             },
           ),
           const SizedBox(height: 4),
           MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(1.0)),
             child: Text(
               widget.count,
               style: widget.countTextStyle ??

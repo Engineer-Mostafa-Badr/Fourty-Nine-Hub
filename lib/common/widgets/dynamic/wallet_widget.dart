@@ -50,7 +50,11 @@ class _WalletWidgetState extends State<WalletWidget> {
         builder: (BuildContext context, state) {
           return Container(
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
-            padding: const EdgeInsets.only(bottom: 10, left: 5, right: 5, ),
+            padding: const EdgeInsets.only(
+              bottom: 10,
+              left: 5,
+              right: 5,
+            ),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12.r),
@@ -93,8 +97,8 @@ class _WalletWidgetState extends State<WalletWidget> {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        // context.push(Routes.BALANCE);
-                        context.push(Routes.CASHBACK);
+                        // context.pushNamed(Routes.BALANCE);
+                        context.pushNamed(Routes.CASHBACK);
                       },
                           LocaleKeys.balance.tr(),
                           '${FormatNumbers().formatNumber(
@@ -120,7 +124,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.GIFT);
+                        context.pushNamed(Routes.GIFT);
                       },
                           LocaleKeys.gift.tr(),
                           '${FormatNumbers().formatNumber(
@@ -146,7 +150,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.WALLET);
+                        context.pushNamed(Routes.WALLET);
                         //showing
                       },
                           LocaleKeys.wallet.tr(),
@@ -211,7 +215,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                             onTap: () {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
-                              context.push(Routes.BALANCE);
+                              context.pushNamed(Routes.BALANCE);
                             },
                             child: SizedBox(
                               height: 200.h,
@@ -223,7 +227,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                                           AdInterstitialTop.loadIntersitialAd();
                                           AdInterstitialTop
                                               .showInterstitialAd();
-                                          context.push(Routes.BALANCE);
+                                          context.pushNamed(Routes.BALANCE);
                                         },
                                         child: LiquidCircularProgressIndicator(
                                           value: state.wallet?.balanceRatio
@@ -281,7 +285,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                               print("objectUser}");
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
-                              context.push(Routes.GIFT);
+                              context.pushNamed(Routes.GIFT);
                             },
                             child: SizedBox(
                               height: 200.h,
@@ -293,7 +297,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                                       print("objectUser}");
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
-                                      context.push(Routes.GIFT);
+                                      context.pushNamed(Routes.GIFT);
                                     },
                                     child: LiquidCircularProgressIndicator(
                                         value: state.wallet?.giftWalletRatio
@@ -349,7 +353,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                             onTap: () {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
-                              context.push(Routes.WALLET);
+                              context.pushNamed(Routes.WALLET);
                             },
                             child: SizedBox(
                               height: 200.h,
@@ -361,7 +365,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                                           AdInterstitialTop.loadIntersitialAd();
                                           AdInterstitialTop
                                               .showInterstitialAd();
-                                          context.push(Routes.WALLET);
+                                          context.pushNamed(Routes.WALLET);
                                         },
                                         child: LiquidCircularProgressIndicator(
                                           value: state.wallet?.realAmountRatio
@@ -427,7 +431,7 @@ class _WalletWidgetState extends State<WalletWidget> {
             //     buildItem(() {
             //       AdInterstitialTop.loadIntersitialAd();
             //       AdInterstitialTop.showInterstitialAd();
-            //       context.push(Routes.BALANCE);
+            //       context.pushNamed(Routes.BALANCE);
             //     },
             //         LocaleKeys.balance.tr(),
             //         '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0)} ',
@@ -447,7 +451,7 @@ class _WalletWidgetState extends State<WalletWidget> {
             //     buildItem(() {
             //       AdInterstitialTop.loadIntersitialAd();
             //       AdInterstitialTop.showInterstitialAd();
-            //       context.push(Routes.GIFT);
+            //       context.pushNamed(Routes.GIFT);
             //     },
             //         LocaleKeys.gift.tr(),
             //         '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)} ',
@@ -466,7 +470,7 @@ class _WalletWidgetState extends State<WalletWidget> {
             //     buildItem(() {
             //       AdInterstitialTop.loadIntersitialAd();
             //       AdInterstitialTop.showInterstitialAd();
-            //       context.push(Routes.WALLET);
+            //       context.pushNamed(Routes.WALLET);
             //       //showing
             //     },
             //         LocaleKeys.wallet.tr(),

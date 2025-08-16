@@ -21,16 +21,18 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
     final doctor = doctorDetailsCubit.state.doctor;
-    final List<AppointmentEntity> callsAppointments = (doctorDetailsCubit.state
-        .doctor?.appointments??[])
-        .where((element) => element.appointmentType == 'calls')
-        .toList();
-    final List<AppointmentEntity> visitHomeAppointments = (doctorDetailsCubit
-        .state.doctor?.appointments??[])
-        .where((element) => element.appointmentType == 'visitHome')
-        .toList();
-    final List<AppointmentEntity> clinicAppointments = (doctorDetailsCubit.state.doctor?.appointments??[]).where((element) => element.appointmentType == 'clinic')
-        .toList();
+    final List<AppointmentEntity> callsAppointments =
+        (doctorDetailsCubit.state.doctor?.appointments ?? [])
+            .where((element) => element.appointmentType == 'calls')
+            .toList();
+    final List<AppointmentEntity> visitHomeAppointments =
+        (doctorDetailsCubit.state.doctor?.appointments ?? [])
+            .where((element) => element.appointmentType == 'visitHome')
+            .toList();
+    final List<AppointmentEntity> clinicAppointments =
+        (doctorDetailsCubit.state.doctor?.appointments ?? [])
+            .where((element) => element.appointmentType == 'clinic')
+            .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -175,10 +177,10 @@ class _DayScheduleWidget extends StatelessWidget {
                       ? AppColors.DARK_GRAY_COLOR
                       : AppColors.LIGHT_GRAY_COLOR),
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (item.isAvailable) {
                   context.read<DoctorDetailsCubit>().selectedAppointment = item;
-                  context.push(Routes.VISITABOOKING,
+                  context.pushNamed(Routes.VISITABOOKING,
                       extra: context.read<DoctorDetailsCubit>());
                 }
               })

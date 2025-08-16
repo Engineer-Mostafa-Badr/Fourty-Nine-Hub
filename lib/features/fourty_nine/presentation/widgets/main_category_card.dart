@@ -18,7 +18,8 @@ class MainCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go(Routes.SUBCATEGORIES, extra: mainCategory.id),
+      onTap: () =>
+          context.goNamed(Routes.SUBCATEGORIES, extra: mainCategory.id),
       child: isList
           ? ClipRRect(
               borderRadius: BorderRadius.circular(10),

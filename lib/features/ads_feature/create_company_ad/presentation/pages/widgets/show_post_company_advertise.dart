@@ -40,10 +40,10 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
           label: LocaleKeys.myPosts.localize,
           leading: IconButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.pop();
               context.pop();
-              context.push(Routes.CREATECOMPANYAD);
+              context.pushNamed(Routes.CREATECOMPANYAD);
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -112,7 +112,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
     bool selected = _selectedType == type;
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         setState(() {
           _selectedType = type;
         });

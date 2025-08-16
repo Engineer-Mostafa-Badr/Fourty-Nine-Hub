@@ -79,7 +79,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._answerQuestionUseCase,
     this._getMainCategoryDetailsUseCase,
     this.updateSettingsDashboardUsecase,
-    this.getSettingsDashboardUsecase, this.listenToNewTripUseCase, this.listenToAcceptOfferUseCase,
+    this.getSettingsDashboardUsecase,
+    this.listenToNewTripUseCase,
+    this.listenToAcceptOfferUseCase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory(BuildContext context) async {
@@ -103,9 +105,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     // }
   }
 
-  initNotification(){
+  initNotification() {
     log("contextinitNotification");
-    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     serviceLocator<FcmNotificationHelper>().setup(currentContext);
   }
 
@@ -227,11 +230,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> getQuestion() async {
     final response = await _getQuestionUseCase(const NoParams());
-    response.fold(
-        (failure) {
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((failure) {
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
       emit(state.copyWith(question: data, status: StateStatus.success));
     });
   }
@@ -305,53 +306,49 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
   }
 
-  Future<void> getSettings(BuildContext context,{bool? listenToSocket=true}) async {
-
-
+  Future<void> getSettings(BuildContext context,
+      {bool? listenToSocket = true}) async {
     final Either<Failure, SettingsDashboardEntityResponse> result =
-    await getSettingsDashboardUsecase(const NoParams());
+        await getSettingsDashboardUsecase(const NoParams());
     result.fold(
-          (failure) {
-
+      (failure) {
         emit(state.copyWith(status: StateStatus.error, failure: failure));
       },
-          (settings) {
-
-            String lady = '62ea012a69ea29c91dfc3917';
+      (settings) {
+        String lady = '62ea012a69ea29c91dfc3917';
         bool isReady = isServiceAvailable(settings);
-        bool isDriverLady = settings.data.categoryIds.any((element) => element.id == lady);
+        bool isDriverLady =
+            settings.data.categoryIds.any((element) => element.id == lady);
         print("isDriverLady $isDriverLady");
-        if(isReady){
+        if (isReady) {
           updateDriverLocation();
-          if(listenToSocket==true)listenToNewTrip(context,settings.data.enableNotificationSound);
-          if(listenToSocket==true)listenToAcceptOffer(context);
+          if (listenToSocket == true)
+            listenToNewTrip(context, settings.data.enableNotificationSound);
+          if (listenToSocket == true) listenToAcceptOffer(context);
         }
         emit(state.copyWith(
-            status: StateStatus.success,setting: settings,isDriverLady:isDriverLady));
+            status: StateStatus.success,
+            setting: settings,
+            isDriverLady: isDriverLady));
       },
     );
   }
 
   Future<void> updateSettings(bool isReady) async {
-
-
-    final Either<Failure, bool> result =
-    await updateSettingsDashboardUsecase(UpdateSettingsDashboardUsecaseParam(
-      isReady: isReady
-    ));
+    final Either<Failure, bool> result = await updateSettingsDashboardUsecase(
+        UpdateSettingsDashboardUsecaseParam(isReady: isReady));
 
     if (isClosed) return;
     result.fold(
-          (failure) {
-      },
-          (settings) {
-        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      (failure) {},
+      (settings) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
 
-        getSettings(currentContext,listenToSocket: false);
+        getSettings(currentContext, listenToSocket: false);
       },
     );
   }
-
 
   bool isServiceAvailable(SettingsDashboardEntityResponse data) {
     // Check if isReady is true
@@ -363,19 +360,18 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     return false;
   }
 
-  Future<void> emitDriverLocation({required double lat,required double long}) async {
+  Future<void> emitDriverLocation(
+      {required double lat, required double long}) async {
     final result = await updateSocketLocationUseCase(
-        UpdateSocketLocationParams(latitude: lat, longitude: long)
-    );
+        UpdateSocketLocationParams(latitude: lat, longitude: long));
     result.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) async {
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) async {});
   }
 
-  void listenToNewTrip(BuildContext context,bool enableSound) {
+  void listenToNewTrip(BuildContext context, bool enableSound) {
     final currentLocation = GoRouter.of(context).state.path;
-    if('$currentLocation' == Paths.rideModeScreen){
+    if ('$currentLocation' == Paths.rideModeScreen) {
       return;
     }
     CliLogger.info('Listen To New Trip123');
@@ -384,26 +380,25 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
     listenToNewTripUseCase((trip) async {
       CliLogger.info('Listen To New ss');
-      if(enableSound){
+      if (enableSound) {
         await Future.delayed(
           const Duration(seconds: 1),
-              () {
-            if(context.isArabic){
+          () {
+            if (context.isArabic) {
               player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
-            }else{
+            } else {
               player.play(AssetSource("audio/u_have_a_new_ride_en.mp3"));
             }
           },
         );
       }
       final currentLocation = GoRouter.of(context).state.path;
-      if('$currentLocation' == Paths.rideModeScreen){
+      if ('$currentLocation' == Paths.rideModeScreen) {
         return;
       }
-      context.push(Routes.rideModeScreen,
+      context.pushNamed(Routes.rideModeScreen,
           extra: const RideModeParams(
-              modeType: 'ride',
-              isSocket: true,currentIndex: 0));
+              modeType: 'ride', isSocket: true, currentIndex: 0));
     });
   }
 
@@ -411,18 +406,16 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToAcceptOfferUseCase((trip) {
       final currentLocation = GoRouter.of(context).state.path;
-      if('$currentLocation' == Paths.rideModeScreen){
+      if ('$currentLocation' == Paths.rideModeScreen) {
         return;
       }
-      context.push(Routes.rideModeScreen,
+      context.pushNamed(Routes.rideModeScreen,
           extra: const RideModeParams(
-              modeType: 'ride',
-              currentIndex: 1,
-              isSocket: true));
+              modeType: 'ride', currentIndex: 1, isSocket: true));
     });
   }
 
-  updateDriverLocation(){
+  updateDriverLocation() {
     final locationService = LocationService();
 
     locationService.startLocationTracking();
@@ -440,7 +433,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       //     textColor: Colors.white,
       //     fontSize: 16.0
       // );
-      print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+      print(
+          'New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     });
   }
 }

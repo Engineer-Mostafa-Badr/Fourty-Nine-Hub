@@ -24,13 +24,13 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
         height: 56, // ارتفاع الزر الجديد
         child: RawMaterialButton(
           onPressed: () {
-      ManageVibration.vibrate();
-            if(context.read<UserCubit>().isLoggedIn) {
-              context.push(Routes.TRIP_JOIN);
-            }else{
+            ManageVibration.vibrate();
+            if (context.read<UserCubit>().isLoggedIn) {
+              context.pushNamed(Routes.TRIP_JOIN);
+            } else {
               return pleaseLoginDialog(context);
 
-              // context.push(Routes.LOGIN);
+              // context.pushNamed(Routes.LOGIN);
             }
           },
           fillColor: AppColors.PRIMARY_COLOR,

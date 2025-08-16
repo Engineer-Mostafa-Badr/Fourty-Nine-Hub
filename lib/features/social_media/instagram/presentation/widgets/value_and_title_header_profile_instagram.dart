@@ -14,7 +14,8 @@ class ValueAndTitleHeaderProfileInstagram extends StatelessWidget {
     super.key,
     required this.value,
     required this.title,
-    required this.index, required this.dataProfile,
+    required this.index,
+    required this.dataProfile,
   });
 
   final String value, title;
@@ -25,14 +26,21 @@ class ValueAndTitleHeaderProfileInstagram extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (index == 0 || index == 1) {
-          context.push(Routes.followersScreen, extra: FollowersScreenArguments(
-            index: index,
-            dataProfile: dataProfile,
-          ));
+          context.pushNamed(Routes.followersScreen,
+              extra: FollowersScreenArguments(
+                index: index,
+                dataProfile: dataProfile,
+              ));
         }
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ViewFollowersAndFollowing(otherId: '67bf629b82c3f5a684b4ebfb', email: '',)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewFollowersAndFollowing(
+                      otherId: '67bf629b82c3f5a684b4ebfb',
+                      email: '',
+                    )));
         // ViewFollowersAndFollowing(index: index, email: '');
       },
       child: Column(

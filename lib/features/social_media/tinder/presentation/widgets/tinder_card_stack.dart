@@ -59,15 +59,15 @@ class _TinderCardStackState extends State<TinderCardStack> {
       initialIndex: _currentIndex,
       cardsCount: 5,
       threshold: 30,
-      allowedSwipeDirection: AllowedSwipeDirection.only(left: true,right: true),
+      allowedSwipeDirection:
+          AllowedSwipeDirection.only(left: true, right: true),
       numberOfCardsDisplayed: 3,
       isLoop: true,
       padding: const EdgeInsets.only(bottom: 24),
       maxAngle: 50,
       onSwipe: (previousIndex, currentIndex, direction) {
         setState(() {
-
-          _currentIndex = currentIndex??0;
+          _currentIndex = currentIndex ?? 0;
           _dragProgress = 0;
           // Update the UI based on new card index
           // _buildCardWidget(
@@ -77,15 +77,16 @@ class _TinderCardStackState extends State<TinderCardStack> {
         });
         return true;
       },
-      onSwipeDirectionChange:  (horizontal, vertical){
+      onSwipeDirectionChange: (horizontal, vertical) {
         setState(() {
-          _swipeDirection=horizontal;
+          _swipeDirection = horizontal;
         });
       },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
         // احسب نسبة السحب الحالية
-        final int drag = horizontalOffsetPercentage.abs() + verticalOffsetPercentage.abs();
+        final int drag =
+            horizontalOffsetPercentage.abs() + verticalOffsetPercentage.abs();
 
         // لو الكارد هو اللي فوق، خزّن نسبة السحب
         if (index == _currentIndex && drag != _dragProgress) {
@@ -98,13 +99,13 @@ class _TinderCardStackState extends State<TinderCardStack> {
         String? swipeLabel;
         Color? labelColor;
         // نحدد الاتجاه من قيمة السحب
-        if ( _swipeDirection != null&&index == _currentIndex ) {
+        if (_swipeDirection != null && index == _currentIndex) {
           if (_swipeDirection == CardSwiperDirection.right) {
-            swipeLabel = context.isArabic?"مش مناسب":'NOPE';
-            labelColor=Color(0xffEB545D);
+            swipeLabel = context.isArabic ? "مش مناسب" : 'NOPE';
+            labelColor = Color(0xffEB545D);
           } else if (_swipeDirection == CardSwiperDirection.left) {
-            swipeLabel = context.isArabic?"أعجبني":'Like';
-            labelColor=Colors.green;
+            swipeLabel = context.isArabic ? "أعجبني" : 'Like';
+            labelColor = Colors.green;
           }
         }
         return Stack(
@@ -118,21 +119,22 @@ class _TinderCardStackState extends State<TinderCardStack> {
             if (swipeLabel != null)
               Positioned(
                 top: 60,
-                    left: _swipeDirection==CardSwiperDirection.left ? null : 30,
-                    right:_swipeDirection==CardSwiperDirection.left? 30 : null,
+                left: _swipeDirection == CardSwiperDirection.left ? null : 30,
+                right: _swipeDirection == CardSwiperDirection.left ? 30 : null,
                 child: Transform.rotate(
                   angle: _swipeDirection == CardSwiperDirection.right
                       ? -0.6 // ميل لليمين
                       : 0.6, // ميل لليسار
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 4.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.h, vertical: 4.h),
                     decoration: BoxDecoration(
-                      border: Border.all(color:labelColor??Colors.white,width: 5 )
-                    ),
+                        border: Border.all(
+                            color: labelColor ?? Colors.white, width: 5)),
                     child: Text(
                       swipeLabel,
                       style: TextStyle(
-                        color:labelColor,
+                        color: labelColor,
                         fontSize: 90.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -148,17 +150,18 @@ class _TinderCardStackState extends State<TinderCardStack> {
   }
 
   Widget _buildCardWidget(
-    BuildContext context,) {
+    BuildContext context,
+  ) {
     return SizedBox(
       child: Container(
         padding: EdgeInsets.only(bottom: 20.0.h),
-        child:  Card(
+        child: Card(
           clipBehavior: Clip.antiAlias,
-          shape:const  RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20), topLeft: Radius.circular(20))),
           elevation: 0,
-          margin: EdgeInsets.only(bottom: 40.h,right: 16.w,left: 16.w),
+          margin: EdgeInsets.only(bottom: 40.h, right: 16.w, left: 16.w),
           child: Stack(
             children: [
               const SwipeCardDemo2(),
@@ -167,7 +170,6 @@ class _TinderCardStackState extends State<TinderCardStack> {
               //     top: 40,
               //     left: direction == CardSwiperDirection.left ? null : 20,
               //     right: direction == CardSwiperDirection.left ? 20 : null,
-
             ],
           ),
         ),
@@ -290,16 +292,16 @@ class _TinderCardStackState extends State<TinderCardStack> {
           children: [
             _buildActionButton(
               context,
-              Image.asset(Assets.unavailable), (){},
+              Image.asset(Assets.unavailable), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.push(Routes.LOGIN)
-              //     : () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
+              //     ? () => context.pushNamed(Routes.LOGIN)
+              //     : () => context.pushNamed(Routes.OTHERSACCOUNT, extra: cardUser.id),
               color: AppColors.PRIMARY_COLOR, isMini: true,
             ),
             _buildActionButton(
               context, Image.asset(Assets.tinder_gift), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.push(Routes.LOGIN)
+              //     ? () => context.pushNamed(Routes.LOGIN)
               //     :  () => showChatBottomSheet(context, cardUser),
               color: Colors.white,
             ),
@@ -307,7 +309,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
               context,
               Image.asset(Assets.green_heart), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.push(Routes.LOGIN)
+              //     ? () => context.pushNamed(Routes.LOGIN)
               //     :  () => _navigateToUserProfile(context, cardUser),
               color: Colors.red, isMini: true,
             ),
@@ -315,14 +317,14 @@ class _TinderCardStackState extends State<TinderCardStack> {
               context,
               Image.asset(Assets.tinder_comments), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.push(Routes.LOGIN)
+              //     ? () => context.pushNamed(Routes.LOGIN)
               //     :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
               color: AppColors.ACCENT_COLOR,
             ),
-            _buildActionButton(
-                context, Image.asset(Assets.tinder_account),()=> context.push(Routes.UserProfilePage),
+            _buildActionButton(context, Image.asset(Assets.tinder_account),
+                () => context.pushNamed(Routes.UserProfilePage),
                 // !context.read<UserCubit>().isLoggedIn
-                //     ? () => context.push(Routes.LOGIN)
+                //     ? () => context.pushNamed(Routes.LOGIN)
                 //     : () {
                 //         bottomSheet(
                 //             context: context,
@@ -344,7 +346,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
       BuildContext context, Widget child, VoidCallback onPressed,
       {Color? color, bool? isMini}) {
     return FloatingActionButton(
-      heroTag: UniqueKey(),elevation: .9,
+      heroTag: UniqueKey(),
+      elevation: .9,
       onPressed: onPressed,
       mini: isMini ?? false,
       backgroundColor: Colors.white,
@@ -584,7 +587,7 @@ class ChatBottomSheet extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           ChatEntity? chat = await context
                               .read<UserCubit>()
@@ -592,7 +595,7 @@ class ChatBottomSheet extends StatelessWidget {
                                 otherId: cardUser.id!,
                               );
                           context.pop();
-                          context.push(
+                          context.pushNamed(
                             Routes.CHAT,
                             extra: ChatsViewParams(
                               isFromStartChat: true,
@@ -603,7 +606,7 @@ class ChatBottomSheet extends StatelessWidget {
                         } else {
                           return pleaseLoginDialog(context);
 
-                          // context.push(Routes.LOGIN);
+                          // context.pushNamed(Routes.LOGIN);
                         }
                       },
                       child: _buildChatOptionCard(
@@ -618,7 +621,7 @@ class ChatBottomSheet extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           log("are friends : ${cardUser.areFriends}");
                           if (cardUser.areFriends == true) {
@@ -629,7 +632,7 @@ class ChatBottomSheet extends StatelessWidget {
                                   categoryId: ChatCategoriesIds.social,
                                 );
                             context.pop();
-                            context.push(
+                            context.pushNamed(
                               Routes.CHAT,
                               extra: ChatsViewParams(
                                 isFromStartChat: true,
@@ -645,7 +648,7 @@ class ChatBottomSheet extends StatelessWidget {
                                   categoryId: ChatCategoriesIds.greet,
                                 );
                             context.pop();
-                            context.push(
+                            context.pushNamed(
                               Routes.CHAT,
                               extra: ChatsViewParams(
                                 isFromStartChat: true,
@@ -657,7 +660,7 @@ class ChatBottomSheet extends StatelessWidget {
                         } else {
                           return pleaseLoginDialog(context);
 
-                          // context.push(Routes.LOGIN);
+                          // context.pushNamed(Routes.LOGIN);
                         }
                       },
                       child: _buildChatOptionCard(
@@ -796,7 +799,7 @@ Widget _buildChatOptionCard(
     height: 150.h,
     child: ElevatedButton(
         onPressed: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           onPressed();
         },
         style: ElevatedButton.styleFrom(
@@ -872,7 +875,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                           icon: Icons.visibility_off,
                           label: LocaleKeys.chat_alert_dialog_anonymous.tr(),
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               log("Are Friends : ${cardUser.areFriends}");
                               ChatEntity? chat = await context
@@ -881,7 +884,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                     otherId: cardUser.id!,
                                   );
                               context.pop();
-                              context.push(
+                              context.pushNamed(
                                 Routes.CHAT,
                                 extra: ChatsViewParams(
                                   isFromStartChat: true,
@@ -892,7 +895,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                             }
                           },
                         ),
@@ -903,7 +906,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                           icon: Icons.visibility,
                           label: LocaleKeys.chat_alert_dialog_regular.tr(),
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               log("Are Friends : ${cardUser.areFriends}");
                               if (cardUser.areFriends == true) {
@@ -914,7 +917,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                       categoryId: ChatCategoriesIds.social,
                                     );
                                 context.pop();
-                                context.push(
+                                context.pushNamed(
                                   Routes.CHAT,
                                   extra: ChatsViewParams(
                                     isFromStartChat: true,
@@ -930,7 +933,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                       categoryId: ChatCategoriesIds.greet,
                                     );
                                 context.pop();
-                                context.push(
+                                context.pushNamed(
                                   Routes.CHAT,
                                   extra: ChatsViewParams(
                                     isFromStartChat: true,
@@ -942,7 +945,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.push(Routes.LOGIN);
+                              // context.pushNamed(Routes.LOGIN);
                             }
                           },
                         ),
@@ -1068,7 +1071,11 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Sizer(height: 10,),personInfoSubtitle(index)],
+                  const Sizer(
+                    height: 10,
+                  ),
+                  personInfoSubtitle(index)
+                ],
               ),
             ),
           ],
@@ -1081,7 +1088,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     switch (index) {
       case 1:
         return _customListTile(
-            Assets.location,
+          Assets.location,
           context.isArabic ? 'يبعُد 10 ميل ' : '10 Miles Away',
         );
       case 2:
@@ -1093,12 +1100,12 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
                 Assets.tinder_home,
                 context.isArabic ? 'حلوان' : 'Helwan',
               ),
-              const Sizer(height: 10,),
+              const Sizer(
+                height: 10,
+              ),
               _customListTile(
                 Assets.location,
-                context.isArabic
-                    ? 'يبعُد 10 ميل'
-                    : '10 Miles Away',
+                context.isArabic ? 'يبعُد 10 ميل' : '10 Miles Away',
               ),
             ]);
       case 3:
@@ -1106,9 +1113,10 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _customListTile(
-                Assets.interest,
-                context.isArabic ? 'اهتمامات' : 'Interests'),
-            const Sizer(height: 8,),
+                Assets.interest, context.isArabic ? 'اهتمامات' : 'Interests'),
+            const Sizer(
+              height: 8,
+            ),
             Wrap(
               children: [
                 _buildInterestsBobble(
@@ -1147,20 +1155,18 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   }
 
   Widget _customListTile(String icon, String title) {
-    return Row(
-      children: [
-        Image.asset(
-          icon,
-          height: 35.h,
-          color: Colors.white,
-        ),
-        const Sizer(),
-        Label(
-          text: title,
-          style: Styles.headerText(color: Colors.white),
-        ),
-      ]
-    );
+    return Row(children: [
+      Image.asset(
+        icon,
+        height: 35.h,
+        color: Colors.white,
+      ),
+      const Sizer(),
+      Label(
+        text: title,
+        style: Styles.headerText(color: Colors.white),
+      ),
+    ]);
   }
 
   Widget _buildCard(BuildContext context, int index) {

@@ -44,7 +44,7 @@ class _RiderBannerState extends State<RiderBanner> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         print(context.read<UserCubit>().isLoggedIn);
         if (context.read<UserCubit>().isLoggedIn) {
           showModalBottomSheet(
@@ -61,7 +61,7 @@ class _RiderBannerState extends State<RiderBanner> {
           );
         } else {
           return pleaseLoginDialog(context);
-          // context.push(Routes.REGISTER);
+          // context.pushNamed(Routes.REGISTER);
         }
       },
       child: MainCategoryBanner(

@@ -33,7 +33,7 @@ class ReelAccountInfo extends StatelessWidget {
               label: item.user?.fullName ?? '',
               style: Styles.mediumText(
                   fontWeight: FontWeight.bold, color: Colors.white),
-              onPressed: () => context.push(Routes.OTHERSACCOUNT),
+              onPressed: () => context.pushNamed(Routes.OTHERSACCOUNT),
             ),
             const Sizer(),
             AppButton(
@@ -41,8 +41,7 @@ class ReelAccountInfo extends StatelessWidget {
               padding: 20,
               label: 'Follow',
               onPressed: () {
-
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
             )
           ],

@@ -203,7 +203,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
@@ -244,10 +244,10 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   IconAppButton(
                                     icon: FontAwesomeIcons.comment,
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       // if (!serviceLocator<UserCubit>()
                                       //     .isLoggedIn) {
-                                      //   context.push(Routes.LOGIN);
+                                      //   context.pushNamed(Routes.LOGIN);
                                       // } else {
                                       //   showCommentsBottomSheetInstagram(
                                       //       context,
@@ -272,7 +272,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                             child: GestureDetector(
                                               behavior: HitTestBehavior.opaque,
                                               onTap: () {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
@@ -389,7 +389,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   text: WidgetSpan(
                                       child: GestureDetector(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       setState(() {
                                         _isExpanded = !_isExpanded;
                                       });
@@ -712,7 +712,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                 text:
                                     '${sortedPosts[index].firstComment?.firstName} ${sortedPosts[index].firstComment?.lastName}\t\t',
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context.push(
+                                  ..onTap = () => context.pushNamed(
                                       Routes.INSTAGRAMPROFILE,
                                       extra: sortedPosts[index].user.id),
                                 style: Styles.mediumText()),
@@ -775,7 +775,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
@@ -816,10 +816,10 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   IconAppButton(
                                     icon: FontAwesomeIcons.comment,
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       // if (!serviceLocator<UserCubit>()
                                       //     .isLoggedIn) {
-                                      //   context.push(Routes.LOGIN);
+                                      //   context.pushNamed(Routes.LOGIN);
                                       // } else {
                                       //   showCommentsBottomSheetInstagram(
                                       //       context,
@@ -844,7 +844,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                             child: GestureDetector(
                                               behavior: HitTestBehavior.opaque,
                                               onTap: () {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
@@ -958,7 +958,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   text: WidgetSpan(
                                       child: GestureDetector(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       setState(() {
                                         _isExpanded = !_isExpanded;
                                       });
@@ -1023,16 +1023,16 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
       children: [
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
-            context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+            ManageVibration.vibrate();
+            context.pushNamed(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
             radius: 32.r,
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(
-                (post.user.image != null && (post.user.image?.isNotEmpty??false))
-                    ? post.user.image??''
-                    : UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage((post.user.image != null &&
+                    (post.user.image?.isNotEmpty ?? false))
+                ? post.user.image ?? ''
+                : UIConst.profilePlaceHolder),
           ),
         ),
         const Sizer(),
@@ -1044,8 +1044,9 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
               children: [
                 InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
-                    context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+                    ManageVibration.vibrate();
+                    context.pushNamed(Routes.INSTAGRAMPROFILE,
+                        extra: post.user.id);
                   },
                   child: TextAppButton(
                       style: TextStyle(
@@ -1053,8 +1054,8 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                           fontSize: 30.sp),
                       label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
-      ManageVibration.vibrate();
-                        context.push(Routes.INSTAGRAMPROFILE,
+                        ManageVibration.vibrate();
+                        context.pushNamed(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);
                       }),
                 ),
@@ -1378,7 +1379,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //                                           onPressed: () {
 //                                             // if (!serviceLocator<UserCubit>()
 //                                             //     .isLoggedIn) {
-//                                             //   context.push(Routes.LOGIN);
+//                                             //   context.pushNamed(Routes.LOGIN);
 //                                             // } else {
 //                                             //   showCommentsBottomSheetInstagram(
 //                                             //       context,
@@ -1865,7 +1866,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //                                           text:
 //                                           '${sortedPosts[index].firstComment?.firstName} ${sortedPosts[index].firstComment?.lastName}\t\t',
 //                                           recognizer: TapGestureRecognizer()
-//                                             ..onTap = () => context.push(
+//                                             ..onTap = () => context.pushNamed(
 //                                                 Routes.INSTAGRAMPROFILE,
 //                                                 extra: controller.feedPagingController
 //                                                     .itemList?[index].user.id),
@@ -2002,7 +2003,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //                                           onPressed: () {
 //                                             // if (!serviceLocator<UserCubit>()
 //                                             //     .isLoggedIn) {
-//                                             //   context.push(Routes.LOGIN);
+//                                             //   context.pushNamed(Routes.LOGIN);
 //                                             // } else {
 //                                             //   showCommentsBottomSheetInstagram(
 //                                             //       context,
@@ -2235,7 +2236,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //       children: [
 //         InkWell(
 //           onTap: () {
-//             context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+//             context.pushNamed(Routes.INSTAGRAMPROFILE, extra: post.user.id);
 //           },
 //           child: CircleAvatar(
 //             radius: 32.r,
@@ -2255,7 +2256,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //                   children: [
 //                     InkWell(
 //                       onTap: () {
-//                         context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+//                         context.pushNamed(Routes.INSTAGRAMPROFILE, extra: post.user.id);
 //                       },
 //                       child: TextAppButton(
 //                           style: TextStyle(
@@ -2263,7 +2264,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //                               fontSize: 30.sp),
 //                           label: "${post.user.firstName} ${post.user.lastName}",
 //                           onPressed: () {
-//                             context.push(Routes.INSTAGRAMPROFILE,
+//                             context.pushNamed(Routes.INSTAGRAMPROFILE,
 //                                 extra: post.user.id);
 //                           }),
 //                     ),

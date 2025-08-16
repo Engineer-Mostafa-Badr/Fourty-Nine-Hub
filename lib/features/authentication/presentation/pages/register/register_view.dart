@@ -41,14 +41,14 @@
 //           showErrorMessage(context, getFailureMessage(state.failure, context));
 //         } else if (state is OTPSent) {
 //           showSuccessMessage(context, 'OTP Sent successfully');
-//           context.go(
+//           context.goNamed(
 //             Routes.VERIFYMAIL,
 //             extra: registerCubit.emailTextController.text,
 //           );
 //         } else if (state is RegisterSuccess) {
 //           context.read<UserCubit>().setLogin(true);
 //           context.read<UserCubit>().getUser();
-//           context.go(Routes.HOME);
+//           context.goNamed(Routes.HOME);
 //           context.pop();
 //         }
 //       },
@@ -230,7 +230,7 @@
 //                         TextSpan(
 //                           text: "Login",
 //                           recognizer: TapGestureRecognizer()
-//                             ..onTap = () => context.push(Routes.LOGIN),
+//                             ..onTap = () => context.pushNamed(Routes.LOGIN),
 //                           style: Styles.mediumText(),
 //                         ),
 //                       ],

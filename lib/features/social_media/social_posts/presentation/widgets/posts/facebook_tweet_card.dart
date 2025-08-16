@@ -49,7 +49,7 @@ class FacebookTweetCard extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               bottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -87,10 +87,8 @@ class FacebookTweetCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5)),
                     child: Column(
                       children: [
-                        _buildAccountHeader(
-                            context: context,
-                            user: post.user),
-                         _buildContent(context: context, post: post),
+                        _buildAccountHeader(context: context, user: post.user),
+                        _buildContent(context: context, post: post),
                       ],
                     ),
                   ),
@@ -110,7 +108,7 @@ class FacebookTweetCard extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () => context.push(Routes.OTHERSACCOUNT, extra: user.id),
+          onTap: () => context.pushNamed(Routes.OTHERSACCOUNT, extra: user.id),
           child: CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage((user.image != null)
@@ -121,7 +119,7 @@ class FacebookTweetCard extends StatelessWidget {
         const Sizer(),
         Expanded(
             child: InkWell(
-          onTap: () => context.push(Routes.OTHERSACCOUNT),
+          onTap: () => context.pushNamed(Routes.OTHERSACCOUNT),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -129,7 +127,8 @@ class FacebookTweetCard extends StatelessWidget {
                   style: Styles.headerText(
                       fontSize: 32, color: Theme.of(context).primaryColor),
                   label: "${user.firstName} ${user.lastName}",
-                  onPressed: () => () => context.push(Routes.OTHERSACCOUNT)),
+                  onPressed: () =>
+                      () => context.pushNamed(Routes.OTHERSACCOUNT)),
               RichText(
                   text: TextSpan(children: [
                 TextSpan(
@@ -178,7 +177,7 @@ class FacebookTweetCard extends StatelessWidget {
                 itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (index != 3 ||
                             (index == 3 && post.images.length == 4)) {
                           showDialog(
@@ -272,7 +271,7 @@ class FacebookTweetCard extends StatelessWidget {
                   itemCount: post.images!.length < 4 ? post.images!.length : 4,
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (index != 3 ||
                               (index == 3 && post.images!.length == 4)) {
                             showDialog(

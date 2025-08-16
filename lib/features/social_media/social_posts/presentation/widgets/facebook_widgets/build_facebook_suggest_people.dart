@@ -22,10 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class BuildFacebookSuggestPeople extends StatefulWidget {
-  const BuildFacebookSuggestPeople({
-    super.key,
-    required this.suggestedFriends
-  });
+  const BuildFacebookSuggestPeople({super.key, required this.suggestedFriends});
   final List<SuggestUserEntity> suggestedFriends;
   @override
   State<BuildFacebookSuggestPeople> createState() =>
@@ -98,9 +95,9 @@ class _BuildFacebookSuggestPeopleState
                   ),
                   ClickableWidget(
                     onTap: () {
-                      context.push(Routes.FacebookSuggestPeople);
+                      context.pushNamed(Routes.FacebookSuggestPeople);
                     },
-                    child: Text( 
+                    child: Text(
                       context.locale == Locales.english
                           ? 'See More'
                           : 'عرض الكل',
@@ -127,7 +124,7 @@ class _BuildFacebookSuggestPeopleState
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
-                                context.push(Routes.OTHERSACCOUNT,
+                                context.pushNamed(Routes.OTHERSACCOUNT,
                                     extra: widget.suggestedFriends[index].id);
                               },
                               child: Container(
@@ -166,13 +163,16 @@ class _BuildFacebookSuggestPeopleState
                                               12), // Rounded top corners
                                         ),
                                         child: ImageFromInternet(
-                                          image: widget.suggestedFriends[index]
-                                              .profilePicture,
-                                          fit: BoxFit
-                                              .fill, // Ensures the image covers the area
-                                          firstChar: widget.suggestedFriends[index].firstName[0].toUpperCase(),
-                                            charPadding:5
-                                        ),
+                                            image: widget
+                                                .suggestedFriends[index]
+                                                .profilePicture,
+                                            fit: BoxFit
+                                                .fill, // Ensures the image covers the area
+                                            firstChar: widget
+                                                .suggestedFriends[index]
+                                                .firstName[0]
+                                                .toUpperCase(),
+                                            charPadding: 5),
                                       ),
                                     ),
                                     // Bottom Half: White Container with Details and Buttons
@@ -508,7 +508,7 @@ class _BuildFacebookSuggestPeopleState
                                                                     context)
                                                             : widget.suggestedFriends[index].addedSuccessfully ==
                                                                         true &&
-                                                            widget
+                                                                    widget
                                                                             .suggestedFriends[
                                                                                 index]
                                                                             .followSuccessfully ==
@@ -530,7 +530,7 @@ class _BuildFacebookSuggestPeopleState
                                                                 .localize
                                                             : widget.suggestedFriends[index].addedSuccessfully ==
                                                                         true &&
-                                                            widget
+                                                                    widget
                                                                             .suggestedFriends[
                                                                                 index]
                                                                             .followSuccessfully ==
@@ -582,7 +582,9 @@ class _BuildFacebookSuggestPeopleState
                                                                   .id,
                                                             );
                                                         if (data == true) {
-                                                          widget.suggestedFriends.removeAt(index);
+                                                          widget
+                                                              .suggestedFriends
+                                                              .removeAt(index);
                                                           setState(() {});
                                                         }
                                                       },

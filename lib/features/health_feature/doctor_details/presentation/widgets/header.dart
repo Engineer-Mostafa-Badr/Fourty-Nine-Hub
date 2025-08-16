@@ -99,7 +99,6 @@ class _DoctorDetailsAccountHeaderState
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
               DoctorImage(
                 rating: doctor?.rating ?? 0,
                 imageUrl: doctor?.image ?? '',
@@ -147,7 +146,7 @@ class _DoctorDetailsAccountHeaderState
                         color: Colors.black,
                         backColor: AppColors.GREY_LIGHT_COLOR,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           showModalBottomSheet(
                             backgroundColor: context.isDarkMode
                                 ? AppColors.DARK_BLUE_COLOR
@@ -190,7 +189,7 @@ class _DoctorDetailsAccountHeaderState
                                           /// on close Button
                                           InkWell(
                                               onTap: () async {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 commentController.clear();
                                                 phoneController.clear();
                                                 rating = 0;
@@ -349,7 +348,7 @@ class _DoctorDetailsAccountHeaderState
                                       ),
                                       InkWell(
                                         onTap: () async {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           if (formKey.currentState!
                                               .validate()) {
                                             bool result =
@@ -429,7 +428,7 @@ class _DoctorDetailsAccountHeaderState
                                     style:
                                         Styles.mediumText(color: Colors.white),
                                     onPressed: () async {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       bool result = await context
                                           .read<StreamCubit>()
                                           .joinNewMeeting(
@@ -439,7 +438,7 @@ class _DoctorDetailsAccountHeaderState
                                         await context
                                             .read<SecretsCubit>()
                                             .getAllSecrets();
-                                        context.go(Routes.MEETINGROOM,
+                                        context.goNamed(Routes.MEETINGROOM,
                                             extra: MeetingRoomArguments(
                                                 liveID: doctor
                                                         ?.meetingData?.roomId ??

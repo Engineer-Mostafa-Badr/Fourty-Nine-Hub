@@ -269,7 +269,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                   : "Advertise your car",
                               onTap: () {
                                 ManageVibration.vibrate();
-                                context.push(Routes.TRIP_JOIN);
+                                context.pushNamed(Routes.TRIP_JOIN);
                               },
                             ),
                           ),

@@ -77,10 +77,10 @@ class _CorporateAdsState extends State<CorporateAds> {
                     ManageVibration.vibrate();
                     if (!context.isUserLoggedIn) {
                       print('not logged in');
-                      context.push(Routes.FirstLoginScreen);
+                      context.pushNamed(Routes.FirstLoginScreen);
                     } else {
                       if (state.price?.isSubscribed == true) {
-                        context.push(
+                        context.pushNamed(
                           Routes.CREATECOMPANYPOSTAD,
                           extra: CreatePostCompanyParams(
                               title: LocaleKeys.createPost.localize,
@@ -116,11 +116,11 @@ class _CorporateAdsState extends State<CorporateAds> {
                     ManageVibration.vibrate();
                     if (!context.isUserLoggedIn) {
                       print('not logged in');
-                      context.push(Routes.FirstLoginScreen);
+                      context.pushNamed(Routes.FirstLoginScreen);
                     } else {
                       print('logged in');
                       if (state.price?.isSubscribed == true) {
-                        context.push(
+                        context.pushNamed(
                           Routes.CREATECOMPANYPOSTREALAD,
                           extra: state.price?.reelPrice ?? 0,
                         );

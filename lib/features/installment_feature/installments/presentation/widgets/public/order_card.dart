@@ -16,7 +16,7 @@ class InstallmentOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.INSTALLMENTORDERDETAILS),
+      onTap: () => context.pushNamed(Routes.INSTALLMENTORDERDETAILS),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -66,10 +66,11 @@ class InstallmentOrderCard extends StatelessWidget {
                 text: 'Comming installment: 13 Jun. 2024',
                 style: Styles.mediumText(color: Colors.grey)),
             const Sizer(),
-            AppButton(label: 'Pay now', onPressed: () {
-
-      ManageVibration.vibrate();
-            }),
+            AppButton(
+                label: 'Pay now',
+                onPressed: () {
+                  ManageVibration.vibrate();
+                }),
           ],
         ),
       ),

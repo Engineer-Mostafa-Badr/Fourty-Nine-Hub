@@ -28,13 +28,14 @@ class RideDetailsRatingWidget extends StatefulWidget {
   final String title;
   const RideDetailsRatingWidget(
       {super.key,
-       this.onRating,
+      this.onRating,
       required this.isRate,
       required this.rate,
       required this.title});
 
   @override
-  State<RideDetailsRatingWidget> createState() => _RideDetailsRatingWidgetState();
+  State<RideDetailsRatingWidget> createState() =>
+      _RideDetailsRatingWidgetState();
 }
 
 class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
@@ -63,12 +64,13 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
         const Spacer(),
         if (widget.isRate) ...[
-           Text(getRatingText(finalRate),
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+          Text(getRatingText(finalRate),
+              style:
+                  const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
           const SizedBox(width: 5),
           GestureDetector(
-            onTap: (){
-      ManageVibration.vibrate();
+            onTap: () {
+              ManageVibration.vibrate();
               showModalBottomSheet(
                 context: context,
                 constraints: BoxConstraints(
@@ -144,8 +146,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
     );
   }
 
-
-  Widget rateWidget(){
+  Widget rateWidget() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -161,25 +162,35 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(children: [
-                  const  SizedBox(width: 25,),
-                  const  Spacer(),
-                  Text(
-                    LocaleKeys.rateTheClient.localize,
-                    style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.shade200,
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 25,
                     ),
-                    child: const Icon(Icons.close,color: Colors.black,),
-                  ),
-                ],),
-                const SizedBox(height: 16,),
+                    const Spacer(),
+                    Text(
+                      LocaleKeys.rateTheClient.localize,
+                      style: const TextStyle(
+                          fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade200,
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
                 // Text(
                 //     _rating >= 5.0?LocaleKeys.excellent.localize:_rating >= 4.0? LocaleKeys.veryGood.localize:_rating >= 3.0 ?LocaleKeys.good.localize:_rating >= 2.0? LocaleKeys.poor2.localize:_rating >= 1.0? LocaleKeys.bad.localize:LocaleKeys.noRating.localize,
                 //   style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
@@ -199,16 +210,20 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
                   ),
                   onRatingUpdate: (rating) {
                     // setState(() {
-                      _rating = rating;
+                    _rating = rating;
                     // });
                   },
                 ),
                 const SizedBox(height: 12),
                 DefaultTextFormField(
                   currentController: rateController,
-                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                  fillColor: context.isDarkMode
+                      ? AppColors.GREY_DARK_COLOR
+                      : AppColors.GREYBG,
                   borderColor: Colors.transparent,
-                  hint: context.isArabic ? 'اكتب رسالة شكر' : 'Write a thank-you message',
+                  hint: context.isArabic
+                      ? 'اكتب رسالة شكر'
+                      : 'Write a thank-you message',
                   // label: LocaleKeys.firstName.localize,
                   validator: (v) {
                     if (v == null || v.isEmpty) {
@@ -224,17 +239,19 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.PRIMARY_COLOR,
                       foregroundColor: Colors.white,
-                      padding:const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () {
-      ManageVibration.vibrate();
-                      if(formKey.currentState!.validate()){
-                        widget.onRating!=null?widget.onRating!(rateController.text, _rating):null;
+                      ManageVibration.vibrate();
+                      if (formKey.currentState!.validate()) {
+                        widget.onRating != null
+                            ? widget.onRating!(rateController.text, _rating)
+                            : null;
                       }
-                      // context.push(Routes.connectionCallScreen);
+                      // context.pushNamed(Routes.connectionCallScreen);
                     },
                     child: Text(LocaleKeys.send.localize),
                   ),
@@ -257,38 +274,41 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
     return LocaleKeys.noRating.localize;
   }
 
-  Widget noRateWidget(Function(String comment, double rate)? onRating) => ClickableWidget(
-    onTap: onRating!=null?()=> showModalBottomSheet(
-      context: context,
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.9,
-      ),
-      backgroundColor: context.isDarkMode
-          ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
-          : AppColors.LIGHT_COLOR,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(32.0),
-          topRight: Radius.circular(32.0),
-        ),
-      ),
-      enableDrag: true,
-      useSafeArea: true,
-      isDismissible: true,
-      isScrollControlled: true,
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: SingleChildScrollView(
-          child: rateWidget(),
-        ),
-      ),
-    ):null,
-    child: Container(
+  Widget noRateWidget(Function(String comment, double rate)? onRating) =>
+      ClickableWidget(
+        onTap: onRating != null
+            ? () => showModalBottomSheet(
+                  context: context,
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.9,
+                  ),
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                      : AppColors.LIGHT_COLOR,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0),
+                    ),
+                  ),
+                  enableDrag: true,
+                  useSafeArea: true,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: SingleChildScrollView(
+                      child: rateWidget(),
+                    ),
+                  ),
+                )
+            : null,
+        child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: context.isDarkMode?AppColors.c5A5A5A:AppColors.cF3F3F3,
+            color: context.isDarkMode ? AppColors.c5A5A5A : AppColors.cF3F3F3,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Label(
@@ -299,9 +319,8 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
             ),
           ),
         ),
-  );
+      );
 }
-
 
 class RideDetailsRatingNonSocketWidget extends StatelessWidget {
   final double? rate;
@@ -351,7 +370,7 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) => RatingBottomSheet(
-        isRide:  isRide!,
+        isRide: isRide!,
         tripId: tripId,
         cubit: cubit,
         onRatingUpdated: onRatingUpdated,
@@ -379,13 +398,13 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
         if (isClient && isRate) const SizedBox(width: 8),
 
         if (isClient && isRate)
-        // Wrap rating display in IntrinsicWidth to avoid shrinking rating text too much
+          // Wrap rating display in IntrinsicWidth to avoid shrinking rating text too much
           IntrinsicWidth(child: _buildRatingDisplay(context)),
 
         if (!isClient && isRate) const SizedBox(width: 8),
 
         if (!isClient && isRate)
-        // Wrap the rating + modify button inside IntrinsicWidth and Row
+          // Wrap the rating + modify button inside IntrinsicWidth and Row
           IntrinsicWidth(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -402,8 +421,8 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
                   child: InkWell(
                     onTap: () => _openRatingSheet(context),
                     child: Container(
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 8),
                       decoration: BoxDecoration(
                         color: AppColors.cF3F3F3,
                         borderRadius: BorderRadius.circular(12),
@@ -414,7 +433,6 @@ class RideDetailsRatingNonSocketWidget extends StatelessWidget {
                         maxLines: 1,
                         softWrap: false,
                         textAlign: TextAlign.center,
-
                         style: Styles.smallText(
                           fontWeight: FontWeight.w600,
                           color: AppColors.PRIMARY_COLOR,
@@ -511,6 +529,7 @@ class RatingBottomSheet extends StatefulWidget {
   @override
   _RatingBottomSheetState createState() => _RatingBottomSheetState();
 }
+
 class _RatingBottomSheetState extends State<RatingBottomSheet> {
   late double _rating;
   final TextEditingController _commentController = TextEditingController();
@@ -529,6 +548,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
     _commentController.dispose();
     super.dispose();
   }
+
   Future<void> _sendRating(BuildContext context) async {
     if (_rating == 0) {
       return;
@@ -552,7 +572,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
             newRatingValue: _rating,
             newComment: _commentController.text.trim(),
           );
-          await widget.cubit.updateRateDriverNonSocket(params: params, context: context);
+          await widget.cubit
+              .updateRateDriverNonSocket(params: params, context: context);
         }
       } else {
         // Loading/delivery trip
@@ -572,7 +593,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
             newRatingValue: _rating,
             newComment: _commentController.text.trim(),
           );
-          await widget.cubit.updateRateDriverLoadingNonSocket(params: params, context: context);
+          await widget.cubit.updateRateDriverLoadingNonSocket(
+              params: params, context: context);
         }
       }
 
@@ -597,6 +619,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       }
     }
   }
+
 /*
   Future<void> _sendRating(BuildContext context) async {
     if (_rating == 0) {
@@ -743,7 +766,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
                         color:
-                        AppColors.getTextColor(context).withOpacity(0.4)),
+                            AppColors.getTextColor(context).withOpacity(0.4)),
                   ),
                   filled: true,
                   fillColor: context.isDarkMode
@@ -851,13 +874,13 @@ class RideDetailsRatingNonSocketClientWidget extends StatelessWidget {
         if (isClient && isRate) const SizedBox(width: 8),
 
         if (isClient && isRate)
-        // Wrap rating display in IntrinsicWidth to avoid shrinking rating text too much
+          // Wrap rating display in IntrinsicWidth to avoid shrinking rating text too much
           IntrinsicWidth(child: _buildRatingDisplay(context)),
 
         if (!isClient && isRate) const SizedBox(width: 8),
 
         if (!isClient && isRate)
-        // Wrap the rating + modify button inside IntrinsicWidth and Row
+          // Wrap the rating + modify button inside IntrinsicWidth and Row
           IntrinsicWidth(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -874,8 +897,8 @@ class RideDetailsRatingNonSocketClientWidget extends StatelessWidget {
                   child: InkWell(
                     onTap: () => _openRatingSheet(context),
                     child: Container(
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 8),
                       decoration: BoxDecoration(
                         color: AppColors.cF3F3F3,
                         borderRadius: BorderRadius.circular(12),
@@ -904,7 +927,6 @@ class RideDetailsRatingNonSocketClientWidget extends StatelessWidget {
       ],
     );
   }
-
 
   Widget _buildRatingDisplay(BuildContext context) {
     return Row(
@@ -938,12 +960,12 @@ class RideDetailsRatingNonSocketClientWidget extends StatelessWidget {
     );
   }
 
-
   Widget _buildNoRatingButton(BuildContext context) {
     return InkWell(
       onTap: () => _openRatingSheet(context),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8), // reduced padding
+        padding: const EdgeInsets.symmetric(
+            vertical: 6, horizontal: 8), // reduced padding
         decoration: BoxDecoration(
           color: AppColors.cF3F3F3,
           borderRadius: BorderRadius.circular(12),
@@ -961,10 +983,6 @@ class RideDetailsRatingNonSocketClientWidget extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 }
 
 class RatingBottomSheetClient extends StatefulWidget {
@@ -1181,7 +1199,4 @@ class _RatingBottomSheetClientState extends State<RatingBottomSheetClient> {
       ),
     );
   }
-
-
 }
-

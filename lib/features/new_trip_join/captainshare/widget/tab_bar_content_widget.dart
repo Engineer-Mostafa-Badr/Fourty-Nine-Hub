@@ -203,12 +203,15 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                           }
                         },
                         onJoin: (phone) {
-                          print("(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)}");
-                          if ((!(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)) &&
+                          print(
+                              "(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients ?? []).any((e) => e.id == UserCubit.to.state.data?.id)}");
+                          if ((!(cubit.availableBookings[index].clients ?? [])
+                                  .any((e) =>
+                                      e.id == UserCubit.to.state.data?.id)) &&
                               cubit.availableBookings[index].status ==
                                   'pending') {
                             cubit.joinToRoute(
-                                phone:phone,
+                                phone: phone,
                                 id: cubit.availableBookings[index].id,
                                 context: context);
                           }
@@ -234,7 +237,7 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          context.push(Routes.captainShareInfoScreen);
+                          context.pushNamed(Routes.captainShareInfoScreen);
                         },
                         child: Container(
                           height: 48.h,
@@ -387,7 +390,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
-                          context.push(Routes.newRouteScreen);
+                          context.pushNamed(Routes.newRouteScreen);
                         },
                       ),
                     ],
@@ -521,7 +524,7 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                           TripJoinFloatingActionButton(
                             title: LocaleKeys.createRoute.localize,
                             onTap: () {
-                              context.push(Routes.newRouteScreen);
+                              context.pushNamed(Routes.newRouteScreen);
                             },
                           ),
                         ],
@@ -666,7 +669,7 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
-                          context.push(Routes.newRouteScreen);
+                          context.pushNamed(Routes.newRouteScreen);
                         },
                       ),
                     ],

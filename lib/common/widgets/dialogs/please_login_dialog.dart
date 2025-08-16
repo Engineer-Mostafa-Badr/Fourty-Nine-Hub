@@ -49,7 +49,7 @@ void pleaseLoginDialog(BuildContext context) {
   //                       : AppColors.PRIMARY_COLOR,
   //                   onPressed: () {
   //                     ManageVibration.vibrate();
-  //                     context.go(Routes.LOGIN);
+  //                     context.goNamed(Routes.LOGIN);
   //                   }),
   //             ),
   //             const Sizer(),

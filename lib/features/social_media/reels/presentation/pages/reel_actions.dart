@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,9 +71,8 @@ class _ReelActionsState extends State<ReelActions> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          
                           UserSection(reel: widget.reel),
-                            const SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           if (widget.reel.caption.isNotEmpty)
                             CaptionWidget(
                               caption: widget.reel.caption,
@@ -84,8 +82,8 @@ class _ReelActionsState extends State<ReelActions> {
                           if (widget.reel.hashtags.isNotEmpty)
                             GestureDetector(
                               onTap: () {
-      ManageVibration.vibrate();
-                                context.push(Routes.TiktokOptionScreen);
+                                ManageVibration.vibrate();
+                                context.pushNamed(Routes.TiktokOptionScreen);
                               },
                               child: const TagWidget(),
                             ),
@@ -97,7 +95,7 @@ class _ReelActionsState extends State<ReelActions> {
                             const SizedBox(height: 6),
                           if (widget.reel.shopNowUrl.isNotEmpty)
                             const ShopNowButton(),
-                             const SizedBox(height: 50),
+                          const SizedBox(height: 50),
                           // if (widget.reel.audio.audioName.isNotEmpty)
                           //   const SizedBox(height: 6),
                           // if (widget.reel.audio.audioName.isNotEmpty)
@@ -179,12 +177,12 @@ class _UserAvatarState extends State<_UserAvatar> {
       ),
       child: InkWell(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           if (!serviceLocator<UserCubit>().isLoggedIn) {
             context.read<PreloadBloc>().pauseTheVideo();
-            context.push(Routes.LOGIN);
+            context.pushNamed(Routes.LOGIN);
           } else {
-            context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+            context.pushNamed(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
           }
         },
         child: Stack(
@@ -210,7 +208,7 @@ class _UserAvatarState extends State<_UserAvatar> {
                     bottom: -5,
                     child: GestureDetector(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           if (widget.reel.user.areFriends == true) {
                           } else {
@@ -233,7 +231,7 @@ class _UserAvatarState extends State<_UserAvatar> {
                             }
                           }
                         } else {
-                          context.push(Routes.LOGIN);
+                          context.pushNamed(Routes.LOGIN);
                         }
                       },
                       child: Container(
@@ -286,12 +284,13 @@ class _UserInfoState extends State<_UserInfo> {
         children: [
           InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (!serviceLocator<UserCubit>().isLoggedIn) {
                 context.read<PreloadBloc>().pauseTheVideo();
-                context.push(Routes.LOGIN);
+                context.pushNamed(Routes.LOGIN);
               } else {
-                context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+                context.pushNamed(Routes.OTHERSACCOUNT,
+                    extra: widget.reel.user.id);
               }
             },
             child: Row(
@@ -311,7 +310,7 @@ class _UserInfoState extends State<_UserInfo> {
                     ? Container()
                     : GestureDetector(
                         onTap: () async {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (context.read<UserCubit>().isLoggedIn) {
                             if (widget.reel.user.isFollowed == true) {
                               var result = await controller.unFollowRequest(
@@ -331,7 +330,7 @@ class _UserInfoState extends State<_UserInfo> {
                               }
                             }
                           } else {
-                            context.push(Routes.LOGIN);
+                            context.pushNamed(Routes.LOGIN);
                           }
                         },
                         child: Container(
@@ -961,9 +960,9 @@ class _AudioAndButtons extends StatelessWidget {
 //         onTap: () {
 //           if (!serviceLocator<UserCubit>().isLoggedIn) {
 //             context.read<PreloadBloc>().pauseTheVideo();
-//             context.push(Routes.LOGIN);
+//             context.pushNamed(Routes.LOGIN);
 //           } else {
-//             context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+//             context.pushNamed(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
 //           }
 //         },
 //         child: Stack(
@@ -1020,7 +1019,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                           }
 //                         } else {
 //                           context.read<PreloadBloc>().pauseTheVideo();
-//                           context.push(Routes.LOGIN);
+//                           context.pushNamed(Routes.LOGIN);
 //                         }
 //                       },
 //                       child: CircleAvatar(
@@ -1071,9 +1070,9 @@ class _AudioAndButtons extends StatelessWidget {
 //             onTap: () {
 //               if (!serviceLocator<UserCubit>().isLoggedIn) {
 //                 context.read<PreloadBloc>().pauseTheVideo();
-//                 context.push(Routes.LOGIN);
+//                 context.pushNamed(Routes.LOGIN);
 //               } else {
-//                 context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+//                 context.pushNamed(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
 //               }
 //             },
 //             child: Row(
@@ -1154,7 +1153,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                             }
 //                           } else {
 //                             context.read<PreloadBloc>().pauseTheVideo();
-//                             context.push(Routes.LOGIN);
+//                             context.pushNamed(Routes.LOGIN);
 //                           }
 //                         },
 //                         child: Container(
@@ -1352,7 +1351,7 @@ class _AudioAndButtons extends StatelessWidget {
 //         //   onTap: () {
 //         //     if (!serviceLocator<UserCubit>().isLoggedIn) {
 //         //      context.read<PreloadBloc>().pauseTheVideo();
-//         //       context.push(Routes.LOGIN);
+//         //       context.pushNamed(Routes.LOGIN);
 //         //     } else {
 //         //       _showGiftBottomSheet(context);
 //         //     }
@@ -1368,7 +1367,7 @@ class _AudioAndButtons extends StatelessWidget {
 //           // onTap: () {
 //           //   if (!serviceLocator<UserCubit>().isLoggedIn) {
 //           // context.read<PreloadBloc>().pauseTheVideo();
-//           //     context.push(Routes.LOGIN);
+//           //     context.pushNamed(Routes.LOGIN);
 //           //   } else {
 //           //     _handleLikeAction(context, reelsCubit);
 //           //   }
@@ -1387,7 +1386,7 @@ class _AudioAndButtons extends StatelessWidget {
 //           onTap: () {
 //             if (!serviceLocator<UserCubit>().isLoggedIn) {
 //               context.read<PreloadBloc>().pauseTheVideo();
-//               context.push(Routes.LOGIN);
+//               context.pushNamed(Routes.LOGIN);
 //             } else {
 //               _handleCommentAction(
 //                 context,
@@ -1424,7 +1423,7 @@ class _AudioAndButtons extends StatelessWidget {
 //             );
 //             // if (!serviceLocator<UserCubit>().isLoggedIn) {
 //             // context.read<PreloadBloc>().pauseTheVideo();
-//             //   context.push(Routes.LOGIN);
+//             //   context.pushNamed(Routes.LOGIN);
 //             // } else {
 //             //   _handleShareAction(context, reel.videoMedia);
 //             // }
@@ -1456,7 +1455,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                         onTap: () {
 //                           if (!serviceLocator<UserCubit>().isLoggedIn) {
 //                             context.read<PreloadBloc>().pauseTheVideo();
-//                             context.push(Routes.LOGIN);
+//                             context.pushNamed(Routes.LOGIN);
 //                           } else {
 //                             _showReportBottomSheet(context);
 //                           }
@@ -1477,7 +1476,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                         onTap: () {
 //                           if (!serviceLocator<UserCubit>().isLoggedIn) {
 //                             context.read<PreloadBloc>().pauseTheVideo();
-//                             context.push(Routes.LOGIN);
+//                             context.pushNamed(Routes.LOGIN);
 //                           } else {
 //                             _handleSaveAction(context, reelsCubit);
 //                           }

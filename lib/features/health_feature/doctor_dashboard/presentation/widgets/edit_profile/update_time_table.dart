@@ -17,9 +17,9 @@ class UpdateDoctorTimetableCard extends StatelessWidget {
     return EditDoctorProfileCard(
       title: LocaleKeys.timeTable.localize,
       onTap: () async {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         var result =
-            await context.push(Routes.EDITDOCTORTIMETABLE, extra: params);
+            await context.pushNamed(Routes.EDITDOCTORTIMETABLE, extra: params);
         if (result == true) {
           context.read<EditDoctorProfileCubit>().loadData();
         }

@@ -23,13 +23,13 @@ class StoresInstagramWidget extends StatelessWidget {
             if (index == 0) {
               return InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   // bottomSheet(
                   //   context: context,
                   //   isScrollControlled: true,
                   //   widget: AddStoryView(),
                   // );
-                  context.push(Routes.ADDSTORYINSTAGRAM);
+                  context.pushNamed(Routes.ADDSTORYINSTAGRAM);
                 },
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(
@@ -49,8 +49,7 @@ class StoresInstagramWidget extends StatelessWidget {
             }
             return InkWell(
               onTap: () {
-
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
               child: StoryInstagramHeaderItem(
                 storyItemEntity: StoryItemEntity.stories[index - 1],

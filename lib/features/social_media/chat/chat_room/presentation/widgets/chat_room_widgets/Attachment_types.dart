@@ -36,122 +36,122 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(
-        child: CustomCircularProgressIndicator(
-          color: AppColors.PRIMARY_COLOR,
-        ))
+            child: CustomCircularProgressIndicator(
+            color: AppColors.PRIMARY_COLOR,
+          ))
         : GridView(
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3),
-      children: [
-        _buildAttachmentTypeItem(
-          color: Colors.purple,
-          label: LocaleKeys.document.tr(),
-          icon: Icons.insert_drive_file_outlined,
-          onTap: () async {
-      manageVibration.ManageVibration.vibrate();
-            setState(() {
-              isLoading = true;
-            });
-            await widget.chatRoomCubit.pickDocuments();
-            if (widget.chatRoomCubit.media.isNotEmpty) {
-              context.push(Routes.ONETIMEDOCUMENTMESSAGE,
-                  extra: OneTimeDocumentMessageViewParams(
-                    chatRoomCubit: widget.chatRoomCubit,
-                  ));
-            }
-            setState(() {
-              isLoading = false;
-            });
-            context.pop();
-          },
-        ),
-        _buildAttachmentTypeItem(
-          color: Colors.redAccent,
-          label: LocaleKeys.camera.tr(),
-          icon: Icons.camera_alt,
-          onTap: () async {
-      manageVibration.ManageVibration.vibrate();
-            context.push(Routes.CHATROOMCAMERAPICKER,
-                extra: CameraPickerViewPrams(
-                  chatRoomCubit: widget.chatRoomCubit,
-                ));
-          },
-        ),
-        _buildAttachmentTypeItem(
-            color: Colors.purpleAccent,
-            label: LocaleKeys.gallery.tr(),
-            onTap: () async {
-      manageVibration.ManageVibration.vibrate();
-              await widget.chatRoomCubit.pickMedia();
-              context.push(
-                Routes.MEDIASLIDER,
-                extra: widget.chatRoomCubit,
-              );
-              context.pop();
-            },
-            icon: Icons.image_outlined),
-        _buildAttachmentTypeItem(
-            color: Colors.orange[600]!,
-            label: LocaleKeys.audio.tr(),
-            onTap: () async {
-      manageVibration.ManageVibration.vibrate();
-              setState(() {
-                isLoading = true;
-              });
-              await widget.chatRoomCubit.pickAudio();
-              if (widget.chatRoomCubit.media.isNotEmpty) {
-                List<File> tempMedia = [
-                  ...widget.chatRoomCubit.media
-                ]; // spread operator
-                widget.chatRoomCubit.media.clear();
-                for (var media in tempMedia) {
-                  widget.chatRoomCubit.media.add(media);
-                  await widget.chatRoomCubit.sendMessage();
-                  widget.chatRoomCubit.media.clear();
-                }
-              }
-              setState(() {
-                isLoading = false;
-              });
-              context.pop();
-            },
-            icon: Icons.headphones_rounded),
-
-        _buildAttachmentTypeItem(
-            color: Colors.lightBlue,
-            label: LocaleKeys.contact.tr(),
-            icon: Icons.person,
-            onTap: () {
-      manageVibration.ManageVibration.vibrate();
-              context.push(
-                Routes.SELECTCONTACTSTOSHARE,
-                extra: widget.chatRoomCubit,
-              );
-            }),
-        (widget.chatRoomCubit.chat.isAdmin != "admin" &&
-            widget.chatRoomCubit.chat.isBirthdayMonth)
-            ? _buildAttachmentTypeItem(
-            color: Colors.green,
-            label: context.isArabic ? "هدية" : "Gift",
-            icon: FontAwesomeIcons.cakeCandles,
-            onTap: () async {
-      manageVibration.ManageVibration.vibrate();
-              context.pop();
-              await showGiftBottomSheet(
-                context,
-                receiverId: widget.chatRoomCubit.chat.userId,
-              );
-            }
-        ) : const SizedBox(),
-      ],
-    );
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3),
+            children: [
+              _buildAttachmentTypeItem(
+                color: Colors.purple,
+                label: LocaleKeys.document.tr(),
+                icon: Icons.insert_drive_file_outlined,
+                onTap: () async {
+                  manageVibration.ManageVibration.vibrate();
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await widget.chatRoomCubit.pickDocuments();
+                  if (widget.chatRoomCubit.media.isNotEmpty) {
+                    context.pushNamed(Routes.ONETIMEDOCUMENTMESSAGE,
+                        extra: OneTimeDocumentMessageViewParams(
+                          chatRoomCubit: widget.chatRoomCubit,
+                        ));
+                  }
+                  setState(() {
+                    isLoading = false;
+                  });
+                  context.pop();
+                },
+              ),
+              _buildAttachmentTypeItem(
+                color: Colors.redAccent,
+                label: LocaleKeys.camera.tr(),
+                icon: Icons.camera_alt,
+                onTap: () async {
+                  manageVibration.ManageVibration.vibrate();
+                  context.pushNamed(Routes.CHATROOMCAMERAPICKER,
+                      extra: CameraPickerViewPrams(
+                        chatRoomCubit: widget.chatRoomCubit,
+                      ));
+                },
+              ),
+              _buildAttachmentTypeItem(
+                  color: Colors.purpleAccent,
+                  label: LocaleKeys.gallery.tr(),
+                  onTap: () async {
+                    manageVibration.ManageVibration.vibrate();
+                    await widget.chatRoomCubit.pickMedia();
+                    context.pushNamed(
+                      Routes.MEDIASLIDER,
+                      extra: widget.chatRoomCubit,
+                    );
+                    context.pop();
+                  },
+                  icon: Icons.image_outlined),
+              _buildAttachmentTypeItem(
+                  color: Colors.orange[600]!,
+                  label: LocaleKeys.audio.tr(),
+                  onTap: () async {
+                    manageVibration.ManageVibration.vibrate();
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await widget.chatRoomCubit.pickAudio();
+                    if (widget.chatRoomCubit.media.isNotEmpty) {
+                      List<File> tempMedia = [
+                        ...widget.chatRoomCubit.media
+                      ]; // spread operator
+                      widget.chatRoomCubit.media.clear();
+                      for (var media in tempMedia) {
+                        widget.chatRoomCubit.media.add(media);
+                        await widget.chatRoomCubit.sendMessage();
+                        widget.chatRoomCubit.media.clear();
+                      }
+                    }
+                    setState(() {
+                      isLoading = false;
+                    });
+                    context.pop();
+                  },
+                  icon: Icons.headphones_rounded),
+              _buildAttachmentTypeItem(
+                  color: Colors.lightBlue,
+                  label: LocaleKeys.contact.tr(),
+                  icon: Icons.person,
+                  onTap: () {
+                    manageVibration.ManageVibration.vibrate();
+                    context.pushNamed(
+                      Routes.SELECTCONTACTSTOSHARE,
+                      extra: widget.chatRoomCubit,
+                    );
+                  }),
+              (widget.chatRoomCubit.chat.isAdmin != "admin" &&
+                      widget.chatRoomCubit.chat.isBirthdayMonth)
+                  ? _buildAttachmentTypeItem(
+                      color: Colors.green,
+                      label: context.isArabic ? "هدية" : "Gift",
+                      icon: FontAwesomeIcons.cakeCandles,
+                      onTap: () async {
+                        manageVibration.ManageVibration.vibrate();
+                        context.pop();
+                        await showGiftBottomSheet(
+                          context,
+                          receiverId: widget.chatRoomCubit.chat.userId,
+                        );
+                      })
+                  : const SizedBox(),
+            ],
+          );
   }
 
-  Widget _buildAttachmentTypeItem({required Color color,
-    required String label,
-    required IconData icon,
-    void Function()? onTap}) {
+  Widget _buildAttachmentTypeItem(
+      {required Color color,
+      required String label,
+      required IconData icon,
+      void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Column(

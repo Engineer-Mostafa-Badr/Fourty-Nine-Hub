@@ -49,15 +49,16 @@ class RideBannerWidget extends StatelessWidget {
                                 horizontal: 10, vertical: 5),
                             child: DashboardBanner(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (state
                                         .model.mainCategory?.isSocketCategory ??
                                     false) {
                                   log("Socket Screen");
-                                  context.push(Routes.ALLTRIPRIDER);
+                                  context.pushNamed(Routes.ALLTRIPRIDER);
                                 } else {
                                   log("No Socket Screen");
-                                  context.push(Routes.ALLTRIPNOSOCKETSCREEN);
+                                  context
+                                      .pushNamed(Routes.ALLTRIPNOSOCKETSCREEN);
                                 }
                               },
                               title: LocaleKeys.rideDashboard.tr(),
@@ -78,19 +79,19 @@ class RideBannerWidget extends StatelessWidget {
                           horizontal: 10, vertical: 5),
                       child: DashboardBanner(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (state.model.mainCategory?.isSocketCategory ??
                               false) {
                             log("Socket Screen");
-                            context.push(Routes.ALLTRIPRIDER);
+                            context.pushNamed(Routes.ALLTRIPRIDER);
                           } else {
                             log("No Socket Screen");
-                            context.push(Routes.ALLTRIPNOSOCKETSCREEN);
+                            context.pushNamed(Routes.ALLTRIPNOSOCKETSCREEN);
                           }
                           // (state.model.mainCategory?.isSocketCategory ??
                           //           false)
-                          //       ? context.push(Routes.ALLTRIPRIDER)
-                          //       : context.push(Routes.ALLTRIPNOSOCKETSCREEN),
+                          //       ? context.pushNamed(Routes.ALLTRIPRIDER)
+                          //       : context.pushNamed(Routes.ALLTRIPNOSOCKETSCREEN),
                         },
                         title: LocaleKeys.rideDashboard.tr(),
                         subTitle: "",

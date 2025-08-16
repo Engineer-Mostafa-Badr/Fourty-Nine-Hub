@@ -85,7 +85,9 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
         }
       },
       child: CustomScaffold(
-          appBar: const HomeAppbar(isWithBackArrow: true,),
+          appBar: const HomeAppbar(
+            isWithBackArrow: true,
+          ),
           body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
               builder: (context, state) {
             if (state is CreateRestaurantLoading) {
@@ -103,7 +105,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               setState(() {
                                 editFood = false;
                               });
@@ -111,8 +113,11 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                             child: Text(
                               widget.from == 'update'
                                   ? LocaleKeys.updateYourRestaurant.localize
-                                  : context.isArabic?'مرحباً بك في تسجيل مطعم':LocaleKeys.welcomeToResturantRegisteration
-                                      .tr(),
+                                  : context.isArabic
+                                      ? 'مرحباً بك في تسجيل مطعم'
+                                      : LocaleKeys
+                                          .welcomeToResturantRegisteration
+                                          .tr(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Styles.headerText(
@@ -124,8 +129,8 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                           ElevatedAppButton(
                             label: LocaleKeys.editFood.localize,
                             onPressed: () {
-      ManageVibration.vibrate();
-                              context.push(Routes.EditFoodView,
+                              ManageVibration.vibrate();
+                              context.pushNamed(Routes.EditFoodView,
                                   extra: EditFoodParams(
                                       restaurantId: widget.restaurantId ?? '',
                                       subCategoryId:
@@ -152,11 +157,11 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 32.h),
                     const CreateResturantSubcategoryDropdown(),
                     Sizer(height: 20.h),
-                     CreateRestaurantNameField(
+                    CreateRestaurantNameField(
                       focusNode: nameFocusNode,
                     ),
                     Sizer(height: 20.h),
-                     CreateRestaurantNumberField(restaurantNumber: '' ),
+                    CreateRestaurantNumberField(restaurantNumber: ''),
                     Sizer(height: 20.h),
                     CreateRestaurantProfilePhotoPicker(
                       subcategoryId: widget.subcategoryId,
@@ -177,6 +182,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     const CreateRestaurantCitiesDropdowns(),
                     Sizer(height: 20.h),
+
                     /// menu
                     if (widget.from != 'update')
                       BlocProvider(
@@ -201,7 +207,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                           Expanded(
                             child: ElevatedAppButton(
                               onPressed: () async {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 var res = await context
                                     .read<CreateRestaurantCubit>()
                                     .updateRestaurant1(context);

@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -70,9 +69,9 @@ class _CreatePostSecondPageInstagramViewBodyState
               builder: (context, state) {
                 return Column(
                   children: [
-
                     const Padding(
-                      padding: EdgeInsets.only(right: 8.0, left: 8.0, top: 24.0),
+                      padding:
+                          EdgeInsets.only(right: 8.0, left: 8.0, top: 24.0),
                       child: ShowImagesCreatePostSecond(
                           // selectedImages: selectedImages,
                           ),
@@ -101,7 +100,9 @@ class _CreatePostSecondPageInstagramViewBodyState
                           ? (context.isDarkMode
                               ? const Color(0xffFF4622)
                               : const Color(0xffFF3308))
-                          : (context.isDarkMode ? Colors.white : AppColors.black),
+                          : (context.isDarkMode
+                              ? Colors.white
+                              : AppColors.black),
                       iconAction: state.usersTag.isNotEmpty
                           ? Icons.close_rounded
                           : Icons.arrow_forward_ios_rounded,
@@ -142,25 +143,25 @@ class _CreatePostSecondPageInstagramViewBodyState
                           ? LocaleKeys.addLocation.localize
                           : state.location!.name,
                       labelColor: state.location == null
-                          ? (context.isDarkMode ? Colors.white : AppColors.black)
+                          ? (context.isDarkMode
+                              ? Colors.white
+                              : AppColors.black)
                           : (context.isDarkMode
                               ? const Color(0xffFF4622)
                               : const Color(0xffFF3308)),
                       iconAction: state.location == null
                           ? Icons.arrow_forward_ios_rounded
                           : Icons.close_rounded,
-                onPressedActionButton:(){
-                  ManageVibration.vibrate();
-                  log('onPressedActionButton pressed');
-                  serviceLocator<InstagramAddLocationCubit>()
-                      .removeLocation();
-                  serviceLocator<CreatePostInstagramCubit>()
-                      .removeLocation();
-                  log(state.location?.name ?? 'location is null');
-                  setState(() {
-
-                  });
-                },
+                      onPressedActionButton: () {
+                        ManageVibration.vibrate();
+                        log('onPressedActionButton pressed');
+                        serviceLocator<InstagramAddLocationCubit>()
+                            .removeLocation();
+                        serviceLocator<CreatePostInstagramCubit>()
+                            .removeLocation();
+                        log(state.location?.name ?? 'location is null');
+                        setState(() {});
+                      },
                       onPressed: () {
                         // context.pushNamed(
                         //   Routes.INSTAGRAMADDLOCATION,
@@ -168,25 +169,26 @@ class _CreatePostSecondPageInstagramViewBodyState
                         // );
                         ManageVibration.vibrate();
                         if (context.isUserLoggedIn) {
-                          context.push(
+                          context.pushNamed(
                             Routes.GoogleMapsSearchAndPick,
                             extra: RideGoogleMapSearchAndPickParams(
                               onPicked: (pickedData) async {
                                 ManageVibration.vibrate();
-                                LocationInstagramEntity selectedPlace = LocationInstagramEntity(
-                                    formattedAddress: pickedData.address,
-                                    name: pickedData.address,
-                                    lat: pickedData.latitude,
-                                    lng: pickedData.longitude);
-                                serviceLocator<CreatePostInstagramCubit>().addLocation(selectedPlace);
+                                LocationInstagramEntity selectedPlace =
+                                    LocationInstagramEntity(
+                                        formattedAddress: pickedData.address,
+                                        name: pickedData.address,
+                                        lat: pickedData.latitude,
+                                        lng: pickedData.longitude);
+                                serviceLocator<CreatePostInstagramCubit>()
+                                    .addLocation(selectedPlace);
                                 context.pop();
                               },
                             ),
                           );
                         } else {
-                          context.push(Routes.LOGIN);
+                          context.pushNamed(Routes.LOGIN);
                         }
-
                       },
                     ),
                     const SizedBox(
@@ -213,7 +215,8 @@ class _CreatePostSecondPageInstagramViewBodyState
             ),
           )),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: AppButton(
               label: LocaleKeys.share.localize,
               height: 51,
@@ -234,10 +237,13 @@ class _CreatePostSecondPageInstagramViewBodyState
                   return;
                 } else {
                   serviceLocator<CreatePostInstagramCubit>().createPost(
-                        caption: captionController.text,
-                      );
+                    caption: captionController.text,
+                  );
                   if (mounted) {
-                    context.go(Routes.SOCIAL, extra: SocialParams(userId: UserCubit.to.state.data?.id ?? '', index: 1));
+                    context.goNamed(Routes.SOCIAL,
+                        extra: SocialParams(
+                            userId: UserCubit.to.state.data?.id ?? '',
+                            index: 1));
                   }
                 }
               },

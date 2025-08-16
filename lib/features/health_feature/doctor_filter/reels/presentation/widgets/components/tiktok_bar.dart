@@ -103,7 +103,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               _buildLiveIcon(onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
@@ -123,7 +123,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                   showTiktokOption(context, generateRandom9DigitNumber);
                 } else {
                   pleaseLoginDialog(context);
-                  // context.go(Routes.LOGIN);
+                  // context.goNamed(Routes.LOGIN);
                 }
               }),
               const Sizer(
@@ -146,7 +146,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           Row(
             children: [
               _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (context
                     .read<ReelsCubit>()
                     .state
@@ -163,11 +163,11 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 setState(() {
                   _selectedIndex = 0;
                 });
-                context.push(Routes.SPOTLIGHT);
+                context.pushNamed(Routes.SPOTLIGHT);
               }),
               // Following Tab
               _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
@@ -186,12 +186,12 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 setState(() {
                   _selectedIndex = 1;
                 });
-                context.push(Routes.SNAP);
+                context.pushNamed(Routes.SNAP);
               }),
 
               // For You Tab with rounded underline
               _buildTab("Reel", 2, onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 setState(() {
                   _selectedIndex = 2;
                 });
@@ -206,8 +206,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           ),
           GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
-              context.push(Routes.Tinder);
+              ManageVibration.vibrate();
+              context.pushNamed(Routes.Tinder);
             },
             child: const Icon(
               Icons.search,
@@ -248,7 +248,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
-                context.push(Routes.Tinder);
+                context.pushNamed(Routes.Tinder);
               }),
               const Sizer(),
             ],

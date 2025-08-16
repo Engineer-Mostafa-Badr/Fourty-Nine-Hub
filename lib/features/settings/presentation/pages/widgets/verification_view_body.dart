@@ -50,7 +50,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                 Navigator.of(context).pop();
               },
               cancelOnPressed: () {
-                context.go(Routes.LOGIN);
+                context.goNamed(Routes.LOGIN);
               },
             ),
           );
@@ -95,7 +95,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                   child: CustomFloatingActionButton(
                     text: LocaleKeys.confirm.localize,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       forgotPasswordCubit.verifyQuestions(
                         context,
                         userId: widget.questions.userId,

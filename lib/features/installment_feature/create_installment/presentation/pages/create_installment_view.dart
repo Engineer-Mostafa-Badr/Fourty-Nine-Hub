@@ -125,7 +125,7 @@ class CreateInstallmentView extends StatelessWidget {
                         ? AppColors.SECONDARY_COLOR.withOpacity(.5)
                         : null,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (state.plans?.isNotEmpty ?? false) {
                         controller.saveInstallment();
                       }
@@ -143,7 +143,7 @@ class CreateInstallmentView extends StatelessWidget {
               ),
             );
           } else if (state.isSuccess) {
-            context.go(Routes.MYADDS);
+            context.goNamed(Routes.MYADDS);
             showSuccessMessage(context, Labels.success);
           }
         }));

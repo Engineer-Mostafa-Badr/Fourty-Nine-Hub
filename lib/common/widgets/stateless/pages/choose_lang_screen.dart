@@ -113,14 +113,14 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                     fontSize: 32.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   changeLang(
                                       locale: Locales.arabic, context: context);
                                   Future.delayed(const Duration(seconds: 1));
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  // context.go(Routes.onBoardingScreen);
+                                  // context.goNamed(Routes.onBoardingScreen);
                                 },
                               ),
                             ),
@@ -161,7 +161,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  context.go(Routes.onBoardingScreen);
+                                  context.goNamed(Routes.onBoardingScreen);
                                 },
                               ),
                             ),
@@ -225,11 +225,12 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                     child: DefaultButton(
                       label: LocaleKeys.next.localize,
                       labelStyle: TextStyle(
-                          fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
+                          fontSize: 35.sp,
+                          color: AppColors.AUTH_CONTAINER_COLOR),
                       width: double.infinity,
                       onPressed: () {
-      ManageVibration.vibrate();
-                        context.go(Routes.onBoardingScreen);
+                        ManageVibration.vibrate();
+                        context.goNamed(Routes.onBoardingScreen);
                       },
                     ),
                   ),

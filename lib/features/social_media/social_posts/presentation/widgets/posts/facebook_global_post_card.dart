@@ -93,7 +93,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       }
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
-     return Container();
+      return Container();
       // if (widget.from == 'posts') {
       //   if (controller
       //           .globalFeedPagingController.itemList?[widget.index].type ==
@@ -201,7 +201,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //               ClickableWidget(
       //                 onTap: () {
       ManageVibration.vibrate();
-      //                   context.push(Routes.LOGIN);
+      //                   context.pushNamed(Routes.LOGIN);
       //                 },
       //                 child: Row(
       //                   children: [
@@ -232,7 +232,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                   child: ClickableWidget(
       //                     onTap: () {
       ManageVibration.vibrate();
-      //                       context.push(Routes.LOGIN);
+      //                       context.pushNamed(Routes.LOGIN);
       //                     },
       //                     child: Column(
       //                       mainAxisAlignment: MainAxisAlignment.center,
@@ -258,7 +258,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       label: LocaleKeys.comment.localize,
       //                       onTap: () {
       ManageVibration.vibrate();
-      //                         context.push(Routes.LOGIN);
+      //                         context.pushNamed(Routes.LOGIN);
       //                       }),
       //                 ),
       //                 Expanded(
@@ -267,7 +267,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       label: LocaleKeys.share.localize,
       //                       onTap: () async {
       ManageVibration.vibrate();
-      //                         context.push(Routes.LOGIN);
+      //                         context.pushNamed(Routes.LOGIN);
       //                       }),
       //                 ),
       //               ],
@@ -320,7 +320,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //             ClickableWidget(
       //               onTap: () {
       ManageVibration.vibrate();
-      //                 context.push(Routes.LOGIN);
+      //                 context.pushNamed(Routes.LOGIN);
       //               },
       //               child: Row(
       //                 children: [
@@ -359,7 +359,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       label: LocaleKeys.comment.localize,
       //                       onTap: () {
       ManageVibration.vibrate();
-      //                         context.push(Routes.LOGIN);
+      //                         context.pushNamed(Routes.LOGIN);
       //                       }),
       //                 ),
       //               Expanded(
@@ -368,7 +368,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                     label: LocaleKeys.share.localize,
       //                     onTap: () async {
       ManageVibration.vibrate();
-      //                       context.push(Routes.LOGIN);
+      //                       context.pushNamed(Routes.LOGIN);
       //                     }),
       //               ),
       //             ],
@@ -410,7 +410,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     return ListTile(
       title: Label(text: title),
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap();
         context.pop();
       },
@@ -438,18 +438,19 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             ClickableWidget(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (widget.fromProfile == false &&
                       context.read<UserCubit>().isLoggedIn) {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                    context.pushNamed(Routes.OTHERSACCOUNT,
+                        extra: post.user.id);
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                   }
                 },
                 child: ImageFromInternet(
-                  image: (post.user.image != null) ? post.user.image??'' : '',
+                  image: (post.user.image != null) ? post.user.image ?? '' : '',
                   height: 45,
                   width: 45,
                   isCircle: true,
@@ -469,31 +470,32 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 children: [
                   ClickableWidget(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (widget.fromProfile == false &&
                           context.read<UserCubit>().isLoggedIn) {
-                        context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                        context.pushNamed(Routes.OTHERSACCOUNT,
+                            extra: post.user.id);
                       } else {
                         return pleaseLoginDialog(context);
 
-                        // context.push(Routes.LOGIN);
+                        // context.pushNamed(Routes.LOGIN);
                       }
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextAppButton(
-                            label: post.user.userName??'',
+                            label: post.user.userName ?? '',
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (widget.fromProfile == false &&
                                   context.read<UserCubit>().isLoggedIn) {
-                                context.push(Routes.OTHERSACCOUNT,
+                                context.pushNamed(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
                               } else {
                                 return pleaseLoginDialog(context);
 
-                                // context.push(Routes.LOGIN);
+                                // context.pushNamed(Routes.LOGIN);
                               }
                             }),
                         RichText(
@@ -522,7 +524,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             padding: const EdgeInsetsDirectional.only(start: 40.0),
             child: ClickableWidget(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 showDialog(
                     context: context,
                     builder: (_) => CustomScaffold(
@@ -558,9 +560,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       children: [
         ClickableWidget(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (widget.fromProfile == false) {
-              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+              context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
           child: CircleAvatar(
@@ -576,9 +578,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             ClickableWidget(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (widget.fromProfile == false) {
-                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
               child: Column(
@@ -588,9 +590,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       style: TextStyle(color: Theme.of(context).primaryColor),
                       label: post.user.firstName,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT,
+                          context.pushNamed(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       }),
@@ -665,7 +667,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                         itemCount: images.length < 4 ? images.length : 4,
                         itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
                                   showDialog(
@@ -788,8 +790,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
-                    context.push(Routes.OTHERSACCOUNT,
+                    ManageVibration.vibrate();
+                    context.pushNamed(Routes.OTHERSACCOUNT,
                         extra: post.users[0].id);
                   },
                   child: Label(
@@ -802,7 +804,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 if (post.users.length > 1)
                   GestureDetector(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         showDialog(
                             context: context,
                             builder: (_) => BuildWithUsers(

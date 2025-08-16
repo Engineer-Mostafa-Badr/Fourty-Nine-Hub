@@ -55,20 +55,18 @@ class ProfilePosts extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             SizedBox(
               height: 300.h,
               child: ListView.separated(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) =>
-                  index == 0
+                  itemBuilder: (context, index) => index == 0
                       ? _newHighlights(context)
                       : _highlights(context),
-                  separatorBuilder: (context, index) =>
-                  const Sizer(
-                    width: 12,
-                  ),
+                  separatorBuilder: (context, index) => const Sizer(
+                        width: 12,
+                      ),
                   itemCount: 5),
             ),
             const Sizer(
@@ -92,10 +90,8 @@ class ProfilePosts extends StatelessWidget {
                     ),
                     Label(
                       text:
-                      '${1393} ${context.isArabic
-                          ? LocaleKeys.friend.localize
-                          : LocaleKeys.friends.localize}'
-                          .toArabicNumbers(context),
+                          '${1393} ${context.isArabic ? LocaleKeys.friend.localize : LocaleKeys.friends.localize}'
+                              .toArabicNumbers(context),
                       style: Styles.mediumText(
                         color: context.isDarkMode
                             ? Colors.grey[300]
@@ -126,8 +122,9 @@ class ProfilePosts extends StatelessWidget {
                   childAspectRatio: 0.65,
                 ),
                 itemBuilder: (context, index) =>
-                    _friendsTile(context, name: names[index],onTap: (){context.read<PeopleTabCubit>().showOtherProfile();
-      ManageVibration.vibrate();
+                    _friendsTile(context, name: names[index], onTap: () {
+                      context.read<PeopleTabCubit>().showOtherProfile();
+                      ManageVibration.vibrate();
                     })),
             const Sizer(
               height: 20,
@@ -135,8 +132,7 @@ class ProfilePosts extends StatelessWidget {
             AppButton(
               label: context.isArabic ? 'عرض كل الأصدقاء' : 'See all friends',
               onPressed: () {
-
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
               width: double.infinity,
               backColor: AppColors.getFindFillColor(context),
@@ -158,14 +154,11 @@ class ProfilePosts extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 40.w,
-                  backgroundColor:
-                  Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   child: ImageFromInternet(
                     image:
-                    //user.profilePicture ??
-                    UIConst.profilePlaceHolder,
+                        //user.profilePicture ??
+                        UIConst.profilePlaceHolder,
                     height: 250.h,
                     width: 300.w,
                     isCircle: true,
@@ -174,21 +167,31 @@ class ProfilePosts extends StatelessWidget {
                 Sizer(),
                 Expanded(
                   child: ClickableWidget(
-                    onTap: (){
-                      
-      ManageVibration.vibrate();
-                      context.push(Routes.CREATEPOST, extra: 'facebook');},
-                    child: Label(text: context.isArabic?'بماذا تفكر؟': "What's on your mind?",style: Styles.headerText(
-                      fontSize: 32,color: context.isDarkMode
-                        ? Colors.grey[300]
-                        : Colors.grey[700],
-                    ), ),
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      context.pushNamed(Routes.CREATEPOST, extra: 'facebook');
+                    },
+                    child: Label(
+                      text: context.isArabic
+                          ? 'بماذا تفكر؟'
+                          : "What's on your mind?",
+                      style: Styles.headerText(
+                        fontSize: 32,
+                        color: context.isDarkMode
+                            ? Colors.grey[300]
+                            : Colors.grey[700],
+                      ),
+                    ),
                   ),
                 ),
-                ClickableWidget(onTap:(){
-
-      ManageVibration.vibrate();
-                },child: Icon(Icons.videocam,color: AppColors.getTextColor(context),))
+                ClickableWidget(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                    },
+                    child: Icon(
+                      Icons.videocam,
+                      color: AppColors.getTextColor(context),
+                    ))
               ],
             ),
             const Sizer(
@@ -207,36 +210,42 @@ class ProfilePosts extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 5,
             itemBuilder: (context, index) {
-             // final user = context.read<UserCubit>().state.data;
-              var posts =[PostEntity(id: "6824c83c5d72a038c1783ae1",
-                type: "normal_post",
-                user: TwitterUserModel(
-                  id: "67ca35d096ca3293cc27deae",
-                  firstName: "Mohamed",
-                  lastName: "salama",
-                  createdAt:DateTime.parse("2024-12-21T13:41:21.979Z") ,
-                  hasStory: false, email: '@dsda', isDocumented: false,
-                ),
-                likesCount: 0,
-                commentsCount: 0,
-                loveCount: 0,
-                sadCount: 0,
-                wowCount: 0,
-                angryCount: 0,
-                createdAt:DateTime.parse("2024-12-21T13:41:21.979Z") ,
-                images:[UIConst.socialImagePlaceHolder,UIConst.socialImagePlaceHolder] ,
-                content: 'Lorem ipsum dolor sit amet consectetur. Ac diam curabitur accumsan commodo a et sit neque nullam. Fermentum at viverra '
-              )] ;
+              // final user = context.read<UserCubit>().state.data;
+              var posts = [
+                PostEntity(
+                    id: "6824c83c5d72a038c1783ae1",
+                    type: "normal_post",
+                    user: TwitterUserModel(
+                      id: "67ca35d096ca3293cc27deae",
+                      firstName: "Mohamed",
+                      lastName: "salama",
+                      createdAt: DateTime.parse("2024-12-21T13:41:21.979Z"),
+                      hasStory: false,
+                      email: '@dsda',
+                      isDocumented: false,
+                    ),
+                    likesCount: 0,
+                    commentsCount: 0,
+                    loveCount: 0,
+                    sadCount: 0,
+                    wowCount: 0,
+                    angryCount: 0,
+                    createdAt: DateTime.parse("2024-12-21T13:41:21.979Z"),
+                    images: [
+                      UIConst.socialImagePlaceHolder,
+                      UIConst.socialImagePlaceHolder
+                    ],
+                    content:
+                        'Lorem ipsum dolor sit amet consectetur. Ac diam curabitur accumsan commodo a et sit neque nullam. Fermentum at viverra ')
+              ];
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(0),
-                    physics:
-                    const NeverScrollableScrollPhysics(),
-                    itemCount:
-                    posts.length ,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: posts.length,
                     itemBuilder: (context, i) {
                       return NormalPostScreen(
                         postEntity: posts[0],
@@ -250,10 +259,10 @@ class ProfilePosts extends StatelessWidget {
                 ],
               );
             }),
-
       ],
     );
   }
+
   Widget _newHighlights(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -305,9 +314,10 @@ class ProfilePosts extends StatelessWidget {
     );
   }
 
-  Widget _friendsTile(BuildContext context, {required String name,void Function()? onTap}) {
+  Widget _friendsTile(BuildContext context,
+      {required String name, void Function()? onTap}) {
     return ClickableWidget(
-      onTap:onTap,
+      onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,8 +326,8 @@ class ProfilePosts extends StatelessWidget {
           AspectRatio(
             aspectRatio: 4 / 5,
             child: Container(
-              // width: 230.w,
-              // height: 260.h,
+                // width: 230.w,
+                // height: 260.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.transparent,
@@ -356,8 +366,7 @@ class ProfileDetails extends StatelessWidget {
       children: [
         Label(
           text: LocaleKeys.details.localize,
-          style:
-          Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
+          style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
         ),
         const Sizer(),
         _detailsTile(
@@ -373,15 +382,12 @@ class ProfileDetails extends StatelessWidget {
             Icons.home_rounded,
             label: context.isArabic ? 'أعيش في ' : 'Lives in'),
         const Sizer(),
-        _detailsTile(
-            context,
-            context.isArabic ? 'بيهانس' : 'behance/rachelpodrez',
-            Icons.link),
+        _detailsTile(context,
+            context.isArabic ? 'بيهانس' : 'behance/rachelpodrez', Icons.link),
         const Sizer(),
         _detailsTile(context, 'Mohamed Magdy', Icons.info_rounded,
-            label: context.isArabic
-                ? 'مزيد من المعلومات عن'
-                : 'More info about'),
+            label:
+                context.isArabic ? 'مزيد من المعلومات عن' : 'More info about'),
       ],
     );
   }

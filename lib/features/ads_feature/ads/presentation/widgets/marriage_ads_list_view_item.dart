@@ -37,8 +37,8 @@ class MarriageAdsListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
-        context.push(Routes.ADdetails, extra: marriageAds.id);
+        ManageVibration.vibrate();
+        context.pushNamed(Routes.ADdetails, extra: marriageAds.id);
       },
       child: Container(
         // margin: EdgeInsets.only(bottom: 20.h),
@@ -73,8 +73,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       Label(
                         text: marriageAds.title,
                         style: Styles.headerText(
-                          color:
-                          AppColors.getTextColor(context),
+                          color: AppColors.getTextColor(context),
                           height: 1.60,
                         ),
                       ),
@@ -86,15 +85,16 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             : Icons.favorite,
                         color: AppColors.SECONDARY_COLOR,
                         onPressed: () async {
-      ManageVibration.vibrate();
-                          if(marriageAds.isFavourite == false){
+                          ManageVibration.vibrate();
+                          if (marriageAds.isFavourite == false) {
                             await context
                                 .read<AdvertisementCubit>()
                                 .favouriteAd(marriageAds.id);
-                          }else{
+                          } else {
                             await context
                                 .read<AdvertisementCubit>()
-                                .unFavouriteAd(marriageAds.id);                          }
+                                .unFavouriteAd(marriageAds.id);
+                          }
                         },
                       ),
                     ],
@@ -114,35 +114,34 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  if( marriageAds.address?.cityEn!=null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SvgPicture.asset(
-                        Assets.mapPinIcon,
-                        color: context.isDarkMode ? Colors.white : null,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Label(
-                        text: (context.isArabic
-                                ? marriageAds.address?.addressAr
-                                : marriageAds.address?.addressEn) ??
-                            '',
-                        style: Styles.headerText(
-                          fontSize: 24,
-                          color:
-                          AppColors.getTextColor(context),
+                  if (marriageAds.address?.cityEn != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SvgPicture.asset(
+                          Assets.mapPinIcon,
+                          color: context.isDarkMode ? Colors.white : null,
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Label(
+                          text: (context.isArabic
+                                  ? marriageAds.address?.addressAr
+                                  : marriageAds.address?.addressEn) ??
+                              '',
+                          style: Styles.headerText(
+                            fontSize: 24,
+                            color: AppColors.getTextColor(context),
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
             Divider(
-              color:AppColors.getTextColor(context),
+              color: AppColors.getTextColor(context),
               height: 0,
             ),
             Padding(
@@ -179,7 +178,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             // padding: const EdgeInsets.symmetric(
                             //     horizontal: 15, vertical: 5,),
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               bottomSheet(
                                 context: context,
                                 widget: CustomMarriageButtonSheet(

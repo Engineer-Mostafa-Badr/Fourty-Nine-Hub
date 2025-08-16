@@ -22,7 +22,7 @@ class AuctionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.push(Routes.MAZADDETAILS, extra: item.id),
+        onTap: () => context.pushNamed(Routes.MAZADDETAILS, extra: item.id),
         child: isVertical
             ? _buildVerticalView(context: context)
             : _buildHorizontalView(context: context));
@@ -71,8 +71,8 @@ class AuctionCard extends StatelessWidget {
               ),
               Label(
                 text: (context.isArabic
-                    ? item.ad.address?.addressAr
-                    : item.ad.address?.addressEn) ??
+                        ? item.ad.address?.addressAr
+                        : item.ad.address?.addressEn) ??
                     '',
                 style: Styles.mediumText(),
                 maxLines: 1,
@@ -95,11 +95,12 @@ class AuctionCard extends StatelessWidget {
                     child: item.isMine
                         ? AppButton(
                             label: 'Details',
-                            onPressed: () => context.push(Routes.MAZADDETAILS,
-                                extra: item.id))
+                            onPressed: () => context
+                                .pushNamed(Routes.MAZADDETAILS, extra: item.id))
                         : AppButton(
                             label: 'Bidding',
-                            onPressed: () => context.push(Routes.MAZADDETAILS,
+                            onPressed: () => context.pushNamed(
+                                Routes.MAZADDETAILS,
                                 extra: item.id)),
                   ),
                 ],
@@ -153,7 +154,7 @@ class AuctionCard extends StatelessWidget {
         ),
         AppButton(
             label: 'Bidding',
-            onPressed: () => context.push(Routes.MAZADDETAILS)),
+            onPressed: () => context.pushNamed(Routes.MAZADDETAILS)),
       ],
     );
   }

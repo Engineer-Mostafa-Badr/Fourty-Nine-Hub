@@ -23,8 +23,8 @@ class UserSection extends StatelessWidget {
           if (reel.location.isNotEmpty)
             GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
-                context.push(Routes.AllLocationScreen);
+                ManageVibration.vibrate();
+                context.pushNamed(Routes.AllLocationScreen);
               },
               child: const LocationReelsWidget(),
             ),
@@ -37,9 +37,9 @@ class UserSection extends StatelessWidget {
                 //   onTap: () {
                 //     // if (!serviceLocator<UserCubit>().isLoggedIn) {
                 //     //   context.read<PreloadBloc>().pauseTheVideo();
-                //     //   context.push(Routes.LOGIN);
+                //     //   context.pushNamed(Routes.LOGIN);
                 //     // } else {
-                //     //   context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
+                //     //   context.pushNamed(Routes.OTHERSACCOUNT, extra: reel.user.id);
                 //     // }
                 //   },
                 //   child: Stack(
@@ -178,7 +178,7 @@ class UserSection extends StatelessWidget {
                 //     ],
                 //   ),
                 // ),
-               if (reel.user.verified) SizedBox(width: 8.w),
+                if (reel.user.verified) SizedBox(width: 8.w),
                 if (reel.user.verified)
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 6.h),

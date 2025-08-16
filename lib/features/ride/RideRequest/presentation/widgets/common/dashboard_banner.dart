@@ -27,7 +27,7 @@ class DashboardBanner extends StatelessWidget {
       onTap: onTap ??
           () {
             if (route != null) {
-              context.push(route!, extra: restaurantId);
+              context.pushNamed(route!, extra: restaurantId);
             }
           },
       child: Container(

@@ -12,7 +12,6 @@ import '../../cubit/social_posts_cubit.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../helpers/manage_vibration.dart';
 
-
 class InstagramProfileSuggestPeople extends StatefulWidget {
   const InstagramProfileSuggestPeople({super.key});
 
@@ -87,7 +86,7 @@ class _InstagramProfileSuggestPeopleState
                     //                   .itemList![index];
                     //               return InkWell(
                     //                 onTap: () {
-                    //                   context.push(Routes.OTHERSACCOUNT,
+                    //                   context.pushNamed(Routes.OTHERSACCOUNT,
                     //                       extra: controller
                     //                           .suggestUserPagingController
                     //                           .itemList?[index]

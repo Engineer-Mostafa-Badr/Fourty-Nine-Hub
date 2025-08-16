@@ -70,7 +70,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     // إغلاق الكيبورد عند الانتقال لتاب People
                     _dismissKeyboard();
 
@@ -88,7 +88,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                     // } else {
                     //   return pleaseLoginDialog(context);
 
-                    // context.push(Routes.LOGIN);
+                    // context.pushNamed(Routes.LOGIN);
                     // }
                   },
                   child: _tabButton(LocaleKeys.people.localize, _showPeople),
@@ -97,7 +97,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       // إغلاق الكيبورد عند الانتقال لتاب Blocked
                       _dismissKeyboard();
 
@@ -113,7 +113,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                       // } else {
                       //   return pleaseLoginDialog(context);
                       //
-                      //   // context.push(Routes.LOGIN);
+                      //   // context.pushNamed(Routes.LOGIN);
                       // }
                     },
                     child:
@@ -122,7 +122,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     // إغلاق الكيبورد عند الانتقال لتاب Suggestion
                     _dismissKeyboard();
 
@@ -138,7 +138,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                     // } else {
                     //   return pleaseLoginDialog(context);
                     //
-                    //   // context.push(Routes.LOGIN);
+                    //   // context.pushNamed(Routes.LOGIN);
                     // }
                   },
                   child: _tabButton(
@@ -148,7 +148,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               ),
               GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   // if (context.read<UserCubit>().isLoggedIn) {
                   setState(() {
                     _showSearch = !_showSearch;
@@ -168,7 +168,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                   // } else {
                   //   return pleaseLoginDialog(context);
 
-                  // context.push(Routes.LOGIN);
+                  // context.pushNamed(Routes.LOGIN);
                   //}
                 },
                 child: Icon(Icons.search, color: AppColors.Facebook_Red_DARK),
@@ -234,8 +234,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
           ])),
           ClickableWidget(
             onTap: () {
-
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
             },
             child: Label(
               text: context.isArabic ? 'مشاهدة المزيد' : 'See More',
@@ -299,7 +298,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                                 Expanded(
                                   child: ClickableWidget(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       confirmedIndexes.add(index);
                                       setState(() {});
                                     },
@@ -410,7 +409,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                                 Expanded(
                                   child: ClickableWidget(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       requestsIndexes.add(index);
                                       setState(() {});
                                     },
@@ -489,8 +488,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
               ),
               trailing: ClickableWidget(
                   onTap: () {
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   },
                   child: Icon(
                     Icons.close,
@@ -566,8 +564,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                     ),
                     trailing: ClickableWidget(
                         onTap: () {
-
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                         },
                         child: Icon(
                           Icons.close,

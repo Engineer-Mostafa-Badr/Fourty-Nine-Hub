@@ -66,12 +66,12 @@ class _ShippingBannerState extends State<ShippingBanner> {
       },
       onRegister: () {
         if (context.read<UserCubit>().isLoggedIn) {
-          context.push(Routes.SHIPPING_REGISTER);
+          context.pushNamed(Routes.SHIPPING_REGISTER);
         } else {
           return pleaseLoginDialog(context);
 
-          // context.push(Routes.SHIPPING_REGISTER);
-          // context.push(Routes.LOGIN);
+          // context.pushNamed(Routes.SHIPPING_REGISTER);
+          // context.pushNamed(Routes.LOGIN);
         }
       },
       // canRegister: true,
@@ -128,12 +128,12 @@ class _ShippingBannerState extends State<ShippingBanner> {
     //       ),
     //       InkWell(
     //         onTap: () {
-      ManageVibration.vibrate();
+    ManageVibration.vibrate();
     // if (context.read<UserCubit>().isLoggedIn) {
-    //   context.push(Routes.SHIPPING_REGISTER);
+    //   context.pushNamed(Routes.SHIPPING_REGISTER);
     // } else {
-    //   context.push(Routes.SHIPPING_REGISTER);
-    //   // context.push(Routes.LOGIN);
+    //   context.pushNamed(Routes.SHIPPING_REGISTER);
+    //   // context.pushNamed(Routes.LOGIN);
     // }
     //         },
     //         child: Text(

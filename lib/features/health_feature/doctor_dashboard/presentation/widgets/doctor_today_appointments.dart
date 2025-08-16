@@ -71,8 +71,8 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
                           label: LocaleKeys.showMore.localize,
                           style: Styles.mediumText(color: Colors.white),
                           onPressed: () {
-      ManageVibration.vibrate();
-                            context.push(Routes.DOCTORTODAYAPPOINTMENTS);
+                            ManageVibration.vibrate();
+                            context.pushNamed(Routes.DOCTORTODAYAPPOINTMENTS);
                           })
                   ],
                 );
@@ -145,7 +145,7 @@ class DoctorAppointmentCard extends StatelessWidget {
                   padding: 15.w,
                   backColor: AppColors.PRIMARY_COLOR,
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     cancelAppointment(appointment.id);
                   })
             ],

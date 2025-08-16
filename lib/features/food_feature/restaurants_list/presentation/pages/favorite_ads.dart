@@ -191,7 +191,7 @@ class FavFoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClickableWidget(
-      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: data),
+      onTap: () => context.pushNamed(Routes.RESTAURANTDETAILS, extra: data),
       child: Container(
         decoration: BoxDecoration(
             border:
