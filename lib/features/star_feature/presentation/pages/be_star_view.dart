@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
@@ -208,6 +209,179 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                   ),
                   const Sizer(),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //   children: [
+                  //     Text(
+                  //       context.isArabic
+                  //           ? convertToArabicNumbers(
+                  //               state.banner?.titleAr ?? '',
+                  //             )
+                  //           : state.banner?.titleEn ?? '',
+                  //       textAlign: TextAlign.center,
+                  //       style: Styles.mediumText(
+                  //         fontSize: 30,
+                  //         color: context.isDarkMode
+                  //             ? Colors.white
+                  //             : AppColors.PRIMARY_COLOR,
+                  //       ),
+                  //     ),
+                  //     //! Hint
+                  //     Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         InkWell(
+                  //           onTap: () {
+                  //             ManageVibration.vibrate();
+                  //             showAnimatedDialog(
+                  //               context,
+                  //               AlertDialog(
+                  //                 contentPadding: const EdgeInsets.all(0),
+                  //                 content: Stack(
+                  //                   // mainAxisSize: MainAxisSize.min,
+                  //                   children: [
+                  //                     Container(
+                  //                       decoration: BoxDecoration(
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(20),
+                  //                       ),
+                  //                       width: double.infinity,
+                  //                       clipBehavior:
+                  //                           Clip.antiAliasWithSaveLayer,
+                  //                       child: Image.asset(
+                  //                         Assets.talentGIF,
+                  //                         width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width *
+                  //                             0.8,
+                  //                         fit: BoxFit.cover,
+                  //                       ),
+                  //                     ),
+                  //                     PositionedDirectional(
+                  //                       top: 10,
+                  //                       start: 10,
+                  //                       child: InkWell(
+                  //                         onTap: () {
+                  //                           ManageVibration.vibrate();
+                  //                           context.pop();
+                  //                         },
+                  //                         child: Image.asset(
+                  //                           Assets.close,
+                  //                           height: 24,
+                  //                           width: 24,
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           },
+                  //           child: SvgPicture.asset(
+                  //             Assets.idea,
+                  //             height: 24,
+                  //             width: 24,
+                  //           ),
+                  //         ),
+                  //         const Sizer(),
+
+                  //         // InkWell(
+                  //         //   onTap: () {
+                  //         //     ManageVibration.vibrate();
+                  //         //     // showAnimatedDialog(
+                  //         //     //   context,
+                  //         //     //   AlertDialog(
+                  //         //     //     contentPadding: const EdgeInsets.all(0),
+                  //         //     //     content: Stack(
+                  //         //     //       // mainAxisSize: MainAxisSize.min,
+                  //         //     //       children: [
+                  //         //     //         Container(
+                  //         //     //           decoration: BoxDecoration(
+                  //         //     //             borderRadius: BorderRadius.circular(20),
+                  //         //     //           ),
+                  //         //     //           width: double.infinity,
+                  //         //     //           clipBehavior: Clip.antiAliasWithSaveLayer,
+                  //         //     //           child: Image.asset(
+                  //         //     //             Assets.talentGIF,
+                  //         //     //             width: MediaQuery.of(context).size.width *
+                  //         //     //                 0.8,
+                  //         //     //             fit: BoxFit.cover,
+                  //         //     //           ),
+                  //         //     //         ),
+                  //         //     //         PositionedDirectional(
+                  //         //     //           top: 10,
+                  //         //     //           start: 10,
+                  //         //     //           child: InkWell(
+                  //         //     //             onTap: () {
+                  //         //     //               ManageVibration.vibrate();
+                  //         //     //               context.pop();
+                  //         //     //             },
+                  //         //     //             child: Image.asset(
+                  //         //     //               Assets.close,
+                  //         //     //               height: 24,
+                  //         //     //               width: 24,
+                  //         //     //             ),
+                  //         //     //           ),
+                  //         //     //         ),
+                  //         //     //       ],
+                  //         //     //     ),
+                  //         //     //   ),
+                  //         //     // );
+
+                  //         //   },
+                  //         //   child: Label(
+                  //         //     text: 'Assets.idea',
+                  //         //   ),
+                  //         // ),
+
+                  //         //! Subscribe Button
+                  //         GestureDetector(
+                  //           onTap: () {
+                  //             ManageVibration.vibrate();
+                  //             if (!context.read<UserCubit>().isLoggedIn) {
+                  //               pleaseLoginDialog(context);
+                  //             } else {
+                  //               SubscriptionMethod().subscribe(
+                  //                 subscribeId: "67e952dbbb085740a35d4281",
+                  //                 title: LocaleKeys.ads.localize,
+                  //               );
+                  //             }
+                  //           },
+                  //           child: Container(
+                  //             margin: EdgeInsets.only(
+                  //               right: context.locale.languageCode == 'ar'
+                  //                   ? 0
+                  //                   : 40,
+                  //               left: context.locale.languageCode == 'ar'
+                  //                   ? 40
+                  //                   : 0,
+                  //             ),
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 20, vertical: 4),
+                  //             decoration: BoxDecoration(
+                  //               color: AppColors.getButtonPrimaryWhiteColor(
+                  //                   context),
+                  //               borderRadius: BorderRadius.circular(10),
+                  //             ),
+                  //             child: Align(
+                  //               alignment: Alignment.center,
+                  //               child: Text(
+                  //                 LocaleKeys.subscribe.localize,
+                  //                 style: TextStyle(
+                  //                   color: context.isDarkMode
+                  //                       ? AppColors.PRIMARY_COLOR
+                  //                       : Colors.white,
+                  //                   fontWeight: FontWeight.bold,
+                  //                   fontSize: 28.sp,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -225,101 +399,119 @@ class _BeStarViewState extends State<BeStarView> {
                               : AppColors.PRIMARY_COLOR,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          showAnimatedDialog(
-                            context,
-                            AlertDialog(
-                              contentPadding: const EdgeInsets.all(0),
-                              content: Stack(
-                                // mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    width: double.infinity,
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Image.asset(
-                                      Assets.talentGIF,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  PositionedDirectional(
-                                    top: 10,
-                                    start: 10,
-                                    child: InkWell(
-                                      onTap: () {
-                                        ManageVibration.vibrate();
-                                        context.pop();
-                                      },
-                                      child: Image.asset(
-                                        Assets.close,
-                                        height: 24,
-                                        width: 24,
+                      //! Subscribe Button and Hint
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              showAnimatedDialog(
+                                context,
+                                AlertDialog(
+                                  contentPadding: const EdgeInsets.all(0),
+                                  content: Stack(
+                                    // mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        width: double.infinity,
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Image.asset(
+                                              Assets.talentGIF,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Text(
+                                                context.isArabic
+                                                    ? 'اشترك لإبقاء الصوت في الخلفية'
+                                                    : 'Subscribe to remain voice in background',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
+                                      PositionedDirectional(
+                                        top: 10,
+                                        start: 10,
+                                        child: InkWell(
+                                          onTap: () {
+                                            ManageVibration.vibrate();
+                                            context.pop();
+                                          },
+                                          child: Image.asset(
+                                            Assets.close,
+                                            height: 24,
+                                            width: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              Assets.idea,
+                              height: 24,
+                              width: 24,
+                            ),
+                          ),
+                          const Sizer(),
+                          GestureDetector(
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              if (!context.read<UserCubit>().isLoggedIn) {
+                                pleaseLoginDialog(context);
+                              } else {
+                                SubscriptionMethod().subscribe(
+                                  subscribeId: "67e952dbbb085740a35d4281",
+                                  title: LocaleKeys.ads.localize,
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.getButtonPrimaryWhiteColor(
+                                    context),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  LocaleKeys.subscribe.localize,
+                                  style: TextStyle(
+                                    color: context.isDarkMode
+                                        ? AppColors.PRIMARY_COLOR
+                                        : Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 28.sp,
+                                  ),
+                                ),
                               ),
                             ),
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          Assets.idea,
-                          height: 24,
-                          width: 24,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          showAnimatedDialog(
-                            context,
-                            AlertDialog(
-                              contentPadding: const EdgeInsets.all(0),
-                              content: Stack(
-                                // mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    width: double.infinity,
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Image.asset(
-                                      Assets.talentGIF,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  PositionedDirectional(
-                                    top: 10,
-                                    start: 10,
-                                    child: InkWell(
-                                      onTap: () {
-                                        ManageVibration.vibrate();
-                                        context.pop();
-                                      },
-                                      child: Image.asset(
-                                        Assets.close,
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        child: Label(
-                          text: 'Assets.idea',
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
