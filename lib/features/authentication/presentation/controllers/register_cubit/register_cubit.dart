@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -56,15 +58,29 @@ class RegisterCubit extends Cubit<RegisterState> {
     // this._facebookSignInUseCase,
   ) : super(RegisterInitial());
 
+  bool isLessThan14YearsOld(String inputDate) {
+    // Parse the string to DateTime
+    DateTime date = DateFormat("dd/MM/yyyy").parse(inputDate);
+
+    // Today and 14 years ago
+    final today = DateTime.now();
+    final fourteenYearsAgo = DateTime(today.year - 14, today.month, today.day);
+
+    // Check if date is after the 14 years ago mark
+    return date.isAfter(fourteenYearsAgo);
+  }
   Future<void> register() async {
     String? token = await FirebaseMessaging.instance.getToken();
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+
     log("message");
     if (state is RegisterLoading) return;
     emit(RegisterLoading());
     if (passwordTextController.text != confirmPasswordTextController.text) {
       emit(RegisterConfirmPassword());
     }else{
-      if (_isPhoneNumber(emailTextController.text.trim())) {
+      if (_isPhoneNumber(emailTextController.text.trim())) {// if()
         final result = await _registerByPhoneUseCase(
           RegisterByPhoneParams(
             userName: userNameController.text.trim(),

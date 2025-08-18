@@ -79,7 +79,7 @@ class DriverCarMarkerWidgetState extends State<DriverCarMarkerWidget> {
     }
   }
 
-  Future<BitmapDescriptor> getResizedCarIcon(String assetPath, {int width = 64}) async {
+  Future<BitmapDescriptor> getResizedCarIcon(String assetPath, {int width = 128}) async {
     final ByteData data = await rootBundle.load(assetPath);
     final Uint8List bytes = data.buffer.asUint8List();
     final ui.Codec codec = await ui.instantiateImageCodec(bytes, targetWidth: width);

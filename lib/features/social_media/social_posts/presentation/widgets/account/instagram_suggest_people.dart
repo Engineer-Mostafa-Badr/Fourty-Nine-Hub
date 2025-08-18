@@ -298,84 +298,84 @@ class _InstagramProfileSuggestPeopleState
                     //                                                   ],
                     //                                                 ),
                     //                                               );
-                    //                                               // showDialog(
-                    //                                               //   context:
-                    //                                               //       context,
-                    //                                               //   builder:
-                    //                                               //       (BuildContext
-                    //                                               //           context) {
-                    //                                               //     return AlertDialog(
-                    //                                               //       backgroundColor:
-                    //                                               //           AppColors.BACKGROUND_COLOR,
-                    //                                               //       surfaceTintColor:
-                    //                                               //           AppColors.BACKGROUND_COLOR,
-                    //                                               //       shape: OutlineInputBorder(
-                    //                                               //           borderRadius:
-                    //                                               //               BorderRadius.circular(4)),
-                    //                                               //       title:
-                    //                                               //           Label(
-                    //                                               //         text: LocaleKeys
-                    //                                               //             .enterGreetMessage
-                    //                                               //             .localize,
-                    //                                               //         style:
-                    //                                               //             Styles.headerText(),
-                    //                                               //       ),
-                    //                                               //       content:
-                    //                                               //           TextField(
-                    //                                               //         // focusNode: focusNode,
-                    //                                               //         maxLines:
-                    //                                               //             null,
-                    //                                               //         maxLength:
-                    //                                               //             150,
-                    //                                               //         onChanged:
-                    //                                               //             (c) {},
-                    //                                               //         controller:
-                    //                                               //             messageController,
-                    //                                               //         decoration: InputDecoration(
-                    //                                               //             hintText: LocaleKeys.greetMessage.localize,
-                    //                                               //             fillColor: Colors.white,
-                    //                                               //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
-                    //                                               //             hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
-                    //                                               //       ),
-                    //                                               //       actions: <Widget>[
-                    //                                               //         TextButton(
-                    //                                               //           onPressed:
-                    //                                               //               () {
-                    //                                               //             Navigator.of(context).pop(); // Close the dialog
-                    //                                               //           },
-                    //                                               //           child:
-                    //                                               //               Label(
-                    //                                               //             text: LocaleKeys.cancel.localize,
-                    //                                               //             style: Styles.headerText(),
-                    //                                               //           ),
-                    //                                               //         ),
-                    //                                               //         InkWell(
-                    //                                               //           onTap:
-                    //                                               //               () async {
-                    //                                               //             if (messageController.text.isNotEmpty) {
-                    //                                               //               await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
-                    //                                               //               controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                    //                                               //               showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
-                    //                                               //               Navigator.of(context).pop();
-                    //                                               //               setState(() {});
-                    //                                               //             }
-                    //                                               //           },
-                    //                                               //           child:
-                    //                                               //               Container(
-                    //                                               //             width: 100,
-                    //                                               //             padding: const EdgeInsets.all(5),
-                    //                                               //             decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
-                    //                                               //             alignment: Alignment.center,
-                    //                                               //             child: Label(
-                    //                                               //               text: LocaleKeys.send.localize,
-                    //                                               //               style: Styles.headerText(color: Colors.white),
-                    //                                               //             ),
-                    //                                               //           ),
-                    //                                               //         ),
-                    //                                               //       ],
-                    //                                               //     );
-                    //                                               //   },
-                    //                                               // );
+                    //                                               showDialog(
+                    //                                                 context:
+                    //                                                     context,
+                    //                                                 builder:
+                    //                                                     (BuildContext
+                    //                                                         context) {
+                    //                                                   return AlertDialog(
+                    //                                                     backgroundColor:
+                    //                                                         AppColors.BACKGROUND_COLOR,
+                    //                                                     surfaceTintColor:
+                    //                                                         AppColors.BACKGROUND_COLOR,
+                    //                                                     shape: OutlineInputBorder(
+                    //                                                         borderRadius:
+                    //                                                             BorderRadius.circular(4)),
+                    //                                                     title:
+                    //                                                         Label(
+                    //                                                       text: LocaleKeys
+                    //                                                           .enterGreetMessage
+                    //                                                           .localize,
+                    //                                                       style:
+                    //                                                           Styles.headerText(),
+                    //                                                     ),
+                    //                                                     content:
+                    //                                                         TextField(
+                    //                                                       // focusNode: focusNode,
+                    //                                                       maxLines:
+                    //                                                           null,
+                    //                                                       maxLength:
+                    //                                                           150,
+                    //                                                       onChanged:
+                    //                                                           (c) {},
+                    //                                                       controller:
+                    //                                                           messageController,
+                    //                                                       decoration: InputDecoration(
+                    //                                                           hintText: LocaleKeys.greetMessage.localize,
+                    //                                                           fillColor: Colors.white,
+                    //                                                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                    //                                                           hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                    //                                                     ),
+                    //                                                     actions: <Widget>[
+                    //                                                       TextButton(
+                    //                                                         onPressed:
+                    //                                                             () {
+                    //                                                           Navigator.of(context).pop(); // Close the dialog
+                    //                                                         },
+                    //                                                         child:
+                    //                                                             Label(
+                    //                                                           text: LocaleKeys.cancel.localize,
+                    //                                                           style: Styles.headerText(),
+                    //                                                         ),
+                    //                                                       ),
+                    //                                                       InkWell(
+                    //                                                         onTap:
+                    //                                                             () async {
+                    //                                                           if (messageController.text.isNotEmpty) {
+                    //                                                             await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
+                    //                                                             controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
+                    //                                                             showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
+                    //                                                             Navigator.of(context).pop();
+                    //                                                             setState(() {});
+                    //                                                           }
+                    //                                                         },
+                    //                                                         child:
+                    //                                                             Container(
+                    //                                                           width: 100,
+                    //                                                           padding: const EdgeInsets.all(5),
+                    //                                                           decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                    //                                                           alignment: Alignment.center,
+                    //                                                           child: Label(
+                    //                                                             text: LocaleKeys.send.localize,
+                    //                                                             style: Styles.headerText(color: Colors.white),
+                    //                                                           ),
+                    //                                                         ),
+                    //                                                       ),
+                    //                                                     ],
+                    //                                                   );
+                    //                                                 },
+                    //                                               );
                     //                                             }
                     //                                           },
                     //                                           child:

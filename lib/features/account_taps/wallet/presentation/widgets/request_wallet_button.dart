@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_bottom_sheet_phone_is_required.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/request_withdrawal_bottom_sheet_wallet.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
@@ -75,15 +77,39 @@ class RequestWalletButton extends StatelessWidget {
                 );
               } else {
                 // اذا كان لي رقم هاتف
-                bottomSheet(
+                showModalBottomSheet(
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                      : AppColors.LIGHT_COLOR,
                   context: context,
-                  widget: BlocProvider(
-                    create: (context) => serviceLocator<WalletTwoCubit>(),
-                    child: RequestWithdrawalBottomSheetWallet(
-                      currancy: currancy,
-                      totalAmount: amount,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0),
                     ),
                   ),
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return AnimatedPadding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      duration: const Duration(milliseconds: 50),
+                      child: Container(
+                        // height: 150.h,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 10,
+                        ),
+                        child: BlocProvider(
+                          create: (context) => serviceLocator<WalletTwoCubit>(),
+                          child: RequestWithdrawalBottomSheetWallet(
+                            currancy: currancy,
+                            totalAmount: amount,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
                 // context.read<WalletTwoCubit>().requestWithdrawal(
                 //       context,
