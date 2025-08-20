@@ -10,19 +10,298 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/entities/lo
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/create_post_request_use_case.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import '../../../../../../core/enums/songs_enum.dart';
+import '../../../domain/entities/song_entity.dart';
+import '../../../domain/usecases/add_remove_songs_from_favs_usecase.dart';
+import '../../../domain/usecases/get_for_you_songs_usecase.dart';
+import '../../../domain/usecases/get_saved_songs_useacase.dart';
+import '../../../domain/usecases/get_treinding_songs_usecase.dart';
 import '../../../domain/usecases/post_confirm_webhook_use_case.dart';
+import '../../../domain/usecases/search_songs_usecase.dart';
 
 part 'create_post_instagram_state.dart';
 
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   CreatePostInstagramCubit(
-      this.createPostInstagramUseCase, this.postConfirmWebhookUseCase)
+      this.createPostInstagramUseCase,
+      this.postConfirmWebhookUseCase,
+      this.getForYouSongsUseCase,
+      this.getTrendingSongsUseCase,
+      this.getSavedSongsUseCase,
+      this.addRemoveSongsFromFavsUseCase,
+      this.searchSongsUseCase,
+      )
       : super( CreatePostInstagramState());
 
   final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
   final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
+  final GetForYouSongsUseCase getForYouSongsUseCase;
+  final GetTrendingSongsUseCase getTrendingSongsUseCase;
+  final GetSavedSongsUseCase getSavedSongsUseCase;
+  final AddRemoveSongsFromFavsUseCase addRemoveSongsFromFavsUseCase;
+  final SearchSongsUseCase searchSongsUseCase;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  TextEditingController searchController = TextEditingController();
+  List<SongEntity> searchSongs = [];
+
+  void clearSearch(){
+    searchController.clear();
+    searchSongs = [];
+    emit(state.copyWith(
+      status: CreatePostInstagramStates.success,
+    ));
+  }
+
+  Future<void> searchForSongs() async {
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    final result = await searchSongsUseCase(query: searchController.text);
+
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.failure,
+            failure: failure,
+          ),
+        );
+      },
+      (data) {
+        searchSongs = data;
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.success,
+          ),
+        );
+      },
+    );
+  }
+
+  void changeMusicSection(SongsEnum song) {
+    if(state.selectedSong == song) return;
+    emit(state.copyWith(
+      selectedSong: song,
+    ));
+  }
+
+  Future<void> addRemoveSongFromFavs({required SongEntity song}) async {
+    final result = await addRemoveSongsFromFavsUseCase(songId: song.id);
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.failure,
+            failure: failure,
+          ),
+        );
+      },
+      (data) {
+        song.isSaved = !song.isSaved;
+        if(song.isSaved){
+          if(favoriteSongs.where((e) => e.id == song.id).isEmpty) favoriteSongs.add(song);
+        }
+        else{
+          favoriteSongs.removeWhere((e) => e.id == song.id);
+        }
+        emit(
+          state.copyWith(
+            status: CreatePostInstagramStates.success,
+          ),
+        );
+      },
+    );
+  }
+
+
+  Future<void> refreshUI() async{
+    await Future.delayed(const Duration(seconds: 1));
+    emit(state.copyWith());
+  }
+
+  Future<void> setSong({required SongEntity song}) async {
+    emit(state.copyWith(song: song, isPlaying: true));
+
+    try {
+      await _audioPlayer.setUrl(song.songUrl); // رابط الصوت
+      await _audioPlayer.play();
+      // emit(state.copyWith(isPlaying: true, song: song));
+    } catch (e) {
+      print('Error playing song: $e');
+    }
+  }
+
+  void makeSongNull() {
+    emit(state.copyWith(clearSong: true));
+  }
+
+  void disposeAudioPlayer() {
+    _audioPlayer.pause();
+    emit(state.copyWith(isPlaying: false));
+  }
+
+
+  Future<void> togglePlayPause() async {
+    emit(state.copyWith(isPlaying: !state.isPlaying));
+    if (_audioPlayer.playing) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.play();
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _audioPlayer.dispose();
+    return super.close();
+  }
+
+  // for you songs
+  List<SongEntity> forYouSongs = [];
+  bool isLoadingMoreForYou = false;
+  bool hasMoreDataForYou = true;
+  int currentPageForYou = 1;
+
+  // trending songs
+  List<SongEntity> trendingSongs = [];
+  bool isLoadingMoreTrending = false;
+  bool hasMoreDataTrending = true;
+  int currentPageTrending = 1;
+
+  // favorite songs
+  List<SongEntity> favoriteSongs = [];
+  bool isLoadingMoreFavorite = false;
+  bool hasMoreDataFavorite= true;
+  int currentPageFavorite= 1;
+  int pageSize = 10;
+
+
+  // for you
+  Future<void> loadInitialForYouSongs() async {
+    forYouSongs.clear();
+    currentPageForYou = 1;
+    hasMoreDataForYou = true;
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    await _fetchForYouSongs();
+  }
+
+  Future<void> getForYouSongs() async {
+    if (!hasMoreDataForYou || isLoadingMoreForYou) return;
+    isLoadingMoreForYou = true;
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    await _fetchForYouSongs();
+  }
+  Future<void> _fetchForYouSongs() async {
+    final result = await getForYouSongsUseCase(
+      params: SongsPaginationParams(
+        page: currentPageForYou,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+          (l) {
+        isLoadingMoreForYou = false; // Reset loading state on error
+        emit(state.copyWith(status: CreatePostInstagramStates.failure, failure: l));
+      },
+          (data) {
+        forYouSongs.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreDataForYou = false;
+        } else {
+          currentPageForYou++;
+        }
+        isLoadingMoreForYou = false;
+        emit(state.copyWith(status: CreatePostInstagramStates.success));
+      },
+    );
+  }
+
+  // trending
+  Future<void> loadInitialTrending() async {
+    trendingSongs.clear();
+    currentPageTrending = 1;
+    hasMoreDataTrending = true;
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    await _fetchTrendingSongs();
+  }
+
+  Future<void> getTrendingSongs() async {
+    if (!hasMoreDataTrending || isLoadingMoreTrending) return;
+    isLoadingMoreTrending = true;
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    await _fetchTrendingSongs();
+  }
+  Future<void> _fetchTrendingSongs() async {
+    final result = await getTrendingSongsUseCase(
+      params: SongsPaginationParams(
+        page: currentPageTrending,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+          (l) {
+        isLoadingMoreTrending = false; // Reset loading state on error
+        emit(state.copyWith(status: CreatePostInstagramStates.failure, failure: l));
+      },
+          (data) {
+        trendingSongs.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreDataTrending = false;
+        } else {
+          currentPageTrending++;
+        }
+        isLoadingMoreTrending = false;
+        emit(state.copyWith(status: CreatePostInstagramStates.success));
+      },
+    );
+  }
+
+  // saved
+  Future<void> loadInitialSaved() async {
+    favoriteSongs.clear();
+    currentPageFavorite = 1;
+    hasMoreDataFavorite = true;
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    await _fetchFavoriteSongs();
+  }
+
+  Future<void> getFavoriteSongs() async {
+    if (!hasMoreDataFavorite || isLoadingMoreFavorite) return;
+    isLoadingMoreFavorite = true;
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
+    await _fetchFavoriteSongs();
+  }
+  Future<void> _fetchFavoriteSongs() async {
+    final result = await getSavedSongsUseCase(
+      params: SongsPaginationParams(
+        page: currentPageFavorite,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+          (l) {
+        isLoadingMoreFavorite = false; // Reset loading state on error
+        emit(state.copyWith(status: CreatePostInstagramStates.failure, failure: l));
+      },
+          (data) {
+        favoriteSongs.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreDataFavorite = false;
+        } else {
+          currentPageFavorite++;
+        }
+        isLoadingMoreFavorite = false;
+        emit(state.copyWith(status: CreatePostInstagramStates.success));
+      },
+    );
+  }
 
   // Future<File?>? selectedImage;
   List<CteatePostTypeInstagram> postTypes = CteatePostTypeInstagram.postTypes;
@@ -244,6 +523,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     await createRequestPost(
       CreatePostRequestInstagramParams(
         content: caption,
+        songId: state.song?.id,
         media: await Future.wait(
           uploadMedia.map((AssetEntity e) async {
             final num size = await _getAssetFileSize(e);

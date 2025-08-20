@@ -893,5 +893,5 @@ class _CustomReserveRideBottomSheetState
 
 class PaymentMethods {
   static String cash = 'cash';
-  static String visa = 'visa';
+  static String visa = 'wallet';
 }

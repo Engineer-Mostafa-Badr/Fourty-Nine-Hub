@@ -40,7 +40,10 @@ import 'package:fourtyninehub/features/social_media/social_posts/data/models/pos
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../../../../core/error/failure.dart';
+import '../../domain/entities/song_entity.dart';
 import '../../domain/usecases/get_all_followers_use_case.dart';
+import '../../domain/usecases/get_for_you_songs_usecase.dart';
+import '../models/song_model.dart';
 
 abstract class InstagramRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed(
@@ -110,6 +113,12 @@ abstract class InstagramRemoteDataSource {
       SavePostInstagramParams params);
 
   Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params);
+
+  Future<Either<Failure, List<SongEntity>>> getForYouSongs({required SongsPaginationParams params});
+  Future<Either<Failure, List<SongEntity>>> getTrendingSongs({required SongsPaginationParams params});
+  Future<Either<Failure, List<SongEntity>>> getSavedSongs({required SongsPaginationParams params});
+  Future<Either<Failure, bool>> addRemoveSongsFromFavs({required String songId});
+  Future<Either<Failure, List<SongEntity>>> searchSongs({required String query});
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -631,6 +640,121 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
         },
             (data) {
           return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getForYouSongs({required SongsPaginationParams params}) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getForYouSongs(params: params),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          return Right((data['data'] as List).map((e) => SongModel.fromJson(e)).toList());
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getTrendingSongs({required SongsPaginationParams params}) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getTrendingSongs(params: params),
+    );
+
+    try {
+      return response.fold(
+            (l) {
+          return Left(l);
+        },
+            (data) {
+          return Right((data['data'] as List).map((e) => SongModel.fromJson(e)).toList());
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getSavedSongs({required SongsPaginationParams params}) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getSavedSongs(params: params),
+    );
+
+    try {
+      return response.fold(
+            (l) {
+          return Left(l);
+        },
+            (data) {
+          return Right((data['data'] as List).map((e) => SongModel.fromJson(e, isSaved: true)).toList());
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> addRemoveSongsFromFavs({required String songId}) async {
+    final response = await _apiConsumer.post(
+      EndPoints.addRemoveSongsFromFavs(songId: songId),
+    );
+
+    try {
+      return response.fold(
+            (l) {
+          return Left(l);
+        },
+            (data) {
+          return const Right(true);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> searchSongs({required String query}) async {
+    final response = await _apiConsumer.get(
+      EndPoints.searchSongs(query: query),
+    );
+
+    try {
+      return response.fold(
+            (l) {
+          return Left(l);
+        },
+            (data) {
+          return Right((data['data'] as List).map((e) => SongModel.fromJson(e)).toList());
         },
       );
     } catch (e) {

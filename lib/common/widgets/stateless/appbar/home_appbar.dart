@@ -189,11 +189,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     return pleaseLoginDialog(context);
                   }
                   await context.read<UserCubit>().resetUnreadedChatsCounter();
-                  if (isCurrentRoute(context, Routes.CHAT) == true) {
+                  // if (isCurrentRoute(context, Routes.CHAT) == true) {
+                  //   return;
+                  // }
+                  if (isCurrentRoute(context, Routes.conversationsScreen) == true) {
                     return;
                   }
                   HandleCashback.setCount('chatCount', context);
-                  context.push(Routes.CHAT, extra: ChatsViewParams());
+                  // context.push(Routes.CHAT, extra: ChatsViewParams());
+                  context.push(Routes.conversationsScreen,);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(12),

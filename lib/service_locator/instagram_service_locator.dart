@@ -4,9 +4,11 @@ import 'package:fourtyninehub/features/social_media/instagram/data/repositories/
 import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repository.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_remove_songs_from_favs_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/create_post_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/delete_comment_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_for_you_songs_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_profile_use_case.dart';
@@ -33,10 +35,13 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/social_media/instagram/domain/usecases/get_saved_songs_useacase.dart';
+import '../features/social_media/instagram/domain/usecases/get_treinding_songs_usecase.dart';
 import '../features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
 import '../features/social_media/instagram/domain/usecases/remove_save_post_instagram_use_case.dart';
 import '../features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import '../features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
+import '../features/social_media/instagram/domain/usecases/search_songs_usecase.dart';
 import '../features/social_media/instagram/domain/usecases/unfollow_user_instagram_use_case.dart';
 import '../features/social_media/instagram/presentation/cubit/like_post_instagram/like_post_instagram_cubit.dart';
 import '../features/social_media/instagram/presentation/cubit/save_post_instagram/save_post_instagram_cubit.dart';
@@ -175,10 +180,45 @@ class InstagramServiceLocator {
           serviceLocator(),
         ));
 
+    serviceLocator.registerLazySingleton<GetForYouSongsUseCase>(
+      () => GetForYouSongsUseCase(
+        repository: serviceLocator(),
+      )
+    );
+
+    serviceLocator.registerLazySingleton<GetTrendingSongsUseCase>(
+      () => GetTrendingSongsUseCase(
+        repository: serviceLocator(),
+      )
+    );
+
+    serviceLocator.registerLazySingleton<GetSavedSongsUseCase>(
+      () => GetSavedSongsUseCase(
+        repository: serviceLocator(),
+      )
+    );
+
+    serviceLocator.registerLazySingleton<AddRemoveSongsFromFavsUseCase>(
+      () => AddRemoveSongsFromFavsUseCase(
+        instagramRepo: serviceLocator(),
+      )
+    );
+
+    serviceLocator.registerLazySingleton<SearchSongsUseCase>(
+      () => SearchSongsUseCase(
+        instagramRepo: serviceLocator(),
+      )
+    );
+
     serviceLocator.registerLazySingleton<CreatePostInstagramCubit>(
       () => CreatePostInstagramCubit(
         serviceLocator<CreateRequestPostInstagramUseCase>(),
         serviceLocator<PostConfirmWebhookUseCase>(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
 

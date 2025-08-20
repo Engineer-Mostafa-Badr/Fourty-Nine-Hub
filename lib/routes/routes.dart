@@ -306,7 +306,7 @@ abstract class Routes {
   static const allDriverRatingScreen = '/allDriverRatingScreen';
   static const allClientRatingScreen = '/allClientRatingScreen';
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
-
+  static const conversationsScreen = '/ConversationsScreen';
 }
 
 abstract class Paths {
@@ -599,5 +599,5 @@ abstract class Paths {
   static const FOLLOWREQUESTSINSTAGRAM = 'FollowRequestsInstagram';
   static const followersScreen = 'FollowersScreen';
   static const allClientRatingScreen = 'allClientRatingScreen';
-
+  static const conversationsScreen = 'ConversationsScreen';
 }

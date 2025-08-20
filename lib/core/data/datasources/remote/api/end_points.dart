@@ -50,6 +50,7 @@ import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
 import '../../../../../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
+import '../../../../../features/social_media/instagram/domain/usecases/get_for_you_songs_usecase.dart';
 import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
@@ -1711,4 +1712,10 @@ class EndPoints {
       '/loading/trip/rating/driver';
   static const addRateToClientWithDriverLoadingNonSocket =
       '/loading/trip/rating/';
+
+  static String getForYouSongs({required SongsPaginationParams params}) => '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
+  static String getTrendingSongs({required SongsPaginationParams params}) => '/songs/onTrending-songs?page=${params.page}&limit=${params.limit}';
+  static String getSavedSongs({required SongsPaginationParams params}) => '/songs/favorite-songs?page=${params.page}&limit=${params.limit}';
+  static String addRemoveSongsFromFavs({required String songId}) => '/songs/add-to-favorites/$songId';
+  static String searchSongs({required String query}) => '/songs/search?query=$query';
 }

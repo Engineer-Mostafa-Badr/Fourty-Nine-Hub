@@ -314,6 +314,7 @@ import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
+import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
@@ -440,6 +441,7 @@ import '../features/social_media/create_post/presentation/pages/create_life_even
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
 import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
+import '../features/social_media/instagram/presentation/widgets/create_post_second_page_instagram_view_body.dart';
 import '../features/social_media/instagram/presentation/widgets/tag_user_view.dart';
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
@@ -1404,7 +1406,7 @@ class AppPages {
                 path: Paths.INSTAGRAMADDMUSIC,
                 name: Routes.INSTAGRAMADDMUSIC,
                 builder: (context, state) {
-                  final cubit = state.extra as CreatePostInstagramCubit;
+                  final cubit = state.extra as MusicScreenParams;
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider(
@@ -1412,10 +1414,12 @@ class AppPages {
                             serviceLocator<InstagramAddMusicCubit>(),
                       ),
                       BlocProvider.value(
-                        value: cubit,
+                        value: cubit.cubit,
                       ),
                     ],
-                    child: const InstagramAddMusicView(),
+                    child: InstagramAddMusicView(
+                      refreshUI: cubit.refreshUI,
+                    ),
                   );
                 },
               ),
@@ -1826,7 +1830,11 @@ class AppPages {
                       ChatView(chatsViewParams: state.extra as ChatsViewParams),
                 ),
               ),
-
+              GoRoute(
+                path: Paths.conversationsScreen,
+                name: Routes.conversationsScreen,
+                builder: (context, state) => const ConversationsScreen(),
+              ),
               // Chat Room
               GoRoute(
                   path: Paths.CHATROOM,
@@ -3831,6 +3839,7 @@ class AppPages {
                   )),
             ],
           ),
+
         ]);
   }
 }

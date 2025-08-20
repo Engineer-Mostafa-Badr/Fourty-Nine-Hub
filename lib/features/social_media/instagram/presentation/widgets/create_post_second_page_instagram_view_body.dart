@@ -28,6 +28,12 @@ import '../../../social_posts/presentation/pages/Social_home.dart';
 import '../../domain/entities/location_instagram_entity.dart';
 import '../cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
 
+class MusicScreenParams{
+  final CreatePostInstagramCubit cubit;
+  final Function? refreshUI;
+  const MusicScreenParams({required this.cubit, this.refreshUI});
+}
+
 class CreatePostSecondPageInstagramViewBody extends StatefulWidget {
   const CreatePostSecondPageInstagramViewBody({
     super.key,
@@ -64,9 +70,10 @@ class _CreatePostSecondPageInstagramViewBodyState
               child: SingleChildScrollView(
             child:
                 BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
-              buildWhen: (previous, current) =>
-                  previous.usersTag != current.usersTag ||
-                  previous.location != current.location,
+              // buildWhen: (previous, current) =>
+              //     previous.usersTag != current.usersTag ||
+              //     previous.location != current.location ||
+              //     previous.selectedSong != current.selectedSong,
               builder: (context, state) {
                 return Column(
                   children: [
@@ -196,16 +203,39 @@ class _CreatePostSecondPageInstagramViewBodyState
                       svgIcon: context.isDarkMode
                           ? Assets.instagramMusicIconDark
                           : Assets.instagramMusicIcon,
-                      title: LocaleKeys.addMusic.localize,
-                      labelColor:
-                          context.isDarkMode ? Colors.white : Colors.black,
-                      iconAction: Icons.arrow_forward_ios_rounded,
-                      onPressed: () {
+                      title: state.song == null
+                          ? LocaleKeys.addMusic.localize
+                          : state.song!.name,
+                      labelColor: state.song == null
+                          ? (context.isDarkMode ? Colors.white : AppColors.black)
+                          : (context.isDarkMode
+                          ? const Color(0xffFF4622)
+                          : const Color(0xffFF3308)),
+                      iconAction: state.song == null
+                          ? Icons.arrow_forward_ios_rounded
+                          : Icons.close_rounded,
+                      onPressedActionButton:(){
+                        ManageVibration.vibrate();
+                        log('onPressedActionButton pressed');
+                        serviceLocator<CreatePostInstagramCubit>()
+                            .makeSongNull();
+                        setState(() {
+                        });
+                      },
+                      onPressed: () async {
                         context.pushNamed(
                           Routes.INSTAGRAMADDMUSIC,
-                          extra: serviceLocator<CreatePostInstagramCubit>(),
+                          extra: MusicScreenParams(
+                            refreshUI: () async {
+                              await serviceLocator<CreatePostInstagramCubit>().refreshUI();
+                              setState(() {
+                              });
+                              log('set state called');
+                            },
+                            cubit: serviceLocator<CreatePostInstagramCubit>(),
+                          ),
                         );
-                      },
+                        },
                     ),
                   ],
                 );

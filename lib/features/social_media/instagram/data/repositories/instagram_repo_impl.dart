@@ -27,8 +27,10 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/po
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import '../../domain/entities/song_entity.dart';
 import '../../domain/repositories/social_posts_repo.dart';
 import '../../domain/usecases/get_all_followers_use_case.dart';
+import '../../domain/usecases/get_for_you_songs_usecase.dart';
 import '../datasources/instagram_remote_datasource.dart';
 
 class InstagramRepoImpl implements InstagramRepo {
@@ -177,5 +179,30 @@ class InstagramRepoImpl implements InstagramRepo {
   Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params) {
     return _remoteDataSource.postConfirmWebhook(params);
 
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getForYouSongs({required SongsPaginationParams params}) async {
+   return await _remoteDataSource.getForYouSongs(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getTrendingSongs({required SongsPaginationParams params}) async {
+    return await _remoteDataSource.getTrendingSongs(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getSavedSongs({required SongsPaginationParams params}) async {
+    return await _remoteDataSource.getSavedSongs(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addRemoveSongsFromFavs({required String songId}) async {
+    return await _remoteDataSource.addRemoveSongsFromFavs(songId: songId);
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> searchSongs({required String query}) async {
+    return await _remoteDataSource.searchSongs(query: query);
   }
 }
