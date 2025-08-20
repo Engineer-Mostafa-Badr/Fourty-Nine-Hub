@@ -841,6 +841,10 @@ class EndPoints {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
+  static String getGlobalAdvertisement(TwitterFeedParams params) {
+    return '/advertisementCompany/feed-global?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+  }
+
   static String acceptTripRider(String id) {
     return '/ride/trips/accept/$id';
   }

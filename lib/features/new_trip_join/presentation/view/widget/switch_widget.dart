@@ -31,22 +31,35 @@ class SwitchWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            thumbColor: WidgetStatePropertyAll(AppColors.getButtonPrimaryColor(context)),
-            trackOutlineColor: value
-                ? const WidgetStatePropertyAll(Colors.transparent)
-                : WidgetStatePropertyAll(AppColors.getButtonPrimaryColor(context)),
-            inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
-            activeTrackColor: HexColor('4CDA64'),
+          Transform.scale(
+            scale: 0.7, // increase or decrease
+            child: SizedBox(
+              height: 30,
+              child: Switch(
+                value: value,
+                onChanged: onChanged,
+                padding: EdgeInsets.zero,
+                thumbColor: WidgetStatePropertyAll(
+                  AppColors.getButtonPrimaryColor(context),
+                ),
+                trackOutlineColor: value
+                    ? const WidgetStatePropertyAll(Colors.transparent)
+                    : WidgetStatePropertyAll(
+                  AppColors.getButtonPrimaryColor(context),
+                ),
+                inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
+                activeTrackColor: HexColor('4CDA64'),
+              ),
+            ),
           )
         ],
       ),

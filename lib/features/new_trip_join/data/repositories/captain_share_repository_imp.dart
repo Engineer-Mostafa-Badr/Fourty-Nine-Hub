@@ -91,7 +91,7 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> pickClient(PickClientParams params) async {
+  Future<Either<Failure, String>> pickClient(PickClientParams params) async {
     return await shippingRemoteDataSource.pickClient(params);
   }
 

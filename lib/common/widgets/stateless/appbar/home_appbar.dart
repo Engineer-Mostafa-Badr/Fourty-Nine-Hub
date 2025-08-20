@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unr
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,6 +45,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? inChat;
   final Function? onBackPressed;
   final PreferredSizeWidget? bottom;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const HomeAppbar({
     super.key,
@@ -63,6 +65,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.language = false,
     this.isHaveLeading = false,
     this.inChat,
+    this.scaffoldKey,
   });
 
   @override
@@ -257,7 +260,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                           ? Colors.white
                           : AppColors.PRIMARY_COLOR,
                     ),
-                    height: 20,
+                    height:  20,
                     unreadCount: !context.read<UserCubit>().isLoggedIn
                         ? 0
                         : getUnreadNotificationsCountCubit
@@ -269,8 +272,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               );
             },
           ),
-          ClickableWidget(
+          if(isMenu)ClickableWidget(
             onTap: (){
+              var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
               ManageVibration.vibrate();
               HandleCashback.setCount('drawerCount', context);
               Scaffold.of(context).openDrawer();

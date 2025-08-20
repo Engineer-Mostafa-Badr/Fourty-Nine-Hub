@@ -2240,7 +2240,8 @@ class AppPages {
                           )),
                     ),
                     // OtherAccountView
-                  ]),
+                  ]
+              ),
 
               // ChatView
               GoRoute(

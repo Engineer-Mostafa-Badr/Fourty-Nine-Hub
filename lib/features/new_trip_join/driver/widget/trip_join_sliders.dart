@@ -38,7 +38,7 @@ class TripJoinSliders extends StatelessWidget {
                 ),
                 const SizedBox(height: 12,),
                 context.isDarkMode?Image.asset(Assets.captainDarkInfoIcon,
-                  height: MediaQuery.of(context).size.height*0.25,fit: BoxFit.cover,):SvgPicture.asset(Assets.captainInfoIcon,height: MediaQuery.of(context).size.height*0.25),
+                  height: MediaQuery.of(context).size.height*0.2,fit: BoxFit.cover,):SvgPicture.asset(Assets.captainInfoIcon,height: MediaQuery.of(context).size.height*0.2),
                 const SizedBox(height: 44,),
                 BulletPoint(text: context.isArabic?"وفر المال واحجز مقعدًا واحدًا.":"Save money & Book 1 seat."),
                 BulletPoint(text: context.isArabic?"اتجه إلى الوجهة النهائية.":"Heading final destination."),

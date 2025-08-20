@@ -13,7 +13,7 @@ class BuildRouteClientsSheet extends StatelessWidget {
     return DraggableScrollableSheet(
       initialChildSize: 0.3,
       minChildSize: 0.2,
-      maxChildSize: 0.6,
+      maxChildSize: 0.7,
       builder: (context, scrollController) {
         return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
           builder: (context,state) {
@@ -35,7 +35,7 @@ class BuildRouteClientsSheet extends StatelessWidget {
                         client: clients[0],
                         index: 0,
                         onPickClient: (otp) {
-                          cubit.goToClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[0].id, otp: otp, context: context);
+                          cubit.goToClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[0].id, otp: otp, context: context, index: 0);
                         },
                         onDropOffClient: () {
                           cubit.dropOffClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[0].id, context: context);
@@ -53,7 +53,7 @@ class BuildRouteClientsSheet extends StatelessWidget {
                         client: clients[1],
                         index: 1,
                         onPickClient: (otp) {
-                          cubit.goToClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[1].id, otp: otp, context: context);
+                          cubit.goToClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[1].id, otp: otp, context: context, index: 1);
                         },
                         onDropOffClient: () {
                           cubit.dropOffClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[1].id, context: context);
@@ -71,7 +71,7 @@ class BuildRouteClientsSheet extends StatelessWidget {
                         client: clients[2],
                         index: 2,
                         onPickClient: (otp) {
-                          cubit.goToClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[2].id, otp: otp, context: context);
+                          cubit.goToClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[2].id, otp: otp, context: context, index: 2);
                         },
                         onDropOffClient: () {
                           cubit.dropOffClient(routeId: state.runningRoute?.id ?? '', passengerId: clients[2].id, context: context);
