@@ -2,23 +2,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../common/functions/helper/numbers_helper.dart';
-import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
-import '../../../../../core/extensions/context_extension.dart';
-import '../../../../../core/extensions/string_extension.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/widget/custom_circular_progress_indicator.dart';
-import '../../controller/cubit/star_cubit.dart';
-import '../../controller/cubit/star_state.dart';
-import '../talent_video_player.dart';
+import '../../../../common/functions/helper/numbers_helper.dart';
+import '../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../controller/cubit/star_cubit.dart';
+import '../controller/cubit/star_state.dart';
+import '../pages/talent_video_player.dart';
 import 'talent_video.dart';
-import '../../../../../res/style/styles.dart';
+import '../../../../res/style/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../../../../core/widget/olx_pagination/banner.dart';
-import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
-import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import '../../../../../helpers/manage_vibration.dart' as manageVibration;
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../../../../helpers/manage_vibration.dart' as manageVibration;
 
 class GetMyTalents extends StatelessWidget {
   final bool isMyTalent;

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/widget/custom_circular_progress_indicator.dart';
-import '../../../main.dart';
-import '../../../res/style/app_colors.dart';
-import '../../../helpers/manage_vibration.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../main.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CustomVideoPlayer extends StatefulWidget {
   const CustomVideoPlayer({
@@ -14,11 +15,15 @@ class CustomVideoPlayer extends StatefulWidget {
     this.onDurationLoaded,
     required this.title,
     this.inFocus = false,
+    this.autoPlay = false,
+    this.isMuted = true,
   });
 
   final String videoUrl;
   final String title;
   final bool inFocus;
+  final bool autoPlay;
+  final bool isMuted;
   final Function(Duration)? onDurationLoaded;
 
   @override
@@ -29,25 +34,38 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
     with WidgetsBindingObserver {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
+  bool _isMuted = true;
+  bool _showSubtitles = false;
+  bool _showControls = false;
 
   // Floating player state
   bool _isFloating = false;
   Offset _floatingPosition = const Offset(100, 100);
-  bool _isPlaying = true;
+  bool _isPlaying = false;
   bool _showFloatingControls = false;
   bool _isDragging = false;
 
   @override
   void initState() {
     super.initState();
+    _isMuted = widget.isMuted;
     _controller = VideoPlayerController.network(widget.videoUrl)
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
         });
         widget.onDurationLoaded?.call(_controller.value.duration);
-        _controller.play();
+        
+        // Set volume based on muted state
+        _controller.setVolume(_isMuted ? 0.0 : 1.0);
+        
+        // Auto play if specified
+        if (widget.autoPlay) {
+          _controller.play();
+          setState(() => _isPlaying = true);
+        }
       });
+    
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -57,14 +75,30 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
   }
 
   @override
+  void didUpdateWidget(CustomVideoPlayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Handle focus changes for auto-play
+    if (widget.inFocus != oldWidget.inFocus) {
+      if (widget.inFocus && widget.autoPlay) {
+        _controller.play();
+        setState(() => _isPlaying = true);
+      } else if (!widget.inFocus) {
+        _controller.pause();
+        setState(() => _isPlaying = false);
+      }
+    }
+  }
+
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    
     // Only dispose controller if it's not being used by floating player
     if (!FloatingVideoManager.isPlayerVisible) {
       _controller.dispose();
     }
-    // _controller.dispose();
     super.dispose();
   }
 
@@ -76,6 +110,19 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
     }
     setState(() {
       _isPlaying = !_isPlaying;
+    });
+  }
+
+  void _toggleMute() {
+    setState(() {
+      _isMuted = !_isMuted;
+      _controller.setVolume(_isMuted ? 0.0 : 1.0);
+    });
+  }
+
+  void _toggleSubtitles() {
+    setState(() {
+      _showSubtitles = !_showSubtitles;
     });
   }
 
@@ -154,24 +201,90 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
   }
 
   Widget _buildVideoPlayer({bool isFloating = false}) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: 200,
-          width: double.infinity,
-          color: Colors.black,
-        ),
-        SizedBox(
-          height: 200,
-          child: AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
+    return GestureDetector(
+      onTap: () {
+        setState(() => _showControls = !_showControls);
+        if (_showControls) {
+          // Hide controls after 3 seconds
+          Future.delayed(const Duration(seconds: 3), () {
+            if (mounted) {
+              setState(() => _showControls = false);
+            }
+          });
+        }
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            color: Colors.black,
           ),
-        ),
-        if (!isFloating || _showFloatingControls)
-          Positioned.fill(child: _buildVideoControls(isFloating: isFloating)),
-      ],
+          SizedBox(
+            height: 200,
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            ),
+          ),
+          if (!isFloating && widget.inFocus)
+            _buildVideoOverlayControls(),
+          if (!isFloating || _showFloatingControls)
+            Positioned.fill(child: _buildVideoControls(isFloating: isFloating)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVideoOverlayControls() {
+    return Positioned(
+      top: 8,
+      right: 8,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Mute/Unmute button
+          GestureDetector(
+            onTap: () {
+              ManageVibration.vibrate();
+              _toggleMute();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                _isMuted ? Icons.volume_off : Icons.volume_up,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Subtitles button
+          GestureDetector(
+            onTap: () {
+              ManageVibration.vibrate();
+              _toggleSubtitles();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                _showSubtitles ? Icons.subtitles : Icons.subtitles_outlined,
+                color: _showSubtitles ? Colors.yellow : Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -179,72 +292,12 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
     bool isFullScreen = false,
     bool isFloating = false,
   }) {
-    // Add state variables for seeking
     bool isSeeking = false;
     double seekPosition = 0.0;
 
     return Stack(
       alignment: Alignment.center,
       children: [
-        /*       // Background progress track
-        Positioned(
-          bottom: 4,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 2,
-            color: Colors.grey[300],
-          ),
-        ),
-
-        // Progress indicator
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: ValueListenableBuilder<VideoPlayerValue>(
-            valueListenable: _controller,
-            builder: (context, value, child) {
-              if (!value.isInitialized || value.duration == Duration.zero) {
-                return const SizedBox();
-              }
-
-              final progressFraction =
-                  value.position.inMilliseconds / value.duration.inMilliseconds;
-              final safeFraction = progressFraction.clamp(0.0, 1.0);
-              final screenWidth = MediaQuery.of(context).size.width;
-
-              return SizedBox(
-                height: 10,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 4,
-                      child: Container(
-                        height: 2,
-                        width: screenWidth * safeFraction,
-                        color: AppColors.SECONDARY_COLOR,
-                      ),
-                    ),
-                    Positioned(
-                      left: screenWidth * safeFraction - 5,
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),*/
-
         // Progress indicator with interactive slider
         Positioned(
           bottom: 0,
@@ -284,7 +337,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                   _controller.seekTo(value.duration * seekPosition);
                 },
                 child: Container(
-                  height: 30, // Increased height for better touch area
+                  height: 30,
                   color: Colors.transparent,
                   child: Stack(
                     children: [
@@ -292,7 +345,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                       Positioned(
                         left: 0,
                         right: 0,
-                        bottom: 14, // Centered vertically
+                        bottom: 14,
                         child: Container(
                           height: 2,
                           color: Colors.grey[300],
@@ -302,7 +355,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                       // Progress bar
                       Positioned(
                         left: 0,
-                        bottom: 14, // Centered vertically
+                        bottom: 14,
                         child: Container(
                           height: 2,
                           width:
@@ -315,7 +368,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                       Positioned(
                         left: MediaQuery.of(context).size.width * safeFraction -
                             10,
-                        bottom: 10, // Aligned with progress bar
+                        bottom: 10,
                         child: Container(
                           height: 10,
                           width: 10,
@@ -333,18 +386,18 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
           ),
         ),
 
-        // Play/Pause button
+        // Play/Pause button - only show when controls are visible or video is paused
         ValueListenableBuilder<VideoPlayerValue>(
           valueListenable: _controller,
           builder: (context, value, child) {
             return AnimatedOpacity(
-              opacity: (value.isPlaying && !isFloating) ? 0.0 : 1.0,
+              opacity: (_showControls || !value.isPlaying) ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 300),
               child: IconButton(
                 icon: Icon(
                   value.isPlaying ? Icons.pause : Icons.play_arrow,
                   size: 50,
-                  color: Colors.white.withValues(alpha: 0.8),
+                  color: Colors.white.withOpacity(0.8),
                 ),
                 onPressed: _togglePlayPause,
               ),
@@ -353,7 +406,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
         ),
 
         // Time display
-        if (!isFloating)
+        if (!isFloating && _showControls)
           Positioned(
             bottom: 20,
             left: 10,
@@ -381,14 +434,14 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
           ),
 
         // Full-screen button
-        if (widget.inFocus)
+        if (widget.inFocus && _showControls)
           if (!isFloating)
             Positioned(
               bottom: 20,
               right: 10,
               child: GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   _toggleFullScreen('Full-screen button');
                 },
                 child: Container(
@@ -409,14 +462,14 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
             ),
 
         // Floating mode button
-        if (widget.inFocus)
+        if (widget.inFocus && _showControls)
           if (!isFullScreen)
             Positioned(
               top: 10,
               right: 50,
               child: GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   FloatingVideoManager.showFloatingPlayer(
                     context: context,
                     videoUrl: widget.videoUrl,
@@ -424,7 +477,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                     controller: _controller,
                     isPlaying: _isPlaying,
                   );
-                  Navigator.pop(context); // Go back to previous screen
+                  Navigator.pop(context);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(5),
@@ -440,232 +493,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
       ],
     );
   }
-
-/*  Widget _buildVideoControls({
-    bool isFullScreen = false,
-    bool isFloating = false,
-  }) {
-    // Add state variables for seeking
-    bool isSeeking = false;
-    double seekPosition = 0.0;
-
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Background progress track - Removed from here and moved into Slider
-
-        // Progress indicator with interactive slider
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: ValueListenableBuilder<VideoPlayerValue>(
-            valueListenable: _controller,
-            builder: (context, value, child) {
-              if (!value.isInitialized || value.duration == Duration.zero) {
-                return const SizedBox();
-              }
-
-              final progressFraction = isSeeking
-                  ? seekPosition
-                  : value.position.inMilliseconds / value.duration.inMilliseconds;
-              final safeFraction = progressFraction.clamp(0.0, 1.0);
-
-              return GestureDetector(
-                onTapDown: (details) {
-                  final box = context.findRenderObject() as RenderBox;
-                  final x = details.localPosition.dx;
-                  final newPosition = (x / box.size.width).clamp(0.0, 1.0);
-                  _controller.seekTo(value.duration * newPosition);
-                },
-                onHorizontalDragStart: (details) {
-                  setState(() => isSeeking = true);
-                },
-                onHorizontalDragUpdate: (details) {
-                  final box = context.findRenderObject() as RenderBox;
-                  final x = details.localPosition.dx;
-                  final newPosition = (x / box.size.width).clamp(0.0, 1.0);
-                  setState(() => seekPosition = newPosition);
-                },
-                onHorizontalDragEnd: (details) {
-                  setState(() => isSeeking = false);
-                  _controller.seekTo(value.duration * seekPosition);
-                },
-                child: Container(
-                  height: 30,  // Increased height for better touch area
-                  color: Colors.transparent,
-                  child: Stack(
-                    children: [
-                      // Background track
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 14,  // Centered vertically
-                        child: Container(
-                          height: 2,
-                          color: Colors.grey[300],
-                        ),
-                      ),
-
-                      // Progress bar
-                      Positioned(
-                        left: 0,
-                        bottom: 14,  // Centered vertically
-                        child: Container(
-                          height: 2,
-                          width: MediaQuery.of(context).size.width * safeFraction,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      ),
-
-                      // Thumb
-                      Positioned(
-                        left: MediaQuery.of(context).size.width * safeFraction - 10,
-                        bottom: 10,  // Aligned with progress bar
-                        child: Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-
-        // Play/Pause button - Remains the same
-        ValueListenableBuilder<VideoPlayerValue>(
-          valueListenable: _controller,
-          builder: (context, value, child) {
-            return AnimatedOpacity(
-              opacity: (value.isPlaying && !isFloating) ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 300),
-              child: IconButton(
-                icon: Icon(
-                  value.isPlaying ? Icons.pause : Icons.play_arrow,
-                  size: 50,
-                  color: Colors.white.withValues(alpha: 0.8),
-                ),
-                onPressed: _togglePlayPause,
-              ),
-            );
-          },
-        ),
-
-
-        // Time display - Adjusted position
-        if (!isFloating)
-          if (!isFloating)
-            Positioned(
-              bottom: 15,
-              left: 10,
-              child: ValueListenableBuilder<VideoPlayerValue>(
-                valueListenable: _controller,
-                builder: (context, value, child) {
-                  return Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      '${formatDuration(value.position)} / ${formatDuration(value.duration)}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-        // Full-screen button - Adjusted position
-        if (!isFloating)
-          Positioned(
-            bottom: 30,  // Moved up above progress bar
-            right: 10,
-            child: GestureDetector(
-              // ... existing fullscreen code ...
-            ),
-          ),
-
-        // Floating mode button - Position adjusted for visibility
-        if (!isFullScreen)
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 10,  // Below status bar
-            right: 10,
-            child: GestureDetector(
-              // ... existing floating button code ...
-            ),
-          ),
-
-        // Full-screen button
-        if (!isFloating)
-          Positioned(
-            bottom: 15,
-            right: 10,
-            child: GestureDetector(
-              onTap: () {
-      ManageVibration.vibrate();
-                _toggleFullScreen('Full-screen button');
-              },
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Icon(
-                  MediaQuery.of(context).orientation == Orientation.portrait
-                      ? Icons.fullscreen
-                      : Icons.fullscreen_exit,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-
-        // Floating mode button
-        if (!isFullScreen)
-          Positioned(
-            top: 10,
-            right: 50,
-            child: GestureDetector(
-              onTap: () {
-      ManageVibration.vibrate();
-                FloatingVideoManager.showFloatingPlayer(
-                  context: context,
-                  videoUrl: widget.videoUrl,
-                  title: widget.title,
-                  controller: _controller,
-                  isPlaying: _isPlaying,
-                );
-                Navigator.pop(context); // Go back to previous screen
-              },
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(Icons.picture_in_picture,
-                    color: Colors.white, size: 20),
-              ),
-            ),
-          ),
-      ],
-    );
-  }*/
 
   Widget _buildFloatingPlayer() {
     return Positioned(
@@ -690,7 +517,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
           setState(() {
             _isDragging = false;
           });
-          // Hide controls after a delay
           Future.delayed(const Duration(seconds: 2), () {
             if (!_isDragging) {
               setState(() {
@@ -700,7 +526,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
           });
         },
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           setState(() {
             _showFloatingControls = !_showFloatingControls;
           });
@@ -714,7 +540,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
+                color: Colors.black.withOpacity(0.5),
                 blurRadius: 10,
                 spreadRadius: 2,
               )
@@ -726,7 +552,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
               children: [
                 _buildVideoPlayer(isFloating: true),
 
-                // Floating player controls
                 if (_showFloatingControls)
                   Positioned(
                     top: 0,
@@ -740,7 +565,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.black.withValues(alpha: 0.7),
+                            Colors.black.withOpacity(0.7),
                             Colors.transparent,
                           ],
                         ),
@@ -782,7 +607,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Colors.black.withValues(alpha: 0.7),
+                            Colors.black.withOpacity(0.7),
                             Colors.transparent,
                           ],
                         ),
@@ -802,7 +627,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                             icon: const Icon(Icons.fullscreen,
                                 color: Colors.white, size: 20),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               _toggleFullScreen('showFloatingControls');
                             },
                           ),
@@ -811,7 +636,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                     ),
                   ),
 
-                // Small play/pause button when controls are hidden
                 if (!_showFloatingControls)
                   Center(
                     child: IconButton(
@@ -864,7 +688,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
                   ),
                 ),
               ),
-            // Floating player overlay
             if (_isFloating) _buildFloatingPlayer(),
           ],
         ),
@@ -873,6 +696,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer>
   }
 }
 
+// Keep the existing FloatingVideoManager classes as they are
 class FloatingVideoManager {
   static OverlayEntry? _overlayEntry;
 
@@ -883,7 +707,6 @@ class FloatingVideoManager {
     required VideoPlayerController controller,
     required bool isPlaying,
   }) {
-    // Close existing player if any
     closeFloatingPlayer();
 
     _overlayEntry = OverlayEntry(
@@ -959,24 +782,20 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
     });
   }
 
-  // Calculate floating player dimensions based on video orientation
   Size get _floatingSize {
     var width = MediaQuery.of(navigatorKey.currentContext!).size.width;
     final baseWidth = _showControls ? width * .9 : width * .6;
 
     if (!_controller.value.isInitialized) {
-      return Size(baseWidth, baseWidth * 16 / 9); // Default landscape
+      return Size(baseWidth, baseWidth * 16 / 9);
     }
 
-    // Use the video's actual dimensions
     final videoWidth = _controller.value.size.width;
     final videoHeight = _controller.value.size.height;
 
     if (videoWidth > videoHeight) {
-      // Landscape video
       return Size(baseWidth, baseWidth * videoHeight / videoWidth);
     } else {
-      // Portrait video
       return Size(baseWidth * videoWidth / videoHeight, baseWidth);
     }
   }
@@ -1021,7 +840,7 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.5),
+                  color: Colors.black.withOpacity(0.5),
                   blurRadius: 10,
                   spreadRadius: 2,
                 )
@@ -1031,7 +850,6 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
               borderRadius: BorderRadius.circular(12),
               child: Stack(
                 children: [
-                  // Video player with rotation support
                   if (_controller.value.isInitialized)
                     Center(
                       child: AspectRatio(
@@ -1042,7 +860,6 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                   else
                     const Center(child: CircularProgressIndicator()),
 
-                  // Floating player controls
                   if (_showControls)
                     Positioned(
                       top: 0,
@@ -1056,7 +873,7 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.black.withValues(alpha: 0.7),
+                              Colors.black.withOpacity(0.7),
                               Colors.transparent,
                             ],
                           ),
@@ -1099,7 +916,7 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withValues(alpha: 0.7),
+                              Colors.black.withOpacity(0.7),
                               Colors.transparent,
                             ],
                           ),
@@ -1119,18 +936,8 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                               icon: const Icon(Icons.open_in_full,
                                   color: Colors.white, size: 20),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 FloatingVideoManager.closeFloatingPlayer();
-                                //TODO : Navigate to Original Screen
-
-                                // navigatorKey.currentState!.push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) => TalentVideoPlayer(
-                                //       videoUrl: widget.videoUrl,
-                                //       talent: widget.talent,
-                                //     ),
-                                //   ),
-                                // );
                               },
                             ),
                           ],
@@ -1138,7 +945,6 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                       ),
                     ),
 
-                  // Small play/pause button when controls are hidden
                   if (!_showControls)
                     Center(
                       child: IconButton(

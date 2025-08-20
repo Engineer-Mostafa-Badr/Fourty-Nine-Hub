@@ -18,7 +18,7 @@ import '../../../../res/style/styles.dart';
 
 import '../../../../core/loading/custom_loading.dart';
 import '../../../../res/assets/assets.dart';
-import 'widgets/all_winner_grid_view.dart';
+import '../widgets/all_winner_grid_view.dart';
 import '../../../../helpers/manage_vibration.dart';
 // import '../../../../../core/widget/custom_scaffold.dart';
 

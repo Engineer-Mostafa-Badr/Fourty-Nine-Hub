@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background audio permissions -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
     <queries>
         <!-- Facebook app -->
         <package android:name="com.facebook.katana" />
@@ -61,6 +67,27 @@
         android:allowBackup="true" android:keepScreenOn="true"
         android:hardwareAccelerated="true"
         >
+        <meta-data
+        android:name="io.flutter.embedding.android.EnableImpeller"
+        android:value="false" />
+        <!-- Audio service -->
+        <service
+            android:name="com.ryanheise.audioservice.AudioService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+        
+        <!-- Media button receiver -->
+        <receiver 
+            android:name="com.ryanheise.audioservice.MediaButtonReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
         <!--  Add this inside the <application> tag in AndroidManifest.xml  -->
         <service android:name=".CallForegroundService" android:enabled="true" android:exported="false" android:foregroundServiceType="microphone"/>
         <!--  Add service for background audio processing  -->
