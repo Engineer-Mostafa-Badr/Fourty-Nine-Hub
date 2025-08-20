@@ -261,7 +261,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                           ? Colors.white
                           : AppColors.PRIMARY_COLOR,
                     ),
-                    height:  20,
+                    height: 20,
                     unreadCount: !context.read<UserCubit>().isLoggedIn
                         ? 0
                         : getUnreadNotificationsCountCubit
@@ -272,22 +272,25 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               );
             },
           ),
-          if(isMenu)ClickableWidget(
-            onTap: (){
-              var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-              ManageVibration.vibrate();
-              HandleCashback.setCount('drawerCount', context);
-              Scaffold.of(context).openDrawer();
-            },
-            child: Container(
-              padding: const EdgeInsetsDirectional.only(end: 12),
-              child: SvgPicture.asset(
-                Assets.menuSvg,
-                color:
-                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          if (isMenu)
+            ClickableWidget(
+              onTap: () {
+                var currentContext =
+                    AppPages.router.configuration.navigatorKey.currentContext!;
+                ManageVibration.vibrate();
+                HandleCashback.setCount('drawerCount', context);
+                Scaffold.of(context).openDrawer();
+              },
+              child: Container(
+                padding: const EdgeInsetsDirectional.only(end: 12),
+                child: SvgPicture.asset(
+                  Assets.menuSvg,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                ),
               ),
             ),
-          ),
           // if(inChat == null)
 
           const Sizer(),

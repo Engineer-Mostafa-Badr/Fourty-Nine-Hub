@@ -135,7 +135,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                 slivers: [
                   //! Collapsible Header Section
                   SliverAppBar(
-                    expandedHeight: 420.h,
+                    expandedHeight: 475.h,
                     floating: false,
                     pinned: false,
                     automaticallyImplyLeading: false,

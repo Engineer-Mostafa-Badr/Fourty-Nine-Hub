@@ -622,6 +622,33 @@ class AppPages {
                       ),
                     ),
                   ),
+                  // Be a Star
+                  GoRoute(
+                    path: Paths.BE_STAR,
+                    name: Routes.BE_STAR,
+                    routes: [
+                      GoRoute(
+                        path: Paths.BE_STAR_DETAILS,
+                        name: Routes.BE_STAR_DETAILS,
+                        pageBuilder: (context, state) {
+                          return customTransition(
+                              context,
+                              state,
+                              BlocProvider<StarCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: const AllWinnerView()));
+                        },
+                      ),
+                    ],
+                    pageBuilder: (context, state) {
+                      return customTransition(
+                          context,
+                          state,
+                          BlocProvider<StarCubit>(
+                              create: (_) => serviceLocator(),
+                              child: const BeStarView()));
+                    },
+                  ),
                   // GoRoute(
                   //   path: Paths.RESTAURANTORDERS,
                   //   name: Routes.RESTAURANTORDERS,
@@ -2238,32 +2265,30 @@ class AppPages {
                   ),
                   // MazadatView
                   GoRoute(
-                      path: Paths.MAZADAT,
-                      name: Routes.MAZADAT,
-                      pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            BlocProvider<AuctionListCubit>(
-                                child: const MazadatView(),
-                                create: (_) => serviceLocator()),
-                          ),
-                      routes: [
-                        GoRoute(
+                    path: Paths.MAZADAT,
+                    name: Routes.MAZADAT,
+                    pageBuilder: (context, state) => customTransition(
+                      context,
+                      state,
+                      BlocProvider<AuctionListCubit>(
+                          child: const MazadatView(),
+                          create: (_) => serviceLocator()),
+                    ),
+                    routes: [
+                      GoRoute(
                           path: Paths.MAZADDETAILS,
                           name: Routes.MAZADDETAILS,
                           pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            BlocProvider<AuctionDetailsCubit>(
-                              create: (_) => serviceLocator(),
-                              child: MazadDetails(id: state.extra as String),
-                            ),
-                          )),
-                    ),
-                    // OtherAccountView
-                  ]
-              ),
-
+                                context,
+                                state,
+                                BlocProvider<AuctionDetailsCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child:
+                                      MazadDetails(id: state.extra as String),
+                                ),
+                              )),
+                    ],
+                  ),
                   // ChatView
                   GoRoute(
                     path: Paths.CHAT,
@@ -3560,33 +3585,6 @@ class AppPages {
                         )),
                   ),
 
-                  // Be a Star
-                  GoRoute(
-                    path: Paths.BE_STAR,
-                    name: Routes.BE_STAR,
-                    routes: [
-                      GoRoute(
-                        path: Paths.BE_STAR_DETAILS,
-                        name: Routes.BE_STAR_DETAILS,
-                        pageBuilder: (context, state) {
-                          return customTransition(
-                              context,
-                              state,
-                              BlocProvider<StarCubit>(
-                                  create: (_) => serviceLocator(),
-                                  child: const AllWinnerView()));
-                        },
-                      ),
-                    ],
-                    pageBuilder: (context, state) {
-                      return customTransition(
-                          context,
-                          state,
-                          BlocProvider<StarCubit>(
-                              create: (_) => serviceLocator(),
-                              child: const BeStarView()));
-                    },
-                  ),
                   GoRoute(
                     path: Paths.TenPercent,
                     name: Routes.TenPercent,
@@ -4782,6 +4780,7 @@ class AppPages {
                         customTransition(context, state, ChanceView()),
                   ),
                 ],
+                // OtherAccountView
               ),
             ]),
       ],

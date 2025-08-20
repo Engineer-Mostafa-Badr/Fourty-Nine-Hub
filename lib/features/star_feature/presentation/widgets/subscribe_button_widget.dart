@@ -32,49 +32,59 @@ class SubscribeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            width: width ?? 160.w,
-            height: height ?? 50.h,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? (selectedColor ?? const Color(0XFFF88B92))
-                  : (unselectedColor ?? Colors.white),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 6,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
+    return Container(
+      width: width ?? 200.w,
+      height: height ?? 100.h,
+      // color: Colors.teal,
+      alignment: Alignment.center,
+      child: Stack(
+        // clipBehavior: Clip.none,
+        children: [
+          Align(
             alignment: Alignment.center,
-            child: Label(
-              text: text,
-              textAlign: TextAlign.center,
-              style: textStyle ??
-                  TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.black : const Color(0xff727272),
-                  ),
+            child: GestureDetector(
+              onTap: onTap,
+              child: Container(
+                width: width ?? 160.w,
+                height: height ?? 50.h,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? (selectedColor ?? const Color(0XFFF88B92))
+                      : (unselectedColor ?? Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Label(
+                  text: text,
+                  textAlign: TextAlign.center,
+                  style: textStyle ??
+                      TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            isSelected ? Colors.black : const Color(0xff727272),
+                      ),
+                ),
+              ),
             ),
           ),
-        ),
-        Positioned(
-          top: -14,
-          right: -6,
-          child: GestureDetector(
-            onTap: onShowHint,
-            child: SvgPicture.asset(icon),
+          Positioned(
+            top: 3,
+            right: 3,
+            child: GestureDetector(
+              onTap: onShowHint,
+              child: SvgPicture.asset(icon),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

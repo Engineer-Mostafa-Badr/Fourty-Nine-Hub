@@ -32,18 +32,54 @@ class TripJoinSliders extends StatelessWidget {
                         ? AppColors.SECONDARY_COLOR
                         : AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.w600,
-                    fontSize: 30
-                ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 12,),
-                context.isDarkMode?Image.asset(Assets.captainDarkInfoIcon,
-                  height: MediaQuery.of(context).size.height*0.2,fit: BoxFit.cover,):SvgPicture.asset(Assets.captainInfoIcon,height: MediaQuery.of(context).size.height*0.2),
-                const SizedBox(height: 44,),
-                BulletPoint(text: context.isArabic?"وفر المال واحجز مقعدًا واحدًا.":"Save money & Book 1 seat."),
-                BulletPoint(text: context.isArabic?"اتجه إلى الوجهة النهائية.":"Heading final destination."),
-                BulletPoint(text: context.isArabic?"انتظر اخرين لمشاركة رحلتك مع الكابتن الخاص بك.":"Wait for others to share route seats with your captain."),
-              ]
+                    fontSize: 30),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              context.isDarkMode
+                  ? Image.asset(
+                      Assets.captainDarkInfoIcon,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      fit: BoxFit.cover,
+                    )
+                  : SvgPicture.asset(Assets.captainInfoIcon,
+                      height: MediaQuery.of(context).size.height * 0.2),
+              const SizedBox(
+                height: 44,
+              ),
+              BulletPoint(
+                  text: context.isArabic
+                      ? "وفر المال واحجز مقعدًا واحدًا."
+                      : "Save money & Book 1 seat."),
+              BulletPoint(
+                  text: context.isArabic
+                      ? "اتجه إلى الوجهة النهائية."
+                      : "Heading final destination."),
+              BulletPoint(
+                  text: context.isArabic
+                      ? "انتظر اخرين لمشاركة رحلتك مع الكابتن الخاص بك."
+                      : "Wait for others to share route seats with your captain."),
+            ]),
+      ),
+      ClickableWidget(
+        onTap: () {
+          ManageVibration.vibrate();
+          context.pushNamed(Routes.AVAILABLE_TRIPS);
+        },
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              context.isArabic ? "جاي معاك !" : "Trip Join!",
+              style: TextStyle(
+                  color: context.isDarkMode
+                      ? AppColors.SECONDARY_COLOR
+                      : AppColors.PRIMARY_COLOR,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 30),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 12,
