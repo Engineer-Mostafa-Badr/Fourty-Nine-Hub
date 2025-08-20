@@ -1,11 +1,11 @@
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/life_event_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+import '../../../create_post/domain/entities/activity_entity.dart';
+import '../../../create_post/domain/entities/feeling_entity.dart';
+import '../../../instagram/domain/entities/instagram_post_entity.dart';
+import '../../data/models/location_model.dart';
+import 'audio_entity.dart';
+import 'life_event_post_entity.dart';
+import 'main_post_entity.dart';
+import '../../../twitter/data/models/twitter_user_model.dart';
 
 import '../../../../../res/assets/assets.dart';
 
@@ -28,12 +28,12 @@ class PostEntity {
   final List<AudioEntity> audio;
   final bool isShared;
   final bool isDocumentation;
-  final bool isLove;
-  final bool isLikes;
-  final bool isWow;
-  final bool isSad;
-  final bool isAngry;
-  final bool isHaha;
+  bool? isLove;
+  bool? isLikes;
+  bool? isWow;
+  bool? isSad;
+  bool? isAngry;
+  bool? isHaha;
   final TwitterUserModel user;
   final FeelingEntity? feeling;
   final ActivityEntity? activity;
@@ -41,12 +41,12 @@ class PostEntity {
   final int commentPrivacy;
   final int commentsCount;
   final int sharesCount;
-  final int likesCount;
-  final int loveCount;
-  final int hahaCount;
-  final int wowCount;
-  final int sadCount;
-  final int angryCount;
+  int? likesCount;
+  int? loveCount;
+  int? hahaCount;
+  int? wowCount;
+  int? sadCount;
+  int? angryCount;
   final int totalCount;
   final String? backgroundColor;
   final String? name;
@@ -83,12 +83,12 @@ class PostEntity {
     this.audio = const [],
     this.isShared = false,
     this.isDocumentation = false,
-    this.isLove = false,
-    this.isLikes = false,
-    this.isWow = false,
-    this.isSad = false,
-    this.isAngry = false,
-    this.isHaha = false,
+    this.isLove,
+    this.isLikes ,
+    this.isWow ,
+    this.isSad ,
+    this.isAngry ,
+    this.isHaha ,
     required this.user,
     this.feeling,
     this.activity,

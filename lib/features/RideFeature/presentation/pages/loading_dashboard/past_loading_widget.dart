@@ -15,6 +15,7 @@ import '../../../domain/entities/loading/get_loading_history_entity.dart';
 import '../widgets/car_circle_widget.dart';
 import '../widgets/info_column_widget.dart';
 import 'loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PastLoadingWidget extends StatefulWidget {
   final GetLoadingHistoryEntity ? tripEntity;
@@ -40,6 +41,7 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
 
         context.push(Routes.loadingDashboardDetailsScreen, extra: widget.tripEntity);
       },

@@ -72,6 +72,8 @@ class RideModeScreen extends StatefulWidget {
 class _RideModeScreenState extends State<RideModeScreen> {
   final ScrollController _scrollController = ScrollController();
   late ScrollController _availableTripsScrollController;
+  late ScrollController availableScrollController;
+  late ScrollController pastScrollController;
   late ScrollController _pastTripsScrollController;
 
   @override
@@ -88,6 +90,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
     SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
     print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
+    availableScrollController = ScrollController();
+    pastScrollController = ScrollController();
     _availableTripsScrollController = ScrollController()..addListener(_onScroll);
     _pastTripsScrollController = ScrollController()..addListener(_onScrollPastTrips);
 
@@ -313,7 +317,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                                       cubit.refuseTripOffer(id);
                                                                     },
                                                                     params: widget.params,
-                                                                  )))
+                                                                  )), scrollController: availableScrollController,)
                                                       : Center(
                                                           child: Text(
                                                             context.isArabic ? 'لا يوجد رحلات متاحة' : 'No Available Trips',
@@ -452,7 +456,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                 items: List.generate(
                                                     cubit.pastRideTrips.length,
                                                     (index) =>
-                                                        PastTripsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', tripEntity: cubit.pastRideTrips[index]))),
+                                                        PastTripsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', tripEntity: cubit.pastRideTrips[index])), scrollController: pastScrollController,),
                           ),
                         )
                       // Settings

@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../data/models/new_reels_model.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -20,6 +20,7 @@ import '../../../../../../routes/routes.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../tinder/data/shared/shared.dart';
 import '../../controllers/preload_cubit/preload_bloc.dart';
+import '../../../../../../helpers/manage_vibration.dart' as manageVibration;
 
 class CommentInputField extends StatefulWidget {
   final TextEditingController commentController;
@@ -83,6 +84,7 @@ class CommentInputFieldState extends State<CommentInputField> {
                           ),
                           child: InkWell(
                             onTap: () async {
+                              manageVibration.ManageVibration.vibrate();
                               final reelsCubit = context.read<ReelsCubit>();
                               if (reelsCubit.receiverComment != null &&
                                   reelsCubit.parentCommentId != null) {
@@ -143,6 +145,7 @@ class CommentInputFieldState extends State<CommentInputField> {
                             SizedBox(width: 25.w),
                             GestureDetector(
                               onTap: () {
+     manageVibration. ManageVibration.vibrate();
                                 if (!serviceLocator<UserCubit>().isLoggedIn) {
                                   context.read<PreloadBloc>().pauseTheVideo();
                                   context.push(Routes.LOGIN);
@@ -325,6 +328,7 @@ class _TikTokCommentBoxState extends State<TikTokCommentBox> {
                     const SizedBox(width: 20),
                     GestureDetector(
                       onTap: () {
+      manageVibration.ManageVibration.vibrate();
                         FocusScope.of(context).unfocus();
                         setState(() {
                           _showEmojiPicker = !_showEmojiPicker;

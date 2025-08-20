@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../res/style/app_colors.dart';
@@ -103,6 +104,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
     Widget textFieldWidget = TextFormField(
         onTap: widget.onTap ??
             () {
+              ManageVibration.vibrate();
               var selection = widget.currentController.selection;
               var length = widget.currentController.text.length;
               var isLast = selection ==

@@ -1,24 +1,24 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/constants/constants.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/features/account_taps/lists/data/models/user_friend_model.dart';
-import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/suggest_user_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import '../../../../../core/constants/constants.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../account_taps/lists/data/models/user_friend_model.dart';
+import '../../../../account_taps/lists/domain/entities/user_friend_entity.dart';
+import '../models/post_model.dart';
+import '../models/suggest_user_model.dart';
+import '../models/user_profile_model.dart';
+import '../../domain/entities/comment_entity.dart';
+import '../../domain/entities/suggest_user_entity.dart';
+import '../../domain/entities/user_profile_entity.dart';
+import '../../domain/usecases/accept_reject_friend_request_use_case.dart';
+import '../../domain/usecases/add_reply_usecase.dart';
+import '../../domain/usecases/get_post_comments_usecase.dart';
+import '../../domain/usecases/get_user_posts_usecase.dart';
+import '../../domain/usecases/post_comment_usecase.dart';
+import '../../domain/usecases/send_greet_message_usecase.dart';
+import '../../domain/usecases/share_post_usecase.dart';
+import '../../domain/usecases/suggest_friends_usecase.dart';
+import '../../../twitter/domain/usecases/get_feed_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/post_entity.dart';
@@ -42,6 +42,8 @@ abstract class SocialPostsRemoteDataSource {
       {required String userId});
   Future<Either<Failure, bool>> viewProfile({required String userId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required UserPostsParams params});
@@ -131,12 +133,27 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getGlobalAdvertisement(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
   Future<Either<Failure, PostEntity>> getPost({required String postId}) async {
     final response = await _apiConsumer.get(EndPoints.deletePost(postId));
     return response.fold((l) {
       return Left(l);
     }, (data) {
-      return Right(PostModel.fromJson(data['data'][0]));
+      return Right(PostModel.fromJson(data['data']));
     });
   }
 

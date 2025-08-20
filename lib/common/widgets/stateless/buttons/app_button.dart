@@ -45,7 +45,7 @@ class AppButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         ManageVibration.vibrate();
-        onPressed();
+        onPressed.call();
       },
       child: Container(
         height: height ?? kToolbarHeight * 1.2.h,

@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MyTripInfoRideWidget extends StatefulWidget {
   const MyTripInfoRideWidget({super.key, required this.model});
@@ -107,7 +108,10 @@ class _MyTripInfoRideWidgetState extends State<MyTripInfoRideWidget> {
                 return Column(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+
+      ManageVibration.vibrate();
+                      },
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -261,6 +265,7 @@ class _MyTripInfoRideWidgetState extends State<MyTripInfoRideWidget> {
                           : Colors.red,
                       color: Colors.white,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (state.model.status == "Accepted") {
                           showModalBottomSheet(
                             backgroundColor: context.isDarkMode
@@ -450,6 +455,7 @@ class _RattingDriverWidgetState extends State<RattingDriverWidget> {
               AppButton(
                 label: LocaleKeys.review.tr(),
                 onPressed: () {
+      ManageVibration.vibrate();
                   if (formKey.currentState?.validate() == true) {
                     context.read<RatingDriverCubit>().rate(
                         model: RattingDriverModel(

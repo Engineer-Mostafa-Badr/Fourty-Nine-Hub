@@ -84,6 +84,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
           isFloatingButtonVisible = false;
         } else {
           isFloatingButtonVisible = true;
+
         }
         setState(() {});
       });
@@ -91,6 +92,15 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     // _fetchSubcategories(
     //   stateSubCategories: [],
     // );
+    context.read<MainCategoriesTapsCubit>().scrollController.addListener(() {
+      if (context.read<MainCategoriesTapsCubit>().scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        isFloatingButtonVisible = false;
+      } else {
+        isFloatingButtonVisible = true;
+      }
+      setState(() {});
+    });
   }
 
   @override
@@ -1107,7 +1117,6 @@ class _MainCategoriesGridViewCustomPageState
                         // }
                         if (subCategories.isNotEmpty) {
                           // final controller = context.read<MainCategoriesTapsCubit>();
-
                           return Expanded(
                             child: GridView.builder(
                               padding: EdgeInsets.all(24.w),

@@ -2,11 +2,13 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import '../../data/models/request_model.dart';
+import '../../data/repositories/shipping_repository.dart';
+import 'shipping_state.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class CreateTripCubit extends Cubit<ShippingState> {
   final ShippingRepository repository;
   CreateTripCubit({required this.repository}) : super(ShippingInitial());
@@ -14,6 +16,10 @@ class CreateTripCubit extends Cubit<ShippingState> {
     var response = await repository.createTrip(model: model);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureShippingState(failure: l));
       },
       (r) async {

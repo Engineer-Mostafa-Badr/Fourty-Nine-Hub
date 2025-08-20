@@ -4,7 +4,9 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/delete_notification_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'delete_notification_state.dart';
 
 class DeleteNotificationCubit extends Cubit<DeleteNotificationState> {
@@ -17,6 +19,10 @@ class DeleteNotificationCubit extends Cubit<DeleteNotificationState> {
     final response = await deleteNotificationUseCase.call(id: id);
     response.fold(
       (Failure failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         pr('Delete Failed ');
         emit(DeleteNotificationFailed(Labels.errorHappened));
       },

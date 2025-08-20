@@ -17,6 +17,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
 import '../../../../../../social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../../../../social_media/reels/presentation/pages/reel_actions.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
@@ -202,6 +203,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       ),
                       GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             if (!serviceLocator<UserCubit>().isLoggedIn) {
                               return pleaseLoginDialog(context);
                               // context.push(Routes.LOGIN);

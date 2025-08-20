@@ -2,9 +2,9 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../core/connect/connect_manager.dart';
 import '../core/seat/seat_manager.dart';
@@ -69,6 +69,7 @@ class _ZegoLiveAudioRoomPopUpSheetMenuState
   Widget popUpItemWidget(int index, ZegoLiveAudioRoomPopupItem popupItem) {
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         ZegoLoggerService.logInfo(
           'click ${popupItem.text}',
           tag: 'audio-room',

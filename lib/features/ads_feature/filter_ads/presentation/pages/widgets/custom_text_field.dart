@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MyTextField extends StatelessWidget {
   MyTextField(
@@ -99,6 +100,7 @@ class MyTextField extends StatelessWidget {
             }
           },
       onTap: () {
+        ManageVibration.vibrate();
         if (onTap != null) {
           onTap!();
         }

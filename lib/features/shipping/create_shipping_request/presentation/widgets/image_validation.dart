@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/images/image_picker_placeholder.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ImageValidation extends StatefulWidget {
   const ImageValidation(
@@ -63,6 +64,7 @@ class _ImageValidationState extends State<ImageValidation> {
               ),
             GestureDetector(
               onTap: () async {
+      ManageVibration.vibrate();
                 if (widget.isAuthentcation) {
                   if (context.isUserLoggedIn) {
                     var pickedFlie = await ImagePicker()

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RetailAds extends StatefulWidget {
   const RetailAds({super.key});
@@ -138,6 +139,7 @@ class _RetailAdsState extends State<RetailAds> {
           Spacer(),
           DefaultButton(
             onPressed: () {
+      ManageVibration.vibrate();
               if(state.selectedMainCategories==null){
                 showErrorMessage(context, context.isArabic?'يرجى اختيار القسم':'Please select main category');
               }else if(state.selectedSubCategories==null){

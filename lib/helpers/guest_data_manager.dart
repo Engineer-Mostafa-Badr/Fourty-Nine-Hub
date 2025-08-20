@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../service_locator/service_locator.dart';
 
 class GuestDataManager {
   static const String _cartKey = 'guest_cart';

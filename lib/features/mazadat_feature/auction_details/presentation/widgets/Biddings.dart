@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
+
+import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/bidding_entity.dart';
 
 class Biddings extends StatelessWidget {
@@ -18,11 +19,8 @@ class Biddings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(30),
-        child: BackAppBar(
-          label: Labels.biddings,
-        ),
+      appBar: const BackAppBar(
+        label: Labels.biddings,
       ),
       body: ListView.builder(
           itemCount: biddingsList.length,

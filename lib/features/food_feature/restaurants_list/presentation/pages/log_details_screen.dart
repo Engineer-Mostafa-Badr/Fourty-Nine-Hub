@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -19,6 +19,7 @@ import '../../../../social_media/tinder/data/shared/shared.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
 import '../cubit/restaurants_list_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class LogDetailsScreen extends StatefulWidget {
   const LogDetailsScreen({super.key, required this.logsEntity});
@@ -126,6 +127,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                             ),
                             InkWell(
                                 onTap: () {
+      ManageVibration.vibrate();
                                   final cubit =
                                       context.read<RestaurantsCubit>();
                                   showModalBottomSheet(
@@ -221,6 +223,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                 const Sizer(),
                                 InkWell(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       final cubit =
                                           context.read<RestaurantsCubit>();
                                       showModalBottomSheet(

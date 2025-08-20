@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import '../../../../../../core/abstract/use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../repositories/chat_room_repository.dart';
+import '../../../chat_view/domain/entities/chat_entity.dart';
 
 import '../entities/message_shared_contacts_entity.dart';
 

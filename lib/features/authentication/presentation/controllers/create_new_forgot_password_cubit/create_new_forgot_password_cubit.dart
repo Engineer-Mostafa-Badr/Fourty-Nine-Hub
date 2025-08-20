@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/use_cases/create_new_forget_password_use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'create_new_forgot_password_state.dart';
 
@@ -29,6 +31,10 @@ class CreateNewForgotPasswordCubit extends Cubit<CreateNewForgotPasswordState> {
       );
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(CreateNewForgotPasswordFailure(failure));
         },
         (success) {

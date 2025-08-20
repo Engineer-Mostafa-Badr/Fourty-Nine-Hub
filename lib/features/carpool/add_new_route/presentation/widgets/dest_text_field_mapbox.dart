@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DestinationTextFieldAndFindButonMapBox extends StatefulWidget {
   const DestinationTextFieldAndFindButonMapBox({super.key});
@@ -75,6 +76,7 @@ class _DestinationTextFieldAndFindButonState
             CustomButton(
               title: LocaleKeys.searchFind.localize,
               onTap: () {
+                ManageVibration.vibrate();
                 if (formKey.currentState!.validate()) {
                   mapBoxDestCubit.searchLocationMapBoxDest(
                       query: destinationController.text);

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
+import '../../domain/entities/audio_entity.dart';
 
 
 class AudioModel extends AudioEntity {

@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/usecases/delet_trip_usecase.dart';
+import '../../../../../../res/strings/labels.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/usecases/delet_trip_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
-
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'delete_trips_state.dart';
 
 class DeleteTripsCubit extends Cubit<DeleteTripsState> {
@@ -18,6 +20,10 @@ class DeleteTripsCubit extends Cubit<DeleteTripsState> {
         subCategory: subCategory, url: url, id: id);
     response.fold(
       (Failure failure) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
         emit(DeleteTripsFailed(Labels.errorHappened));
       },
       (_) {

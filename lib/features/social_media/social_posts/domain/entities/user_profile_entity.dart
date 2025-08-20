@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_followers_entity.dart';
+import 'user_profile_followers_entity.dart';
 
 class UserProfileEntity {
   final String id;

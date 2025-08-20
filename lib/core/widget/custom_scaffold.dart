@@ -1,11 +1,14 @@
-
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common/widgets/dialogs/please_login_dialog.dart';
@@ -36,11 +39,14 @@ class CustomScaffold extends StatefulWidget {
     this.enableCustomAppBar = false,
     this.bottomSheet,
     this.showNavBAr = true,
+    this.isMenu = false,
     this.resizeToAvoidBottomInset,
     this.scaffoldBackgroundWithAppBarColor,
+    this.scaffoldKey,
   });
 
   final Widget body;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
   final Color? backgroundColor;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Widget? floatingActionButton;
@@ -51,6 +57,7 @@ class CustomScaffold extends StatefulWidget {
   final bool extendBodyBehindAppBar;
   final bool showNavBAr;
   final bool? resizeToAvoidBottomInset;
+  final bool? isMenu;
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
   final Color? scaffoldBackgroundWithAppBarColor;
@@ -80,7 +87,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 floatingActionButtonLocation:
                     widget.floatingActionButtonLocation,
                 floatingActionButton: widget.floatingActionButton,
-                drawer: widget.drawer,
+                drawer: widget.isMenu==false?null:DrawerWidget(),
                 bottomNavigationBar: widget.bottomNavigationBar,
                 body: widget.body,
                 appBar: widget.appBar,
@@ -95,6 +102,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
               ),
               floatingWidget: GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   floatingNavigatorCubit.changeFloatingNavigator();
                 },
                 child: Column(
@@ -157,16 +165,21 @@ class _CustomScaffoldState extends State<CustomScaffold>
   Widget drawerRollWidget({
     required String label,
     required String image,
+    bool? isSvg=false,
     EdgeInsetsGeometry? padding,
     required void Function()? onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40.h,
-        height: 40.h,
+        width: 35.h,
+        height: 35.h,
         padding: padding ?? const EdgeInsets.all(0),
-        child: Image.asset(
+        child: isSvg!=true?Image.asset(
+          image,
+          fit: BoxFit.cover,
+          color: context.isDarkMode ? AppColors.whiteColor : null,
+        ):SvgPicture.asset(
           image,
           fit: BoxFit.cover,
           color: context.isDarkMode ? AppColors.whiteColor : null,
@@ -226,126 +239,266 @@ class _CustomScaffoldState extends State<CustomScaffold>
                           spacing: 32.h,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            drawerRollWidget(
-                              label: LocaleKeys.ride.localize,
-                              image: Assets.rideIcon,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.RIDE_HOME);
-                              },
+                            Row(
+                              children: [
+                                drawerRollWidget(
+                                    image: Assets.quran,
+                                    label: LocaleKeys.quraan.localize,
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      floatingNavigatorCubit.changeFloatingNavigator();
+                                      context.push(Routes.QURAAN);
+                                    }),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                    image: Assets.azkar,
+                                    label: LocaleKeys.azkar.localize,
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      floatingNavigatorCubit.changeFloatingNavigator();
+                                      context.push(Routes.AZKAAR);
+                                    }),
+
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                drawerRollWidget(
+                                    label: LocaleKeys.ride.localize,
+                                    image: Assets.rideIcon,
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      floatingNavigatorCubit.changeFloatingNavigator();
+                                      context.push(Routes.RIDE_HOME);
+                                    }),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                    label: LocaleKeys.tripJoin.localize,
+                                    image: Assets.newTripJoin,
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      HandleCashback.setCount('tripJoinCount', context);
+                                      floatingNavigatorCubit.changeFloatingNavigator();
+                                      context.push(context.read<UserCubit>().isLoggedIn?
+                                      Routes.newRideModeScreen:
+                                      Routes.FirstLoginScreen
+                                      );
+                                    }),
+                              ],
                             ),
                             // drawerRollWidget(
                             //   label: LocaleKeys.loading.localize,
                             //   image: Assets.loading,
                             //   // onTap: () {},
                             //   onTap: () {
-                            //     floatingNavigatorCubit.changeFloatingNavigator();
-                            //     context.push(Routes.createLoadingTripScreen);
+                            //     context.pop();
+                            //     context
+                            //         .push(Routes.createLoadingTripScreen);
                             //   },
                             // ),
-                            drawerRollWidget(
-                              label: LocaleKeys.health.localize,
-                              image: Assets.healthIcon,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.VISITA);
-                              },
+                            Row(
+                              children: [
+                                drawerRollWidget(
+                                  label: LocaleKeys.health.localize,
+                                  image: Assets.healthIcon,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.VISITA);
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: LocaleKeys.meal.localize,
+                                  image: Assets.meal,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.FOOD);
+                                  },
+                                ),
+                              ],
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.meal.localize,
-                              image: Assets.meal,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.FOOD);
-                              },
+                            Row(
+                              children: [
+                                drawerRollWidget(
+                                  label: LocaleKeys.marriage.localize,
+                                  image: Assets.married,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.MARRIAGESUBCATEGORIES);
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: LocaleKeys.tube.localize,
+                                  image: Assets.tube1,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    HandleCashback.setCount('beAStarCount', context);
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.BE_STAR);
+                                  },
+                                ),
+                              ],
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.marriage.localize,
-                              image: Assets.married,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.MARRIAGESUBCATEGORIES);
-                              },
+                            Row(
+                              children: [
+                                drawerRollWidget(
+                                  label: LocaleKeys.book.localize,
+                                  image: Assets.booking,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    HandleCashback.setCount('bookingCount', context);
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    soonDialog(context);
+                                    // context.push(Routes.BE_STAR);
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: LocaleKeys.find.localize,
+                                  image: Assets.find,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.Tinder);
+                                  },
+                                ),
+                              ],
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.find.localize,
-                              image: Assets.find,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.Tinder);
-                              },
+                            Row(
+                              children: [
+                                drawerRollWidget(
+                                  label: LocaleKeys.reel.localize,
+                                  image: Assets.reel,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.REELS);
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: LocaleKeys.live.localize,
+                                  image: Assets.liveIcon,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(context.read<UserCubit>().isLoggedIn?Routes.LIVE:Routes.FirstLoginScreen);
+                                  },
+                                ),
+                              ],
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.reel.localize,
-                              image: context.isDarkMode ? Assets.reelBarPng : Assets.reel,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                context.push(Routes.REELS);
-                              },
-                            ),
-                            drawerRollWidget(
-                              label: LocaleKeys.spotlight.localize,
-                              image: Assets.spotlight,
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                if(!context.read<UserCubit>().isLoggedIn){
-                                  return pleaseLoginDialog(context);
-                                }
-                                context.push(Routes.SPOTLIGHT);
-                              },
-                            ),
-                            drawerRollWidget(
-                              label: LocaleKeys.live.localize,
-                              image: Assets.liveIcon,
-                              onTap: () {
+                            // drawerRollWidget(
+                            //   label: LocaleKeys.meet.localize,
+                            //   image: Assets.meet,
+                            //   onTap: () {
 
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                if(!context.read<UserCubit>().isLoggedIn){
-                                  return pleaseLoginDialog(context);
-                                }
-                                context.push(Routes.LIVE);
-                              },
-                            ),
+                            //     context.pop();
+                            //     context.push(Routes.MEETINGROOM);
+                            //   },
+                            // ),
                             // drawerRollWidget(
                             //   label: LocaleKeys.snap.localize,
                             //   image: Assets.snap,
                             //   onTap: () {
-                            //     floatingNavigatorCubit
-                            //         .changeFloatingNavigator();
+                            //     context.pop();
                             //     context.push(Routes.SNAP);
                             //   },
                             // ),
-                            drawerRollWidget(
-                              label: LocaleKeys.chat.localize,
-                              image: Assets.whatsApp,
-                              padding: const EdgeInsets.all(2),
-                              onTap: () {
-                                floatingNavigatorCubit
-                                    .changeFloatingNavigator();
-                                if(!context.read<UserCubit>().isLoggedIn){
-                                  return pleaseLoginDialog(context);
-                                }
-                                context.push(Routes.CHAT,
-                                    extra: ChatsViewParams());
-                              },
+                            Row(
+                              children: [
+
+                                drawerRollWidget(
+                                  label: LocaleKeys.chat.localize,
+                                  image: Assets.whatsApp,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    if (!context.read<UserCubit>().isLoggedIn)context.push(Routes.FirstLoginScreen);
+                                    if (context.read<UserCubit>().isLoggedIn) {
+                                      context.push(Routes.CHAT,
+                                        extra: ChatsViewParams());
+                                    }
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: context.isArabic?'العاب':"Games",
+                                  image: Assets.gamesIcon,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    soonDialog(context);
+                                    // context.push(Routes.CHAT,
+                                    //     extra: ChatsViewParams());
+                                  },
+                                ),
+                              ],
                             ),
+                            Row(
+                              children: [
+
+                                drawerRollWidget(
+                                  label: LocaleKeys.ads.localize,
+                                  image: Assets.spcialAdsIcon,
+                                  isSvg: true,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(Routes.CREATECOMPANYAD);
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: context.isArabic?'المزاد':"Auction",
+                                  image: Assets.bidIcon,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(context.read<UserCubit>().isLoggedIn?Routes.MAZADAT:Routes.FirstLoginScreen);
+                                  },
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+
+                                drawerRollWidget(
+                                  label: LocaleKeys.chance.localize,
+                                  image: Assets.chanceIcon,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    context.push(context.read<UserCubit>().isLoggedIn?Routes.CHANCE:Routes.FirstLoginScreen);
+                                  },
+                                ),
+                                SizedBox(width: 20,),
+                                drawerRollWidget(
+                                  label: context.isArabic?'عملات':"Exchange",
+                                  image: Assets.moneyExchange,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    floatingNavigatorCubit.changeFloatingNavigator();
+                                    soonDialog(context);
+                                  },
+                                ),
+                              ],
+                            ),
+
                           ],
                         ),
                       ),
                     )
                   : Container(),
+
               Material(
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
+                    ManageVibration.vibrate();
                     floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(
@@ -488,33 +641,32 @@ class MainScaffold extends StatelessWidget {
                 resizeToAvoidBottomInset: resizeToAvoidBottomInset,
               );
             } else {
-              return Scaffold(
-                backgroundColor: backgroundColor,
-                floatingActionButtonLocation: floatingActionButtonLocation,
-                floatingActionButton: floatingActionButton,
-                drawer: drawer,
-                onDrawerChanged: (value) {
-                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
-                  print(
-                      'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
-                  print('onDrawerChanged open $value');
-                },
-                bottomNavigationBar: bottomNavigationBar,
-                body: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    body,
-                    if ((choiceRulerCubit.choiceRulerStatus ||
-                            floatingNavigatorCubit.floatingNavigatorStatus) &&
-                        showNavBAr)
-                      rulerWidget,
-                  ],
-                ),
-                appBar: appBar,
-                extendBody: extendBody,
-                extendBodyBehindAppBar: extendBodyBehindAppBar,
-                bottomSheet: bottomSheet,
-                resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+              return Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Scaffold(
+                    backgroundColor: backgroundColor,
+                    floatingActionButtonLocation: floatingActionButtonLocation,
+                    floatingActionButton: floatingActionButton,
+                    drawer: drawer,
+                    onDrawerChanged: (value) {
+                      choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+                      print(
+                          'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                      print('onDrawerChanged open $value');
+                    },
+                    bottomNavigationBar: bottomNavigationBar,
+                    body: body,
+                    appBar: appBar,
+                    extendBody: extendBody,
+                    extendBodyBehindAppBar: extendBodyBehindAppBar,
+                    bottomSheet: bottomSheet,
+                    resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+                  ),
+                  if ((choiceRulerCubit.choiceRulerStatus ||
+                      floatingNavigatorCubit.floatingNavigatorStatus) &&
+                      showNavBAr)
+                    rulerWidget,                ],
               );
             }
           },

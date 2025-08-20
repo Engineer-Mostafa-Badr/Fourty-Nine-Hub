@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winners_grid_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/loading/custom_loading.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -42,6 +43,7 @@ class WinnersCashbackViewBody extends StatelessWidget {
           return CustomFailureWidget(
             title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
             onPressed: () {
+      ManageVibration.vibrate();
               context.read<WinnersCashbackCubit>().getWinners(context);
             },
           );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/reply_message_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../domain/entities/message_entity.dart';
+import '../../../domain/entities/reply_message_entity.dart';
+import '../../../../../../../res/style/app_colors.dart';
 
 class ReplayMessageWidget extends StatelessWidget {
   final MessageEntity? messageEntity;

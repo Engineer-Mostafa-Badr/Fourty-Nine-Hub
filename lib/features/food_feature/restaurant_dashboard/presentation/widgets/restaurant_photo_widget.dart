@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -16,6 +16,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
 import '../../domain/usecases/update_restaurant_usecase.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class RestaurantPhotoPicker extends StatefulWidget {
   var subcategoryId;
@@ -63,6 +64,7 @@ class _RestaurantPhotoPickerState
                                 right: 4,
                                 child: GestureDetector(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     context.read<RestaurantDashboardCubit>().removeFile(e);
                                   },
                                   child: Container(
@@ -89,6 +91,7 @@ class _RestaurantPhotoPickerState
                           backColor:AppColors.getRedColor(context),
                           color:AppColors.whiteColor,
                           onPressed: () {
+      ManageVibration.vibrate();
                             _updateRestaurantImage(context);
                           },
                           label: LocaleKeys.update.localize,
@@ -96,6 +99,7 @@ class _RestaurantPhotoPickerState
                         const Sizer(),],
                       InkWell(
                         onTap: () async {
+      ManageVibration.vibrate();
                           await createRestaurantCubit.uploadProfileImage(
                               subcategoryId: widget.subcategoryId,
                               context: context

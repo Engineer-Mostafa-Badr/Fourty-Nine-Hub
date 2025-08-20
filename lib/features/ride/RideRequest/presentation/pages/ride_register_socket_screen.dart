@@ -30,6 +30,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideRegisterSocketScreen extends StatefulWidget {
   const RideRegisterSocketScreen({
@@ -333,6 +334,7 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                         ),
                         label: LocaleKeys.submit.tr(),
                         onPressed: () {
+      ManageVibration.vibrate();
                           // registerRider.uploadImages();
                           if (context
                                   .read<RegisterRiderCubit>()

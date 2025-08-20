@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
+import '../../../../../../core/abstract/use_case.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../chat_room/data/models/seen_history_model.dart';
+import '../repositories/chats_repository.dart';
 
 class GetSeenHistoryUseCase extends UseCase<List<SeenHistoryModel>, String> {
   final ChatsRepository _repo;

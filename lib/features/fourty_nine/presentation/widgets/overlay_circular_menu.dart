@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class OverlayCircularMenu extends StatefulWidget {
   final Widget mainIcon;
@@ -138,6 +139,7 @@ class _OverlayCircularMenuState extends State<OverlayCircularMenu>
                                   child: InkWell(
                                     customBorder: CircleBorder(),
                                     onTap: () {
+      ManageVibration.vibrate();
                                       print(
                                           '----------------------- Inside onTap -----------------------');
                                       _handleItemTap(index);

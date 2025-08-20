@@ -41,6 +41,7 @@ class HistoryTripsScreen extends StatefulWidget {
 
 class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
   late ScrollController _scrollController;
+  late ScrollController newScrollController;
   int page = 1;
   final int limit = 10;
   bool isFetching = false;
@@ -49,6 +50,7 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
+    newScrollController = ScrollController()..addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.params.rideCubit.fetchAllHistoryTrips(limit: limit, page: page);
     });
@@ -144,7 +146,7 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
                                   // );
                                   return TripCard(trip: trip);
                                 }
-                              }));
+                              }), scrollController: newScrollController,);
                 //   return ListView.builder(
                 //     controller: _scrollController,
                 //     itemCount: (state.historyTrips?.length ?? 0) + (isFetching ? 1 : 0),

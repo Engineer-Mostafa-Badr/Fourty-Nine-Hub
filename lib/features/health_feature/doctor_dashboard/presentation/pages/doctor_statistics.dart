@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorStatisticsView extends StatelessWidget {
   const DoctorStatisticsView({super.key, required this.totalEarnedMoney});
@@ -37,6 +38,7 @@ class DoctorStatisticsView extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         // context.push(Routes.ALLDOCTORRESERVATIONS);
                       },
                       child: DoctorHistoryCard(

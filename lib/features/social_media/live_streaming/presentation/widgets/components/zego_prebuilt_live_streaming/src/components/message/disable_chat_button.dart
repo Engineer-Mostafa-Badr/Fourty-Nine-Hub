@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../internal/defines.dart';
 import 'defines.dart';
@@ -59,6 +60,7 @@ class _ZegoLiveStreamingDisableChatButtonState
 
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         if (isUpdatingRoomProperty) {
           ZegoLoggerService.logInfo(
             'room property update is not finish',

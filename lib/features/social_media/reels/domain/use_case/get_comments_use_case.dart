@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../../data/models/get_comments_model.dart';
 
 import '../repositories/reels_repository.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
+import '../../data/data_sources/reels_remote_data_source.dart';
 
 class GetCommentsUseCase extends UseCase<GetCommentsResponse, CommentParams> {
   final ReelsRepository _repository;

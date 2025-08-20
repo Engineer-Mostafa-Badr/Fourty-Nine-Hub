@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/are_you_sure_delete_ad_widget.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/build_tag_ads_widget.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/image_ads_widget.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
+import '../../../../core/utils/format_numbers.dart';
+import '../../../ads_feature/ads/domain/entities/ad_entity.dart';
+import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import '../../../ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
+import '../../../ads_feature/ads/presentation/widgets/premium_request_button.dart';
+import '../../../ads_feature/ads/presentation/widgets/request_button.dart';
+import '../../../ads_feature/create_ad/domain/entities/create_ad_entity.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../widgets/are_you_sure_delete_ad_widget.dart';
+import '../widgets/build_tag_ads_widget.dart';
+import '../widgets/image_ads_widget.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
@@ -33,6 +33,7 @@ import '../../../../../routes/routes.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/constants/subscription_status.dart';
 import '../../../social_media/instagram/presentation/widgets/read_more_text.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class MyAdCard extends StatefulWidget {
   final AdEntity item;
@@ -72,6 +73,7 @@ class _MyAdCardState extends State<MyAdCard> {
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () {
+      ManageVibration.vibrate();
             if (widget.item.userId != userId) {
               serviceLocator<AdvertisementCubit>().adViewToAds(widget.item.id);
             }
@@ -84,10 +86,11 @@ class _MyAdCardState extends State<MyAdCard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
-                  color: context.isDarkMode
-                      ? AppColors.LIGHT_COLOR
-                      : AppColors.GREY_DARK_COLOR,
-                  width: 1),
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_COLOR
+                    : AppColors.GREY_DARK_COLOR,
+                width: 1,
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -159,7 +162,8 @@ class _MyAdCardState extends State<MyAdCard> {
                                     text:
                                         '${context.isArabic ? 'مقدم' : 'Deposit'} ${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
                                     style: Styles.mediumText(
-                                        color: AppColors.getReversedTextColor(context))),
+                                        color: AppColors.getReversedTextColor(
+                                            context))),
                               ),
                             )
                         ],
@@ -380,6 +384,7 @@ class _MyAdCardState extends State<MyAdCard> {
                                 height: 1.60,
                               ),
                               onPressed: () {
+      ManageVibration.vibrate();
                                 bottomSheet(
                                     context: context,
                                     isFloating: true,
@@ -455,6 +460,7 @@ class _MyAdCardState extends State<MyAdCard> {
               height: 30,
               backColor: AppColors.SECONDARY_COLOR_DARK2,
               onPressed: () async {
+      ManageVibration.vibrate();
                 if (!context.read<UserCubit>().isLoggedIn) {
                   return pleaseLoginDialog(context);
                   // context.push(Routes.LOGIN);

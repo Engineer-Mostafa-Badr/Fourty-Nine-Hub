@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
+import '../../domain/entities/reel_entity.dart';
 
 class ReelModel extends ReelEntity {
   const ReelModel({

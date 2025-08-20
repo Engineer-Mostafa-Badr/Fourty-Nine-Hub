@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/core/utils/duration_helper.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
+import '../../../../core/utils/duration_helper.dart';
+import 'user_star_entity.dart';
 
 class StarEntity {
   final String id;
@@ -34,6 +34,31 @@ class StarEntity {
     this.createdAt,
     this.createAt,
   });
+
+  StarEntity copyWith({
+    String? id,
+    UserStarEntity? user,
+    List<MediaUrlEntity>? mediaUrl,
+    String? title,
+    String? description,
+    bool? isApproved,
+    num? totalViews,
+    num? averageRating,
+    bool? haveStories,
+    int? storyCount,
+  }) =>
+      StarEntity(
+        id: id ?? this.id,
+        user: user ?? this.user,
+        mediaUrl: mediaUrl ?? this.mediaUrl,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        isApproved: isApproved ?? this.isApproved,
+        totalViews: totalViews ?? this.totalViews,
+        averageRating: averageRating ?? this.averageRating,
+        haveStories: haveStories ?? this.haveStories,
+        storyCount: storyCount ?? this.storyCount,
+      );
 }
 
 class MediaUrlEntity {

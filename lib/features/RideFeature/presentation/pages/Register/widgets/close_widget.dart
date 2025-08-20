@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 Widget closeWidget({required BuildContext context, required Function onAcceptSaveData, required Function closeRemoveData}) {
   return Row(
@@ -17,6 +18,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
     children: [
       InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           bottomSheet(
             backColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.AUTH_CONTAINER_COLOR,
             context: context,
@@ -86,6 +88,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
       ),
       InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           showAnimatedDialog(
             context,
             AlertDialog(
@@ -115,6 +118,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
                             color: AppColors.AUTH_CONTAINER_COLOR,
                           ),
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.pop();
 
                             // Navigator.popAndPushNamed(

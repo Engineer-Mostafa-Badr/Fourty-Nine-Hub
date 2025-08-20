@@ -1,26 +1,32 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/get_unread_notifications_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'get_unread_notifications_count_state.dart';
 
 class GetUnreadNotificationsCountCubit
     extends Cubit<GetUnreadNotificationsCountState> {
   GetUnreadNotificationsCountUseCase getUnreadNotificationsCountUseCase;
+  UnreadNotificationsCountEntity? unreadNotificationsCountEntity;
+
   GetUnreadNotificationsCountCubit({
     required this.getUnreadNotificationsCountUseCase,
   }) : super(GetUnreadNotificationsCountInitial());
-
-  UnreadNotificationsCountEntity? unreadNotificationsCountEntity;
 
   Future<void> getUnreadNotificationsCount() async {
     emit(GetUnreadNotificationsCountLoading());
     final response = await getUnreadNotificationsCountUseCase.call();
     response.fold(
-      (Failure failure) {
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(GetUnreadNotificationsCountFailed(Labels.errorHappened));
       },
       (data) {

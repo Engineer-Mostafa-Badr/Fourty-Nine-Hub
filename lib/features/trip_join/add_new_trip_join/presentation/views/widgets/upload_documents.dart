@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_image_button_sheet.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_image_info.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'button.dart';
+import 'upload_image_button_sheet.dart';
+import 'upload_image_info.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class UploadDocuments extends StatelessWidget {
   const UploadDocuments({
@@ -34,6 +35,7 @@ class UploadDocuments extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5.h),
           child: CustomButton(
             onTap: () {
+      ManageVibration.vibrate();
               showModalBottomSheet(
                   context: context,
                   builder: (builder) {

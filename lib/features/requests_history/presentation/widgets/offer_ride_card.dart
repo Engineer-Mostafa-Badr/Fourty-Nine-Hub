@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/requests_history/data/models/offer_model.
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OfferRideCard extends StatelessWidget {
   final OfferModel offer;
@@ -59,7 +60,10 @@ class OfferRideCard extends StatelessWidget {
             ],
           )),
           AppButton(
-              label: 'Accept', padding: 5, icon: Icons.check, onPressed: () {})
+              label: 'Accept', padding: 5, icon: Icons.check, onPressed: () {
+
+      ManageVibration.vibrate();
+              })
         ],
       ),
     );

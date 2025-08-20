@@ -12,6 +12,7 @@ import 'widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'widgets/font_manager.dart';
 import 'widgets/map_section.dart';
 import 'widgets/otp_input_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class CurrentRideScreen extends StatefulWidget {
@@ -161,6 +162,7 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       context.push(Routes.RideRequestHOME);
 
 
@@ -184,6 +186,7 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                   Expanded(
                                     child: ElevatedButton(
                                       onPressed: () {
+      ManageVibration.vibrate();
                                         showCustomDialogTrip(context,const ConfirmRecordDialog());
                                         // showCustomDialogTrip(context,WhyDoHaveCancelDialog());
                                         // showCustomDialogTrip(context,ClientCancelTripDialog());
@@ -239,6 +242,7 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                               width: double.infinity,
                               child: OutlinedButton(
                                 onPressed: () {
+      ManageVibration.vibrate();
                                 },
                                 style: OutlinedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -269,4 +273,3 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
     );
   }
 }
-

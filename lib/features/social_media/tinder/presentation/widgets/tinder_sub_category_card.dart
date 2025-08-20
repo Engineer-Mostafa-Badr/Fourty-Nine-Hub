@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/functions/helper/numbers_helper.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/images/square_image.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../ads_feature/ads/presentation/pages/ads_view.dart';
+import '../../../../ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
+import '../../data/models/get_fav_sub_category_model.dart';
+import '../cubit/tinder_cubit.dart';
+import '../cubit/tinder_state.dart';
+import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class TinderSubCategoryCard extends StatefulWidget {
@@ -42,6 +43,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.ADS,
             extra: AdsViewParams(
                 subCategory: widget.subCategoryCardData,
@@ -85,6 +87,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                                 ? Colors.redAccent
                                 : Colors.grey,
                             onPressed: () {
+      ManageVibration.vibrate();
                               context
                                   .read<TinderViewCubit>()
                                   .addFavoriteCategory(
@@ -122,6 +125,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                         margin: 0,
                         isCircle: true,
                         onPressed: () {
+      ManageVibration.vibrate();
                           context.push(Routes.CREATEAD,
                               extra: CategorizationEntity(
                                   mainCategory: widget.mainCategory,
@@ -177,6 +181,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                         ? Colors.redAccent
                         : Colors.grey,
                     onPressed: () {
+      ManageVibration.vibrate();
                       context
                           .read<TinderViewCubit>()
                           .addFavoriteCategory(categoryId: subCategoryId)
@@ -248,6 +253,7 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TinderSubCategoryCard extends StatefulWidget {
   final SubCategoryData subCategoryCardData;
@@ -277,6 +283,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
     final subCategoryPicture = widget.subCategoryCardData.picture ?? '';
     return InkWell(
       onTap: () {},
+      ManageVibration.vibrate();
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
@@ -322,6 +329,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                                   ? Colors.redAccent
                                   : Colors.grey,
                               onPressed: () {
+      ManageVibration.vibrate();
                                 context
                                     .read<TinderViewCubit>()
                                     .addFavoriteCategory(
@@ -360,6 +368,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                           margin: 0,
                           isCircle: true,
                           onPressed: () {
+      ManageVibration.vibrate();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -433,6 +442,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                           ? Colors.redAccent
                           : Colors.grey,
                       onPressed: () {
+      ManageVibration.vibrate();
                         context
                             .read<TinderViewCubit>()
                             .addFavoriteCategory(categoryId: subCategoryId)

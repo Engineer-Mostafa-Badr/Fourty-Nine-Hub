@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import '../../../../account_taps/lists/domain/entities/user_friend_entity.dart';
+import '../entities/suggest_user_entity.dart';
+import '../entities/user_profile_entity.dart';
+import '../usecases/accept_reject_friend_request_use_case.dart';
+import '../usecases/add_reply_usecase.dart';
+import '../usecases/get_post_comments_usecase.dart';
+import '../usecases/get_user_posts_usecase.dart';
+import '../usecases/send_greet_message_usecase.dart';
+import '../usecases/share_post_usecase.dart';
+import '../usecases/suggest_friends_usecase.dart';
+import '../../../twitter/domain/usecases/get_feed_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../entities/comment_entity.dart';
@@ -23,6 +23,8 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
       {required TwitterFeedParams params});

@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/muted_stories.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'muted_stories.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 // Import localization keys
@@ -20,6 +20,7 @@ import '../cubit/stories_cubit.dart';
 import 'more_stories.dart';
 import 'create_story_screen.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class Stories extends StatelessWidget {
   const Stories({super.key});
@@ -136,7 +137,7 @@ class Stories extends StatelessWidget {
           //
           // ),
           // const Sizer(),
-          _buildYourStory(context),
+          if(UserCubit.to.isLoggedIn)_buildYourStory(context),
           const Sizer(
             width: 8,
           ),
@@ -180,7 +181,7 @@ class Stories extends StatelessWidget {
               // TODO: implement listener
             },
             builder: (context, state) {
-              if (state.mutedStoriesResponse != null) {
+              if (state.mutedStoriesResponse != null&&UserCubit.to.isLoggedIn) {
                 return _buildMutedStories(context);
               }
               return const SizedBox(
@@ -204,6 +205,7 @@ class Stories extends StatelessWidget {
       borderRadius: BorderRadius.circular(5),
       child: GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           await Navigator.push(
             context,
             MaterialPageRoute(
@@ -329,6 +331,7 @@ class Stories extends StatelessWidget {
       children: [
         Expanded(child: GestureDetector(
           onTap: () async {
+      ManageVibration.vibrate();
             await Navigator.push(
               context,
               MaterialPageRoute(
@@ -415,6 +418,7 @@ class Stories extends StatelessWidget {
         const Sizer(),
         Expanded(child: GestureDetector(
           onTap: () async {
+      ManageVibration.vibrate();
             // await Navigator.push(
             //   context,
             //   MaterialPageRoute(
@@ -524,6 +528,7 @@ class Stories extends StatelessWidget {
       borderRadius: BorderRadius.circular(12), // Facebook-like rounded edges
       child: GestureDetector(
         onTap: () async {
+      ManageVibration.vibrate();
           await Navigator.push(
             context,
             MaterialPageRoute(

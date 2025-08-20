@@ -6,7 +6,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 class GetTripInfoCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   GetTripInfoRequestModel model = GetTripInfoRequestModel();
@@ -29,6 +31,10 @@ class GetTripInfoCubit extends Cubit<RiderState> {
     ], subCateogryId: subCateogryId, comfort: true));
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureRiderState(failure: l));
       },
       (r) {

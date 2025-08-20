@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
-import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/functions/helper/lang_helper.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
+import '../../../add_new_trip_join/presentation/views/widgets/card.dart';
+import '../../domain/entities/tripjoin_request_entity.dart';
+import '../../../view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:intl/intl.dart' as intl;
+import '../../../../../helpers/manage_vibration.dart';
 
 class TripJoinRequestCard extends StatelessWidget {
   const TripJoinRequestCard({
@@ -145,6 +146,7 @@ class TripJoinRequestCard extends StatelessWidget {
                       title: LocaleKeys.deleteRequest.localize,
                       color: AppColors.getSecondryColor(context),
                       onTap: () async {
+      ManageVibration.vibrate();
                         await showModalBottomSheet(
                           context: context,
                           builder: (context) {

@@ -15,6 +15,9 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class RegisterRiderCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repo;
@@ -268,6 +271,10 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     var response = await repo.registerDriver(model: model);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         emit(FailureRiderState(failure: l));
       },
       (r) async {
@@ -283,6 +290,10 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     var response = await repo.riderRegister(model: model);
     response.fold(
       (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
         log(getFailureMessage(l, context), name: "lllllllllllllllll");
         emit(FailureRiderState(failure: l));
       },
@@ -312,7 +323,12 @@ class RegisterRiderCubit extends Cubit<RiderState> {
       required Function(Map<String, dynamic> data) ifRight}) async {
     var response = await repo.getSignUrl(data: data, url: url);
     response.fold(
-      (l) {},
+      (l) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+      },
       (r) async {
         ifRight(r);
       },

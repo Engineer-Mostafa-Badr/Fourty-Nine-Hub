@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../tinder/data/models/gift_model.dart';
+import '../../../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/utils/custom_show_dialog.dart';
@@ -17,6 +17,7 @@ import '../../../../../../../../authentication/presentation/controllers/user_cub
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../../../../../helpers/manage_vibration.dart';
 
 Future<void> showUpdateGoalsSheet(BuildContext context,
     {bool? showEdit = false,
@@ -100,7 +101,10 @@ Future<void> showUpdateGoalsSheet(BuildContext context,
                                 ),
                                 const Spacer(),
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+
+      ManageVibration.vibrate(); 
+                                    },
                                     icon: const Icon(
                                       FontAwesomeIcons.circleQuestion,
                                       color: AppColors.GREY_NORMAL_COLOR,
@@ -388,6 +392,7 @@ Widget _buildItem(BuildContext context, GiftData gift,
       Sizer(height: 5.h),
       IconButton(
           onPressed: () {
+      ManageVibration.vibrate();
             // Navigator.of(context).push(createCustomTransitionRoute(
             //   MultiBlocProvider(providers: [
             //     BlocProvider(
@@ -433,6 +438,7 @@ Widget _buildItem(BuildContext context, GiftData gift,
                       ),
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           print(
                               'state.liveCreateResponseEntity?.goals${context.read<StreamCubit>().state.liveCreateResponseEntity?.goals}');
                           print(context
@@ -526,6 +532,7 @@ Widget _buildItem(BuildContext context, GiftData gift,
             //           ),
             //           GestureDetector(
             //             onTap: () {
+      ManageVibration.vibrate();
             //               print(
             //                   'state.liveCreateResponseEntity?.goals${context.read<StreamCubit>().state.liveCreateResponseEntity?.goals}');
             //               print(context

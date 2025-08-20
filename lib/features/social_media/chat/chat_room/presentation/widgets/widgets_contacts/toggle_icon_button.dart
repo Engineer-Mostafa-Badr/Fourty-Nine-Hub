@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../../res/style/app_colors.dart';
 
 class ToggleIconButton extends StatefulWidget {
   const ToggleIconButton({super.key});

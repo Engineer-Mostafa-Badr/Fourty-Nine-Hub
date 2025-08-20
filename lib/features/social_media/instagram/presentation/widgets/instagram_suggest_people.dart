@@ -2,22 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/instagram_cubit.dart';
+import '../../../social_posts/domain/entities/suggest_user_entity.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramSuggestPeople extends StatefulWidget {
   const InstagramSuggestPeople({super.key});
@@ -65,6 +66,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                           ),
                           GestureDetector(
                             onTap: (){
+      ManageVibration.vibrate();
                               context.push(Routes.InstagramSuggestPeople);
                             },
                             child: Label(
@@ -118,6 +120,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                         .itemList![index];
                                     return InkWell(
                                       onTap: () {
+      ManageVibration.vibrate();
                                         context.push(Routes.INSTAGRAMPROFILE,
                                             extra: controller
                                                 .suggestUserPagingController
@@ -146,6 +149,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                   AlignmentDirectional.topEnd,
                                               child: InkWell(
                                                 onTap: () async {
+      ManageVibration.vibrate();
                                                   bool data = await controller
                                                       .removeSuggestUser(
                                                           context: context,
@@ -299,6 +303,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                       Expanded(
                                                                                         child: InkWell(
                                                                                           onTap: () async {
+      ManageVibration.vibrate();
                                                                                             if (messageController.text.isNotEmpty) {
                                                                                               var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                               if (result == true) {
@@ -328,6 +333,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                       Expanded(
                                                                                         child: TextButton(
                                                                                           onPressed: () {
+      ManageVibration.vibrate();
                                                                                             Navigator.of(context).pop(); // Close the dialog
                                                                                           },
                                                                                           child: Label(

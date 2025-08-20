@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -91,6 +92,7 @@ class AreYouSure extends StatelessWidget {
                         color:AppColors.getReversedTextColor(context),
                       ),
                       onPressed: () {
+      ManageVibration.vibrate();
                         action();
                         context.pop();
                       }),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ads_address_entity.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -20,13 +21,13 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../auction_list/domain/entities/auction_entity.dart';
 import '../widgets/DetailsCounterWidget.dart';
 import '../widgets/PlaceBidding.dart';
 
 class MazadDetails extends StatefulWidget {
   final String id;
-
   const MazadDetails({super.key, required this.id});
 
   @override
@@ -59,10 +60,7 @@ class _MazadDetailsState extends State<MazadDetails> {
       builder: (context, state) {
         final controller = context.read<AuctionDetailsCubit>();
         return CustomScaffold(
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: BackAppBar(),
-          ),
+          appBar: const BackAppBar(),
           bottomNavigationBar: ((state.auction?.isMine ?? false) &&
                   !(state.auction?.isFinished ?? false))
               ? AppButton(
@@ -97,17 +95,133 @@ class _MazadDetailsState extends State<MazadDetails> {
                       }),
           body: state.isLoading
               ? const Center(
-                  child: CustomCircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 )
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView(
                     children: [
                       _buildAdInfoWidget(
-                          ad: state.auction!.ad,
-                          auction: state.auction!,
+                          ad: AdEntity(
+                            id: 'ad_101',
+                            title: 'Luxury Car Auction',
+                            description: 'A rare luxury car in excellent condition, ready for auction.',
+                            images: [
+                              'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg',
+                              'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg',
+                            ],
+                            address: AdsAddressEntity(
+                              governmentAr: 'القاهرة',
+                              governmentEn: 'Cairo',
+                              cityAr: 'مدينة نصر',
+                              cityEn: 'Nasr City',
+                              addressAr: 'شارع الطيران، عمارة 15',
+                              addressEn: 'Tayaran St., Building 15',
+                              coordinates: [31.2983, 30.0677],
+                            ),
+                            user: UserEntity(
+                              id: 'user_555',
+                              firstName: 'Mohamed',
+                              lastName: 'Salama',
+                              email: 'mohamed@example.com',
+                              profilePicture:
+                              'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
+                              profileCover:
+                              'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
+                              friendsCount: 120,
+                              followersCount: 450,
+                              followingCount: 300,
+                              wallet: 1500.75,
+                            ),
+                            active: true,
+                            approved: true,
+                            details: [],
+                            createdAt: DateTime(2025, 8, 10),
+                          ),
+                          auction:  AuctionEntity(
+                            id: 'auction_001',
+                            startDate: DateTime(2025, 8, 20).toString(),
+                            startTime: '10:00 AM',
+                            endDate: DateTime(2025, 8, 25).toString(),
+                            endTime: '06:00 PM',
+                            minPrice: 2000,
+                            currentPrice: 2750,
+                            rate: 4.5,
+                            ad: AdEntity(
+                              id: 'ad_101',
+                              title: 'Luxury Car Auction',
+                              description: 'A rare luxury car in excellent condition, ready for auction.',
+                              images: [
+                                'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg',
+                                'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg',
+                              ],
+                              address: AdsAddressEntity(
+                                governmentAr: 'القاهرة',
+                                governmentEn: 'Cairo',
+                                cityAr: 'مدينة نصر',
+                                cityEn: 'Nasr City',
+                                addressAr: 'شارع الطيران، عمارة 15',
+                                addressEn: 'Tayaran St., Building 15',
+                                coordinates: [31.2983, 30.0677],
+                              ),
+                              user: UserEntity(
+                                id: 'user_555',
+                                firstName: 'Mohamed',
+                                lastName: 'Salama',
+                                email: 'mohamed@example.com',
+                                profilePicture:
+                                'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
+                                profileCover:
+                                'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
+                                friendsCount: 120,
+                                followersCount: 450,
+                                followingCount: 300,
+                                wallet: 1500.75,
+                              ),
+                              active: true,
+                              approved: true,
+                              details: [],
+                              createdAt: DateTime(2025, 8, 10),
+                            ),
+                            isFinished: false,
+                          ),
                           context: context),
-                      _buildDetailsWidget(ad: state.auction!.ad),
+                      _buildDetailsWidget(ad: AdEntity(
+                        id: 'ad_101',
+                        title: 'Luxury Car Auction',
+                        description: 'A rare luxury car in excellent condition, ready for auction.',
+                        images: [
+                          'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg',
+                          'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg',
+                        ],
+                        address: AdsAddressEntity(
+                          governmentAr: 'القاهرة',
+                          governmentEn: 'Cairo',
+                          cityAr: 'مدينة نصر',
+                          cityEn: 'Nasr City',
+                          addressAr: 'شارع الطيران، عمارة 15',
+                          addressEn: 'Tayaran St., Building 15',
+                          coordinates: [31.2983, 30.0677],
+                        ),
+                        user: UserEntity(
+                          id: 'user_555',
+                          firstName: 'Mohamed',
+                          lastName: 'Salama',
+                          email: 'mohamed@example.com',
+                          profilePicture:
+                          'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
+                          profileCover:
+                          'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
+                          friendsCount: 120,
+                          followersCount: 450,
+                          followingCount: 300,
+                          wallet: 1500.75,
+                        ),
+                        active: true,
+                        approved: true,
+                        details: [],
+                        createdAt: DateTime(2025, 8, 10),
+                      )),
                     ],
                   ),
                 ),

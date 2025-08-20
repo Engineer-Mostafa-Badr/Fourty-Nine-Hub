@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../../core/extensions/context_extension.dart';
+import '../../../domain/entities/message_entity.dart';
+import '../../../../../../../res/style/styles.dart';
 
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../res/style/app_colors.dart';

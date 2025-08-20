@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../helpers/manage_vibration.dart';
 
 class AreYouSureDeleteAdWidget extends StatelessWidget {
   final String title, subTitle;
@@ -67,6 +68,7 @@ class AreYouSureDeleteAdWidget extends StatelessWidget {
                             : Colors.white,
                       ),
                       onPressed: () {
+      ManageVibration.vibrate();
                         action();
                         // context.pop();
                       }),

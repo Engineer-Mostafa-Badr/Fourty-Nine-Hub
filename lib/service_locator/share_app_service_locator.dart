@@ -1,7 +1,7 @@
-import 'package:fourtyninehub/features/account_taps/share_app/data/data_source/share_app_remote_data_source.dart';
-import 'package:fourtyninehub/features/account_taps/share_app/data/repository/share_app_repository_impl.dart';
-import 'package:fourtyninehub/features/account_taps/share_app/domain/repository/share_app_repository.dart';
-import 'package:fourtyninehub/features/account_taps/share_app/domain/use_case/share_app_use_case.dart';
+import '../features/account_taps/share_app/data/data_source/share_app_remote_data_source.dart';
+import '../features/account_taps/share_app/data/repository/share_app_repository_impl.dart';
+import '../features/account_taps/share_app/domain/repository/share_app_repository.dart';
+import '../features/account_taps/share_app/domain/use_case/share_app_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 class ShareAppServiceLocator {

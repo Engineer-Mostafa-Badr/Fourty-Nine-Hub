@@ -4,38 +4,39 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_trip_form.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/shipping_banner.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
+import '../../data/models/all_trip_model/all_trip_model.dart';
+import '../../data/models/banner_model/banner_model.dart';
+import '../../data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
+import '../../data/repositories/shipping_repository.dart';
+import '../cubit/accept_decline_trip_cubit.dart';
+import '../cubit/call_message_cubit.dart';
+import '../cubit/create_trip_cubit.dart';
+import '../cubit/get_all_request_by_my_trip_cubit.dart';
+import '../cubit/get_my_trip_cubit.dart';
+import '../cubit/shipping_cubit.dart';
+import '../cubit/shipping_state.dart';
+import '../cubit/trip_cubit.dart';
+import 'create_trip_form.dart';
+import '../widgets/shipping_banner.dart';
+import '../widgets/trip_card.dart';
+import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key, this.selectedId});
@@ -189,6 +190,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                     // onTap: () => context
                                     //     .push(Routes.SHIPPING_REGISTER),
                                     onTap: () {
+      ManageVibration.vibrate();
                                       if (context
                                           .read<UserCubit>()
                                           .isLoggedIn) {
@@ -524,6 +526,7 @@ class RequestOfferCard extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
+      ManageVibration.vibrate();
                             context.push(Routes.TripRating, extra: model);
                           },
                           child: Row(
@@ -560,6 +563,7 @@ class RequestOfferCard extends StatelessWidget {
                           // padding: EdgeInsets.symmetric(vertical: 0),
                           width: double.infinity,
                           onPressed: () {
+      ManageVibration.vibrate();
                             context.read<AcceptDeclineTripCubit>().complete(
                                 loadingTrip: model.loadingTripId ?? "");
                           },
@@ -577,6 +581,7 @@ class RequestOfferCard extends StatelessWidget {
                                 // padding: EdgeInsets.symmetric(vertical: 0),
                                 width: double.infinity,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   context
                                       .read<AcceptDeclineTripCubit>()
                                       .decline(
@@ -599,6 +604,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   context
                                       .read<AcceptDeclineTripCubit>()
                                       .accept(loadingRequestId: model.id ?? "");
@@ -631,6 +637,7 @@ class RequestOfferCard extends StatelessWidget {
                                         ? AppColors.PRIMARY_COLOR
                                         : AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   if (state.data &&
                                       (model.isAccepted ?? false)) {
                                     launchUrlString(
@@ -654,7 +661,10 @@ class RequestOfferCard extends StatelessWidget {
                                         : AppColors.DARK_GRAY_COLOR,
                                 style: Styles.mediumText(
                                     fontSize: 15, color: Colors.white),
-                                onPressed: () {},
+                                onPressed: () {
+
+      ManageVibration.vibrate(); 
+                                },
                               ),
                             ),
                             const Sizer(
@@ -668,6 +678,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   // tripCubit.report(
                                   //     loadingTripId: widget.model.id ?? "");
                                   // showBottomSheet(
@@ -698,6 +709,7 @@ class RequestOfferCard extends StatelessWidget {
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:
@@ -720,6 +732,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:
@@ -738,6 +751,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   showBottomSheet(
                                     context: context,
                                     builder: (context) => const ReportView(
@@ -761,6 +775,7 @@ class RequestOfferCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     //هتروح لي صفحه subscription
                     serviceLocator<SubscriptionController>()
                         .showSubscriptionPlans(

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_photos.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_posts.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/profile_videos.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import 'image_from_internet.dart';
+import 'profile_photos.dart';
+import 'profile_posts.dart';
+import 'profile_videos.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../res/style/const.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class FacebookProfile extends StatefulWidget {
   const FacebookProfile({super.key, required this.scrollController});
@@ -48,6 +49,7 @@ class _FacebookProfileState extends State<FacebookProfile> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+      ManageVibration.vibrate();
                   setState(() {
                     _showPosts = true;
                     if (_showPosts) {
@@ -64,6 +66,7 @@ class _FacebookProfileState extends State<FacebookProfile> {
             Expanded(
               child: GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     setState(() {
                       _showPhotos = true;
                       if (_showPhotos) {
@@ -80,6 +83,7 @@ class _FacebookProfileState extends State<FacebookProfile> {
             Expanded(
               child: GestureDetector(
                 onTap: () {setState(() {
+      ManageVibration.vibrate();
                   _showVideos = true;
                   if (_showVideos) {
                     _showPhotos = false;
@@ -171,6 +175,7 @@ class ProfileHeader extends StatelessWidget {
                     //     :
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         // showDialog(
                         //     context: context,
                         //     builder: (context) =>
@@ -196,6 +201,7 @@ class ProfileHeader extends StatelessWidget {
                     // if (loginUser?.id == user.id)
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         // selectCoverImage();
                       },
                       child: Container(
@@ -275,6 +281,7 @@ class ProfileHeader extends StatelessWidget {
                       //     :
                       GestureDetector(
                         onTap: () {
+      ManageVibration.vibrate();
                           // if (context.isUserLoggedIn) {
                           //   context.read<UserCubit>().updateProfileView(
                           //       isProfile: false,
@@ -314,6 +321,7 @@ class ProfileHeader extends StatelessWidget {
                         bottom: 10.h,
                         child: InkWell(
                           onTap: () {
+      ManageVibration.vibrate();
                             // selectImageGallary();
                           },
                           child: Container(
@@ -417,7 +425,10 @@ class ProfileHeader extends StatelessWidget {
                   Expanded(
                     child: AppButton(
                       label: context.isArabic ? 'اضف قصة' : 'Add to Story',
-                      onPressed: () {},
+                      onPressed: () {
+
+      ManageVibration.vibrate();
+                      },
                       backColor: AppColors.getButtonPrimaryWhiteColor(context),
                       color: AppColors.getPrimaryTextColor(context),
                       textColor: AppColors.getPrimaryTextColor(context),
@@ -430,7 +441,10 @@ class ProfileHeader extends StatelessWidget {
                     child: AppButton(
                       label:
                       context.isArabic ? 'تعديل معلوماتك' : 'Edit Profile',
-                      onPressed: () {},
+                      onPressed: () {
+
+      ManageVibration.vibrate();
+                      },
                       backColor: AppColors.getFindFillColor(context),
                       color: AppColors.getTextColor(context),
                       textColor: AppColors.getTextColor(context),
@@ -441,7 +455,10 @@ class ProfileHeader extends StatelessWidget {
                   const Sizer(),
                   AppButton(
                     label: '',
-                    onPressed: () {},
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    },
                     backColor: AppColors.getFindFillColor(context),
                     color: AppColors.getTextColor(context),
                     textColor: AppColors.getTextColor(context),
@@ -643,6 +660,5 @@ class ProfileHeader extends StatelessWidget {
         ]));
   }
 }
-
 
 

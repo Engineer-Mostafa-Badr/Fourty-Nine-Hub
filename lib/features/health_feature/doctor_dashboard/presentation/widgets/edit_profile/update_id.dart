@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_docs.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_profile/update_card.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class UpdateDoctorIdCard extends StatelessWidget {
   const UpdateDoctorIdCard({super.key, required this.subCategoryId});
@@ -18,6 +19,7 @@ class UpdateDoctorIdCard extends StatelessWidget {
     return EditDoctorProfileCard(
       title: LocaleKeys.id.localize,
       onTap: () {
+      ManageVibration.vibrate();
         bottomSheet(
           context: context,
           widget: EditDoctorDocsView(

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'accept_ride_offer_screen.dart';
 import 'offer_ride_offer_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MainTabsRideOffer extends StatefulWidget {
   const MainTabsRideOffer({super.key, this.type = 'ride'});
@@ -88,6 +89,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                     radius: 15,
                     label: LocaleKeys.ride.tr(),
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (selectedTap != 'ride') {
                         setState(() {
                           selectedTap = 'ride';
@@ -137,6 +139,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
                     radius: 15,
                     label: context.isArabic ? 'تحميله' : 'Shipping',
                     onPressed: () {
+      ManageVibration.vibrate();
                       if (selectedTap != 'shipping') {
                         setState(() {
                           selectedTap = 'shipping';

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -326,6 +327,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     if (widget.canRegister) {
       return GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
           log('88888888888888888888888888');
           widget.onRegister?.call();
         },
@@ -478,40 +480,38 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
                       ? widget.removeFavorite
                       ? Container()
                       : PositionedDirectional(
-                    top: 10.h,
+                    // top: 10.h,
+                    top: 10,
+                    bottom: 10,
                     start: 10.w,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: const Offset(1, 1),
-                          )
-                        ]
-                      ),
-                      child: IconAppButton(
-                        icon: widget.category.isFavorite == false
-                            ? Icons.favorite_outline
-                            : Icons.favorite,
-                        onPressed: () async {
-                          final result =
-                          await widget.onFavorite();
-                          print("resutlt=$result");
-                          if (result == true) {
-                            print(result);
-                            setState(() {
-                              widget.category.isFavorite =
-                              !widget.category.isFavorite!;
-                              print(widget.category.isFavorite);
-                              widget.isFavorite = result;
-                              print("===================$result");
-                            });
-                          }
-                        },
-                        color: AppColors.SECONDARY_COLOR,
-                      ),
+                    child: IconAppButton(
+                      icon: widget.category.isFavorite == false
+                          ? Icons.favorite_outline
+                          : Icons.favorite,
+                      shadows: [
+                        BoxShadow(
+                          color: Colors.black,
+                          spreadRadius: 10,
+                          blurRadius: 10,
+                          offset: const Offset(1, 1),
+                        )
+                      ],
+                      onPressed: () async {
+                        final result =
+                        await widget.onFavorite();
+                        print("resutlt=$result");
+                        if (result == true) {
+                          print(result);
+                          setState(() {
+                            widget.category.isFavorite =
+                            !widget.category.isFavorite!;
+                            print(widget.category.isFavorite);
+                            widget.isFavorite = result;
+                            print("===================$result");
+                          });
+                        }
+                      },
+                      color: AppColors.SECONDARY_COLOR,
                     ),
                   )
                       : const SizedBox.shrink(),
@@ -660,6 +660,7 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
     if (widget.canRegister) {
       return GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
             log('88888888888888888888888888');
             widget.onRegister?.call();
           },

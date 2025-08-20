@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../cubit/instagram_cubit.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramAllDiscoverPeople extends StatefulWidget {
   const InstagramAllDiscoverPeople({super.key});
@@ -96,6 +97,7 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
             cubit.facebookSuggestPeople[index];
             return GestureDetector(
               onTap: (){
+      ManageVibration.vibrate();
                 context.push(Routes.OTHERSACCOUNT,extra: user.id);
               },
               child: Container(
@@ -131,6 +133,7 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
                                   backColor: user.followSuccessfully==false?AppColors.SECONDARY_COLOR:AppColors.GREY_DARK_COLOR,
                                   color: Colors.white,
                                   label: user.followSuccessfully==false?LocaleKeys.follow.localize:LocaleKeys.unFollow.localize, onPressed: () async {
+      ManageVibration.vibrate();
                                   if(user.followSuccessfully==false){
                                           bool data =
                                               await cubit.followRequest(
@@ -157,6 +160,7 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
                                       },),
                               const Sizer(),
                               InkWell(onTap: () async {
+      ManageVibration.vibrate();
                                 bool data = await cubit.removeSuggestUser(
                                     context:
                                     context,

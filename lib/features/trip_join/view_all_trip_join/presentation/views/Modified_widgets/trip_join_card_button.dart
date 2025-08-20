@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../res/style/styles.dart';
+
+import '../../../../../../helpers/manage_vibration.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class TripJoinCardButton extends StatelessWidget {
+  final void Function()? onTap;
+  final Color? color;
+  final String title;
+  final bool noFill;
+  final IconData? icon;
+  final EdgeInsetsGeometry? padding;
+  final double radius;
   const TripJoinCardButton({
     super.key,
     required this.title,
@@ -15,17 +25,13 @@ class TripJoinCardButton extends StatelessWidget {
     this.padding,
     this.radius = 5,
   });
-  final void Function()? onTap;
-  final Color? color;
-  final String title;
-  final bool noFill;
-  final IconData? icon;
-  final EdgeInsetsGeometry? padding;
-  final double radius;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        ManageVibration.vibrate();
+        onTap?.call();
+      },
       child: Container(
         padding: padding ?? EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
@@ -44,7 +50,9 @@ class TripJoinCardButton extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: Styles.headerText(color: context.isDarkMode?Colors.black:Colors.white, fontSize: 30),
+                style: Styles.headerText(
+                    color: context.isDarkMode ? Colors.black : Colors.white,
+                    fontSize: 30),
                 textAlign: TextAlign.center,
               ),
             ),

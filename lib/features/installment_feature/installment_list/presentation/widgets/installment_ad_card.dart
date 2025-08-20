@@ -11,6 +11,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../domain/entities/installment_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class InstallmentAdCard extends StatelessWidget {
   final InstallmentEntity item;
@@ -23,6 +24,7 @@ class InstallmentAdCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
+      ManageVibration.vibrate();
           print(item.id);
           context.push(Routes.INSTALLMENTDETAILS, extra: item.id);
         },

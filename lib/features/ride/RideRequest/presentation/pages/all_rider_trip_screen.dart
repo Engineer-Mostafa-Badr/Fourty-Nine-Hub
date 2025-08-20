@@ -33,6 +33,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AllRiderTripScreen extends StatefulWidget {
   const AllRiderTripScreen({super.key});
@@ -349,6 +350,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                                             AppColors
                                                                 .PRIMARY_COLOR)),
                                                 onPressed: () {
+      ManageVibration.vibrate();
                                                   context
                                                       .read<
                                                           GetAvailableTripsForDriversCubit>()
@@ -427,6 +429,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                                               .PRIMARY_COLOR),
                                                 ),
                                                 onPressed: () {
+      ManageVibration.vibrate();
                                                   context
                                                       .read<
                                                           VerifyCompleteDriverCubit>()

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/no_not
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card_loading.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/see_and_clear_buttons.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class ServicesNotificationBuilder extends StatefulWidget {
@@ -37,26 +38,6 @@ class _ServicesNotificationBuilderState
   late final DeleteNotificationCubit deleteNotificationCubit;
   late final DeleteAllNotificationsCubit deleteAllNotificationsCubit;
   @override
-  void initState() {
-    getServicesNotificationsCubit =
-        context.read<GetServicesNotificationsCubit>();
-    notificationSeenCubit = context.read<NotificationSeenCubit>();
-    getUnreadNotificationsCountCubit =
-        context.read<GetUnreadNotificationsCountCubit>();
-    deleteNotificationCubit = context.read<DeleteNotificationCubit>();
-    deleteAllNotificationsCubit = context.read<DeleteAllNotificationsCubit>();
-    _fetchNotificationsIfEmpty();
-    _scrollListener();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // _fetchNotificationsIfEmpty();
     return BlocConsumer<GetServicesNotificationsCubit,
@@ -71,74 +52,107 @@ class _ServicesNotificationBuilderState
             getServicesNotificationsCubit.notifications.isEmpty) {
           return const NoNotificationsWidget();
         }
-        return ListView.builder(
-          controller: scrollController,
-          itemCount: getServicesNotificationsCubit.notifications.length + 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return SeeAndClearButtons(
-                seeAllCallback: () async {
-                  context
-                      .read<AllNotficationsSeenCubit>()
-                      .allNotificationSeen(type: 'services')
-                      .then(
-                        (value) => context
-                            .read<GetUnreadNotificationsCountCubit>()
-                            .getUnreadNotificationsCount(),
-                      );
-                  context
-                      .read<GetServicesNotificationsCubit>()
-                      .notifications
-                      .forEach((element) {
-                    element.read = true;
-                  });
-                },
-                clearAllCallback: () async {
-                  await deleteAllNotificationsCubit.deleteAllNotifications(
-                      type: 'services');
-                  getServicesNotificationsCubit.notifications = [];
-                  getServicesNotificationsCubit.page = 1;
-                  await getServicesNotificationsCubit.getServicesNotifications(
-                      languageCode: 'en');
-                  await getUnreadNotificationsCountCubit
-                      .getUnreadNotificationsCount();
-                },
-              );
-            }
-            index--;
-            if (index < getServicesNotificationsCubit.notifications.length) {
-              final NotificationEntity notificationEntity =
-                  getServicesNotificationsCubit.notifications[index];
-              return NotificationCard(
-                type: 'services',
-                notificationEntity: notificationEntity,
-                index: index,
-                notificationSeenCallback: () {
-                  notificationEntity.read = true;
-                  notificationSeenCubit
-                      .notificationSeen(id: notificationEntity.id ?? '')
-                      .then(
-                        (value) => getUnreadNotificationsCountCubit
-                            .getUnreadNotificationsCount()
-                            .then((value) => context.push(
-                                notificationEntity.path ?? '',
-                                extra: notificationEntity.payload)),
-                      );
-                },
-                notificationDeleteCallback: () {
-                  deleteNotificationCubit.deleteNotification(
-                      id: notificationEntity.id ?? '');
-                  getServicesNotificationsCubit.notifications.removeAt(index);
-                },
-              );
-            }
-            return state is GetServicesNotificationsLoading
-                ? const NotificationCardLoadingList()
-                : const SizedBox();
-          },
+        return GlowingOverscrollIndicator(
+          axisDirection: AxisDirection.down,
+          color: AppColors.SECONDARY_COLOR,
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: getServicesNotificationsCubit.notifications.length + 2,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return SeeAndClearButtons(
+                  seeAllCallback: () async {
+                    context
+                        .read<AllNotficationsSeenCubit>()
+                        .allNotificationSeen(type: 'services')
+                        .then(
+                          (value) => context
+                              .read<GetUnreadNotificationsCountCubit>()
+                              .getUnreadNotificationsCount(),
+                        );
+                    context
+                        .read<GetServicesNotificationsCubit>()
+                        .notifications
+                        .forEach((element) {
+                      element.read = true;
+                    });
+                  },
+                  clearAllCallback: () async {
+                    await deleteAllNotificationsCubit.deleteAllNotifications(
+                        type: 'services');
+                    getServicesNotificationsCubit.notifications = [];
+                    getServicesNotificationsCubit.page = 1;
+                    await getServicesNotificationsCubit
+                        .getServicesNotifications(languageCode: 'en');
+                    await getUnreadNotificationsCountCubit
+                        .getUnreadNotificationsCount();
+                  },
+                );
+              }
+              index--;
+              if (index < getServicesNotificationsCubit.notifications.length) {
+                final NotificationEntity notificationEntity =
+                    getServicesNotificationsCubit.notifications[index];
+                return NotificationCard(
+                  type: 'services',
+                  notificationEntity: notificationEntity,
+                  index: index,
+                  notificationSeenCallback: () {
+                    notificationEntity.read = true;
+                    notificationSeenCubit
+                        .notificationSeen(id: notificationEntity.id ?? '')
+                        .then(
+                          (value) => getUnreadNotificationsCountCubit
+                              .getUnreadNotificationsCount()
+                              .then((value) => context.push(
+                                  notificationEntity.path ?? '',
+                                  extra: notificationEntity.payload)),
+                        );
+                  },
+                  notificationDeleteCallback: () {
+                    deleteNotificationCubit.deleteNotification(
+                        id: notificationEntity.id ?? '');
+                    getServicesNotificationsCubit.notifications.removeAt(index);
+                  },
+                );
+              }
+              return state is GetServicesNotificationsLoading
+                  ? const NotificationCardLoadingList()
+                  : const SizedBox();
+            },
+          ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    getServicesNotificationsCubit =
+        context.read<GetServicesNotificationsCubit>();
+    notificationSeenCubit = context.read<NotificationSeenCubit>();
+    getUnreadNotificationsCountCubit =
+        context.read<GetUnreadNotificationsCountCubit>();
+    deleteNotificationCubit = context.read<DeleteNotificationCubit>();
+    deleteAllNotificationsCubit = context.read<DeleteAllNotificationsCubit>();
+    _fetchNotificationsIfEmpty();
+    _scrollListener();
+    super.initState();
+  }
+
+  void _fetchNotificationsIfEmpty() {
+    if (getServicesNotificationsCubit.notifications.isEmpty) {
+      getServicesNotificationsCubit.page = 1;
+      // getServicesNotificationsCubit.notifications = [];
+      getServicesNotificationsCubit.getServicesNotifications(
+          languageCode: 'en');
+    }
   }
 
   void _scrollListener() {
@@ -159,14 +173,5 @@ class _ServicesNotificationBuilderState
         }
       }
     });
-  }
-
-  void _fetchNotificationsIfEmpty() {
-    if (getServicesNotificationsCubit.notifications.isEmpty) {
-      getServicesNotificationsCubit.page = 1;
-      // getServicesNotificationsCubit.notifications = [];
-      getServicesNotificationsCubit.getServicesNotifications(
-          languageCode: 'en');
-    }
   }
 }

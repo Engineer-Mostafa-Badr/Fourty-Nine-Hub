@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/star_feature/data/model/user_star_model.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
+import 'user_star_model.dart';
+import '../../domain/entity/star_winner_entity.dart';
 
 class StarWinnerModel extends StarWinnerEntity {
   StarWinnerModel({

@@ -37,6 +37,7 @@ import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
@@ -252,6 +253,7 @@ class _LoginViewState extends State<LoginView> {
                         children: [
                           chooseAuthWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               setState(() {
                                 widget.authType = AuthType.LOGIN;
                               });
@@ -270,6 +272,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           chooseAuthWidget(
                             onTap: () {
+                              ManageVibration.vibrate();
                               setState(() {
                                 widget.authType = AuthType.REGISTER;
                               });
@@ -319,6 +322,11 @@ class _LoginViewState extends State<LoginView> {
                                 if (registerCubit.accept) {
                                   if (formKeyRegister.currentState!
                                       .validate()) {
+                                    if(registerCubit.isLessThan14YearsOld(registerCubit.birthDateTextController.text.trim())){
+                                      showErrorMessage(context, context.isArabic?'يجب ان يكون المستخدم اكبر من 14 سنة':'The user must be older than 14 years');
+                                      return;
+                                    }
+
                                     registerCubit.register();
                                   }
                                 } else {
@@ -424,6 +432,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           obscureText: obsecure,
           prefixIcon: GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               setState(() {
                 obsecure = !obsecure;
               });
@@ -457,6 +466,76 @@ class _LoginWidgetState extends State<LoginWidget> {
           style: Styles.mediumText(color: Colors.grey),
         ),
         const Sizer(),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.google.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         icon: FontAwesomeIcons.google,
+        //         onPressed: () async {
+        //           ManageVibration.vibrate();
+        //           // await  loginCubit.handleGoogleSignIn();
+        //           print('@@@@@@@@@@@@@@@@@@@@@@@@@');
+        //           log("uid: ${loginCubit.user?.uid ?? ''}");
+        //           log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+        //           log('Google sign in pressed');
+        //           try {
+        //             final user = await loginCubit.signInWithGoogle();
+        //             context.push(Routes.HOME);
+        //             // if (user != null && mounted) {
+        //             // }
+        //           } on FirebaseAuthException catch (error) {
+        //             print(error.message);
+        //             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //                 content: Text(
+        //               error.message ?? "Something went wrong",
+        //             )));
+        //           } catch (error) {
+        //             print(error);
+        //             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //                 content: Text(
+        //               error.toString(),
+        //             )));
+        //           }
+        //         },
+        //       ),
+        //     ),
+        //     const Sizer(),
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.facebook.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         icon: FontAwesomeIcons.facebook,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         onPressed: () async {
+        //           ManageVibration.vibrate();
+        //           log('Facebook sign in pressed');
+        //           await loginCubit.signInWithFacebook();
+        //         },
+        //       ),
+        //     ),
+        //     if (Platform.isIOS) ...[
+        //       const Sizer(),
+        //       Expanded(
+        //         child: AppButton(
+        //           label: 'Apple',
+        //           backColor: AppColors.LIGHT_GRAY_COLOR,
+        //           textColor: Colors.black,
+        //           icon: FontAwesomeIcons.apple,
+        //           onPressed: () {
+        //             log('Apple sign in pressed');
+        //             ManageVibration.vibrate();
+        //             loginCubit.signInWithApple();
+        //           },
+        //         ),
+        //       ),
+        //     ],
+        //   ],
+        // ),
         Row(
           children: [
             Expanded(
@@ -467,14 +546,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                 color: AppColors.PRIMARY_COLOR,
                 icon: FontAwesomeIcons.google,
                 onPressed: () async {
-                  // await  loginCubit.handleGoogleSignIn();
-                  print('@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  print(loginCubit.user?.uid??'');
                   try {
-                    final user = await loginCubit.loginWithGoogle();
-                    if (user != null && mounted) {
-                      context.push(Routes.HOME);
-                    }
+                    ManageVibration.vibrate();
+                    print('Google sign in pressed');
+                    log("uid: ${loginCubit.user?.uid ?? ''}");
+                    log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                    await loginCubit.signInWithGoogle();
+                    context.push(Routes.HOME);
                   } on FirebaseAuthException catch (error) {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -500,23 +578,62 @@ class _LoginWidgetState extends State<LoginWidget> {
                 icon: FontAwesomeIcons.facebook,
                 color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
-                  await loginCubit.signInWithFacebook();
+                  try {
+                    ManageVibration.vibrate();
+                    print('Facebook sign in pressed');
+                    log("uid: ${loginCubit.user?.uid ?? ''}");
+                    log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                    await loginCubit.signInWithFacebook();
+                    context.push(Routes.HOME);
+                  } on FirebaseAuthException catch (error) {
+                    print(error.message);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.message ?? "Something went wrong",
+                    )));
+                  } catch (error) {
+                    print(error);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.toString(),
+                    )));
+                  }
                 },
               ),
             ),
-            if (Platform.isIOS) const Sizer(),
-            if (Platform.isIOS)
+            if (Platform.isIOS) ...[
+              const Sizer(),
               Expanded(
                 child: AppButton(
                   label: 'Apple',
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   textColor: Colors.black,
                   icon: FontAwesomeIcons.apple,
-                  onPressed: () {
-                    loginCubit.signInWithApple();
+                  onPressed: () async {
+                    try {
+                      ManageVibration.vibrate();
+                      print('Apple sign in pressed');
+                      log("uid: ${loginCubit.user?.uid ?? ''}");
+                      log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
+                      await loginCubit.signInWithApple();
+                      context.push(Routes.HOME);
+                    } on FirebaseAuthException catch (error) {
+                      print(error.message);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        error.message ?? "Something went wrong",
+                      )));
+                    } catch (error) {
+                      print(error);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        error.toString(),
+                      )));
+                    }
                   },
                 ),
               ),
+            ],
           ],
         ),
       ],
@@ -657,6 +774,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Expanded(
                               child: BadgedLabel(
                                   onTap: () {
+                                    ManageVibration.vibrate();
                                     registerCubit.isMale = true;
 
                                     setState(() {});
@@ -678,6 +796,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Expanded(
                             child: BadgedLabel(
                               onTap: () {
+                                ManageVibration.vibrate();
                                 registerCubit.isMale = false;
 
                                 setState(() {});
@@ -711,6 +830,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         obsecure = !obsecure;
                       });
@@ -741,6 +861,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   obscureText: obsecure,
                   prefixIcon: GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         obsecure = !obsecure;
                       });
@@ -799,6 +920,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     ClickableWidget(
                       onTap: () {
+                        ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
                         context.push(Routes.POLICY, extra: true);

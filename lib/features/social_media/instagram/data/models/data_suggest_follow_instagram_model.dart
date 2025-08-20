@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
+import '../../domain/entities/data_suggest_follow_instagram_entity.dart';
 
 class DataSuggestFollowInstagramModel extends DataSuggestFollowInstagramEntity {
   DataSuggestFollowInstagramModel({

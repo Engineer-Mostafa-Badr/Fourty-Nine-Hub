@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/ma
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideArrivedScreen extends StatelessWidget {
   const RideArrivedScreen({super.key});
@@ -93,7 +94,10 @@ class RideArrivedScreen extends StatelessWidget {
                               to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               hasTitle: true,
                             ),
-                            CustomRideButton(text: "I've Arrived",onPressed: (){},),
+                            CustomRideButton(text: "I've Arrived",onPressed: (){
+
+      ManageVibration.vibrate();
+                            },),
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 10, // المسافة بين الأزرار

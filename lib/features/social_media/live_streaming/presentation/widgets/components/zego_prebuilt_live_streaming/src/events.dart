@@ -12,6 +12,7 @@ import '../../zego_uikit/src/services/defines/user.dart';
 import 'defines.dart';
 import 'events.defines.dart';
 import 'pk/core/event/defines.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// You can listen to events that you are interested in here, such as Co-hosting
 class ZegoUIKitPrebuiltLiveStreamingEvents {

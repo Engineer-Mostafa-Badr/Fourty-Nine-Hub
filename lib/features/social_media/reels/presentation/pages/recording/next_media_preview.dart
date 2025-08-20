@@ -4,26 +4,27 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/shared/filter_utiles.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
+import '../../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../account_taps/privacy/domain/entities/privacy_status_enum.dart';
+import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../shared/filter_utiles.dart';
+import '../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../routes/routes.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class NextMediaPreview extends StatefulWidget {
   final String mediaPath;
@@ -91,6 +92,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                 children: [
                   GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       Navigator.pop(context);
                     },
                     child: Icon(
@@ -177,6 +179,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                   ),
                   InkWell(
                     onTap: () async {
+      ManageVibration.vibrate();
                       final res =
                           await CustomVerticalSheetItem.normal<PrivacyStatus>(
                               context, [
@@ -270,6 +273,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                       Expanded(
                         child: buildContainer(
                           onTap: () {
+      ManageVibration.vibrate();
                             print('isImage: ${widget.isImage}');
                             if (widget.isImage == true) {
                               // controller.uploadReel(
@@ -334,6 +338,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
     final user = context.read<UserCubit>().state.data;
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
         onTap();
       },
       child: Container(

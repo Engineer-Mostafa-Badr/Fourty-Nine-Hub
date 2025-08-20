@@ -1,4 +1,4 @@
-package com.app.fourtyninehub
+package com.fourtyninehub.fourtyninehub
 
 import android.app.Notification
 import android.app.NotificationChannel

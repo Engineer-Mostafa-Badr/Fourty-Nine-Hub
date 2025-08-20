@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 
 part 'edit_doctor_personal_info_state.dart';
@@ -24,6 +25,11 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
   final GetCitiesUseCase _getCitiesUseCase;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final UpdateDoctorPersonalInfoUsecase _updateDoctorPersonalInfoUsecase;
+  final TextEditingController firstNameController = TextEditingController();
+
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   EditDoctorPersonalInfoCubit(
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
@@ -31,10 +37,54 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
       this._updateDoctorPersonalInfoUsecase)
       : super(const EditDoctorPersonalInfoState());
 
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  getCities(String governorateId) async {
+    emit(state.copyWith(status: EditDoctorPersonalInfoStates.loadCities));
+    final response = await _getCitiesUseCase.call(governorateId);
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(
+          failure: failure, status: EditDoctorPersonalInfoStates.error));
+    },
+        (data) => emit(state.copyWith(
+            cities: data,
+            status: EditDoctorPersonalInfoStates.loadCitiesSuccess)));
+  }
+
+  getGovernorates({String? id}) async {
+    final response = await _getGovernoratesUseCase.call(const NoParams());
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(
+          failure: failure, status: EditDoctorPersonalInfoStates.error));
+    }, (governorates) {
+      if (id != null && governorates.isNotEmpty) {
+        getCities(id);
+      }
+      emit(state.copyWith(governorates: governorates));
+    });
+  }
+
+  Future<void> getSubCategories() async {
+    final userId = UserCubit.to.state.data?.id;
+
+    final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(
+          status: EditDoctorPersonalInfoStates.error, failure: failure));
+    }, (data) {
+      emit(state.copyWith(speciality: data));
+    });
+  }
 
   Future<void> init(DoctorEntity data) async {
     emit(state.copyWith(status: EditDoctorPersonalInfoStates.loading));
@@ -56,40 +106,11 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
         selectedCityId: data.address.cityId));
   }
 
-  getGovernorates({String? id}) async {
-    final response = await _getGovernoratesUseCase.call(const NoParams());
-    response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure,
-            status: EditDoctorPersonalInfoStates.error)), (governorates) {
-      if (id != null && governorates.isNotEmpty) {
-        getCities(id);
-      }
-      emit(state.copyWith(governorates: governorates));
-    });
-  }
-
-  getCities(String governorateId) async {
-    emit(state.copyWith(status: EditDoctorPersonalInfoStates.loadCities));
-    final response = await _getCitiesUseCase.call(governorateId);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: EditDoctorPersonalInfoStates.error)),
-        (data) => emit(state.copyWith(
-            cities: data,
-            status: EditDoctorPersonalInfoStates.loadCitiesSuccess)));
-  }
-
-  Future<void> getSubCategories() async {
-    final userId = UserCubit.to.state.data?.id;
-
-    final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
-    response.fold(
-        (failure) => emit(state.copyWith(
-            status: EditDoctorPersonalInfoStates.error,
-            failure: failure)), (data) {
-      emit(state.copyWith(speciality: data));
-    });
+  void onSelectCity(String id) {
+    if (state.selectedCityId != null && state.selectedCityId == id) return;
+    emit(state.copyWith(selectedCityId: id));
+    print("state.governorateCubit${state.selectedGovernorateId}");
+    print("state.cityCubit${state.selectedCityId}");
   }
 
   void onSelectGovernorate(String id) {
@@ -115,6 +136,11 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
     getCities(selectedId);
   }
 
+  onSelectSpeciality(SubCategoryEntity? value) {
+    emit(state.copyWith(selectedSpeciality: value?.id));
+    print('state.speciality${state.selectedSpeciality}');
+  }
+
   updateDoctorPersonalInfo(BuildContext context) async {
     final response =
         await _updateDoctorPersonalInfoUsecase.call(DoctorPersonalInfoParams(
@@ -128,24 +154,16 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
     ));
 
     response.fold((failure) {
-      showErrorMessage(context, getFailureMessage(failure, context));
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      // showErrorMessage(context, getFailureMessage(failure, context));
       emit(state.copyWith(
           status: EditDoctorPersonalInfoStates.error, failure: failure));
     }, (data) {
       showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
       context.pop(true);
     });
-  }
-
-  void onSelectCity(String id) {
-    if (state.selectedCityId != null && state.selectedCityId == id) return;
-    emit(state.copyWith(selectedCityId: id));
-    print("state.governorateCubit${state.selectedGovernorateId}");
-    print("state.cityCubit${state.selectedCityId}");
-  }
-
-  onSelectSpeciality(SubCategoryEntity? value) {
-    emit(state.copyWith(selectedSpeciality: value?.id));
-    print('state.speciality${state.selectedSpeciality}');
   }
 }

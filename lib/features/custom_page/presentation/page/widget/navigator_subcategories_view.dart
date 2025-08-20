@@ -14,6 +14,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../domain/entity/custom_page_categories_entity.dart';
 import '../../cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class NavigatorSubCategoriesView extends StatefulWidget {
   final CustomPageCategoriesEntity mainCategory;
@@ -113,6 +114,7 @@ class _NavigatorSubCategoriesViewState
           ),
           floatingActionButton: CustomFloatingActionButton(
             onPressed: () {
+      ManageVibration.vibrate();
               Navigator.pop(context);
             },
             text: LocaleKeys.save.localize,

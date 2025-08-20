@@ -1,20 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/pick_driver_image_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/profile_image_info_ride_screen.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/validation_error_widget.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+import '../../../../../common/widgets/form/text_fields/first_name_text_form_field.dart';
+import '../../../../../common/widgets/form/text_fields/last_name_text_form_field.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../ride/RideRequest/presentation/cubit/pick_driver_image_cubit.dart';
+import '../../../../ride/RideRequest/presentation/cubit/rider_state.dart';
+import '../../../../ride/RideRequest/presentation/pages/profile_image_info_ride_screen.dart';
+import '../../../../ride/RideRequest/presentation/widgets/validation_error_widget.dart';
+import '../cubit/shipping_cubit.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class UserInfoShippingRegisterWidget extends StatefulWidget {
   const UserInfoShippingRegisterWidget({super.key});
@@ -187,6 +188,7 @@ class _UserInfoShippingRegisterWidgetState
                 children: [
                   GestureDetector(
                     onTap: () async {
+      ManageVibration.vibrate();
                       var pickedDate = await showDatePicker(
                           context: context,
                           firstDate: DateTime(1800),

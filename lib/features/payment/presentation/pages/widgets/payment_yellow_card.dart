@@ -22,6 +22,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
 import '../../../domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 import '../../cache_out_cubit/payment_cubit.dart'; // For image picking
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PaymentYellowCard extends StatefulWidget {
   const PaymentYellowCard({
@@ -135,6 +136,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                           const Sizer(),
                           InkWell(
                             onTap: () {
+      ManageVibration.vibrate();
                               if (formKey.currentState!.validate()) {
                                 showAreYouSure(
                                     title: LocaleKeys.alert.localize,
@@ -175,6 +177,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                     ] else ...[
                       InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           if (state.wallet!.realAmount >= 400) {
                             setState(() {
                               isRequestingYellowCard = true;
@@ -218,6 +221,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                               children: [
                                 InkWell(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     showModalBottomSheet(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -229,6 +233,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               title: Text(
                                                   LocaleKeys.gallery.localize),
                                               onTap: () async {
+      ManageVibration.vibrate();
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
                                                     isGallery: true,
@@ -242,6 +247,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               title: Text(
                                                   LocaleKeys.camera.localize),
                                               onTap: () async {
+      ManageVibration.vibrate();
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
                                                     isGallery: false,
@@ -314,6 +320,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                               children: [
                                 InkWell(
                                   onTap: () {
+      ManageVibration.vibrate();
                                     showModalBottomSheet(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -325,6 +332,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               title: Text(
                                                   LocaleKeys.gallery.localize),
                                               onTap: () async {
+      ManageVibration.vibrate();
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
                                                     isGallery: true,
@@ -338,6 +346,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               title: Text(
                                                   LocaleKeys.camera.localize),
                                               onTap: () async {
+      ManageVibration.vibrate();
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
                                                     isGallery: false,
@@ -443,6 +452,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                       Sizer(height: 30.h),
                       InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           print('object');
                           print(state.wallet?.realAmount);
                           if (isRequestingYellowCard &&

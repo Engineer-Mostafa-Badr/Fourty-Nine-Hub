@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CounterMoneyWidget extends StatefulWidget {
   const CounterMoneyWidget({super.key});
@@ -20,6 +21,7 @@ class _CounterMoneyWidgetState extends State<CounterMoneyWidget> {
       children: [
         ElevatedButton(
           onPressed: () {
+      ManageVibration.vibrate();
             setState(() {
               if (value > 0) {
                 value = value - 1;
@@ -64,6 +66,7 @@ class _CounterMoneyWidgetState extends State<CounterMoneyWidget> {
         const Spacer(),
         ElevatedButton(
           onPressed: () {
+      ManageVibration.vibrate();
             setState(() {
               value = value + 1; // زيادة القيمة
             });

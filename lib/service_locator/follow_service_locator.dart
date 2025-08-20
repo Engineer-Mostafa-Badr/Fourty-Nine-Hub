@@ -1,6 +1,6 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_all_following_use_case.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/followers_cubit/follower_cubit.dart';
+import '../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
+import '../features/social_media/instagram/domain/usecases/get_all_following_use_case.dart';
+import '../features/social_media/instagram/presentation/cubit/followers_cubit/follower_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class FollowServiceLocator {

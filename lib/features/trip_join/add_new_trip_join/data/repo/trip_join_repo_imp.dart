@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/remote_data_source/trip_join_remote_datasource.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_brand_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_model_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_year_type_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_join_publish_param.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/repo/trip_join_repo.dart';
+import '../../../../../core/error/failure.dart';
+import '../remote_data_source/trip_join_remote_datasource.dart';
+import '../../domain/entities/car_brand_entity.dart';
+import '../../domain/entities/car_model_entity.dart';
+import '../../domain/entities/car_year_type_entity.dart';
+import '../../domain/entities/trip_info_entity.dart';
+import '../../domain/entities/trip_join_publish_param.dart';
+import '../../domain/repo/trip_join_repo.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
 class TripJoinRepoImp implements TripJoinRepo {

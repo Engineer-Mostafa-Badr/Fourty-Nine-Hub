@@ -2,10 +2,8 @@
 import 'dart:typed_data';
 
 // Flutter imports:
-import 'package:flutter/material.dart';
-
-// Package imports:
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 import '../../zego_prebuilt_live_streaming/src/components/utils/dialogs.dart';
@@ -25,31 +23,19 @@ import 'minimizing/data.dart';
 import 'minimizing/defines.dart';
 import 'minimizing/overlay_machine.dart';
 
-part '../../zego_prebuilt_audio_streaming/src/controller/media.dart';
-
-part '../../zego_prebuilt_audio_streaming/src/controller/message.dart';
-
-part '../../zego_prebuilt_audio_streaming/src/controller/seat.dart';
-
 part '../../zego_prebuilt_audio_streaming/src/controller/audio_video.dart';
-
+part '../../zego_prebuilt_audio_streaming/src/controller/media.dart';
+part '../../zego_prebuilt_audio_streaming/src/controller/message.dart';
 part '../../zego_prebuilt_audio_streaming/src/controller/minimize.dart';
-
-part '../../zego_prebuilt_audio_streaming/src/controller/room.dart';
-
-part '../../zego_prebuilt_audio_streaming/src/controller/user.dart';
-
-part '../../zego_prebuilt_audio_streaming/src/controller/private/room.dart';
-
-part '../../zego_prebuilt_audio_streaming/src/controller/private/private.dart';
-
 part '../../zego_prebuilt_audio_streaming/src/controller/private/audio_video.dart';
-
 part '../../zego_prebuilt_audio_streaming/src/controller/private/minimize.dart';
-
+part '../../zego_prebuilt_audio_streaming/src/controller/private/private.dart';
+part '../../zego_prebuilt_audio_streaming/src/controller/private/room.dart';
 part '../../zego_prebuilt_audio_streaming/src/controller/private/seat.dart';
-
 part '../../zego_prebuilt_audio_streaming/src/controller/private/user.dart';
+part '../../zego_prebuilt_audio_streaming/src/controller/room.dart';
+part '../../zego_prebuilt_audio_streaming/src/controller/seat.dart';
+part '../../zego_prebuilt_audio_streaming/src/controller/user.dart';
 
 /// Used to control the audio chat room functionality.
 ///

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/repositories/restaurant_details_repo.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/error/failure.dart';
+import '../repositories/restaurant_details_repo.dart';
+import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 
 class AddFoodUseCase extends UseCase<RestaurantMenu, AddFoodParams> {
   final RestaurantDetailsRepo _repository;

@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
+import 'message_sender_entity.dart';
 
 import 'message_media_entity.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -10,18 +11,19 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/share_app_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 class ShareTheApp extends StatelessWidget {
   const ShareTheApp({super.key});
@@ -100,6 +102,12 @@ class ShareTheApp extends StatelessWidget {
         ));
   }
 
+  // Example simulated backend call (replace with your actual API call)
+  Future<bool> simulateReferralDownload() async {
+    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    return true; // Simulate successful referral
+  }
+
   Widget _buildLinkWidget({
     required BuildContext context,
     required num referralGift,
@@ -116,7 +124,14 @@ class ShareTheApp extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: AppColors.getFindFillColor(context),
-                      content: Text(context.isArabic?'تم نسخ الإحالة الخاصة بك!':'Your Referral ID is copied!',style: Styles.mediumText(color: AppColors.getTextColor(context)),),),
+                    content: Text(
+                      context.isArabic
+                          ? 'تم نسخ الإحالة الخاصة بك!'
+                          : 'Your Referral ID is copied!',
+                      style: Styles.mediumText(
+                          color: AppColors.getTextColor(context)),
+                    ),
+                  ),
                 );
               });
             });
@@ -144,6 +159,7 @@ class ShareTheApp extends StatelessWidget {
           radius: 15,
           height: 52,
           onPressed: () async {
+            ManageVibration.vibrate();
             if (referralId.isNotEmpty) {
               await Share.share("""
 سجل للحصول على $referralGift جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً
@@ -181,53 +197,6 @@ https://example.com/download
     );
   }
 
-// Example simulated backend call (replace with your actual API call)
-  Future<bool> simulateReferralDownload() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
-    return true; // Simulate successful referral
-  }
-
-  Widget _buildStatisticsWidget({
-    required BuildContext context,
-    required num user,
-    required num balance,
-    required num gift,
-  }) {
-    return InkWell(
-      onTap: () => context.push(Routes.WALLET),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildStatisticsItem(
-              context,
-              color: AppColors.getButtonPrimaryColor(context),
-              title: LocaleKeys.userShare.localize,
-              subTitle: '${context.isArabic ? numAr(user) : user}',
-            ),
-          ),
-          const Sizer(),
-          Expanded(
-            child: _buildStatisticsItem(
-              context,
-              color: AppColors.getButtonPrimaryColor(context),
-              title: context.isArabic
-                  ? 'استرداد نقدي'
-                  : LocaleKeys.balance.localize,
-              subTitle: '${context.isArabic ? numAr(balance) : balance}',
-            ),
-          ),
-          const Sizer(),
-          Expanded(
-            child: _buildStatisticsItem(context,
-                color: AppColors.getButtonPrimaryColor(context),
-                title: LocaleKeys.gift.localize,
-                subTitle: '${context.isArabic ? numAr(gift) : gift}'),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildStatisticsItem(
     BuildContext context, {
     required Color color,
@@ -258,6 +227,49 @@ https://example.com/download
               color: AppColors.getReversedTextColor(context),
               fontSize: 32,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatisticsWidget({
+    required BuildContext context,
+    required num user,
+    required num balance,
+    required num gift,
+  }) {
+    return InkWell(
+      onTap: () {
+        ManageVibration.vibrate();
+         context.push(Routes.WALLET);},
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildStatisticsItem(
+              context,
+              color: AppColors.getButtonPrimaryColor(context),
+              title: LocaleKeys.userShare.localize,
+              subTitle: '${context.isArabic ? numAr(user) : user}',
+            ),
+          ),
+          const Sizer(),
+          Expanded(
+            child: _buildStatisticsItem(
+              context,
+              color: AppColors.getButtonPrimaryColor(context),
+              title: context.isArabic
+                  ? 'استرداد نقدي'
+                  : LocaleKeys.balance.localize,
+              subTitle: '${context.isArabic ? numAr(balance) : balance}',
+            ),
+          ),
+          const Sizer(),
+          Expanded(
+            child: _buildStatisticsItem(context,
+                color: AppColors.getButtonPrimaryColor(context),
+                title: LocaleKeys.gift.localize,
+                subTitle: '${context.isArabic ? numAr(gift) : gift}'),
           ),
         ],
       ),

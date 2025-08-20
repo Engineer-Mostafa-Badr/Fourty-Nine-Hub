@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ZegoInRoomChatViewItem extends StatefulWidget {
   const ZegoInRoomChatViewItem({
@@ -140,6 +141,7 @@ class _ZegoCallMessageListState extends State<ZegoInRoomChatViewItem> {
 
         return GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             if (widget.message.state.value == ZegoInRoomMessageState.failed) {
               ZegoUIKit().resendInRoomMessage(widget.message);
             }

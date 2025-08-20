@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AcceptedCardForDriver extends StatelessWidget {
   const AcceptedCardForDriver({super.key, required this.entity});
@@ -154,6 +155,7 @@ class AcceptedCardForDriver extends StatelessWidget {
                 title: LocaleKeys.viewRoute.localize,
                 color: AppColors.PRIMARY_COLOR,
                 onTap: () async {
+                  ManageVibration.vibrate();
                   await openGoogleMapsWithRoute(entity.polyline ?? "");
                 },
               ),
@@ -244,6 +246,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
         children: [
           GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               String otpSaved = "";
 
               final parentContext = context;
@@ -335,6 +338,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
                                               title:
                                                   LocaleKeys.confirm.localize,
                                               onTap: () async {
+                                                ManageVibration.vibrate();
                                                 try {
                                                   await BlocProvider.of<
                                                               VerifyCompleteDriverCubit>(
@@ -392,6 +396,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
                                             : AppColors.GREY_DARK_COLOR,
                                         title: LocaleKeys.reached.localize,
                                         onTap: () async {
+                                          ManageVibration.vibrate();
                                           await BlocProvider.of<
                                                       VerifyCompleteDriverCubit>(
                                                   parentContext)

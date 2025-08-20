@@ -9,6 +9,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../captainshare/screen/captain_share_info_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripJoinInfoScreen extends StatelessWidget {
   const TripJoinInfoScreen({super.key});
@@ -18,6 +19,7 @@ class TripJoinInfoScreen extends StatelessWidget {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           context.push(Routes.AVAILABLE_TRIPS);
         },
         child: Container(

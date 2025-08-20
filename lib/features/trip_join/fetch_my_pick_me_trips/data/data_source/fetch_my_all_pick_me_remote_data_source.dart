@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/data/models/fetch_my_pick_me_model.dart';
-import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../models/fetch_my_pick_me_model.dart';
+import '../../../helpers/print_helper.dart';
 
 abstract class FetchMyAllPickMeRemoteDataSource {
   Future<Either<Failure, List<TripData>>> fetchMyPickMeTrips(

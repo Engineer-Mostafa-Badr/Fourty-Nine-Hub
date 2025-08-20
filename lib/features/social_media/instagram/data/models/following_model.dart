@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
+import '../../domain/entities/following_entity.dart';
 
 class FollowingModel extends FollowingEntity {
   FollowingModel({

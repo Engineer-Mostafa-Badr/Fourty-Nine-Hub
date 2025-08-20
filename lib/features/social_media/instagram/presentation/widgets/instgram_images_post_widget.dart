@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'image_post_widget.dart';
+import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../core/widget/SmoothIndicator/scrollig_dots_effect.dart';
 import '../../../../../core/widget/SmoothIndicator/smooth_page_indicator.dart';

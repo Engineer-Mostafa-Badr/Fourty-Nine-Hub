@@ -25,6 +25,7 @@ import 'package:slide_countdown/slide_countdown.dart';
 
 import 'Doctor_contact_buttons.dart';
 import 'doctor_image.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorDetailsAccountHeader extends StatefulWidget {
   const DoctorDetailsAccountHeader({super.key});
@@ -146,6 +147,7 @@ class _DoctorDetailsAccountHeaderState
                         color: Colors.black,
                         backColor: AppColors.GREY_LIGHT_COLOR,
                         onPressed: () {
+      ManageVibration.vibrate();
                           showModalBottomSheet(
                             backgroundColor: context.isDarkMode
                                 ? AppColors.DARK_BLUE_COLOR
@@ -188,6 +190,7 @@ class _DoctorDetailsAccountHeaderState
                                           /// on close Button
                                           InkWell(
                                               onTap: () async {
+      ManageVibration.vibrate();
                                                 commentController.clear();
                                                 phoneController.clear();
                                                 rating = 0;
@@ -346,6 +349,7 @@ class _DoctorDetailsAccountHeaderState
                                       ),
                                       InkWell(
                                         onTap: () async {
+      ManageVibration.vibrate();
                                           if (formKey.currentState!
                                               .validate()) {
                                             bool result =
@@ -425,6 +429,7 @@ class _DoctorDetailsAccountHeaderState
                                     style:
                                         Styles.mediumText(color: Colors.white),
                                     onPressed: () async {
+      ManageVibration.vibrate();
                                       bool result = await context
                                           .read<StreamCubit>()
                                           .joinNewMeeting(

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/settings/data/data_source/setting_remote_data_source.dart';
-import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
-import 'package:fourtyninehub/features/settings/domain/repository/setting_repository.dart';
+import '../../../../core/error/failure.dart';
+import '../data_source/setting_remote_data_source.dart';
+import '../../domain/entities/disable_entity.dart';
+import '../../domain/repository/setting_repository.dart';
 
 class SettingRepositoryImpl extends SettingRepository {
   final SettingRemoteDataSource _settingRemoteDataSource;

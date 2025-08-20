@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import '../../../../../common/widgets/stateless/dynamic/CarouselSlider.dart';
+import '../../../../../common/widgets/stateless/images/square_image.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/restaurant.dart';

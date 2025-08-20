@@ -2,14 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../domain/entities/user_profile_entity.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class MessageButton extends StatelessWidget {
   final UserProfileEntity user;
@@ -42,6 +43,7 @@ class MessageButton extends StatelessWidget {
           label: LocaleKeys.send.localize,
           // image: Assets.comment,
           onTap: () {
+      ManageVibration.vibrate();
             showModalBottomSheet(
                 context: context,
                 builder: (_) => Container(
@@ -86,6 +88,7 @@ class MessageButton extends StatelessWidget {
                                     .tr(),
                                 cardUser: user,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   anonymousPress();
                                 },
                               ),
@@ -96,6 +99,7 @@ class MessageButton extends StatelessWidget {
                                       .chat_alert_dialog_regular
                                       .tr(),
                                   cardUser: user, onPressed: () {
+      ManageVibration.vibrate();
                                     normalPress();
                                   }),
                             ],
@@ -111,6 +115,7 @@ class MessageButton extends StatelessWidget {
           label: LocaleKeys.send.localize,
           style: Styles.mediumText(color: Colors.white, fontSize: 24),
           onPressed: () {
+      ManageVibration.vibrate();
             showModalBottomSheet(
                 context: context,
                 builder: (_) => Container(
@@ -155,6 +160,7 @@ class MessageButton extends StatelessWidget {
                                         .tr(),
                                     cardUser: user,
                                     onPressed: () {
+      ManageVibration.vibrate();
                                       anonymousPress();
                                     },
                                   ),
@@ -165,6 +171,7 @@ class MessageButton extends StatelessWidget {
                                           .chat_alert_dialog_regular
                                           .tr(),
                                       cardUser: user, onPressed: () {
+      ManageVibration.vibrate();
                                     normalPress();
                                   }),
                                 ],
@@ -249,6 +256,7 @@ class MessageButton extends StatelessWidget {
       height: 150.h,
       child: ElevatedButton(
           onPressed: () {
+      ManageVibration.vibrate();
             onPressed();
           },
           style: ElevatedButton.styleFrom(

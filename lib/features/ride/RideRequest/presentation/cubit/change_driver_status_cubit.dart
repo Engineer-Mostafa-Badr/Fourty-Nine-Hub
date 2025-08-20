@@ -1,6 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 class ChangeDriverStatusCubit extends Cubit<RiderState> {
   final ApiConsumer apiConsumer;
@@ -12,6 +15,10 @@ class ChangeDriverStatusCubit extends Cubit<RiderState> {
 
     response.fold(
       (left) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(left, currentContext));
         emit(FailureGetDriverStatus());
       },
       (data) {
@@ -28,6 +35,10 @@ class ChangeDriverStatusCubit extends Cubit<RiderState> {
 
     response.fold(
       (left) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(left, currentContext));
         emit(FailureGetDriverStatus());
       },
       (data) {

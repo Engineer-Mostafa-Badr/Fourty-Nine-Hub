@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+import '../../../twitter/data/models/twitter_user_model.dart';
 
 import '../../domain/entities/comment_entity.dart';
 
@@ -9,10 +9,16 @@ class CommentModel extends CommentEntity {
       required super.post,
       required super.createdAt,
       super.reply,
-      super.angryCount,
+      super.replies,
+        super.commentOwnerId,
+        super.commentOwnerFirstName,
+        super.commentOwnerLastName,
+
+        super.angryCount,
       super.likesCount,
       super.loveCount,
       super.repliesCount,
+      super.remainingRepliesCount,
       super.totalCount,
       super.sadCount,
       super.hahaCount,
@@ -29,7 +35,11 @@ class CommentModel extends CommentEntity {
     return CommentModel(
       id: json['_id'],
       content: json['content'],
-      reply: json['reply'] ?? '',
+      commentOwnerId: json['reply']!=null?json['reply']['userInfo']['_id']??'':'',
+      commentOwnerFirstName: json['reply']!=null?json['reply']['userInfo']['firstName']??'':'',
+      commentOwnerLastName: json['reply']!=null?json['reply']['userInfo']['lastName']??'':'',
+      replies: json['replies']??[],
+      // reply: json['reply'] ?? '',
       post: json['post'] != null
           ? json['post'] is String
               ? json['post']
@@ -51,6 +61,7 @@ class CommentModel extends CommentEntity {
       sadCount: json['sadCount'] ?? 0,
       angryCount: json['angryCount'] ?? 0,
       repliesCount: json['repliesCount'] ?? 0,
+      remainingRepliesCount: json['repliesCount'] ?? 0,
       totalCount: json['totalCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
     );

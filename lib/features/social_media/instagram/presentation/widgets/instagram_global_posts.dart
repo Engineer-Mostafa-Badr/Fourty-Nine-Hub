@@ -3,35 +3,36 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../common/widgets/stateless/buttons/text_button.dart';
+import '../../../../../common/widgets/stateless/images/social_image_viewer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/instagram_cubit.dart';
+import 'insta_reel_card.dart';
+import 'instagram_post_comments.dart';
+import '../../../social_posts/domain/entities/post_entity.dart';
+import '../../../social_posts/domain/usecases/add_reply_usecase.dart';
+import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
+import '../../../social_posts/domain/usecases/post_react_usecase.dart';
+import '../../../social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramGlobalPosts extends StatefulWidget {
   const InstagramGlobalPosts({super.key, required this.scrollController});
@@ -212,6 +213,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
                                             onPressed: () async {
+      ManageVibration.vibrate();
                                               if (context
                                                   .read<UserCubit>()
                                                   .isLoggedIn) {
@@ -292,6 +294,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             icon: Icons
                                                 .chat_bubble_outline_rounded,
                                             onPressed: () {
+      ManageVibration.vibrate();
                                               if (context
                                                   .read<UserCubit>()
                                                   .isLoggedIn) {
@@ -449,6 +452,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                   .itemList![index].content!.isEmpty) ...[
                                 InkWell(
                                     onTap: () {
+      ManageVibration.vibrate();
                                       pleaseLoginDialog(context);
                                       // context.push(Routes.LOGIN);
                                       },
@@ -556,6 +560,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       children: [
         InkWell(
           onTap: () {
+      ManageVibration.vibrate();
             if (context.read<UserCubit>().isLoggedIn) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             } else {                                  return pleaseLoginDialog(context);
@@ -579,6 +584,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
               children: [
                 InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (context.read<UserCubit>().isLoggedIn) {
                       context.push(Routes.INSTAGRAMPROFILE,
                           extra: post.user.id);
@@ -591,6 +597,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                       style: TextStyle(color: Theme.of(context).primaryColor),
                       label: post.user.firstName,
                       onPressed: () {
+      ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           context.push(Routes.INSTAGRAMPROFILE,
                               extra: post.user.id);

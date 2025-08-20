@@ -1,7 +1,7 @@
   import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/utils/logging_service.dart';
+import '../../../core/utils/logging_service.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
-import 'package:fourtyninehub/features/call/services/video_fix_helper.dart';
+import 'video_fix_helper.dart';
   
     /// Helper method to refresh remote video with better error handling
     Future<Widget?> refreshRemoteVideo(String streamID) async {

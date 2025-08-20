@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class AvailableTripsFloatingActionButton extends StatelessWidget {
   const AvailableTripsFloatingActionButton({
@@ -17,7 +18,10 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
         // width: 120, // عرض الزر الجديد
         height: 56, // ارتفاع الزر الجديد
         child: RawMaterialButton(
-          onPressed: () {},
+          onPressed: () {
+      ManageVibration.vibrate();
+
+          },
           fillColor: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(

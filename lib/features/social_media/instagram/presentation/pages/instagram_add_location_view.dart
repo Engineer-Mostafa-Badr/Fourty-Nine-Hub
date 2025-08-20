@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import '../cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 import '../../../../../service_locator/service_locator.dart';
 
@@ -56,6 +57,7 @@ class InstagramAddLocationView extends StatelessWidget {
               ),
               leading: IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.close_rounded),
@@ -68,6 +70,7 @@ class InstagramAddLocationView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       context
                           .read<InstagramAddLocationCubit>()
                           .fetchLocationAndAddress();
@@ -130,6 +133,7 @@ class InstagramAddLocationView extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           context
                               .read<InstagramAddLocationCubit>()
                               .removeLocation();
@@ -194,6 +198,7 @@ class InstagramAddLocationView extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
+      ManageVibration.vibrate();
                           context
                               .read<InstagramAddLocationCubit>()
                               .fetchLocationAndAddress();

@@ -2,20 +2,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
-import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
-import 'package:fourtyninehub/features/call/presentation/pages/declined_call_screen.dart';
-import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
-import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
-import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../core/enums/call_enums_manager.dart';
+import '../../../authentication/data/models/user_model.dart';
+import '../../domain/entities/call_data.dart';
+import '../controller/call_controller/call_cubit.dart';
+import '../controller/call_controller/call_state.dart';
+import '../controller/send_call_controller.dart/send_call_cubit.dart';
+import '../controller/send_call_controller.dart/send_call_states.dart';
+import 'declined_call_screen.dart';
+import '../../widgets/build_app_bar.dart';
+import '../../widgets/build_bottom_btns.dart';
+import '../../../../helpers/call_helpers/call_helper/call_with_notification_helper.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/const.dart';
+import '../../../../service_locator/service_locator.dart';
 
 class SendWhatsappCallScreen extends StatefulWidget {
   const SendWhatsappCallScreen({

@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/text_input/text_input_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ExpandedInputWidget extends StatefulWidget {
   final String title, disableMsg;
@@ -109,6 +110,7 @@ class _ExpandedInputWidgetState extends State<ExpandedInputWidget> {
         SizedBox(height: 7.h),
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             print(widget.enabled);
             if (widget.enabled!) {
               setState(() {
@@ -175,6 +177,7 @@ class _ExpandedInputWidgetState extends State<ExpandedInputWidget> {
                   widget.dropDownList.length,
                   (index) => GestureDetector(
                     onTap: () {
+      ManageVibration.vibrate();
                       widget.onSelectItem(index);
                       isExpanded = false;
                       controller.text = widget.dropDownList[index];

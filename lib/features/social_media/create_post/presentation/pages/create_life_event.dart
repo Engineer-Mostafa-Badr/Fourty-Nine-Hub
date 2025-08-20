@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/clickable_widget.dart';
+import '../../domain/entities/life_event_entity.dart';
+import '../cubit/create_post_cubit.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class CreateLifeEvent extends StatefulWidget {
   const CreateLifeEvent({super.key, required this.lifeEventData});
@@ -48,6 +49,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ClickableWidget(
                 onTap: (){
+      ManageVibration.vibrate();
                   if(formKey.currentState!.validate()){
                     if(context.read<CreatePostCubit>().state.pickedDate!=null){
                       print("context.read<CreatePostCubit>().titleController.text${context.read<CreatePostCubit>().titleController.text}");
@@ -116,6 +118,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
             children: [
               GestureDetector(
                 onTap: (){
+      ManageVibration.vibrate();
                   context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
                 },
                 child:Container(
@@ -151,6 +154,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
                           if(context.read<CreatePostCubit>().state.lifeEventImages!=null&&context.read<CreatePostCubit>().state.lifeEventImages!.isNotEmpty)PositionedDirectional(top: 8,start: 8,
                               child: GestureDetector(
                                   onTap: (){
+      ManageVibration.vibrate();
                                     context.read<CreatePostCubit>().onRemoveLifeEventImages(index);
                                   },
                                   child:Container(
@@ -193,6 +197,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
                   child:
                   GestureDetector(
                     onTap: (){
+      ManageVibration.vibrate();
                       context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
                     },
                     child:const Text("Photos / Vidos",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
@@ -201,6 +206,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
               PositionedDirectional(top: 8,end: 8,
                   child:GestureDetector(
                       onTap: (){
+      ManageVibration.vibrate();
                         context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
                       },
                       child:Container(
@@ -251,6 +257,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
   Widget _buildDateSelector(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+      ManageVibration.vibrate();
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: selectedDate,
@@ -313,7 +320,10 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+
+      ManageVibration.vibrate();
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

@@ -22,6 +22,7 @@ import '../../../../../../../res/style/const.dart';
 import '../../../../../../../routes/routes.dart';
 import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
 import '../chat_room_widgets/message_card.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ReceivedContactsCard extends StatefulWidget {
   const ReceivedContactsCard({
@@ -42,6 +43,7 @@ class _ReceivedContactsCardState extends State<ReceivedContactsCard> {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (widget.messageEntity.isSelected) {
           context
               .read<ChatRoomCubit>()
@@ -150,6 +152,7 @@ class _ReceivedContactsCardState extends State<ReceivedContactsCard> {
                                         ),
                                         child: GestureDetector(
                                           onTap: () {
+      ManageVibration.vibrate();
                                             if (widget.messageEntity
                                                     .sharedContacts.length ==
                                                 1) {
@@ -242,6 +245,7 @@ class _ReceivedContactsCardState extends State<ReceivedContactsCard> {
                                         const Divider(),
                                         TextButton(
                                           onPressed: () {
+      ManageVibration.vibrate();
                                             context.push(Routes.CONTACTSVIEW,
                                                 extra: ContactsViewParams(
                                                     chatRoomCubit:

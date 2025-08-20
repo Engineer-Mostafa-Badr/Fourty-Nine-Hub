@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/trip_join/presentation/views/widgets/test_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -16,7 +17,7 @@ class CaptainShareScreen extends StatelessWidget {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 89,),
-          const Text("Captain Share!",style:
+          Text("Captain Share!",style:
             TextStyle(
               color: AppColors.PRIMARY_COLOR,
               fontWeight: FontWeight.w600,
@@ -39,7 +40,7 @@ class CaptainShareScreen extends StatelessWidget {
               width: 204,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 20,
+                fontSize: 18,
                 color:  AppColors.LIGHT_COLOR,
               ),
               label: "Join Now!", onPressed: (){
@@ -61,10 +62,10 @@ class BulletPoint extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("• ", style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 20,
+          const Text("• ", style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700)),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 16,
           fontWeight: FontWeight.w700,
-            color: AppColors.black
+            color: context.isDarkMode? AppColors.whiteColor : AppColors.black
           ))),
         ],
       ),

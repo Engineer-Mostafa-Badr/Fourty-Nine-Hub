@@ -6,7 +6,7 @@ class MyBookingEntity{
   List<dynamic>? features;
   num? availableSeats;
   num? pricePerSeat;
-  List<dynamic>? polyLine;
+  List<List<double>>? polyLine;
   List<BookingClientEntity>? clients;
   MyBookingLocationEntity? startLocation;
   MyBookingLocationEntity? targetLocation;
@@ -25,10 +25,13 @@ class MyBookingLocationEntity{
 class BookingClientEntity{
   final String id;
   String? status;
+  String? phoneNumber;
   String? driverArrivalTime;
+  String? pickedAddress;
   num? pickupDistanceFromStart;
+  List<List<double>>? polyLine;
   String? driverWaitingTime;
   final MyBookingLocationEntity location;
 
-  BookingClientEntity( {required this.id, required this.location, this.status,this.pickupDistanceFromStart, this.driverArrivalTime, this.driverWaitingTime,});
+  BookingClientEntity( {required this.id, required this.location,this.polyLine,this.pickedAddress,this.phoneNumber, this.status,this.pickupDistanceFromStart, this.driverArrivalTime, this.driverWaitingTime,});
 }

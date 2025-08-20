@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class VehicleInformationScreen extends StatelessWidget {
   const VehicleInformationScreen({super.key, required this.params});
@@ -89,6 +90,7 @@ class VehicleInformationScreen extends StatelessWidget {
                                   (index) => UploadFileWidget(
                                     title: uploadFilesTitles[index],
                                     onTap: () {
+      ManageVibration.vibrate();
                                       if (index == 0) {
                                         cubit.onUploadVehiclePicture(context);
                                       } else if (index == 1) {
@@ -153,6 +155,7 @@ class VehicleInformationScreen extends StatelessWidget {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         if(context.read<RideRegisterCubit>().driverLicenseFormKey.currentState!.validate()) {
                           print("object");

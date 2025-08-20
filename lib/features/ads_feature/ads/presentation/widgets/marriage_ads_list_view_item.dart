@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/assets/assets.dart';
@@ -36,6 +37,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: marriageAds.id);
       },
       child: Container(
@@ -84,6 +86,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             : Icons.favorite,
                         color: AppColors.SECONDARY_COLOR,
                         onPressed: () async {
+      ManageVibration.vibrate();
                           if(marriageAds.isFavourite == false){
                             await context
                                 .read<AdvertisementCubit>()
@@ -176,6 +179,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             // padding: const EdgeInsets.symmetric(
                             //     horizontal: 15, vertical: 5,),
                             onTap: () {
+      ManageVibration.vibrate();
                               bottomSheet(
                                 context: context,
                                 widget: CustomMarriageButtonSheet(

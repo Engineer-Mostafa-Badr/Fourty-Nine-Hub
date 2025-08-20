@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_media_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
+import 'message_media_entity.dart';
+import 'message_shared_contacts_entity.dart';
 
 import 'message_sender_entity.dart';
 import 'reply_message_entity.dart';

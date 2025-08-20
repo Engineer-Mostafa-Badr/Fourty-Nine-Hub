@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Package imports:
 
@@ -12,7 +13,6 @@ import '../../config.dart';
 import '../core/defines.dart';
 import '../layout/layout.dart';
 import 'common.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 // Project imports:
 

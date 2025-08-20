@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gi
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/investment_item.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class InvestmentSection extends StatefulWidget {
   const InvestmentSection({
@@ -54,7 +55,10 @@ class _InvestmentSectionState extends State<InvestmentSection> {
               child: Padding(
                 padding: const EdgeInsetsDirectional.only(end: 20),
                 child: InkWell(
-                  onTap: () => _toggleHint(),
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    _toggleHint();
+                  },
                   child: SvgPicture.asset(
                     Assets.ideaIcon,
                   ),
@@ -100,6 +104,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                             : widget.giftWalletEntity.currencyEn,
                         price: widget.giftWalletEntity.fiveYears ?? 0,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context
                               .read<GiftTwoCubit>()
                               .requestTransferFiveYears(context);
@@ -122,6 +127,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                             : widget.giftWalletEntity.currencyEn,
                         price: widget.giftWalletEntity.tenYears ?? 0,
                         onPressed: () {
+                          ManageVibration.vibrate();
                           context
                               .read<GiftTwoCubit>()
                               .requestTransferTenYears(context);

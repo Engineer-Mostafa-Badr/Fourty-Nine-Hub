@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_gradient_border.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/widget/clickable_widget.dart';
+import '../../../../create_post/domain/entities/activity_entity.dart';
+import '../../../../create_post/domain/entities/feeling_entity.dart';
+import '../../../data/models/location_model.dart';
+import 'build_gradient_border.dart';
+import 'image_from_internet.dart';
+import '../posts/build_with_users.dart';
+import '../../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BuildFacebookHeader extends StatelessWidget {
   const BuildFacebookHeader(
@@ -39,13 +43,37 @@ class BuildFacebookHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // if (user != null && user.image != null)
-        user.hasStory?GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,):ClickableWidget(onTap: ()=>print(user.image),
-          child: ImageFromInternet(
-            image: user.image ?? '',
-            isCircle: true,
-            defaultLogo: false,
-            width: 40,
-            height: 40,
+        user.hasStory==true?ClickableWidget(
+          onTap: (){
+            ManageVibration.vibrate();
+            if(!context.read<UserCubit>().isLoggedIn){
+              pleaseLoginDialog(context);
+              return;
+            }
+          },
+          child: GradientProfileBorder(imageUrl: user.image ?? '',segments: 3,
+              firstChar:user.firstName[0].toUpperCase()
+          ),
+        ):ClickableWidget(onTap: (){
+          ManageVibration.vibrate();
+          if(!context.read<UserCubit>().isLoggedIn){
+            pleaseLoginDialog(context);
+            return;
+          }
+        },
+          child: Stack(
+            // alignment: Alignment.center,
+            children: [
+              ImageFromInternet(
+                image: user.image ?? '',
+                isCircle: true,
+                defaultLogo: false,
+                width: 40,
+                height: 40,
+                firstChar: user.firstName[0].toUpperCase(),
+                charPadding:0
+              ),
+            ],
           ),
         ),
         const SizedBox(width: 10.0),
@@ -261,9 +289,25 @@ class BuildFacebookHeader extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(Icons.more_horiz_outlined,color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,size: 24,),
+            ClickableWidget(
+                onTap: (){
+                  ManageVibration.vibrate();
+                  if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                  }
+                },
+                child: Icon(Icons.more_horiz_outlined,color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,size: 24,)),
             SizedBox(width: 12.0),
-            Icon(Icons.close,color: AppColors.getRedColor(context),size: 24,),
+            ClickableWidget(
+                onTap: (){
+                  ManageVibration.vibrate();
+                  if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                  }
+                },
+                child: Icon(Icons.close,color: AppColors.getRedColor(context),size: 24,)),
           ],
         ),
       ],

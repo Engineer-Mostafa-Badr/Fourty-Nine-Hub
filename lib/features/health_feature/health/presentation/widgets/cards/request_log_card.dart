@@ -8,6 +8,7 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../../doctor_filter/presentation/widgets/premuim_views_card.dart';
 import 'health_contacts_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RequestLogCard extends StatelessWidget {
   const RequestLogCard({super.key});
@@ -15,7 +16,10 @@ class RequestLogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+
+      ManageVibration.vibrate();
+      },
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(

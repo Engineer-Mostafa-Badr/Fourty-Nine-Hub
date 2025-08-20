@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class AppBarCreatePostInstagram extends StatelessWidget {
   const AppBarCreatePostInstagram({
@@ -40,6 +41,7 @@ class AppBarCreatePostInstagram extends StatelessWidget {
             color: context.isDarkMode ? Colors.white : Colors.black,
           ),
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
         ),

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -81,6 +82,7 @@ class GiftWalletView extends StatelessWidget {
                                 icon: Icons.star,
                                 iconSize: 50.h,
                                 onPressed: () {
+      ManageVibration.vibrate();
                                   HandleCashback.setCount(
                                       'tenPercentCount', context);
                                   context.push(Routes.TenPercent);
@@ -264,6 +266,7 @@ class GiftWalletView extends StatelessWidget {
                           competitionsWalletEntity:
                               state.gift!.competitionsWallet[index],
                           onTap: () {
+      ManageVibration.vibrate();
                             context.read<GiftCubit>().requestWithdraw(
                                 state.gift!.competitionsWallet[index].id);
                           },
@@ -293,6 +296,7 @@ class GiftWalletView extends StatelessWidget {
       subtitle: Label(text: subTitle),
       trailing: MaterialButton(
         onPressed: () {
+      ManageVibration.vibrate();
           ontap();
         },
         color: color,

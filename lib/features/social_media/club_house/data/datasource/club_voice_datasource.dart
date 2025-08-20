@@ -1,14 +1,14 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/club_house/data/model/club_voice_room_model.dart';
-import 'package:fourtyninehub/features/social_media/club_house/data/model/create_voice_room_model.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
-import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../model/club_voice_room_model.dart';
+import '../model/create_voice_room_model.dart';
+import '../../domain/entities/club_voice_room_entity.dart';
+import '../../domain/usecases/add_club_voice_use_case.dart';
+import '../../domain/usecases/join_club_voice_use_case.dart';
+import '../../domain/usecases/search_club_voice_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 abstract class ClubVoiceDataSource {

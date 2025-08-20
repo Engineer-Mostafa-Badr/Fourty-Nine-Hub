@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class SubscribeButtonWidget extends StatelessWidget {
   const SubscribeButtonWidget({super.key});
@@ -14,7 +15,10 @@ class SubscribeButtonWidget extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+
+      ManageVibration.vibrate();
+        },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 25.h),

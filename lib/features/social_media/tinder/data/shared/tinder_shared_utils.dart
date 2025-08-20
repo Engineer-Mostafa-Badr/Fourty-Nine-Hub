@@ -2,10 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
+import '../models/gift_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class TinderSharedUtils {
   static String _token = '';
@@ -157,6 +158,7 @@ class TinderSharedUtils {
       if (isError)
         TextButton(
           onPressed: () {
+      ManageVibration.vibrate();
             Navigator.of(context).pop();
           },
           style: TextButton.styleFrom(

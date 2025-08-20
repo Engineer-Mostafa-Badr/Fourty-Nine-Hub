@@ -8,7 +8,9 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
-
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 part 'doctor_today_appointments_state.dart';
 
 class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
@@ -44,8 +46,14 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
                 PaginationParams(page: currentPage, limit: pageSize)));
 
     response.fold(
-      (failure) => emit(state.copyWith(
-          failure: failure, status: DoctorTodayAppointmentsStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: DoctorTodayAppointmentsStates.error));
+      },
       (data) {
         appointments.addAll(data);
 
@@ -69,7 +77,13 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
     emit(
         state.copyWith(status: DoctorTodayAppointmentsStates.endCancelLoading));
     response.fold(
-      (l) => emit(state.copyWith(status: DoctorTodayAppointmentsStates.error)),
+      (l) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(l, currentContext));
+        emit(state.copyWith(status: DoctorTodayAppointmentsStates.error));
+      },
       (r) {
         appointments.removeWhere((element) => element.id == appointmentId);
         showSuccessMessage(

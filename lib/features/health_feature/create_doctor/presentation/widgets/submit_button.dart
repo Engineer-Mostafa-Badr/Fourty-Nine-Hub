@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateDoctorSubmitButton extends StatelessWidget {
   const CreateDoctorSubmitButton({super.key});
@@ -15,6 +16,7 @@ class CreateDoctorSubmitButton extends StatelessWidget {
         Expanded(
           child: ElevatedAppButton(
             onPressed: () {
+      ManageVibration.vibrate();
               context.read<CreateDoctorCubit>().submit(context);
             },
             label: context.isArabic ? 'ارسال' : 'Submit',

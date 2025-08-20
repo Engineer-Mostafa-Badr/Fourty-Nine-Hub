@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/comment_widget_insta.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../instagram/presentation/widgets/comment_widget_insta.dart';
+import '../../data/models/new_reels_model.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
 import 'send_to_bottom_sheet.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ShareCountBottomSheet extends StatelessWidget {
   final Reel? reel;
@@ -28,6 +29,7 @@ class ShareCountBottomSheet extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     showModalBottomSheet(
                       context: context,
                       backgroundColor:
@@ -61,6 +63,7 @@ class ShareCountBottomSheet extends StatelessWidget {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
+      ManageVibration.vibrate();
                     context.pop();
                   },
                   child: const Icon(
@@ -85,21 +88,30 @@ class ShareCountBottomSheet extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SocialAndTextWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? 'إعادة النشر' : 'Repost',
                         icon: Assets.repostIcon,
                         backGroundColor: 0xffFACE15,
                       ),
                       SizedBox(width: 30.w),
                       SocialAndTextWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? 'واتساب' : 'Whatsapp',
                         icon: Assets.whatsIcon,
                         backGroundColor: 0xff25D366,
                       ),
                       SizedBox(width: 35.w),
                       SocialAndTextWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? 'حالة' : 'Status',
                         icon: Assets.whatsIcon,
                         backGroundColor: 0xff25D366,
@@ -107,7 +119,10 @@ class ShareCountBottomSheet extends StatelessWidget {
                       SizedBox(width: 35.w),
                       SocialAndTextWidget(
                         width: 33,
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? 'حالة' : 'Status',
                         icon: Assets.messengerIcon,
                         backGroundColor: 0xffF5F5F5,
@@ -115,14 +130,20 @@ class ShareCountBottomSheet extends StatelessWidget {
                       SizedBox(width: 35.w),
                       SocialAndTextWidget(
                         width: 55,
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? 'فيسبوك' : 'Facebook',
                         icon: Assets.faceIcon,
                         backGroundColor: 0,
                       ),
                       SizedBox(width: 35.w),
                       SocialAndTextWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? 'انستقرام' : 'instagram ',
                         icon: Assets.instagram,
                         backGroundColor: 0,
@@ -137,6 +158,7 @@ class ShareCountBottomSheet extends StatelessWidget {
                     children: [
                       OptionWidget(
                         onTap: () {
+      ManageVibration.vibrate();
                           _showReportBottomSheet(context);
                         },
                         text: context.isArabic ? 'ابلاغ' : 'Report',
@@ -149,7 +171,10 @@ class ShareCountBottomSheet extends StatelessWidget {
                       //   icon: Assets.notIcon,
                       // ),
                       OptionWidget(
-                        onTap: () {},
+                        onTap: () {
+
+      ManageVibration.vibrate();
+                        },
                         text: context.isArabic ? ' اضف للقصة' : 'Add to story',
                         icon: Assets.addStoryIcon,
                       ),

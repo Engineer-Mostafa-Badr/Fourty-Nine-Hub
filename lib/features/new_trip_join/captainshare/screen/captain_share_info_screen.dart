@@ -4,8 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CaptainShareInfoScreen extends StatefulWidget {
   const CaptainShareInfoScreen({super.key});
@@ -22,6 +24,7 @@ class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
+          ManageVibration.vibrate();
           context.pop();
         },
         child: Container(

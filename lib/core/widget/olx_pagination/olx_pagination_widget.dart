@@ -7,6 +7,7 @@ class OlxPaginationWidget extends StatefulWidget {
   final List<Widget> items;
   final List<BannerAdsModel> banners;
   final int itemsPerPage;
+  final ScrollController scrollController;
   final Future<void> Function(int) loadPage; // Callback for loading pages
 
   const OlxPaginationWidget({
@@ -14,6 +15,7 @@ class OlxPaginationWidget extends StatefulWidget {
     required this.items,
     required this.banners,
     required this.loadPage,
+    required this.scrollController,
     this.itemsPerPage = 10,
   });
 
@@ -22,21 +24,21 @@ class OlxPaginationWidget extends StatefulWidget {
 }
 
 class _OlxPaginationWidget extends State<OlxPaginationWidget> {
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   int _currentPage = 1; // Start at page 1
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
+    widget.scrollController.addListener(_scrollListener);
     // Load initial page if items are empty
     if (widget.items.isEmpty) _loadPage(_currentPage);
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 100 &&
+    if (widget.scrollController.position.pixels >=
+        widget.scrollController.position.maxScrollExtent - 100 &&
         !_isLoading) {
       _loadNextPage();
     }
@@ -58,7 +60,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   @override
   void dispose() {
-    _scrollController
+    widget.scrollController
       ..removeListener(_scrollListener)
       ..dispose();
     super.dispose();
@@ -66,7 +68,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height*0.6;
     // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
@@ -74,7 +76,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
       color: AppColors.SECONDARY_COLOR,
       axisDirection: AxisDirection.down,
       child: CustomScrollView(
-        controller: _scrollController,
+        controller: widget.scrollController,
         slivers: [
           // First page items
           if (widget.items.isNotEmpty)
@@ -87,40 +89,39 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
               ),
             ),
 
-          // Subsequent pages with banners
-          for (int page = 1; page < pageCount; page++) ...[
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: false,
-              expandedHeight: screenHeight, // Reduced height for banner
-              flexibleSpace: BannerAdsWidget(
-                key: Key('banner_$page'),
-                banner: widget.banners[(page - 1) % widget.banners.length],
-              ),
+        // Subsequent pages with banners
+        for (int page = 1; page < pageCount; page++) ...[
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            pinned: false,
+            expandedHeight: screenHeight, // Reduced height for banner
+            flexibleSpace: BannerAdsWidget(
+              key: Key('banner_$page'),
+              banner: widget.banners[(page - 1) % widget.banners.length],
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final itemIndex = page * widget.itemsPerPage + index;
-                  return itemIndex < widget.items.length
-                      ? widget.items[itemIndex]
-                      : null;
-                },
-                childCount: widget.itemsPerPage,
-              ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final itemIndex = page * widget.itemsPerPage + index;
+                return itemIndex < widget.items.length
+                    ? widget.items[itemIndex]
+                    : null;
+              },
+              childCount: widget.itemsPerPage,
             ),
-          ],
-
-          // Loading indicator
-          if (_isLoading)
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-            ),
+          ),
         ],
-      ),
-    );
+
+        // Loading indicator
+        if (_isLoading)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+      ],
+    ));
   }
 }

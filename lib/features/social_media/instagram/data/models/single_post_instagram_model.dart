@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
+import '../../domain/entities/single_post_instagram_entity.dart';
 
 import 'last_like_model.dart';
 

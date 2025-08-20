@@ -1,17 +1,17 @@
-import 'package:fourtyninehub/features/installment_feature/create_installment/data/datasources/create_installment_remote_datasource.dart';
-import 'package:fourtyninehub/features/installment_feature/create_installment/domain/repositories/create_installment_repo.dart';
-import 'package:fourtyninehub/features/installment_feature/create_installment/domain/usecases/create_installment_usecase.dart';
-import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_details/data/datasources/installment_details_remote_datasource.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_details/domain/repositories/installment_details_repo.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_details/domain/usecases/buy_installment_usecase.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_details/domain/usecases/get_installment_details_usecase.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
+import '../features/installment_feature/create_installment/data/datasources/create_installment_remote_datasource.dart';
+import '../features/installment_feature/create_installment/domain/repositories/create_installment_repo.dart';
+import '../features/installment_feature/create_installment/domain/usecases/create_installment_usecase.dart';
+import '../features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
+import '../features/installment_feature/installment_details/data/datasources/installment_details_remote_datasource.dart';
+import '../features/installment_feature/installment_details/domain/repositories/installment_details_repo.dart';
+import '../features/installment_feature/installment_details/domain/usecases/buy_installment_usecase.dart';
+import '../features/installment_feature/installment_details/domain/usecases/get_installment_details_usecase.dart';
+import '../features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 
-import 'package:fourtyninehub/features/installment_feature/installment_list/data/datasources/installment_list_remote_datasource.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_list/domain/repositories/installment_list_repo.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_list/domain/usecases/get_installment_list_usecase.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
+import '../features/installment_feature/installment_list/data/datasources/installment_list_remote_datasource.dart';
+import '../features/installment_feature/installment_list/domain/repositories/installment_list_repo.dart';
+import '../features/installment_feature/installment_list/domain/usecases/get_installment_list_usecase.dart';
+import '../features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 
 import 'package:get_it/get_it.dart';
 

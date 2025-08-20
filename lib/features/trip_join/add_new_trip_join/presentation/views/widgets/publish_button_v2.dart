@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/cubit/dest_get_lat_and_long_cubit.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/get_lat_and_long_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/publish_trip_join/publish_trip_join_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../common/functions/helper/routing_helper.dart';
+import '../../../../../../core/extensions/context_extension.dart';
+import '../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/cubit/dest_get_lat_and_long_cubit.dart';
+import '../../../../../carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/get_lat_and_long_cubit.dart';
+import '../../cubits/destination_location/destination_location_cubit.dart';
+import '../../cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
+import '../../cubits/fetch_car_models/fetch_car_models_cubit.dart';
+import '../../cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
+import '../../cubits/publish_trip_join/publish_trip_join_cubit.dart';
+import '../../cubits/starting_location/starting_location_cubit.dart';
+import '../../cubits/trip_join_view/trip_join_view_cubit.dart';
+import 'button.dart';
+import '../../../../../../res/style/const.dart';
+import '../../../../../../routes/routes.dart';
+import '../../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../../helpers/manage_vibration.dart';
 
 class PublishButton extends StatefulWidget {
   const PublishButton({
@@ -69,6 +70,7 @@ class _PublishButtonState extends State<PublishButton> {
             CustomButton(
               height: 80.h,
               onTap: () async {
+      ManageVibration.vibrate();
                 if (widget.formKey.currentState!.validate()) {
                   await fetchData();
                   // pr('${publishTripJoinCubit.tripJoinPublishParam}');

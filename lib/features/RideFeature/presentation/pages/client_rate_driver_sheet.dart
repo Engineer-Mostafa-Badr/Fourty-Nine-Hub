@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../service_locator/service_locator.dart';
 import '../controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class BuildClientRateDriverSheet extends StatefulWidget {
   const BuildClientRateDriverSheet(
@@ -128,6 +129,7 @@ class _BuildClientRateDriverSheetState extends State<BuildClientRateDriverSheet>
                                     ),
                                   ),
                                   onPressed: () {
+      ManageVibration.vibrate();
                                     widget.onPressed(otherController.text, _rating);
                                     // context.push(Routes.connectionCallScreen);
                                   },
@@ -209,6 +211,7 @@ class _RideFeedbackTagsState extends State<RideFeedbackTags> {
           final isSelected = tag == selectedTag;
           return GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               setState(() {
                 selectedTag = tag;
                 widget.controller.text = tag; // Update the TextField

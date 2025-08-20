@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ImageUploaderWidget extends StatefulWidget {
   final String? tilte;
@@ -37,6 +38,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         UploadFile().uploadImage(
           subCategoryId: widget.subCategoryId,
           onUploaded: (value) {

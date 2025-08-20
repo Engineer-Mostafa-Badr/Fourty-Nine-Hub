@@ -8,6 +8,7 @@ import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class InstallmentOrderCard extends StatelessWidget {
   const InstallmentOrderCard({super.key});
@@ -65,7 +66,10 @@ class InstallmentOrderCard extends StatelessWidget {
                 text: 'Comming installment: 13 Jun. 2024',
                 style: Styles.mediumText(color: Colors.grey)),
             const Sizer(),
-            AppButton(label: 'Pay now', onPressed: () {}),
+            AppButton(label: 'Pay now', onPressed: () {
+
+      ManageVibration.vibrate();
+            }),
           ],
         ),
       ),

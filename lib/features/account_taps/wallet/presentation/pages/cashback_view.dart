@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/ca
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/cash_back_view_body.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../routes/routes.dart';
 import '../widgets/custom_winner_appbar.dart';
@@ -25,6 +26,7 @@ class CashbackView extends StatelessWidget {
           actions: [
             CustomWinnerAppbar(
               onPressed: () {
+      ManageVibration.vibrate();
                 context.push(Routes.WINNERSCASHBACK);
               },
             ),

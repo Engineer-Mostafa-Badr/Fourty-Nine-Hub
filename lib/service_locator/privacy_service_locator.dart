@@ -1,7 +1,7 @@
-import 'package:fourtyninehub/features/account_taps/privacy/data/data_source/privacy_data_source.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/data/repository/privacy_repository_impl.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/repository/privacy_repository.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
+import '../features/account_taps/privacy/data/data_source/privacy_data_source.dart';
+import '../features/account_taps/privacy/data/repository/privacy_repository_impl.dart';
+import '../features/account_taps/privacy/domain/repository/privacy_repository.dart';
+import '../features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/account_taps/privacy/domain/useCase/fetch_communication_privacy_use_case.dart';

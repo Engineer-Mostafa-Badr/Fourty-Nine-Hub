@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/speciality_dropdown.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EmergencyView extends StatefulWidget {
   const EmergencyView({
@@ -69,7 +70,10 @@ class _EmergencyViewState extends State<EmergencyView> {
                     height: 30,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+      ManageVibration.vibrate();
+
+                    },
                     child: Container(
                       width: double.infinity,
                       height: 76.h,

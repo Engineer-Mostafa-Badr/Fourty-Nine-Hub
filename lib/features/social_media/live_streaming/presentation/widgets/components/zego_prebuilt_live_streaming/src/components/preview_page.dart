@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 // Package imports:
@@ -248,6 +249,7 @@ class _ZegoLiveStreamingPreviewPageState
                     ),
                     child: InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         _showTopicSheet(
                           context,
                           context.read<StreamCubit>().topics,
@@ -286,6 +288,7 @@ class _ZegoLiveStreamingPreviewPageState
                 Expanded(
                   child: InkWell(
                     onTap: () {
+      ManageVibration.vibrate();
                       // showGiftBottomSheet(context,
                       //     receiverId: '', forSelect: true);
                       Navigator.of(context).push(createCustomTransitionRoute(
@@ -374,6 +377,7 @@ class _ZegoLiveStreamingPreviewPageState
         elevation: 0,
         leading: TextButton(
           onPressed: () {
+      ManageVibration.vibrate();
             Navigator.of(
               context,
               rootNavigator: widget.config.rootNavigator,
@@ -486,6 +490,7 @@ class _ZegoLiveStreamingPreviewPageState
               margin: const EdgeInsets.only(left: 20),
               child: ZegoTextIconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   Navigator.of(
                     context,
                     rootNavigator: widget.config.rootNavigator,
@@ -716,6 +721,7 @@ class _ZegoLiveStreamingPreviewPageState
         }) ??
         GestureDetector(
           onTap: () {
+      ManageVibration.vibrate();
             print(_titleController.text.trim());
             defaultAction(_titleController.text.trim());
           },

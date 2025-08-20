@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/screen/widget/add_story_and_sound_button.dart';
+import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import 'widget/add_story_and_sound_button.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
 import 'widget/use_sound_body.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class UseSoundScreen extends StatelessWidget {
   const UseSoundScreen({super.key});
@@ -19,6 +20,7 @@ class UseSoundScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
+      ManageVibration.vibrate();
             context.pop();
           },
         ),
@@ -36,7 +38,10 @@ class UseSoundScreen extends StatelessWidget {
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+
+      ManageVibration.vibrate();
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SvgPicture.asset(

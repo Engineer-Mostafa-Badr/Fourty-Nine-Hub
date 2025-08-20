@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_banner_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
+import '../../../../../common/functions/global/upload_file.dart';
+import '../../../../../core/abstract/use_case.dart';
+import '../../../domain/entity/star_entity.dart';
+import '../../../domain/entity/star_winner_entity.dart';
+import '../../../domain/use_case/delete_my_star_use_case.dart';
+import '../../../domain/use_case/fetch_all_star_use_case.dart';
+import '../../../domain/use_case/fetch_banner_use_case.dart';
+import '../../../domain/use_case/fetch_myl_star_use_case.dart';
+import '../../../domain/use_case/fetch_winner_star_use_case.dart';
+import '../../../domain/use_case/upload_my_star_use_case.dart';
+import 'star_state.dart';
 
 class StarCubit extends Cubit<StarState> {
   final FetchAllStarUseCase _allStarUseCase;
@@ -77,9 +81,12 @@ class StarCubit extends Cubit<StarState> {
     final response = await _allStarUseCase(
       StarPaginationParams(page: currentPage, limit: pageSize),
     );
-    response
-        .fold((l) => emit(state.copyWith(failure: l, status: StarStates.error)),
-            (data) async {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StarStates.error));
+    }, (data) async {
       allTalents.addAll(data);
       if (data.length < pageSize) {
         hasMoreAllTalentsData = false;
@@ -115,9 +122,12 @@ class StarCubit extends Cubit<StarState> {
     emit(state.copyWith(status: StarStates.loading));
     final response = await _fetchMylStarUseCase.call(const NoParams());
 
-    response
-        .fold((l) => emit(state.copyWith(failure: l, status: StarStates.error)),
-            (data) async {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StarStates.error));
+    }, (data) async {
       myTalents.addAll(data);
       if (data.length < pageSize) {
         hasMoreMyTalentsData = false;
@@ -155,8 +165,13 @@ class StarCubit extends Cubit<StarState> {
     );
 
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: StarStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StarStates.error));
+      },
       (data) {
         if (refresh) {
           star = data;
@@ -186,8 +201,13 @@ class StarCubit extends Cubit<StarState> {
     );
 
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: StarStates.error)),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StarStates.error));
+      },
       (data) {
         winner.addAll(data);
 
@@ -244,6 +264,10 @@ class StarCubit extends Cubit<StarState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: StarStates.error));
         return false;
       },
@@ -264,6 +288,10 @@ class StarCubit extends Cubit<StarState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
       (data) {
@@ -284,6 +312,10 @@ class StarCubit extends Cubit<StarState> {
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
       (data) {
@@ -319,6 +351,17 @@ class StarCubit extends Cubit<StarState> {
         },
         context: context);
     print("length${state.video?.length}");
+  }
+
+  changeRating(String id, int rating) {
+    allTalents = allTalents.map((element) {
+      if (element.id == id) {
+        return element.copyWith(averageRating: rating);
+      }
+      return element;
+    }).toList();
+
+    emit(state.copyWith());
   }
 
   void clearSelectedVideos() {

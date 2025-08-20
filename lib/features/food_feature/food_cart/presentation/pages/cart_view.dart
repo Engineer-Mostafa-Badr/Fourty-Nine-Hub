@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_item.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/cart_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
+import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import 'cart_item.dart';
+import '../../../restaurant_details/data/models/cart_model.dart';
+import '../../../restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
+import '../../../../../helpers/manage_vibration.dart';
 
 // Helper functions (assuming these are defined elsewhere in your project)
 Color scaffoldDarkColor(BuildContext context) {
@@ -347,6 +348,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
+      ManageVibration.vibrate();
               _showFoodRequestBottomSheet(
                 cartId: cartId,
                 orderType: 'premium',
@@ -371,6 +373,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
+      ManageVibration.vibrate();
               _showFoodRequestBottomSheet(
                 cartId: cartId,
                 orderType: 'normal',

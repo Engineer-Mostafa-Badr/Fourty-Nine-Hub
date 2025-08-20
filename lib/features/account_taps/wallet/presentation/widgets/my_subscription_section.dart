@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/my_subscription_list_view.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class MySubscriptionSection extends StatefulWidget {
   const MySubscriptionSection({super.key, required this.subscriptions});
@@ -71,6 +72,7 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   setState(() {
                     _isExpanded = !_isExpanded;
                   });

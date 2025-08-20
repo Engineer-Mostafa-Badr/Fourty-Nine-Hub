@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../defines.dart';
 import 'input_board.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomInRoomMessageInputBoardButton extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ZegoLiveAudioRoomInRoomMessageInputBoardButtonState
   Widget build(BuildContext context) {
     return ZegoTextIconButton(
       onPressed: () {
+      ManageVibration.vibrate();
         final key = DateTime.now().millisecondsSinceEpoch;
         widget.onSheetPopUp?.call(key);
 

@@ -19,6 +19,7 @@ import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../loading_dashboard/loading_dashboard_details_screen.dart';
 import 'drivers_license_loading_screen.dart';
 import 'update_personal_info_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class SettingsNotSocketLoading extends StatefulWidget {
@@ -193,6 +194,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
@@ -204,6 +206,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
@@ -216,6 +219,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
@@ -235,7 +239,10 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                 child: AppButton(
                   label: LocaleKeys.deleteRegistration.tr(),
                   backColor: AppColors.SECONDARY_COLOR_DARK2,
-                  onPressed: () {},
+                  onPressed: () {
+
+      ManageVibration.vibrate();
+                  },
                 ),
               ),
             ],
@@ -438,6 +445,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
           ),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: PersonalDocumentsLoadingScreen())));
@@ -445,6 +453,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
               child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
           ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: DriversLicenseLoadingScreen())));
@@ -454,6 +463,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
           ),
             ClickableWidget(
             onTap: () async {
+      ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
                   child: VehicleInformationLoadingScreen())));
@@ -473,6 +483,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                     label: LocaleKeys.deleteRegistration.tr(),
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {}),
+      ManageVibration.vibrate();
               ),
             ],
           ),

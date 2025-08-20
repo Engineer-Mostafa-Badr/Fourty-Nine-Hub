@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RestaurantOrderCard extends StatelessWidget {
   final RestaurantOrder item;
@@ -244,6 +245,7 @@ class CallMessageReportButtons extends StatelessWidget {
             icon: Icons.report,
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
+      ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,

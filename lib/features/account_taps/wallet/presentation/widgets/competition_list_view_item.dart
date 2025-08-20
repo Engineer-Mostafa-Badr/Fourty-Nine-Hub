@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/percentage_competition_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../domain/entities/gift_competitions_entity.dart';
 
@@ -239,7 +240,10 @@ class CompetitionListViewItem extends StatelessWidget {
                     ? CustomButtonWalletAndGiftAndCashback(
                         title: LocaleKeys.waitingApproval.localize,
                         //'Request Transfer',
-                        onPressed: () {},
+                        onPressed: () {
+
+      ManageVibration.vibrate();
+                        },
                         status: false,
                       )
                     : CustomButtonWalletAndGiftAndCashback(

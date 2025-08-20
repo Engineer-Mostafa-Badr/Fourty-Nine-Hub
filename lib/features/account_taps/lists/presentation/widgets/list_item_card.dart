@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../cubit/lists_cubit.dart';
 
@@ -53,6 +54,7 @@ class ListItemCard extends StatelessWidget {
             if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     acceptRequest(AcceptRejectFriendRequestParams(
                         userId: user.id, status: true));
                   },
@@ -63,6 +65,7 @@ class ListItemCard extends StatelessWidget {
             if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
+      ManageVibration.vibrate();
                     removeRequest(AcceptRejectFriendRequestParams(
                         userId: user.id, status: false));
                   },
@@ -72,6 +75,7 @@ class ListItemCard extends StatelessWidget {
                   )),
             IconButton(
                 onPressed: () {
+      ManageVibration.vibrate();
                   bottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -89,7 +93,9 @@ class ListItemCard extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ListTile(
-          onTap: () => context.push(Routes.OTHERSACCOUNT, extra: user.id),
+          onTap: () {
+            ManageVibration.vibrate();
+             context.push(Routes.OTHERSACCOUNT, extra: user.id);},
           leading: const Icon(Icons.person),
           title: Label(
               text:
@@ -110,6 +116,7 @@ class ListItemCard extends StatelessWidget {
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
             onTap: () {
+      ManageVibration.vibrate();
               unfollowUser(user.id);
               context.pop();
             },
@@ -125,6 +132,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.green,
             ),
             onTap: () {
+      ManageVibration.vibrate();
               unblockUser(user.id);
               context.pop();
             },
@@ -145,6 +153,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.green,
             ),
             onTap: () {
+      ManageVibration.vibrate();
               acceptRequest(AcceptRejectFriendRequestParams(
                   userId: user.id, status: true));
               context.pop();
@@ -163,6 +172,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.red,
             ),
             onTap: () {
+      ManageVibration.vibrate();
               removeRequest(AcceptRejectFriendRequestParams(
                   userId: user.id, status: false));
               context.pop();
@@ -181,6 +191,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.red,
             ),
             onTap: () {
+      ManageVibration.vibrate();
               deleteFriend(user.id);
               context.pop();
             },

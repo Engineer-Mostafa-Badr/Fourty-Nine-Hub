@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/no_not
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card_loading.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/see_and_clear_buttons.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class SocialNotificationBuilder extends StatefulWidget {
@@ -37,25 +38,6 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   late final DeleteAllNotificationsCubit deleteAllNotificationsCubit;
 
   @override
-  void initState() {
-    getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
-    notificationSeenCubit = context.read<NotificationSeenCubit>();
-    getUnreadNotificationsCountCubit =
-        context.read<GetUnreadNotificationsCountCubit>();
-    deleteNotificationCubit = context.read<DeleteNotificationCubit>();
-    deleteAllNotificationsCubit = context.read<DeleteAllNotificationsCubit>();
-    _fetchNotificationsIfEmpty();
-    _scrollListener();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetSocialNotificationsCubit,
         GetSocialNotificationsState>(
@@ -69,81 +51,110 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
             getSocialNotificationsCubit.notifications.isEmpty) {
           return const NoNotificationsWidget();
         }
-        return ListView.builder(
-          controller: scrollController,
-          itemCount: getSocialNotificationsCubit.notifications.length + 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return SeeAndClearButtons(
-                seeAllCallback: () async {
-                  context
-                      .read<AllNotficationsSeenCubit>()
-                      .allNotificationSeen(type: 'social')
-                      .then(
-                        (value) => context
-                            .read<GetUnreadNotificationsCountCubit>()
-                            .getUnreadNotificationsCount(),
-                      );
-                  context
-                      .read<GetSocialNotificationsCubit>()
-                      .notifications
-                      .forEach((element) {
-                    element.read = true;
-                  });
-                },
-                clearAllCallback: () async {
-                  await deleteAllNotificationsCubit.deleteAllNotifications(
-                      type: 'social');
-                  getSocialNotificationsCubit.notifications = [];
-                  getSocialNotificationsCubit.page = 1;
-                  await getSocialNotificationsCubit.getSocialNotifications(
-                      languageCode: 'en');
-                  await getUnreadNotificationsCountCubit
-                      .getUnreadNotificationsCount();
-                },
-              );
-            }
-            index--;
-            if (index < getSocialNotificationsCubit.notifications.length) {
-              final NotificationEntity notificationEntity =
-                  getSocialNotificationsCubit.notifications[index];
-              return NotificationCard(
-                notificationEntity: notificationEntity,
-                index: index,
-                notificationSeenCallback: () {
-                  notificationEntity.read = true;
-                  notificationSeenCubit
-                      .notificationSeen(id: notificationEntity.id ?? '')
-                      .then(
-                        (value) => getUnreadNotificationsCountCubit
-                            .getUnreadNotificationsCount()
-                            .then((value) {
-                              if(notificationEntity.path =="/SinglePostInstagram"){
-                                context.push(notificationEntity.path ?? '',
-                                    extra: notificationEntity.payload!['postId']);
-                              }
-                              else{
-                                context.push(notificationEntity.path ?? '',
-                                    extra: notificationEntity.payload);
-                              }
-
-                        }),
-                      );
-                },
-                notificationDeleteCallback: () {
-                  deleteNotificationCubit.deleteNotification(
-                      id: notificationEntity.id ?? '');
-                  getSocialNotificationsCubit.notifications.removeAt(index);
-                },
-              );
-            }
-            return state is GetSocialNotificationsLoading
-                ? const NotificationCardLoadingList()
-                : const SizedBox();
-          },
+        return GlowingOverscrollIndicator(
+          axisDirection: AxisDirection.down,
+          color: AppColors.SECONDARY_COLOR,
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: getSocialNotificationsCubit.notifications.length + 2,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return SeeAndClearButtons(
+                  seeAllCallback: () async {
+                    context
+                        .read<AllNotficationsSeenCubit>()
+                        .allNotificationSeen(type: 'social')
+                        .then(
+                          (value) => context
+                              .read<GetUnreadNotificationsCountCubit>()
+                              .getUnreadNotificationsCount(),
+                        );
+                    context
+                        .read<GetSocialNotificationsCubit>()
+                        .notifications
+                        .forEach((element) {
+                      element.read = true;
+                    });
+                  },
+                  clearAllCallback: () async {
+                    await deleteAllNotificationsCubit.deleteAllNotifications(
+                        type: 'social');
+                    getSocialNotificationsCubit.notifications = [];
+                    getSocialNotificationsCubit.page = 1;
+                    await getSocialNotificationsCubit.getSocialNotifications(
+                        languageCode: 'en');
+                    await getUnreadNotificationsCountCubit
+                        .getUnreadNotificationsCount();
+                  },
+                );
+              }
+              index--;
+              if (index < getSocialNotificationsCubit.notifications.length) {
+                final NotificationEntity notificationEntity =
+                    getSocialNotificationsCubit.notifications[index];
+                return NotificationCard(
+                  notificationEntity: notificationEntity,
+                  index: index,
+                  notificationSeenCallback: () {
+                    notificationEntity.read = true;
+                    notificationSeenCubit
+                        .notificationSeen(id: notificationEntity.id ?? '')
+                        .then(
+                          (value) => getUnreadNotificationsCountCubit
+                              .getUnreadNotificationsCount()
+                              .then((value) {
+                            if (notificationEntity.path ==
+                                "/SinglePostInstagram") {
+                              context.push(notificationEntity.path ?? '',
+                                  extra: notificationEntity.payload!['postId']);
+                            } else {
+                              context.push(notificationEntity.path ?? '',
+                                  extra: notificationEntity.payload);
+                            }
+                          }),
+                        );
+                  },
+                  notificationDeleteCallback: () {
+                    deleteNotificationCubit.deleteNotification(
+                        id: notificationEntity.id ?? '');
+                    getSocialNotificationsCubit.notifications.removeAt(index);
+                  },
+                );
+              }
+              return state is GetSocialNotificationsLoading
+                  ? const NotificationCardLoadingList()
+                  : const SizedBox();
+            },
+          ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
+    notificationSeenCubit = context.read<NotificationSeenCubit>();
+    getUnreadNotificationsCountCubit =
+        context.read<GetUnreadNotificationsCountCubit>();
+    deleteNotificationCubit = context.read<DeleteNotificationCubit>();
+    deleteAllNotificationsCubit = context.read<DeleteAllNotificationsCubit>();
+    _fetchNotificationsIfEmpty();
+    _scrollListener();
+    super.initState();
+  }
+
+  void _fetchNotificationsIfEmpty() {
+    if (getSocialNotificationsCubit.notifications.isEmpty) {
+      getSocialNotificationsCubit.page = 1;
+      getSocialNotificationsCubit.getSocialNotifications(languageCode: 'en');
+    }
   }
 
   void _scrollListener() {
@@ -164,12 +175,5 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
         }
       }
     });
-  }
-
-  void _fetchNotificationsIfEmpty() {
-    if (getSocialNotificationsCubit.notifications.isEmpty) {
-      getSocialNotificationsCubit.page = 1;
-      getSocialNotificationsCubit.getSocialNotifications(languageCode: 'en');
-    }
   }
 }

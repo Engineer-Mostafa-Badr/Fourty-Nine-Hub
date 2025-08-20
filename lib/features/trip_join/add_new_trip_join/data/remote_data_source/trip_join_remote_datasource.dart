@@ -1,18 +1,18 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/car_brand_model.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/car_type_model.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/car_year_type_model.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/trip_join_model.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_brand_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_model_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_year_type_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_join_publish_param.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../../core/error/failure.dart';
+import '../models/car_brand_model.dart';
+import '../models/car_type_model.dart';
+import '../models/car_year_type_model.dart';
+import '../models/trip_join_model.dart';
+import '../../domain/entities/car_brand_entity.dart';
+import '../../domain/entities/car_model_entity.dart';
+import '../../domain/entities/car_year_type_entity.dart';
+import '../../domain/entities/trip_info_entity.dart';
+import '../../domain/entities/trip_join_publish_param.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class TripJoinRemoteDataSource {

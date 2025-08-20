@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RegisterExpansionTile extends StatefulWidget {
   const RegisterExpansionTile({
@@ -63,6 +64,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
                 widget.children.length,
                     (index) => InkWell(
                   onTap: () {
+      ManageVibration.vibrate();
                     if (widget.children.isNotEmpty) {
                       setState(() {
                         selectedTitle = widget.children[index]; // Update state

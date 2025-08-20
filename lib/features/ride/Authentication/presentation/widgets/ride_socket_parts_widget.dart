@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/pictu
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RideSocketPartsWidget extends StatelessWidget {
   const RideSocketPartsWidget({super.key, this.model});
@@ -215,6 +216,7 @@ class RideSocketPartsWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               Navigator.push(
                   context,
                   MaterialPageRoute(

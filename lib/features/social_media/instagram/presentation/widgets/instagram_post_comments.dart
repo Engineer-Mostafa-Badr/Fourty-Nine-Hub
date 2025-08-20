@@ -2,25 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/comment_input_field_insta.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/comment_widget_insta.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/instagram_cubit.dart';
+import 'comment_input_field_insta.dart';
+import 'comment_widget_insta.dart';
+import '../../../reels/presentation/widgets/comments/no_scale_text.dart';
+import '../../../social_posts/data/models/comment_model.dart';
+import '../../../social_posts/domain/entities/comment_entity.dart';
+import '../../../social_posts/domain/usecases/add_reply_usecase.dart';
+import '../../../social_posts/domain/usecases/post_comment_usecase.dart';
+import '../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramPostComments extends StatefulWidget {
   final String postId;
@@ -76,6 +77,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+      ManageVibration.vibrate();
         FocusScope.of(context).unfocus();
       },
       child: Container(

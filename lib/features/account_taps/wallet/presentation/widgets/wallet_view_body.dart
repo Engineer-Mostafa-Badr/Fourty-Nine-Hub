@@ -8,16 +8,17 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fetch_sub_category_wallet/fetch_sub_category_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/charge_wallet_button_bloc.dart';
-import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/my_subscription_section.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/select_categories_wallet_section.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/request_wallet_button.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/select_categories_wallet_section.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -38,29 +39,7 @@ class WalletViewBody extends StatefulWidget {
 class _WalletViewBodyState extends State<WalletViewBody> {
   final ScrollController _scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(
-      () {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          if (!context.read<WalletTwoCubit>().state.hasReachedMax) {
-            context.read<WalletTwoCubit>().getHistories();
-          }
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(() {});
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-// Future<void> showActiveSubscriptionAmounts(
+  // Future<void> showActiveSubscriptionAmounts(
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -181,7 +160,9 @@ class _WalletViewBodyState extends State<WalletViewBody> {
                                 //   subCategories: state,
                                 // ),
                                 Label(
-                                  text: context.isArabic?"سجل التحويلات":"Transfer History",
+                                  text: context.isArabic
+                                      ? "سجل التحويلات"
+                                      : "Transfer History",
                                   style: Styles.headerText(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w700,
@@ -213,6 +194,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
                       ),
                       label: LocaleKeys.transferMoney.localize,
                       onPressed: () {
+                        ManageVibration.vibrate();
                         context.push(Routes.TRANSFERMONEY);
                       },
                     ),
@@ -225,12 +207,35 @@ class _WalletViewBodyState extends State<WalletViewBody> {
               title: state.failureMessage ??
                   LocaleKeys.somethingWentWrong.localize,
               onPressed: () {
+                ManageVibration.vibrate();
                 context.read<WalletTwoCubit>().getAllDataWalletScreen(context);
               },
             );
           }
         },
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(
+      () {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (!context.read<WalletTwoCubit>().state.hasReachedMax) {
+            context.read<WalletTwoCubit>().getHistories();
+          }
+        }
+      },
     );
   }
 }

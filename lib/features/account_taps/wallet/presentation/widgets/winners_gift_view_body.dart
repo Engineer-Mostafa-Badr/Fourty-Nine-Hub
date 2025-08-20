@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/winners_gift_cubit/winners_gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winners_grid_view.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class WinnersGiftViewBody extends StatelessWidget {
   const WinnersGiftViewBody({super.key});
@@ -44,6 +45,7 @@ class WinnersGiftViewBody extends StatelessWidget {
           return CustomFailureWidget(
             title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
             onPressed: () {
+      ManageVibration.vibrate();
               context.read<WinnersGiftCubit>().getWinners(context);
             },
           );

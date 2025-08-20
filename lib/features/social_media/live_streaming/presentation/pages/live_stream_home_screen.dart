@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/video_stream_tab_bar.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import 'video_stream_tab_bar.dart';
+import '../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/localization/locale_keys.g.dart';

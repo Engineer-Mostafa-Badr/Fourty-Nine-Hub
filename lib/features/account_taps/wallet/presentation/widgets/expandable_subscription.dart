@@ -16,6 +16,7 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ExpandableSubscription extends StatelessWidget {
   const ExpandableSubscription({
@@ -85,6 +86,7 @@ class ExpandableSubscription extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
+                  ManageVibration.vibrate();
                   bottomSheet(
                       context: context,
                       isFloating: true,
@@ -112,6 +114,7 @@ class ExpandableSubscription extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
+                  ManageVibration.vibrate();
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
                           wallets: [

@@ -16,6 +16,7 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ReelSearchView extends StatefulWidget {
   const ReelSearchView({super.key});
@@ -110,6 +111,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
               }
               return InkWell(
                 onTap: () {
+      ManageVibration.vibrate();
                   context.push(Routes.REELS);
                 },
                 child: VideoGridItem(videoUrl: reels[index]),
@@ -155,6 +157,7 @@ class _VideoGridItemState extends State<VideoGridItem> {
     return _controller.value.isInitialized
         ? GestureDetector(
             onTap: () {
+      ManageVibration.vibrate();
               if (_controller.value.isPlaying) {
                 _controller.pause();
               } else {
@@ -182,6 +185,7 @@ class _VideoGridItemState extends State<VideoGridItem> {
                         size: 30.0,
                       ),
                       onPressed: () {
+      ManageVibration.vibrate();
                         setState(() {
                           _controller.value.isPlaying
                               ? _controller.pause()

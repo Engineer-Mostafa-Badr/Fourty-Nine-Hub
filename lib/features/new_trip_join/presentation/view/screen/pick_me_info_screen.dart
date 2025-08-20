@@ -9,6 +9,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../captainshare/screen/captain_share_info_screen.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PickMeInfoScreen extends StatefulWidget {
   const PickMeInfoScreen({super.key});
@@ -25,6 +26,7 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
     return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           context.push(Routes.AddNewPickMe);
         },
         child: Container(

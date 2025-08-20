@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/location_entity.dart';
+import '../../../domain/entities/location_entity.dart';
 
 import 'address_component.dart';
 import 'geometry.dart';

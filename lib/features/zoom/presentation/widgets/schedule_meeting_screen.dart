@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/messages/messages.dart';
+import '../controller/stream_cubit.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -150,6 +150,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                               : AppColors.PRIMARY_COLOR)),
                   TextButton(
                     onPressed: () async {
+                      // ManageVibration.vibrate();
                       final title = _titleController.text;
                       if (title.isNotEmpty &&
                           _selectedDate != null &&

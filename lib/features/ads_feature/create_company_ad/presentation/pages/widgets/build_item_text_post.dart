@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../../core/enums/base_status_enum.dart';
@@ -58,6 +59,7 @@ class BuildItemTextPost extends StatelessWidget {
                           SizedBox(width: 10.w),
                           GestureDetector(
                             onTap: () {
+                              ManageVibration.vibrate();
                               onDeleteItem(advertises.sId!);
                             },
                             child: Container(

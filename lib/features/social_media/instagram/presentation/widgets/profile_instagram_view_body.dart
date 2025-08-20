@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/birthday_section.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/buttons_profile_instagram_section.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/discover_people_profile_instagram_list_view_item.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_profile_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/subtitle_and_name_under_header_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/top_navigation_bar_profile_instagram.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/helpers/media_helper.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../domain/entities/profile_instagram_data_entity.dart';
+import '../cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import 'birthday_section.dart';
+import 'buttons_profile_instagram_section.dart';
+import 'discover_people_profile_instagram_list_view_item.dart';
+import 'header_profile_instagram.dart';
+import 'post_instagram_widget.dart';
+import 'subtitle_and_name_under_header_instagram.dart';
+import 'top_navigation_bar_profile_instagram.dart';
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../helpers/media_helper.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
 import 'follow_button_instagram.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class ProfileInstagramViewBody extends StatefulWidget {
   const ProfileInstagramViewBody({super.key});
@@ -97,12 +98,16 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
                   FollowButtonInstagram(
                     isReel: false,
                     isFollow: false,
-                    onPressed: () {},
+                    onPressed: () {
+
+      ManageVibration.vibrate();
+                    },
                   ),
               ],
             ),
             leading: IconButton(
               onPressed: () {
+      ManageVibration.vibrate();
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back_ios_new_outlined),
@@ -166,6 +171,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+      ManageVibration.vibrate();
                         context.pushNamed(
                           Routes.SINGLEPOSTINSTAGRAM,
                           extra: myPosts[index],
@@ -298,7 +304,10 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
                           style: Styles.mediumText(),
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+
+      ManageVibration.vibrate();
+                          },
                           child: Label(
                             text: LocaleKeys.seeAll.localize,
                             style: Styles.mediumText(
@@ -377,6 +386,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
+      ManageVibration.vibrate();
                 context.pushNamed(
                   Routes.SINGLEPOSTINSTAGRAM,
                   extra: myPosts[index].id,

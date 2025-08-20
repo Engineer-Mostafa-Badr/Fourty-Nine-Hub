@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import '../../../../../../core/error/failure.dart';
+import '../../../domain/entities/data_suggest_follow_instagram_entity.dart';
+import '../../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'suggest_follow_state.dart';
 
@@ -25,6 +28,10 @@ class SuggestFollowCubit extends Cubit<SuggestFollowState> {
 
     res.fold(
       (f) {
+        var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(f, currentContext));
         emit(state.copyWith(
           status: SuggestFollowStatus.failure,
           failure: f,

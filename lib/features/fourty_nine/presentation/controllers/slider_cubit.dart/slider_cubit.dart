@@ -1,10 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_slider_items_usecase.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
+import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/states/basic_state.dart';
+import '../../../domain/entities/slider_item_entity.dart';
+import '../../../domain/use_cases/get_slider_items_usecase.dart';
 
 class SliderCubit extends Cubit<BasicState<List<SliderItemEntity>>> {
   final GetSliderItemsUseCase _getSliderItemsUseCase;
@@ -23,6 +26,10 @@ class SliderCubit extends Cubit<BasicState<List<SliderItemEntity>>> {
     emit(
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           print("objectLSADSALD:AS");
           print('there is an error ${failure.toString()}');
           return state.copyWith(

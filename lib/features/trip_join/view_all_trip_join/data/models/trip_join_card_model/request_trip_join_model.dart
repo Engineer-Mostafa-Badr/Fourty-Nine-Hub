@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/request_trip_join_entity.dart';
+import '../../../domain/entities/request_trip_join_entity.dart';
 
 class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
   GetRequestTripJoinModel({

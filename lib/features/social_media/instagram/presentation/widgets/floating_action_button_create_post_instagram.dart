@@ -2,19 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../../../stories/presentation/pages/create_story_screen.dart';
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/presentation/pages/recording/recording_shared.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
   const FloatingActionButtonCreatePostInstagram({
@@ -57,6 +58,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 16),
                   child: InkWell(
                     onTap: () async {
+      ManageVibration.vibrate();
                       if (index == 1) {
                         context.read<UserCubit>().isLoggedIn
                             ? await Navigator.push(

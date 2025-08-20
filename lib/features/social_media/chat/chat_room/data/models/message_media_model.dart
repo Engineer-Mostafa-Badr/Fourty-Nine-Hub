@@ -1,5 +1,5 @@
-import 'package:fourtyninehub/core/extensions/file_extension.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_media_entity.dart';
+import '../../../../../../core/extensions/file_extension.dart';
+import '../../domain/entities/message_media_entity.dart';
 
 class MessageMediaModel extends MessageMediaEntity {
   MessageMediaModel(

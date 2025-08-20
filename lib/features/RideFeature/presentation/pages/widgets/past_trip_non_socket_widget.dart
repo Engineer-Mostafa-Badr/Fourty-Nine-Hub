@@ -13,6 +13,7 @@ import '../../../../social_media/social_posts/presentation/widgets/facebook_widg
 import '../../../domain/entities/dashboards/get_past_ride_non_socket_trip_entity.dart';
 import 'car_circle_widget.dart';
 import 'info_column_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class PastNonSocketTripsWidget extends StatefulWidget {
@@ -39,6 +40,7 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return GestureDetector(
       onTap: () {
+      ManageVibration.vibrate();
 
         // context.push(Routes.rideDashboardDetailsScreen, extra: widget.tripEntity);
       },

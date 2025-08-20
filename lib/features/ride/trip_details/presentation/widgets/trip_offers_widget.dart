@@ -15,6 +15,7 @@ import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripOffersWidget extends StatelessWidget {
   final TripEntity trip;
@@ -132,6 +133,7 @@ class TripOffersWidget extends StatelessWidget {
                 label: 'Cancel Trip',
                 icon: Icons.clear,
                 onPressed: () {
+      ManageVibration.vibrate();
                   showErrorMessage(context, 'TODO');
                 }),
           ],

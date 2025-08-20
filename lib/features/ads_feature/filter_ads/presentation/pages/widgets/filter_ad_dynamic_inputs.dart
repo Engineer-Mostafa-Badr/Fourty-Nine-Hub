@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class FilterAdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
@@ -448,6 +449,7 @@ class _FilterAdDynamicInputWidgetState
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
+                  ManageVibration.vibrate();
                   widget.onChanged(widget.property.values[index]);
                   value = widget.property.values[index];
                   setState(() {});

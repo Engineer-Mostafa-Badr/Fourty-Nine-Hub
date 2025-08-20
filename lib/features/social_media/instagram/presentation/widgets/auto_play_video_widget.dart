@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_post_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_view_body.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../../domain/entities/instagram_post_entity.dart';
+import 'header_post_instagram.dart';
+import 'instagram_view_body.dart';
+import '../../../../../res/style/app_colors.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../helpers/manage_vibration.dart';
 
 // ويدجيت لعرض الفيديو مع مراقبة الظهور وأزرار التحكم
 class AutoplayVideoWidget extends StatefulWidget {
@@ -114,6 +115,7 @@ class _AutoplayVideoWidgetState extends State<AutoplayVideoWidget> {
       },
       child: GestureDetector(
         onTap: () {
+      ManageVibration.vibrate();
           if (widget.showControls) {
             _showControlsTemporarily();
           }

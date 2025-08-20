@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../widgets/upload_file_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PersonalDocumentsScreen extends StatelessWidget {
   const PersonalDocumentsScreen({super.key, required this.params});
@@ -115,6 +116,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
                                     (index) => UploadFileWidget(
                                   title: uploadFilesTitles[index],
                                   onTap: (){
+      ManageVibration.vibrate();
                                     if(index==0){
                                       cubit.onUploadPersonalFrontIdPicture(context);
                                     }else if(index==1){
@@ -161,6 +163,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
                     const Sizer(),
                     InkWell(
                       onTap: () {
+      ManageVibration.vibrate();
                         print("object");
                         context.read<RideRegisterCubit>().onSubmitUploadingId(context,params);
                       },

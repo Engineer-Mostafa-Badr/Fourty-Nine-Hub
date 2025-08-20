@@ -2,10 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_wheel_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_states.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../../../../lucky_wheel/domain/use_cases/get_wheel_wallet_use_case.dart';
 
 class GiftCubit extends Cubit<GiftState> {
@@ -21,15 +25,12 @@ class GiftCubit extends Cubit<GiftState> {
     this._requestWithdrawWheelUseCase,
   ) : super(const GiftState());
 
-  void loadData() async {
-    await fetchGiftWallet();
-    await getWheelWallet();
-    // await fetchCompetitionWallet();
-  }
-
   Future<void> fetchGiftWallet() async {
     final response = await _giftUseCases.call(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: GiftStates.error));
     }, (data) {
       log('///////////////////////////////////////');
@@ -50,9 +51,18 @@ class GiftCubit extends Cubit<GiftState> {
     );
   }
 
+  void loadData() async {
+    await fetchGiftWallet();
+    await getWheelWallet();
+    // await fetchCompetitionWallet();
+  }
+
   requestWithdraw(String id) async {
     final response = await _requestWithdrawUseCase(id);
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: GiftStates.errorRequest));
     }, (data) {
       emit(state.copyWith(status: GiftStates.success));
@@ -62,6 +72,9 @@ class GiftCubit extends Cubit<GiftState> {
   requestWithdrawWheel() async {
     final response = await _requestWithdrawWheelUseCase(const NoParams());
     response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: GiftStates.errorRequest));
     }, (data) {
       emit(state.copyWith(status: GiftStates.success));

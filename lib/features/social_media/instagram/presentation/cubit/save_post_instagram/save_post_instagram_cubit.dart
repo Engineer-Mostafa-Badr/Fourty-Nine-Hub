@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/usecases/remove_save_post_instagram_use_case.dart';
 import '../../../domain/usecases/save_post_instagram_use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 
 part 'save_post_instagram_state.dart';
 
@@ -20,7 +23,12 @@ class SavePostInstagramCubit extends Cubit<SavePostInstagramState> {
       ),
     );
     result.fold(
-        (l) => emit(state.copyWith(status: SavePostInstagramStatus.failure)),
+        (l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+           emit(state.copyWith(status: SavePostInstagramStatus.failure));},
         (r) => emit(state.copyWith(status: SavePostInstagramStatus.success, isSave: r)));
   }
 
@@ -32,7 +40,12 @@ class SavePostInstagramCubit extends Cubit<SavePostInstagramState> {
       ),
     );
     result.fold(
-        (l) => emit(state.copyWith(status: SavePostInstagramStatus.failure)),
+        (l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(l, currentContext));
+           emit(state.copyWith(status: SavePostInstagramStatus.failure));},
         (r) => emit(state.copyWith(status: SavePostInstagramStatus.success, isSave: r)));
   }
 }

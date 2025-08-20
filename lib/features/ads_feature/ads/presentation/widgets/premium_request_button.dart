@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -98,6 +99,7 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
                       isLoading: state.requestStatus == AdsStates.loading,
                       onChanged: (c) => controller.changePhone(v: c),
                       onTap: () async {
+                        ManageVibration.vibrate();
                         if (controller.formKey.currentState!.validate()) {
                           await controller.makeAdPremiumRequest(id: widget.adId);
                           //     .then((value) {
@@ -120,103 +122,103 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
                       },
                     ),
                   );
-                  return AnimatedPadding(
-                    padding: MediaQuery.of(context).viewInsets,
-                    duration: const Duration(milliseconds: 50),
-                    child: Container(
-                      height: 400.h,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10.h,
-                        horizontal: 10,
-                      ),
-                      child: Column(
-                        children: [
-                          Label(
-                            text: LocaleKeys.enterPhoneNumber.localize,
-                            style: Styles.headerText(),
-                          ),
-                          Sizer(
-                            height: 30.h,
-                          ),
-                          Container(
-                            constraints: BoxConstraints(maxHeight: 180.h),
-                            child: Form(
-                              key: controller.formKey,
-                              child: NewPhoneNumberTextFormField(
-                                currentController: TextEditingController(),
-                                isRequired: true,
-                                maxLines: null,
-                                maxLength: 150,
-                                onChanged: (c) => controller.changePhone(v: c),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () async {
-                                      if (controller.formKey.currentState!
-                                          .validate()) {
-                                        await controller
-                                            .makeAdPremiumRequest(id: widget.adId)
-                                            .then((value) {
-                                          if (value == true) {
-                                            context.pop();
-                                            showSuccessMessage(context,
-                                                'Request Sent Successfully');
-                                            controller.resetRequest();
-                                          } else {
-                                            context.pop();
-                                            if (state.failure != null) {
-                                              showErrorMessage(
-                                                  context,
-                                                  getFailureMessage(
-                                                      state.failure!, context));
-                                            } else {
-                                              showErrorMessage(
-                                                  context, 'Please Try Again!');
-                                            }
-                                          }
-                                        });
-                                      }
-                                    },
-                                    child: Container(
-                                      width: 100,
-                                      height: 80.h,
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: AppColors.PRIMARY_COLOR,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      alignment: Alignment.center,
-                                      child: Label(
-                                        text: LocaleKeys.send.localize,
-                                        style: Styles.headerText(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Label(
-                                      text: LocaleKeys.cancel.localize,
-                                      style: Styles.headerText(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  // return AnimatedPadding(
+                  //   padding: MediaQuery.of(context).viewInsets,
+                  //   duration: const Duration(milliseconds: 50),
+                  //   child: Container(
+                  //     height: 400.h,
+                  //     padding: EdgeInsets.symmetric(
+                  //       vertical: 10.h,
+                  //       horizontal: 10,
+                  //     ),
+                  //     child: Column(
+                  //       children: [
+                  //         Label(
+                  //           text: LocaleKeys.enterPhoneNumber.localize,
+                  //           style: Styles.headerText(),
+                  //         ),
+                  //         Sizer(
+                  //           height: 30.h,
+                  //         ),
+                  //         Container(
+                  //           constraints: BoxConstraints(maxHeight: 180.h),
+                  //           child: Form(
+                  //             key: controller.formKey,
+                  //             child: NewPhoneNumberTextFormField(
+                  //               currentController: TextEditingController(),
+                  //               isRequired: true,
+                  //               maxLines: null,
+                  //               maxLength: 150,
+                  //               onChanged: (c) => controller.changePhone(v: c),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         Expanded(
+                  //           child: Row(
+                  //             children: [
+                  //               Expanded(
+                  //                 child: InkWell(
+                  //                   onTap: () async {
+                  //                     if (controller.formKey.currentState!
+                  //                         .validate()) {
+                  //                       await controller
+                  //                           .makeAdPremiumRequest(id: widget.adId)
+                  //                           .then((value) {
+                  //                         if (value == true) {
+                  //                           context.pop();
+                  //                           showSuccessMessage(context,
+                  //                               'Request Sent Successfully');
+                  //                           controller.resetRequest();
+                  //                         } else {
+                  //                           context.pop();
+                  //                           if (state.failure != null) {
+                  //                             showErrorMessage(
+                  //                                 context,
+                  //                                 getFailureMessage(
+                  //                                     state.failure!, context));
+                  //                           } else {
+                  //                             showErrorMessage(
+                  //                                 context, 'Please Try Again!');
+                  //                           }
+                  //                         }
+                  //                       });
+                  //                     }
+                  //                   },
+                  //                   child: Container(
+                  //                     width: 100,
+                  //                     height: 80.h,
+                  //                     padding: const EdgeInsets.all(5),
+                  //                     decoration: BoxDecoration(
+                  //                         color: AppColors.PRIMARY_COLOR,
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(15)),
+                  //                     alignment: Alignment.center,
+                  //                     child: Label(
+                  //                       text: LocaleKeys.send.localize,
+                  //                       style: Styles.headerText(
+                  //                           color: Colors.white),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //               Expanded(
+                  //                 child: TextButton(
+                  //                   onPressed: () {
+                  //                     Navigator.of(context).pop();
+                  //                   },
+                  //                   child: Label(
+                  //                     text: LocaleKeys.cancel.localize,
+                  //                     style: Styles.headerText(),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // );
                 },
               );
             }

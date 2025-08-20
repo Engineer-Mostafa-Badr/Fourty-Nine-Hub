@@ -26,6 +26,7 @@ import '../../../../../res/style/const.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart'  as manageVibration;
 
 class EnhancedInputWidget extends StatefulWidget {
   const EnhancedInputWidget(
@@ -68,6 +69,7 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
                       : Colors.white,
                 ),
                 onPressed: () async {
+       manageVibration.ManageVibration.vibrate();
                   // Handle favorite button press
 
                   await BlocProvider.of<StoryCubit>(context)
@@ -102,6 +104,7 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
               child: IconButton(
                 icon: const Icon(Icons.send, color: Colors.white),
                 onPressed: () async {
+      manageVibration.ManageVibration.vibrate();
                   if (_messageController.text.trim().isEmpty) {
                     showErrorMessage(
                         context,
@@ -233,6 +236,7 @@ class ReactionWidget extends StatelessWidget {
         final reaction = reactions[index];
         return FloatingActionButton.small(
           onPressed: () {
+      manageVibration.ManageVibration.vibrate();
             debugPrint('Selected: ${reaction['label']}');
           },
           backgroundColor: Colors.transparent,
@@ -449,6 +453,7 @@ class UserStoryViewState extends State<UserStoryView>
                   width: 0.1.sw,
                   child: InkWell(
                     onTap: () async {
+      manageVibration.ManageVibration.vibrate();
                       _storyController.pause();
                       await showViewerList(context, state.viewersResponse!);
                       _storyController.play();

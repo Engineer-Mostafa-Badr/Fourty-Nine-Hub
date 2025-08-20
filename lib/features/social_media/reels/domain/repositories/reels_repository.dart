@@ -1,25 +1,27 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../data/data_sources/reels_remote_data_source.dart';
+import '../../data/models/add_comments_model.dart';
+import '../../data/models/audio_reels_model.dart';
+import '../../data/models/get_comments_model.dart';
+import '../../data/models/like_model.dart';
+import '../../data/models/new_reels_model.dart';
+import '../../data/models/save_reel_model.dart';
+import '../../data/models/share_reel_model.dart';
+import '../use_case/add_reel_comment_use_case.dart';
+import '../use_case/add_reel_reply_use_case.dart';
+import '../use_case/create_advertisement_use_case.dart';
+import '../use_case/create_reel_use_case.dart';
+import '../use_case/reels_with_same_audia_use_case.dart';
+import '../use_case/upload_reel_use_case.dart';
+import '../use_case/upload_video_reel_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 
 abstract class ReelsRepository {
   Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params);
+  Future<Either<Failure, ReelsResponse>> getGlobalReels(
       PaginationParams params);
   Future<Either<Failure, AddCommentResponse>> addComment(
       AddReelCommentParams params);

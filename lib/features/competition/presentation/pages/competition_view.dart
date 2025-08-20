@@ -14,6 +14,7 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../account_taps/wallet/domain/entities/competition_entity.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CompetitionView extends StatelessWidget {
   final List<CompetitionEntity> list;
@@ -40,6 +41,7 @@ class CompetitionView extends StatelessWidget {
   Widget winnersBanner({required BuildContext context}) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         context.push(Routes.WINNERS);
       },
       child: Container(
@@ -161,6 +163,7 @@ class CompetitionView extends StatelessWidget {
   }) {
     return InkWell(
       onTap: () {
+      ManageVibration.vibrate();
         if (onCompetitionClicked != null) {
           onCompetitionClicked!(context);
         }
