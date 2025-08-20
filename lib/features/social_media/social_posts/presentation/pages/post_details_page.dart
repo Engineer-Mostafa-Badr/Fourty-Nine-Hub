@@ -245,7 +245,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: EdgeInsets.only(bottom: 8,right: 8,left: 8),
                                   child: Row(
                                     children: [
                                       Expanded(

@@ -25,7 +25,7 @@ abstract class CaptainShareRepository {
   Future<Either<Failure, List<MyBookingEntity>>> getRunningBooking(PaginationParams params);
   Future<Either<Failure, bool>> cancelMyBooking(String id);
   Future<Either<Failure, bool>> acceptRoute(String id);
-  Future<Either<Failure, bool>> pickClient(PickClientParams params);
+  Future<Either<Failure, String>> pickClient(PickClientParams params);
   Future<Either<Failure, bool>> dropClient(DropClientParams params);
   Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params);
   Future<Either<Failure, String>> arrivedToClient(ClientNotShownParams params);

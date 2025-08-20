@@ -43,6 +43,8 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, bool>> viewProfile({required String userId});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required UserPostsParams params});
 
@@ -124,6 +126,21 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
       return Left(l);
     }, (data) {
       final list = (data['data']['advertises'] as List)
+          .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.getGlobalAdvertisement(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
           .map((e) => PostModel.fromJson(e))
           .toList();
       return Right(list);

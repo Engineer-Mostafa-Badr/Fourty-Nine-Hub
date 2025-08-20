@@ -24,6 +24,8 @@ abstract class SocialPostsRepo {
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getAdvertisement(
       {required TwitterFeedParams params});
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
+      {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getTweet(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(

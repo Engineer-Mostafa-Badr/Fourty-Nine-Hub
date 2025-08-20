@@ -639,6 +639,7 @@ class _CommentCardState extends State<CommentCard> {
                                 },
                                 onEditComment: (PostCommentParams params) => widget.onEditComment(params),
                                 reply: widget.comment.replies![i],
+                                comment: widget.comment,
                                 onReplyReact: (String id) {},
                                 onReport: (TwitterReportParams params) {},
                               ),

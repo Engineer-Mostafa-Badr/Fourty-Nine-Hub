@@ -61,7 +61,7 @@ class AuctionServiceLocator {
     serviceLocator.registerFactory<AuctionListCubit>(() => AuctionListCubit(
           serviceLocator(),
           serviceLocator(),
-        )..loadData());
+        ));
     serviceLocator.registerFactory<CreateAuctionCubit>(() => CreateAuctionCubit(
           serviceLocator(),
         ));

@@ -45,6 +45,11 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
       {required TwitterFeedParams params}) {
     return _remoteDataSource.getAdvertisement(params: params);
   }
+  @override
+  Future<Either<Failure, List<PostEntity>>> getGlobalAdvertisement(
+      {required TwitterFeedParams params}) {
+    return _remoteDataSource.getGlobalAdvertisement(params: params);
+  }
 
   @override
   Future<Either<Failure, List<PostEntity>>> getUserPosts(

@@ -2258,24 +2258,11 @@ class AppPages {
                               create: (_) => serviceLocator(),
                               child: MazadDetails(id: state.extra as String),
                             ),
-                          ),
-                        ),
-                        // CreateAuctionView
-                        GoRoute(
-                          path: Paths.CREATEAUCTION,
-                          name: Routes.CREATEAUCTION,
-                          pageBuilder: (context, state) => customTransition(
-                              context,
-                              state,
-                              BlocProvider.value(
-                                value: serviceLocator<CreateAuctionCubit>(),
-                                child: CreateAuctionView(
-                                  adId: state.extra as String,
-                                ),
-                              )),
-                        ),
-                        // OtherAccountView
-                      ]),
+                          )),
+                    ),
+                    // OtherAccountView
+                  ]
+              ),
 
                   // ChatView
                   GoRoute(

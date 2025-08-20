@@ -56,7 +56,7 @@ class CustomNotificationWidget extends StatelessWidget {
       children: [
         Container(
           height: height ?? 40,
-          margin: const EdgeInsetsDirectional.only(
+          margin: unreadCount==0?null:const EdgeInsetsDirectional.only(
               top: 16, end: 8, start: 8, bottom: 8),
           // padding: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,bottom: 8),
           child: icon,

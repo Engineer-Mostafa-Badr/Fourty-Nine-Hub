@@ -21,6 +21,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart
 
 class ReplyCard extends StatefulWidget {
   final Color textColor;
+  final CommentEntity comment;
   final CommentEntity reply;
   final Function(String) onReplyReact;
   final Function(String) onDeleteReply;
@@ -30,6 +31,7 @@ class ReplyCard extends StatefulWidget {
   const ReplyCard({
     super.key,
     this.textColor = Colors.black,
+    required this.comment,
     required this.reply,
     required this.onReplyReact,
     required this.onReport,
@@ -113,6 +115,7 @@ class _ReplyCardState extends State<ReplyCard> {
 
   @override
   Widget build(BuildContext context) {
+    print("widget.reply.commentOwnerId ${widget.reply.commentOwnerId}  ==>  ${widget.reply.user.id}");
     final user = context.read<UserCubit>().state.data;
     // Keep sizes synced with CommentCard so the connector lines align visually
     final double mainAvatarSize = 36.w;
@@ -205,6 +208,18 @@ class _ReplyCardState extends State<ReplyCard> {
                                 ),
                               ],
                             ),
+                            if((widget.reply.commentOwnerId?.isNotEmpty??false)&&((widget.reply.commentOwnerId??'')!=(widget.reply.user.id)))...[
+                              SizedBox(height: 3.h),
+                            // Reply content
+                            Text(
+                              "${widget.reply.commentOwnerFirstName} ${widget.reply.commentOwnerLastName}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1.3,
+                                color: AppColors.LIGHT_BLUE),
+                              ),
+
+                            ],
                             SizedBox(height: 3.h),
                             // Reply content
                             Text(

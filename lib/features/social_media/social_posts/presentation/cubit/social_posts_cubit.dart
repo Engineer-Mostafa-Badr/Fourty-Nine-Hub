@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/edit_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_global_advertisement_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/face_tweet_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/friend_request_usecase.dart';
@@ -82,6 +83,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
   final FaceTweetUseCase _getTwitterFeedUseCase;
   final FaceAdvertisementUseCase _advertisementUseCase;
+  final FaceGlobalAdvertisementUseCase _advertisementGlobalUseCase;
   final GetPostUseCase _getPostUseCase;
   final UserProfileUseCase _userProfileUseCase;
   final ViewProfileUseCase _viewProfileUseCase;
@@ -111,6 +113,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._replyOnCommentUseCase,
     this._getTwitterFeedUseCase,
     this._advertisementUseCase,
+    this._advertisementGlobalUseCase,
     this._getPostUseCase,
     this._deleteCommentUseCase,
     this._userProfileUseCase,
@@ -498,7 +501,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
           // }
 
           // if(facePage == 3 || facePage % 3 == 0){
-          // advertisements = await getAdvertisements((facePage == 3 || facePage % 3 == 0)?4:1);
+          advertisements = await getGlobalAdvertisements((facePage == 3 || facePage % 3 == 0)?4:1);
           // }
           // tweets = await getTwitterFeed();
 
@@ -576,6 +579,23 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // get advertisements
   Future<List<PostEntity>> getAdvertisements(int limit) async {
     final response = await _advertisementUseCase(
+        TwitterFeedParams(limit: limit, page: facePage));
+    List<PostEntity> advertisements = [];
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      advertisements.addAll(data);
+      int? page = state.advertisementsPage! + 1;
+      emit(state.copyWith(
+          advertisementsPage: page, posts: data, status: StateStatus.success));
+    });
+    print("advertisements:${advertisements.length}");
+    return advertisements;
+  }
+
+  // get global advertisements
+  Future<List<PostEntity>> getGlobalAdvertisements(int limit) async {
+    final response = await _advertisementGlobalUseCase(
         TwitterFeedParams(limit: limit, page: facePage));
     List<PostEntity> advertisements = [];
     response.fold(
@@ -1241,11 +1261,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   Future<bool> friendRequest(
       {required BuildContext context, required String userId}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     final response = await _friedRequestUseCase(userId);
     bool isAdd = false;
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (l) {
+          currentContext.pop();
+          emit(state.copyWith(failure: l, status: StateStatus.error));
+        },
         (r) {
+          currentContext.pop();
       isAdd = r;
       emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
@@ -1254,11 +1280,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   Future<bool> removeFriendRequest(
       {required BuildContext context, required String userId}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     final response = await _removeFriedRequestUseCase(userId);
     bool isRemoved = false;
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (l) {
+          currentContext.pop();
+          emit(state.copyWith(failure: l, status: StateStatus.error));
+        },
         (r) {
+          currentContext.pop();
       isRemoved = r;
       emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });

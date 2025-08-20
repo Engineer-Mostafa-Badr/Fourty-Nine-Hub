@@ -407,6 +407,7 @@ abstract class Assets {
   static String snap = 'assets/drawerIcons/snap.png';
   static String cameraOutlined = 'assets/drawerIcons/camera_outlined.png';
   static String whatsApp = 'assets/drawerIcons/whatsapp.png';
+  static String whatsAppIcon = 'assets/icons/whatsapp.png';
   static String editProfile = 'assets/drawerIcons/editProfile.png';
   static String changePassword = 'assets/drawerIcons/changePassword.png';
 //   static String disableAccount = 'assets/drawerIcons/disableAccount.png';

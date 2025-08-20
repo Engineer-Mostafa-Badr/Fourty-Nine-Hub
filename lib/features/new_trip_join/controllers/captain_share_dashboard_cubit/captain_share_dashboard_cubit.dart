@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/route_client_enum.dart';
@@ -332,7 +333,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   }
 
   Future<void> startClientRoute(
-      {required String id,required String passengerId,required String otp, required BuildContext context}) async {
+      {required String id,required String passengerId,required String otp, required BuildContext context,required int index}) async {
     showLoadingDialog(context);
     final response = await pickClientUseCase(PickClientParams(routeId: id,passengerId: passengerId,otp: otp));
     response.fold((l) {
@@ -351,7 +352,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   }
 
   Future<void> goToClient(
-      {required String routeId,required String passengerId,required String otp, required BuildContext context}) async {
+      {required String routeId,required String passengerId,required String otp,required int index, required BuildContext context}) async {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     final response = await pickClientUseCase(PickClientParams(
@@ -369,6 +370,22 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       if(otp.isEmpty)clients.firstWhere((c) => c.id == passengerId).status = RouteClientStatus.cancelled.name;
       if(otp.isNotEmpty)clients.firstWhere((c) => c.id == passengerId).status = RouteClientStatus.pickedUp.name;
       // getRunningRoute(currentContext);
+      for (int i = 0; i < clients.length; i++) {
+        if (clients[i].status == RouteClientStatus.pickedUp.name) {
+         clients[i].polyLine = [];
+        }
+      }
+      List<List<double>> parsedPolyline = [];
+      PolylinePoints polylinePoints = PolylinePoints();
+      List<PointLatLng> decoded = polylinePoints.decodePolyline(
+        data,
+      );
+      parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
+      if(index==0){
+        clients[1].polyLine = parsedPolyline;
+      }else if(index==1){
+        clients[2].polyLine = parsedPolyline;
+      }
       if(otp.isNotEmpty)showSuccessMessage(currentContext, currentContext.isArabic?'تم التقاط الراكب بنجاح':'Client Picked Successfully');
       if(otp.isEmpty)showSuccessMessage(currentContext, currentContext.isArabic?'تم الغاء الرحله لهذا الراكب بنجاح':'Trip Cancelled For This Client Successfully');
       emit(state.copyWith(status: CaptainShareDashboardStates.success));

@@ -7,7 +7,7 @@ class PickClientUseCase {
 
   PickClientUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call(PickClientParams params) {
+  Future<Either<Failure, String>> call(PickClientParams params) {
     return repository.pickClient(params);
   }
 }

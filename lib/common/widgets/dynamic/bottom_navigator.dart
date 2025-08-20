@@ -70,25 +70,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     });
   }
 
-  List<BottomItemModel> _shuffleButKeepIndex(
-      int fixedIndex, List<BottomItemModel> items) {
-    if (items.length <= fixedIndex) return items;
-
-    // Keep a reference to the fixed item
-    final fixedItem = items[fixedIndex];
-
-    // Copy items without the fixed one
-    final otherItems = List<BottomItemModel>.from(items)..removeAt(fixedIndex);
-
-    // Shuffle the remaining items
-    otherItems.shuffle(Random());
-
-    // Insert the fixed item back in the same position
-    otherItems.insert(fixedIndex, fixedItem);
-
-    return otherItems;
-  }
-
   void _initializePages() {
     pages = secondPages;
   }
@@ -96,7 +77,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   List<BottomItemModel> firstPages = [
     BottomItemModel(
       icon: FontAwesomeIcons.bowlFood,
-      label: LocaleKeys.find.localize,
+      localeKey: LocaleKeys.find,
       index: 0,
       cacheKey: 'tinderCount',
       image: Assets.find,
@@ -104,42 +85,42 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.list,
-      label: LocaleKeys.reels.localize,
+      localeKey: LocaleKeys.reels,
       index: 1,
       cacheKey: 'reelsCount',
       image: Assets.reelBarPng,
       route: Routes.REELS,
-      // height: 60,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.health.localize,
+      localeKey: LocaleKeys.health,
       cacheKey: 'healthCount',
       image: Assets.health,
       index: 2,
       route: Routes.VISITA,
     ),
     BottomItemModel(
-        icon: FontAwesomeIcons.plus,
-        label: LocaleKeys.chat.localize,
-        cacheKey: 'chatCount',
-        image: Assets.whatsApp,
-        index: 3,
-        route: Routes.CHAT,
-        height: 20),
+      icon: FontAwesomeIcons.plus,
+      localeKey: LocaleKeys.chat,
+      cacheKey: 'chatCount',
+      image: Assets.whatsAppIcon,
+      index: 3,
+      route: Routes.CHAT,
+    ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      label: LocaleKeys.book.localize,
+      localeKey: LocaleKeys.book,
       cacheKey: 'bookingCount',
       index: 4,
       image: Assets.booking,
       route: Routes.RIDE_HOME,
     ),
   ];
+
   List<BottomItemModel> secondPages = [
     BottomItemModel(
       icon: FontAwesomeIcons.bowlFood,
-      label: LocaleKeys.ride.localize,
+      localeKey: LocaleKeys.ride,
       index: 11,
       cacheKey: 'rideCount',
       image: Assets.rideIcon1,
@@ -147,7 +128,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.tripJoin.localize,
+      localeKey: LocaleKeys.tripJoin,
       cacheKey: 'tripJoinCount',
       image: Assets.tripJoinIcon2,
       index: 12,
@@ -155,7 +136,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.health.localize,
+      localeKey: LocaleKeys.health,
       cacheKey: 'healthCount',
       image: Assets.health,
       index: 13,
@@ -163,7 +144,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      label: LocaleKeys.meal.localize,
+      localeKey: LocaleKeys.meal,
       cacheKey: 'bookingCount',
       index: 14,
       image: Assets.mealIcon,
@@ -171,7 +152,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.health.localize,
+      localeKey: LocaleKeys.health,
       cacheKey: 'healthCount',
       image: Assets.healthIcon1,
       index: 15,
@@ -203,11 +184,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           }
           await context.read<UserCubit>().resetUnreadedChatsCounter();
           HandleCashback.setCount('chatCount', context);
-          context.pushNamed(
-              context.read<UserCubit>().isLoggedIn
-                  ? Routes.CHAT
-                  : Routes.FirstLoginScreen,
-              extra: ChatsViewParams());
+          context.push(
+            context.read<UserCubit>().isLoggedIn
+                ? Routes.CHAT
+                : Routes.FirstLoginScreen,
+            extra: ChatsViewParams(),
+          );
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         } else {
           final selectedItem = pages[index];
@@ -311,7 +293,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
+              const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
                 BoxShadow(
                     color: Colors.black12, blurRadius: 5, spreadRadius: 2),
@@ -319,104 +301,99 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             ),
             child: bottomNavBarHeight == 75
                 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: List.generate(widget.items.length, (index) {
-                      return Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            if (index != 2) {
-                              widget.onTap(index);
-                            }
-                          },
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.zero,
-                            child: isScrollingDown
-                                ? Container()
-                                : ClickableWidget(
-                                    child: widget.items[index].index != 2 &&
-                                            widget.items[index].index != 13
-                                        ? Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16.0),
-                                            child: Column(
-                                              children: [
-                                                (widget.items[index].index ==
-                                                            3 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            4 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            0 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            12 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            11 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            15 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            14 ||
-                                                        widget.items[index]
-                                                                .index ==
-                                                            1)
-                                                    ? Image.asset(
-                                                        widget.items[index]
-                                                            .image!,
-                                                        height: widget
-                                                            .items[index]
-                                                            .height,
-                                                        width: widget
-                                                            .items[index]
-                                                            .height,
-                                                        color: context
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : AppColors
-                                                                .PRIMARY_COLOR,
-                                                      )
-                                                    : SvgPicture.asset(
-                                                        widget.items[index]
-                                                            .image!,
-                                                        height: widget
-                                                            .items[index]
-                                                            .height,
-                                                        width: widget
-                                                            .items[index]
-                                                            .height,
-                                                        color: context
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : AppColors
-                                                                .PRIMARY_COLOR,
-                                                      ),
-                                                if (widget.items[index].index ==
-                                                    3)
-                                                  SizedBox(
-                                                    height: 4.h,
-                                                  ),
-                                                Expanded(
-                                                  child: Label(
-                                                    text: widget
-                                                        .items[index].label,
-                                                    style: Styles.smallText(),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                                  ),
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: List.generate(widget.items.length, (index) {
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      if (index != 2) {
+                        widget.onTap(index);
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.zero,
+                      child: isScrollingDown
+                          ? Container()
+                          : ClickableWidget(
+                        child: widget.items[index].index != 2 &&
+                            widget.items[index].index != 13
+                            ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0),
+                          child: Column(
+                            children: [
+                              (widget.items[index].index ==
+                                  3 ||
+                                  widget.items[index]
+                                      .index ==
+                                      4 ||
+                                  widget.items[index]
+                                      .index ==
+                                      0 ||
+                                  widget.items[index]
+                                      .index ==
+                                      12 ||
+                                  widget.items[index]
+                                      .index ==
+                                      11 ||
+                                  widget.items[index]
+                                      .index ==
+                                      15 ||
+                                  widget.items[index]
+                                      .index ==
+                                      14 ||
+                                  widget.items[index]
+                                      .index ==
+                                      1)
+                                  ? Image.asset(
+                                widget
+                                    .items[index].image!,
+                                height: widget.items[index]
+                                    .height,
+                                width: widget.items[index]
+                                    .height,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors
+                                    .PRIMARY_COLOR,
+                              )
+                                  : SvgPicture.asset(
+                                widget
+                                    .items[index].image!,
+                                height: widget.items[index]
+                                    .height,
+                                width: widget.items[index]
+                                    .height,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors
+                                    .PRIMARY_COLOR,
+                              ),
+                              if (widget.items[index].index ==
+                                  3)
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                              Expanded(
+                                child: Label(
+                                  text: widget
+                                      .items[index].localeKey
+                                      .localize, // translate on build
+                                  style: Styles.smallText(),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      );
-                    }),
-                  )
+                        )
+                            : Container(),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            )
                 : Container(),
           ),
         ),
@@ -427,7 +404,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
 class BottomItemModel {
   final IconData icon;
-  final String label;
+  final String localeKey; // store only key
   final int index;
   final String? image;
   final String? cacheKey;
@@ -436,7 +413,7 @@ class BottomItemModel {
 
   BottomItemModel({
     required this.icon,
-    required this.label,
+    required this.localeKey,
     required this.index,
     this.image,
     this.cacheKey,
