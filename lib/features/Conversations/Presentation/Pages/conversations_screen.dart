@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/Conversations/Presentation/Pages/Widgets/chat_card.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -15,12 +14,10 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/calling_card.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/end_to_end_Encrypted_widget.dart';
-import '../../../social_media/chat/chat_view/presentation/widgets/new_chat_card.dart';
 import '../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 
 class ConversationsScreen extends StatefulWidget {

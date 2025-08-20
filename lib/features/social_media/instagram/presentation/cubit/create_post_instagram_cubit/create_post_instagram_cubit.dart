@@ -963,38 +963,38 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     return result.isAuth; // تحقق من أن الإذن مُعطى
   }
 
-  Future<List<AssetEntity>> _fetchAllImages(int page, int pageSize) async {
-    final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
-      onlyAll: true,
-      // type: RequestType.fromTypes([RequestType.image, RequestType.video]), // جلب الصور فقط
-      type: RequestType.image,
-    );
-    if (albums.isNotEmpty) {
-      final AssetPathEntity album = albums.first;
-      // جلب الصور في الصفحة المحددة فقط
-      return await album.getAssetListPaged(page: page, size: pageSize);
-    }
-    return [];
-
-    // if (albums.isNotEmpty) {
-    //   final AssetPathEntity album = albums.first; // اختر الألبوم الأول
-    //   List<AssetEntity> allImages = [];
-    //   int page = 0; // ابدأ من الصفحة الأولى
-    //   const int pageSize = 20;
-    //   while (true) {
-    //     // جلب الصور في الصفحة الحالية
-    //     final List<AssetEntity> images =
-    //         await album.getAssetListPaged(page: page, size: pageSize);
-    //     if (images.isEmpty) {
-    //       break; // إذا لم تكن هناك صور إضافية، أخرج من الحلقة
-    //     }
-    //     allImages.addAll(images); // أضف الصور إلى القائمة النهائية
-    //     page++; // انتقل إلى الصفحة التالية
-    //   }
-    //   return allImages;
-    // }
-    // return [];
-  }
+  // Future<List<AssetEntity>> _fetchAllImages(int page, int pageSize) async {
+  //   final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
+  //     onlyAll: true,
+  //     // type: RequestType.fromTypes([RequestType.image, RequestType.video]), // جلب الصور فقط
+  //     type: RequestType.image,
+  //   );
+  //   if (albums.isNotEmpty) {
+  //     final AssetPathEntity album = albums.first;
+  //     // جلب الصور في الصفحة المحددة فقط
+  //     return await album.getAssetListPaged(page: page, size: pageSize);
+  //   }
+  //   return [];
+  //
+  //   // if (albums.isNotEmpty) {
+  //   //   final AssetPathEntity album = albums.first; // اختر الألبوم الأول
+  //   //   List<AssetEntity> allImages = [];
+  //   //   int page = 0; // ابدأ من الصفحة الأولى
+  //   //   const int pageSize = 20;
+  //   //   while (true) {
+  //   //     // جلب الصور في الصفحة الحالية
+  //   //     final List<AssetEntity> images =
+  //   //         await album.getAssetListPaged(page: page, size: pageSize);
+  //   //     if (images.isEmpty) {
+  //   //       break; // إذا لم تكن هناك صور إضافية، أخرج من الحلقة
+  //   //     }
+  //   //     allImages.addAll(images); // أضف الصور إلى القائمة النهائية
+  //   //     page++; // انتقل إلى الصفحة التالية
+  //   //   }
+  //   //   return allImages;
+  //   // }
+  //   // return [];
+  // }
 
 // تحميل صفحة محددة من الصور
   Future<List<AssetEntity>> _fetchImagesPage(int page, int pageSize) async {

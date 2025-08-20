@@ -8,7 +8,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 
 class ChatCard extends StatefulWidget {

@@ -161,7 +161,7 @@ class _CustomReserveRideBottomSheetState
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(12),
                                             color: selectedGridIndex == index
-                                                ? AppColors.PRIMARY_COLOR.withOpacity(0.1)
+                                                ? AppColors.PRIMARY_COLOR.withValues(alpha:  0.1)
                                                 : Colors.grey.shade200,
                                             border: Border.all(
                                               color: selectedGridIndex == index
@@ -730,7 +730,7 @@ class _CustomReserveRideBottomSheetState
                     fontSize: 14,
                     color: context.isDarkMode
                         ? AppColors.whiteColor
-                        : AppColors.black.withOpacity(0.7),
+                        : AppColors.black.withValues(alpha:  0.7),
                   ),
                 ),
                 Spacer(),
@@ -766,8 +766,7 @@ class _CustomReserveRideBottomSheetState
                     Label(
                       text: context.isArabic
                           ? '${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)} ج.م'
-                          : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)}' ??
-                          "",
+                          : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.rideCubit.getTotalPrice(state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.price, isScooter: state.rideExpectedPrice!.subcategoryModel.where((e) => e.id == selectedCategoryId).first.nameEn.toLowerCase() == 'scooter').toInt().toString(), isArabic: context.isArabic)}',
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -791,7 +790,7 @@ class _CustomReserveRideBottomSheetState
                             fontSize: 14,
                             color: context.isDarkMode
                                 ? AppColors.whiteColor
-                                : AppColors.black.withOpacity(0.7)),
+                                : AppColors.black.withValues(alpha:  0.7)),
                       ),
                       Image.asset(Assets.airConditioner,
                         height: 20,
@@ -808,7 +807,7 @@ class _CustomReserveRideBottomSheetState
                             fontSize: 14,
                             color: context.isDarkMode
                                 ? AppColors.whiteColor
-                                : AppColors.black.withOpacity(0.7)),
+                                : AppColors.black.withValues(alpha:  0.7)),
                       ),
                       Image.asset(Assets.noSmokingIcon,
                         height: 20,
@@ -825,7 +824,7 @@ class _CustomReserveRideBottomSheetState
                             fontSize: 14,
                             color: context.isDarkMode
                                 ? AppColors.whiteColor
-                                : AppColors.black.withOpacity(0.7)),
+                                : AppColors.black.withValues(alpha:  0.7)),
                       ),
                       Icon(Icons.autorenew, size: 20,),
                     ],
@@ -873,10 +872,8 @@ class _CustomReserveRideBottomSheetState
                     ),
                     Label(
                       text: context.isArabic
-                          ? '${FormatNumbers().convertNumberToLocalizedString(subcategory?.price.toInt().toString() ?? '0', isArabic: context.isArabic)} ج.م' ??
-                              ''
-                          : 'EGP ${FormatNumbers().convertNumberToLocalizedString(subcategory?.price.toInt().toString() ?? '0', isArabic: context.isArabic)}' ??
-                              '',
+                          ? '${FormatNumbers().convertNumberToLocalizedString(subcategory?.price.toInt().toString() ?? '0', isArabic: context.isArabic)} ج.م'
+                          : 'EGP ${FormatNumbers().convertNumberToLocalizedString(subcategory?.price.toInt().toString() ?? '0', isArabic: context.isArabic)}',
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600),
                     ),

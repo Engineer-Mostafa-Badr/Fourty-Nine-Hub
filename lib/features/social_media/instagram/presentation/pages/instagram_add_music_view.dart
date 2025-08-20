@@ -9,8 +9,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_music_cubit/instagram_add_music_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -474,7 +472,7 @@ class _InstagramAddMusicListViewForYouState extends State<InstagramAddMusicListV
                         if(context.read<CreatePostInstagramCubit>().state.song?.id == context.read<CreatePostInstagramCubit>().forYouSongs[index].id)
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.4),
+                            color: Colors.black.withValues(alpha:  0.4),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           height: 44,
@@ -662,7 +660,7 @@ class _InstagramAddMusicListViewTrendingState extends State<InstagramAddMusicLis
                           if(context.read<CreatePostInstagramCubit>().state.song?.id == context.read<CreatePostInstagramCubit>().trendingSongs[index].id)
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.4),
+                                color: Colors.black.withValues(alpha:  0.4),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               height: 44,
@@ -851,7 +849,7 @@ class _InstagramAddMusicListViewSavedState extends State<InstagramAddMusicListVi
                           if(context.read<CreatePostInstagramCubit>().state.song?.id == context.read<CreatePostInstagramCubit>().favoriteSongs[index].id)
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.4),
+                                color: Colors.black.withValues(alpha:  0.4),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               height: 44,
@@ -1010,7 +1008,7 @@ class _InstagramAddMusicListViewSearchState extends State<InstagramAddMusicListV
                           if(context.read<CreatePostInstagramCubit>().state.song?.id == context.read<CreatePostInstagramCubit>().searchSongs[index].id)
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.4),
+                                color: Colors.black.withValues(alpha:  0.4),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               height: 44,
