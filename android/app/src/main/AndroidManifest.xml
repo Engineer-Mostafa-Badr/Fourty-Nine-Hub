@@ -61,6 +61,10 @@
         android:allowBackup="true" android:keepScreenOn="true"
         android:hardwareAccelerated="true"
         >
+        <!-- to use skia engine -->
+        <meta-data
+        android:name="io.flutter.embedding.android.EnableImpeller"
+        android:value="false" />
         <!--  Add this inside the <application> tag in AndroidManifest.xml  -->
         <service android:name=".CallForegroundService" android:enabled="true" android:exported="false" android:foregroundServiceType="microphone"/>
         <!--  Add service for background audio processing  -->

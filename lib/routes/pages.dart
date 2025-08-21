@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -469,6 +470,15 @@ class AppPages {
         navigatorKey: navigatorKey,
         initialLocation: initialRoute,
         routes: <RouteBase>[
+          GoRoute(
+            path: Routes.splash,
+            name: Routes.splash,
+            pageBuilder: (context, state) => customTransition(
+              context,
+              state,
+              const SplashScreen(),
+            ),
+          ),
           GoRoute(
             path: Routes.HOME,
             pageBuilder: (context, state) => customTransition(
@@ -2063,7 +2073,8 @@ class AppPages {
                           state,
                           BlocProvider<TwitterCubit>(
                             create: (_) => serviceLocator<TwitterCubit>(),
-                            child: TwitterPostDetailsNotify.fromPayload(payload: payload),
+                            child: TwitterPostDetailsNotify.fromPayload(
+                                payload: payload),
                           ),
                         );
                       },
@@ -4718,11 +4729,11 @@ class AppPages {
                     )),
               ),
               GoRoute(
-                  path: Paths.CHANCE,
-                  name: Routes.CHANCE,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,ChanceView()),),
+                path: Paths.CHANCE,
+                name: Routes.CHANCE,
+                pageBuilder: (context, state) =>
+                    customTransition(context, state, ChanceView()),
+              ),
             ],
           ),
         ]);
