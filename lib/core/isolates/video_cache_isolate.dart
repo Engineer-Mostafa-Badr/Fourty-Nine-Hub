@@ -30,13 +30,15 @@ Future<CachedResult> cacheVideosInIsolate(List<String> urls) async {
 
   // Resolve cache directory on the main isolate (plugins allowed here)
   final Directory baseDir = await getTemporaryDirectory();
-  final Directory cacheDir = Directory(p.join(baseDir.path, 'reels_video_cache'));
+  final Directory cacheDir =
+      Directory(p.join(baseDir.path, 'reels_video_cache'));
   if (!await cacheDir.exists()) {
     await cacheDir.create(recursive: true);
   }
 
   final responsePort = ReceivePort();
-  isolateSendPort.send(_DownloadRequest(urls, cacheDir.path, responsePort.sendPort));
+  isolateSendPort
+      .send(_DownloadRequest(urls, cacheDir.path, responsePort.sendPort));
   final CachedResult result = await responsePort.first as CachedResult;
   return result;
 }
@@ -48,7 +50,9 @@ Future<void> _cacheIsolateEntry(SendPort mainSendPort) async {
 
   // Very small in-memory LRU index to avoid redownloading during this isolate lifetime
   final LinkedHashMap<String, String> memoryIndex = LinkedHashMap();
-  final Dio dio = Dio(BaseOptions(receiveTimeout: const Duration(seconds: 30), connectTimeout: const Duration(seconds: 10)));
+  final Dio dio = Dio(BaseOptions(
+      receiveTimeout: const Duration(seconds: 30),
+      connectTimeout: const Duration(seconds: 10)));
 
   await for (final message in port) {
     if (message is _DownloadRequest) {
@@ -98,11 +102,14 @@ void _touch(LinkedHashMap<String, String> lru, String key) {
 
 String _safeFileNameFromUrl(String url) {
   final uri = Uri.tryParse(url);
-  final last = uri?.pathSegments.isNotEmpty == true ? uri!.pathSegments.last : 'video.mp4';
+  final last = uri?.pathSegments.isNotEmpty == true
+      ? uri!.pathSegments.last
+      : 'video.mp4';
   final sanitized = last.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
   // Include simple hash to avoid collisions
   final hash = url.hashCode.toUnsigned(20).toRadixString(16);
-  final ext = p.extension(sanitized).isNotEmpty ? p.extension(sanitized) : '.mp4';
+  final ext =
+      p.extension(sanitized).isNotEmpty ? p.extension(sanitized) : '.mp4';
   final base = p.basenameWithoutExtension(sanitized);
   return '${base}_$hash$ext';
 }

@@ -8,7 +8,6 @@ import '../../../../../../main.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../../../core/isolates/get_video_isolate.dart';
 import '../../../../../../core/isolates/video_cache_isolate.dart';
 import '../../shared/constants.dart';
 import 'preload_state.dart';
@@ -28,7 +27,6 @@ class PreloadBloc extends Cubit<PreloadState> {
   }
 
   Future<void> getVideosFromApi() async {
-    print('getVideosFromApi called');
     try {
       // Cancel any existing subscription to avoid duplication
       await _reelsSubscription?.cancel();
@@ -37,19 +35,16 @@ class PreloadBloc extends Cubit<PreloadState> {
       setLoading(true);
       final reelsCubit = serviceLocator<ReelsCubit>();
 
-      // Check if data is already available in ReelsCubit's state
-      if (reelsCubit.state.globalReels.isNotEmpty) {
-        print('Reels already available, using existing data');
+      Future<void> applyUrlsFromCubit() async {
+        final urls =
+            reelsCubit.state.globalReels.map((e) => e.videoMedia).toList();
+        if (urls.isEmpty) return;
 
-        // Get videos from existing state
-        final List<String> urls = await getReelVideos();
-
-        // Clear existing URLs and controllers to prevent duplicates
+        // Reset controllers
         for (var controller in state.controllers.values) {
           controller.dispose();
         }
 
-        // Update state with new URLs
         emit(state.copyWith(
           urls: urls,
           controllers: {},
@@ -57,59 +52,35 @@ class PreloadBloc extends Cubit<PreloadState> {
           reloadCounter: state.reloadCounter + 1,
         ));
 
-        // Pre-cache the first triple buffer
         await _ensureTripleBufferCached(0);
 
-        // Initialize first videos
-        if (urls.isNotEmpty) {
-          await _initializeControllerAtIndex(0);
-          _playControllerAtIndex(0);
-          if (urls.length > 1) await _initializeControllerAtIndex(1);
-        }
+        await _initializeControllerAtIndex(0);
+        _playControllerAtIndex(0);
+        if (urls.length > 1) await _initializeControllerAtIndex(1);
+      }
 
-        log('Using existing reels data complete');
-      } else {
-        // No existing data, set up stream subscription to wait for data
-        print('No existing reels data, setting up listener');
-        _reelsSubscription = reelsCubit.stream.listen((reelsState) async {
-          if (!reelsState.isLoading && reelsState.globalReels.isNotEmpty) {
-            // Cancel subscription after first valid data
-            await _reelsSubscription?.cancel();
-            _reelsSubscription = null;
+      if (reelsCubit.state.globalReels.isNotEmpty) {
+        await applyUrlsFromCubit();
+      }
 
-            final List<String> urls = await getReelVideos();
-            print('Fetched URLs: ${urls.length}');
-
-            if (urls.isEmpty) {
-              setLoading(false);
-              return;
-            }
-
-            // Update state with new URLs
-            emit(state.copyWith(
-              urls: urls,
-              isLoading: false,
-              reloadCounter: state.reloadCounter + 1,
-            ));
-
-            await _ensureTripleBufferCached(0);
-
-            // Initialize first videos
-            if (urls.isNotEmpty) {
-              await _initializeControllerAtIndex(0);
-              _playControllerAtIndex(0);
-              if (urls.length > 1) await _initializeControllerAtIndex(1);
-            }
-
-            log('API fetch complete');
+      _reelsSubscription = reelsCubit.stream.listen((reelsState) async {
+        if (!reelsState.isLoading && reelsState.globalReels.isNotEmpty) {
+          // Append any newly added URLs
+          final updated =
+              reelsState.globalReels.map((e) => e.videoMedia).toList();
+          if (updated.length != state.urls.length) {
+            emit(state.copyWith(urls: updated));
+            // Pre-cache around current focus
+            _ensureTripleBufferCached(state.focusedIndex);
+            // Ensure next controller prepared
+            _initializeControllerAtIndex(state.focusedIndex + 1);
           }
-        });
-
-        // Trigger fetch if needed
-        if (reelsCubit.state.globalReels.isEmpty) {
-          print('Triggering fetchReels()');
-          reelsCubit.fetchReels();
+          setLoading(false);
         }
+      });
+
+      if (reelsCubit.state.globalReels.isEmpty) {
+        reelsCubit.fetchReels();
       }
     } catch (e) {
       log('Error in getVideosFromApi: $e');
@@ -120,40 +91,26 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   // Add this to PreloadBloc class
   void handleScreenReturn() {
-    print('Handling return to reels screen');
-
     // Dispose all existing controllers to start fresh
     for (var entry in state.controllers.entries) {
       try {
         entry.value.pause();
         entry.value.dispose();
-      } catch (e) {
-        print('Error disposing controller: $e');
-      }
+      } catch (_) {}
     }
 
-    // Reset state but keep URLs
-    emit(state.copyWith(
-        controllers: {}, // Clear all controllers
-        focusedIndex: 0, // Reset to first video
-        isLoading: true // Show loading while reinitializing
-        ));
+    emit(state.copyWith(controllers: {}, focusedIndex: 0, isLoading: true));
 
-    // Reinitialize first video explicitly on next frame
     Future.microtask(() async {
       if (state.urls.isNotEmpty) {
         await _ensureTripleBufferCached(0);
         await _initializeControllerAtIndex(0);
-        _playControllerAtIndex(0); // Start playing first video
-
-        // Preload second video if available
+        _playControllerAtIndex(0);
         if (state.urls.length > 1) {
           await _initializeControllerAtIndex(1);
         }
-
         emit(state.copyWith(isLoading: false));
       } else {
-        // No URLs available, need to fetch them
         getVideosFromApi();
       }
     });
@@ -161,12 +118,13 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   // Handle video index change and preload logic
   void onVideoIndexChanged(int index) {
+    final reelsCubit = serviceLocator<ReelsCubit>();
     final shouldFetch = index + kPreloadLimit >= state.urls.length;
     if (shouldFetch) {
-      preloadVideos(index);
+      // trigger backend fetch through cubit; listener will append
+      reelsCubit.fetchReels();
     }
 
-    // Kick off triple buffer caching for around the new index
     _ensureTripleBufferCached(index);
 
     if (index > state.focusedIndex) {
@@ -176,22 +134,6 @@ class PreloadBloc extends Cubit<PreloadState> {
     }
 
     emit(state.copyWith(focusedIndex: index));
-  }
-
-  // Update the list of URLs with new videos
-  void updateUrls(List<String> newUrls) {
-    final updatedUrls = List<String>.from(state.urls)..addAll(newUrls);
-
-    _initializeControllerAtIndex(state.focusedIndex + 1);
-    emit(state.copyWith(
-      urls: updatedUrls,
-      reloadCounter: state.reloadCounter + 1,
-      isLoading: false,
-    ));
-    log('🚀🚀🚀 NEW VIDEOS ADDED');
-
-    // Pre-cache around current index if needed
-    _ensureTripleBufferCached(state.focusedIndex);
   }
 
   // Ensure we have cached files for [index-1, index, index+1]
@@ -241,9 +183,8 @@ class PreloadBloc extends Cubit<PreloadState> {
     final String url = state.urls[index];
     final String pathOrUrl = _effectivePathForUrl(url);
 
-    final Uri sourceUri = pathOrUrl.startsWith('http')
-        ? pathOrUrl.toUri
-        : Uri.file(pathOrUrl);
+    final Uri sourceUri =
+        pathOrUrl.startsWith('http') ? pathOrUrl.toUri : Uri.file(pathOrUrl);
 
     final controller = pathOrUrl.startsWith('http')
         ? VideoPlayerController.networkUrl(sourceUri)
