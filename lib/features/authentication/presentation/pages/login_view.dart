@@ -20,10 +20,12 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/widgets/birth_date_field.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -37,7 +39,6 @@ import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
-import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
@@ -225,6 +226,9 @@ class _LoginViewState extends State<LoginView> {
               showLoadingDialog(context);
               _isLoadingDialogShown = true;
             }
+          } else if (state is SocialAuthState) {
+            // Handle Social Auth States
+            _handleSocialAuthState(state);
           }
         },
         child: Scaffold(
@@ -319,6 +323,7 @@ class _LoginViewState extends State<LoginView> {
                               label: LocaleKeys.confirm.localize,
                               width: double.infinity,
                               onPressed: () {
+                                ManageVibration.vibrate();
                                 if (registerCubit.accept) {
                                   if (formKeyRegister.currentState!
                                       .validate()) {
@@ -347,6 +352,7 @@ class _LoginViewState extends State<LoginView> {
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: () {
+                                ManageVibration.vibrate();
                                 log("message");
                                 loginCubit.login(formKeyLogin);
                               },
@@ -393,6 +399,112 @@ class _LoginViewState extends State<LoginView> {
         name: "lllllllllllllllllllllllllllllllllllll");
     // wid, required AuthType authTypeget.authType = widget.authType;
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
+  }
+
+  Future<void> _handleLoginSuccess(LoginSuccess state) async {
+    _showLoadingIfNeeded();
+
+    try {
+      final userCubit = serviceLocator<UserCubit>();
+      await userCubit.setLogin(true);
+      userCubit.attachToken();
+
+      await userCubit.getUser();
+
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
+
+      log('Login successful!');
+      log('Access Token: $accessToken');
+      log('Refresh Token: $refreshToken');
+      log('User data: ${userCubit.state.data}');
+
+      _hideLoadingIfShown();
+      context.pushReplacement(Routes.HOME);
+      showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+    } catch (e) {
+      _hideLoadingIfShown();
+      log('Error in login success handler: $e');
+      showErrorMessage(context, 'An error occurred during login');
+    }
+  }
+
+  Future<void> _handleSocialAuthState(SocialAuthState state) async {
+    switch (state.status) {
+      case AuthStatus.authenticating:
+        _showLoadingIfNeeded();
+        break;
+
+      case AuthStatus.authenticated:
+        if (state.userTokensEntity != null) {
+          await _handleSocialLoginSuccess(state.userTokensEntity!);
+        }
+        break;
+
+      case AuthStatus.authenticateError:
+        _hideLoadingIfShown();
+        String errorMessage = 'Social login failed';
+        if (state.error != null) {
+          errorMessage = getFailureMessage(state.error!, context);
+        }
+        showErrorMessage(context, errorMessage);
+        break;
+
+      case AuthStatus.authenticateCanceled:
+        _hideLoadingIfShown();
+        // User canceled - no error message needed
+        break;
+
+      default:
+        _hideLoadingIfShown();
+        break;
+    }
+  }
+
+
+  Future<void> _handleSocialLoginSuccess(UserTokensEntity userTokens) async {
+    try {
+      final userCubit = serviceLocator<UserCubit>();
+      await userCubit.setLogin(true);
+      userCubit.attachToken();
+
+      await userCubit.getUser();
+
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
+
+      log('Social login successful!');
+      log('Access Token: $accessToken');
+      log('Refresh Token: $refreshToken');
+
+      _hideLoadingIfShown();
+      context.pushReplacement(Routes.HOME);
+      showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
+    } catch (e) {
+      _hideLoadingIfShown();
+      log('Error in social login success handler: $e');
+      showErrorMessage(context, 'An error occurred during social login');
+    }
+  }
+
+  Future<void> _handleGuestSuccess(LoginGuestSuccess state) async {
+    _hideLoadingIfShown();
+    // Handle guest login success
+    context.pushReplacement(Routes.HOME);
+  }
+
+  void _showLoadingIfNeeded() {
+    if (!_isLoadingDialogShown) {
+      showLoadingDialog(context);
+      _isLoadingDialogShown = true;
+    }
+  }
+
+  void _hideLoadingIfShown() {
+    if (_isLoadingDialogShown) {
+      Navigator.of(context).pop();
+      _isLoadingDialogShown = false;
+    }
   }
 }
 
@@ -557,14 +669,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.message ?? "Something went wrong",
-                    )));
+                          error.message ?? "Something went wrong",
+                        )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.toString(),
-                    )));
+                          error.toString(),
+                        )));
                   }
                 },
               ),
@@ -589,14 +701,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.message ?? "Something went wrong",
-                    )));
+                          error.message ?? "Something went wrong",
+                        )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      error.toString(),
-                    )));
+                          error.toString(),
+                        )));
                   }
                 },
               ),
@@ -621,14 +733,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                       print(error.message);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                        error.message ?? "Something went wrong",
-                      )));
+                            error.message ?? "Something went wrong",
+                          )));
                     } catch (error) {
                       print(error);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                        error.toString(),
-                      )));
+                            error.toString(),
+                          )));
                     }
                   },
                 ),

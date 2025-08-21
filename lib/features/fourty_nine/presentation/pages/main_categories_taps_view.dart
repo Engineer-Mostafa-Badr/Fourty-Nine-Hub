@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_search_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart' as vibrate;
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -376,6 +377,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         IconButton(
                           padding: const EdgeInsets.all(0),
                           onPressed: () {
+                            vibrate.ManageVibration.vibrate();
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isSearchAdsOpen');
@@ -406,6 +408,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                   .read<SubcategoriesCubit>()
                                   .isFavouriteAdsOpen,
                               onPressed: () {
+                                vibrate.ManageVibration.vibrate();
                                 if (!context.isUserLoggedIn) {
                                   return pleaseLoginDialog(context);
                                 } else {
@@ -437,6 +440,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                   .read<SubcategoriesCubit>()
                                   .isRequestLogOpen,
                               onPressed: () {
+                                vibrate.ManageVibration.vibrate();
                                 context
                                     .read<SubcategoriesCubit>()
                                     .loadRequestsLogByMainCategory(
@@ -462,6 +466,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                             isOpened:
                                 context.read<SubcategoriesCubit>().isMyAdsOpen,
                             onPressed: () {
+                              vibrate.ManageVibration.vibrate();
                               // TODO: EDIT THIS
                               if (!context.isUserLoggedIn) {
                                 return pleaseLoginDialog(context);
@@ -921,6 +926,7 @@ class _MainCategoriesGridViewCustomPageState
                         IconButton(
                           padding: const EdgeInsets.all(0),
                           onPressed: () {
+                            vibrate.ManageVibration.vibrate();
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isSearchAdsOpen');
@@ -951,6 +957,7 @@ class _MainCategoriesGridViewCustomPageState
                                   .read<SubcategoriesCubit>()
                                   .isFavouriteAdsOpen,
                               onPressed: () {
+                                vibrate.ManageVibration.vibrate();
                                 if (!context.isUserLoggedIn) {
                                   return pleaseLoginDialog(context);
                                 } else {
@@ -982,6 +989,7 @@ class _MainCategoriesGridViewCustomPageState
                                   .read<SubcategoriesCubit>()
                                   .isRequestLogOpen,
                               onPressed: () {
+                                vibrate.ManageVibration.vibrate();
                                 context
                                     .read<SubcategoriesCubit>()
                                     .loadRequestsLogByMainCategory(
@@ -1007,6 +1015,7 @@ class _MainCategoriesGridViewCustomPageState
                             isOpened:
                                 context.read<SubcategoriesCubit>().isMyAdsOpen,
                             onPressed: () {
+                              vibrate.ManageVibration.vibrate();
                               // TODO: EDIT THIS
                               if (!context.isUserLoggedIn) {
                                 return pleaseLoginDialog(context);
@@ -1117,6 +1126,7 @@ class _MainCategoriesGridViewCustomPageState
                         // }
                         if (subCategories.isNotEmpty) {
                           // final controller = context.read<MainCategoriesTapsCubit>();
+
                           return Expanded(
                             child: GridView.builder(
                               padding: EdgeInsets.all(24.w),
