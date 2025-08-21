@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../explore_reels_cubit/reel_cubit.dart';
@@ -8,6 +9,7 @@ import '../../../../../../service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../../core/isolates/get_video_isolate.dart';
+import '../../../../../../core/isolates/video_cache_isolate.dart';
 import '../../shared/constants.dart';
 import 'preload_state.dart';
 
@@ -55,6 +57,9 @@ class PreloadBloc extends Cubit<PreloadState> {
           reloadCounter: state.reloadCounter + 1,
         ));
 
+        // Pre-cache the first triple buffer
+        await _ensureTripleBufferCached(0);
+
         // Initialize first videos
         if (urls.isNotEmpty) {
           await _initializeControllerAtIndex(0);
@@ -87,6 +92,8 @@ class PreloadBloc extends Cubit<PreloadState> {
               reloadCounter: state.reloadCounter + 1,
             ));
 
+            await _ensureTripleBufferCached(0);
+
             // Initialize first videos
             if (urls.isNotEmpty) {
               await _initializeControllerAtIndex(0);
@@ -110,47 +117,8 @@ class PreloadBloc extends Cubit<PreloadState> {
       rethrow;
     }
   }
-  // Todo: this is last Fetch videos from the API and initialize controllers for the first videos
-  // Future<void> getVideosFromApi() async {
-  //   print('getVideosFromApi called');
-  //   try {
-  //     setLoading(true);
-  //     print('Fetching videos from API');
-  //     // Future.delayed(const Duration(seconds: 3), () async{
 
-  //     serviceLocator<ReelsCubit>().stream.listen((reelsState) async {
-  //       if (!reelsState.isLoading) {
-  //         final List<String> urls = await getReelVideos();
-  //         print('Fetched URLs: $urls');
-
-  //         final updatedUrls = List<String>.from(state.urls)..addAll(urls);
-  //         print('message urls: ${updatedUrls.length}');
-  //         if (updatedUrls.isEmpty) {
-  //           setLoading(false);
-  //           return;
-  //         }
-  //         emit(state.copyWith(
-  //           urls: updatedUrls,
-  //           isLoading: false,
-  //           reloadCounter: state.reloadCounter + 1,
-  //         ));
-
-  //         if (updatedUrls.isNotEmpty) {
-  //           await _initializeControllerAtIndex(0);
-  //           _playControllerAtIndex(0);
-  //           if (updatedUrls.length > 1) await _initializeControllerAtIndex(1);
-  //         }
-
-  //         log('API fetch complete');
-  //       }
-  //     });
-  //   } catch (e) {
-  //     log('error occurred $e');
-  //     setLoading(false);
-  //     rethrow;
-  //   }
-  // }
-// Add this to PreloadBloc class
+  // Add this to PreloadBloc class
   void handleScreenReturn() {
     print('Handling return to reels screen');
 
@@ -174,6 +142,7 @@ class PreloadBloc extends Cubit<PreloadState> {
     // Reinitialize first video explicitly on next frame
     Future.microtask(() async {
       if (state.urls.isNotEmpty) {
+        await _ensureTripleBufferCached(0);
         await _initializeControllerAtIndex(0);
         _playControllerAtIndex(0); // Start playing first video
 
@@ -192,12 +161,13 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   // Handle video index change and preload logic
   void onVideoIndexChanged(int index) {
-    // final shouldFetch = (index + kPreloadLimit) % kNextLimit == 0 &&
-    //     state.urls.length == index + kPreloadLimit;
     final shouldFetch = index + kPreloadLimit >= state.urls.length;
     if (shouldFetch) {
       preloadVideos(index);
     }
+
+    // Kick off triple buffer caching for around the new index
+    _ensureTripleBufferCached(index);
 
     if (index > state.focusedIndex) {
       _playNext(index);
@@ -219,6 +189,35 @@ class PreloadBloc extends Cubit<PreloadState> {
       isLoading: false,
     ));
     log('🚀🚀🚀 NEW VIDEOS ADDED');
+
+    // Pre-cache around current index if needed
+    _ensureTripleBufferCached(state.focusedIndex);
+  }
+
+  // Ensure we have cached files for [index-1, index, index+1]
+  Future<void> _ensureTripleBufferCached(int index) async {
+    final List<String> toPrefetch = [];
+    for (final i in [index - 1, index, index + 1]) {
+      if (i < 0 || i >= state.urls.length) continue;
+      final url = state.urls[i];
+      if (!(state.cachedPaths.containsKey(url))) {
+        toPrefetch.add(url);
+      }
+    }
+    if (toPrefetch.isEmpty) return;
+
+    try {
+      final result = await cacheVideosInIsolate(toPrefetch);
+      final newMap = Map<String, String>.from(state.cachedPaths)
+        ..addAll(result.urlToPath);
+      emit(state.copyWith(cachedPaths: newMap));
+    } catch (e) {
+      log('Cache isolate error: $e');
+    }
+  }
+
+  String _effectivePathForUrl(String url) {
+    return state.cachedPaths[url] ?? url;
   }
 
   // Private helper methods for managing video player controllers
@@ -238,8 +237,18 @@ class PreloadBloc extends Cubit<PreloadState> {
   }
 
   Future<void> _initializeControllerAtIndex(int index) async {
-    final controller =
-        VideoPlayerController.networkUrl(state.urls[index].toUri);
+    if (index < 0 || index >= state.urls.length) return;
+    final String url = state.urls[index];
+    final String pathOrUrl = _effectivePathForUrl(url);
+
+    final Uri sourceUri = pathOrUrl.startsWith('http')
+        ? pathOrUrl.toUri
+        : Uri.file(pathOrUrl);
+
+    final controller = pathOrUrl.startsWith('http')
+        ? VideoPlayerController.networkUrl(sourceUri)
+        : VideoPlayerController.file(File(sourceUri.toFilePath()));
+
     state.controllers[index] = controller;
 
     await controller.initialize();
@@ -248,6 +257,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   void _playControllerAtIndex(int index) {
     final controller = state.controllers[index];
+    controller?.setLooping(true);
     controller?.play();
     log('🚀🚀🚀 PLAYING $index');
   }
@@ -255,7 +265,6 @@ class PreloadBloc extends Cubit<PreloadState> {
   void _stopControllerAtIndex(int index) {
     final controller = state.controllers[index];
     controller?.pause();
-    // controller?.seekTo(Duration.zero);
     log('🚀🚀🚀 STOPPED $index');
   }
 

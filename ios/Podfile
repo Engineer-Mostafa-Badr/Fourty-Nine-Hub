@@ -1,7 +1,6 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '16.0'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -28,34 +27,44 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
+  # IMPORTANT: static linkage fixes 'Flutter/Flutter.h' not found with ZEGO & others
+  use_frameworks! :linkage => :static
   use_modular_headers!
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
   target 'RunnerTests' do
     inherit! :search_paths
   end
 end
 
 post_install do |installer|
+  # Standard Flutter extra settings
   installer.pods_project.targets.each do |target|
-    if target.name == 'deepar_flutter'
-      target.build_configurations.each do |config|
-        # Prevent duplicate embedding
-        config.build_settings['SKIP_INSTALL'] = 'YES'
-      end
+    flutter_additional_ios_build_settings(target)
+
+    target.build_configurations.each do |config|
+
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+
+        ## dart: PermissionGroup.camera
+         'PERMISSION_CAMERA=1',
+
+        ## dart: PermissionGroup.microphone
+         'PERMISSION_MICROPHONE=1',
+      ]
+      # Keep deployment target consistent with the platform line
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+      # Bitcode is deprecated; avoid odd warnings
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
     end
+
+    # Prevent duplicate-embed from deepar_flutter (your original intent)
+    # if target.name == 'deepar_flutter'
+    #   target.build_configurations.each do |config|
+    #     config.build_settings['SKIP_INSTALL'] = 'YES'
+    #   end
+    # end
   end
 end
-
-# post_install do |installer|
-#   installer.pods_project.targets.each do |target|
-#     flutter_additional_ios_build_settings(target)
-#     target.build_configurations.each do |config|
-#       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
-#          if target.name == 'deepar_flutter'
-#               config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
-#               config.build_settings['VALID_ARCHS'] = 'arm64 armv7' # Device-only
-#             end
-#     end
-#   end
-# end
