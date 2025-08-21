@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../res/style/app_colors.dart';
 import 'banner.dart';
 
 class OlxPaginationWidget extends StatefulWidget {
@@ -67,23 +68,26 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height*0.6;
     // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
-    return CustomScrollView(
-      controller: widget.scrollController,
-      slivers: [
-        // First page items
-        if (widget.items.isNotEmpty)
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => widget.items[index],
-              childCount: widget.items.length > widget.itemsPerPage
-                  ? widget.itemsPerPage
-                  : widget.items.length,
+    return GlowingOverscrollIndicator(
+      color: AppColors.SECONDARY_COLOR,
+      axisDirection: AxisDirection.down,
+      child: CustomScrollView(
+        controller: widget.scrollController,
+        slivers: [
+          // First page items
+          if (widget.items.isNotEmpty)
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => widget.items[index],
+                childCount: widget.items.length > widget.itemsPerPage
+                    ? widget.itemsPerPage
+                    : widget.items.length,
+              ),
             ),
-          ),
 
         // Subsequent pages with banners
         for (int page = 1; page < pageCount; page++) ...[
@@ -118,6 +122,6 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
             ),
           ),
       ],
-    );
+    ));
   }
 }

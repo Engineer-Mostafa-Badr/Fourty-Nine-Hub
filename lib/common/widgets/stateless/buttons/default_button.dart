@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../core/utils/type_defs.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
@@ -104,6 +105,7 @@ class _DefaultButtonState extends State<DefaultButton>
             : GestureDetector(
                 onTap: widget.enabled && widget.onPressed != null
                     ? () {
+                      ManageVibration.vibrate();
                         FocusScope.of(context).unfocus();
                         final futureOr = widget.onPressed!();
                         if (futureOr is Future) {

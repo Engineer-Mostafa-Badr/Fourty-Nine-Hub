@@ -58,7 +58,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                           textAlign: TextAlign.center,
                         ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 8),
 
                   // Text & Photo Ad Option with container border
                   _buildAdOption(context,
@@ -178,7 +178,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                     ),
                   )
                 : Container(
-                    height: 120,
+                    height: 96,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -216,7 +216,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
-            SizedBox(height: 8),
+            SizedBox(height: 0),
 
             // Description with shimmer
             isLoading
@@ -235,7 +235,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                     style: TextStyle(color: Colors.grey[600]),
                   ),
 
-            SizedBox(height: 16),
+            SizedBox(height: 8),
 
             // Button with shimmer
             isLoading
@@ -254,7 +254,7 @@ class _CorporateAdsState extends State<CorporateAds> {
                 : ElevatedButton(
                     onPressed: onPressed,
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: Size(double.infinity, 32),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),

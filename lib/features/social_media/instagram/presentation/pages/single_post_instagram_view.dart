@@ -116,7 +116,12 @@ class SinglePostInstagramViewBody extends StatelessWidget {
         likesCounter: post.likesCounter,
         locationName: null,
         // post.locationName,
-        medias: post.mediaUrls,
+        medias: post.mediaUrls.map(
+          (m) => InstagramPostMediaUrlEntity(
+            url: m,
+            id: "",
+          ),
+        ).toList(),
         profilePictureUrl: post.owner.profilePictureUrl,
         userId: post.owner.id,
         userTags: List<InstagramPostUserTagEntity>.from(

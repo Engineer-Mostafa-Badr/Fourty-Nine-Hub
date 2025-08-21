@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:872417805780:android:94641dc7b1e1c719850241",
         "android_client_info": {
-          "package_name": "com.app.fourtynine"
+          "package_name": "com.fourtyninehub.fourtynine"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "872417805780-bi9ujup85jrnh8hkl3b93k22vbln8hu2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.app.fourtynine",
+            "package_name": "com.fourtyninehub.fourtynine",
             "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
           }
         },

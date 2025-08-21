@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
 import '../core/data/datasources/remote/api/api_consumer.dart';
@@ -365,6 +366,7 @@ class DI {
     TinderServiceLocator.execute(serviceLocator: serviceLocator);
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
     NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
+    SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

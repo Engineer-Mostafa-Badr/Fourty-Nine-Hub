@@ -32,7 +32,6 @@ class _MapSectionState extends State<MapSection> {
   void _setUserCurrentLocation() async {
     try {
       Position position = await GetCurrentLocationDriver.getCurrentPosition();
-      print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
       StartTextFieldAndFindWidget.startingPoint.text = "Your location";
       // await context.read<GetStartingPointRideCubit>().getStartingPoint(
       //       address: "",

@@ -72,7 +72,7 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   setState(() {
                     _isExpanded = !_isExpanded;
                   });

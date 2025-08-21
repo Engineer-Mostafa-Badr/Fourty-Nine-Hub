@@ -40,7 +40,7 @@ class CaptainShareScreen extends StatelessWidget {
               width: 204,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 20,
+                fontSize: 18,
                 color:  AppColors.LIGHT_COLOR,
               ),
               label: "Join Now!", onPressed: (){
@@ -62,8 +62,8 @@ class BulletPoint extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("• ", style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 20,
+          const Text("• ", style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700)),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 16,
           fontWeight: FontWeight.w700,
             color: context.isDarkMode? AppColors.whiteColor : AppColors.black
           ))),

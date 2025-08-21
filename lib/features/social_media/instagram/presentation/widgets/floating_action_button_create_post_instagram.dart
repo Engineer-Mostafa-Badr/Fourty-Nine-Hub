@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +13,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/presentation/pages/recording/recording_shared.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
@@ -50,7 +52,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
               width: 17,
             ),
             ...List.generate(
-              context.read<CreatePostInstagramCubit>().postTypes.length,
+              serviceLocator<CreatePostInstagramCubit>().postTypes.length,
               (index) {
                 return Padding(
                   padding: const EdgeInsetsDirectional.only(end: 16),
@@ -97,8 +99,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                             : pleaseLoginDialog(context);
                         // context.push(Paths.REELS);
                       } else {
-                        context
-                            .read<CreatePostInstagramCubit>()
+                        serviceLocator<CreatePostInstagramCubit>()
                             .changePostType(index);
                       }
                     },
@@ -109,8 +110,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                           current.postTypeSelectedIndex,
                       builder: (context, state) {
                         return Label(
-                          text: context
-                              .read<CreatePostInstagramCubit>()
+                          text: serviceLocator<CreatePostInstagramCubit>()
                               .postTypes[index]
                               .title,
                           style: Styles.mediumText(

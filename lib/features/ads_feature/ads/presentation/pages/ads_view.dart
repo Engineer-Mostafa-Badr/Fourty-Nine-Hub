@@ -157,6 +157,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     indicatorSize: TabBarIndicatorSize.tab,
                     labelStyle: Styles.headerText(),
                     onTap: (i) {
+                      ManageVibration.vibrate();
                       if (i == 1) {
                         state.city = '';
                         state.governorate = '';

@@ -100,7 +100,7 @@ class MinimizedCallAppBar extends StatelessWidget
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           // Navigate back to call screen
           context.read<MinimizeCubit>().maximizeCall();
           Navigator.pushNamed(context, '/call', arguments: receiver);
@@ -155,14 +155,14 @@ class MinimizedCallAppBar extends StatelessWidget
                   IconButton(
                     icon: const Icon(Icons.videocam, color: Colors.white),
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       // Toggle video
                     },
                   ),
                   IconButton(
                     icon: const Icon(Icons.call_end, color: Colors.red),
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context.read<CallCubit>().endCall();
                       context.read<MinimizeCubit>().endCall();
                     },

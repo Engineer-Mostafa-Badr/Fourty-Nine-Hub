@@ -1,56 +1,6 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-// import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-//
-// class ShowImagesCreatePostSecond extends StatelessWidget {
-//   const ShowImagesCreatePostSecond({
-//     super.key,
-//     // required this.selectedImages,
-//   });
-//   // final List<Future<File?>> selectedImages;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: MediaQuery.sizeOf(context).height * 0.35,
-//       child: BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
-//         builder: (context, state) {
-//           print('state.selectedGalleryPost ${state.selectedGalleryPost.length}');
-//           print('state.selectedGalleryReels ${state.selectedGalleryReels.length}');
-//           if (state.selectedGalleryPost.isNotEmpty) {
-//             return PageView.builder(
-//               itemCount: state.selectedGalleryPost.length,
-//               itemBuilder: (context, index) {
-//                 return AssetEntityImage(
-//                   state.selectedGalleryPost[index],
-//                   fit: BoxFit.cover,
-//                 );
-//               },
-//             );
-//           }else if (state.selectedGalleryReels.isNotEmpty) {
-//             return PageView.builder(
-//               itemCount: state.selectedGalleryReels.length,
-//               itemBuilder: (context, index) {
-//                 return AssetEntityImage(
-//                   state.selectedGalleryReels[index],
-//                   thumbnailFormat: ThumbnailFormat.jpeg,
-//                   isOriginal: false,
-//                   fit: BoxFit.cover,
-//                 );
-//               },
-//             );
-//           }
-//           return Container();
-//         },
-//       ),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
@@ -134,6 +84,73 @@ class _ShowImagesCreatePostSecondState extends State<ShowImagesCreatePostSecond>
                   );
                 },
               ),
+
+              // أسهم التنقل (فقط إذا كان هناك أكثر من عنصر واحد)
+              if (itemsToShow.length > 1) ...[
+                // السهم الأيسر
+                Positioned(
+                  left: 10,
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (_currentIndex > 0) {
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          context.isArabic? Icons.arrow_forward_ios : Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // السهم الأيمن
+                Positioned(
+                  right: 10,
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (_currentIndex < itemsToShow.length - 1) {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          context.isArabic? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
 
               // الإنديكيتور (فقط إذا كان هناك أكثر من عنصر واحد)
               if (itemsToShow.length > 1)

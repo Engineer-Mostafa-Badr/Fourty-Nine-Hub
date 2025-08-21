@@ -83,13 +83,13 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(
-      "/twitter/feed/general?page=${params.page}&limit=${params.limit}&subCategory=${Constants.twitterSubCategory}",
+      "/twitter/threads?page=${params.page}&limit=${params.limit}",
     );
 
     return response.fold((l) {
       return Left(l);
     }, (data) {
-      final list = (data['data']['posts'] as List)
+      final list = (data['data']['threads'] as List)
           .map((e) => TwitterPostModel.fromJson(e))
           .toList();
       return Right(list);
@@ -100,7 +100,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
       {required String postId}) async {
     final response = await _apiConsumer.get(
-        "/twitter/post/$postId?subCategory=${Constants.twitterSubCategory}");
+        "/twitter/threads/$postId?subCategory=${Constants.twitterSubCategory}");
 
     return response.fold((l) {
       return Left(l);

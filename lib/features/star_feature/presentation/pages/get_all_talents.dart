@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
@@ -13,20 +15,24 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../helpers/manage_vibration.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../custom_video_player.dart';
 import 'talent_video_player.dart';
 
 class GetAllTalents extends StatelessWidget {
   final bool isMyTalent;
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
 
   const GetAllTalents(
-      {super.key, this.scrollController, this.isMyTalent = false});
+      {super.key, required this.scrollController, this.isMyTalent = false});
 
   // final ScrollController _scrollController = ScrollController();
   @override
@@ -52,9 +58,9 @@ class GetAllTalents extends StatelessWidget {
             );
           }
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.61,
+            height: MediaQuery.of(context).size.height * .8,
             child: OlxPaginationWidget(
-              scrollController: scrollController ?? ScrollController(),
+              scrollController: scrollController,
               itemsPerPage: 1,
               loadPage: (page) => cubit.getAllTalent(),
               banners: bannersList,
@@ -163,7 +169,7 @@ class GetAllTalents extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsetsDirectional.only(start: 16.0),
                         child: Row(
                           children: [
                             // Padding(
@@ -204,9 +210,9 @@ class GetAllTalents extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "${context.isArabic ? convertToArabicNumbers(talent.totalViews.toShortScale) : talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic ? convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)) : timeago.format(createdAt, locale: context.locale.languageCode)}",
+                                    "${talent.user.firstName} ${talent.user.lastName} • ${context.isArabic ? convertToArabicNumbers(talent.totalViews.toShortScale) : talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${context.isArabic ? convertToArabicNumbers(timeago.format(createdAt, locale: context.locale.languageCode)) : timeago.format(createdAt, locale: context.locale.languageCode)}",
                                     style: TextStyle(
-                                      fontSize: 26.sp,
+                                      fontSize: 20.sp,
                                       color: context.isDarkMode
                                           ? Colors.white
                                           : Colors.grey,
@@ -217,16 +223,126 @@ class GetAllTalents extends StatelessWidget {
                             ),
                             ...List.generate(
                               5,
-                              (index) => Padding(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: Image.asset(
-                                  index < talent.averageRating.floor()
-                                      ? "assets/49-New-icons/star_gold.png"
-                                      : "assets/49-New-icons/star.png",
+                              (starIndex) => GestureDetector(
+                                onTap: () {
+                                  // context
+                                  //     .read<ClientOrdersCubit>()
+                                  //     .changeDeriveRate(index + 1);
+                                  talent;
+                                  cubit.changeRating(talent.id, starIndex + 1);
+                                  debugPrint(
+                                      'GestureDetector onTap ${talent.averageRating}');
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  child: Image.asset(
+                                    starIndex < talent.averageRating
+                                        ? "assets/49-New-icons/star_gold.png"
+                                        : "assets/49-New-icons/star.png",
+                                  ),
                                 ),
                               ),
                             ),
                             SizedBox(width: 10.w),
+                            IconButton(
+                              onPressed: () {
+                                bottomSheet(
+                                  context: context,
+                                  asAlertDialog: true,
+                                  isDismissible: true,
+                                  backColor: context.isDarkMode
+                                      ? Color(0xff0D0D0D)
+                                      : null,
+                                  widget: Column(
+                                    spacing: 20,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: context.isDarkMode
+                                              ? Color(0xff0D0D0D)
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                child: Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      Assets.instagramHideIcon,
+                                                      width: 24,
+                                                      color: Colors.black,
+                                                    ),
+                                                    const Sizer(),
+                                                    Text(
+                                                      LocaleKeys.hide.localize,
+                                                      style: Styles.headerText(
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              const Sizer(),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  ManageVibration.vibrate();
+                                                  bottomSheet(
+                                                    context: context,
+                                                    widget: ReportView(
+                                                      id: 'postId',
+                                                      categoryId: 'test',
+                                                    ),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.report,
+                                                        color: Colors.red,
+                                                        size: 24,
+                                                      ),
+                                                      const Sizer(),
+                                                      Text(
+                                                        LocaleKeys
+                                                            .report.localize,
+                                                        style:
+                                                            Styles.headerText(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    Colors.red),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.more_vert_rounded,
+                                size: 20,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -236,7 +352,6 @@ class GetAllTalents extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              ManageVibration.vibrate();
                               showAreYouSure(
                                 context: context,
                                 title: LocaleKeys.alert.localize,

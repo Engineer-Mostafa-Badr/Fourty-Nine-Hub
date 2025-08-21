@@ -9,8 +9,9 @@ class GradientProfileBorder extends StatelessWidget {
   final double? borderWidth;
   final double? fullWidth;
   final double? imageWidth;
+  final String? firstChar;
 
-  const GradientProfileBorder({super.key, required this.imageUrl, required this.segments, this.borderWidth, this.imageWidth, this.fullWidth});
+  const GradientProfileBorder({super.key, required this.imageUrl, required this.segments,this.firstChar, this.borderWidth, this.imageWidth, this.fullWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +22,19 @@ class GradientProfileBorder extends StatelessWidget {
           size: Size(fullWidth??40, fullWidth??40),
           painter: SegmentedGradientBorderPainter(segments: segments,borderWidth: borderWidth),
         ),
-        ImageFromInternet(
-          image: imageUrl,
-          isCircle: true,
-          defaultLogo: false,
-          width: imageWidth??30,
-          height: imageWidth??30,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            ImageFromInternet(
+              image: imageUrl,
+              isCircle: true,
+              defaultLogo: false,
+              width: imageWidth??30,
+              height: imageWidth??30,
+                firstChar: firstChar,
+                charPadding:0
+            ),
+          ],
         ),
       ],
     );

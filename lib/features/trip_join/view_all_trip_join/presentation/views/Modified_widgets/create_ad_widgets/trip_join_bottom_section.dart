@@ -11,8 +11,6 @@ import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../../../../../../../helpers/manage_vibration.dart';
 
-
-
 class TripJoinBottomSection extends StatelessWidget {
   const TripJoinBottomSection({
     super.key,
@@ -69,8 +67,10 @@ class TripJoinBottomSection extends StatelessWidget {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              formatDistance(expectedPriceTripEntity?.distance ?? 0),
-                              style: Styles.headerText(color: AppColors.getTextColor(context)),
+                              formatDistance(
+                                  expectedPriceTripEntity?.distance ?? 0),
+                              style: Styles.headerText(
+                                  color: AppColors.getTextColor(context)),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
@@ -79,6 +79,7 @@ class TripJoinBottomSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
+
                     /// RIGHT SIDE: Price + Currency
                     Expanded(
                       flex: 2,
@@ -101,7 +102,8 @@ class TripJoinBottomSection extends StatelessWidget {
                           Text(
                             context.isArabic ? 'جنيه' : 'EGP',
                             style: Styles.mediumText(
-                              fontSize: context.locale.languageCode == "ar" ? 35 : 28,
+                              fontSize:
+                                  context.locale.languageCode == "ar" ? 35 : 28,
                               fontWeight: FontWeight.w500,
                               color: AppColors.getRedColor(context),
                             ),
@@ -121,10 +123,11 @@ class TripJoinBottomSection extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () async {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               final newTime = await showTimePicker(
                                 context: context,
-                                initialTime: const TimeOfDay(hour: 0, minute: 0),
+                                initialTime:
+                                    const TimeOfDay(hour: 0, minute: 0),
                               );
                               onTimeChanged(newTime);
                             },
@@ -138,7 +141,8 @@ class TripJoinBottomSection extends StatelessWidget {
                           Expanded(
                             child: Text(
                               getTime(),
-                              style: Styles.headerText(color: AppColors.getTextColor(context)),
+                              style: Styles.headerText(
+                                  color: AppColors.getTextColor(context)),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
@@ -147,6 +151,7 @@ class TripJoinBottomSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
+
                     /// RIGHT SIDE: Checkbox + Repeat Text
                     Expanded(
                       flex: 2,
@@ -155,11 +160,15 @@ class TripJoinBottomSection extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Checkbox(
-                            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                             value: isChecked,
                             onChanged: onCheckedChanged,
-                            checkColor: context.isDarkMode ? Colors.black : Colors.white,
+                            checkColor: context.isDarkMode
+                                ? Colors.black
+                                : Colors.white,
                             activeColor: AppColors.getTextColor(context),
                             side: BorderSide(
                               color: AppColors.getTextColor(context),
@@ -170,7 +179,8 @@ class TripJoinBottomSection extends StatelessWidget {
                           Flexible(
                             child: Text(
                               LocaleKeys.repeat.localize,
-                              style: Styles.headerText(color: AppColors.getTextColor(context)),
+                              style: Styles.headerText(
+                                  color: AppColors.getTextColor(context)),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
@@ -199,16 +209,20 @@ class TripJoinBottomSection extends StatelessWidget {
                             alignment: Alignment.center,
                             underline: const SizedBox.shrink(),
                             value: selectedSeatNum,
-                            items: [1, 2, 3, 4, 5, 6].map(
+                            items: [1, 2, 3, 4, 5, 6]
+                                .map(
                                   (e) => DropdownMenuItem<int>(
-                                alignment: Alignment.center,
-                                value: e,
-                                child: Text(
-                                  e.toString(),
-                                  style: TextStyle(color: AppColors.getTextColor(context)),
-                                ),
-                              ),
-                            ).toList(),
+                                    alignment: Alignment.center,
+                                    value: e,
+                                    child: Text(
+                                      e.toString(),
+                                      style: TextStyle(
+                                          color:
+                                              AppColors.getTextColor(context)),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                             onChanged: onSeatNumChanged,
                             isDense: true,
                             icon: const Icon(Icons.keyboard_arrow_down),
@@ -216,12 +230,14 @@ class TripJoinBottomSection extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             LocaleKeys.seat.localize,
-                            style: Styles.headerText(color: AppColors.getTextColor(context)),
+                            style: Styles.headerText(
+                                color: AppColors.getTextColor(context)),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(width: 12),
+
                     /// RIGHT SIDE: Baby Seat Icon + Text
                     Expanded(
                       flex: 1,

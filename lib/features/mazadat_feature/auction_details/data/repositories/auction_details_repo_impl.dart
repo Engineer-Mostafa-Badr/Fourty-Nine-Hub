@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/entities/bidding_entity.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
+
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 
 import '../../domain/repositories/auction_details_repo.dart';

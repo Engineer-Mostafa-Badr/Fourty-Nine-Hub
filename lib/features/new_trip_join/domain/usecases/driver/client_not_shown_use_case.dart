@@ -24,8 +24,8 @@ class ClientNotShownParams {
   Map<String, dynamic> toJson() => {
     "passengerId": passengerId,
     "location": {
-      "longitude": 31.27047,
-      "latitude": 29.96541
+      "longitude": 31.23493,
+      "latitude": 30.02541
     }
   };
 }

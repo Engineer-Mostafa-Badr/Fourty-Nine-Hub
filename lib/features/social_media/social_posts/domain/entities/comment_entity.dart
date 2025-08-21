@@ -4,12 +4,17 @@ class CommentEntity {
   final String id;
   String content;
   String? reply;
+  String? commentOwnerId;
+  String? commentOwnerFirstName;
+  String? commentOwnerLastName;
   final String post;
   dynamic user;
   bool? isLove;
+  List<CommentEntity>? replies;
   bool? isLikes;
   bool? isWow;
   bool? edit;
+  bool? makeReply;
   bool? isSad;
   bool? isAngry;
   bool? isHaha;
@@ -20,16 +25,21 @@ class CommentEntity {
   num? angryCount;
   num? hahaCount;
   num? repliesCount;
+  num? remainingRepliesCount;
   num? totalCount;
   final DateTime createdAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt);
 
   String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+      DurationHelper().formatTimeAgo(createdAt);
   CommentEntity({
     required this.id,
     required this.content,
     this.reply,
+    this.commentOwnerId,
+    this.commentOwnerFirstName,
+    this.commentOwnerLastName,
+    this.replies,
     required this.post,
     required this.createdAt,
     required this.user,
@@ -40,6 +50,7 @@ class CommentEntity {
     this.angryCount = 0,
     this.hahaCount = 0,
     this.repliesCount = 0,
+    this.remainingRepliesCount = 0,
     this.totalCount = 0,
     this.isLove = false,
     this.isLikes = false,
@@ -48,6 +59,7 @@ class CommentEntity {
     this.isAngry = false,
     this.isHaha = false,
     this.edit = false,
+    this.makeReply = false,
   });
 
   //toJson
@@ -55,6 +67,7 @@ class CommentEntity {
         '_id': id,
         'content': content,
         'post': post,
+        'replies': replies,
         'isLove': isLove,
         'isLikes': isLikes,
         'user': user,
@@ -69,6 +82,7 @@ class CommentEntity {
         'sadCount': sadCount,
         'angryCount': angryCount,
         'repliesCount': repliesCount,
+        'remainingRepliesCount': remainingRepliesCount,
         'totalCount': totalCount,
         'createdAt': createdAt,
       };

@@ -148,7 +148,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                           final item = widget.items[index];
                           return InkWell(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               setState(() => _selectedItem = item);
                               widget.onItemSelected(item);
                               _closeDropdown();

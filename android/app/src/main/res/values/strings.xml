@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Fourtyninehub</string>
     <string name="facebook_app_id">660212443761468</string>
-    <string name="fb_login_protocol_scheme">fb660212443761468</string>
+    <string name="fb_login_protocol_scheme">fbd022d588e73f2526b115f049c8ab4c5b</string>
     <string name="facebook_client_token">255815a3e684d4212c43e057a063712a</string>
         <string name="mapbox_access_token">sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg</string>
         <!-- Google Sign-In Configuration -->
-    <string name="default_web_client_id">872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com</string>
+    <!-- <string name="default_web_client_id">872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com</string> -->
+    <string name="default_web_client_id">361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com</string>
 </resources>

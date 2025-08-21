@@ -76,7 +76,7 @@ class _DestinationTextFieldAndFindButonState
             CustomButton(
               title: LocaleKeys.searchFind.localize,
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (formKey.currentState!.validate()) {
                   mapBoxDestCubit.searchLocationMapBoxDest(
                       query: destinationController.text);

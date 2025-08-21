@@ -28,12 +28,12 @@ class PostEntity {
   final List<AudioEntity> audio;
   final bool isShared;
   final bool isDocumentation;
-  final bool isLove;
-  final bool isLikes;
-  final bool isWow;
-  final bool isSad;
-  final bool isAngry;
-  final bool isHaha;
+  bool? isLove;
+  bool? isLikes;
+  bool? isWow;
+  bool? isSad;
+  bool? isAngry;
+  bool? isHaha;
   final TwitterUserModel user;
   final FeelingEntity? feeling;
   final ActivityEntity? activity;
@@ -41,12 +41,12 @@ class PostEntity {
   final int commentPrivacy;
   final int commentsCount;
   final int sharesCount;
-  final int likesCount;
-  final int loveCount;
-  final int hahaCount;
-  final int wowCount;
-  final int sadCount;
-  final int angryCount;
+  int? likesCount;
+  int? loveCount;
+  int? hahaCount;
+  int? wowCount;
+  int? sadCount;
+  int? angryCount;
   final int totalCount;
   final String? backgroundColor;
   final String? name;
@@ -83,12 +83,12 @@ class PostEntity {
     this.audio = const [],
     this.isShared = false,
     this.isDocumentation = false,
-    this.isLove = false,
-    this.isLikes = false,
-    this.isWow = false,
-    this.isSad = false,
-    this.isAngry = false,
-    this.isHaha = false,
+    this.isLove,
+    this.isLikes ,
+    this.isWow ,
+    this.isSad ,
+    this.isAngry ,
+    this.isHaha ,
     required this.user,
     this.feeling,
     this.activity,

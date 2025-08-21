@@ -207,6 +207,8 @@ abstract class Assets {
   // navigator
   static String logo = 'assets/images/logo_600.png';
   static String womanPlaceHolder = 'assets/icons/woman_place_holder.png';
+  static String womanIcon = 'assets/icons/woman.png';
+  static String manIcon = 'assets/icons/man.png';
   static String logoWithBlackText = 'assets/images/logoWithBlackText.png';
   static String allRestaurants = 'assets/images/allRestaurants.png';
 //   static String healthcare = 'assets/images/healthcare.png';
@@ -278,6 +280,9 @@ abstract class Assets {
 //   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String bookingImage = 'assets/images/bookingImage.png';
+  static String gamesImage = 'assets/images/gamesImage.jpg';
+  static String moneyExchangeImage = 'assets/images/moneyExchangeImage.png';
   static String status = 'assets/images/status.png';
   static String hand_dark = 'assets/icons/handshakeIconDark.png';
   static String status_dark = 'assets/icons/statusIconDark.png';
@@ -402,6 +407,7 @@ abstract class Assets {
   static String snap = 'assets/drawerIcons/snap.png';
   static String cameraOutlined = 'assets/drawerIcons/camera_outlined.png';
   static String whatsApp = 'assets/drawerIcons/whatsapp.png';
+  static String whatsAppIcon = 'assets/icons/whatsapp.png';
   static String editProfile = 'assets/drawerIcons/editProfile.png';
   static String changePassword = 'assets/drawerIcons/changePassword.png';
 //   static String disableAccount = 'assets/drawerIcons/disableAccount.png';
@@ -561,6 +567,19 @@ abstract class Assets {
   static String maleUser = 'assets/images/trip_join/male_user.png';
   static String femaleUser = 'assets/images/trip_join/female_user.png';
   static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
+  static String foodIcon = 'assets/icons/foodIcon.png';
+  static String tripJoinIcon1 = 'assets/icons/tripJoin.png';
+  static String newTripJoin = 'assets/icons/newTripJoin.png';
+  static String tripJoinIcon2 = 'assets/icons/tripJoinIcon2.png';
+  static String rideIcon1 = 'assets/icons/rideIcon.png';
+  static String healthIcon1 = 'assets/icons/healthIcon.png';
+  static String gamesIcon = 'assets/icons/gamesIcon.png';
+  static String bidIcon = 'assets/icons/bidIcon.png';
+  static String mealIcon = 'assets/icons/mealIcon.png';
+  static String chanceIcon = 'assets/icons/chanceIcon.png';
+  static String moneyExchange = 'assets/icons/moneyExchange.png';
+  static String chanceImage = 'assets/images/changeImage.png';
+  static String bidImage = 'assets/images/bidImage.png';
   static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
 //   static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
 
@@ -661,6 +680,8 @@ abstract class Assets {
   static String doctorImage = "assets/images/doctor.png";
   static String marriage = "assets/images/marriage.png";
   static String reelBar = "assets/icons/reelBar.svg";
+  static String booking = "assets/icons/booking.png";
+  static String tinderIcon = "assets/icons/tinder.png";
   static String reelBarPng = "assets/icons/reelBar.png";
   static String gridIcon = "assets/icons/gridIcon.png";
   static String sliderIcon = "assets/icons/sliderIcon.png";

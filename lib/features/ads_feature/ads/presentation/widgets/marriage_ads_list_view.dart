@@ -28,7 +28,7 @@ class MarriageAdsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     print('state.ads! ${state.ads!.length}');
     return OlxPaginationWidget(
-      scrollController: scrollController,
+      scrollController: ScrollController(),
       itemsPerPage: 2,
       loadPage: (page) {
         print('==> page $page');

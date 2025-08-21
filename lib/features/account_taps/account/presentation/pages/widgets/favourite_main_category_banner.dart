@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -71,7 +72,9 @@ class _FavouriteMainCategoryBannerState
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                          onTap: () async => await widget.onFavorite(),
+                          onTap: () async {
+                            ManageVibration.vibrate();
+                             await widget.onFavorite();},
                           child: const Icon(
                             Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
@@ -130,7 +133,9 @@ class _FavouriteMainCategoryBannerState
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                          onTap: () async => await widget.onFavorite(),
+                          onTap: () async {
+                            ManageVibration.vibrate();
+                             await widget.onFavorite();},
                           child: const Icon(
                             Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
@@ -149,7 +154,9 @@ class _FavouriteMainCategoryBannerState
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
       return InkWell(
-        onTap: () => widget.onRegister?.call(),
+        onTap: () async {
+          ManageVibration.vibrate();
+          await widget.onRegister?.call();},
         child: Text(Labels.register,
             style: Styles.mediumText(
                 color: Colors.white, fontWeight: FontWeight.bold)),

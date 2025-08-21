@@ -152,7 +152,7 @@ class SubscriptionWidget extends StatelessWidget {
   }) =>
       GestureDetector(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           function();
         },
         child: Container(

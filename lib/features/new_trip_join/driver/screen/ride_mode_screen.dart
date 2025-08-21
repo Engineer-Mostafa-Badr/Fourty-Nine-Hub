@@ -105,7 +105,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                 isApproved: state.setting?.data.isApproved ?? false,
                 hasActiveTrip:cubit.activeTrip!=null
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 10.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +139,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                 ),
               ],
             ),
-            const SizedBox(height: 44,),
+            const SizedBox(height: 10,),
             Expanded(child: TripJoinSliders())
           ],
         );

@@ -458,7 +458,7 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                   // }
                 },
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   // Don't stop the timer when returning to call screen
                   print(
                       "Tapped on minimized overlay. Current timer: ${_timerService.formatDuration(_timerService.duration.value)}");
@@ -478,8 +478,7 @@ class _MinimizedCallOverlayState extends State<MinimizedCallOverlay>
                   // );
                 },
                 child: hasVideo
-                    ? _buildVideoCallBubble(
-                        context, minimizeState, callState)
+                    ? _buildVideoCallBubble(context, minimizeState, callState)
                     : _buildCallBubble(context, minimizeState),
               ),
             );

@@ -91,7 +91,7 @@
 
 //     try {
 //       dev.log('Starting Apple Sign-In...');
-      
+
 //       // Generate nonce for security
 //       final rawNonce = _generateNonce();
 //       final nonce = _sha256ofString(rawNonce);
@@ -285,8 +285,6 @@
 //     }
 //   }
 
-  
-
 //   // // Helper methods for Apple Sign-In
 //   // String _generateNonce([int length = 32]) {
 //   //   const charset =
@@ -324,9 +322,6 @@
 //   }
 // }
 
-
-
-
 import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
@@ -354,6 +349,7 @@ abstract class FirebaseAuthServiceRepository {
   Future<Either<Failure, bool>> isSignedIn();
   Future<Either<Failure, String?>> refreshIdToken();
   Future<Either<Failure, void>> sendEmailVerification();
+  Future<Either<Failure, UserCredential?>> signInWithApple();
   Future<Either<Failure, UserCredential?>> signInWithFacebook();
   Future<Either<Failure, UserCredential?>> signInWithGoogle();
   Future<Either<Failure, void>> signOut();
@@ -365,7 +361,10 @@ class SocialAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    serverClientId: '872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com',
+    // هذا يجب أن يطابق CLIENT_ID في GoogleService-Info.plist
+    serverClientId:
+        '361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com',
+        
   );
 
   // Get current user
@@ -377,7 +376,7 @@ class SocialAuthService {
     return await user?.getIdToken();
   }
 
-  // Apple Sign In - Fixed version
+  // Apple Sign In - Fixed to use the simple working method
   Future<UserCredential?> signInWithApple() async {
     if (!Platform.isIOS) {
       throw Exception('Apple Sign-In is only available on iOS');
@@ -385,129 +384,77 @@ class SocialAuthService {
 
     try {
       dev.log('Starting Apple Sign-In...');
-      
-      // First check if Apple Sign-In is available
-      if (!await SignInWithApple.isAvailable()) {
-        throw Exception('Apple Sign-In is not available on this device');
-      }
 
-      // Generate nonce for security
-      final rawNonce = _generateNonce();
-      final nonce = _sha256ofString(rawNonce);
+      // Use the simple Firebase method that works
+      final appleProvider = AppleAuthProvider();
+      appleProvider.addScope('email');
+      appleProvider.addScope('name');
 
-      dev.log('Generated nonce, requesting Apple ID credential...');
-
-      // Request credential for the currently signed in Apple account
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        nonce: nonce,
-        // Add state parameter for additional security
-        state: 'signin_${DateTime.now().millisecondsSinceEpoch}',
-      );
-
-      dev.log('Apple credential obtained successfully');
-      dev.log('Identity Token exists: ${appleCredential.identityToken != null}');
-      dev.log('Authorization Code exists: ${appleCredential.authorizationCode != null}');
-      dev.log('User Identifier: ${appleCredential.userIdentifier}');
-
-      // Validate that we have the required tokens
-      if (appleCredential.identityToken == null) {
-        throw Exception('Failed to get Apple ID token');
-      }
-
-      // Create Firebase credential from Apple credential
-      final oauthCredential = OAuthProvider("apple.com").credential(
-        idToken: appleCredential.identityToken,
-        rawNonce: rawNonce,
-        // Use authorization code as access token
-        accessToken: appleCredential.authorizationCode,
-      );
-
-      dev.log('Created Firebase OAuth credential');
-
-      // Sign in to Firebase with the credential
-      final UserCredential userCredential = await _firebaseAuth.signInWithCredential(oauthCredential);
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithProvider(appleProvider);
 
       dev.log('Firebase Apple sign-in successful');
       dev.log('User UID: ${userCredential.user?.uid}');
       dev.log('User Email: ${userCredential.user?.email}');
       dev.log('Display Name: ${userCredential.user?.displayName}');
 
-      // If this is the first time signing in and we have full name info
-      if (appleCredential.givenName != null || appleCredential.familyName != null) {
-        final displayName = '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'.trim();
-        if (displayName.isNotEmpty && userCredential.user?.displayName == null) {
-          try {
-            await userCredential.user?.updateDisplayName(displayName);
-            dev.log('Updated display name to: $displayName');
-          } catch (e) {
-            dev.log('Failed to update display name: $e');
-          }
-        }
-      }
-
       return userCredential;
-    } on SignInWithAppleAuthorizationException catch (e) {
-      dev.log('Apple Sign-In Authorization Error: ${e.code}');
-      dev.log('Error message: ${e.message}');
-      
-      switch (e.code) {
-        case AuthorizationErrorCode.canceled:
-          dev.log('User canceled Apple Sign-In');
-          return null; // User canceled, return null instead of throwing
-        case AuthorizationErrorCode.failed:
-          throw Exception('Apple Sign-In failed');
-        case AuthorizationErrorCode.invalidResponse:
-          throw Exception('Invalid response from Apple Sign-In');
-        case AuthorizationErrorCode.notHandled:
-          throw Exception('Apple Sign-In request was not handled');
-        case AuthorizationErrorCode.unknown:
-          throw Exception('Unknown error occurred during Apple Sign-In');
-        default:
-          throw Exception('Apple Sign-In error: ${e.message}');
-      }
     } on FirebaseAuthException catch (e) {
       dev.log('Firebase Auth Error during Apple Sign-In: ${e.code}');
       dev.log('Firebase Auth Error message: ${e.message}');
-      
+
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          throw Exception('An account already exists with a different sign-in method');
+          throw Exception(
+              'An account already exists with a different sign-in method');
         case 'invalid-credential':
           throw Exception('The Apple credential is invalid');
         case 'operation-not-allowed':
           throw Exception('Apple Sign-In is not enabled in Firebase');
         case 'user-disabled':
           throw Exception('This user account has been disabled');
+        case 'cancelled':
+        case 'user-cancelled':
+          dev.log('User cancelled Apple Sign-In');
+          return null; // User cancelled, return null
         default:
           throw Exception('Firebase authentication failed: ${e.message}');
       }
     } catch (e, stackTrace) {
       dev.log('Unexpected Apple Sign-In Error: $e');
       dev.log('Stack trace: $stackTrace');
+
+      // Handle user cancellation gracefully
+      if (e.toString().contains('cancelled') ||
+          e.toString().contains('canceled')) {
+        dev.log('User cancelled Apple Sign-In');
+        return null;
+      }
+
       rethrow;
     }
   }
 
-  // Facebook Sign In - Improved version
+  // Facebook Sign In - Improved with better token handling
   Future<UserCredential?> signInWithFacebook() async {
     try {
       dev.log('Starting Facebook Sign-In...');
 
+      // For better security, generate nonce for limited login
+      final rawNonce = _generateNonce();
+      final nonce = _sha256ofString(rawNonce);
+
       // Trigger the sign-in flow
       final LoginResult loginResult = await FacebookAuth.instance.login(
         permissions: ['email', 'public_profile'],
-        loginBehavior: LoginBehavior.webOnly,
+        nonce: nonce, // Add nonce for security
       );
 
       dev.log('Facebook login result status: ${loginResult.status}');
 
       if (loginResult.status == LoginStatus.success) {
         dev.log('Facebook login successful');
-        
+
         final accessToken = loginResult.accessToken;
         if (accessToken == null) {
           throw Exception('Failed to get Facebook access token');
@@ -515,9 +462,37 @@ class SocialAuthService {
 
         dev.log('Facebook access token obtained');
 
-        // Create a credential from the access token
-        final OAuthCredential facebookAuthCredential =
-            FacebookAuthProvider.credential(accessToken.tokenString);
+        OAuthCredential facebookAuthCredential;
+
+        // Handle different token types on iOS
+        if (Platform.isIOS) {
+          switch (accessToken.type) {
+            case AccessTokenType.classic:
+              final token = accessToken as ClassicToken;
+              facebookAuthCredential = FacebookAuthProvider.credential(
+                token.authenticationToken ?? token.tokenString,
+              );
+              break;
+            case AccessTokenType.limited:
+              final token = accessToken as LimitedToken;
+              facebookAuthCredential = OAuthCredential(
+                providerId: 'facebook.com',
+                signInMethod: 'oauth',
+                idToken: token.tokenString,
+                rawNonce: rawNonce,
+              );
+              break;
+            default:
+              facebookAuthCredential = FacebookAuthProvider.credential(
+                accessToken.tokenString,
+              );
+          }
+        } else {
+          // Android - use standard approach
+          facebookAuthCredential = FacebookAuthProvider.credential(
+            accessToken.tokenString,
+          );
+        }
 
         // Sign in with Firebase using the credential
         final UserCredential userCredential =
@@ -538,10 +513,11 @@ class SocialAuthService {
     } on FirebaseAuthException catch (e) {
       dev.log('Firebase Auth Error during Facebook Sign-In: ${e.code}');
       dev.log('Firebase Auth Error message: ${e.message}');
-      
+
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          throw Exception('An account already exists with a different sign-in method');
+          throw Exception(
+              'An account already exists with a different sign-in method');
         case 'invalid-credential':
           throw Exception('The Facebook credential is invalid');
         case 'operation-not-allowed':
@@ -558,7 +534,7 @@ class SocialAuthService {
     }
   }
 
-  // Google Sign In - Improved version
+  // Google Sign In - Already working well, minor improvements
   Future<UserCredential?> signInWithGoogle() async {
     try {
       dev.log('Starting Google Sign-In...');
@@ -607,10 +583,11 @@ class SocialAuthService {
     } on FirebaseAuthException catch (e) {
       dev.log('Firebase Auth Error during Google Sign-In: ${e.code}');
       dev.log('Firebase Auth Error message: ${e.message}');
-      
+
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          throw Exception('An account already exists with a different sign-in method');
+          throw Exception(
+              'An account already exists with a different sign-in method');
         case 'invalid-credential':
           throw Exception('The Google credential is invalid');
         case 'operation-not-allowed':
@@ -627,18 +604,18 @@ class SocialAuthService {
     }
   }
 
-  // Sign Out - Improved version
+  // Sign Out - Works well, keeping as is
   Future<void> signOut() async {
     try {
       dev.log('Starting sign out process...');
-      
+
       // Sign out from all services
       await Future.wait([
         _firebaseAuth.signOut(),
         _googleSignIn.signOut(),
         FacebookAuth.instance.logOut(),
       ]);
-      
+
       dev.log('Sign out completed successfully');
     } catch (e) {
       dev.log('Sign out error: $e');
@@ -646,11 +623,32 @@ class SocialAuthService {
     }
   }
 
-  // Helper methods for Apple Sign-In
+  // Check if user is signed in
+  bool isSignedIn() {
+    return _firebaseAuth.currentUser != null;
+  }
+
+  // Get user info as Map
+  Map<String, dynamic>? getUserInfo() {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) return null;
+
+    return {
+      'uid': user.uid,
+      'email': user.email,
+      'displayName': user.displayName,
+      'photoURL': user.photoURL,
+      'emailVerified': user.emailVerified,
+    };
+  }
+
+  // Helper methods
   String _generateNonce([int length = 32]) {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
   }
 
   String _sha256ofString(String input) {

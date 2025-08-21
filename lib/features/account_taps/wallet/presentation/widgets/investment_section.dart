@@ -55,7 +55,10 @@ class _InvestmentSectionState extends State<InvestmentSection> {
               child: Padding(
                 padding: const EdgeInsetsDirectional.only(end: 20),
                 child: InkWell(
-                  onTap: () => _toggleHint(),
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    _toggleHint();
+                  },
                   child: SvgPicture.asset(
                     Assets.ideaIcon,
                   ),
@@ -101,7 +104,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                             : widget.giftWalletEntity.currencyEn,
                         price: widget.giftWalletEntity.fiveYears ?? 0,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           context
                               .read<GiftTwoCubit>()
                               .requestTransferFiveYears(context);
@@ -124,7 +127,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                             : widget.giftWalletEntity.currencyEn,
                         price: widget.giftWalletEntity.tenYears ?? 0,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           context
                               .read<GiftTwoCubit>()
                               .requestTransferTenYears(context);

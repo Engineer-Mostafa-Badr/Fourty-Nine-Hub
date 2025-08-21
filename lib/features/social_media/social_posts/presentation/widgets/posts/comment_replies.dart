@@ -194,25 +194,25 @@ class _CommentRepliesState extends State<CommentReplies> {
     });
   }
 
-  Widget _buildCommentCard(
-      {required CommentEntity reply, required Function(String) onDeleteReply}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ReplyCard(
-          reply: reply,
-          onReplyReact: (String id) {
-            // widget.onReplyReact(id);
-            // reply.isReact = !reply.isReact!;
-          },
-          onReport: (TwitterReportParams params) {
-            // widget.onReport(params);
-          },
-          onDeleteReply: (String id) => onDeleteReply(id),
-          onEditComment: (PostCommentParams params) =>
-              widget.onEditComment(params),
-        ),
-      ],
-    );
-  }
+  // Widget _buildCommentCard(
+  //     {required CommentEntity reply, required Function(String) onDeleteReply}) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       ReplyCard(
+  //         reply: reply,
+  //         onReplyReact: (String id) {
+  //           // widget.onReplyReact(id);
+  //           // reply.isReact = !reply.isReact!;
+  //         },
+  //         onReport: (TwitterReportParams params) {
+  //           // widget.onReport(params);
+  //         },
+  //         onDeleteReply: (String id) => onDeleteReply(id),
+  //         onEditComment: (PostCommentParams params) =>
+  //             widget.onEditComment(params),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

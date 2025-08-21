@@ -26,10 +26,10 @@ class CreatePostInstagramState {
   final int currentPage;
   final bool hasMoreImages;
   final List<UserTagEntity> usersTag;
-  final LocationInstagramEntity? location;
+  LocationInstagramEntity? location;
   final bool isImageCover;
 
-  const CreatePostInstagramState({
+   CreatePostInstagramState({
     this.status = CreatePostInstagramStates.loading,
     this.galleryPost = const [],
     this.selectedGalleryPost = const [],
@@ -69,6 +69,7 @@ class CreatePostInstagramState {
     List<UserTagEntity>? usersTag,
     LocationInstagramEntity? location,
     bool? isImageCover,
+    bool? clearLocation, // إضافة parameter للـ clear
   }) {
     return CreatePostInstagramState(
       status: status ?? this.status,
@@ -89,8 +90,8 @@ class CreatePostInstagramState {
       failure: failure ?? this.failure,
       currentPage: currentPage ?? this.currentPage,
       hasMoreImages: hasMoreImages ?? this.hasMoreImages,
+      location: clearLocation == true ? null : (location ?? this.location),
       usersTag: usersTag ?? this.usersTag,
-      location: location ?? this.location,
       isImageCover: isImageCover ?? this.isImageCover,
     );
   }

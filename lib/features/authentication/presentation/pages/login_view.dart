@@ -327,6 +327,11 @@ class _LoginViewState extends State<LoginView> {
                                 if (registerCubit.accept) {
                                   if (formKeyRegister.currentState!
                                       .validate()) {
+                                    if(registerCubit.isLessThan14YearsOld(registerCubit.birthDateTextController.text.trim())){
+                                      showErrorMessage(context, context.isArabic?'يجب ان يكون المستخدم اكبر من 14 سنة':'The user must be older than 14 years');
+                                      return;
+                                    }
+
                                     registerCubit.register();
                                   }
                                 } else {

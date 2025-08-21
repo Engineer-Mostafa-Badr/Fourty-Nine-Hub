@@ -147,55 +147,39 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 }),
               ],
             ),
-            GestureDetector(
-              onTap: () {
-      ManageVibration.vibrate();
-                if (!serviceLocator<UserCubit>().isLoggedIn) {
-                  context.read<PreloadBloc>().pauseTheVideo();
-                  context.push(Routes.LOGIN);
-                } else {
-                  context.push(Routes.Tinder);
-                }
-              },
-              child: MediaQuery(
-                data: MediaQuery.of(context)
-                    .copyWith(textScaler: const TextScaler.linear(1.0)),
-                child: SvgPicture.asset(
-                  Assets.searchIcon,
-                  color: Colors.white,
-                  width: 30,
-                  height: 30,
-                ),
-              ),
-            )
+            _buildLiveIcon(onTap: () {
+              ManageVibration.vibrate();
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+              if (context
+                  .read<ReelsCubit>()
+                  .state
+                  .controllers[context.read<ReelsCubit>().state.focusedIndex]!
+                  .value
+                  .isPlaying) {
+                context
+                    .read<ReelsCubit>()
+                    .state
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]
+                    ?.pause();
+              }
+              if (context.isUserLoggedIn) {
+                showTiktokOption(context, generateRandom9DigitNumber);
+              } else {
+                return pleaseLoginDialog(context);
+                // context.push(Routes.LOGIN);
+              }
+            }, onBackTap: () {
+              context.pop();
+            }),
           ],
         ),
         SizedBox(height: 18),
-        _buildLiveIcon(onTap: () {
-      ManageVibration.vibrate();
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          if (context
-              .read<ReelsCubit>()
-              .state
-              .controllers[context.read<ReelsCubit>().state.focusedIndex]!
-              .value
-              .isPlaying) {
-            context
-                .read<ReelsCubit>()
-                .state
-                .controllers[context.read<ReelsCubit>().state.focusedIndex]
-                ?.pause();
-          }
-          if (context.isUserLoggedIn) {
-            showTiktokOption(context, generateRandom9DigitNumber);
-          } else {
-            return pleaseLoginDialog(context);
-            // context.push(Routes.LOGIN);
-          }
-        }, onBackTap: () {
-          context.pop();
-        }),
+       Align(
+         alignment: AlignmentDirectional.topEnd,
+         child: Icon(Icons.volume_mute,color: AppColors.whiteColor,        size: 30,
+         ),
+       )
 
         // Image.asset(
         //   Assets.volumeOff,

@@ -278,9 +278,9 @@ class ReelsCubit extends Cubit<ReelsState> {
         emit(state.copyWith(
           reels: [...state.globalReels, ...data.data.reels],
           isLoading: false,
-          hasReachedMax: data.data.pagination.currentPage >=
-              data.data.pagination.pageCount,
-          currentPage: data.data.pagination.currentPage,
+          hasReachedMax: (data.data.pagination?.currentPage??1) >=
+              (data.data.pagination?.pageCount??1),
+          currentPage: data.data.pagination?.currentPage??1,
         ));
       },
     );
@@ -310,9 +310,9 @@ class ReelsCubit extends Cubit<ReelsState> {
             ...data.data.reels
           ],
           reelsForFollowerIsLoading: false,
-          reelsForFollowerHasReachedMax: data.data.pagination.currentPage >=
-              data.data.pagination.pageCount,
-          reelsForFollowerCurrentPage: data.data.pagination.currentPage,
+          reelsForFollowerHasReachedMax: (data.data.pagination?.currentPage??1) >=
+              (data.data.pagination?.pageCount??1),
+          reelsForFollowerCurrentPage: data.data.pagination?.currentPage??1,
         ));
       },
     );

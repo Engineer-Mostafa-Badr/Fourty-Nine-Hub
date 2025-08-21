@@ -5,11 +5,11 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
 import '../../common/widgets/stateless/buttons/app_button.dart';
 import '../../common/widgets/stateless/buttons/default_button.dart';
@@ -23,6 +23,7 @@ import '../enums/wallet_types_enums.dart';
 import '../utils/custom_show_dialog.dart';
 
 showErrorMessage(BuildContext context, String message) {
+  if (message == 'Unauthorized') return;
   ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -84,7 +85,7 @@ showSuccessMessage(
                 message,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color:AppColors.getTextColor(context),
+                  color: AppColors.getTextColor(context),
                 ),
               ),
             ),
@@ -96,7 +97,6 @@ showSuccessMessage(
           ],
         ),
         backgroundColor: AppColors.getFillColor(context),
-
         behavior: SnackBarBehavior.floating,
         padding: EdgeInsets.symmetric(
           vertical: 20.h,
@@ -219,9 +219,7 @@ Future<void> showPermissionDialog({required String message}) async =>
 // );
 
 void showLoadingDialog(BuildContext context,
-    {String? message,
-      bool canPop = false,
-      bool barrierDismissible = false}) {
+    {String? message, bool canPop = false, bool barrierDismissible = false}) {
   showGeneralDialog(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -243,7 +241,8 @@ void showLoadingDialog(BuildContext context,
                   const CustomCircularProgressIndicator(),
                   const SizedBox(height: 20),
                   Text(
-                    message ?? (context.isArabic? 'يرجى الانتظار...' : 'Loading...'),
+                    message ??
+                        (context.isArabic ? 'يرجى الانتظار...' : 'Loading...'),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -405,148 +404,150 @@ void showConfirmDialog(
   // );
 }
 
-showSubscribeDialog(BuildContext context, String subCategoryId, {String? title}) {
-    showCustomDialogTrip(
-        context,
-        Column(
-          spacing: 12,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              LocaleKeys.alert.localize,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
+showSubscribeDialog(BuildContext context, String subCategoryId,
+    {String? title}) {
+  showCustomDialogTrip(
+      context,
+      Column(
+        spacing: 12,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.alert.localize,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
             ),
-            Text(title??'Please Subscribe for more trips',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: FontSize.s16,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: LocaleKeys.close.localize,
-                    backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                const SizedBox(width: 16),
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: LocaleKeys.subscribe.localize,
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      SubscriptionMethod().subscribe(
-                          subscribeId: subCategoryId,
-                          showRegular: true,
-                          title: '');
-                    }),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-        ));
-  }
+          ),
+          Text(title ?? 'Please Subscribe for more trips',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: FontSize.s16,
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              )),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppButton(
+                  width: context.screenWidth / 3.4,
+                  label: LocaleKeys.close.localize,
+                  backColor: AppColors.SECONDARY_COLOR_DARK2,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              const SizedBox(width: 16),
+              AppButton(
+                  width: context.screenWidth / 3.4,
+                  label: LocaleKeys.subscribe.localize,
+                  backColor: AppColors.PRIMARY_COLOR,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    SubscriptionMethod().subscribe(
+                        subscribeId: subCategoryId,
+                        showRegular: true,
+                        title: '');
+                  }),
+            ],
+          ),
+          const SizedBox(height: 16),
+        ],
+      ));
+}
 
-  showDebtDialog(BuildContext context, String subCategoryId, String title) {
-    showCustomDialogTrip(
-        context,
-        Column(
-          spacing: 12,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              LocaleKeys.alert.localize,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
+showDebtDialog(BuildContext context, String subCategoryId, String title) {
+  showCustomDialogTrip(
+      context,
+      Column(
+        spacing: 12,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.alert.localize,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
             ),
-            Text(title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: FontSize.s16,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: context.isArabic? 'اغلاق' : 'Close',
-                    backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                const SizedBox(width: 16),
-                AppButton(
-                    width: context.screenWidth / 3.4,
-                    label: context.isArabic? 'دفع' : 'Pay',
-                    backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      serviceLocator<SubscriptionController>()
-                          .showActiveSubscriptionAmounts(
-                              walletType: WalletTypes.mainWallet, price: 50);
-                    }),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-        ));
-  }
+          ),
+          Text(title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: FontSize.s16,
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              )),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppButton(
+                  width: context.screenWidth / 3.4,
+                  label: context.isArabic ? 'اغلاق' : 'Close',
+                  backColor: AppColors.SECONDARY_COLOR_DARK2,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              const SizedBox(width: 16),
+              AppButton(
+                  width: context.screenWidth / 3.4,
+                  label: context.isArabic ? 'دفع' : 'Pay',
+                  backColor: AppColors.PRIMARY_COLOR,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    serviceLocator<SubscriptionController>()
+                        .showActiveSubscriptionAmounts(
+                            walletType: WalletTypes.mainWallet, price: 50);
+                  }),
+            ],
+          ),
+          const SizedBox(height: 16),
+        ],
+      ));
+}
 
-
-  showHaveTripDialog({required BuildContext context,required String title,Function()? onClose}) {
-    showCustomDialogTrip(
-        context,
-        Column(
-          spacing: 12,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              LocaleKeys.alert.localize,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
+showHaveTripDialog(
+    {required BuildContext context,
+    required String title,
+    Function()? onClose}) {
+  showCustomDialogTrip(
+      context,
+      Column(
+        spacing: 12,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.alert.localize,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
             ),
-            Text(title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: FontSize.s16,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AppButton(
-                    width: context.screenWidth/3,
-                    label: context.isArabic? 'حسنا' : 'OK',
-                    backColor: AppColors.SECONDARY_COLOR_DARK2,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      // if(onClose!=null)onClose!();
-                    }),
-
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-        ));
-  }
+          ),
+          Text(title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: FontSize.s16,
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              )),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppButton(
+                  width: context.screenWidth / 3,
+                  label: context.isArabic ? 'حسنا' : 'OK',
+                  backColor: AppColors.SECONDARY_COLOR_DARK2,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // if(onClose!=null)onClose!();
+                  }),
+            ],
+          ),
+          const SizedBox(height: 16),
+        ],
+      ));
+}

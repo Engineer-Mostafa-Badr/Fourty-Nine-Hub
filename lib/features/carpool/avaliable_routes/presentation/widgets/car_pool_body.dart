@@ -32,7 +32,6 @@ class _CarPoolBodyState extends State<CarPoolBody>
   void _printCurrentLocation() async {
     try {
       Position position = await GetCurrentLocationDriver.getCurrentPosition();
-      print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
       GetCurrentLocationDriver.position = position;
     } catch (e) {
       print('Error: $e');

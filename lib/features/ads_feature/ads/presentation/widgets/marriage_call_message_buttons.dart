@@ -152,7 +152,7 @@ class _MarriageCallMessageButtonsState
                                                     .getButtonPrimaryColor(
                                                         context),
                                                 onTap: () {
-      ManageVibration.vibrate();
+                                                  ManageVibration.vibrate();
                                                   context.pop();
                                                   LaunchURLHelper().call(
                                                       phone: widget.phone);
@@ -166,7 +166,7 @@ class _MarriageCallMessageButtonsState
                                                 radius: 12,
                                                 color: AppColors.grey300,
                                                 onTap: () async {
-      ManageVibration.vibrate();
+                                                  ManageVibration.vibrate();
                                                   context.pop();
                                                   if (await Permission
                                                               .microphone

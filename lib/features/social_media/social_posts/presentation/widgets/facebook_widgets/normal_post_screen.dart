@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -30,7 +32,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/post_entity.dart';
 import '../../../../../../helpers/manage_vibration.dart';
 
-class NormalPostScreen extends StatelessWidget {
+class NormalPostScreen extends StatefulWidget {
   const NormalPostScreen({
     super.key,
     required this.postEntity,
@@ -39,7 +41,79 @@ class NormalPostScreen extends StatelessWidget {
   final PostEntity postEntity;
 
   @override
+  State<NormalPostScreen> createState() => _NormalPostScreenState();
+}
+
+class _NormalPostScreenState extends State<NormalPostScreen> {
+  void handlePostReact(PostEntity post, String newReaction) {
+    String? currentReaction;
+    if (post.isLikes == true) currentReaction = 'like';
+    else if (post.isWow == true) currentReaction = 'wow';
+    else if (post.isHaha == true) currentReaction = 'haha';
+    else if (post.isLove == true) currentReaction = 'love';
+    else if (post.isSad == true) currentReaction = 'sad';
+    else if (post.isAngry == true) currentReaction = 'angry';
+    if (currentReaction == newReaction) {
+      _decrementReactionCount(post, newReaction);
+      return;
+    }
+    if (currentReaction != null) {
+      _decrementReactionCount(post, currentReaction);
+    }
+    _incrementReactionCount(post, newReaction);
+  }
+
+  void _incrementReactionCount(PostEntity post, String reaction) {
+    switch (reaction) {
+      case 'like':
+      case 'likes':
+        post.likesCount = (post.likesCount ?? 0) + 1;
+        break;
+      case 'wow':
+        post.wowCount = (post.wowCount ?? 0) + 1;
+        break;
+      case 'haha':
+        post.hahaCount = (post.hahaCount ?? 0) + 1;
+        break;
+      case 'love':
+        post.loveCount = (post.loveCount ?? 0) + 1;
+        break;
+      case 'sad':
+        post.sadCount = (post.sadCount ?? 0) + 1;
+        break;
+      case 'angry':
+        post.angryCount = (post.angryCount ?? 0) + 1;
+        break;
+    }
+  }
+
+  void _decrementReactionCount(PostEntity post, String reaction) {
+    switch (reaction) {
+      case 'like':
+      case 'likes':
+        post.likesCount = (post.likesCount ?? 0) - 1;
+        break;
+      case 'wow':
+        post.wowCount = (post.wowCount ?? 0) - 1;
+        break;
+      case 'haha':
+        post.hahaCount = (post.hahaCount ?? 0) - 1;
+        break;
+      case 'love':
+        post.loveCount = (post.loveCount ?? 0) - 1;
+        break;
+      case 'sad':
+        post.sadCount = (post.sadCount ?? 0) - 1;
+        break;
+      case 'angry':
+        post.angryCount = (post.angryCount ?? 0) - 1;
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    num totalReactions = (widget.postEntity.likesCount??0) + (widget.postEntity.hahaCount??0) + (widget.postEntity.loveCount??0) + (widget.postEntity.wowCount??0) + (widget.postEntity.sadCount??0) +(widget.postEntity.angryCount??0);
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -51,16 +125,16 @@ class NormalPostScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
             child: BuildFacebookHeader(
-              user: postEntity.user,
+              user: widget.postEntity.user,
               sinceTime:
              context.isArabic
                   ? DateFormat('d MMM, h:mm a', 'ar')
-                      .format(postEntity.createdAt!)
-                  : DateFormat('MMM d, h:mm a').format(postEntity.createdAt!),
-              activity: postEntity.activity,
-              feeling: postEntity.feeling,
-              users: postEntity.users,
-              location: postEntity.location,
+                      .format(widget.postEntity.createdAt!)
+                  : DateFormat('MMM d, h:mm a').format(widget.postEntity.createdAt!),
+              activity: widget.postEntity.activity,
+              feeling: widget.postEntity.feeling,
+              users: widget.postEntity.users,
+              location: widget.postEntity.location,
             ),
           ),
           // const SizedBox(height: 8.0),
@@ -68,12 +142,12 @@ class NormalPostScreen extends StatelessWidget {
           // if (postEntity.images?.isNotEmpty??false)
           Column(
             children: [
-              if (postEntity.content?.isNotEmpty ?? false)
+              if (widget.postEntity.content?.isNotEmpty ?? false)
                 Padding(
                   padding:
                       const EdgeInsets.only(right: 10, left: 10, bottom: 16),
                   child: ReadMoreLabel(
-                    text: postEntity.content ?? '',
+                    text: widget.postEntity.content ?? '',
                     // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
                     style: TextStyle(
                         fontSize: 16,
@@ -82,34 +156,34 @@ class NormalPostScreen extends StatelessWidget {
                   ),
                 ),
               // if(postEntity.type=="live_event_post")FacebookLifeEventWidget(postEntity: postEntity,),
-              if (postEntity.type == "gif_post" &&
-                  postEntity.gifUrl != null &&
-                  postEntity.gifUrl!.isNotEmpty)
+              if (widget.postEntity.type == "gif_post" &&
+                  widget.postEntity.gifUrl != null &&
+                  widget.postEntity.gifUrl!.isNotEmpty)
                 ImageFromInternet(
-                  image: postEntity.gifUrl ?? '',
+                  image: widget.postEntity.gifUrl ?? '',
                   width: double.infinity,
                   height: 256,
                   fit: BoxFit.cover,
                 ),
-              if (postEntity.images.isNotEmpty &&
-                  postEntity.type == "normal_post")
+              if (widget.postEntity.images.isNotEmpty &&
+                  widget.postEntity.type == "normal_post")
                 SizedBox(
                   height: 256,
                   width: double.infinity,
-                  child: _buildImageGrid(context, postEntity.images ?? []),
+                  child: _buildImageGrid(context, widget.postEntity.images ?? []),
                 ),
             ],
           ),
           //const SizedBox(height: 12),
 
-          if(postEntity.totalCount!=0)Padding(
+          if(widget.postEntity.totalCount!=0)Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    if(postEntity.likesCount!=0)Positioned(
+                    if(widget.postEntity.likesCount!=0)Positioned(
                       left: 14, // Adjust position for overlap
                       child: Image.asset(
                         Assets.loveReact,
@@ -117,27 +191,27 @@ class NormalPostScreen extends StatelessWidget {
                         height: 20, // Set a fixed height
                       ),
                     ),
-                    if(postEntity.loveCount!=0)Image.asset(
+                    if(widget.postEntity.loveCount!=0)Image.asset(
                       Assets.likeReact,
                       width: 20, // Set a fixed width to ensure it's not cut off
                       height: 20, // Set a fixed height to match the other image
                     ),
-                    if(postEntity.wowCount!=0)Image.asset(
+                    if(widget.postEntity.wowCount!=0)Image.asset(
                       Assets.wowReaction,
                       width: 20, // Set a fixed width to ensure it's not cut off
                       height: 20, // Set a fixed height to match the other image
                     ),
-                    if(postEntity.hahaCount!=0)Image.asset(
+                    if(widget.postEntity.hahaCount!=0)Image.asset(
                       Assets.hahaReaction,
                       width: 20, // Set a fixed width to ensure it's not cut off
                       height: 20, // Set a fixed height to match the other image
                     ),
-                    if(postEntity.sadCount!=0)Image.asset(
+                    if(widget.postEntity.sadCount!=0)Image.asset(
                       Assets.sadReaction,
                       width: 20, // Set a fixed width to ensure it's not cut off
                       height: 20, // Set a fixed height to match the other image
                     ),
-                    if(postEntity.angryCount!=0)Image.asset(
+                    if(widget.postEntity.angryCount!=0)Image.asset(
                       Assets.angryReaction,
                       width: 20, // Set a fixed width to ensure it's not cut off
                       height: 20, // Set a fixed height to match the other image
@@ -147,7 +221,7 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 // Increased space between reactions and text
                 Label(
-                  text:postEntity.totalCount.toString().toArabicNumbers(context)??'',
+                  text:widget.postEntity.totalCount.toString().toArabicNumbers(context)??'',
                      // "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'اخرين' : 'Others'}",
                   style: TextStyle(
                     color: context.isDarkMode
@@ -161,7 +235,48 @@ class NormalPostScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10.0),
-
+          if(totalReactions!=0)Padding(
+            padding: EdgeInsets.only(bottom: 8,right: 8,left: 8),
+            child: Row(
+              children: [
+                if((widget.postEntity.angryCount??0)>0)Image.asset(
+                  Assets.angry,
+                  width: 20,
+                  height: 20,
+                ),
+                if((widget.postEntity.sadCount??0)>0)Image.asset(
+                  Assets.sad,
+                  width: 20,
+                  height: 20,
+                ),
+                if((widget.postEntity.wowCount??0)>0)Image.asset(
+                  Assets.wow,
+                  width: 20,
+                  height: 20,
+                ),
+                if((widget.postEntity.loveCount??0)>0)Image.asset(
+                  Assets.heart,
+                  width: 20,
+                  height: 20,
+                ),
+                if((widget.postEntity.hahaCount??0)>0)Image.asset(
+                  Assets.haha,
+                  width: 20,
+                  height: 20,
+                ),
+                if((widget.postEntity.likesCount??0)>0)Image.asset(
+                  Assets.like,
+                  width: 20,
+                  height: 20,
+                ),
+                if(totalReactions>0)Text('$totalReactions',style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+                ),),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -184,8 +299,11 @@ class NormalPostScreen extends StatelessWidget {
                 // ),
                 SizedBox(
                   child: BuildReactionsButtons(
-                    post: postEntity,
+                    post: widget.postEntity,
                     from: "posts",
+                      handleReaction: (String reaction) {
+                        handlePostReact(widget.postEntity, reaction);
+                      }
                   ),
                 ),
                 const SizedBox(width: 16), // Space between buttons
@@ -193,57 +311,91 @@ class NormalPostScreen extends StatelessWidget {
                 // Comment button
                 ClickableWidget(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                    pleaseLoginDialog(context);
+                    return;
+                    }
+                    print("postEntity.id ${widget.postEntity.id}");
                     bottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.94,
+                        ),
                         widget: BlocProvider.value(
                           value: serviceLocator<SocialPostsCubit>()
                             ..loadPostCommentsData(
-                                context: context, postId: postEntity.id),
-                          child: FacebookPostComments(
-                            postId: postEntity.id,
-                            onAddComment: (PostCommentParams params) {
-                              // return controller.onPostComment(
-                              //     params: params, from: 'feed');
-                            },
-                            onCommentReply: (ReplyOnCommentParams params) {
-                              // return controller.replyOnComment(
-                              //   params: ReplyOnCommentParams(
-                              //       postId: params.postId,
-                              //       content: params.content,
-                              //       commentId:
-                              //       params.commentId),
-                              //   from: 'feed',
-                              // );
-                            },
-                            onDeleteComment: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
-                              // print(result);
-                            },
-                            onDeleteReply: (String id) async {
-                              // return await controller
-                              //     .deleteComment(
-                              //     context: context,
-                              //     commentId: id,
-                              //     postId: state.postDetails
-                              //         ?.id ??
-                              //         '',
-                              //     from: 'feed');
-                            },
-                            from: 'feed',
-                            onEditComment: (PostCommentParams params) async {
-                              // var result = await controller
-                              //     .editComment(params: params);
-                              // return result;
-                            },
+                                context: context, postId: widget.postEntity.id),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: AlignmentDirectional.center,
+                                child: Container(
+                                  width: 40,
+                                  height: 4.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.getTextColor(context),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
+                              ),
+                              Sizer(),
+                              Align(
+                                alignment: AlignmentDirectional.topStart,
+                                child: Text(
+                                  context.isArabic?'الأكثر شيوعا':"Most Relevant",
+                                  style: TextStyle(
+                                    color: AppColors.getTextColor(context),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Sizer(),
+                              Expanded(
+                                child: FacebookPostComments(
+                                  postId: widget.postEntity.id,
+                                  onAddComment: (PostCommentParams params) {
+                                    return context.read<SocialPostsCubit>().onPostComment(
+                                        params: params, from: 'feed');
+                                  },
+                                  onCommentReply: (ReplyOnCommentParams params) {
+                                    return context.read<SocialPostsCubit>().replyOnComment(
+                                      params: ReplyOnCommentParams(
+                                          postId: params.postId,
+                                          content: params.content,
+                                          commentId:
+                                          params.commentId),
+                                      from: 'feed',
+                                    );
+                                  },
+                                  onDeleteComment: (String id) async {
+                                    return await context.read<SocialPostsCubit>()
+                                        .deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: widget.postEntity.id,
+                                        from: 'feed');
+                                    // print(result);
+                                  },
+                                  onDeleteReply: (String id) async {
+                                    return await context.read<SocialPostsCubit>()
+                                        .deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: widget.postEntity.id,
+                                        from: 'feed');
+                                  },
+                                  from: 'feed',
+                                  onEditComment: (PostCommentParams params) async {
+                                    var result = await context.read<SocialPostsCubit>()
+                                        .editComment(params: params);
+                                    return result;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ));
                   },
@@ -268,44 +420,62 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(width: 16), // Space between buttons
 
                 // Send button
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      Assets.sendIcon,
-                      color: context.isDarkMode ? Colors.white : null,
-                    ),
-                    // Send Icon
-                    SizedBox(width: 8.w),
-                    // Space between icon and text
-                    Label(
-                      text: LocaleKeys.send.localize,
-                      style: TextStyle(
-                          color: AppColors.getTextColor(context),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    // Send Text
-                  ],
+                ClickableWidget(
+                  onTap: (){
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                      pleaseLoginDialog(context);
+                      return;
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        Assets.sendIcon,
+                        color: context.isDarkMode ? Colors.white : null,
+                      ),
+                      // Send Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
+                      Label(
+                        text: LocaleKeys.send.localize,
+                        style: TextStyle(
+                            color: AppColors.getTextColor(context),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // Send Text
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 16), // Space between buttons
 
                 // Share button
-                Row(
-                  children: [
-                    SvgPicture.asset(Assets.shareIcon,
-                        color: context.isDarkMode ? Colors.white : null),
-                    // Share Icon
-                    SizedBox(width: 8.w),
-                    // Space between icon and text
-                    Label(
-                      text: LocaleKeys.share.localize,
-                      style: TextStyle(
-                          color: AppColors.getTextColor(context),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    // Share Text
-                  ],
+                ClickableWidget(
+                  onTap: (){
+                    ManageVibration.vibrate();
+                    if(!context.read<UserCubit>().isLoggedIn){
+                      pleaseLoginDialog(context);
+                      return;
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(Assets.shareIcon,
+                          color: context.isDarkMode ? Colors.white : null),
+                      // Share Icon
+                      SizedBox(width: 8.w),
+                      // Space between icon and text
+                      Label(
+                        text: LocaleKeys.share.localize,
+                        style: TextStyle(
+                            color: AppColors.getTextColor(context),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // Share Text
+                    ],
+                  ),
                 ),
               ],
             ),

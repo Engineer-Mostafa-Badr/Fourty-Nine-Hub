@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -24,7 +25,9 @@ class CustomMarriageButtonSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           InkWell(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              ManageVibration.vibrate();
+               Navigator.pop(context);},
             child: Container(
               height: 24,
               width: 24,

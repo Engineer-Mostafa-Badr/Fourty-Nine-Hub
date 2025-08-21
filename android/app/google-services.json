@@ -1,108 +1,48 @@
 {
   "project_info": {
-    "project_number": "872417805780",
-    "project_id": "app-af0a7",
-    "storage_bucket": "app-af0a7.firebasestorage.app"
+    "project_number": "361206050719",
+    "project_id": "hub-bef9d",
+    "storage_bucket": "hub-bef9d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:872417805780:android:94641dc7b1e1c719850241",
+        "mobilesdk_app_id": "1:361206050719:android:8fd9d30d8e87729cab57aa",
         "android_client_info": {
           "package_name": "com.fourtyninehub.fourtynine"
         }
       },
       "oauth_client": [
         {
-          "client_id": "872417805780-g788eo4ip7p9ujn1pqb0phuph8u7ad00.apps.googleusercontent.com",
+          "client_id": "361206050719-tjft7usie6bna7tov26vlfdpar0s0vls.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.app.fourtynine",
+            "package_name": "com.fourtyninehub.fourtynine",
             "certificate_hash": "ca4b51184f61a9f9605feeb6b77220c7051eaffc"
           }
         },
         {
-          "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
+          "client_id": "361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB1QP6tPVIeH617TLobf0Cj56yYBIE7ZcA"
+          "current_key": "AIzaSyACecBTljJZl7XCzfDsaHjYDTMYcVULV9M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
+              "client_id": "361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "872417805780-3ngvvf5k56fddj7bf4vca83eckb86fjc.apps.googleusercontent.com",
+              "client_id": "361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.fourtynineDashboard"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:872417805780:android:e673aa3ca4d2b4a1850241",
-        "android_client_info": {
-          "package_name": "com.fourtyninehub.fourtynine"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "872417805780-cotfnp1t13h434p75tohju5jm9l763q2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fourtyninehub.fourtynine",
-            "certificate_hash": "3e27c2d97bdc923448b470ef30cad6c45a9c368f"
-          }
-        },
-        {
-          "client_id": "872417805780-s6bhbcfk9osbjo909kt339vm8lpo5s0l.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fourtyninehub.fourtynine",
-            "certificate_hash": "e5ad73de921942c766ac19f7d5451f0dc9f2dc53"
-          }
-        },
-        {
-          "client_id": "872417805780-sk1v8kurpq5junlp9kjlb9eivqdv692h.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fourtyninehub.fourtynine",
-            "certificate_hash": "75fb46bc870648b8327055a0664ead2c7c6a6e3f"
-          }
-        },
-        {
-          "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB1QP6tPVIeH617TLobf0Cj56yYBIE7ZcA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "872417805780-auso8n3398jmm9l41ls8ttnjmloo3lmb.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "872417805780-3ngvvf5k56fddj7bf4vca83eckb86fjc.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.fourtynineDashboard"
+                "bundle_id": "com.fourtyninehub.fourtynine"
               }
             }
           ]

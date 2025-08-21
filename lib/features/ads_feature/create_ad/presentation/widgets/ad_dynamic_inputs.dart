@@ -321,7 +321,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             itemCount: widget.property.values.length,
             itemBuilder: (context, index) => ClickableWidget(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     widget.onChanged(widget.property.values[index]);
                     value = widget.property.values[index];
                     setState(() {});

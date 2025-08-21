@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -58,6 +59,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                   itemCount: length < 4 ? length : 4,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       if (index != 3 || (index == 3 && length == 4)) {
                         showDialog(
                             context: context,
@@ -142,6 +144,7 @@ class BuildItemPhotoPost extends StatelessWidget {
             // Ensure the background remains unchanged
             child: InkWell(
               onTap: () {
+                ManageVibration.vibrate();
                 print("object");
                 showDialog(
                   context: context,

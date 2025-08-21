@@ -630,8 +630,13 @@ class RideCubit extends Cubit<RideState> {
     final Either<Failure, String> result =
         await getAvailableMapCountryUseCase();
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+        },
       (availableMapCountry) {
         getAvailableMapCountryKey = availableMapCountry;
         emit(state.copyWith(status: RideStates.success));
@@ -649,8 +654,13 @@ class RideCubit extends Cubit<RideState> {
         CancelTripByClientUseCaseParams(tripId, reasonId, note,
             state.currentLocation?.lat, state.currentLocation?.lng));
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (isCanceled) async {
         state.rideExpectedPrice = null;
         state.requestedTrip = null;
@@ -802,10 +812,11 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) {
-        showErrorMessage(context,
-            context.isArabic ? "لم يتم ارسال الرسالة" : "Message not sent");
-
-        emit(state.copyWith(status: RideStates.error));
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) {
         showSuccessMessage(
@@ -1009,6 +1020,10 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (rideCategory) async {
@@ -1039,8 +1054,13 @@ class RideCubit extends Cubit<RideState> {
             GetRideCategoriesParams(userId: userId, refresh: refresh));
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (rideCategory) async {
         if (selectedCategoryType != 'ride' && subCategoryId.isNotEmpty) {
           final index = rideCategory.subCategories.indexWhere(
@@ -1069,6 +1089,10 @@ class RideCubit extends Cubit<RideState> {
         ownerId: userId, subcategoryId: subcategoryId, clientId: userId));
     result.fold(
       (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) {
@@ -1090,6 +1114,10 @@ class RideCubit extends Cubit<RideState> {
     // if (isClosed) return false;
     result.fold(
       (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) {
@@ -1308,8 +1336,13 @@ class RideCubit extends Cubit<RideState> {
     log(result.toString());
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (rideExpectedPrice) => emit(state.copyWith(
           status: RideStates.success, rideExpectedPrice: rideExpectedPrice)),
     );
@@ -1370,15 +1403,22 @@ class RideCubit extends Cubit<RideState> {
         polyline: polyline,
         wayPointOneTitle: wayPointOneTitle,
         wayPointTwoTitle: wayPointTwoTitle,
-        phoneNumber: phoneNumberController.text,
+        phoneNumber: phoneNumberController.text.replaceAllMapped(
+          RegExp(r'[٠-٩]'),
+              (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+        ),
       ),
     );
 
     result.fold(
       (failure) {
-        showErrorMessage(context, failure.toString());
         context.pop();
-        emit(state.copyWith(status: RideStates.error, failure: failure));
+          var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(status: RideStates.error, failure: failure));
+
       },
       (rideRequestTrip) {
         log("tripId${rideRequestTrip.id}");
@@ -1448,8 +1488,13 @@ class RideCubit extends Cubit<RideState> {
     );
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (status) {
         state.requestedTrip!.autoAccept = isAutoAccept;
         emit(state.copyWith(status: RideStates.success));
@@ -1465,8 +1510,13 @@ class RideCubit extends Cubit<RideState> {
     );
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (status) {
         if (state.requestedTrip != null && state.requestedTrip!.price != null) {
           final newPrice = state.requestedTrip!.price! + newOfferPrice;
@@ -1546,8 +1596,13 @@ class RideCubit extends Cubit<RideState> {
         await acceptOfferByClientUseCase(offerId);
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+        currentContext, getFailureMessage(failure, currentContext));
+    emit(state.copyWith(status: RideStates.error, failure: failure));
+  },
       (rideRequestTrip) {
         if (rideRequestTrip.status == TripState.canceled.name || rideRequestTrip.status == TripState.cancelledByClient.name || rideRequestTrip.status == TripState.cancelledByDriver.name ||
             rideRequestTrip.status == TripState.completed.name) {
@@ -1608,8 +1663,13 @@ class RideCubit extends Cubit<RideState> {
     );
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (isCanceled) async {
         if (isCanceled) {
           state.rideExpectedPrice = null;
@@ -1636,6 +1696,10 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (completedTrips) {
@@ -1659,6 +1723,10 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (runningTrips) {
@@ -1682,6 +1750,10 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (historyTrips) {
@@ -1703,8 +1775,13 @@ class RideCubit extends Cubit<RideState> {
         await getAllActivityTripsUseCase(
             GetAllActivityTripsUseCaseParams(limit: limit, page: page));
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
       (activityTrips) => emit(state.copyWith(
           status: RideStates.success, activityTrips: activityTrips)),
     );
