@@ -61,7 +61,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               // AppButton(
               //     label: 'Requests History',
               //     icon: Icons.history,
-              //     onPressed: () => context.goNamed(Routes.REQUESTSHISTORY)),
+              //     onPressed: () => context.go(Routes.REQUESTSHISTORY)),
 
               const Sizer(),
 

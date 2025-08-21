@@ -246,7 +246,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   final prefs =
                                       await SharedPreferences.getInstance();
                                   await prefs.setBool("ISLOGIN", false);
-                                  context.goNamed(Routes.HOME);
+                                  context.go(Routes.HOME);
                                 }),
                           ],
                         ),
@@ -859,7 +859,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         AdInterstitialTop.showInterstitialAd();
         if (context.read<UserCubit>().isLoggedIn) {
           Navigator.pop(context);
-          context.goNamed(Routes.LUCKYWHEEL);
+          context.go(Routes.LUCKYWHEEL);
         } else {
           return pleaseLoginDialog(context);
 

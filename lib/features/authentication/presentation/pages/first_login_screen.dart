@@ -93,8 +93,7 @@ class FirstLoginScreen extends StatelessWidget {
                   height: 60.h,
                   width: MediaQuery.sizeOf(context).width * .4,
                   child: DefaultButton(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,
@@ -107,7 +106,7 @@ class FirstLoginScreen extends StatelessWidget {
                             : AppColors.AUTH_CONTAINER_COLOR),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.goNamed(Routes.LOGIN);
+                      context.go(Routes.LOGIN);
                     },
                   ),
                 ),
@@ -116,8 +115,7 @@ class FirstLoginScreen extends StatelessWidget {
                   height: 60.h,
                   width: MediaQuery.sizeOf(context).width * .4,
                   child: DefaultButton(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,
@@ -130,7 +128,7 @@ class FirstLoginScreen extends StatelessWidget {
                             : AppColors.AUTH_CONTAINER_COLOR),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.goNamed(Routes.REGISTER);
+                      context.go(Routes.REGISTER);
                     },
                   ),
                 ),

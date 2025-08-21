@@ -117,7 +117,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           onTap: () {
             ManageVibration.vibrate();
             CacheManager.isShowOnboarding(true);
-            context.goNamed(Routes.HOME);
+            context.go(Routes.HOME);
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(
@@ -219,7 +219,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             cubit.changeOnboardingData(index + 1);
           } else {
             CacheManager.isShowOnboarding(true);
-            context.goNamed(Routes.HOME);
+            context.go(Routes.HOME);
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(

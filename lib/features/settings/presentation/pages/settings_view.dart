@@ -90,7 +90,7 @@ class SettingsView extends StatelessWidget {
                 //             // if (state.able?.isDisabled == false) {
                 //             //   final prefs = await SharedPreferences.getInstance();
                 //             //   await prefs.setBool("ISLOGIN", false);
-                //             //   context.goNamed(Routes.HOME);
+                //             //   context.go(Routes.HOME);
                 //             return context
                 //                 .read<SettingCubit>()
                 //                 .disableAccount();
@@ -134,7 +134,7 @@ class SettingsView extends StatelessWidget {
                         context.read<SettingCubit>().deleteAccount();
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setBool("ISLOGIN", false);
-                        context.goNamed(Routes.HOME);
+                        context.go(Routes.HOME);
                       },
                       context: context,
                     ),

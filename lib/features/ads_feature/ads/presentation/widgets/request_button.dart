@@ -108,7 +108,7 @@ class RequestButton extends StatelessWidget {
                         }
                         // else {
                         //   return pleaseLoginDialog(context);
-                        //   // context.goNamed(Routes.LOGIN);
+                        //   // context.go(Routes.LOGIN);
                         // }
                       },
                     );
@@ -243,7 +243,7 @@ class RequestButton extends StatelessWidget {
       //                                           }
       //                                         });
       //                                       } else {
-      //                                         context.goNamed(Routes.LOGIN);
+      //                                         context.go(Routes.LOGIN);
       //                                       }
       //                                     },
       //                                     child: Container(

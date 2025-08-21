@@ -109,13 +109,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 bool isCustomPage = await CacheManager.getActivation() ?? false;
                 if (isCustomPage) {
                   if (!isCurrentRoute(context, Routes.PAGEPREVIEW)) {
-                    context.goNamed(
+                    context.go(
                       Routes.PAGEPREVIEW,
                     );
                   }
                 } else {
                   if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.goNamed(
+                    context.go(
                       Routes.HOME,
                     );
                   }

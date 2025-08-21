@@ -436,7 +436,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
-        onTap: () => context.goNamed(Routes.MAZADAT),
+        onTap: () => context.go(Routes.MAZADAT),
         child: SizedBox(
           height: kToolbarHeight * .9.h,
           child: Stack(

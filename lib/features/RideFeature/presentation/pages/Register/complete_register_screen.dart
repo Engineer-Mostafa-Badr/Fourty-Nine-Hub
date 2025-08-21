@@ -72,7 +72,7 @@ class CompleteRegisterScreen extends StatelessWidget {
                             color: AppColors.AUTH_CONTAINER_COLOR),
                         onPressed: () {
                           ManageVibration.vibrate();
-                          context.goNamed(Routes.RIDE_HOME);
+                          context.go(Routes.RIDE_HOME);
                         },
                         radius: 15,
                         backColor: AppColors.PRIMARY_COLOR,

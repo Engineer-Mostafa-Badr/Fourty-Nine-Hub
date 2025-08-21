@@ -115,13 +115,13 @@ class _LoginViewState extends State<LoginView> {
                   : 'Password does not match');
         } else if (state is OTPSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
-          context.goNamed(
+          context.go(
             Routes.VERIFYMAIL,
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is OTPPhoneSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
-          context.goNamed(
+          context.go(
             Routes.registerVerifyPhoneOTP,
             extra: registerCubit.emailTextController.text,
           );
@@ -149,7 +149,7 @@ class _LoginViewState extends State<LoginView> {
 
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
-                  context.goNamed(
+                  context.go(
                     Routes.CompleteRegisterWelcomeScreen,
                     extra: context.isArabic
                         ? state.giftMessageEntity.ar
@@ -161,7 +161,7 @@ class _LoginViewState extends State<LoginView> {
         } else if (state is RegisterSuccess) {
           await context.read<UserCubit>().setLogin(true);
           await context.read<UserCubit>().getUser();
-          context.goNamed(Routes.HOME);
+          context.go(Routes.HOME);
         }
       },
       child: BlocListener<LoginCubit, LoginState>(
@@ -175,7 +175,7 @@ class _LoginViewState extends State<LoginView> {
                 getFailureMessage(state.failure, context).toString();
             print("Print here $isVerified");
             if (isVerified == "Email not verified") {
-              context.goNamed(
+              context.go(
                 Routes.VERIFYMAIL,
                 extra: loginCubit.emailTextController.text,
               );
@@ -468,7 +468,6 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-
   Future<void> _handleSocialLoginSuccess(UserTokensEntity userTokens) async {
     try {
       final userCubit = serviceLocator<UserCubit>();
@@ -676,14 +675,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.message ?? "Something went wrong",
-                        )));
+                      error.message ?? "Something went wrong",
+                    )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.toString(),
-                        )));
+                      error.toString(),
+                    )));
                   }
                 },
               ),
@@ -708,14 +707,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.message ?? "Something went wrong",
-                        )));
+                      error.message ?? "Something went wrong",
+                    )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.toString(),
-                        )));
+                      error.toString(),
+                    )));
                   }
                 },
               ),
@@ -740,14 +739,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                       print(error.message);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                            error.message ?? "Something went wrong",
-                          )));
+                        error.message ?? "Something went wrong",
+                      )));
                     } catch (error) {
                       print(error);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                            error.toString(),
-                          )));
+                        error.toString(),
+                      )));
                     }
                   },
                 ),

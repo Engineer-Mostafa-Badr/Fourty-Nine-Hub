@@ -123,7 +123,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                   showTiktokOption(context, generateRandom9DigitNumber);
                 } else {
                   pleaseLoginDialog(context);
-                  // context.goNamed(Routes.LOGIN);
+                  // context.go(Routes.LOGIN);
                 }
               }),
               const Sizer(

@@ -935,7 +935,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             canPop: false,
             onPopInvokedWithResult: (c, v) async {
               if (cubit.selectedCategoryIsSocket) {
-                context.goNamed(Routes.HOME);
+                context.go(Routes.HOME);
               } else {
                 await cubit.returnToSocket();
               }
@@ -951,7 +951,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           mainCategoryId: 2,
                           onBackPressed: () async {
                             if (cubit.selectedCategoryIsSocket) {
-                              context.goNamed(Routes.HOME);
+                              context.go(Routes.HOME);
                             } else {
                               await cubit.returnToSocket();
                             }

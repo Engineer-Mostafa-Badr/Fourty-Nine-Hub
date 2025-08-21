@@ -88,7 +88,7 @@
 //                       mainAxisAlignment: MainAxisAlignment.center,
 //                       children: [
 //                         GestureDetector(
-//                             onTap: () => context.pushNamed(Routes.LOGIN),
+//                             onTap: () => context.push(Routes.LOGIN),
 //                             child: Label(
 //                                 text: 'Login',
 //                                 style: Styles.headerText(color: Colors.blue))),
@@ -486,7 +486,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                             offset: const Offset(0, 50),
                                             onSelected: (int value) async {
                                               if (value == 4) {
-                                                context.pushNamed(
+                                                context.push(
                                                     Routes.CHATPROFILEVIEW);
                                               }
                                             },
@@ -685,7 +685,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               icon: Icons.archive,
               text: LocaleKeys.archive.tr(),
               onTap: () async {
-                final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
                       chatsCubit: chatCubit,
@@ -716,7 +716,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       icon: Icons.mail_lock,
                       text: LocaleKeys.lockChat.tr(),
                       onTap: () async {
-                        final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: 'LockedChats',
                               chatsCubit: chatCubit,
@@ -748,7 +748,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       icon: Icons.person_off,
                       text: LocaleKeys.anonymous.tr(),
                       onTap: () async {
-                        final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: ChatCategoriesIds.anonymous,
                               chatsCubit: chatCubit,
@@ -780,7 +780,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       icon: Icons.emoji_people,
                       text: LocaleKeys.greet.tr(),
                       onTap: () async {
-                        final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: ChatCategoriesIds.greet,
                               chatsCubit: chatCubit,
@@ -810,7 +810,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               icon: Icons.archive,
               text: LocaleKeys.archive.tr(),
               onTap: () async {
-                final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
                       chatsCubit: chatCubit,
@@ -840,7 +840,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       icon: Icons.mail_lock,
                       text: LocaleKeys.lockChat.tr(),
                       onTap: () async {
-                        final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: 'LockedChats',
                               chatsCubit: chatCubit,
@@ -1036,7 +1036,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  context.pushNamed(Routes.SEEALLBROADCASTS);
+                  context.push(Routes.SEEALLBROADCASTS);
                 },
                 child: Text(
                   LocaleKeys.seeAll.tr(),

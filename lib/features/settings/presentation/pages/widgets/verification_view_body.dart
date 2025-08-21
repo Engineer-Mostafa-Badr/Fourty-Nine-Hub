@@ -50,7 +50,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                 Navigator.of(context).pop();
               },
               cancelOnPressed: () {
-                context.goNamed(Routes.LOGIN);
+                context.go(Routes.LOGIN);
               },
             ),
           );

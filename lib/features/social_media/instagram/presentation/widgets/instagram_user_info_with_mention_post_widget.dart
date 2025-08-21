@@ -42,7 +42,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
           GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
-              context.goNamed(
+              context.go(
                 Routes.INSTAGRAMPROFILE,
                 extra: userId,
               );

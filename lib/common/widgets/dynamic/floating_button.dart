@@ -45,7 +45,7 @@ class FloatingButton extends StatelessWidget {
                 HandleCashback.setCount('socialCount', context);
                 if (changeView == 1) {
                   context.read<CreatePostCubit>().loadData();
-                  context.goNamed(
+                  context.go(
                     Routes.SOCIAL,
                     extra: SocialParams(
                       userId: UserCubit.to.state.data?.id ?? '',
@@ -56,7 +56,7 @@ class FloatingButton extends StatelessWidget {
                   bool isCustomPage =
                       await CacheManager.getActivation() ?? false;
                   if (isCustomPage) {
-                    context.goNamed(
+                    context.go(
                       Routes.PAGEPREVIEW,
                     );
                   } else {

@@ -251,7 +251,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           (r) async {
         emit(state.copyWith(status: CreatePostStates.success));
         onDiscardPost();
-        context.goNamed(Routes.SOCIAL,
+        context.go(Routes.SOCIAL,
             extra: SocialParams(
                 userId: UserCubit.to.state.data?.id ?? '', index: 0));
       });
@@ -431,13 +431,13 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         btnTitle: 'Confirm',
         description: "ستفقد بيانات الصفحة الحالية عند تأكيد التراجع",
         onSafeAsDraft: () {
-          context.goNamed(Routes.SOCIAL,
+          context.go(Routes.SOCIAL,
               extra: SocialParams(
                   userId: UserCubit.to.state.data?.id ?? '', index: 0));
         },
         onDiscardPost: () async {
           await onDiscardPost();
-          context.goNamed(Routes.SOCIAL,
+          context.go(Routes.SOCIAL,
               extra: SocialParams(
                   userId: UserCubit.to.state.data?.id ?? '', index: 0));
           // });

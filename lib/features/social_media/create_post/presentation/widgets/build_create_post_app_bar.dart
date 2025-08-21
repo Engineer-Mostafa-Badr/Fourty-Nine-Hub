@@ -22,7 +22,7 @@ class BuildCreatePostAppBar extends StatelessWidget {
         children: [
           ClickableWidget(
               onTap: () {
-                context.goNamed(Routes.SOCIAL,
+                context.go(Routes.SOCIAL,
                     extra: SocialParams(
                         userId: UserCubit.to.state.data?.id ?? '', index: 0));
               },

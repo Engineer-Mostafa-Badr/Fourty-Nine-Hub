@@ -52,7 +52,7 @@ class ProviderAdsView extends StatelessWidget {
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
-                            dynamic data = await context.pushNamed(Routes.FILTERADS,
+                            dynamic data = await context.push(Routes.FILTERADS,
                                 extra: CategorizationEntity(
                                     mainCategory: params.mainCategory,
                                     subCategory: params.subCategory));
@@ -82,7 +82,7 @@ class ProviderAdsView extends StatelessWidget {
                               vertical: 15.h, horizontal: 5.w),
                           iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
-                            dynamic data = await context.pushNamed(
+                            dynamic data = await context.push(
                                 Routes.GOVERNORATEFILTERADS,
                                 extra: CategorizationEntity(
                                     mainCategory: params.mainCategory,

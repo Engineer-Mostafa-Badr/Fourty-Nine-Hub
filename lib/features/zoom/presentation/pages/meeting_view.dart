@@ -264,7 +264,7 @@ class MeetingView extends StatelessWidget {
                                   joinRoom(context.read<StreamCubit>(),
                                       scheduledMeeting.roomId);
                                   if (context.mounted) {
-                                    context.goNamed(Routes.MEETINGROOM,
+                                    context.go(Routes.MEETINGROOM,
                                         extra: MeetingRoomArguments(
                                             liveID: scheduledMeeting.roomId,
                                             isHost: true,

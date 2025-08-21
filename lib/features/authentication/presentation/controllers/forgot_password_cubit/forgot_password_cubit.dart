@@ -122,9 +122,9 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         // await context.read<UserCubit>().logout(context);
         // final prefs = await SharedPreferences.getInstance();
         // await prefs.setBool("ISLOGIN", false);
-        // context.goNamed(Routes.LOGIN);
+        // context.go(Routes.LOGIN);
         // emit(ChangePasswordSuccess());
-        // context.goNamed(Routes.SETTINGS);
+        // context.go(Routes.SETTINGS);
       },
     );
   }

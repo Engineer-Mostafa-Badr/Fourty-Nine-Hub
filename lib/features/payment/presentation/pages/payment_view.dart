@@ -493,7 +493,7 @@ class _PaymentViewState extends State<PaymentView> {
                 //       backgroundColor: Colors.green,
                 //     ),
                 //   );
-                //   // context.goNamed(Routes.HOME);
+                //   // context.go(Routes.HOME);
                 // }
                 if (state.instaPayStatus == StateStatus.success) {
                   showSuccessMessage(
@@ -501,7 +501,7 @@ class _PaymentViewState extends State<PaymentView> {
                     state.instaPayResponseData?.message ??
                         LocaleKeys.paymentSuccessful.localize,
                   );
-                  context.goNamed(Routes.HOME);
+                  context.go(Routes.HOME);
                 }
                 if (state.instaPayStatus == StateStatus.error) {
                   showErrorMessage(

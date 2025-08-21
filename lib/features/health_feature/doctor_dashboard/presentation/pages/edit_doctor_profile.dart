@@ -44,7 +44,7 @@ class EditDoctorProfileView extends StatelessWidget {
             );
             break;
           case EditDoctorProfileStateStatus.doctorDeleted:
-            context.goNamed(Routes.VISITA);
+            context.go(Routes.VISITA);
             break;
           default:
             break;

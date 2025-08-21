@@ -41,14 +41,14 @@
 //           showErrorMessage(context, getFailureMessage(state.failure, context));
 //         } else if (state is OTPSent) {
 //           showSuccessMessage(context, 'OTP Sent successfully');
-//           context.goNamed(
+//           context.go(
 //             Routes.VERIFYMAIL,
 //             extra: registerCubit.emailTextController.text,
 //           );
 //         } else if (state is RegisterSuccess) {
 //           context.read<UserCubit>().setLogin(true);
 //           context.read<UserCubit>().getUser();
-//           context.goNamed(Routes.HOME);
+//           context.go(Routes.HOME);
 //           context.pop();
 //         }
 //       },

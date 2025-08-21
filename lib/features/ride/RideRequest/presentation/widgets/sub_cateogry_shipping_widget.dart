@@ -44,7 +44,7 @@ class _SubCateogryShippingWidgetState extends State<SubCateogryShippingWidget> {
       listener: (context, state) {
         log(state.toString(), name: "lskdjlskdjflskdjf");
         if (state is SuccessCreateTrip) {
-          context.goNamed(Routes.HOME);
+          context.go(Routes.HOME);
           showSuccessMessage(context, state.message);
         }
         if (state is FailureShippingState) {

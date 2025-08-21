@@ -95,7 +95,7 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
               ),
               onPressed: () {
                 ManageVibration.vibrate();
-                context.goNamed(Routes.HOME);
+                context.go(Routes.HOME);
               },
             ),
           ),

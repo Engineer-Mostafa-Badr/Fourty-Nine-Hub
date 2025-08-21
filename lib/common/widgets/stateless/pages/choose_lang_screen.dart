@@ -122,7 +122,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  // context.goNamed(Routes.onBoardingScreen);
+                                  // context.go(Routes.onBoardingScreen);
                                 },
                               ),
                             ),
@@ -165,7 +165,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  context.goNamed(Routes.onBoardingScreen);
+                                  context.go(Routes.onBoardingScreen);
                                 },
                               ),
                             ),
@@ -227,8 +227,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                     height: 60.h,
                     width: MediaQuery.sizeOf(context).width * .9,
                     child: DefaultButton(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       label: LocaleKeys.next.localize,
                       labelStyle: TextStyle(
                           fontSize: 35.sp,
@@ -236,7 +235,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                       width: double.infinity,
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.goNamed(Routes.onBoardingScreen);
+                        context.go(Routes.onBoardingScreen);
                       },
                     ),
                   ),

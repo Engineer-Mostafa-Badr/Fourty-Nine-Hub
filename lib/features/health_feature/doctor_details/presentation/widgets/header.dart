@@ -438,7 +438,7 @@ class _DoctorDetailsAccountHeaderState
                                         await context
                                             .read<SecretsCubit>()
                                             .getAllSecrets();
-                                        context.goNamed(Routes.MEETINGROOM,
+                                        context.go(Routes.MEETINGROOM,
                                             extra: MeetingRoomArguments(
                                                 liveID: doctor
                                                         ?.meetingData?.roomId ??

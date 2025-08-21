@@ -2873,7 +2873,7 @@ class RideCubit extends Cubit<RideState> {
             .toList());
     await Storage().saveDriverEntity(params);
     await Storage().removeDriverNoSocketEntity();
-    context.goNamed(Routes.RIDE_HOME);
+    context.go(Routes.RIDE_HOME);
   }
 
   onSetSavedData() async {
