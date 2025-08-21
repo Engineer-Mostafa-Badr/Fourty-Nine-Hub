@@ -467,61 +467,27 @@ class AppPages {
 
   static initializeRouter(String initialRoute) {
     router = GoRouter(
-      navigatorKey: navigatorKey,
-      initialLocation: initialRoute,
-      routes: <RouteBase>[
-        GoRoute(
-          path: Paths.SPLASH,
-          // name: Routes.SPLASH,
-          pageBuilder: (context, state) => customTransition(
-            context,
-            state,
-            const SplashScreen(),
+        navigatorKey: navigatorKey,
+        initialLocation: initialRoute,
+        routes: <RouteBase>[
+          GoRoute(
+            path: Routes.splash,
+            name: Routes.splash,
+            pageBuilder: (context, state) => customTransition(
+              context,
+              state,
+              const SplashScreen(),
+            ),
           ),
-          routes: [
-            GoRoute(
-              path: Paths.HOME,
-              name: Routes.HOME,
-              pageBuilder: (context, state) => customTransition(
-                context,
-                state,
-                MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<SliderCubit>(),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          serviceLocator<StarCubit>()..getAllTalent(),
-                    ),
-                    BlocProvider(
-                      create: (context) => serviceLocator<MainCategoriesCubit>()
-                        ..loadData(context),
-                    ),
-                    // BlocProvider(
-                    //   create: (context) => serviceLocator<ThumbnailsCubit>(),
-                    // ),
-                  ],
-                  child: const FourtyNineView(),
-                  // child: const BeStarView(),
-                  // child: const GetAllTalents(),
-                ),
-              ),
-              routes: [
-                GoRoute(
-                  path: Paths.RIDEHOME,
-                  name: Routes.RIDE_HOME,
-                  pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(
-                          value: serviceLocator<RideCubit>(),
-                        ),
-                      ],
-                      child: const RideHome(),
-                    ),
+          GoRoute(
+            path: Routes.HOME,
+            pageBuilder: (context, state) => customTransition(
+              context,
+              state,
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => serviceLocator<SliderCubit>(),
                   ),
                 ),
                 GoRoute(
@@ -2114,40 +2080,28 @@ class AppPages {
                               child: TwitterPostDetailsNotify.fromPayload(
                                   payload: payload),
                             ),
-                          );
-                        },
-                      ),
-                      GoRoute(
-                          path: Paths.OTHERSACCOUNT,
-                          name: Routes.OTHERSACCOUNT,
-                          pageBuilder: (context, state) {
-                            return customTransition(
-                                context,
-                                state,
-                                BlocProvider<SocialPostsCubit>(
-                                    create: (_) => serviceLocator(),
-                                    child: OtherAccountView(
-                                      payload: state.extra,
-                                    )));
-                          },
-                          routes: [
-                            GoRoute(
-                              path: Paths.EDITPROFILE,
-                              name: Routes.EDITPROFILE,
-                              pageBuilder: (context, state) => customTransition(
-                                context,
-                                state,
-                                BlocProvider<EditProfileCubit>(
-                                    create: (_) =>
-                                        serviceLocator<EditProfileCubit>()
-                                          ..fetchRideGovernorates(),
-                                    child: const EditProfileView()),
-                              ),
-                            ),
-                          ]),
-                      GoRoute(
-                        path: Paths.REELS,
-                        name: Routes.REELS,
+                        routes: const []),
+                    GoRoute(
+                      path: Paths.TWITTERPOSTDETAILS,
+                      name: Routes.TWITTERPOSTDETAILS,
+                      pageBuilder: (context, state) {
+                        // state.extra can be null / String / Map – pass it through as-is
+                        final dynamic payload = state.extra;
+
+                        return customTransition(
+                          context,
+                          state,
+                          BlocProvider<TwitterCubit>(
+                            create: (_) => serviceLocator<TwitterCubit>(),
+                            child: TwitterPostDetailsNotify.fromPayload(
+                                payload: payload),
+                          ),
+                        );
+                      },
+                    GoRoute(
+                        path: Paths.OTHERSACCOUNT,
+                        name: Routes.OTHERSACCOUNT,
+                    ),
                         pageBuilder: (context, state) {
                           // context.read<ReelsCubit>().fetchReels();
                           return customTransition(
@@ -4739,19 +4693,45 @@ class AppPages {
                             tripEntity: state.extra as GetLoadingHistoryEntity),
                       )),
                 ),
-                GoRoute(
-                  path: Paths.CHANCE,
-                  name: Routes.CHANCE,
-                  pageBuilder: (context, state) =>
-                      customTransition(context, state, ChanceView()),
+              ),
+              GoRoute(
+                path: Paths.allClientRatingScreen,
+                name: Routes.allClientRatingScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider(
+                      create: (context) => serviceLocator<ClientTripsCubit>()
+                        ..getClientAllRating(params: state.extra as String),
+                      child: AllClientRatingScreen()),
                 ),
-              ],
-              // OtherAccountView
-            ),
-          ],
-        ),
-      ],
-    );
+              ),
+              GoRoute(
+                path: Paths.loadingDashboardDetailsScreen,
+                name: Routes.loadingDashboardDetailsScreen,
+                pageBuilder: (context, state) => customTransition(
+                    context,
+                    state,
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<DashboardsCubit>(),
+                        ),
+                      ],
+                      child: LoadingDashboardDetailsScreen(
+                          tripEntity: state.extra as GetLoadingHistoryEntity),
+                    )),
+              ),
+              GoRoute(
+                path: Paths.CHANCE,
+                name: Routes.CHANCE,
+                pageBuilder: (context, state) =>
+                    customTransition(context, state, ChanceView()),
+              ),
+            ],
+          ),
+        ]);
   }
 }
 

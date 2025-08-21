@@ -28,9 +28,8 @@ if (flutterVersionName == null) {
 android {
     // useAndroidX = true
     
-    // namespace "com.fourtyninehub.fourtynine"
     namespace "com.fourtyninehub.fourtynine"
-    compileSdk 35
+    compileSdk 36
     ndkVersion flutter.ndkVersion
 
     packagingOptions {
@@ -43,6 +42,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -56,12 +56,12 @@ android {
     
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        // applicationId "com.fourtyninehub.fourtynine"
         applicationId "com.fourtyninehub.fourtynine"
+        // applicationId "com.fourtyninehub.fourtynine"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 24
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -85,4 +85,5 @@ flutter {
 
 dependencies {
     implementation 'io.socket:socket.io-client:2.1.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }
