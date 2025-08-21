@@ -231,6 +231,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/pages/chat_home_page.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/controllers/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
@@ -2261,6 +2263,20 @@ class AppPages {
                     ],
                     child: ChatView(
                         chatsViewParams: state.extra as ChatsViewParams),
+                  ),
+                ),
+              ),
+
+              // Chat Home
+              GoRoute(
+                path: Paths.CHAT_HOME,
+                name: Routes.CHAT_HOME,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider<ChatCubit>(
+                    create: (_) => serviceLocator(),
+                    child: const ChatHomePage(),
                   ),
                 ),
               ),

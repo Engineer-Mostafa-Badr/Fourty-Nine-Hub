@@ -84,6 +84,7 @@ abstract class Routes {
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
   static const ARCHIVEDCHATS = '/ArchivedChatsView';
+  static const CHAT_HOME = '/ChatHome';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const ONETIMEVOICEMESSAGE = '/OneTimeVoiceMessageView';
@@ -373,6 +374,7 @@ abstract class Paths {
   static const CREATEAUCTION = 'CreateAuction';
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
+  static const CHAT_HOME = 'ChatHome';
   static const VIEWCONTACT = 'ViewContact';
   static const ATTACHMENTSVIEW = 'AttachmentsView';
   static const CHATPROFILEVIEW = 'ChatProfileView';

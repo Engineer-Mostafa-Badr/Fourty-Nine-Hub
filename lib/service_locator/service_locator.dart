@@ -72,6 +72,7 @@ import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
+import 'chat_service_locator.dart';
 import 'chance_service_locator.dart';
 import 'company_add_service_locator.dart';
 import 'custom_page_service_locator.dart';
@@ -346,6 +347,7 @@ class DI {
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);
     BalanceServiceLocator.execute(serviceLocator: serviceLocator);
+    ChatServiceLocator.execute(serviceLocator: serviceLocator);
     CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
     PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
     SettingServiceLocator.execute(serviceLocator: serviceLocator);
