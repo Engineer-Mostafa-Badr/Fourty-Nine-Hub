@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/enums/route_client_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
@@ -42,30 +45,54 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
 
       int currentIndex = cubit.getCurrentClientIndex(state.runningRoute?.clients ?? []);
       print("state.runningRoute?.clients??[] ${state.runningRoute?.clients?.length}");
-      return RefreshIndicator(
-        onRefresh: ()async{
-          await cubit.getRunningRoute(context);
-        },
-        child: Expanded(
-          child: Stack(
-            // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-            children: [
-              _buildTopMap(context,state),
-              // DriverRouteWidget(
-              //   hasAcceptButton: false,
-              //   statusDriver: state.runningRoute?.status ?? '',
-              //   model: state.runningRoute,
-              //   cancelButton: false,
-              // ),
-              BuildRouteClientsSheet(clients: cubit.clients),
-          
-            ],
-          ),
-        ),
+      return Stack(
+        // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+        children: [
+          _buildTopMap(context,state),
+          // DriverRouteWidget(
+          //   hasAcceptButton: false,
+          //   statusDriver: state.runningRoute?.status ?? '',
+          //   model: state.runningRoute,
+          //   cancelButton: false,
+          // ),
+          BuildRouteClientsSheet(clients: cubit.clients),
+
+        ],
       );
     });
   }
   Widget _buildTopMap(BuildContext context, CaptainShareDashboardState state) {
+    List<LatLng> driverRoutePoints = [];
+    List<LatLng> routePoints = [];
+    // routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.polyLine??[]);
+    List<BookingClientEntity> clients = context.read<CaptainShareDashboardCubit>().clients;
+    LatLng? startLocation;
+    LatLng? targetLocation;
+    // if(true){
+    //   routePoints = _convertRoutePolylineToLatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.polyLine??[]);
+    //   startLocation = LatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.startLocation?.location[1]??0, context.read<CaptainShareDashboardCubit>().state.runningRoute?.startLocation?.location[0]??0);
+    //   targetLocation = LatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.targetLocation?.location[1]??0, context.read<CaptainShareDashboardCubit>().state.runningRoute?.targetLocation?.location[0]??0);
+    // }
+    if(clients.isNotEmpty&&(clients[0].status==RouteClientStatus.acceptedByDriver.name||clients[0].status==RouteClientStatus.driverNoShowPassenger.name)){
+      routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().clients[0].polyLine??[]);
+      startLocation = routePoints.isNotEmpty?routePoints.first:null;
+      targetLocation = routePoints.isNotEmpty?routePoints.last:null;
+    }else if(clients.length>1&&(clients[1].status==RouteClientStatus.acceptedByDriver.name||clients[1].status==RouteClientStatus.driverNoShowPassenger.name)){
+      routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().clients[1].polyLine??[]);
+      startLocation = routePoints.isNotEmpty?routePoints.first:null;
+      targetLocation = routePoints.isNotEmpty?routePoints.last:null;
+    }else if(clients.length>=2&&(clients[2].status==RouteClientStatus.acceptedByDriver.name||clients[2].status==RouteClientStatus.driverNoShowPassenger.name)){
+      routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().clients[2].polyLine??[]);
+      startLocation = routePoints.isNotEmpty?routePoints.first:null;
+      targetLocation = routePoints.isNotEmpty?routePoints.last:null;
+    }else{
+      print("objectElse");
+      routePoints = _convertRoutePolylineToLatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.polyLine??[]);
+      startLocation = LatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.startLocation?.location[1]??0, context.read<CaptainShareDashboardCubit>().state.runningRoute?.startLocation?.location[0]??0);
+      targetLocation = LatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.targetLocation?.location[1]??0, context.read<CaptainShareDashboardCubit>().state.runningRoute?.targetLocation?.location[0]??0);
+    }
+
+    log("routePoints $routePoints");
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
@@ -74,15 +101,22 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
       ),
       child: ClipRect(
         child: CustomGoogleMap(
-          startLocation: null,
-          targetLocation: null,
+          startLocation: startLocation,
+          targetLocation: targetLocation,
           enableScrolling: true,
+          polylinePoints: routePoints,
+          // fromClient: false,
         ),
       ),
     );
   }
 
   List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
+    return polyline.map((point) => LatLng(point[0], point[1])).toList();
+  }
+
+
+  List<LatLng> _convertRoutePolylineToLatLng(List<List<double>> polyline) {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 

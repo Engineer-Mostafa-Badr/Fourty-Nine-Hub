@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -24,11 +24,8 @@ class CreateAuctionView extends StatelessWidget {
     return BlocConsumer<CreateAuctionCubit, BasicState<bool>>(
         builder: (context, state) {
       return CustomScaffold(
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(30),
-          child: BackAppBar(
-            label: 'Create Auction',
-          ),
+        appBar: const BackAppBar(
+          label: 'Create Auction',
         ),
         bottomNavigationBar: AppButton(
             label: 'Save Auction',

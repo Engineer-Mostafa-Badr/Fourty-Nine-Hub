@@ -4,6 +4,9 @@ class CommentEntity {
   final String id;
   String content;
   String? reply;
+  String? commentOwnerId;
+  String? commentOwnerFirstName;
+  String? commentOwnerLastName;
   final String post;
   dynamic user;
   bool? isLove;
@@ -33,6 +36,9 @@ class CommentEntity {
     required this.id,
     required this.content,
     this.reply,
+    this.commentOwnerId,
+    this.commentOwnerFirstName,
+    this.commentOwnerLastName,
     this.replies,
     required this.post,
     required this.createdAt,

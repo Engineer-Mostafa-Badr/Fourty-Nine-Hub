@@ -16,7 +16,7 @@ class ApiService {
       '$_baseUrl$url',
       options: Options(
         headers: {'Authorization': 'Bearer $token',
-          "x-api-key": "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
+          "x-api-key": "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
         },
       ),
       queryParameters: params,
@@ -46,7 +46,7 @@ class ApiService {
       queryParameters: query,
       options: Options(
         headers: {'Authorization': 'Bearer $token',
-          "x-api-key": "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",},
+          "x-api-key": "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",},
       ),
     );
     return response.data;
@@ -59,7 +59,7 @@ class ApiService {
     var response = await dio.delete(
       '$_baseUrl$url',
       options: Options(
-        headers: {'Authorization': 'Bearer $token', "x-api-key": "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",},
+        headers: {'Authorization': 'Bearer $token', "x-api-key": "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",},
       ),
     );
     // Check if the response is a Map or a List

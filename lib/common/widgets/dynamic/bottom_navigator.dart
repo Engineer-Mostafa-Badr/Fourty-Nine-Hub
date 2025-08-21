@@ -61,31 +61,13 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     // Shuffle every 5 seconds
     _shuffleTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       setState(() {
-        if(pages.any((e)=>e.index==11)){
+        if (pages.any((e) => e.index == 11)) {
           pages = firstPages;
-        }else{
+        } else {
           pages = secondPages;
         }
       });
     });
-  }
-
-  List<BottomItemModel> _shuffleButKeepIndex(int fixedIndex, List<BottomItemModel> items) {
-    if (items.length <= fixedIndex) return items;
-
-    // Keep a reference to the fixed item
-    final fixedItem = items[fixedIndex];
-
-    // Copy items without the fixed one
-    final otherItems = List<BottomItemModel>.from(items)..removeAt(fixedIndex);
-
-    // Shuffle the remaining items
-    otherItems.shuffle(Random());
-
-    // Insert the fixed item back in the same position
-    otherItems.insert(fixedIndex, fixedItem);
-
-    return otherItems;
   }
 
   void _initializePages() {
@@ -95,7 +77,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   List<BottomItemModel> firstPages = [
     BottomItemModel(
       icon: FontAwesomeIcons.bowlFood,
-      label: LocaleKeys.find.localize,
+      localeKey: LocaleKeys.find,
       index: 0,
       cacheKey: 'tinderCount',
       image: Assets.find,
@@ -103,60 +85,66 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.list,
-      label: LocaleKeys.reels.localize,
+      localeKey: LocaleKeys.reels,
       index: 1,
       cacheKey: 'reelsCount',
       image: Assets.reelBarPng,
       route: Routes.REELS,
-      // height: 60,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.health.localize,
+      localeKey: LocaleKeys.health,
       cacheKey: 'healthCount',
       image: Assets.health,
       index: 2,
       route: Routes.VISITA,
     ),
-    BottomItemModel(icon: FontAwesomeIcons.plus, label: LocaleKeys.chat.localize,
-        cacheKey: 'chatCount', image: Assets.whatsApp, index: 3, route: Routes.CHAT, height: 20),
+    BottomItemModel(
+      icon: FontAwesomeIcons.plus,
+      localeKey: LocaleKeys.chat,
+      cacheKey: 'chatCount',
+      image: Assets.whatsAppIcon,
+      index: 3,
+      route: Routes.CHAT,
+    ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      label: LocaleKeys.book.localize,
+      localeKey: LocaleKeys.book,
       cacheKey: 'bookingCount',
       index: 4,
       image: Assets.booking,
       route: Routes.RIDE_HOME,
     ),
   ];
+
   List<BottomItemModel> secondPages = [
     BottomItemModel(
       icon: FontAwesomeIcons.bowlFood,
-      label: LocaleKeys.ride.localize,
+      localeKey: LocaleKeys.ride,
       index: 11,
       cacheKey: 'rideCount',
       image: Assets.rideIcon1,
       route: Routes.RIDE_HOME,
     ),
     BottomItemModel(
-        icon: FontAwesomeIcons.plus,
-        label: LocaleKeys.tripJoin.localize,
-        cacheKey: 'tripJoinCount',
-        image: Assets.tripJoinIcon2,
-        index: 12, route: Routes.newRideModeScreen,
+      icon: FontAwesomeIcons.plus,
+      localeKey: LocaleKeys.tripJoin,
+      cacheKey: 'tripJoinCount',
+      image: Assets.tripJoinIcon2,
+      index: 12,
+      route: Routes.newRideModeScreen,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.health.localize,
+      localeKey: LocaleKeys.health,
       cacheKey: 'healthCount',
       image: Assets.health,
       index: 13,
       route: Routes.VISITA,
     ),
-
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      label: LocaleKeys.meal.localize,
+      localeKey: LocaleKeys.meal,
       cacheKey: 'bookingCount',
       index: 14,
       image: Assets.mealIcon,
@@ -164,7 +152,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.plus,
-      label: LocaleKeys.health.localize,
+      localeKey: LocaleKeys.health,
       cacheKey: 'healthCount',
       image: Assets.healthIcon1,
       index: 15,
@@ -196,7 +184,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           }
           await context.read<UserCubit>().resetUnreadedChatsCounter();
           HandleCashback.setCount('chatCount', context);
-          context.push(context.read<UserCubit>().isLoggedIn?Routes.CHAT:Routes.FirstLoginScreen, extra: ChatsViewParams());
+          context.push(
+            context.read<UserCubit>().isLoggedIn
+                ? Routes.CHAT
+                : Routes.FirstLoginScreen,
+            extra: ChatsViewParams(),
+          );
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         } else {
           final selectedItem = pages[index];
@@ -230,13 +223,15 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState(
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState(
         scrollController: scrollController,
         isScrollingDown: isScrollingDown,
       );
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with SingleTickerProviderStateMixin {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+    with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
   bool isScrollingDown;
 
@@ -265,14 +260,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   void _scrollListener() {
     if (_isDisposed || !mounted) return;
 
-    if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    if (scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
       if (!isScrollingDown && scrollController.offset > 20) {
         setState(() {
           isScrollingDown = true;
           bottomNavBarHeight = 0.0;
         });
       }
-    } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+    } else if (scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
       if (isScrollingDown) {
         setState(() {
           isScrollingDown = false;
@@ -295,76 +292,107 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
                 BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
               ],
             ),
             child: bottomNavBarHeight == 75
                 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: List.generate(widget.items.length, (index) {
-                      return Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            if (index != 2) {
-                              widget.onTap(index);
-                            }
-                          },
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.zero,
-                            child: isScrollingDown
-                                ? Container()
-                                : ClickableWidget(
-                                    child: widget.items[index].index != 2&&
-                                        widget.items[index].index != 13
-                                        ? Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                                            child: Column(
-                                              children: [
-                                                (widget.items[index].index == 3 ||
-                                                        widget.items[index].index == 4 ||
-                                                        widget.items[index].index == 0 ||
-                                                        widget.items[index].index == 12 ||
-                                                        widget.items[index].index == 11 ||
-                                                        widget.items[index].index == 15 ||
-                                                        widget.items[index].index == 14 ||
-                                                        widget.items[index].index == 1)
-                                                    ? Image.asset(
-                                                        widget.items[index].image!,
-                                                        height: widget.items[index].height,
-                                                        width: widget.items[index].height,
-                                                        color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-                                                      )
-                                                    : SvgPicture.asset(
-                                                        widget.items[index].image!,
-                                                        height: widget.items[index].height,
-                                                        width: widget.items[index].height,
-                                                        color:
-                                                        context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-                                                      ),
-                                                if (widget.items[index].index == 3)
-                                                  SizedBox(
-                                                    height: 4.h,
-                                                  ),
-                                                Expanded(
-                                                  child: Label(
-                                                    text: widget.items[index].label,
-                                                    style: Styles.smallText(),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                                  ),
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: List.generate(widget.items.length, (index) {
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      if (index != 2) {
+                        widget.onTap(index);
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.zero,
+                      child: isScrollingDown
+                          ? Container()
+                          : ClickableWidget(
+                        child: widget.items[index].index != 2 &&
+                            widget.items[index].index != 13
+                            ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0),
+                          child: Column(
+                            children: [
+                              (widget.items[index].index ==
+                                  3 ||
+                                  widget.items[index]
+                                      .index ==
+                                      4 ||
+                                  widget.items[index]
+                                      .index ==
+                                      0 ||
+                                  widget.items[index]
+                                      .index ==
+                                      12 ||
+                                  widget.items[index]
+                                      .index ==
+                                      11 ||
+                                  widget.items[index]
+                                      .index ==
+                                      15 ||
+                                  widget.items[index]
+                                      .index ==
+                                      14 ||
+                                  widget.items[index]
+                                      .index ==
+                                      1)
+                                  ? Image.asset(
+                                widget
+                                    .items[index].image!,
+                                height: widget.items[index]
+                                    .height,
+                                width: widget.items[index]
+                                    .height,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors
+                                    .PRIMARY_COLOR,
+                              )
+                                  : SvgPicture.asset(
+                                widget
+                                    .items[index].image!,
+                                height: widget.items[index]
+                                    .height,
+                                width: widget.items[index]
+                                    .height,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors
+                                    .PRIMARY_COLOR,
+                              ),
+                              if (widget.items[index].index ==
+                                  3)
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                              Expanded(
+                                child: Label(
+                                  text: widget
+                                      .items[index].localeKey
+                                      .localize, // translate on build
+                                  style: Styles.smallText(),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      );
-                    }),
-                  )
+                        )
+                            : Container(),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            )
                 : Container(),
           ),
         ),
@@ -375,7 +403,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
 
 class BottomItemModel {
   final IconData icon;
-  final String label;
+  final String localeKey; // store only key
   final int index;
   final String? image;
   final String? cacheKey;
@@ -384,7 +412,7 @@ class BottomItemModel {
 
   BottomItemModel({
     required this.icon,
-    required this.label,
+    required this.localeKey,
     required this.index,
     this.image,
     this.cacheKey,

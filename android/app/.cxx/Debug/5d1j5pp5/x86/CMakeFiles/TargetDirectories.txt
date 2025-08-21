@@ -1,0 +1,2 @@
+/Users/shefo/Documents/GitHub/49-mobile-app/android/app/.cxx/Debug/5d1j5pp5/x86/CMakeFiles/edit_cache.dir
+/Users/shefo/Documents/GitHub/49-mobile-app/android/app/.cxx/Debug/5d1j5pp5/x86/CMakeFiles/rebuild_cache.dir
