@@ -32,6 +32,7 @@ import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
+import '../../../../social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 
 class PagePreview extends StatefulWidget {
   const PagePreview({super.key, this.state, this.isButtonsVisible = false});
@@ -196,7 +197,7 @@ class _PagePreviewState extends State<PagePreview>
                                           ? const InstagramView(
                                               hideAppBar: true,
                                             )
-                                          : const TwitterView(),
+                                          : const Twitter11(),
                                 );
                               } else {
                                 return const CustomLoading();

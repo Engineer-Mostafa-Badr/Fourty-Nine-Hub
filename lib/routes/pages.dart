@@ -447,6 +447,7 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -2047,22 +2048,25 @@ class AppPages {
                         pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              const TwitterView(),
+                              const Twitter11(),
                             ),
                         routes: const []),
                     GoRoute(
                       path: Paths.TWITTERPOSTDETAILS,
                       name: Routes.TWITTERPOSTDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<TwitterCubit>(
-                            create: (_) {
-                              return serviceLocator();
-                            },
-                            child: TwitterPostDetailsNotify(
-                                payload: state.extra as dynamic)),
-                      ),
+                      pageBuilder: (context, state) {
+                        // state.extra can be null / String / Map – pass it through as-is
+                        final dynamic payload = state.extra;
+
+                        return customTransition(
+                          context,
+                          state,
+                          BlocProvider<TwitterCubit>(
+                            create: (_) => serviceLocator<TwitterCubit>(),
+                            child: TwitterPostDetailsNotify.fromPayload(payload: payload),
+                          ),
+                        );
+                      },
                     ),
                     GoRoute(
                         path: Paths.OTHERSACCOUNT,
@@ -2240,8 +2244,7 @@ class AppPages {
                           )),
                     ),
                     // OtherAccountView
-                  ]
-              ),
+                  ]),
 
               // ChatView
               GoRoute(
