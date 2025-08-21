@@ -392,7 +392,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         const Sizer(),
         Expanded(
           child: Label(
-              text: '@${post.user.phoneNumber.split('@')[0]}',
+              text: '@${post.user.email}',
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
