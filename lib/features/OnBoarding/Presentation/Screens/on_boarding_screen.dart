@@ -115,7 +115,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         const Spacer(),
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             CacheManager.isShowOnboarding(true);
             context.go(Routes.HOME);
             // Navigator.push(
@@ -208,7 +208,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       child: AppButton(
         backColor: isDarkTheme ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
         onPressed: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           _startAutoScroll(); // Reset timer on button press
           final index = state.currentIndex;
           if (index < cubit.images.length - 1) {

@@ -172,183 +172,183 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           ),
         ),
         const Sizer(),
-      //   Padding(
-      //     padding: const EdgeInsets.symmetric(horizontal: 16),
-      //     child: Row(
-      //       children: [
-      //         InkWell(
-      //           onTap: () async {
-      //             ManageVibration.vibrate();
-      //             dynamic data = await context.push(
-      //               Routes.FILTERADS,
-      //               extra: FilterAdsParams(
-      //                 categorization: CategorizationEntity(
-      //                   mainCategory: widget.state.mainCategory!,
-      //                   fromMarriage: true,
-      //                   subCategory: widget.state.subCategories![
-      //                       widget.state.subCategories?.indexWhere(
-      //                               (element) => element.isSelected == true) ??
-      //                           0],
-      //                 ),
-      //                 userType: '',
-      //               ),
-      //             );
-      //
-      //             if (data != null) {
-      //               print("objectsdaa");
-      //               widget.controller.changeFilterModel(data);
-      //               widget.controller.loadFilterData(
-      //                 model: data,
-      //                 filter: 'user',
-      //               );
-      //             }
-      //           },
-      //           child: Container(
-      //             height: 42,
-      //             padding:
-      //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      //             clipBehavior: Clip.antiAlias,
-      //             decoration: ShapeDecoration(
-      //               color: AppColors.getButtonPrimaryColor(context),
-      //               shape: RoundedRectangleBorder(
-      //                 borderRadius: BorderRadius.circular(15),
-      //               ),
-      //             ),
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 Image.asset(
-      //                   Assets.filter,
-      //                   width: 16,
-      //                   height: 16,
-      //                   color: AppColors.getReversedTextColor(context),
-      //                 ),
-      //                 const Sizer(),
-      //                 Label(
-      //                   text: LocaleKeys.filter.localize,
-      //                   style: Styles.mediumText(
-      //                     color: AppColors.getReversedTextColor(context),
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //         const Sizer(),
-      //         InkWell(
-      //           onTap: () async {
-      //             ManageVibration.vibrate();
-      //             dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
-      //                 extra: CategorizationEntity(
-      //                     mainCategory: widget.state.mainCategory!,
-      //                     fromMarriage: true,
-      //                     subCategory: widget.state.subCategories![widget
-      //                             .state.subCategories
-      //                             ?.indexWhere((element) =>
-      //                                 element.isSelected == true) ??
-      //                         0]));
-      //             if (data != null) {
-      //               print("data.cityId${data.cityId}");
-      //               print("data.governorateId${data.governorateId}");
-      //               print("objectsdaa");
-      //               widget.controller.state.city = data.cityId;
-      //               widget.controller.state.governorate = data.governorateId;
-      //               widget.controller.changeFilterModel(data);
-      //               await widget.controller
-      //                   .loadFilterData(model: data, filter: 'user');
-      //             }
-      //           },
-      //           child: Container(
-      //             height: 42,
-      //             padding:
-      //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      //             clipBehavior: Clip.antiAlias,
-      //             decoration: ShapeDecoration(
-      //               color: AppColors.getButtonPrimaryColor(context),
-      //               shape: RoundedRectangleBorder(
-      //                 borderRadius: BorderRadius.circular(15),
-      //               ),
-      //             ),
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 Image.asset(
-      //                   Assets.hotelFilter,
-      //                   width: 16,
-      //                   height: 16,
-      //                   color: AppColors.getReversedTextColor(context),
-      //                 ),
-      //                 const Sizer(),
-      //                 Label(
-      //                   text: LocaleKeys.city.localize,
-      //                   style: Styles.mediumText(
-      //                     color: AppColors.getReversedTextColor(context),
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //         /* Expanded(
-      //           child: FilterButtonItem(
-      //             title: LocaleKeys.filter.localize,
-      //             onTap: () async {
-      //               dynamic data = await context.push(
-      //                 Routes.FILTERADS,
-      //                 extra: CategorizationEntity(
-      //                   mainCategory: widget.state.mainCategory!,
-      //                   fromMarriage: true,
-      //                   subCategory: widget.state.subCategories![
-      //                       widget.state.subCategories?.indexWhere(
-      //                               (element) => element.isSelected == true) ??
-      //                           0],
-      //                 ),
-      //               );
-      //               if (data != null) {
-      //                 print("objectsdaa");
-      //                 widget.controller.changeFilterModel(data);
-      //                 widget.controller.loadFilterData(
-      //                   model: data,
-      //                   filter: 'user',
-      //                 );
-      //               }
-      //             },
-      //           ),
-      //         ),
-      //         const SizedBox(
-      //           width: 8,
-      //         ),
-      //         Expanded(
-      //           child: FilterButtonItem(
-      //             title: LocaleKeys.city.localize,
-      //             onTap: () async {
-      // ManageVibration.vibrate();
-      //               dynamic data = await context.push(
-      //                   Routes.GOVERNORATEFILTERADS,
-      //                   extra: CategorizationEntity(
-      //                       mainCategory: widget.state.mainCategory!,
-      //                       fromMarriage: true,
-      //                       subCategory: widget.state.subCategories![widget
-      //                               .state.subCategories
-      //                               ?.indexWhere((element) =>
-      //                                   element.isSelected == true) ??
-      //                           0]));
-      //               if (data != null) {
-      //                 print("data.cityId${data.cityId}");
-      //                 print("data.governorateId${data.governorateId}");
-      //                 print("objectsdaa");
-      //                 widget.controller.state.city = data.cityId;
-      //                 widget.controller.state.governorate = data.governorateId;
-      //                 widget.controller.changeFilterModel(data);
-      //                 await widget.controller
-      //                     .loadFilterData(model: data, filter: 'user');
-      //               }
-      //             },
-      //           ),
-      //         ),*/
-      //       ],
-      //     ),
-      //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 16),
+        //     child: Row(
+        //       children: [
+        //         InkWell(
+        //           onTap: () async {
+        //             ManageVibration.vibrate();
+        //             dynamic data = await context.push(
+        //               Routes.FILTERADS,
+        //               extra: FilterAdsParams(
+        //                 categorization: CategorizationEntity(
+        //                   mainCategory: widget.state.mainCategory!,
+        //                   fromMarriage: true,
+        //                   subCategory: widget.state.subCategories![
+        //                       widget.state.subCategories?.indexWhere(
+        //                               (element) => element.isSelected == true) ??
+        //                           0],
+        //                 ),
+        //                 userType: '',
+        //               ),
+        //             );
+        //
+        //             if (data != null) {
+        //               print("objectsdaa");
+        //               widget.controller.changeFilterModel(data);
+        //               widget.controller.loadFilterData(
+        //                 model: data,
+        //                 filter: 'user',
+        //               );
+        //             }
+        //           },
+        //           child: Container(
+        //             height: 42,
+        //             padding:
+        //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        //             clipBehavior: Clip.antiAlias,
+        //             decoration: ShapeDecoration(
+        //               color: AppColors.getButtonPrimaryColor(context),
+        //               shape: RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(15),
+        //               ),
+        //             ),
+        //             child: Row(
+        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //               children: [
+        //                 Image.asset(
+        //                   Assets.filter,
+        //                   width: 16,
+        //                   height: 16,
+        //                   color: AppColors.getReversedTextColor(context),
+        //                 ),
+        //                 const Sizer(),
+        //                 Label(
+        //                   text: LocaleKeys.filter.localize,
+        //                   style: Styles.mediumText(
+        //                     color: AppColors.getReversedTextColor(context),
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //         const Sizer(),
+        //         InkWell(
+        //           onTap: () async {
+        //             ManageVibration.vibrate();
+        //             dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
+        //                 extra: CategorizationEntity(
+        //                     mainCategory: widget.state.mainCategory!,
+        //                     fromMarriage: true,
+        //                     subCategory: widget.state.subCategories![widget
+        //                             .state.subCategories
+        //                             ?.indexWhere((element) =>
+        //                                 element.isSelected == true) ??
+        //                         0]));
+        //             if (data != null) {
+        //               print("data.cityId${data.cityId}");
+        //               print("data.governorateId${data.governorateId}");
+        //               print("objectsdaa");
+        //               widget.controller.state.city = data.cityId;
+        //               widget.controller.state.governorate = data.governorateId;
+        //               widget.controller.changeFilterModel(data);
+        //               await widget.controller
+        //                   .loadFilterData(model: data, filter: 'user');
+        //             }
+        //           },
+        //           child: Container(
+        //             height: 42,
+        //             padding:
+        //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        //             clipBehavior: Clip.antiAlias,
+        //             decoration: ShapeDecoration(
+        //               color: AppColors.getButtonPrimaryColor(context),
+        //               shape: RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(15),
+        //               ),
+        //             ),
+        //             child: Row(
+        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //               children: [
+        //                 Image.asset(
+        //                   Assets.hotelFilter,
+        //                   width: 16,
+        //                   height: 16,
+        //                   color: AppColors.getReversedTextColor(context),
+        //                 ),
+        //                 const Sizer(),
+        //                 Label(
+        //                   text: LocaleKeys.city.localize,
+        //                   style: Styles.mediumText(
+        //                     color: AppColors.getReversedTextColor(context),
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //         /* Expanded(
+        //           child: FilterButtonItem(
+        //             title: LocaleKeys.filter.localize,
+        //             onTap: () async {
+        //               dynamic data = await context.push(
+        //                 Routes.FILTERADS,
+        //                 extra: CategorizationEntity(
+        //                   mainCategory: widget.state.mainCategory!,
+        //                   fromMarriage: true,
+        //                   subCategory: widget.state.subCategories![
+        //                       widget.state.subCategories?.indexWhere(
+        //                               (element) => element.isSelected == true) ??
+        //                           0],
+        //                 ),
+        //               );
+        //               if (data != null) {
+        //                 print("objectsdaa");
+        //                 widget.controller.changeFilterModel(data);
+        //                 widget.controller.loadFilterData(
+        //                   model: data,
+        //                   filter: 'user',
+        //                 );
+        //               }
+        //             },
+        //           ),
+        //         ),
+        //         const SizedBox(
+        //           width: 8,
+        //         ),
+        //         Expanded(
+        //           child: FilterButtonItem(
+        //             title: LocaleKeys.city.localize,
+        //             onTap: () async {
+        // ManageVibration.vibrate();
+        //               dynamic data = await context.push(
+        //                   Routes.GOVERNORATEFILTERADS,
+        //                   extra: CategorizationEntity(
+        //                       mainCategory: widget.state.mainCategory!,
+        //                       fromMarriage: true,
+        //                       subCategory: widget.state.subCategories![widget
+        //                               .state.subCategories
+        //                               ?.indexWhere((element) =>
+        //                                   element.isSelected == true) ??
+        //                           0]));
+        //               if (data != null) {
+        //                 print("data.cityId${data.cityId}");
+        //                 print("data.governorateId${data.governorateId}");
+        //                 print("objectsdaa");
+        //                 widget.controller.state.city = data.cityId;
+        //                 widget.controller.state.governorate = data.governorateId;
+        //                 widget.controller.changeFilterModel(data);
+        //                 await widget.controller
+        //                     .loadFilterData(model: data, filter: 'user');
+        //               }
+        //             },
+        //           ),
+        //         ),*/
+        //       ],
+        //     ),
+        //   ),
         const Sizer(),
 
         // if (widget.state.subCategories != null)

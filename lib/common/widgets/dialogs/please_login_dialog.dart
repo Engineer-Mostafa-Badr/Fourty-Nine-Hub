@@ -14,7 +14,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/utils/custom_show_dialog.dart';
 
 void pleaseLoginDialog(BuildContext context) {
-  context.pushNamed(Routes.FirstLoginScreen);
+  context.push(Routes.FirstLoginScreen);
   // showAnimatedDialog(
   //   context,
   //   Container(

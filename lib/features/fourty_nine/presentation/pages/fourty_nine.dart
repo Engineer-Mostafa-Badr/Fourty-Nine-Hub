@@ -161,15 +161,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ExitWidget(
       child: CustomScaffold(
         key: _scaffoldKey,
-        scaffoldKey:_scaffoldKey,
+        scaffoldKey: _scaffoldKey,
         isMenu: true,
         appBar: HomeAppbar(
-          isWithBackArrow: false,
-            scaffoldKey:_scaffoldKey,
-          language: true,
-            isMenu:false
-          // isHaveLeading: true,
-        ),
+            isWithBackArrow: false,
+            scaffoldKey: _scaffoldKey,
+            language: true,
+            isMenu: true
+            // isHaveLeading: true,
+            ),
         bottomNavigationBar: _isScrollingDown
             ? null
             : BottomNavigator(
@@ -271,7 +271,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     children: List.generate(
                       5,
                       (index) => Shimmer.fromColors(
-                        baseColor: context.isDarkMode?Colors.grey[800]!:Colors.grey[100]!,
+                        baseColor: context.isDarkMode
+                            ? Colors.grey[800]!
+                            : Colors.grey[100]!,
                         highlightColor: Colors.white24,
                         child: Container(
                           margin: const EdgeInsets.symmetric(

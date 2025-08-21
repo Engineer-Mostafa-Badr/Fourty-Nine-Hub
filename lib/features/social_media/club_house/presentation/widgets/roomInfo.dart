@@ -220,7 +220,7 @@ class RoomInfoWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.CLUBHOUSECHAT);
             },
             child: Container(

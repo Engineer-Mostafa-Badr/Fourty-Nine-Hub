@@ -38,7 +38,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   void _scrollListener() {
     if (widget.scrollController.position.pixels >=
-        widget.scrollController.position.maxScrollExtent - 100 &&
+            widget.scrollController.position.maxScrollExtent - 100 &&
         !_isLoading) {
       _loadNextPage();
     }
@@ -68,60 +68,60 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height*0.6;
+    final screenHeight = MediaQuery.of(context).size.height * 0.6;
     // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
     return GlowingOverscrollIndicator(
-      color: AppColors.SECONDARY_COLOR,
-      axisDirection: AxisDirection.down,
-      child: CustomScrollView(
-        controller: widget.scrollController,
-        slivers: [
-          // First page items
-          if (widget.items.isNotEmpty)
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => widget.items[index],
-                childCount: widget.items.length > widget.itemsPerPage
-                    ? widget.itemsPerPage
-                    : widget.items.length,
+        color: AppColors.SECONDARY_COLOR,
+        axisDirection: AxisDirection.down,
+        child: CustomScrollView(
+          controller: widget.scrollController,
+          slivers: [
+            // First page items
+            if (widget.items.isNotEmpty)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => widget.items[index],
+                  childCount: widget.items.length > widget.itemsPerPage
+                      ? widget.itemsPerPage
+                      : widget.items.length,
+                ),
               ),
-            ),
 
-        // Subsequent pages with banners
-        for (int page = 1; page < pageCount; page++) ...[
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            pinned: false,
-            expandedHeight: screenHeight, // Reduced height for banner
-            flexibleSpace: BannerAdsWidget(
-              key: Key('banner_$page'),
-              banner: widget.banners[(page - 1) % widget.banners.length],
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final itemIndex = page * widget.itemsPerPage + index;
-                return itemIndex < widget.items.length
-                    ? widget.items[itemIndex]
-                    : null;
-              },
-              childCount: widget.itemsPerPage,
-            ),
-          ),
-        ],
+            // Subsequent pages with banners
+            for (int page = 1; page < pageCount; page++) ...[
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                pinned: false,
+                expandedHeight: screenHeight, // Reduced height for banner
+                flexibleSpace: BannerAdsWidget(
+                  key: Key('banner_$page'),
+                  banner: widget.banners[(page - 1) % widget.banners.length],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final itemIndex = page * widget.itemsPerPage + index;
+                    return itemIndex < widget.items.length
+                        ? widget.items[itemIndex]
+                        : null;
+                  },
+                  childCount: widget.itemsPerPage,
+                ),
+              ),
+            ],
 
-        // Loading indicator
-        if (_isLoading)
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          ),
-      ],
-    ));
+            // Loading indicator
+            if (_isLoading)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              ),
+          ],
+        ));
   }
 }

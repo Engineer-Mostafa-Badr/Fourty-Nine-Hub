@@ -21,20 +21,19 @@ class PastTripsWidget extends StatelessWidget {
               children: [
                 AvailableRideModeWidget(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(Routes.captainRideDetails);
                   },
                   cancelButton: false,
-                  statusDriver: context.isArabic?'منتهي':"Expired",
-                  requestType: context.isArabic?'عادي':'Regular',
+                  statusDriver: context.isArabic ? 'منتهي' : "Expired",
+                  requestType: context.isArabic ? 'عادي' : 'Regular',
                 ),
                 AvailableRideModeWidget(
                   onTap: () {
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   },
-                  statusDriver: context.isArabic?'منتهي':"Expired",
-                  requestType: context.isArabic?'عادي':'Regular',
+                  statusDriver: context.isArabic ? 'منتهي' : "Expired",
+                  requestType: context.isArabic ? 'عادي' : 'Regular',
                 ),
               ],
             ),

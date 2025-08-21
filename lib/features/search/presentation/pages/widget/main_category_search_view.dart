@@ -18,15 +18,12 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 //MainCategorySearchView
 
-
 class MainCategorySearchView extends StatefulWidget {
   const MainCategorySearchView({super.key});
-
 
   @override
   State<MainCategorySearchView> createState() => _MainCategorySearchViewState();
 }
-
 
 class _MainCategorySearchViewState extends State<MainCategorySearchView> {
   late final ScrollController _scrollController;
@@ -39,6 +36,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
     _cubit = context.read<SearchCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
   }
+
   void _onScroll() async {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
@@ -73,7 +71,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       buildWhen: (prev, curr) =>
-      prev.search != curr.search || prev.status != curr.status,
+          prev.search != curr.search || prev.status != curr.status,
       builder: (context, state) {
         final subCategories = _cubit.paginatedSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
@@ -83,7 +81,9 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
-          return const Center(child: CustomLoadingSearchWidget(),);
+          return const Center(
+            child: CustomLoadingSearchWidget(),
+          );
         }
 
         // No results
@@ -93,12 +93,8 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
           );
         }
         return GridView.builder(
-          gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 10,
-              crossAxisCount: 2,
-              childAspectRatio: .9),
-
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisSpacing: 10, crossAxisCount: 2, childAspectRatio: .9),
           itemCount: _cubit.paginatedSearch.length +
               (_cubit.isLoadingSubCategoriesSearchMore ? 1 : 0),
           physics: _cubit.searchController.text.trim().isEmpty
@@ -116,11 +112,10 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
               padding: const EdgeInsets.all(16),
               child: InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount(
-                      'mainCategoriesCount', context);
+                  HandleCashback.setCount('mainCategoriesCount', context);
                   if (_cubit.paginatedSearch[index].id ==
                       '62c8b5b09332225799fe335e') {
                     context.push(Routes.MARRIAGESUBCATEGORIES,
@@ -145,7 +140,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
           },
         );
         // List view with loader at bottom
-      /*  return ListView.builder(
+        /*  return ListView.builder(
           controller: _scrollController,
           physics: _cubit.searchController.text.trim().isEmpty
               ? const NeverScrollableScrollPhysics()
@@ -166,11 +161,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
             );
           },
         );*/
-
       },
     );
   }
-
 }
-
-

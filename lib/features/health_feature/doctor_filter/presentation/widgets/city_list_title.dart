@@ -26,7 +26,7 @@ class CityListTitle extends StatelessWidget {
         style: Styles.headerText(fontWeight: FontWeight.w600),
       ),
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
 
         context.push(Routes.VISITADOCTORLIST,

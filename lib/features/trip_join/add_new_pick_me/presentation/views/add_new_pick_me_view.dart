@@ -55,17 +55,20 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
-        mainCategoryId: 1,isWithBackArrow: true,
+        mainCategoryId: 1,
+        isWithBackArrow: true,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0.h,vertical:8.h ),
+                padding:
+                    EdgeInsets.symmetric(horizontal: 16.0.h, vertical: 8.h),
                 child: WelcomeTextWidget(
                   title: LocaleKeys.welcome_pick_me.localize,
-                  infoMessage:
-                  context.isArabic?"انشئ رحلة واضف رحلتك. انتظر أصحاب السيارات للاتصال بك. شارك الرحلة و وفر المال!":"Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!",
+                  infoMessage: context.isArabic
+                      ? "انشئ رحلة واضف رحلتك. انتظر أصحاب السيارات للاتصال بك. شارك الرحلة و وفر المال!"
+                      : "Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!",
                 ),
               ),
               _buildTopImage(),
@@ -78,17 +81,18 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                   color: Colors.green,
                   text: currentAddress,
                   onPressed: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(
                       Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                       extra: RideOpenStreetMapSearchAndPickParams(
                         onPicked: (pickedData) async {
                           currentAddress = pickedData.addressName;
-                          currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                          currentLocation = [
+                            pickedData.latLong.latitude,
+                            pickedData.latLong.longitude
+                          ];
                           context.pop();
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                       ),
                     );
@@ -97,23 +101,26 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
               ),
               const Sizer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.h,vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
                 child: _customLocationField(
                   isTo: true,
                   context: context,
                   color: Colors.blue,
-                  text:toAddress,
+                  text: toAddress,
                   onPressed: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                         extra: RideOpenStreetMapSearchAndPickParams(
-                          onPicked: (pickedData) async {
-                            toAddress = pickedData.addressName;
-                            toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                            context.pop();
-                            setState(() {});
-                          },
-                        ));
+                      onPicked: (pickedData) async {
+                        toAddress = pickedData.addressName;
+                        toLocation = [
+                          pickedData.latLong.latitude,
+                          pickedData.latLong.longitude
+                        ];
+                        context.pop();
+                        setState(() {});
+                      },
+                    ));
                   },
                 ),
               ),
@@ -122,20 +129,22 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: FormTextField(
                     type: TextInputType.phone,
-                    textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    textStyle: Styles.mediumText(
+                        color: AppColors.getTextColor(context)),
                     height: 76.h,
-                    style: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    style: Styles.mediumText(
+                        color: AppColors.getTextColor(context)),
                     constraints:
-                    const BoxConstraints(maxHeight: 52, minHeight: 52),
+                        const BoxConstraints(maxHeight: 52, minHeight: 52),
                     fillColor: AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(30.h),
-                    borderColor: AppColors.getFillColor(context),borderSide: AppColors.getFillColor(context),
+                    borderColor: AppColors.getFillColor(context),
+                    borderSide: AppColors.getFillColor(context),
                     controller: phoneController,
                     hint: LocaleKeys.phoneNumber.localize,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return LocaleKeys
-                            .please_enter_phone_number.localize;
+                        return LocaleKeys.please_enter_phone_number.localize;
                       }
                       return null;
                     }),
@@ -146,14 +155,17 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
               //   child: TripJoinBottomSection(),
               // ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h,),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 18.0.h,
+                  vertical: 8.h,
+                ),
                 child: const PremiumAndRequestWidget(),
               ),
             ],
-
           ),
         ));
   }
+
   Widget _customLocationField({
     required Color color,
     required String? text,
@@ -192,16 +204,17 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
               child: Text(
                 text == 'From'
                     ? context.isArabic
-                    ? "من"
-                    : "From"
+                        ? "من"
+                        : "From"
                     : text == 'To'
-                    ? context.isArabic
-                    ? "إلى"
-                    : "To"
-                    : text,
+                        ? context.isArabic
+                            ? "إلى"
+                            : "To"
+                        : text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Styles.mediumText(color: AppColors.getTextColor(context)),
+                style:
+                    Styles.mediumText(color: AppColors.getTextColor(context)),
               ),
             ),
           ],
@@ -211,7 +224,6 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
   }
 
   Widget _buildTopMap(BuildContext context) {
-
     if (currentLocation != null && currentLocation!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
@@ -223,12 +235,12 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
 
     return SizedBox(
       width: double.infinity,
-      height:MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.5,
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
           initialCenter: LatLng(
-            currentLocation?[0]?? 30.0596113,
+            currentLocation?[0] ?? 30.0596113,
             currentLocation?[1] ?? 31.1760625,
           ),
           initialZoom: 12.0,
@@ -242,8 +254,9 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
               if (currentLocation != null && currentLocation!.isNotEmpty)
                 Marker(
                   point: LatLng(
-                    currentLocation?[0]?? 0.0,
-                    currentLocation?[1] ?? 0.0,),
+                    currentLocation?[0] ?? 0.0,
+                    currentLocation?[1] ?? 0.0,
+                  ),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
@@ -257,7 +270,6 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                   child: const Icon(Icons.location_pin,
                       color: Colors.red, size: 40),
                 ),
-
             ],
           ),
           // if (routePoints.isNotEmpty)

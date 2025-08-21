@@ -12,7 +12,6 @@ import '../../cubit/social_posts_cubit.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../helpers/manage_vibration.dart';
 
-
 class InstagramProfileSuggestPeople extends StatefulWidget {
   const InstagramProfileSuggestPeople({super.key});
 

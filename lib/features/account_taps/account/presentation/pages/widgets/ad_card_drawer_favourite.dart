@@ -60,7 +60,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
         final controller = context.read<AdvertisementCubit>();
         return InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             context.push(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
@@ -146,7 +146,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                             //     : Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               widget.onRemoveFav();
                             }),
                       ),

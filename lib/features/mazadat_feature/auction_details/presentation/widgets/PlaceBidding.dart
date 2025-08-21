@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -132,13 +134,15 @@ class _PlaceBiddingState extends State<PlaceBidding> {
               style: Styles.headerText(color: Colors.white),
               label: Labels.placeBidding,
               onPressed: () {
+                ManageVibration.vibrate();
                 if (bidding > widget.auction.currentPrice) {
                   if (AuthHelper().isLoggedIn()) {
                     widget.onPlaced(bidding);
 
                     context.pop();
                   } else {
-                    context.push(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
+                    return pleaseLoginDialog(context);
                   }
                 }
               }),

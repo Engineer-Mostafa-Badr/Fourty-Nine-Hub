@@ -62,7 +62,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                       Colors.black.withOpacity(0.6),
                       Colors.transparent,
                     ],
-                    begin:Alignment.topCenter,
+                    begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
                 ),
@@ -85,18 +85,18 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                             color: Colors.redAccent,
                           ),
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               final success = await context
                                   .read<RestaurantDetailsCubit>()
                                   .toggleFavoriteRestaurant(
-                                  widget.restaurant.id ?? "", context);
+                                      widget.restaurant.id ?? "", context);
                               if (success) {
                                 setState(() {
                                   isFavorite = !isFavorite;
                                 });
                               }
-                            }else{
+                            } else {
                               return pleaseLoginDialog(context);
 
                               // ScaffoldMessenger.of(context).showSnackBar(
@@ -113,7 +113,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                               //       label: LocaleKeys.login.localize,
                               //       textColor: Colors.white,
                               //       onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               //         // context.push(Routes.LOGIN);
                               //       },
                               //     ),
@@ -143,38 +143,44 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                   child: Row(
                                     children: [
                                       RatingBar(
-                                        initialRating: widget.restaurant.totalRating?.toDouble() ?? 0,
+                                        initialRating: widget
+                                                .restaurant.totalRating
+                                                ?.toDouble() ??
+                                            0,
                                         ignoreGestures: true,
                                         allowHalfRating: true,
-                                        itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 3),
                                         ratingWidget: RatingWidget(
                                           full: SvgPicture.asset(Assets.star1),
-                                          half: SvgPicture.asset(Assets.halfStar),  // <-- same as full!
-                                          empty: SvgPicture.asset(Assets.starEmpty),
+                                          half: SvgPicture.asset(Assets
+                                              .halfStar), // <-- same as full!
+                                          empty: SvgPicture.asset(
+                                              Assets.starEmpty),
                                         ),
                                         itemSize: 13,
                                         onRatingUpdate: (double value) {},
                                       ),
                                       Text(
-                                        '${widget.restaurant.totalRating ?? '0.0'} '.toArabicNumbers(context),
+                                        '${widget.restaurant.totalRating ?? '0.0'} '
+                                            .toArabicNumbers(context),
                                         style: Styles.mediumText(
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.PRIMARY_COLOR
-                                        ),
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.PRIMARY_COLOR),
                                       ),
                                     ],
                                   ),
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})'.toArabicNumbers(context),
+                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})'
+                                      .toArabicNumbers(context),
                                   style: Styles.mediumText(
                                     color: Colors.white70,
                                   ),
                                 ),
                               ],
                             ),
-
                           ],
                         ),
                         // Favorite icon

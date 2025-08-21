@@ -40,10 +40,10 @@ class _RatingClientScreenState extends State<RatingClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SharedScaffold(
-          mainCategoryId: 2,
-          body: Stack(
+        mainCategoryId: 2,
+        body: Stack(
           children: [
-           const MapSection(),
+            const MapSection(),
             Align(
               alignment: Alignment.bottomCenter,
               child: RatingCard(
@@ -89,13 +89,13 @@ class RatingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius:const BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
-        boxShadow:const [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 10,
@@ -105,28 +105,39 @@ class RatingCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(children: [
-            const  SizedBox(width: 25,),
-            const  Spacer(),
-            Text(
-              LocaleKeys.rateTheDriver.localize,
-              style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
-            ),
-           const Spacer(),
-            Container(
-              height: 25,
-              width: 25,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey.shade200,
+          Row(
+            children: [
+              const SizedBox(
+                width: 25,
               ),
-              child: const Icon(Icons.close,color: Colors.black,),
-            ),
-          ],),
-          const SizedBox(height: 8,),
-           Text(
-      getRatingText(rating),
-            style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+              const Spacer(),
+              Text(
+                LocaleKeys.rateTheDriver.localize,
+                style: const TextStyle(
+                    fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              Container(
+                height: 25,
+                width: 25,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey.shade200,
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            getRatingText(rating),
+            style: const TextStyle(
+                fontSize: FontSize.s20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           RatingBar.builder(
@@ -146,26 +157,28 @@ class RatingCard extends StatelessWidget {
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
-            children: tags.map((tag) =>  GestureDetector(
-                onTap: () => onTagSelected(tag),
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width*.41,
-                  height: 40,
-                  margin: const EdgeInsets.all(4),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: context.isDarkMode?Colors.black.withOpacity(.6):Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12)
-                  ),
-                  child:Text(tag),
-
-              ),
-            )).toList(),
+            children: tags
+                .map((tag) => GestureDetector(
+                      onTap: () => onTagSelected(tag),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width * .41,
+                        height: 40,
+                        margin: const EdgeInsets.all(4),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: context.isDarkMode
+                                ? Colors.black.withOpacity(.6)
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Text(tag),
+                      ),
+                    ))
+                .toList(),
           ),
           const SizedBox(height: 12),
           GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
             },
             child: Container(
               width: double.infinity,
@@ -177,11 +190,12 @@ class RatingCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Text(
+                  Text(
                     LocaleKeys.writeThankYouMessage.localize,
-                    style:const TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: Colors.grey),
                   ),
-                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                  const Icon(Icons.arrow_forward_ios,
+                      color: Colors.grey, size: 16),
                 ],
               ),
             ),
@@ -193,13 +207,13 @@ class RatingCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.PRIMARY_COLOR,
                 foregroundColor: Colors.white,
-                padding:const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 context.push(Routes.connectionCallScreen);
               },
               child: Text(LocaleKeys.send.localize),
@@ -210,6 +224,7 @@ class RatingCard extends StatelessWidget {
     );
   }
 }
+
 String getRatingText(double rating) {
   if (rating >= 5.0) return LocaleKeys.excellent.localize;
   if (rating >= 4.0) return LocaleKeys.veryGood.localize;

@@ -251,7 +251,7 @@ class _RiderRegisterNoSocketScreenState
                           ),
                           label: Labels.submit,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             log("message");
                             if (context.isUserLoggedIn) {
                               registerRider.registerTow(context);

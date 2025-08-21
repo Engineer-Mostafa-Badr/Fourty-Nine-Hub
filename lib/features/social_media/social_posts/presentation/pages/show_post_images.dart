@@ -39,7 +39,7 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
           itemCount: widget.images.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               print("object");
               // context.push(Routes.TWITTER);
 

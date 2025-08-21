@@ -155,7 +155,7 @@ class RotatingCircularButton extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 showModalBottomSheet(
                   backgroundColor:
                       context.isDarkMode ? Colors.grey[900] : Colors.white,
@@ -234,33 +234,30 @@ class RotatingBottomSheet extends StatelessWidget {
         SizedBox(height: 50.h),
         SoundOptionBottomSheet(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             Navigator.pop(context);
-            context.pushNamed(Routes.UseSoundScreen);
+            context.push(Routes.UseSoundScreen);
           },
           icon: Assets.useSoundIcon,
           title: context.isArabic ? 'استخدم هذا الصوت' : 'Use this sound',
         ),
         SoundOptionBottomSheet(
           onTap: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           icon: Assets.collabIcon,
           title: context.isArabic ? 'تعاون' : 'Collab',
         ),
         SoundOptionBottomSheet(
           onTap: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           icon: Assets.layoutIcon,
           title: context.isArabic ? 'تَخطِيط' : 'Layout',
         ),
         SoundOptionBottomSheet(
           onTap: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           icon: Assets.mix,
           title: context.isArabic ? 'تجميعة مقاطع' : 'Mix Reel',

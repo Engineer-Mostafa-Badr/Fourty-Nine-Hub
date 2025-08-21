@@ -95,7 +95,7 @@ class _VerificationViewBodyState extends State<VerificationViewBody> {
                   child: CustomFloatingActionButton(
                     text: LocaleKeys.confirm.localize,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       forgotPasswordCubit.verifyQuestions(
                         context,
                         userId: widget.questions.userId,

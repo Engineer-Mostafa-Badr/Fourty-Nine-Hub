@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/data_source/spotlight_data_source.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/upload_request_model.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/friends_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/paginated_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_media_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_profile_entity.dart';
@@ -102,6 +103,22 @@ class SpotlightRepositoryImpl implements SpotlightRepository {
       (failure) => Left(failure),
       (model) => Right(model),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> markStoryAsViewed(String storyId) async {
+    if (storyId.isEmpty) {
+      return Left(const ValidationFailure('Story ID cannot be empty'));
+    }
+    return await dataSource.markStoryAsViewed(storyId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> likeStory(String storyId) async {
+    if (storyId.isEmpty) {
+      return Left(const ValidationFailure('Story ID cannot be empty'));
+    }
+    return await dataSource.likeStory(storyId);
   }
 
   @override

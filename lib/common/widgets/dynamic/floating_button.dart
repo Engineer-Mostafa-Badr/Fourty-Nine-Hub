@@ -40,7 +40,7 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () async {
-          ManageVibration.vibrate();
+                ManageVibration.vibrate();
 
                 HandleCashback.setCount('socialCount', context);
                 if (changeView == 1) {

@@ -22,28 +22,28 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.DOCTORREVIEWS, extra: '');
             },
             child: Text(LocaleKeys.reviews.localize),
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.DOCTORSTATISTICS, extra: earnedMoney);
             },
             child: Text(LocaleKeys.history.localize),
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
             },
             child: Text(LocaleKeys.emergencyRequests.localize),
           ),
           PopupMenuItem(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.ALLAPPOINTMENTS);
             },
             child: Text(LocaleKeys.allAppointments.localize),

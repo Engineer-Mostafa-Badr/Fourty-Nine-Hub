@@ -24,7 +24,7 @@ class InstallmentAdCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           print(item.id);
           context.push(Routes.INSTALLMENTDETAILS, extra: item.id);
         },

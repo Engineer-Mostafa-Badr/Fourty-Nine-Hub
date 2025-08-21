@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:flutter/material.dart';
@@ -115,12 +117,13 @@ void main() async {
   // final initialRoute = Routes.ChooseLangScreen;
   isActivate = await CacheManager.getActivation() ?? false;
   isShowOnboarding = await CacheManager.getShowOnboarding();
-  // final initialRoute = Routes.splash;
-  final initialRoute = !isShowOnboarding
-      ? Routes.ChooseLangScreen
-      : isActivate
-          ? Routes.PAGEPREVIEW
-          : Routes.HOME;
+  final initialRoute = Routes.splash;
+  // final initialRoute = !isShowOnboarding
+  //     ? Routes.ChooseLangScreen
+  //     : isActivate
+  //         ? Routes.PAGEPREVIEW
+  //         : Routes.HOME;
+  await requestTrackingPermission();
   AppPages.initializeRouter(initialRoute);
   await LocationServiceWatcher().start();
   runApp(
@@ -134,6 +137,12 @@ void main() async {
       // child: const MyApp(),
     ),
   );
+}
+Future<void> requestTrackingPermission() async {
+  final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+  if (status == TrackingStatus.notDetermined) {
+    await AppTrackingTransparency.requestTrackingAuthorization();
+  }
 }
 
 bool isActivate = false;
@@ -149,6 +158,45 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Future<dynamic> getCurrentCall() async {
+    var calls = await FlutterCallkitIncoming.activeCalls();
+    if (calls is List) {
+      if (calls.isNotEmpty) {
+        print('DATA: $calls');
+        return calls[0];
+      } else {
+        return null;
+      }
+    }
+  }
+
+  Future<void> getDevicePushTokenVoIP() async {
+    var devicePushTokenVoIP =
+    await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    print(devicePushTokenVoIP);
+  }
+
+  Future getToken() async {
+    var token = await CacheManager.getAccessToken();
+    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    NetworkManager().initialize();
+
+    WidgetsBinding.instance.addObserver(this);
+  }
+
   @override
   Widget build(BuildContext context) {
     getToken();
@@ -360,41 +408,4 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  Future<dynamic> getCurrentCall() async {
-    var calls = await FlutterCallkitIncoming.activeCalls();
-    if (calls is List) {
-      if (calls.isNotEmpty) {
-        print('DATA: $calls');
-        return calls[0];
-      } else {
-        return null;
-      }
-    }
-  }
-
-  Future<void> getDevicePushTokenVoIP() async {
-    var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
-    print(devicePushTokenVoIP);
-  }
-
-  Future getToken() async {
-    var token = await CacheManager.getAccessToken();
-    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    NetworkManager().initialize();
-
-    WidgetsBinding.instance.addObserver(this);
-  }
 }

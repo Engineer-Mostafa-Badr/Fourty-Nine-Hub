@@ -191,7 +191,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                               title: e.translatedName,
                               isSelected: e == selectedWallet,
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 selectedWallet = e;
                                 setState(() {});
                               },
@@ -304,7 +304,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             : Colors.white,
                       ),
                       onPressed: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         List<num> list = _isPremium
                             ? widget.subscribePlans.premiumPlans
                             : widget.subscribePlans.regularPlans;
@@ -350,10 +350,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                                   ),
                                 );
                             if (context.mounted) {
-                              if(widget.onSubscribe != null) {
+                              if (widget.onSubscribe != null) {
                                 widget.onSubscribe!();
-                              }
-                             else {
+                              } else {
                                 context.pop();
                                 context.pop();
                               }
@@ -399,7 +398,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         fontSize: 36,
                       ),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context.pop();
                       },
                     ),
@@ -555,8 +554,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
             child: ElevatedAppButton(
               label: period,
               onPressed: () {
-      ManageVibration.vibrate();
-
+                ManageVibration.vibrate();
               },
               backColor: _isPremium
                   ? (context.isDarkMode
@@ -578,10 +576,10 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           const SizedBox(width: 30),
           Expanded(
             child: ElevatedAppButton(
-              label: FormatNumbers().formatNumberByComma(price.toString(), isArabic: context.isArabic),
+              label: FormatNumbers().formatNumberByComma(price.toString(),
+                  isArabic: context.isArabic),
               onPressed: () {
-
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
               backColor: _isPremium
                   ? (context.isDarkMode

@@ -79,8 +79,9 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                           label: LocaleKeys.showMore.localize,
                           style: Styles.mediumText(color: Colors.white),
                           onPressed: () {
-      ManageVibration.vibrate();
-                            context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
+                            ManageVibration.vibrate();
+                            context
+                                .pushNamed(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
                           })
                   ],
                 );

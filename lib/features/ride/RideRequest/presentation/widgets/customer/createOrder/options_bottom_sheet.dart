@@ -132,7 +132,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               if (state.fromAddress != null)
                 InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     bottomSheet(
                       //backColor: Theme.of(context).scaffoldBackgroundColor,
                       widget: const SelectDropOffPoints(),
@@ -172,7 +172,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               // if (state.isFromAndToLocationSelected)
               InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   bottomSheet(
                     widget: const SelectDropOffPoints(),
                     isScrollControlled: true,
@@ -212,7 +212,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                   children: [
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         bottomSheet(
                             widget: RideContactPhoneNumber(
                               onChanged: (String v) =>
@@ -246,7 +246,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     const Sizer(),
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         bottomSheet(
                             widget: GiveOffer(),
                             isScrollControlled: true,
@@ -342,7 +342,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     const Sizer(),
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         bottomSheet(
                           widget: const RideOptions(),
                           // isScrollControlled: true,

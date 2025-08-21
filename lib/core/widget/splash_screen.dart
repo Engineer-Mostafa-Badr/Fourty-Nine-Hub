@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart'; // أضف هذا الimport
 
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
@@ -7,8 +10,7 @@ import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../routes/pages.dart';
-import '../../routes/routes.dart';
+import '../../routes/routes.dart'; // احذف import pages.dart
 import '../utils/shared_pref.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,20 +24,31 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    bool isActivate = false;
-    bool isShowOnboarding = false;
-    print('will go onBoardingScreen ${!isShowOnboarding}');
+    _navigateToNextScreen();
+  }
 
-    Future.delayed(const Duration(seconds: 5), () {}).then((value) async {
-      isActivate = await CacheManager.getActivation() ?? false;
-      isShowOnboarding = await CacheManager.getShowOnboarding();
-      final initialRoute = !isShowOnboarding
-          ? Routes.ChooseLangScreen
-          : isActivate
-              ? Routes.PAGEPREVIEW
-              : Routes.HOME;
-      AppPages.initializeRouter(initialRoute);
-    });
+  Future<void> _navigateToNextScreen() async {
+    // انتظار 3 ثواني
+    await Future.delayed(const Duration(seconds: 3));
+
+    // تحديد الشاشة التالية
+    final isActivate = await CacheManager.getActivation() ?? false;
+    final isShowOnboarding = await CacheManager.getShowOnboarding();
+
+    String nextRoute;
+    if (!isShowOnboarding) {
+      nextRoute = Routes.ChooseLangScreen;
+    } else if (isActivate) {
+      nextRoute = Routes.PAGEPREVIEW;
+    } else {
+      nextRoute = Routes.HOME;
+    }
+
+    print('Navigating to: $nextRoute');
+
+    if (mounted) {
+      context.go(nextRoute);
+    }
   }
 
   @override
@@ -78,7 +91,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    // margin: const EdgeInsets.symmetric(horizontal: 16),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Image.asset(
                       Assets.loginGIF,
@@ -108,9 +120,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontFamily: 'Tangerine',
                   ),
                 ),
-                const Spacer(
-                  flex: 3,
-                ),
+                const Spacer(flex: 3),
                 Label(
                   text: '© 49 HUB FOR PROGRAMMING',
                   style: Styles.mediumText(
@@ -129,9 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontSize: 20,
                   ),
                 ),
-                const Spacer(
-                  flex: 2,
-                ),
+                const Spacer(flex: 2),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,13 +34,13 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
-class TwitterView extends StatefulWidget {
-  const TwitterView({super.key});
+class Twitter11 extends StatefulWidget {
+  const Twitter11({super.key});
   @override
-  State<TwitterView> createState() => _TwitterViewState();
+  State<Twitter11> createState() => _Twitter11State();
 }
 
-class _TwitterViewState extends State<TwitterView> {
+class _Twitter11State extends State<Twitter11> {
   @override
   void initState() {
     // context.read<TwitterCubit>().loadData();
@@ -65,7 +66,7 @@ class _TwitterViewState extends State<TwitterView> {
           end: 10,
           child: CustomElevatedButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATEPOST, extra: 'twitter');
               } else {
@@ -77,7 +78,8 @@ class _TwitterViewState extends State<TwitterView> {
             backgoundColor: AppColors.getButtonPrimaryColor(context),
             child: Text(
               LocaleKeys.createPost.localize,
-              style: Styles.smallText(color: AppColors.getReversedTextColor(context)),
+              style: Styles.smallText(
+                  color: AppColors.getReversedTextColor(context)),
             ),
           ),
         ),
@@ -453,3 +455,4 @@ class _TwitterViewState extends State<TwitterView> {
     );
   }
 }
+*/

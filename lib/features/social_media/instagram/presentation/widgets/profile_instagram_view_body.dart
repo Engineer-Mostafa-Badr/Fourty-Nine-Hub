@@ -60,6 +60,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
     tabController.dispose();
     super.dispose();
   }
+
   void _handleScroll() {
     // Calculate when header is fully hidden (400 - 56 = 344)
     const double headerHideThreshold = 400;
@@ -81,40 +82,39 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
         return [
           BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
             builder: (context, state) {
-    return SliverAppBar(
-            pinned: true,
-            title: Row(
-              children: [
-                Label(
-                  text:
-                  '${state.profileData!.firstName} ${state.profileData!.lastName}',
-                  style: Styles.headerText(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w500,
-                  ),
+              return SliverAppBar(
+                pinned: true,
+                title: Row(
+                  children: [
+                    Label(
+                      text:
+                          '${state.profileData!.firstName} ${state.profileData!.lastName}',
+                      style: Styles.headerText(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Spacer(),
+                    if (_showFloatingIcon)
+                      FollowButtonInstagram(
+                        isReel: false,
+                        isFollow: false,
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                        },
+                      ),
+                  ],
                 ),
-                Spacer(),
-                if (_showFloatingIcon)
-                  FollowButtonInstagram(
-                    isReel: false,
-                    isFollow: false,
-                    onPressed: () {
-
-      ManageVibration.vibrate();
-                    },
-                  ),
-              ],
-            ),
-            leading: IconButton(
-              onPressed: () {
-      ManageVibration.vibrate();
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined),
-            ),
-          );
-  },
-),
+                leading: IconButton(
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                ),
+              );
+            },
+          ),
           SliverAppBar(
             expandedHeight: 400,
             pinned: false,
@@ -172,7 +172,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
                     return GestureDetector(
                       onTap: () {
       ManageVibration.vibrate();
-                        context.pushNamed(
+                        context.push(
                           Routes.SINGLEPOSTINSTAGRAM,
                           extra: myPosts[index],
                         );
@@ -305,8 +305,7 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
                         ),
                         InkWell(
                           onTap: () {
-
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                           },
                           child: Label(
                             text: LocaleKeys.seeAll.localize,
@@ -386,30 +385,30 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
-                context.pushNamed(
+                ManageVibration.vibrate();
+                context.push(
                   Routes.SINGLEPOSTINSTAGRAM,
                   extra: myPosts[index].id,
                 );
               },
               child: (MediaHelper.getMediaTypeFromExtension(
-                  myPosts[index].mediaUrls.first)) ==
-                  MediaType.image
+                          myPosts[index].mediaUrls.first)) ==
+                      MediaType.image
                   ? ImageFromInternet(
-                image: myPosts[index].mediaUrls[0],
-                fit: BoxFit.cover,
-              )
+                      image: myPosts[index].mediaUrls[0],
+                      fit: BoxFit.cover,
+                    )
                   : Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.black.withValues(alpha: 0.5),
-                ),
-                child: VideoPlayer(
-                  VideoPlayerController.networkUrl(
-                    Uri.parse(myPosts[index].mediaUrls[0]),
-                  ),
-                ),
-              ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.black.withValues(alpha: 0.5),
+                      ),
+                      child: VideoPlayer(
+                        VideoPlayerController.networkUrl(
+                          Uri.parse(myPosts[index].mediaUrls[0]),
+                        ),
+                      ),
+                    ),
             );
           },
         );
@@ -492,8 +491,8 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
       },
     );
   }
-
 }
+
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 

@@ -78,7 +78,7 @@ class _PaymentViewState extends State<PaymentView> {
                       Expanded(
                         child: _buildCustomCard(
                           onTap: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             final cubit = context.read<PaymentCubit>();
                             final url = cubit.state.paymobData?.data;
                             if (url != null) {
@@ -159,7 +159,7 @@ class _PaymentViewState extends State<PaymentView> {
   }) {
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         setState(() {
           _selectedPaymentMethod = titleId;
         });
@@ -398,8 +398,7 @@ class _PaymentViewState extends State<PaymentView> {
             ),
           ),
           onPressed: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           child: Label(
             text: "${widget.amount}",
@@ -455,7 +454,7 @@ class _PaymentViewState extends State<PaymentView> {
                         ),
                   label: LocaleKeys.uploadImage.localize,
                   onPressed: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     await cubit.uploadProfileImage(context: context);
                   },
                 );
@@ -526,7 +525,7 @@ class _PaymentViewState extends State<PaymentView> {
                           borderRadius: BorderRadius.circular(20)),
                     ),
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider $_selectedProviderId");

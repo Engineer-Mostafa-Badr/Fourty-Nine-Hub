@@ -15,17 +15,19 @@ class RideFindingCard extends StatefulWidget {
   @override
   State<RideFindingCard> createState() => _RideFindingCardState();
 }
-bool switchAcceptFirstDriver= false;
+
+bool switchAcceptFirstDriver = false;
 int price = 79;
+
 class _RideFindingCardState extends State<RideFindingCard> {
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow:const [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 10,
@@ -36,35 +38,35 @@ class _RideFindingCardState extends State<RideFindingCard> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-           Text(
+          Text(
             LocaleKeys.findingDrivers.localize,
-            style: const TextStyle(fontSize: FontSize.s18, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontSize: FontSize.s18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if(!switchAcceptFirstDriver)
-              _fareButton("-3", () {
-                if(price>3) {
-                  price = price - 3;
-                  setState(() {});
-                }
-              }),
+              if (!switchAcceptFirstDriver)
+                _fareButton("-3", () {
+                  if (price > 3) {
+                    price = price - 3;
+                    setState(() {});
+                  }
+                }),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "EGP $price",
-                  style: const TextStyle(fontSize:  FontSize.s20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: FontSize.s20, fontWeight: FontWeight.bold),
                 ),
               ),
-              if(!switchAcceptFirstDriver)
-              _fareButton("+3", () {
-
+              if (!switchAcceptFirstDriver)
+                _fareButton("+3", () {
                   price = price + 3;
                   setState(() {});
-
-              }),
+                }),
             ],
           ),
           const SizedBox(height: 8),
@@ -82,32 +84,38 @@ class _RideFindingCardState extends State<RideFindingCard> {
           //   child: const Text("Raise Faire"),
           // ),
           const SizedBox(height: 8),
-          if(!switchAcceptFirstDriver)
-          Container(
-            width: double.infinity,
-            height: 45,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.buttonDialog,
-              borderRadius: BorderRadius.circular(10),
+          if (!switchAcceptFirstDriver)
+            Container(
+              width: double.infinity,
+              height: 45,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.buttonDialog,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                LocaleKeys.raiseFare.localize,
+                style: const TextStyle(
+                    fontSize: FontSize.s16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
             ),
-            child: Text(LocaleKeys.raiseFare.localize,style:const TextStyle(
-              fontSize: FontSize.s16,
-
-              fontWeight: FontWeight.bold,
-              color: Colors.white
-            ),),
-          ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset(Assets.automatic2AcceptIcon,color: context.isDarkMode?Colors.white:Colors.black,),
-               Expanded(child: Text("${LocaleKeys.automaticallyAcceptTheNearest.localize}$price EGP")),
+              Image.asset(
+                Assets.automatic2AcceptIcon,
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              ),
+              Expanded(
+                  child: Text(
+                      "${LocaleKeys.automaticallyAcceptTheNearest.localize}$price EGP")),
               Switch(
                 value: switchAcceptFirstDriver,
                 onChanged: (value) {
-                  switchAcceptFirstDriver=value;
+                  switchAcceptFirstDriver = value;
                   setState(() {});
                 },
                 activeColor: AppColors.PRIMARY_COLOR,
@@ -115,11 +123,12 @@ class _RideFindingCardState extends State<RideFindingCard> {
                 inactiveThumbColor: AppColors.PRIMARY_COLOR,
                 inactiveTrackColor: AppColors.LIGHT_GRAY_COLOR,
               ),
-
             ],
           ),
           const SizedBox(height: 4),
-          PaymentInfoWidget(price: price,),
+          PaymentInfoWidget(
+            price: price,
+          ),
 
           const SizedBox(height: 4),
           Row(
@@ -135,12 +144,15 @@ class _RideFindingCardState extends State<RideFindingCard> {
           ),
           const SizedBox(height: 4),
           _locationRow("أول العاشر من رمضان", Colors.blue),
-         const SizedBox(height: 10,),
-          _locationRow("المنطقة الصناعية الثالثة العاشر من رمضان", Colors.green),
+          const SizedBox(
+            height: 10,
+          ),
+          _locationRow(
+              "المنطقة الصناعية الثالثة العاشر من رمضان", Colors.green),
           const SizedBox(height: 16),
           GestureDetector(
-            onTap: (){
-      ManageVibration.vibrate();
+            onTap: () {
+              ManageVibration.vibrate();
               // context.push(Routes.supportRideScreen);
             },
             child: Container(
@@ -151,11 +163,14 @@ class _RideFindingCardState extends State<RideFindingCard> {
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(LocaleKeys.cancelOrder.localize,style:const TextStyle(
+              child: Text(
+                LocaleKeys.cancelOrder.localize,
+                style: const TextStyle(
                   fontSize: FontSize.s16,
                   fontWeight: FontWeight.bold,
-                color: AppColors.PRIMARY_COLOR_DARK,
-              ),),
+                  color: AppColors.PRIMARY_COLOR_DARK,
+                ),
+              ),
             ),
           ),
           // ElevatedButton(
@@ -180,12 +195,12 @@ class _RideFindingCardState extends State<RideFindingCard> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor:AppColors.PRIMARY_COLOR,
+        backgroundColor: AppColors.PRIMARY_COLOR,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
-      child: Text(label, style: const TextStyle(fontSize:  FontSize.s16)),
+      child: Text(label, style: const TextStyle(fontSize: FontSize.s16)),
     );
   }
 
@@ -196,13 +211,9 @@ class _RideFindingCardState extends State<RideFindingCard> {
           height: 20,
           width: 20,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.whiteColor,
-            border: Border.all(
-              color: color,
-              width: 4
-            )
-          ),
+              shape: BoxShape.circle,
+              color: AppColors.whiteColor,
+              border: Border.all(color: color, width: 4)),
         ),
         const SizedBox(width: 8),
         Text(location),

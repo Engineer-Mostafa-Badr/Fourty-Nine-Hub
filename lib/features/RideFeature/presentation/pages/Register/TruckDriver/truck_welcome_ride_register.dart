@@ -55,7 +55,7 @@ class TruckWelcomeRideRegister extends StatelessWidget {
                         14,
                         (index) => InkWell(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             bottomSheet(
                               context: context,
                               widget: Column(

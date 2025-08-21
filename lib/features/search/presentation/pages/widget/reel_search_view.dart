@@ -111,7 +111,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
               }
               return InkWell(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   context.push(Routes.REELS);
                 },
                 child: VideoGridItem(videoUrl: reels[index]),
@@ -157,7 +157,7 @@ class _VideoGridItemState extends State<VideoGridItem> {
     return _controller.value.isInitialized
         ? GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (_controller.value.isPlaying) {
                 _controller.pause();
               } else {
@@ -185,7 +185,7 @@ class _VideoGridItemState extends State<VideoGridItem> {
                         size: 30.0,
                       ),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         setState(() {
                           _controller.value.isPlaying
                               ? _controller.pause()
