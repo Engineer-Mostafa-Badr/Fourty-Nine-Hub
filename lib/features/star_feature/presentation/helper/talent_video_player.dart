@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/exclusion_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/profile_page.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../common/functions/helper/numbers_helper.dart';
@@ -699,20 +700,127 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
           Row(
             children: [
               // Avatar
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
-                ),
-                child: ClipOval(
-                  child: widget.talent.user.image.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: widget.talent.user.image,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.person, color: Colors.grey),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePageView(
+                        user: widget.talent.user,
+                        userVideos: [
+                          StarEntity(
+                            id: '1',
+                            title: 'Heart Touching Nasheed - Part 2',
+                            description:
+                                'A beautiful continuation of heart touching nasheeds',
+                            user: UserStarEntity(
+                              id: '1',
+                              firstName: 'Islamic',
+                              lastName: 'Channel',
+                              email: 'islamic@example.com',
+                              image: '',
+                              viewNumber: 507000,
+                              averageRating: 4.5,
+                            ),
+                            mediaUrl: [
+                              MediaUrlEntity(
+                                id: '1',
+                                mediaKey: 'video1.mp4',
+                                duration:
+                                    const Duration(minutes: 7, seconds: 54),
+                                mediaType: 'video/mp4',
+                              )
+                            ],
+                            totalViews: 507000,
+                            averageRating: 4,
+                            isApproved: true,
+                            haveStories: false,
+                            storyCount: 0,
+                            createdAt: DateTime.now()
+                                .subtract(const Duration(days: 300)),
+                          ),
+                          StarEntity(
+                            id: '2',
+                            title: 'Beautiful Nasheed Collection 2024',
+                            description:
+                                'A collection of the most beautiful nasheeds from 2024',
+                            user: UserStarEntity(
+                              id: '2',
+                              firstName: 'Peaceful',
+                              lastName: 'Sounds',
+                              email: 'peaceful@example.com',
+                              image: '',
+                              viewNumber: 320000,
+                              averageRating: 5.0,
+                            ),
+                            mediaUrl: [
+                              MediaUrlEntity(
+                                id: '2',
+                                mediaKey: 'video2.mp4',
+                                duration:
+                                    const Duration(minutes: 12, seconds: 30),
+                                mediaType: 'video/mp4',
+                              )
+                            ],
+                            totalViews: 320000,
+                            averageRating: 5,
+                            isApproved: true,
+                            haveStories: true,
+                            storyCount: 3,
+                            createdAt: DateTime.now()
+                                .subtract(const Duration(days: 240)),
+                          ),
+                          StarEntity(
+                            id: '3',
+                            title: 'Islamic Nasheed Compilation',
+                            description:
+                                'Compilation of inspiring Islamic nasheeds',
+                            user: UserStarEntity(
+                              id: '3',
+                              firstName: 'Spiritual',
+                              lastName: 'Music',
+                              email: 'spiritual@example.com',
+                              image: '',
+                              viewNumber: 245000,
+                              averageRating: 4.2,
+                            ),
+                            mediaUrl: [
+                              MediaUrlEntity(
+                                id: '3',
+                                mediaKey: 'video3.mp4',
+                                duration:
+                                    const Duration(minutes: 15, seconds: 45),
+                                mediaType: 'video/mp4',
+                              )
+                            ],
+                            totalViews: 245000,
+                            averageRating: 3,
+                            isApproved: true,
+                            haveStories: false,
+                            storyCount: 0,
+                            createdAt: DateTime.now()
+                                .subtract(const Duration(days: 180)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: widget.talent.user.image.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: widget.talent.user.image,
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(Icons.person, color: Colors.grey),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),

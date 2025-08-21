@@ -697,7 +697,7 @@ class TalentCard {
     );
   }
 
-  static void _showYouTubeOptions(BuildContext context, StarEntity talent) {
+  static void showYouTubeOptions(BuildContext context, StarEntity talent) {
     OptionsBottomSheet.showOptions(
       context: context,
       options: [
@@ -970,7 +970,7 @@ class TalentCard {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () => _showYouTubeOptions(context, talent),
+                      onPressed: () => showYouTubeOptions(context, talent),
                       icon: Icon(
                         Icons.more_vert,
                         color: context.isDarkMode ? Colors.white : Colors.black,

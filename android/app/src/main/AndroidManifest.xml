@@ -67,6 +67,7 @@
         android:allowBackup="true" android:keepScreenOn="true"
         android:hardwareAccelerated="true"
         >
+        <!-- to use skia engine -->
         <meta-data
         android:name="io.flutter.embedding.android.EnableImpeller"
         android:value="false" />
