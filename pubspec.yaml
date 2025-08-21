@@ -152,7 +152,7 @@ dependencies:
   vertical_card_pager: ^1.6.3
   vibration: ^1.8.4
   video_compress: ^3.1.4
-  video_player: ^2.9.3
+  video_player: ^2.10.0
   visibility_detector: ^0.4.0+2
   voice_message_package: ^2.2.1
   web_socket_channel: ^2.4.0
