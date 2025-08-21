@@ -53,7 +53,7 @@ class _ChatCardState extends State<ChatCard> {
             ManageVibration.vibrate();
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
               context.read<ChatsCubit>().selectChat = widget.chat!;
-              context.pushNamed(Routes.CHATROOM, extra: widget.chatsCubit);
+              context.push(Routes.CHATROOM, extra: widget.chatsCubit);
               // log("typiiiiiiiing = ${widget.chat!.typing}");
               // log("recordiiiiiiing = ${widget.chat!.recording}");
             } else {
@@ -282,7 +282,7 @@ class _ChatCardState extends State<ChatCard> {
                                                                                 onPressed: () {
                                                                                   ManageVibration.vibrate();
                                                                                   context.read<ChatsCubit>().selectChat = widget.chat!;
-                                                                                  context.pushNamed(Routes.CHATROOM, extra: widget.chatsCubit);
+                                                                                  context.push(Routes.CHATROOM, extra: widget.chatsCubit);
                                                                                 },
                                                                               ),
                                                                               IconButton(
@@ -311,7 +311,7 @@ class _ChatCardState extends State<ChatCard> {
                                                                                 onPressed: () {
                                                                                   ManageVibration.vibrate();
                                                                                   context.read<ChatsCubit>().selectChat = widget.chat!;
-                                                                                  context.pushNamed(Routes.VIEWCONTACT, extra: widget.chatsCubit);
+                                                                                  context.push(Routes.VIEWCONTACT, extra: widget.chatsCubit);
                                                                                 },
                                                                               ),
                                                                             ],

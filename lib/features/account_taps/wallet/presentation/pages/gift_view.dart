@@ -27,7 +27,7 @@ class GiftView extends StatelessWidget {
             CustomWinnerAppbar(
               onPressed: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.WINNERSGift);
+                context.push(Routes.WINNERSGift);
               },
             ),
           ],

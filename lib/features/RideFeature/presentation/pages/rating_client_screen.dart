@@ -214,7 +214,7 @@ class RatingCard extends StatelessWidget {
               ),
               onPressed: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.connectionCallScreen);
+                context.push(Routes.connectionCallScreen);
               },
               child: Text(LocaleKeys.send.localize),
             ),

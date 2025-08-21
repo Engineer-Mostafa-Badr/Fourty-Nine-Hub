@@ -36,7 +36,7 @@ class BuildItemListView extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                context.pushNamed(Routes.GIFT);
+                context.push(Routes.GIFT);
               },
               child: Text(
                 context.locale == Locales.english ? model.nameEn : model.nameAr,
@@ -54,7 +54,7 @@ class BuildItemListView extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  context.pushNamed(Routes.GIFT);
+                  context.push(Routes.GIFT);
                 },
                 child: CustomPaint(
                   size: const Size(40, 20),
@@ -126,7 +126,7 @@ class BuildItemListView extends StatelessWidget {
           padding: EdgeInsets.only(left: 5.w),
           child: GestureDetector(
             onTap: () {
-              context.pushNamed(Routes.GIFT);
+              context.push(Routes.GIFT);
             },
             child: Text(
               context.locale == Locales.english

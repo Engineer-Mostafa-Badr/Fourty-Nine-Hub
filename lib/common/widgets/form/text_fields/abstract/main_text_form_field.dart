@@ -208,7 +208,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
               (widget.onChanged ?? (_) {})(text);
             } else {
               return pleaseLoginDialog(context);
-              // context.pushNamed(Routes.LOGIN);
+              // context.push(Routes.LOGIN);
             }
           } else {
             if (text.isEmpty) {

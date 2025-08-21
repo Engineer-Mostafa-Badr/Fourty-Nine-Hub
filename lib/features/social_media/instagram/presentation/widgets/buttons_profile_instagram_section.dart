@@ -37,7 +37,7 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                 ),
                 onPressed: () {
                   ManageVibration.vibrate();
-                  context.pushNamed(Routes.EDITPROFILE);
+                  context.push(Routes.EDITPROFILE);
                 },
               ),
             ),

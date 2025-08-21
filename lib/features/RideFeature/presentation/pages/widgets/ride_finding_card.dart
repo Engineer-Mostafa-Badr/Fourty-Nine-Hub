@@ -153,7 +153,7 @@ class _RideFindingCardState extends State<RideFindingCard> {
           GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
-              // context.pushNamed(Routes.supportRideScreen);
+              // context.push(Routes.supportRideScreen);
             },
             child: Container(
               width: double.infinity,

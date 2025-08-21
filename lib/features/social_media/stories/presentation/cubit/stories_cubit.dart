@@ -142,7 +142,7 @@ final List<Map<String, dynamic>> viewers = [
 //                                 BorderSide(color: Colors.grey[300]!, width: 1),
 //                           ),
 //                           leading: GestureDetector(
-//                             onTap: () => context.pushNamed(Routes.OTHERSACCOUNT,
+//                             onTap: () => context.push(Routes.OTHERSACCOUNT,
 //                                 extra: viewer.user.id),
 //                             child: CircleAvatar(
 //                               radius: 19,
@@ -274,7 +274,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                                         color: Colors.grey[300]!, width: 1),
                                   ),
                                   leading: GestureDetector(
-                                    onTap: () => context.pushNamed(
+                                    onTap: () => context.push(
                                         Routes.OTHERSACCOUNT,
                                         extra: viewer.user.id),
                                     child: CircleAvatar(

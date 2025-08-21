@@ -127,7 +127,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                               LocaleKeys.youMustSelectAtLeastOneImage.localize,
                             );
                           } else {
-                            context.pushNamed(
+                            context.push(
                               Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
                               extra: serviceLocator<CreatePostInstagramCubit>(),
                             );
@@ -136,7 +136,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                             //     .nextPage(context);
                           }
                         } else if (state.postTypeSelectedIndex == 2) {
-                          context.pushNamed(Routes.REELS);
+                          context.push(Routes.REELS);
                           // bool isGalleryReelEmpty = context
                           //     .read<CreatePostInstagramCubit>()
                           //     .state
@@ -148,7 +148,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           //     LocaleKeys.youMustSelectAtLeastOneVideo.localize,
                           //   );
                           // } else {
-                          //   context.pushNamed(
+                          //   context.push(
                           //     Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
                           //     extra: context.read<CreatePostInstagramCubit>(),
                           //   );

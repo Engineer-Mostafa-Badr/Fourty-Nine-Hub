@@ -294,14 +294,14 @@ class _TinderCardStackState extends State<TinderCardStack> {
               context,
               Image.asset(Assets.unavailable), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.pushNamed(Routes.LOGIN)
-              //     : () => context.pushNamed(Routes.OTHERSACCOUNT, extra: cardUser.id),
+              //     ? () => context.push(Routes.LOGIN)
+              //     : () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
               color: AppColors.PRIMARY_COLOR, isMini: true,
             ),
             _buildActionButton(
               context, Image.asset(Assets.tinder_gift), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.pushNamed(Routes.LOGIN)
+              //     ? () => context.push(Routes.LOGIN)
               //     :  () => showChatBottomSheet(context, cardUser),
               color: Colors.white,
             ),
@@ -309,7 +309,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
               context,
               Image.asset(Assets.green_heart), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.pushNamed(Routes.LOGIN)
+              //     ? () => context.push(Routes.LOGIN)
               //     :  () => _navigateToUserProfile(context, cardUser),
               color: Colors.red, isMini: true,
             ),
@@ -317,14 +317,14 @@ class _TinderCardStackState extends State<TinderCardStack> {
               context,
               Image.asset(Assets.tinder_comments), () {},
               // !context.read<UserCubit>().isLoggedIn
-              //     ? () => context.pushNamed(Routes.LOGIN)
+              //     ? () => context.push(Routes.LOGIN)
               //     :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
               color: AppColors.ACCENT_COLOR,
             ),
             _buildActionButton(context, Image.asset(Assets.tinder_account),
-                () => context.pushNamed(Routes.UserProfilePage),
+                () => context.push(Routes.UserProfilePage),
                 // !context.read<UserCubit>().isLoggedIn
-                //     ? () => context.pushNamed(Routes.LOGIN)
+                //     ? () => context.push(Routes.LOGIN)
                 //     : () {
                 //         bottomSheet(
                 //             context: context,
@@ -595,7 +595,7 @@ class ChatBottomSheet extends StatelessWidget {
                                 otherId: cardUser.id!,
                               );
                           context.pop();
-                          context.pushNamed(
+                          context.push(
                             Routes.CHAT,
                             extra: ChatsViewParams(
                               isFromStartChat: true,
@@ -606,7 +606,7 @@ class ChatBottomSheet extends StatelessWidget {
                         } else {
                           return pleaseLoginDialog(context);
 
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       },
                       child: _buildChatOptionCard(
@@ -632,7 +632,7 @@ class ChatBottomSheet extends StatelessWidget {
                                   categoryId: ChatCategoriesIds.social,
                                 );
                             context.pop();
-                            context.pushNamed(
+                            context.push(
                               Routes.CHAT,
                               extra: ChatsViewParams(
                                 isFromStartChat: true,
@@ -648,7 +648,7 @@ class ChatBottomSheet extends StatelessWidget {
                                   categoryId: ChatCategoriesIds.greet,
                                 );
                             context.pop();
-                            context.pushNamed(
+                            context.push(
                               Routes.CHAT,
                               extra: ChatsViewParams(
                                 isFromStartChat: true,
@@ -660,7 +660,7 @@ class ChatBottomSheet extends StatelessWidget {
                         } else {
                           return pleaseLoginDialog(context);
 
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       },
                       child: _buildChatOptionCard(
@@ -884,7 +884,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                     otherId: cardUser.id!,
                                   );
                               context.pop();
-                              context.pushNamed(
+                              context.push(
                                 Routes.CHAT,
                                 extra: ChatsViewParams(
                                   isFromStartChat: true,
@@ -895,7 +895,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),
@@ -917,7 +917,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                       categoryId: ChatCategoriesIds.social,
                                     );
                                 context.pop();
-                                context.pushNamed(
+                                context.push(
                                   Routes.CHAT,
                                   extra: ChatsViewParams(
                                     isFromStartChat: true,
@@ -933,7 +933,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                                       categoryId: ChatCategoriesIds.greet,
                                     );
                                 context.pop();
-                                context.pushNamed(
+                                context.push(
                                   Routes.CHAT,
                                   extra: ChatsViewParams(
                                     isFromStartChat: true,
@@ -945,7 +945,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

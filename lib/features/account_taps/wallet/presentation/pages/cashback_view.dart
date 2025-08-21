@@ -27,7 +27,7 @@ class CashbackView extends StatelessWidget {
             CustomWinnerAppbar(
               onPressed: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.WINNERSCASHBACK);
+                context.push(Routes.WINNERSCASHBACK);
               },
             ),
           ],

@@ -180,7 +180,7 @@ class _DayScheduleWidget extends StatelessWidget {
                 ManageVibration.vibrate();
                 if (item.isAvailable) {
                   context.read<DoctorDetailsCubit>().selectedAppointment = item;
-                  context.pushNamed(Routes.VISITABOOKING,
+                  context.push(Routes.VISITABOOKING,
                       extra: context.read<DoctorDetailsCubit>());
                 }
               })

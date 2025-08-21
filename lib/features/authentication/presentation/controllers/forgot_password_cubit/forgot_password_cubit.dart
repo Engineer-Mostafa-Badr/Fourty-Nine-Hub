@@ -59,7 +59,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
           emit(ForgotPasswordSendOTPFailure(failure));
         },
         (questions) {
-          context.pushNamed(Routes.VERIFICATION, extra: questions);
+          context.push(Routes.VERIFICATION, extra: questions);
           emit(ForgotPasswordSendOTPSuccess());
         },
       );
@@ -79,7 +79,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         },
         (_) {
           print('is email');
-          context.pushNamed(
+          context.push(
             Routes.FORGOTPASSWORDOTP,
             extra: emailController.text.trim(),
           );
@@ -151,7 +151,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         emit(VerifyQuestionsFailure(failure));
       },
       (_) {
-        context.pushNamed(Routes.CREATENEWFORGOTPASSWORD,
+        context.push(Routes.CREATENEWFORGOTPASSWORD,
             extra: {"userId": userId, "email": null});
         emit(VerifyQuestionsSuccess());
       },

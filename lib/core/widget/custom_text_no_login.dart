@@ -20,7 +20,7 @@ class CustomTextNoLogin extends StatelessWidget {
           onTap: () {
             ManageVibration.vibrate();
             return pleaseLoginDialog(context);
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           },
           child: Container(
             padding: EdgeInsets.all(12.w),
@@ -61,7 +61,7 @@ class CustomTextNoLoginNew extends StatelessWidget {
           onTap: () {
             ManageVibration.vibrate();
             return pleaseLoginDialog(context);
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           },
           child: Center(
             child: Text(

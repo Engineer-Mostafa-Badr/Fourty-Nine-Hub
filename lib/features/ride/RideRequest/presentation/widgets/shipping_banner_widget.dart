@@ -49,7 +49,7 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
                   (state.model.mainCategory?.isDriverApproved ?? false))
                 // if(!(state.model.mainCategory?.haveTrip??false))
                 DashboardBanner(
-                  onTap: () => context.pushNamed(Routes.DASHBOARDDRIVERSCREEN),
+                  onTap: () => context.push(Routes.DASHBOARDDRIVERSCREEN),
                   title: LocaleKeys.loadingDashboard.tr(),
                   subTitle: "",
                   route: Routes.DOCTORDASHBOARD,
@@ -68,7 +68,7 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
                   //     .push(Routes.SHIPPING_REGISTER),
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.SHIPPING_REGISTER);
+                    context.push(Routes.SHIPPING_REGISTER);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

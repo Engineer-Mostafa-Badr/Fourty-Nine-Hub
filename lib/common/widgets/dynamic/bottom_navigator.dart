@@ -176,7 +176,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         if (pages[index].index == 4) {
           soonDialog(context);
         } else if (pages[index].index == 0) {
-          context.pushNamed(pages[index].route);
+          context.push(pages[index].route);
         } else if (pages[index].index == 3) {
           ManageVibration.vibrate();
           if (!context.read<UserCubit>().isLoggedIn) {
@@ -184,7 +184,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           }
           await context.read<UserCubit>().resetUnreadedChatsCounter();
           HandleCashback.setCount('chatCount', context);
-          context.pushNamed(
+          context.push(
             context.read<UserCubit>().isLoggedIn
                 ? Routes.CHAT
                 : Routes.FirstLoginScreen,
@@ -429,6 +429,6 @@ class BottomItemModel {
   });
 
   void action(BuildContext context) {
-    context.pushNamed(route);
+    context.push(route);
   }
 }

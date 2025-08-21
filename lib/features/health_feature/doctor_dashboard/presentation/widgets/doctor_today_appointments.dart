@@ -72,7 +72,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
                           style: Styles.mediumText(color: Colors.white),
                           onPressed: () {
                             ManageVibration.vibrate();
-                            context.pushNamed(Routes.DOCTORTODAYAPPOINTMENTS);
+                            context.push(Routes.DOCTORTODAYAPPOINTMENTS);
                           })
                   ],
                 );

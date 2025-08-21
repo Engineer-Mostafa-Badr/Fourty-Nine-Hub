@@ -206,7 +206,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                             ManageVibration.vibrate();
                             if (!serviceLocator<UserCubit>().isLoggedIn) {
                               return pleaseLoginDialog(context);
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             } else {
                               _showGiftBottomSheet(context);
                             }

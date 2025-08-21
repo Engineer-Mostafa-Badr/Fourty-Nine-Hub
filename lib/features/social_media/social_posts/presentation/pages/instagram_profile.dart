@@ -217,7 +217,7 @@
 //                             }
 //                           },
 //                           getUserProfile: () async {
-//                             await context.pushNamed(Routes.EDITPROFILE);
+//                             await context.push(Routes.EDITPROFILE);
 //                             controller.getUserProfile(id: widget.userId);
 //                           },
 //                           showHideSuggestPeople: () {
@@ -714,7 +714,7 @@
 //                                         categoryId: ChatCategoriesIds.social,
 //                                       );
 //                                   context.pop();
-//                                   context.pushNamed(
+//                                   context.push(
 //                                     Routes.CHAT,
 //                                     extra: ChatsViewParams(
 //                                       isFromStartChat: true,
@@ -730,7 +730,7 @@
 //                                         categoryId: ChatCategoriesIds.greet,
 //                                       );
 //                                   context.pop();
-//                                   context.pushNamed(
+//                                   context.push(
 //                                     Routes.CHAT,
 //                                     extra: ChatsViewParams(
 //                                       isFromStartChat: true,
@@ -742,7 +742,7 @@
 //                               } else {
 //                                 return pleaseLoginDialog(context);
 //
-//                                 // context.pushNamed(Routes.LOGIN);
+//                                 // context.push(Routes.LOGIN);
 //                               }
 //                             },
 //                             anonymousPress: () async {
@@ -753,7 +753,7 @@
 //                                       otherId: widget.userId,
 //                                     );
 //                                 context.pop();
-//                                 context.pushNamed(
+//                                 context.push(
 //                                   Routes.CHAT,
 //                                   extra: ChatsViewParams(
 //                                     isFromStartChat: true,
@@ -764,7 +764,7 @@
 //                               } else {
 //                                 return pleaseLoginDialog(context);
 //
-//                                 // context.pushNamed(Routes.LOGIN);
+//                                 // context.push(Routes.LOGIN);
 //                               }
 //                             },
 //                           ),

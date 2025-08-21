@@ -112,7 +112,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
               return InkWell(
                 onTap: () {
                   ManageVibration.vibrate();
-                  context.pushNamed(Routes.REELS);
+                  context.push(Routes.REELS);
                 },
                 child: VideoGridItem(videoUrl: reels[index]),
               );
@@ -161,7 +161,7 @@ class _VideoGridItemState extends State<VideoGridItem> {
               if (_controller.value.isPlaying) {
                 _controller.pause();
               } else {
-                context.pushNamed(Routes.REELS);
+                context.push(Routes.REELS);
                 // controller.play();
               }
             },

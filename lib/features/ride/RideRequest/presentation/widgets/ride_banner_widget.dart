@@ -54,7 +54,7 @@ class RideBannerWidget extends StatelessWidget {
                                         .model.mainCategory?.isSocketCategory ??
                                     false) {
                                   log("Socket Screen");
-                                  context.pushNamed(Routes.ALLTRIPRIDER);
+                                  context.push(Routes.ALLTRIPRIDER);
                                 } else {
                                   log("No Socket Screen");
                                   context
@@ -83,15 +83,15 @@ class RideBannerWidget extends StatelessWidget {
                           if (state.model.mainCategory?.isSocketCategory ??
                               false) {
                             log("Socket Screen");
-                            context.pushNamed(Routes.ALLTRIPRIDER);
+                            context.push(Routes.ALLTRIPRIDER);
                           } else {
                             log("No Socket Screen");
-                            context.pushNamed(Routes.ALLTRIPNOSOCKETSCREEN);
+                            context.push(Routes.ALLTRIPNOSOCKETSCREEN);
                           }
                           // (state.model.mainCategory?.isSocketCategory ??
                           //           false)
-                          //       ? context.pushNamed(Routes.ALLTRIPRIDER)
-                          //       : context.pushNamed(Routes.ALLTRIPNOSOCKETSCREEN),
+                          //       ? context.push(Routes.ALLTRIPRIDER)
+                          //       : context.push(Routes.ALLTRIPNOSOCKETSCREEN),
                         },
                         title: LocaleKeys.rideDashboard.tr(),
                         subTitle: "",

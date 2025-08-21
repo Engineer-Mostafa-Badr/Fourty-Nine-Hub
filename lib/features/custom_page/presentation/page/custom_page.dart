@@ -85,7 +85,7 @@ class _CustomPageState extends State<CustomPage> {
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.PAGEPREVIEW,
+                    context.push(Routes.PAGEPREVIEW,
                         extra: state.activate?.customPage == true);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),

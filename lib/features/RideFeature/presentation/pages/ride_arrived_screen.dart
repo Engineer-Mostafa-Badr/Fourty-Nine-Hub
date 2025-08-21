@@ -51,14 +51,14 @@ class RideArrivedScreen extends StatelessWidget {
                               driverRating: 12.2,
                               driverName: driverName,
                               onContactDriver: () {
-                                context.pushNamed(Routes.ratingDriverScreen);
+                                context.push(Routes.ratingDriverScreen);
                               },
                               onSafety: () {
-                                context.pushNamed(Routes.ratingClientScreen);
+                                context.push(Routes.ratingClientScreen);
                               },
                               is_show_message: true,
                               onMessage: () {
-                                context.pushNamed(Routes.completeRideScreen);
+                                context.push(Routes.completeRideScreen);
                               },
                             ),
 

@@ -43,7 +43,7 @@ class _PastNonSocketTripsWidgetState extends State<PastNonSocketTripsWidget> {
       onTap: () {
         ManageVibration.vibrate();
 
-        // context.pushNamed(Routes.rideDashboardDetailsScreen, extra: widget.tripEntity);
+        // context.push(Routes.rideDashboardDetailsScreen, extra: widget.tripEntity);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),

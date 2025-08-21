@@ -118,12 +118,12 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                 //     size: 20,
                 //     onPressed: () {
                 //       if (AuthHelper().isLoggedIn()) {
-                //         context.pushNamed(Routes.CREATEAD,
+                //         context.push(Routes.CREATEAD,
                 //             extra: CategorizationEntity(
                 //                 mainCategory: mainCategory,
                 //                 subCategory: item));
                 //       } else {
-                //         context.pushNamed(Routes.LOGIN);
+                //         context.push(Routes.LOGIN);
                 //       }
                 //     })
               ],

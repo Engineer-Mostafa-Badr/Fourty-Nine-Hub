@@ -118,10 +118,10 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
                   HandleCashback.setCount('mainCategoriesCount', context);
                   if (_cubit.paginatedSearch[index].id ==
                       '62c8b5b09332225799fe335e') {
-                    context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                    context.push(Routes.MARRIAGESUBCATEGORIES,
                         extra: _cubit.paginatedSearch[index]);
                   } else {
-                    context.pushNamed(Routes.SUBCATEGORIES,
+                    context.push(Routes.SUBCATEGORIES,
                         extra: _cubit.paginatedSearch[index]);
                   }
                 },

@@ -74,7 +74,7 @@ class InstagramPostButtomSheetWithoutMentionWidget extends StatelessWidget {
           GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.INSTAGRAMPROFILE, extra: userId);
+              context.push(Routes.INSTAGRAMPROFILE, extra: userId);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),

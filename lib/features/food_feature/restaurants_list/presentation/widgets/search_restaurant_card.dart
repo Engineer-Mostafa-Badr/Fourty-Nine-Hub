@@ -25,9 +25,9 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
     return GestureDetector(
       onTap: () {
         ManageVibration.vibrate();
-        // context.pushNamed(Routes.RESTAURANTDETAILS,
+        // context.push(Routes.RESTAURANTDETAILS,
         //     extra: widget.restaurant?.id);
-        context.pushNamed(Routes.RESTAURANTDETAILS, extra: widget.restaurant);
+        context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant);
       },
       child: Card(
         color: Colors.white,

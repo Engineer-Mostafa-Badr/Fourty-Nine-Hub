@@ -226,7 +226,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         onTap: () {
                           if (context.isUserLoggedIn) {
                             Navigator.pop(context);
-                            context.pushNamed(Routes.CREATEAD,
+                            context.push(Routes.CREATEAD,
                                 extra: CategorizationEntity(
                                     mainCategory: context
                                         .read<MainCategoriesTapsCubit>()
@@ -235,7 +235,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           } else {
                             return pleaseLoginDialog(context);
 
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         },
                       ),
@@ -317,7 +317,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               print(labelName);
                               // if (controller.mainCategories[i].id ==
                               //     '62c8b5b09332225799fe335e') {
-                              //   context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                              //   context.push(Routes.MARRIAGESUBCATEGORIES,
                               //       extra: controller.mainCategories[i]);
                               // }
                             },
@@ -482,7 +482,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isMyAdsOpen');
                               }
-                              // context.pushNamed(Routes.MYADDS);
+                              // context.push(Routes.MYADDS);
                             },
                           ),
                         ),
@@ -775,7 +775,7 @@ class _MainCategoriesGridViewCustomPageState
                           onTap: () {
                             if (context.isUserLoggedIn) {
                               Navigator.pop(context);
-                              context.pushNamed(
+                              context.push(
                                 Routes.CREATEAD,
                                 extra: CategorizationEntity(
                                   mainCategory: context
@@ -787,7 +787,7 @@ class _MainCategoriesGridViewCustomPageState
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),
@@ -866,7 +866,7 @@ class _MainCategoriesGridViewCustomPageState
                               print(labelName);
                               // if (controller.mainCategories[i].id ==
                               //     '62c8b5b09332225799fe335e') {
-                              //   context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                              //   context.push(Routes.MARRIAGESUBCATEGORIES,
                               //       extra: controller.mainCategories[i]);
                               // }
                             },
@@ -1031,7 +1031,7 @@ class _MainCategoriesGridViewCustomPageState
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isMyAdsOpen');
                               }
-                              // context.pushNamed(Routes.MYADDS);
+                              // context.push(Routes.MYADDS);
                             },
                           ),
                         ),
@@ -1244,12 +1244,12 @@ class _MainCategoriesGrideViewSectionState
                         HandleCashback.setCount('mainCategoriesCount', context);
                         if (widget.state.customPage![index].id ==
                             '62c8b5b09332225799fe335e') {
-                          context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                          context.push(Routes.MARRIAGESUBCATEGORIES,
                               extra: widget.state.customPage![index]);
                         } else {
                           print(
                               'mainCategory.id ${widget.state.customPage![index].id} in gredview');
-                          context.pushNamed(Routes.CustomPageSubCategoriesView,
+                          context.push(Routes.CustomPageSubCategoriesView,
                               extra: CustomPageSubCategoriesParams(
                                 mainCategory: widget.state.customPage![index],
                                 isCustomPage: true,

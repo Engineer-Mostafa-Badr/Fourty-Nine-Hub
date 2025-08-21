@@ -41,7 +41,7 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
             onTap: () {
               ManageVibration.vibrate();
               print("object");
-              // context.pushNamed(Routes.TWITTER);
+              // context.push(Routes.TWITTER);
 
               showDialog(
                 context: context,

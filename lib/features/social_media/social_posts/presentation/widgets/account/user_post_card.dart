@@ -253,7 +253,7 @@ class _UserPostCardState extends State<UserPostCard> {
                     } else {
                       return pleaseLoginDialog(context);
 
-                      // context.pushNamed(Routes.LOGIN);
+                      // context.push(Routes.LOGIN);
                     }
                   },
                   child: Row(
@@ -307,7 +307,7 @@ class _UserPostCardState extends State<UserPostCard> {
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           }),
                 ),
@@ -323,7 +323,7 @@ class _UserPostCardState extends State<UserPostCard> {
                           } else {
                             return pleaseLoginDialog(context);
 
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         }),
                   ),
@@ -345,7 +345,7 @@ class _UserPostCardState extends State<UserPostCard> {
                         } else {
                           return pleaseLoginDialog(context);
 
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       }),
                 ),
@@ -450,8 +450,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 onTap: () {
                   ManageVibration.vibrate();
                   if (user?.id != post.user.id) {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -470,7 +469,7 @@ class _UserPostCardState extends State<UserPostCard> {
                       onTap: () {
                         ManageVibration.vibrate();
                         if (user?.id != post.user.id) {
-                          context.pushNamed(Routes.OTHERSACCOUNT,
+                          context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       },
@@ -489,7 +488,7 @@ class _UserPostCardState extends State<UserPostCard> {
                               onPressed: () {
                                 ManageVibration.vibrate();
                                 if (user?.id != post.user.id) {
-                                  context.pushNamed(Routes.OTHERSACCOUNT,
+                                  context.push(Routes.OTHERSACCOUNT,
                                       extra: post.user.id);
                                 }
                               }),
@@ -580,7 +579,7 @@ class _UserPostCardState extends State<UserPostCard> {
           onTap: () {
             ManageVibration.vibrate();
             if (user?.id != post.user.id) {
-              context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
           child: ImageFromInternet(
@@ -598,7 +597,7 @@ class _UserPostCardState extends State<UserPostCard> {
               onTap: () {
                 ManageVibration.vibrate();
                 if (user?.id != post.user.id) {
-                  context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
               child: Column(
@@ -612,7 +611,7 @@ class _UserPostCardState extends State<UserPostCard> {
                       onPressed: () {
                         ManageVibration.vibrate();
                         if (user?.id != post.user.id) {
-                          context.pushNamed(Routes.OTHERSACCOUNT,
+                          context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       }),
@@ -825,8 +824,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 GestureDetector(
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.users[0].id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.users[0].id);
                   },
                   child: Label(
                     text:

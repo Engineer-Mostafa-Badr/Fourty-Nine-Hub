@@ -19,7 +19,7 @@ class UpdateDoctorTimetableCard extends StatelessWidget {
       onTap: () async {
         ManageVibration.vibrate();
         var result =
-            await context.pushNamed(Routes.EDITDOCTORTIMETABLE, extra: params);
+            await context.push(Routes.EDITDOCTORTIMETABLE, extra: params);
         if (result == true) {
           context.read<EditDoctorProfileCubit>().loadData();
         }

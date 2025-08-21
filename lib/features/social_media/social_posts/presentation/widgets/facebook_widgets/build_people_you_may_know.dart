@@ -110,7 +110,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                 final item = controller.suggestedFriends[index];
                                 return ClickableWidget(
                                   onTap: () {
-                                    context.pushNamed(Routes.OTHERSACCOUNT,
+                                    context.push(Routes.OTHERSACCOUNT,
                                         extra: controller
                                             .suggestedFriends[index].id);
                                   },
@@ -539,7 +539,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                   ),
                   // GestureDetector(
                   //   onTap: () {
-                  //     context.pushNamed(Routes.FacebookSuggestPeople);
+                  //     context.push(Routes.FacebookSuggestPeople);
                   //   },
                   //   child: Row(
                   //     mainAxisAlignment: MainAxisAlignment.center,

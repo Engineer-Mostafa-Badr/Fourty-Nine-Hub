@@ -54,8 +54,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                         label: LocaleKeys.viewAll.localize,
                         onPressed: () {
                           ManageVibration.vibrate();
-                          context.pushNamed(Routes.DOCTORREVIEWS,
-                              extra: doctorId);
+                          context.push(Routes.DOCTORREVIEWS, extra: doctorId);
                         },
                         style: Styles.headerText(color: Colors.white),
                       )

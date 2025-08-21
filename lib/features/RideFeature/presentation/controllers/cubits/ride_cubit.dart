@@ -2139,7 +2139,7 @@ class RideCubit extends Cubit<RideState> {
         categoriesToCheck.contains(element.subCategoryId) &&
         element.isSelected == true)) {
       emit(state.copyWith(registerType: 'socket', isShipping: false));
-      context.pushNamed(Routes.personalInformationScreen,
+      context.push(Routes.personalInformationScreen,
           extra: RideFeatureRegisterParams(
               isSocket: true,
               isShipping: false,
@@ -2150,7 +2150,7 @@ class RideCubit extends Cubit<RideState> {
                   .toList()));
     } else {
       emit(state.copyWith(registerType: 'noSocket', isShipping: false));
-      context.pushNamed(Routes.personalInformationScreen,
+      context.push(Routes.personalInformationScreen,
           extra: RideFeatureRegisterParams(
               isSocket: false,
               isShipping: false,
@@ -2164,7 +2164,7 @@ class RideCubit extends Cubit<RideState> {
 
   onSubmitSelectShippingSubCategories(BuildContext context) async {
     emit(state.copyWith(registerType: 'noSocket', isShipping: true));
-    context.pushNamed(Routes.personalInformationScreen,
+    context.push(Routes.personalInformationScreen,
         extra: RideFeatureRegisterParams(
             isSocket: false,
             isShipping: true,
@@ -2179,10 +2179,10 @@ class RideCubit extends Cubit<RideState> {
       {required bool fromShipping, required BuildContext context}) {
     if (fromShipping == true) {
       emit(state.copyWith(isShipping: true, status: RideStates.success));
-      context.pushNamed(Routes.welcomeRideRegister, extra: fromShipping);
+      context.push(Routes.welcomeRideRegister, extra: fromShipping);
     } else {
       emit(state.copyWith(isShipping: false, status: RideStates.success));
-      context.pushNamed(Routes.welcomeRideRegister, extra: fromShipping);
+      context.push(Routes.welcomeRideRegister, extra: fromShipping);
     }
   }
 

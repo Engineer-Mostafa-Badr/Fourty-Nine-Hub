@@ -44,7 +44,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(Routes.ADS,
+        context.push(Routes.ADS,
             extra: AdsViewParams(
                 subCategory: widget.subCategoryCardData,
                 mainCategory: widget.mainCategory));
@@ -126,7 +126,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                         isCircle: true,
                         onPressed: () {
                           ManageVibration.vibrate();
-                          context.pushNamed(Routes.CREATEAD,
+                          context.push(Routes.CREATEAD,
                               extra: CategorizationEntity(
                                   mainCategory: widget.mainCategory,
                                   subCategory: widget.subCategoryCardData));

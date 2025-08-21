@@ -159,7 +159,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                   onPressed: () {
                     ManageVibration.vibrate();
                     if (groupValue != null) {
-                      context.pushNamed(Routes.PAYMENT,
+                      context.push(Routes.PAYMENT,
                           extra: PaymobLink(
                               amountId: newIndex,
                               // providerId: "667331f44fbaddc4357d612b",

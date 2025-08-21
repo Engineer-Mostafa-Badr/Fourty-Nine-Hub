@@ -418,7 +418,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                     label: LocaleKeys.editFood.localize,
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.pushNamed(Routes.EditFoodView,
+                      context.push(Routes.EditFoodView,
                           extra: EditFoodParams(
                               restaurantId: widget.restaurantId ?? '',
                               subCategoryId:

@@ -61,7 +61,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
         return InkWell(
           onTap: () {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.ADdetails, extra: widget.item.id);
+            context.push(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
             width: kToolbarHeight * 2.5,
@@ -107,8 +107,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                                 if (index == 3)
                                   Positioned.fill(
                                       child: InkWell(
-                                    onTap: () => context.pushNamed(
-                                        Routes.ADdetails,
+                                    onTap: () => context.push(Routes.ADdetails,
                                         extra: widget.item.id),
                                     child: Container(
                                       color: Colors.black.withOpacity(0.8),
@@ -161,7 +160,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: () => context.pushNamed(Routes.ADdetails,
+                        onTap: () => context.push(Routes.ADdetails,
                             extra: widget.item.id),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

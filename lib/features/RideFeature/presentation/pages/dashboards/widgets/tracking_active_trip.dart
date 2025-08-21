@@ -303,7 +303,7 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
               },
               supportRideScreen: () {
                 ManageVibration.vibrate();
-                context.pushNamed(
+                context.push(
                   Routes.supportRideScreen,
                   extra: SupportRideParams(
                     tripId: cubit.activeTrip?.tripId ?? '',
@@ -316,11 +316,11 @@ class _TrackingActiveTripState extends State<TrackingActiveTrip> {
               },
               emergencyContactsScreen: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.emergencyContactsScreen);
+                context.push(Routes.emergencyContactsScreen);
               },
               rideFindingScreen: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.rideFindingScreen);
+                context.push(Routes.rideFindingScreen);
               },
             ),
         ],

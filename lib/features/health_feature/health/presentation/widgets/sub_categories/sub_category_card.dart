@@ -39,7 +39,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
             print("The x ${widget.subCategory.id}");
             serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
                 widget.subCategory;
-            context.pushNamed(Routes.VISITADOCTORLIST,
+            context.push(Routes.VISITADOCTORLIST,
                 extra: DoctorsListParams(
                     fromHome: true, subCategoryId: widget.subCategory.id));
           } else {

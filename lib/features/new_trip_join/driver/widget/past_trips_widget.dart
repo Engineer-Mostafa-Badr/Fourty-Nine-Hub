@@ -22,7 +22,7 @@ class PastTripsWidget extends StatelessWidget {
                 AvailableRideModeWidget(
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.captainRideDetails);
+                    context.push(Routes.captainRideDetails);
                   },
                   cancelButton: false,
                   statusDriver: context.isArabic ? 'منتهي' : "Expired",

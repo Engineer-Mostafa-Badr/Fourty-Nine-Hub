@@ -608,8 +608,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               InkWell(
                 onTap: () {
                   if (widget.fromProfile == false) {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -627,7 +626,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     InkWell(
                       onTap: () {
                         if (widget.fromProfile == false) {
-                          context.pushNamed(Routes.OTHERSACCOUNT,
+                          context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       },
@@ -640,7 +639,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                               style: Styles.headerText(fontSize: 32),
                               onPressed: () {
                                 if (widget.fromProfile == false) {
-                                  context.pushNamed(Routes.OTHERSACCOUNT,
+                                  context.push(Routes.OTHERSACCOUNT,
                                       extra: post.user.id);
                                 }
                               }),
@@ -723,7 +722,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
           InkWell(
             onTap: () {
               if (widget.fromProfile == false) {
-                context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
             },
             child: ImageFromInternet(
@@ -741,8 +740,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
               InkWell(
                 onTap: () {
                   if (widget.fromProfile == false) {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
                 child: Column(
@@ -756,7 +754,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                             color: Theme.of(context).primaryColor),
                         onPressed: () {
                           if (widget.fromProfile == false) {
-                            context.pushNamed(Routes.OTHERSACCOUNT,
+                            context.push(Routes.OTHERSACCOUNT,
                                 extra: post.user.id);
                           }
                         }),
@@ -985,8 +983,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.users[0].id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.users[0].id);
                   },
                   child: Label(
                     text:

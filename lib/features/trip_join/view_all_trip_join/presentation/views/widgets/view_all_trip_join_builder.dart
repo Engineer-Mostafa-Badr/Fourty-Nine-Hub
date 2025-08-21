@@ -76,7 +76,7 @@ class _ViewAllTripJoinCardBuilderState
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 premuimRequestOnTap: () async {
@@ -105,7 +105,7 @@ class _ViewAllTripJoinCardBuilderState
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 requestOnTap: () async {
@@ -128,7 +128,7 @@ class _ViewAllTripJoinCardBuilderState
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 callOnTap: () async {
@@ -143,7 +143,7 @@ class _ViewAllTripJoinCardBuilderState
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                   // launchUrlString("tel://${tripJoinCardEntity.phone}");
                   // return;
@@ -158,7 +158,7 @@ class _ViewAllTripJoinCardBuilderState
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 subscribeMessageOnTap: () async {
@@ -173,7 +173,7 @@ class _ViewAllTripJoinCardBuilderState
                     print("not LOOGEDIN \n");
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
               );

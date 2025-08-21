@@ -164,7 +164,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     context
                         .read<SubcategoriesCubit>()
                         .toggleMyAds('isMyAdsOpen');
-                    // context.pushNamed(Routes.MYADDS);
+                    // context.push(Routes.MYADDS);
                   },
                 ),
               ),
@@ -179,7 +179,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         //         InkWell(
         //           onTap: () async {
         //             ManageVibration.vibrate();
-        //             dynamic data = await context.pushNamed(
+        //             dynamic data = await context.push(
         //               Routes.FILTERADS,
         //               extra: FilterAdsParams(
         //                 categorization: CategorizationEntity(
@@ -238,7 +238,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         //         InkWell(
         //           onTap: () async {
         //             ManageVibration.vibrate();
-        //             dynamic data = await context.pushNamed(Routes.GOVERNORATEFILTERADS,
+        //             dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
         //                 extra: CategorizationEntity(
         //                     mainCategory: widget.state.mainCategory!,
         //                     fromMarriage: true,
@@ -293,7 +293,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         //           child: FilterButtonItem(
         //             title: LocaleKeys.filter.localize,
         //             onTap: () async {
-        //               dynamic data = await context.pushNamed(
+        //               dynamic data = await context.push(
         //                 Routes.FILTERADS,
         //                 extra: CategorizationEntity(
         //                   mainCategory: widget.state.mainCategory!,
@@ -323,7 +323,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         //             title: LocaleKeys.city.localize,
         //             onTap: () async {
         // ManageVibration.vibrate();
-        //               dynamic data = await context.pushNamed(
+        //               dynamic data = await context.push(
         //                   Routes.GOVERNORATEFILTERADS,
         //                   extra: CategorizationEntity(
         //                       mainCategory: widget.state.mainCategory!,
@@ -396,7 +396,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       InkWell(
                         onTap: () async {
                           ManageVibration.vibrate();
-                          dynamic data = await context.pushNamed(
+                          dynamic data = await context.push(
                             Routes.FILTERADS,
                             extra: FilterAdsParams(
                               categorization: CategorizationEntity(
@@ -460,7 +460,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       InkWell(
                         onTap: () async {
                           ManageVibration.vibrate();
-                          dynamic data = await context.pushNamed(
+                          dynamic data = await context.push(
                               Routes.GOVERNORATEFILTERADS,
                               extra: CategorizationEntity(
                                   mainCategory: widget.state.mainCategory!,
@@ -521,7 +521,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 child: FilterButtonItem(
                   title: LocaleKeys.filter.localize,
                   onTap: () async {
-                    dynamic data = await context.pushNamed(
+                    dynamic data = await context.push(
                       Routes.FILTERADS,
                       extra: CategorizationEntity(
                         mainCategory: widget.state.mainCategory!,
@@ -551,7 +551,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                   title: LocaleKeys.city.localize,
                   onTap: () async {
       ManageVibration.vibrate();
-                    dynamic data = await context.pushNamed(
+                    dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
                         extra: CategorizationEntity(
                             mainCategory: widget.state.mainCategory!,

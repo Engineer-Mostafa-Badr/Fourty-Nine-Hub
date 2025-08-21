@@ -36,10 +36,10 @@ class MealBanner extends StatelessWidget {
             canRegister: state.isResturant == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.pushNamed(Routes.CREATERESTURANT);
+                context.push(Routes.CREATERESTURANT);
               } else {
                 return pleaseLoginDialog(context);
-                // context.pushNamed(Routes.REGISTER);
+                // context.push(Routes.REGISTER);
               }
             },
             onFavorite: () {

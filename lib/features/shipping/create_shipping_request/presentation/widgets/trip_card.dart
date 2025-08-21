@@ -87,7 +87,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
           onTap: () {
             ManageVibration.vibrate();
             if (!widget.buttons && !widget.yourRequest) {
-              // context.pushNamed(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
+              // context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
           },
           child: Container(

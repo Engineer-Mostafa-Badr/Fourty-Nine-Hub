@@ -35,7 +35,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        // context.pushNamed(
+        // context.push(
         //   Routes.ADS,
         //   extra: AdsViewParams(
         //     mainCategory: widget.mainCategory,
@@ -113,13 +113,13 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                       onPressed: () {
                         ManageVibration.vibrate();
                         // if (AuthHelper().isLoggedIn()) {
-                        //   context.pushNamed(Routes.CREATEAD,
+                        //   context.push(Routes.CREATEAD,
                         //       extra: CategorizationEntity(
                         //           mainCategory: widget.mainCategory,
                         //           subCategory: widget.item));
                         // } else {
                         //   return pleaseLoginDialog(context);
-                        //   // context.pushNamed(Routes.LOGIN);
+                        //   // context.push(Routes.LOGIN);
                         // }
                       })
                 ],

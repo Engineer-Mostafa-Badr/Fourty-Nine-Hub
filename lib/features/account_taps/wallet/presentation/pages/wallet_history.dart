@@ -51,7 +51,7 @@ class WalletHistory extends StatelessWidget {
               onPressed: () async {
                 ManageVibration.vibrate();
                 // if (await LocalAuth().checkBiometrics()) {
-                //   context.pushNamed(Routes.PAYMENT);
+                //   context.push(Routes.PAYMENT);
                 // }
               },
               color: Colors.red,

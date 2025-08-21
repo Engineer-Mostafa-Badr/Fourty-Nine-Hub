@@ -41,15 +41,15 @@ class RiderBannerWidget extends StatelessWidget {
                           if (state.model.mainCategory?.isSocketCategory ??
                               false) {
                             log("Socket Screen");
-                            context.pushNamed(Routes.ALLTRIPRIDER);
+                            context.push(Routes.ALLTRIPRIDER);
                           } else {
                             log("No Socket Screen");
-                            context.pushNamed(Routes.ALLTRIPNOSOCKETSCREEN);
+                            context.push(Routes.ALLTRIPNOSOCKETSCREEN);
                           }
                           // (state.model.mainCategory?.isSocketCategory ??
                           //           false)
-                          //       ? context.pushNamed(Routes.ALLTRIPRIDER)
-                          //       : context.pushNamed(Routes.ALLTRIPNOSOCKETSCREEN),
+                          //       ? context.push(Routes.ALLTRIPRIDER)
+                          //       : context.push(Routes.ALLTRIPNOSOCKETSCREEN),
                         },
                         title: LocaleKeys.rideDashboard.tr(),
                         subTitle: "",
@@ -66,7 +66,7 @@ class RiderBannerWidget extends StatelessWidget {
                           //     .push(Routes.SHIPPING_REGISTER),
                           onTap: () {
                             ManageVibration.vibrate();
-                            context.pushNamed(Routes.RIDERREGISTER);
+                            context.push(Routes.RIDERREGISTER);
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(

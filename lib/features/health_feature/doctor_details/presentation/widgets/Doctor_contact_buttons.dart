@@ -43,7 +43,7 @@ class DoctorContactButtons extends StatelessWidget {
                     !context.read<UserCubit>().isLoggedIn
                         ? () {
                             pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : state.enabled == true
                             ? () {
@@ -70,7 +70,7 @@ class DoctorContactButtons extends StatelessWidget {
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
                           pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : state.enabled == true
                           ? () {
@@ -203,7 +203,7 @@ class DoctorContactButtons extends StatelessWidget {
                       },
                     ),
                     // !context.read<UserCubit>().isLoggedIn
-                    //     ? () => context.pushNamed(Routes.LOGIN)
+                    //     ? () => context.push(Routes.LOGIN)
                     //     : state.enabled == true
                     //         ? () {
                     //             LaunchURLHelper()
@@ -223,7 +223,7 @@ class DoctorContactButtons extends StatelessWidget {
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
                             pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : state.enabled == true
                             ? () {}

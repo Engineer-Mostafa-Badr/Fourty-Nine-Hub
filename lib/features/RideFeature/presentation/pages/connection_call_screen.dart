@@ -109,7 +109,7 @@ class CallCard extends StatelessWidget {
             ),
             onPressed: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.safetyRideScreen);
+              context.push(Routes.safetyRideScreen);
             },
             child: Center(child: Text(LocaleKeys.freeCall.localize)),
           ),
@@ -125,7 +125,7 @@ class CallCard extends StatelessWidget {
             ),
             onPressed: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.safetyRideScreen);
+              context.push(Routes.safetyRideScreen);
             },
             child: Center(child: Text(LocaleKeys.regularCall.localize)),
           ),

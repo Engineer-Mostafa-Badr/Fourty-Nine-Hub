@@ -38,7 +38,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   text: state.currentLocation?.address,
                   onPressed: () async {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.GoogleMapsSearchAndPick,
+                    context.push(Routes.GoogleMapsSearchAndPick,
                         extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
                         serviceLocator<RideCubit>().updateFromLocation(
@@ -57,7 +57,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   text: state.toLocation?.address,
                   onPressed: () async {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.GoogleMapsSearchAndPick,
+                    context.push(Routes.GoogleMapsSearchAndPick,
                         extra: RideGoogleMapSearchAndPickParams(
                       onPicked: (pickedData) async {
                         serviceLocator<RideCubit>().updateToLocation(
@@ -86,7 +86,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     text: state.wayPointOne?.address,
                     onPressed: () async {
                       ManageVibration.vibrate();
-                      context.pushNamed(Routes.GoogleMapsSearchAndPick,
+                      context.push(Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
                           serviceLocator<RideCubit>().updateWayPointOne(
@@ -116,7 +116,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     text: state.wayPointTwo?.address,
                     onPressed: () async {
                       ManageVibration.vibrate();
-                      context.pushNamed(Routes.GoogleMapsSearchAndPick,
+                      context.push(Routes.GoogleMapsSearchAndPick,
                           extra: RideGoogleMapSearchAndPickParams(
                         onPicked: (pickedData) async {
                           serviceLocator<RideCubit>().updateWayPointTwo(

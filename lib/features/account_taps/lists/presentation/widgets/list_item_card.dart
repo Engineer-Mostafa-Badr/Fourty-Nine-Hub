@@ -95,7 +95,7 @@ class ListItemCard extends StatelessWidget {
         ListTile(
           onTap: () {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.OTHERSACCOUNT, extra: user.id);
+            context.push(Routes.OTHERSACCOUNT, extra: user.id);
           },
           leading: const Icon(Icons.person),
           title: Label(
@@ -104,7 +104,7 @@ class ListItemCard extends StatelessWidget {
         ),
         if (type != ListTypes.blocked)
           ListTile(
-            onTap: () => context.pushNamed(Routes.CHATROOM),
+            onTap: () => context.push(Routes.CHATROOM),
             leading: const Icon(Icons.chat),
             title: Label(
                 text: '${LocaleKeys.chatWith.localize} ${user.firstName}'),

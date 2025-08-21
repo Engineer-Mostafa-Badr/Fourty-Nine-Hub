@@ -201,7 +201,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //               ClickableWidget(
       //                 onTap: () {
       ManageVibration.vibrate();
-      //                   context.pushNamed(Routes.LOGIN);
+      //                   context.push(Routes.LOGIN);
       //                 },
       //                 child: Row(
       //                   children: [
@@ -232,7 +232,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                   child: ClickableWidget(
       //                     onTap: () {
       ManageVibration.vibrate();
-      //                       context.pushNamed(Routes.LOGIN);
+      //                       context.push(Routes.LOGIN);
       //                     },
       //                     child: Column(
       //                       mainAxisAlignment: MainAxisAlignment.center,
@@ -258,7 +258,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       label: LocaleKeys.comment.localize,
       //                       onTap: () {
       ManageVibration.vibrate();
-      //                         context.pushNamed(Routes.LOGIN);
+      //                         context.push(Routes.LOGIN);
       //                       }),
       //                 ),
       //                 Expanded(
@@ -267,7 +267,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       label: LocaleKeys.share.localize,
       //                       onTap: () async {
       ManageVibration.vibrate();
-      //                         context.pushNamed(Routes.LOGIN);
+      //                         context.push(Routes.LOGIN);
       //                       }),
       //                 ),
       //               ],
@@ -320,7 +320,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //             ClickableWidget(
       //               onTap: () {
       ManageVibration.vibrate();
-      //                 context.pushNamed(Routes.LOGIN);
+      //                 context.push(Routes.LOGIN);
       //               },
       //               child: Row(
       //                 children: [
@@ -359,7 +359,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                       label: LocaleKeys.comment.localize,
       //                       onTap: () {
       ManageVibration.vibrate();
-      //                         context.pushNamed(Routes.LOGIN);
+      //                         context.push(Routes.LOGIN);
       //                       }),
       //                 ),
       //               Expanded(
@@ -368,7 +368,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       //                     label: LocaleKeys.share.localize,
       //                     onTap: () async {
       ManageVibration.vibrate();
-      //                       context.pushNamed(Routes.LOGIN);
+      //                       context.push(Routes.LOGIN);
       //                     }),
       //               ),
       //             ],
@@ -441,12 +441,11 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   ManageVibration.vibrate();
                   if (widget.fromProfile == false &&
                       context.read<UserCubit>().isLoggedIn) {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 child: ImageFromInternet(
@@ -473,12 +472,11 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       ManageVibration.vibrate();
                       if (widget.fromProfile == false &&
                           context.read<UserCubit>().isLoggedIn) {
-                        context.pushNamed(Routes.OTHERSACCOUNT,
-                            extra: post.user.id);
+                        context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                       } else {
                         return pleaseLoginDialog(context);
 
-                        // context.pushNamed(Routes.LOGIN);
+                        // context.push(Routes.LOGIN);
                       }
                     },
                     child: Column(
@@ -490,12 +488,12 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                               ManageVibration.vibrate();
                               if (widget.fromProfile == false &&
                                   context.read<UserCubit>().isLoggedIn) {
-                                context.pushNamed(Routes.OTHERSACCOUNT,
+                                context.push(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
                               } else {
                                 return pleaseLoginDialog(context);
 
-                                // context.pushNamed(Routes.LOGIN);
+                                // context.push(Routes.LOGIN);
                               }
                             }),
                         RichText(
@@ -562,7 +560,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           onTap: () {
             ManageVibration.vibrate();
             if (widget.fromProfile == false) {
-              context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
           child: CircleAvatar(
@@ -580,7 +578,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               onTap: () {
                 ManageVibration.vibrate();
                 if (widget.fromProfile == false) {
-                  context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
               child: Column(
@@ -592,7 +590,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       onPressed: () {
                         ManageVibration.vibrate();
                         if (widget.fromProfile == false) {
-                          context.pushNamed(Routes.OTHERSACCOUNT,
+                          context.push(Routes.OTHERSACCOUNT,
                               extra: post.user.id);
                         }
                       }),
@@ -791,8 +789,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 GestureDetector(
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.users[0].id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.users[0].id);
                   },
                   child: Label(
                     text:

@@ -416,7 +416,7 @@
 //           //     if (!context.read<UserCubit>().isLoggedIn) {
 //           //       pleaseLoginDialog(context);
 //           //     } else {
-//           //       context.pushNamed(Routes.MY_TALENT);
+//           //       context.push(Routes.MY_TALENT);
 //           //     }
 //           //   },
 //           //   child: Container(
@@ -489,7 +489,6 @@
 //   }
 // }
 
-
 //!
 
 import 'package:easy_localization/easy_localization.dart';
@@ -545,7 +544,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
   List<StarEntity> _filteredTalents = [];
-  
+
   // Add these variables to track video details view state
   StarEntity? _selectedVideoTalent;
   String? _selectedVideoUrl;
@@ -825,10 +824,13 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         );
       case 3:
         // Modified: Show VideoDetailsView if video is selected, otherwise show list
-        if (_showVideoDetails && _selectedVideoTalent != null && _selectedVideoUrl != null) {
+        if (_showVideoDetails &&
+            _selectedVideoTalent != null &&
+            _selectedVideoUrl != null) {
           return SliverToBoxAdapter(
-            child: Container(
-              height: MediaQuery.of(context).size.height - 200, // Adjust height as needed
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height -
+                  200, // Adjust height as needed
               child: VideoDetailsView(
                 talent: _selectedVideoTalent!,
                 mediaUrl: _selectedVideoUrl!,

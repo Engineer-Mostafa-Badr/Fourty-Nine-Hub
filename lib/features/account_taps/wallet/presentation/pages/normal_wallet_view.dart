@@ -54,7 +54,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
         child: MaterialButton(
           onPressed: () async {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.TRANSFERMONEY);
+            context.push(Routes.TRANSFERMONEY);
           },
           color: AppColors.SECONDARY_COLOR,
           textColor: AppColors.AUTH_CONTAINER_COLOR,

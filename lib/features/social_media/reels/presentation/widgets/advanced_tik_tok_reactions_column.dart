@@ -105,7 +105,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         //   onTap: () {
         //     if (!serviceLocator<UserCubit>().isLoggedIn) {
         // context.read<PreloadBloc>().pauseTheVideo();
-        //       context.pushNamed(Routes.LOGIN);
+        //       context.push(Routes.LOGIN);
         //     } else {
         //       _showGiftBottomSheet(context);
         //     }
@@ -120,9 +120,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
-              context.pushNamed(Routes.LOGIN);
+              context.push(Routes.LOGIN);
             } else {
-              context.pushNamed(Routes.OTHERSACCOUNT, extra: reel.user.id);
+              context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
             }
           },
           child: Stack(
@@ -165,7 +165,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
-              context.pushNamed(Routes.LOGIN);
+              context.push(Routes.LOGIN);
             } else {
               _showGiftBottomSheet(context);
             }
@@ -193,7 +193,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           // onTap: () {
           //   if (!serviceLocator<UserCubit>().isLoggedIn) {
           // context.read<PreloadBloc>().pauseTheVideo();
-          //     context.pushNamed(Routes.LOGIN);
+          //     context.push(Routes.LOGIN);
           //   } else {
           //     _handleLikeAction(context, reelsCubit);
           //   }
@@ -220,7 +220,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
-              context.pushNamed(Routes.LOGIN);
+              context.push(Routes.LOGIN);
             } else {
               _handleCommentAction(
                 context,
@@ -252,7 +252,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
-              context.pushNamed(Routes.LOGIN);
+              context.push(Routes.LOGIN);
             } else {
               showModalBottomSheet(
                 context: context,
@@ -273,7 +273,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
 
               // if (!serviceLocator<UserCubit>().isLoggedIn) {
               // context.read<PreloadBloc>().pauseTheVideo();
-              //   context.pushNamed(Routes.LOGIN);
+              //   context.push(Routes.LOGIN);
               // } else {
               //   _handleShareAction(context, reel.videoMedia);
               // }
@@ -325,7 +325,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
                                 Navigator.pop(context);
                                 if (!serviceLocator<UserCubit>().isLoggedIn) {
                                   context.read<PreloadBloc>().pauseTheVideo();
-                                  context.pushNamed(Routes.LOGIN);
+                                  context.push(Routes.LOGIN);
                                 } else {
                                   _showReportBottomSheet(context);
                                 }
@@ -372,7 +372,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               ManageVibration.vibrate();
               //                 if (!serviceLocator<UserCubit>().isLoggedIn) {
               //                   context.read<PreloadBloc>().pauseTheVideo();
-              //                   context.pushNamed(Routes.LOGIN);
+              //                   context.push(Routes.LOGIN);
               //                 } else {
               //                   _showReportBottomSheet(context);
               //                 }
@@ -394,7 +394,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               ManageVibration.vibrate();
               //                 if (!serviceLocator<UserCubit>().isLoggedIn) {
               //                   context.read<PreloadBloc>().pauseTheVideo();
-              //                   context.pushNamed(Routes.LOGIN);
+              //                   context.push(Routes.LOGIN);
               //                 } else {
               //                   _handleSaveAction(context, reelsCubit);
               //                 }
@@ -442,7 +442,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.read<PreloadBloc>().pauseTheVideo();
-              context.pushNamed(Routes.LOGIN);
+              context.push(Routes.LOGIN);
             } else {
               _handleLikeAction(context, context.read<ReelsCubit>());
             }

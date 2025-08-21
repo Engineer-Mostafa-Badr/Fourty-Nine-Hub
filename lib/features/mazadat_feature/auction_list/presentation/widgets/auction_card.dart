@@ -20,7 +20,7 @@ class AuctionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.pushNamed(Routes.MAZADDETAILS, extra: item.id),
+        onTap: () => context.push(Routes.MAZADDETAILS, extra: item.id),
         child: isVertical
             ? _buildVerticalView(context: context)
             : _buildHorizontalView(context: context));
@@ -97,8 +97,7 @@ class AuctionCard extends StatelessWidget {
                                 .pushNamed(Routes.MAZADDETAILS, extra: item.id))
                         : AppButton(
                             label: 'Bidding',
-                            onPressed: () => context.pushNamed(
-                                Routes.MAZADDETAILS,
+                            onPressed: () => context.push(Routes.MAZADDETAILS,
                                 extra: item.id)),
                   ),
                 ],
@@ -152,7 +151,7 @@ class AuctionCard extends StatelessWidget {
         ),
         AppButton(
             label: 'Bidding',
-            onPressed: () => context.pushNamed(Routes.MAZADDETAILS)),
+            onPressed: () => context.push(Routes.MAZADDETAILS)),
       ],
     );
   }

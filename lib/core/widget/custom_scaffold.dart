@@ -250,7 +250,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                       ManageVibration.vibrate();
                                       floatingNavigatorCubit
                                           .changeFloatingNavigator();
-                                      context.pushNamed(Routes.QURAAN);
+                                      context.push(Routes.QURAAN);
                                     }),
                                 SizedBox(
                                   width: 20,
@@ -262,7 +262,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                       ManageVibration.vibrate();
                                       floatingNavigatorCubit
                                           .changeFloatingNavigator();
-                                      context.pushNamed(Routes.AZKAAR);
+                                      context.push(Routes.AZKAAR);
                                     }),
                               ],
                             ),
@@ -275,7 +275,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                       ManageVibration.vibrate();
                                       floatingNavigatorCubit
                                           .changeFloatingNavigator();
-                                      context.pushNamed(Routes.RIDE_HOME);
+                                      context.push(Routes.RIDE_HOME);
                                     }),
                                 SizedBox(
                                   width: 20,
@@ -289,7 +289,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                           'tripJoinCount', context);
                                       floatingNavigatorCubit
                                           .changeFloatingNavigator();
-                                      context.pushNamed(
+                                      context.push(
                                           context.read<UserCubit>().isLoggedIn
                                               ? Routes.newRideModeScreen
                                               : Routes.FirstLoginScreen);
@@ -315,7 +315,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(Routes.VISITA);
+                                    context.push(Routes.VISITA);
                                   },
                                 ),
                                 SizedBox(
@@ -328,7 +328,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(Routes.FOOD);
+                                    context.push(Routes.FOOD);
                                   },
                                 ),
                               ],
@@ -342,8 +342,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(
-                                        Routes.MARRIAGESUBCATEGORIES);
+                                    context.push(Routes.MARRIAGESUBCATEGORIES);
                                   },
                                 ),
                                 SizedBox(
@@ -358,7 +357,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                         'beAStarCount', context);
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(Routes.BE_STAR);
+                                    context.push(Routes.BE_STAR);
                                   },
                                 ),
                               ],
@@ -375,7 +374,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
                                     soonDialog(context);
-                                    // context.pushNamed(Routes.BE_STAR);
+                                    // context.push(Routes.BE_STAR);
                                   },
                                 ),
                                 SizedBox(
@@ -388,7 +387,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(Routes.Tinder);
+                                    context.push(Routes.Tinder);
                                   },
                                 ),
                               ],
@@ -402,7 +401,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(Routes.REELS);
+                                    context.push(Routes.REELS);
                                   },
                                 ),
                                 SizedBox(
@@ -415,7 +414,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(
+                                    context.push(
                                         context.read<UserCubit>().isLoggedIn
                                             ? Routes.LIVE
                                             : Routes.FirstLoginScreen);
@@ -429,7 +428,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             //   onTap: () {
 
                             //     context.pop();
-                            //     context.pushNamed(Routes.MEETINGROOM);
+                            //     context.push(Routes.MEETINGROOM);
                             //   },
                             // ),
                             // drawerRollWidget(
@@ -437,7 +436,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             //   image: Assets.snap,
                             //   onTap: () {
                             //     context.pop();
-                            //     context.pushNamed(Routes.SNAP);
+                            //     context.push(Routes.SNAP);
                             //   },
                             // ),
                             Row(
@@ -453,7 +452,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                       context
                                           .pushNamed(Routes.FirstLoginScreen);
                                     if (context.read<UserCubit>().isLoggedIn) {
-                                      context.pushNamed(Routes.CHAT,
+                                      context.push(Routes.CHAT,
                                           extra: ChatsViewParams());
                                     }
                                   },
@@ -469,7 +468,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
                                     soonDialog(context);
-                                    // context.pushNamed(Routes.CHAT,
+                                    // context.push(Routes.CHAT,
                                     //     extra: ChatsViewParams());
                                   },
                                 ),
@@ -485,7 +484,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(Routes.CREATECOMPANYAD);
+                                    context.push(Routes.CREATECOMPANYAD);
                                   },
                                 ),
                                 SizedBox(
@@ -499,7 +498,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(
+                                    context.push(
                                         context.read<UserCubit>().isLoggedIn
                                             ? Routes.MAZADAT
                                             : Routes.FirstLoginScreen);
@@ -516,7 +515,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    context.pushNamed(
+                                    context.push(
                                         context.read<UserCubit>().isLoggedIn
                                             ? Routes.CHANCE
                                             : Routes.FirstLoginScreen);

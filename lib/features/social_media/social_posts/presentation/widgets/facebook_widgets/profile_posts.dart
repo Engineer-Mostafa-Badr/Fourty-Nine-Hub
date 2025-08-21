@@ -169,7 +169,7 @@ class ProfilePosts extends StatelessWidget {
                   child: ClickableWidget(
                     onTap: () {
                       ManageVibration.vibrate();
-                      context.pushNamed(Routes.CREATEPOST, extra: 'facebook');
+                      context.push(Routes.CREATEPOST, extra: 'facebook');
                     },
                     child: Label(
                       text: context.isArabic

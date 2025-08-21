@@ -129,7 +129,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                                       otherId: widget.otherUserId,
                                       categoryId: widget.subcategoryId,
                                     );
-                                context.pushNamed(
+                                context.push(
                                   Routes.CHAT,
                                   extra: ChatsViewParams(
                                     isFromStartChat: true,
@@ -161,7 +161,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                         ManageVibration.vibrate();
 
                         return pleaseLoginDialog(context);
-                        // context.pushNamed(Routes.LOGIN);
+                        // context.push(Routes.LOGIN);
                       }
                     : () {
                         ManageVibration.vibrate();

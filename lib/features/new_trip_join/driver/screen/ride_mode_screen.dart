@@ -90,7 +90,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
           children: [
             RideModeButton(
                 onTap: () {
-                  context.pushNamed(Routes.runningAndPastTripsScreen);
+                  context.push(Routes.runningAndPastTripsScreen);
                 },
                 onRefreshSettings: () {
                   cubit.getSettings(context);
@@ -109,7 +109,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                   imagePath: Assets.locationTripIcon,
                   title: context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
                   onTap: () {
-                    context.pushNamed(Routes.captainShareScreen);
+                    context.push(Routes.captainShareScreen);
                   },
                   iconColor: AppColors.getButtonPrimaryColor(context),
                 ),
@@ -118,7 +118,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                   imagePath: Assets.locationTripIcon,
                   title: context.isArabic ? "جاي معاك" : "Trip Join",
                   onTap: () {
-                    context.pushNamed(Routes.AVAILABLE_TRIPS);
+                    context.push(Routes.AVAILABLE_TRIPS);
                   },
                   iconColor: AppColors.getButtonPrimaryColor(context),
                 ),
@@ -127,7 +127,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                   imagePath: Assets.locationTripIcon,
                   title: context.isArabic ? "وصلني معاك" : "Pick me",
                   onTap: () {
-                    context.pushNamed(Routes.All_PickMe_View);
+                    context.push(Routes.All_PickMe_View);
                   },
                   iconColor: AppColors.getButtonPrimaryColor(context),
                 ),
@@ -180,18 +180,18 @@ class RideModeButton extends StatelessWidget {
                 }
               : isRegistered == false
                   ? () async {
-                      await context.pushNamed(Routes.welcomeRideRegister,
+                      await context.push(Routes.welcomeRideRegister,
                           extra: false);
                       if (onRefreshSettings != null) onRefreshSettings!();
                     }
                   : (isApproved == false)
                       ? () async {
-                          await context.pushNamed(Routes.RIDE_HOME);
+                          await context.push(Routes.RIDE_HOME);
                           if (onRefreshSettings != null) onRefreshSettings!();
                         }
                       : (isReady == false || isCaptain == false)
                           ? () async {
-                              await context.pushNamed(Routes.rideModeScreen,
+                              await context.push(Routes.rideModeScreen,
                                   extra: const RideModeParams(
                                       modeType: 'ride',
                                       isSocket: true,
@@ -272,14 +272,13 @@ class RideModeButton extends StatelessWidget {
                         ? 'برجاء اكمال الرحله الجاريه في توصيله اولا'
                         : 'Please complete the running trip at ride first');
               } else if (isRegistered == false) {
-                await context.pushNamed(Routes.welcomeRideRegister,
-                    extra: false);
+                await context.push(Routes.welcomeRideRegister, extra: false);
                 if (onRefreshSettings != null) onRefreshSettings!();
               } else if (isApproved == false) {
-                await context.pushNamed(Routes.RIDE_HOME);
+                await context.push(Routes.RIDE_HOME);
                 if (onRefreshSettings != null) onRefreshSettings!();
               } else if (isReady == false || isCaptain == false) {
-                await context.pushNamed(Routes.rideModeScreen,
+                await context.push(Routes.rideModeScreen,
                     extra: const RideModeParams(
                         modeType: 'ride', isSocket: true, currentIndex: 3));
 

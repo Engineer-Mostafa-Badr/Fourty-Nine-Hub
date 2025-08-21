@@ -43,7 +43,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
               ManageVibration.vibrate();
               context.pop();
               context.pop();
-              context.pushNamed(Routes.CREATECOMPANYAD);
+              context.push(Routes.CREATECOMPANYAD);
             },
             icon: const Icon(
               Icons.arrow_back,

@@ -217,7 +217,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   }
 
   onNavigateToCreateRoute(BuildContext context) async {
-    await context.pushNamed(Routes.newRouteScreen);
+    await context.push(Routes.newRouteScreen);
     if (state.tapIndex == 0) {
       loadInitialAvailableData(context);
     } else {

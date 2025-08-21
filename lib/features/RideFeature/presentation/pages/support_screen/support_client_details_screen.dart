@@ -69,7 +69,7 @@ class SupportClientDetailsScreen extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {
                   ManageVibration.vibrate();
-                  context.pushNamed(Routes.emergencyContactsScreen);
+                  context.push(Routes.emergencyContactsScreen);
                 },
                 icon: Icon(Icons.download, color: Colors.white),
                 label: Text(LocaleKeys.locationLog.localize),

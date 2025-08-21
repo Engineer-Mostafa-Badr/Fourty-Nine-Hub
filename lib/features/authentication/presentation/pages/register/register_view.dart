@@ -230,7 +230,7 @@
 //                         TextSpan(
 //                           text: "Login",
 //                           recognizer: TapGestureRecognizer()
-//                             ..onTap = () => context.pushNamed(Routes.LOGIN),
+//                             ..onTap = () => context.push(Routes.LOGIN),
 //                           style: Styles.mediumText(),
 //                         ),
 //                       ],

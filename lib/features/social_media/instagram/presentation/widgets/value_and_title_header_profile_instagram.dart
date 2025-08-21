@@ -28,7 +28,7 @@ class ValueAndTitleHeaderProfileInstagram extends StatelessWidget {
       onTap: () {
         ManageVibration.vibrate();
         if (index == 0 || index == 1) {
-          context.pushNamed(Routes.followersScreen,
+          context.push(Routes.followersScreen,
               extra: FollowersScreenArguments(
                 index: index,
                 dataProfile: dataProfile,

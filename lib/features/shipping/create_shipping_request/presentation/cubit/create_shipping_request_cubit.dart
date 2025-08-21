@@ -40,7 +40,7 @@ class CreateShippingRequestCubit extends Cubit<CreateShippingRequestState> {
       : super(const CreateShippingRequestState());
 
   void addNormalRequest({required BuildContext context}) {
-    context.pushNamed(Routes.TRIPDETAILS);
+    context.push(Routes.TRIPDETAILS);
   }
 
 // change subCategory selection

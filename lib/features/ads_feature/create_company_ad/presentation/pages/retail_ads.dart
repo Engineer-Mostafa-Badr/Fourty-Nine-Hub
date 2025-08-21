@@ -178,7 +178,7 @@ class _RetailAdsState extends State<RetailAds> {
                         : 'Please select sub category');
               } else if (state.selectedMainCategories != null &&
                   state.selectedSubCategories != null) {
-                context.pushNamed(Routes.CREATEAD,
+                context.push(Routes.CREATEAD,
                     extra: CategorizationEntity(
                         mainCategory: state.selectedMainCategories!,
                         subCategory: state.selectedSubCategories!));

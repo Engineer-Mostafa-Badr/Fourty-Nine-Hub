@@ -242,7 +242,7 @@ https://example.com/download
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(Routes.WALLET);
+        context.push(Routes.WALLET);
       },
       child: Row(
         children: [

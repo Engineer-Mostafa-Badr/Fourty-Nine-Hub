@@ -31,7 +31,7 @@ class GovernorateListTitle extends StatelessWidget {
         serviceLocator<HealthSharedData>().doctorSearchParams.governorate =
             governorate;
 
-        context.pushNamed(Routes.FILTERDOCTORCITY, extra: type);
+        context.push(Routes.FILTERDOCTORCITY, extra: type);
       },
     );
   }

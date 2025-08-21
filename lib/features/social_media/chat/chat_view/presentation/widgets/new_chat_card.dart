@@ -57,7 +57,7 @@ class _NewChatCardState extends State<NewChatCard> {
             ManageVibration.vibrate();
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
               context.read<ChatsCubit>().selectChat = widget.chat!;
-              context.pushNamed(Routes.CHATROOM, extra: widget.chatsCubit);
+              context.push(Routes.CHATROOM, extra: widget.chatsCubit);
             } else {
               setState(() {
                 if (!widget.chat!.isSelected) {
@@ -665,7 +665,7 @@ class _NewChatCardState extends State<NewChatCard> {
                               ManageVibration.vibrate();
                               context.read<ChatsCubit>().selectChat =
                                   widget.chat!;
-                              context.pushNamed(Routes.CHATROOM,
+                              context.push(Routes.CHATROOM,
                                   extra: widget.chatsCubit);
                             },
                           ),
@@ -696,7 +696,7 @@ class _NewChatCardState extends State<NewChatCard> {
                               ManageVibration.vibrate();
                               context.read<ChatsCubit>().selectChat =
                                   widget.chat!;
-                              context.pushNamed(Routes.VIEWCONTACT,
+                              context.push(Routes.VIEWCONTACT,
                                   extra: widget.chatsCubit);
                             },
                           ),

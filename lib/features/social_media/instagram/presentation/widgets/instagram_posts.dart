@@ -412,7 +412,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         ManageVibration.vibrate();
                                         // if (!serviceLocator<UserCubit>()
                                         //     .isLoggedIn) {
-                                        //   context.pushNamed(Routes.LOGIN);
+                                        //   context.push(Routes.LOGIN);
                                         // } else {
                                         //   showCommentsBottomSheetInstagram(
                                         //       context,
@@ -909,7 +909,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   text:
                                       '${controller.feedPagingController.itemList?[index].firstComment?.firstName} ${controller.feedPagingController.itemList?[index].firstComment?.lastName}\t\t',
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.pushNamed(
+                                    ..onTap = () => context.push(
                                         Routes.INSTAGRAMPROFILE,
                                         extra: controller.feedPagingController
                                             .itemList?[index].user.id),
@@ -1051,7 +1051,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         ManageVibration.vibrate();
                                         // if (!serviceLocator<UserCubit>()
                                         //     .isLoggedIn) {
-                                        //   context.pushNamed(Routes.LOGIN);
+                                        //   context.push(Routes.LOGIN);
                                         // } else {
                                         //   showCommentsBottomSheetInstagram(
                                         //       context,
@@ -1292,7 +1292,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
         InkWell(
           onTap: () {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+            context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
             radius: 32.r,
@@ -1313,8 +1313,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 InkWell(
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.INSTAGRAMPROFILE,
-                        extra: post.user.id);
+                    context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
                   },
                   child: TextAppButton(
                       style: TextStyle(
@@ -1323,7 +1322,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                       label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.pushNamed(Routes.INSTAGRAMPROFILE,
+                        context.push(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);
                       }),
                 ),

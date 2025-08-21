@@ -27,10 +27,10 @@ class RideRequestScreen extends StatelessWidget {
           //       price: 150,
           //       driverImage: "https://maps.gstatic.com/tactile/pane/default_geocode-2x.png",
           //       onAccept: () {
-          //         context.pushNamed(Routes.RideStatusScreen);
+          //         context.push(Routes.RideStatusScreen);
           //       },
           //       onRefuse: () {
-          //         context.pushNamed(Routes.RideStatusScreen);
+          //         context.push(Routes.RideStatusScreen);
           //
           //       },
           //     ),

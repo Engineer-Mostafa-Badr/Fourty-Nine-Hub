@@ -110,7 +110,7 @@ class _FollowersViewState extends State<FollowersView> {
                   return GestureDetector(
                     onTap: () {
                       ManageVibration.vibrate();
-                      context.pushNamed(Routes.INSTAGRAMPROFILE,
+                      context.push(Routes.INSTAGRAMPROFILE,
                           extra: followers.userId);
                     },
                     child: InstagramUserFollowWidget(

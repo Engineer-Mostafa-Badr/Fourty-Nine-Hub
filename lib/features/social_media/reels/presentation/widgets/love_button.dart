@@ -71,7 +71,7 @@ class _LoveButtonState extends State<LoveButton>
   void toggleLove() {
     if (!serviceLocator<UserCubit>().isLoggedIn) {
       context.read<PreloadBloc>().pauseTheVideo();
-      context.pushNamed(Routes.LOGIN);
+      context.push(Routes.LOGIN);
     } else {
       setState(() {
         isLoved = !isLoved;

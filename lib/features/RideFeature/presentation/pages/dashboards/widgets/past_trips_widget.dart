@@ -44,7 +44,7 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
       onTap: () {
         ManageVibration.vibrate();
 
-        context.pushNamed(Routes.rideDashboardDetailsScreen,
+        context.push(Routes.rideDashboardDetailsScreen,
             extra: widget.tripEntity);
       },
       child: Container(

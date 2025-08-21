@@ -48,7 +48,7 @@ class HeaderProfileInstagram extends StatelessWidget {
                             ),
                           )
                         : pleaseLoginDialog(context);
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
 
                     BlocProvider.of<StoryCubit>(context)
                       ..fetchStories()

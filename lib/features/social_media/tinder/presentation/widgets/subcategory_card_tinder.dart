@@ -38,7 +38,7 @@ class _SubCategoryCardState extends State<SubcategoryCardTinder> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.pushNamed(Routes.ADS,
+      onTap: () => context.push(Routes.ADS,
           extra: AdsViewParams(
               mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
@@ -107,13 +107,13 @@ class _SubCategoryCardState extends State<SubcategoryCardTinder> {
                       onPressed: () {
                         ManageVibration.vibrate();
                         if (AuthHelper().isLoggedIn()) {
-                          context.pushNamed(Routes.CREATEAD,
+                          context.push(Routes.CREATEAD,
                               extra: CategorizationEntity(
                                   mainCategory: widget.mainCategory,
                                   subCategory: widget.item));
                         } else {
                           return pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       })
                 ],

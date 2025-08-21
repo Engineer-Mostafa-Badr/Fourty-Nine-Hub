@@ -573,7 +573,7 @@ class _LoadingDashboardDetailsScreenState
                                   if (path != null) {
                                     _showPdfPreview(context, path);
                                   }
-                                  // context.pushNamed(Routes.emergencyContactsScreen);
+                                  // context.push(Routes.emergencyContactsScreen);
                                 },
                                 icon: const Icon(Icons.download,
                                     color: Colors.white),

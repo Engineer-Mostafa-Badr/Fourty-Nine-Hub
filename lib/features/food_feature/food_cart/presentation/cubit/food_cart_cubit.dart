@@ -41,7 +41,7 @@ class FoodCartCubit extends Cubit<BasicState<CartEntity>> {
         showErrorMessage(currentContext, getFailureMessage(l, currentContext));
         return Left(l);
       }, (data) {
-        context.pushNamed(Routes.REQUESTSHISTORY);
+        context.push(Routes.REQUESTSHISTORY);
       });
     }
   }

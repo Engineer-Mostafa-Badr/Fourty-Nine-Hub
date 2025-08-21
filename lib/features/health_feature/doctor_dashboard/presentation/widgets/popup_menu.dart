@@ -23,35 +23,35 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
           PopupMenuItem(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.DOCTORREVIEWS, extra: '');
+              context.push(Routes.DOCTORREVIEWS, extra: '');
             },
             child: Text(LocaleKeys.reviews.localize),
           ),
           PopupMenuItem(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.DOCTORSTATISTICS, extra: earnedMoney);
+              context.push(Routes.DOCTORSTATISTICS, extra: earnedMoney);
             },
             child: Text(LocaleKeys.history.localize),
           ),
           PopupMenuItem(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
+              context.push(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
             },
             child: Text(LocaleKeys.emergencyRequests.localize),
           ),
           PopupMenuItem(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.ALLAPPOINTMENTS);
+              context.push(Routes.ALLAPPOINTMENTS);
             },
             child: Text(LocaleKeys.allAppointments.localize),
           ),
         ];
       },
       onSelected: (value) {
-        context.pushNamed(value);
+        context.push(value);
       },
     );
   }

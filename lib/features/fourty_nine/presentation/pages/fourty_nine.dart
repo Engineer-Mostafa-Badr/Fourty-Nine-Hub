@@ -141,7 +141,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   @override
   Widget build(BuildContext context) {
-    // context.pushNamed(Routes.REELS);
+    // context.push(Routes.REELS);
     return
         // BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
         //   listener: (context, state) {
@@ -161,15 +161,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ExitWidget(
       child: CustomScaffold(
         key: _scaffoldKey,
-        scaffoldKey:_scaffoldKey,
+        scaffoldKey: _scaffoldKey,
         isMenu: true,
         appBar: HomeAppbar(
-          isWithBackArrow: false,
-            scaffoldKey:_scaffoldKey,
-          language: true,
-            isMenu:true
-          // isHaveLeading: true,
-        ),
+            isWithBackArrow: false,
+            scaffoldKey: _scaffoldKey,
+            language: true,
+            isMenu: true
+            // isHaveLeading: true,
+            ),
         bottomNavigationBar: _isScrollingDown
             ? null
             : BottomNavigator(
@@ -271,7 +271,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     children: List.generate(
                       5,
                       (index) => Shimmer.fromColors(
-                        baseColor: context.isDarkMode?Colors.grey[800]!:Colors.grey[100]!,
+                        baseColor: context.isDarkMode
+                            ? Colors.grey[800]!
+                            : Colors.grey[100]!,
                         highlightColor: Colors.white24,
                         child: Container(
                           margin: const EdgeInsets.symmetric(
@@ -299,10 +301,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                         HandleCashback.setCount('mainCategoriesCount', context);
                         if (state.data![index].id ==
                             '62c8b5b09332225799fe335e') {
-                          context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                          context.push(Routes.MARRIAGESUBCATEGORIES,
                               extra: state.data![index]);
                         } else {
-                          context.pushNamed(Routes.SUBCATEGORIES,
+                          context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         }
                       },
@@ -393,10 +395,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                                 'mainCategoriesCount', context);
                             if (state.data![index].id ==
                                 '62c8b5b09332225799fe335e') {
-                              context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                              context.push(Routes.MARRIAGESUBCATEGORIES,
                                   extra: state.data![index]);
                             } else {
-                              context.pushNamed(Routes.SUBCATEGORIES,
+                              context.push(Routes.SUBCATEGORIES,
                                   extra: state.data![index]);
                             }
                           },
@@ -496,11 +498,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ManageVibration.vibrate();
         onTab();
         if (routeName == Routes.MAINCATEGORIESCARDS) {
-          context.pushNamed(routeName,
+          context.push(routeName,
               extra:
                   MainCategoriesCardsParams(data: extra, isCustomPage: false));
         } else {
-          context.pushNamed(routeName, extra: extra);
+          context.push(routeName, extra: extra);
         }
       },
       child: Container(

@@ -37,7 +37,7 @@
 //           onTap: () {
 //             AdInterstitialTop.loadIntersitialAd();
 //             AdInterstitialTop.showInterstitialAd();
-//             context.pushNamed(Routes.RIDE_HOME);
+//             context.push(Routes.RIDE_HOME);
 //           },
 //           shadowColor: Color(0xff8000FF),
 //           image: Assets.car2Image,
@@ -48,7 +48,7 @@
 //           onTap: () {
 //             AdInterstitialTop.loadIntersitialAd();
 //             AdInterstitialTop.showInterstitialAd();
-//             context.pushNamed(Routes.VISITA);
+//             context.push(Routes.VISITA);
 //           },
 //           shadowColor: Color(0xff4997D0),
 //           image: Assets.doctorImage,
@@ -60,7 +60,7 @@
 //             AdInterstitialTop.loadIntersitialAd();
 //             AdInterstitialTop.showInterstitialAd();
 //             HandleCashback.setCount('beAStarCount', context);
-//             context.pushNamed(Routes.FOOD);
+//             context.push(Routes.FOOD);
 //           },
 //           shadowColor: Color(0xffFF7F00),
 //           image: Assets.mealImage,
@@ -75,7 +75,7 @@
 //             AdInterstitialTop.loadIntersitialAd();
 //             AdInterstitialTop.showInterstitialAd();
 //             HandleCashback.setCount('tripJoinCount', context);
-//             context.pushNamed(Routes.newRideModeScreen);
+//             context.push(Routes.newRideModeScreen);
 //           },
 //           shadowColor: context.isDarkMode
 //               ? AppColors.whiteColor.withValues(alpha: .8)
@@ -89,7 +89,7 @@
 //             AdInterstitialTop.loadIntersitialAd();
 //             AdInterstitialTop.showInterstitialAd();
 //             HandleCashback.setCount('beAStarCount', context);
-//             context.pushNamed(Routes.BE_STAR);
+//             context.push(Routes.BE_STAR);
 //           },
 //           shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
 //           image: Assets.tube1,
@@ -100,7 +100,7 @@
 //           onTap: () {
 //             AdInterstitialTop.loadIntersitialAd();
 //             AdInterstitialTop.showInterstitialAd();
-//             context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
+//             context.push(Routes.MARRIAGESUBCATEGORIES);
 //           },
 //           shadowColor: Color(0xffFFC0CB),
 //           image: Assets.marriage,
@@ -193,7 +193,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.pushNamed(Routes.RIDE_HOME);
+          context.push(Routes.RIDE_HOME);
         },
         shadowColor: const Color(0xff8000FF).withValues(alpha: 0.4),
         image: Assets.car2Image,
@@ -205,7 +205,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.pushNamed(Routes.VISITA);
+          context.push(Routes.VISITA);
         },
         shadowColor: const Color(0xff4997D0).withValues(alpha: 0.4),
         image: Assets.doctorImage,
@@ -218,7 +218,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('beAStarCount', context);
-          context.pushNamed(Routes.FOOD);
+          context.push(Routes.FOOD);
         },
         shadowColor: const Color(0xffFF7F00).withValues(alpha: 0.4),
         image: Assets.mealImage,
@@ -235,7 +235,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('tripJoinCount', context);
-          context.pushNamed(Routes.newRideModeScreen);
+          context.push(Routes.newRideModeScreen);
         },
         shadowColor: context.isDarkMode
             ? AppColors.whiteColor.withValues(alpha: .4)
@@ -250,7 +250,7 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('beAStarCount', context);
-          context.pushNamed(Routes.BE_STAR);
+          context.push(Routes.BE_STAR);
         },
         shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .4),
         image: Assets.tube1,
@@ -262,7 +262,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
+          context.push(Routes.MARRIAGESUBCATEGORIES);
         },
         shadowColor: const Color(0xffFFC0CB).withValues(alpha: 0.9),
         image: Assets.marriage,
@@ -274,7 +274,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.pushNamed(Routes.CHANCE);
+          context.push(Routes.CHANCE);
         },
         shadowColor: const Color(0xFFFFE76B).withValues(alpha: 0.9),
         image: Assets.chanceImage,
@@ -287,7 +287,7 @@ class GridBlocksWidget extends StatelessWidget {
           soonDialog(context);
           // AdInterstitialTop.loadIntersitialAd();
           // AdInterstitialTop.showInterstitialAd();
-          // context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
         },
         shadowColor: const Color(0xFF161F68).withValues(alpha: 0.9),
         image: Assets.bookingImage,
@@ -300,7 +300,7 @@ class GridBlocksWidget extends StatelessWidget {
           soonDialog(context);
           // AdInterstitialTop.loadIntersitialAd();
           // AdInterstitialTop.showInterstitialAd();
-          // context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
         },
         shadowColor: Colors.pinkAccent.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
@@ -312,7 +312,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.pushNamed(Routes.MAZADAT);
+          context.push(Routes.MAZADAT);
         },
         shadowColor: Colors.green.withValues(alpha: 0.9),
         image: Assets.bidImage,
@@ -325,7 +325,7 @@ class GridBlocksWidget extends StatelessWidget {
           soonDialog(context);
           // AdInterstitialTop.loadIntersitialAd();
           // AdInterstitialTop.showInterstitialAd();
-          // context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
         },
         shadowColor: Colors.grey.withValues(alpha: 0.9),
         image: Assets.gamesImage,

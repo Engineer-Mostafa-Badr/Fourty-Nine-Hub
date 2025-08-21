@@ -59,12 +59,12 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                         ManageVibration.vibrate();
                         if (state.data![i].categoryEntity.id ==
                             '62c8b5b09332225799fe335e') {
-                          context.pushNamed(
+                          context.push(
                             Routes.MARRIAGESUBCATEGORIES,
                             extra: state.data![i].categoryEntity,
                           );
                         } else {
-                          context.pushNamed(
+                          context.push(
                             Routes.SUBCATEGORIES,
                             extra: state.data![i].categoryEntity,
                           );

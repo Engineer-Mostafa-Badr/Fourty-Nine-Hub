@@ -16,7 +16,7 @@ class UpdateDoctorPersonalInfo extends StatelessWidget {
       title: LocaleKeys.personalInformation.localize,
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(Routes.EDITDOCTORPERSONALINFO, extra: doctor);
+        context.push(Routes.EDITDOCTORPERSONALINFO, extra: doctor);
       },
     );
   }

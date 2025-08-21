@@ -41,13 +41,13 @@ class DoctorCard extends StatelessWidget {
       onTap: () {
         ManageVibration.vibrate();
         if (UserCubit.to.isLoggedIn) {
-          context.pushNamed(Routes.VISITADOCTORDETAILS,
+          context.push(Routes.VISITADOCTORDETAILS,
               extra: DoctorDetailsParams(
                   doctorId: doctor.id, fromSearch: false, type: type));
         } else {
           return pleaseLoginDialog(context);
 
-          // context.pushNamed(Routes.LOGIN);
+          // context.push(Routes.LOGIN);
         }
       },
       child: Container(

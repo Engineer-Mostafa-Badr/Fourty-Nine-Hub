@@ -167,7 +167,7 @@
 //                           return ClickableWidget(
 //                             onTap: () {
 //       ManageVibration.vibrate();
-//                               context.pushNamed(Routes.LIFEEVENTSub,
+//                               context.push(Routes.LIFEEVENTSub,
 //                                   extra: cubit.lifeEventCategories[index]);
 //                             },
 //                             child: Container(
@@ -489,7 +489,7 @@ class _LifeEventState extends State<LifeEvent> {
                           print(cubit.lifeEventCategories[index].image);
                           return ClickableWidget(
                             onTap: () {
-                              context.pushNamed(Routes.LIFEEVENTSub,
+                              context.push(Routes.LIFEEVENTSub,
                                   extra: cubit.lifeEventCategories[index]);
                             },
                             child: Container(

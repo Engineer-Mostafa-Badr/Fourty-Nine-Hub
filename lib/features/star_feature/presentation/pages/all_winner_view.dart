@@ -116,7 +116,7 @@ class _AllWinnerViewState extends State<AllWinnerView> {
           InkWell(
             onTap: () {
               ManageVibration.vibrate();
-              // context.pushNamed(Routes.OTHERSACCOUNT, extra: star.user.id);
+              // context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
             },
             child: ImageFromInternet(
               image: star.user.image,

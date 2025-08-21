@@ -553,11 +553,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         driverName: state.requestedTrip?.driverFirstName ?? "",
                         onContactDriver: () {
                           ManageVibration.vibrate();
-                          // context.pushNamed(Routes.ratingClientScreen);
+                          // context.push(Routes.ratingClientScreen);
                         },
                         onSafety: () {
                           ManageVibration.vibrate();
-                          // context.pushNamed(Routes.rideArrivedScreen);
+                          // context.push(Routes.rideArrivedScreen);
                           serviceLocator<RideCubit>()
                               .changeTripStatus(tripState: TripState.support);
                         },
@@ -1083,7 +1083,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     () {
                                                                   ManageVibration
                                                                       .vibrate();
-                                                                  context.pushNamed(
+                                                                  context.push(
                                                                       Routes
                                                                           .supportRideScreen,
                                                                       extra: SupportRideParams(
@@ -1102,7 +1102,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     () {
                                                                   ManageVibration
                                                                       .vibrate();
-                                                                  context.pushNamed(
+                                                                  context.push(
                                                                       Routes
                                                                           .emergencyContactsScreen);
                                                                 },
@@ -1377,20 +1377,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return;
               } else if (driverInfo.status ==
                   RegistrationStatus.rejected.status) {
-                context.pushNamed(Routes.UploadRiderImages,
+                context.push(Routes.UploadRiderImages,
                     extra: UploadRiderImagesParams(
                         isShipping: false,
                         isSocket:
                             driverInfo.driverType == 'socket' ? true : false));
               } else if (driverInfo.status ==
                   RegistrationStatus.initial.status) {
-                context.pushNamed(Routes.UploadRiderImages,
+                context.push(Routes.UploadRiderImages,
                     extra: UploadRiderImagesParams(
                         isShipping: false,
                         isSocket:
                             driverInfo.driverType == 'socket' ? true : false));
               } else {
-                context.pushNamed(Routes.rideModeScreen,
+                context.push(Routes.rideModeScreen,
                     extra: RideModeParams(
                         modeType: 'ride',
                         isSocket:
@@ -1486,16 +1486,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return;
               } else if (loadingInfo.status ==
                   RegistrationStatus.rejected.status) {
-                context.pushNamed(Routes.UploadRiderImages,
+                context.push(Routes.UploadRiderImages,
                     extra: UploadRiderImagesParams(
                         isShipping: true, isSocket: false));
               } else if (loadingInfo.status ==
                   RegistrationStatus.initial.status) {
-                context.pushNamed(Routes.UploadRiderImages,
+                context.push(Routes.UploadRiderImages,
                     extra: UploadRiderImagesParams(
                         isShipping: true, isSocket: false));
               } else {
-                context.pushNamed(Routes.rideModeScreen,
+                context.push(Routes.rideModeScreen,
                     extra: RideModeParams(
                         modeType: 'truck',
                         isSocket:
@@ -1577,7 +1577,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             if (context.isUserLoggedIn) {
               ManageVibration.vibrate();
               context.pop();
-              context.pushNamed(Routes.rideOffer, extra: 'ride');
+              context.push(Routes.rideOffer, extra: 'ride');
             } else {
               ManageVibration.vibrate();
               context.pop();
@@ -1627,7 +1627,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             if (context.isUserLoggedIn) {
               ManageVibration.vibrate();
               context.pop();
-              context.pushNamed(Routes.RIDEHISTORYTRIPS,
+              context.push(Routes.RIDEHISTORYTRIPS,
                   extra: HistoryTripsScreenParams(
                     rideCubit: serviceLocator<RideCubit>(),
                   ));
@@ -1635,7 +1635,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ManageVibration.vibrate();
               context.pop();
               pleaseLoginDialog(context);
-              // context.pushNamed(Routes.LOGIN);
+              // context.push(Routes.LOGIN);
             }
           },
           child: Container(
@@ -1743,7 +1743,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             RegistrationStatus.approved.status &&
                         loadingInfo?.status !=
                             RegistrationStatus.approved.status) {
-                      context.pushNamed(Routes.rideModeScreen,
+                      context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
                               modeType: 'ride',
                               isSocket: driverInfo?.driverType == 'socket'
@@ -1753,7 +1753,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             RegistrationStatus.approved.status &&
                         loadingInfo?.status ==
                             RegistrationStatus.approved.status) {
-                      context.pushNamed(Routes.rideModeScreen,
+                      context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
                               modeType: 'truk',
                               isSocket: driverInfo?.driverType == 'socket'
@@ -1885,7 +1885,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             child: ClickableWidget(
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  context.pushNamed(Routes.RIDERUNNINGTRIPS,
+                                  context.push(Routes.RIDERUNNINGTRIPS,
                                       extra: RunningTripParams(
                                         rideCubit: serviceLocator<RideCubit>(),
                                       ));
@@ -1898,7 +1898,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             child: ClickableWidget(
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  context.pushNamed(Routes.RIDEEXPIREDTRIPE,
+                                  context.push(Routes.RIDEEXPIREDTRIPE,
                                       extra: ExpiredTripsScreenParams(
                                         rideCubit: serviceLocator<RideCubit>(),
                                       ));
@@ -1988,7 +1988,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               onPressed: () async {
                                 ManageVibration.vibrate();
                                 if (context.isUserLoggedIn) {
-                                  context.pushNamed(
+                                  context.push(
                                     Routes.GoogleMapsSearchAndPick,
                                     extra: RideGoogleMapSearchAndPickParams(
                                       minDistanceReferencePoint:
@@ -2011,7 +2011,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ),
                                   );
                                 } else {
-                                  context.pushNamed(Routes.FirstLoginScreen);
+                                  context.push(Routes.FirstLoginScreen);
                                 }
                               },
                             )
@@ -2024,7 +2024,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               onPressed: () async {
                                 ManageVibration.vibrate();
                                 if (context.isUserLoggedIn) {
-                                  context.pushNamed(
+                                  context.push(
                                     Routes.GoogleMapsSearchAndPick,
                                     extra: RideGoogleMapSearchAndPickParams(
                                       minDistanceReferencePoint:
@@ -2048,7 +2048,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ),
                                   );
                                 } else {
-                                  context.pushNamed(Routes.FirstLoginScreen);
+                                  context.push(Routes.FirstLoginScreen);
                                 }
                               },
                             )
@@ -2074,7 +2074,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                             final state = rideCubit.state;
 
                                             if (!context.isUserLoggedIn) {
-                                              context.pushNamed(
+                                              context.push(
                                                   Routes.FirstLoginScreen);
                                               return;
                                             }
@@ -2411,7 +2411,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                 ManageVibration.vibrate();
 
                                                 if (!context.isUserLoggedIn) {
-                                                  context.pushNamed(
+                                                  context.push(
                                                       Routes.FirstLoginScreen);
                                                   return;
                                                 }

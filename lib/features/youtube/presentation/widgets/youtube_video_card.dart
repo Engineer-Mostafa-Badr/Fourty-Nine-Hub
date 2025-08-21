@@ -19,7 +19,7 @@ class YoutubeVideoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.pushNamed(Routes.PLAYVIDEO),
+      onTap: () => context.push(Routes.PLAYVIDEO),
       child: isVertical
           ? _buildVerticalWidget(context: context)
           : _buildHorizontalWidget(context: context),

@@ -155,7 +155,7 @@ class _AzkarViewState extends State<AzkarView> {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(
+        context.push(
           Routes.AZKAARDETAILS,
           extra: item.name,
         );

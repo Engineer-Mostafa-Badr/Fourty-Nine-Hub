@@ -716,8 +716,8 @@ class _UserInfoBarState extends State<UserInfoBar> {
 
   Widget _buildUserAvatar(BuildContext context) {
     return InkWell(
-      onTap: () => context.pushNamed(Routes.OTHERSACCOUNT,
-          extra: widget.userStory.user?.id),
+      onTap: () =>
+          context.push(Routes.OTHERSACCOUNT, extra: widget.userStory.user?.id),
       child: CircleAvatar(
         minRadius: 22,
         backgroundImage:

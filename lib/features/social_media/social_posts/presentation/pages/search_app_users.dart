@@ -126,8 +126,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: InkWell(
-                onTap: () =>
-                    context.pushNamed(Routes.OTHERSACCOUNT, extra: item.id),
+                onTap: () => context.push(Routes.OTHERSACCOUNT, extra: item.id),
                 child: Row(
                   children: [
                     UserProfileImage(

@@ -67,7 +67,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                           GestureDetector(
                             onTap: () {
                               ManageVibration.vibrate();
-                              context.pushNamed(Routes.InstagramSuggestPeople);
+                              context.push(Routes.InstagramSuggestPeople);
                             },
                             child: Label(
                               text: LocaleKeys.viewAll.localize,
@@ -120,8 +120,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                     return InkWell(
                                       onTap: () {
                                         ManageVibration.vibrate();
-                                        context.pushNamed(
-                                            Routes.INSTAGRAMPROFILE,
+                                        context.push(Routes.INSTAGRAMPROFILE,
                                             extra: controller
                                                 .suggestUserPagingController
                                                 .itemList?[index]

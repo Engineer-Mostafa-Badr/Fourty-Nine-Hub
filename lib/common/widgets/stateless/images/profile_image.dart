@@ -44,7 +44,7 @@ class ProfileImage extends StatelessWidget {
                   userId: userId,
                 );
           }
-          context.pushNamed(Routes.OTHERSACCOUNT, extra: userId);
+          context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
       },
       child: ImageFromInternet(

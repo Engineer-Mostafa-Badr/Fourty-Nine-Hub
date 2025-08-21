@@ -141,7 +141,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
               onPressed: () {
                 ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
-                  context.pushNamed(Routes.FOODCART);
+                  context.push(Routes.FOODCART);
                 } else {
                   return pleaseLoginDialog(context);
 
@@ -160,7 +160,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                   //       textColor: Colors.white,
                   //       onPressed: () {
                   ManageVibration.vibrate();
-                  //        // context.pushNamed(Routes.LOGIN);
+                  //        // context.push(Routes.LOGIN);
                   //       },
                   //     ),
                   //   ),

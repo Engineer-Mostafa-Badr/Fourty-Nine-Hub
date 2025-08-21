@@ -278,13 +278,13 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
               onPressed: () {
                 ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
-                  context.pushNamed(Routes.CREATEAD,
+                  context.push(Routes.CREATEAD,
                       extra: CategorizationEntity(
                           mainCategory: widget.params.mainCategory,
                           subCategory: widget.params.subCategory));
                 } else {
                   return pleaseLoginDialog(context);
-                  // context.pushNamed(Routes.LOGIN);
+                  // context.push(Routes.LOGIN);
                 }
               },
               iconSize: 18,
@@ -300,14 +300,14 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       onPressed: () {
         ManageVibration.vibrate();
         if (context.isUserLoggedIn) {
-          context.pushNamed(Routes.CREATEAD,
+          context.push(Routes.CREATEAD,
               extra: CategorizationEntity(
                   mainCategory: widget.params.mainCategory,
                   subCategory: widget.params.subCategory));
         } else {
           return pleaseLoginDialog(context);
 
-          // context.pushNamed(Routes.LOGIN);
+          // context.push(Routes.LOGIN);
         }
       },
       backgroundColor: AppColors.getButtonPrimaryColor(context),

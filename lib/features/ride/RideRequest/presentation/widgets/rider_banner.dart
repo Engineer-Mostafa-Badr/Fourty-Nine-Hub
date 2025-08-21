@@ -61,7 +61,7 @@ class _RiderBannerState extends State<RiderBanner> {
           );
         } else {
           return pleaseLoginDialog(context);
-          // context.pushNamed(Routes.REGISTER);
+          // context.push(Routes.REGISTER);
         }
       },
       child: MainCategoryBanner(

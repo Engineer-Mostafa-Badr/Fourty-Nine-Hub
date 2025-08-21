@@ -55,7 +55,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
                   });
                   await widget.chatRoomCubit.pickDocuments();
                   if (widget.chatRoomCubit.media.isNotEmpty) {
-                    context.pushNamed(Routes.ONETIMEDOCUMENTMESSAGE,
+                    context.push(Routes.ONETIMEDOCUMENTMESSAGE,
                         extra: OneTimeDocumentMessageViewParams(
                           chatRoomCubit: widget.chatRoomCubit,
                         ));
@@ -72,7 +72,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
                 icon: Icons.camera_alt,
                 onTap: () async {
                   manageVibration.ManageVibration.vibrate();
-                  context.pushNamed(Routes.CHATROOMCAMERAPICKER,
+                  context.push(Routes.CHATROOMCAMERAPICKER,
                       extra: CameraPickerViewPrams(
                         chatRoomCubit: widget.chatRoomCubit,
                       ));
@@ -84,7 +84,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
                   onTap: () async {
                     manageVibration.ManageVibration.vibrate();
                     await widget.chatRoomCubit.pickMedia();
-                    context.pushNamed(
+                    context.push(
                       Routes.MEDIASLIDER,
                       extra: widget.chatRoomCubit,
                     );
@@ -123,7 +123,7 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
                   icon: Icons.person,
                   onTap: () {
                     manageVibration.ManageVibration.vibrate();
-                    context.pushNamed(
+                    context.push(
                       Routes.SELECTCONTACTSTOSHARE,
                       extra: widget.chatRoomCubit,
                     );

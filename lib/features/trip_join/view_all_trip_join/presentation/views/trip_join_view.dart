@@ -187,11 +187,11 @@ class _TripJoinViewState extends State<TripJoinView>
             //     onTap: () {
             //       switch (selectedIndex) {
             //         case 0:
-            //           context.pushNamed(Routes.captainShareInfoScreen);
+            //           context.push(Routes.captainShareInfoScreen);
             //         case 1:
-            //           context.pushNamed(Routes.tripJoinInfoScreen);
+            //           context.push(Routes.tripJoinInfoScreen);
             //         case 2:
-            //           context.pushNamed(Routes.pickMeInfoScreen);
+            //           context.push(Routes.pickMeInfoScreen);
             //
             //         default:
             //           () {};
@@ -226,11 +226,11 @@ class _TripJoinViewState extends State<TripJoinView>
                           ManageVibration.vibrate();
                           switch (selectedIndex) {
                             case 0:
-                              context.pushNamed(Routes.captainShareInfoScreen);
+                              context.push(Routes.captainShareInfoScreen);
                             case 1:
-                              context.pushNamed(Routes.tripJoinInfoScreen);
+                              context.push(Routes.tripJoinInfoScreen);
                             case 2:
-                              context.pushNamed(Routes.pickMeInfoScreen);
+                              context.push(Routes.pickMeInfoScreen);
 
                             default:
                               () {};
@@ -291,7 +291,7 @@ class _TripJoinViewState extends State<TripJoinView>
           title: LocaleKeys.createRoute.localize,
           onTap: () {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.newRouteScreen);
+            context.push(Routes.newRouteScreen);
           },
         );
       case 1:
@@ -301,7 +301,7 @@ class _TripJoinViewState extends State<TripJoinView>
             title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.TRIP_JOIN);
+              context.push(Routes.TRIP_JOIN);
             },
           ),
         );
@@ -312,7 +312,7 @@ class _TripJoinViewState extends State<TripJoinView>
             title: context.isArabic ? "انشر رحلتك" : "Post your ride",
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.AddNewPickMe);
+              context.push(Routes.AddNewPickMe);
             },
           ),
         );

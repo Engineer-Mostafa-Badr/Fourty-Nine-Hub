@@ -23,7 +23,7 @@ class RouteButtonWidget extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.captainShareInfoScreen);
+              context.push(Routes.captainShareInfoScreen);
             },
             child: Container(
               height: 50.h,
@@ -44,7 +44,7 @@ class RouteButtonWidget extends StatelessWidget {
         GestureDetector(
           onTap: () {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.newRouteScreen);
+            context.push(Routes.newRouteScreen);
           },
           child: Container(
             width: 344.w,

@@ -20,7 +20,7 @@ class TripJoinSliders extends StatelessWidget {
       ClickableWidget(
         onTap: () {
           ManageVibration.vibrate();
-          context.pushNamed(Routes.captainShareScreen);
+          context.push(Routes.captainShareScreen);
         },
         child: ListView(
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ class TripJoinSliders extends StatelessWidget {
       ClickableWidget(
         onTap: () {
           ManageVibration.vibrate();
-          context.pushNamed(Routes.AVAILABLE_TRIPS);
+          context.push(Routes.AVAILABLE_TRIPS);
         },
         child: ListView(
           // crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class TripJoinSliders extends StatelessWidget {
       ClickableWidget(
         onTap: () {
           ManageVibration.vibrate();
-          context.pushNamed(Routes.All_PickMe_View);
+          context.push(Routes.All_PickMe_View);
         },
         child: ListView(
           // crossAxisAlignment: CrossAxisAlignment.start,

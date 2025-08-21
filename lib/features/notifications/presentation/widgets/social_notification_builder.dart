@@ -105,10 +105,10 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
                               .then((value) {
                             if (notificationEntity.path ==
                                 "/SinglePostInstagram") {
-                              context.pushNamed(notificationEntity.path ?? '',
+                              context.push(notificationEntity.path ?? '',
                                   extra: notificationEntity.payload!['postId']);
                             } else {
-                              context.pushNamed(notificationEntity.path ?? '',
+                              context.push(notificationEntity.path ?? '',
                                   extra: notificationEntity.payload);
                             }
                           }),

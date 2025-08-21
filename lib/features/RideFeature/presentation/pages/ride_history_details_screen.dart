@@ -136,7 +136,7 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: GestureDetector(
                           onTap: () {
-                            context.pushNamed(Routes.TripReceiptScreen,
+                            context.push(Routes.TripReceiptScreen,
                                 extra: TripReceiptScreenParams(
                                   rideCubit: serviceLocator<RideCubit>(),
                                   historyTripEntity:

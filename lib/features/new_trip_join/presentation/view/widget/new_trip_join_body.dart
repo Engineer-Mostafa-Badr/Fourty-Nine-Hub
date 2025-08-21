@@ -24,7 +24,7 @@ class NewTripJoinBody extends StatelessWidget {
                 title: context.isArabic ? 'مشاركة كابتن' : 'Captain Share',
                 onTap: () {
                   ManageVibration.vibrate();
-                  context.pushNamed(Routes.captainShareScreen);
+                  context.push(Routes.captainShareScreen);
                 },
               ),
               TripOptionWidget(

@@ -52,7 +52,7 @@ class RequestButton extends StatelessWidget {
                 context.pop();
                 return pleaseLoginDialog(context);
 
-                // context.pushNamed(Routes.LOGIN);
+                // context.push(Routes.LOGIN);
               }
             // : subscriptionStatus == 'not subscribed'
             //     ? null
@@ -142,7 +142,7 @@ class RequestButton extends StatelessWidget {
       //   onTap: !context.read<UserCubit>().isLoggedIn
       //       ? () {
       //           context.pop();
-      //           context.pushNamed(Routes.LOGIN);
+      //           context.push(Routes.LOGIN);
       //         }
       //       : subscriptionStatus == 'premium'
       //           ? null

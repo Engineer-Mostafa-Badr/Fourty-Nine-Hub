@@ -522,7 +522,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                   : "Advertise your car",
                               onTap: () {
                                 ManageVibration.vibrate();
-                                context.pushNamed(Routes.TRIP_JOIN);
+                                context.push(Routes.TRIP_JOIN);
                               },
                             ),
                           ),

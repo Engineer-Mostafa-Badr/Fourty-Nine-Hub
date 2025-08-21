@@ -95,7 +95,7 @@ class _BuildFacebookSuggestPeopleState
                   ),
                   ClickableWidget(
                     onTap: () {
-                      context.pushNamed(Routes.FacebookSuggestPeople);
+                      context.push(Routes.FacebookSuggestPeople);
                     },
                     child: Text(
                       context.locale == Locales.english
@@ -124,7 +124,7 @@ class _BuildFacebookSuggestPeopleState
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
-                                context.pushNamed(Routes.OTHERSACCOUNT,
+                                context.push(Routes.OTHERSACCOUNT,
                                     extra: widget.suggestedFriends[index].id);
                               },
                               child: Container(

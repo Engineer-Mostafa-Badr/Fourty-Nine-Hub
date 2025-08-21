@@ -198,12 +198,12 @@ class _ItemCardState extends State<ItemCard> {
                               //       textColor: Colors.white,
                               //       onPressed: () {
                               ManageVibration.vibrate();
-                              //        // context.pushNamed(Routes.LOGIN);
+                              //        // context.push(Routes.LOGIN);
                               //       },
                               //     ),
                               //   ),
                               // );
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                           child: Container(

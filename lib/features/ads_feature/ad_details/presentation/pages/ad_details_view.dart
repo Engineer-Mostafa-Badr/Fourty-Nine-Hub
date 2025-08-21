@@ -348,7 +348,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             backColor: AppColors.c0B1035,
             onPressed: () async {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.ADRequests,
+              context.push(Routes.ADRequests,
                   extra: AdRequestParams(id: widget.id, userName: ''));
             },
             label: LocaleKeys.showAdRequests.localize,

@@ -87,7 +87,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                               controller.buyWithInstallment(
                                   installmentId: widget.installmentId);
                             } else {
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                               return pleaseLoginDialog(context);
                             }
                           }),

@@ -25,7 +25,7 @@ notificationSnackBar({
     GestureDetector(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(notificationEntity.path ?? '',
+        context.push(notificationEntity.path ?? '',
             extra: notificationEntity.payload);
       },
       child: CustomSnackBar.error(

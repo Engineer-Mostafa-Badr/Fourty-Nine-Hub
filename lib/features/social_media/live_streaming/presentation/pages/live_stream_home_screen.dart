@@ -121,7 +121,7 @@ await context
                 .read<StreamCubit>()
                 .createLive(title: 'Mo Salama Mo Salama');
             if (context.mounted) {
-              context.pushNamed(
+              context.push(
               Routes.LIVEView,
                   extra: ZegoArgs(
                       context

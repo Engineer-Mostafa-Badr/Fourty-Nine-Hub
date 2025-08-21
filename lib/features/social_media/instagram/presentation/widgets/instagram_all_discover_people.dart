@@ -100,8 +100,7 @@ class _InstagramAllDiscoverPeopleState
                       return GestureDetector(
                         onTap: () {
                           ManageVibration.vibrate();
-                          context.pushNamed(Routes.OTHERSACCOUNT,
-                              extra: user.id);
+                          context.push(Routes.OTHERSACCOUNT, extra: user.id);
                         },
                         child: Container(
                           margin: EdgeInsetsDirectional.all(5.w),

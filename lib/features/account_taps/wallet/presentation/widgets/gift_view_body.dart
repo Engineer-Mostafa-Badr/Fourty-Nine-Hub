@@ -60,7 +60,7 @@ class GiftViewBody extends StatelessWidget {
                       onPressed: () {
                         ManageVibration.vibrate();
                         HandleCashback.setCount('tenPercentCount', context);
-                        context.pushNamed(Routes.TenPercent);
+                        context.push(Routes.TenPercent);
                       },
                       status: true,
                     ),

@@ -104,7 +104,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                   setState(() {
                     _selectedIndex = 0;
                   });
-                  context.pushNamed(Routes.SPOTLIGHT);
+                  context.push(Routes.SPOTLIGHT);
                 }),
                 SizedBox(width: 16),
                 // Following Tab
@@ -129,7 +129,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                   setState(() {
                     _selectedIndex = 1;
                   });
-                  context.pushNamed(Routes.SNAP);
+                  context.push(Routes.SNAP);
                 }),
                 SizedBox(width: 16),
                 // For You Tab with rounded underline
@@ -167,7 +167,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 showTiktokOption(context, generateRandom9DigitNumber);
               } else {
                 return pleaseLoginDialog(context);
-                // context.pushNamed(Routes.LOGIN);
+                // context.push(Routes.LOGIN);
               }
             }, onBackTap: () {
               context.pop();

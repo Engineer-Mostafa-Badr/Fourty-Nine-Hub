@@ -174,7 +174,7 @@ class WalletView extends StatelessWidget {
     //               // MaterialButton(
     //               //   onPressed: () async {
     //               //     if (await LocalAuth().checkBiometrics()) {
-    //               //       context.pushNamed(Routes.TRANSFERMONEY);
+    //               //       context.push(Routes.TRANSFERMONEY);
     //               //     }
     //               //   },
     //               //   color: Colors.red,

@@ -991,7 +991,7 @@ class MessageCard extends StatelessWidget {
                                             .getOneTimeViewMessage(
                                           message: messageEntity,
                                         );
-                                        context.pushNamed(
+                                        context.push(
                                           Routes.IMAGESPAGEVIEW,
                                           extra: ImagesPageViewParams(
                                             messageEntity: messageEntity,
@@ -1006,7 +1006,7 @@ class MessageCard extends StatelessWidget {
                                             .getOneTimeViewMessage(
                                           message: messageEntity,
                                         );
-                                        context.pushNamed(
+                                        context.push(
                                           Routes.ONETIMEVOICEMESSAGE,
                                           extra: messageEntity,
                                         );
@@ -2126,7 +2126,7 @@ class FourOrMoreMediaCard extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.SHOWIMAGEVIEW, extra: messageEntity);
+                context.push(Routes.SHOWIMAGEVIEW, extra: messageEntity);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -2306,7 +2306,7 @@ class CustomVideoCard extends StatelessWidget {
           return InkWell(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(
+              context.push(
                 Routes.IMAGESPAGEVIEW,
                 extra: ImagesPageViewParams(
                   messageEntity: messageEntity,
@@ -2382,7 +2382,7 @@ class _CustomChachedNetworkImageState extends State<CustomChachedNetworkImage> {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(
+        context.push(
           Routes.IMAGESPAGEVIEW,
           extra: ImagesPageViewParams(
             messageEntity: widget.messageEntity,

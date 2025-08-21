@@ -113,7 +113,7 @@ class TruckVehicleInformationScreen extends StatelessWidget {
           ),
           RegisterNextRow(
             index: 4,
-            onTap: () => context.pushNamed(Routes.truckMoreInfoScreen),
+            onTap: () => context.push(Routes.truckMoreInfoScreen),
           ),
         ],
       ),

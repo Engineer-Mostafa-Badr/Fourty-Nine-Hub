@@ -78,7 +78,7 @@ class _ImageValidationState extends State<ImageValidation> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 } else {
                   var pickedFlie = await ImagePicker()

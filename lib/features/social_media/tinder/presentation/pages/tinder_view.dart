@@ -111,7 +111,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
               ],
             ),
             title: ClickableWidget(
-                onTap: () => context.pushNamed(Routes.FindMyProfileScreen),
+                onTap: () => context.push(Routes.FindMyProfileScreen),
                 child: Image.asset(
                   Assets.male_profile,
                   width: 70.w,

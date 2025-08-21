@@ -185,7 +185,7 @@ class BottomItemModel {
   });
 
   void action(BuildContext context) {
-    context.pushNamed(route, extra: extra);
+    context.push(route, extra: extra);
   }
 }
 

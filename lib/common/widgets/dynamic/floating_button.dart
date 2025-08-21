@@ -60,7 +60,7 @@ class FloatingButton extends StatelessWidget {
                       Routes.PAGEPREVIEW,
                     );
                   } else {
-                    context.pushNamed(Routes.HOME);
+                    context.push(Routes.HOME);
                   }
                 }
               },

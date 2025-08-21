@@ -66,12 +66,12 @@ class _ShippingBannerState extends State<ShippingBanner> {
       },
       onRegister: () {
         if (context.read<UserCubit>().isLoggedIn) {
-          context.pushNamed(Routes.SHIPPING_REGISTER);
+          context.push(Routes.SHIPPING_REGISTER);
         } else {
           return pleaseLoginDialog(context);
 
-          // context.pushNamed(Routes.SHIPPING_REGISTER);
-          // context.pushNamed(Routes.LOGIN);
+          // context.push(Routes.SHIPPING_REGISTER);
+          // context.push(Routes.LOGIN);
         }
       },
       // canRegister: true,
@@ -130,10 +130,10 @@ class _ShippingBannerState extends State<ShippingBanner> {
     //         onTap: () {
     ManageVibration.vibrate();
     // if (context.read<UserCubit>().isLoggedIn) {
-    //   context.pushNamed(Routes.SHIPPING_REGISTER);
+    //   context.push(Routes.SHIPPING_REGISTER);
     // } else {
-    //   context.pushNamed(Routes.SHIPPING_REGISTER);
-    //   // context.pushNamed(Routes.LOGIN);
+    //   context.push(Routes.SHIPPING_REGISTER);
+    //   // context.push(Routes.LOGIN);
     // }
     //         },
     //         child: Text(

@@ -195,7 +195,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
                       label: LocaleKeys.transferMoney.localize,
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.pushNamed(Routes.TRANSFERMONEY);
+                        context.push(Routes.TRANSFERMONEY);
                       },
                     ),
                   ),

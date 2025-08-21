@@ -94,7 +94,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
                           return pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : snap.data == true
                           ? () {
@@ -260,7 +260,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
                           return pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : snap.data == true
                           ? () async {
@@ -270,7 +270,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                                     otherId: widget.otherUserId,
                                     categoryId: widget.subcategoryId,
                                   );
-                              context.pushNamed(
+                              context.push(
                                 Routes.CHAT,
                                 extra: ChatsViewParams(
                                   isFromStartChat: true,
@@ -294,7 +294,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
                           return pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : () {
                           bottomSheet(

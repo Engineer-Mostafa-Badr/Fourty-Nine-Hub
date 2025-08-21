@@ -69,13 +69,13 @@ class AnnounceWidget extends StatelessWidget {
             print(item.titleEn);
             if (UserCubit.to.isLoggedIn == false) {
               return pleaseLoginDialog(context);
-              // context.pushNamed(Routes.LOGIN);
+              // context.push(Routes.LOGIN);
               // return;
             }
             if (item.id == '67700fc734004152c40f8b71') {
-              context.pushNamed(Routes.GIFT);
+              context.push(Routes.GIFT);
             } else if (item.id == '6770102e34004152c40f8b9a') {
-              context.pushNamed(Routes.CASHBACK);
+              context.push(Routes.CASHBACK);
             } else if (item.id == '67700f4934004152c40f8b48') {
               Navigator.push(
                 context,
@@ -96,7 +96,7 @@ class AnnounceWidget extends StatelessWidget {
               // ),
               // );
             }
-            // context.pushNamed(Routes.GIFT);
+            // context.push(Routes.GIFT);
           },
           child: Stack(
             children: [

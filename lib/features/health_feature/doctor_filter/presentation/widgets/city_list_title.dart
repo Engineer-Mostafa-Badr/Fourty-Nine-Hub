@@ -29,7 +29,7 @@ class CityListTitle extends StatelessWidget {
         ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
 
-        context.pushNamed(Routes.VISITADOCTORLIST,
+        context.push(Routes.VISITADOCTORLIST,
             extra: DoctorsListParams(
                 fromHome: false, subCategoryId: '', type: type));
       },

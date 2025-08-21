@@ -20,7 +20,7 @@ class TripJoinInfoScreen extends StatelessWidget {
       floatingActionButton: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
-          context.pushNamed(Routes.AVAILABLE_TRIPS);
+          context.push(Routes.AVAILABLE_TRIPS);
         },
         child: Container(
           width: 300.w,

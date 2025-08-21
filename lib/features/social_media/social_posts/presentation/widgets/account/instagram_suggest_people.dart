@@ -86,7 +86,7 @@ class _InstagramProfileSuggestPeopleState
                     //                   .itemList![index];
                     //               return InkWell(
                     //                 onTap: () {
-                    //                   context.pushNamed(Routes.OTHERSACCOUNT,
+                    //                   context.push(Routes.OTHERSACCOUNT,
                     //                       extra: controller
                     //                           .suggestUserPagingController
                     //                           .itemList?[index]

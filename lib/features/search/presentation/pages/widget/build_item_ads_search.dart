@@ -63,8 +63,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
             splashColor: Colors.transparent,
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: () =>
-                context.pushNamed(Routes.ADdetails, extra: widget.item.id),
+            onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
             child: IntrinsicHeight(
               child: Container(
                 // width: kToolbarHeight * 2.5,
@@ -297,7 +296,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                               if (index == 3)
                                 Positioned.fill(
                                     child: InkWell(
-                                  onTap: () => context.pushNamed(Routes.ADdetails,
+                                  onTap: () => context.push(Routes.ADdetails,
                                       extra: widget.item.id),
                                   child: Container(
                                     color: Colors.black.withOpacity(0.8),
@@ -358,7 +357,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: () => context.pushNamed(Routes.ADdetails,
+                        onTap: () => context.push(Routes.ADdetails,
                             extra: widget.item.id),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -564,7 +563,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
               onPressed: () async {
                 if (!context.read<UserCubit>().isLoggedIn) {
                   return pleaseLoginDialog(context);
-                  // context.pushNamed(Routes.LOGIN);
+                  // context.push(Routes.LOGIN);
                 } else {
                   bottomSheet(
                     context: context,

@@ -67,7 +67,7 @@ class _MapSectionState extends State<MapSection> {
             onPressed: () {
               ManageVibration.vibrate();
               if (context.read<UserCubit>().isLoggedIn) {
-                context.pushNamed(Routes.rideModeScreen,
+                context.push(Routes.rideModeScreen,
                     extra: const RideModeParams(modeType: 'truk'));
               } else {
                 return pleaseLoginDialog(context);
@@ -83,7 +83,7 @@ class _MapSectionState extends State<MapSection> {
               //               label: LocaleKeys.ride.tr(),
               //               onPressed: () {
               ManageVibration.vibrate();
-              //                 context.pushNamed(Routes.welcomeRideRegister);
+              //                 context.push(Routes.welcomeRideRegister);
               //               },
               //               backColor: AppColors.PRIMARY_COLOR,
               //               width: double.infinity),

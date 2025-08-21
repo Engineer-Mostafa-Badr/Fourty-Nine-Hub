@@ -152,7 +152,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 .isAdmin ==
                                             "admin"
                                         ? null
-                                        : () => context.pushNamed(
+                                        : () => context.push(
                                               Routes.VIEWCONTACT,
                                               extra: chatsCubit,
                                             ),
@@ -600,12 +600,11 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                           offset: const Offset(0, 50),
                                           onSelected: (int value) async {
                                             if (value == 0) {
-                                              context.pushNamed(
-                                                  Routes.VIEWCONTACT,
+                                              context.push(Routes.VIEWCONTACT,
                                                   extra: chatsCubit);
                                             }
                                             if (value == 1) {
-                                              context.pushNamed(
+                                              context.push(
                                                 Routes.ATTACHMENTSVIEW,
                                                 extra: widget.chatRoomCubit,
                                               );
@@ -689,7 +688,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                     IconButton(
                                       onPressed: () async {
                                         ManageVibration.vibrate();
-                                        context.pushNamed(
+                                        context.push(
                                           Routes.FORWARDMESSAGES,
                                           extra: ForwardMessagesViewParams(
                                             chatRoomCubit: widget.chatRoomCubit,

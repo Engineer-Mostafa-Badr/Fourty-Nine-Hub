@@ -162,10 +162,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                   print('category.id ${category.id}');
                   print('category $category');
                   if (category.id == '62c8b5b09332225799fe335e') {
-                    context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
-                        extra: category);
+                    context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
                   } else {
-                    context.pushNamed(
+                    context.push(
                       Routes.CustomPageSubCategoriesView,
                       extra: CustomPageSubCategoriesParams(
                           mainCategory: category, isCustomPage: true),
@@ -717,9 +716,9 @@ class _MainCategoriesListViewState extends State<MainCategoriesListView> {
             print('category.id ${category.id}');
             print('category $category');
             if (category.id == '62c8b5b09332225799fe335e') {
-              context.pushNamed(Routes.MARRIAGESUBCATEGORIES, extra: category);
+              context.push(Routes.MARRIAGESUBCATEGORIES, extra: category);
             } else {
-              context.pushNamed(
+              context.push(
                 Routes.CustomPageSubCategoriesView,
                 extra: CustomPageSubCategoriesParams(
                     mainCategory: category, isCustomPage: true),

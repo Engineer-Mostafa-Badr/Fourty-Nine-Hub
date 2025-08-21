@@ -335,7 +335,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
         color: AppColors.getRedColor(context),
         onPressed: () {
           ManageVibration.vibrate();
-          context.pushNamed(Routes.RESTAURANTDETAILS, extra: item);
+          context.push(Routes.RESTAURANTDETAILS, extra: item);
         },
       ),
     );
@@ -562,7 +562,7 @@ class SubCategoriesRestaurantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.pushNamed(Routes.RESTAURANTDETAILS, extra: item),
+      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
       child: isVertical
           ? VerticalRestaurantCard(
               item: item,
@@ -716,7 +716,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                     //       label: LocaleKeys.login.localize,
                     //       textColor: Colors.white,
                     //       onPressed: () {
-                    //         // context.pushNamed(Routes.LOGIN);
+                    //         // context.push(Routes.LOGIN);
                     //       },
                     //     ),
                     //   ),
@@ -820,7 +820,7 @@ class _CallMessageReportButtonsState extends State<CallMessageReportButtons> {
                     //       label: LocaleKeys.login.localize,
                     //       textColor: Colors.white,
                     //       onPressed: () {
-                    //         // context.pushNamed(Routes.LOGIN);
+                    //         // context.push(Routes.LOGIN);
                     //       },
                     //     ),
                     //   ),

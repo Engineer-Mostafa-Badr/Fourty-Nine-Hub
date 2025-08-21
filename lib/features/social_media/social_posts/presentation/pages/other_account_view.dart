@@ -223,7 +223,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 } else {
                                   return pleaseLoginDialog(context);
 
-                                  // context.pushNamed(Routes.LOGIN);
+                                  // context.push(Routes.LOGIN);
                                 }
                               },
                               onAddFriend: () async {
@@ -257,7 +257,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 } else {
                                   return pleaseLoginDialog(context);
 
-                                  // context.pushNamed(Routes.LOGIN);
+                                  // context.push(Routes.LOGIN);
                                 }
                               },
                               onAcceptFriend: () async {
@@ -295,7 +295,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 return result;
                               },
                               editProfile: () async {
-                                await context.pushNamed(Routes.EDITPROFILE);
+                                await context.push(Routes.EDITPROFILE);
                                 controller.getUserProfile(id: widget.userId);
                               },
                               selectImageGallary: () {
@@ -382,7 +382,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 label: LocaleKeys.editProfile.localize,
                                 onPressed: () async {
                                   ManageVibration.vibrate();
-                                  await context.pushNamed(Routes.EDITPROFILE);
+                                  await context.push(Routes.EDITPROFILE);
                                   controller.getUserProfile(id: widget.userId);
                                 },
                                 color: Colors.white,
@@ -911,7 +911,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //                 categoryId: ChatCategoriesIds.social,
                     //               );
                     //           context.pop();
-                    //           context.pushNamed(
+                    //           context.push(
                     //             Routes.CHAT,
                     //             extra: ChatsViewParams(
                     //               isFromStartChat: true,
@@ -927,7 +927,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //                 categoryId: ChatCategoriesIds.greet,
                     //               );
                     //           context.pop();
-                    //           context.pushNamed(
+                    //           context.push(
                     //             Routes.CHAT,
                     //             extra: ChatsViewParams(
                     //               isFromStartChat: true,
@@ -939,7 +939,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //       } else {
                     //         return pleaseLoginDialog(context);
                     //
-                    //         // context.pushNamed(Routes.LOGIN);
+                    //         // context.push(Routes.LOGIN);
                     //       }
                     //     },
                     //     anonymousPress: () async {
@@ -950,7 +950,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //               otherId: widget.userId,
                     //             );
                     //         context.pop();
-                    //         context.pushNamed(
+                    //         context.push(
                     //           Routes.CHAT,
                     //           extra: ChatsViewParams(
                     //             isFromStartChat: true,
@@ -961,7 +961,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     //       } else {
                     //         return pleaseLoginDialog(context);
                     //
-                    //         // context.pushNamed(Routes.LOGIN);
+                    //         // context.push(Routes.LOGIN);
                     //       }
                     //     },
                     //   ),

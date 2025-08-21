@@ -82,7 +82,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                   text: currentAddress,
                   onPressed: () async {
                     ManageVibration.vibrate();
-                    context.pushNamed(
+                    context.push(
                       Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                       extra: RideOpenStreetMapSearchAndPickParams(
                         onPicked: (pickedData) async {
@@ -109,7 +109,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                   text: toAddress,
                   onPressed: () async {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                    context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                         extra: RideOpenStreetMapSearchAndPickParams(
                       onPicked: (pickedData) async {
                         toAddress = pickedData.addressName;

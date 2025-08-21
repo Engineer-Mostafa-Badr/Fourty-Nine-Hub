@@ -195,7 +195,7 @@ class _ChangePasswordSecondViewBodyState
                               return;
                             }
                             forgotPasswordCubit.changePassword(context);
-                            // context.pushNamed(Routes.VERIFICATION);
+                            // context.push(Routes.VERIFICATION);
                           },
                         );
                       },

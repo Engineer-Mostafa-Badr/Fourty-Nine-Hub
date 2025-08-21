@@ -241,7 +241,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                   } else {
                                     return pleaseLoginDialog(context);
 
-                                    // context.pushNamed(Routes.LOGIN);
+                                    // context.push(Routes.LOGIN);
                                   }
 
                                   setState(() {});
@@ -279,7 +279,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                     date = pickedDate;
                                   } else {
                                     return pleaseLoginDialog(context);
-                                    // context.pushNamed(Routes.LOGIN);
+                                    // context.push(Routes.LOGIN);
                                   }
 
                                   setState(() {});
@@ -324,7 +324,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             if (!context.isUserLoggedIn) {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                           focusNode: decorationFocusNode,
@@ -490,7 +490,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                   } else {
                                     return pleaseLoginDialog(context);
 
-                                    // context.pushNamed(Routes.LOGIN);
+                                    // context.push(Routes.LOGIN);
                                   }
                                 },
                               ),

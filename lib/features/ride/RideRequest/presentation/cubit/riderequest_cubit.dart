@@ -68,9 +68,9 @@ class RiderequestCubit extends Cubit<RiderequestState> {
 
       if (service == RideServicesEnum.pickMe ||
           service == RideServicesEnum.comeWithYou) {
-        context.pushNamed(Routes.MYADDS);
+        context.push(Routes.MYADDS);
       } else {
-        context.pushNamed(Routes.TRIPDETAILS);
+        context.push(Routes.TRIPDETAILS);
       }
       emit(state.copyWith(status: RideRequestStatusesEnum.requestSent));
     });

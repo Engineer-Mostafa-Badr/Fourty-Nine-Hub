@@ -129,8 +129,7 @@ class TruckWelcomeRideRegister extends StatelessWidget {
             ),
           ),
           RegisterNextRow(
-            onTap: () =>
-                context.pushNamed(Routes.truckPersonalInformationScreen),
+            onTap: () => context.push(Routes.truckPersonalInformationScreen),
           ),
         ],
       ),

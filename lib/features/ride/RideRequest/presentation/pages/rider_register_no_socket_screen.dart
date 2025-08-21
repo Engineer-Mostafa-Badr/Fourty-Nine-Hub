@@ -258,7 +258,7 @@ class _RiderRegisterNoSocketScreenState
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

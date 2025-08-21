@@ -67,7 +67,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               print(serviceLocator<UserCubit>().state.data.toString());
 
               Navigator.pop(context);
-              context.pushNamed(Routes.HOME);
+              context.push(Routes.HOME);
 
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {

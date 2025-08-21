@@ -96,7 +96,7 @@ class TruckDriversLicenseScreen extends StatelessWidget {
           ),
           RegisterNextRow(
             index: 2,
-            onTap: () => context.pushNamed(Routes.truckPersonalDocumentsScreen),
+            onTap: () => context.push(Routes.truckPersonalDocumentsScreen),
           ),
         ],
       ),

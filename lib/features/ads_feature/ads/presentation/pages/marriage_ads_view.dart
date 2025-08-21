@@ -74,7 +74,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   //   if (_isFilterApplied) return; // Prevent duplicate execution
   //   _isFilterApplied = true;
   //
-  //   dynamic data = await context.pushNamed(
+  //   dynamic data = await context.push(
   //     Routes.GOVERNORATEFILTERADS,
   //     extra: CategorizationEntity(
   //       mainCategory: controller.state.mainCategory!,
@@ -130,7 +130,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                       onPressed: () {
                         ManageVibration.vibrate();
                         if (AuthHelper().isLoggedIn()) {
-                          context.pushNamed(
+                          context.push(
                             Routes.CREATEAD,
                             extra: CategorizationEntity(
                               mainCategory: state.mainCategory!,
@@ -144,7 +144,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                           );
                         } else {
                           return pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       },
                     )),
@@ -162,7 +162,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //     floatingActionButton: CustomFloatingActionButton(
       //       onPressed: () {
       //         if (AuthHelper().isLoggedIn()) {
-      //           context.pushNamed(Routes.CREATEAD,
+      //           context.push(Routes.CREATEAD,
       //               extra: CategorizationEntity(
       //                   mainCategory: state.mainCategory!,
       //                   // mainCategory: widget.mainCategory,
@@ -172,7 +172,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                       0],
       //                   fromMarriage: true));
       //         } else {
-      //           context.pushNamed(Routes.LOGIN);
+      //           context.push(Routes.LOGIN);
       //         }
       //       },
       //       text:
@@ -195,7 +195,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                         icon: Icons.filter_alt_rounded,
       //                         iconLeading: Icons.arrow_drop_down,
       //                         onTap: () async {
-      //                           dynamic data = await context.pushNamed(
+      //                           dynamic data = await context.push(
       //                               Routes.FILTERADS,
       //                               extra: CategorizationEntity(
       //                                 mainCategory: state.mainCategory!,
@@ -227,7 +227,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                             vertical: 15.h, horizontal: 5.w),
       //                         iconLeading: Icons.arrow_drop_down,
       //                         onTap: () async {
-      //                           dynamic data = await context.pushNamed(
+      //                           dynamic data = await context.push(
       //                               Routes.GOVERNORATEFILTERADS,
       //                               extra: CategorizationEntity(
       //                                   mainCategory: state.mainCategory!,
@@ -326,7 +326,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //                     physics: const BouncingScrollPhysics(),
       //                     itemBuilder: (context, index) => ClickableWidget(
       //                           onTap: () {
-      //                             context.pushNamed(Routes.ADdetails,
+      //                             context.push(Routes.ADdetails,
       //                                 extra: state.ads?[index].id);
       //                           },
       //                           child: Container(

@@ -117,7 +117,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     onTap: widget.post.isShared == true
                         ? () {
                             print("objectH");
-                            // context.pushNamed(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
+                            // context.push(Routes.TWITTERPOSTDETAILS,extra: widget.post.mainPost.id);
 
                             bottomSheet(
                                 context: context,
@@ -188,7 +188,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 } else {
                   return pleaseLoginDialog(context);
 
-                  // context.pushNamed(Routes.LOGIN);
+                  // context.push(Routes.LOGIN);
                 }
               },
             ),
@@ -209,7 +209,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 } else {
                   return pleaseLoginDialog(context);
 
-                  // context.pushNamed(Routes.LOGIN);
+                  // context.push(Routes.LOGIN);
                 }
               },
             ),
@@ -227,7 +227,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 iconColor: post.isReact == false ? Colors.grey : Colors.red),

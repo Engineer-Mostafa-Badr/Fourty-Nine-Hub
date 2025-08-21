@@ -90,7 +90,7 @@ class _LifeEventSubCategoriesState extends State<LifeEventSubCategories> {
                           return ClickableWidget(
                             onTap: () {
                               ManageVibration.vibrate();
-                              context.pushNamed(Routes.CREATELIFEEVENT,
+                              context.push(Routes.CREATELIFEEVENT,
                                   extra: selected);
                             },
                             child: Container(

@@ -68,7 +68,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       onTap: () {
                         ManageVibration.vibrate();
                       },
-                      // onTap: () => context.pushNamed(Routes.EDITDOCTORDOCS),
+                      // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
                 ),
@@ -87,7 +87,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                       onTap: () {
                         ManageVibration.vibrate();
                       },
-                      // onTap: () => context.pushNamed(Routes.EDITDOCTORDOCS),
+                      // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
                 ),

@@ -79,7 +79,7 @@ class MusicReels extends StatelessWidget {
 
   Widget _buildReelItem({required BuildContext context}) {
     return InkWell(
-      onTap: () => context.pushNamed(Routes.REELS),
+      onTap: () => context.push(Routes.REELS),
       child: Image.network(UIConst.mrbeast),
     );
   }

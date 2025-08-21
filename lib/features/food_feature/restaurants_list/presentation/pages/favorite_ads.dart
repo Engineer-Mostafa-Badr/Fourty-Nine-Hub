@@ -192,7 +192,7 @@ class FavFoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClickableWidget(
-      onTap: () => context.pushNamed(Routes.RESTAURANTDETAILS, extra: data),
+      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: data),
       child: Container(
         decoration: BoxDecoration(
             border:
@@ -426,10 +426,9 @@ class FavoriteButtonAds extends StatelessWidget {
         color: AppColors.getRedColor(context),
       ),
       onPressed: () async {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         await favouriteRestaurant(item.id!);
       },
     );
   }
 }
-

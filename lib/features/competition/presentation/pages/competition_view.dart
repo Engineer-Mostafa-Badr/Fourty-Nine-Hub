@@ -42,7 +42,7 @@ class CompetitionView extends StatelessWidget {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(Routes.WINNERS);
+        context.push(Routes.WINNERS);
       },
       child: Container(
         margin: const EdgeInsets.all(10),

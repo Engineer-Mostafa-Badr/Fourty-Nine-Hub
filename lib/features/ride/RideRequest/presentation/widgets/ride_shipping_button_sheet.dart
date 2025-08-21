@@ -50,7 +50,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                                 ? "في انتظار الموافقة"
                                 : "Waiting for approve");
                       } else {
-                        context.pushNamed(Routes.SHIPPING_REGISTER);
+                        context.push(Routes.SHIPPING_REGISTER);
                       }
                     },
                     child: Stack(
@@ -126,7 +126,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                           ? "في انتظار الموافقة"
                           : "Waiting for approve");
                 } else {
-                  context.pushNamed(Routes.RIDERREGISTER);
+                  context.push(Routes.RIDERREGISTER);
                 }
               },
               child: Stack(

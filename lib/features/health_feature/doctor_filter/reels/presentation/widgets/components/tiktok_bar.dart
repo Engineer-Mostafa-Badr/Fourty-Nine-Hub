@@ -163,7 +163,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 setState(() {
                   _selectedIndex = 0;
                 });
-                context.pushNamed(Routes.SPOTLIGHT);
+                context.push(Routes.SPOTLIGHT);
               }),
               // Following Tab
               _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
@@ -186,7 +186,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 setState(() {
                   _selectedIndex = 1;
                 });
-                context.pushNamed(Routes.SNAP);
+                context.push(Routes.SNAP);
               }),
 
               // For You Tab with rounded underline
@@ -207,7 +207,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.Tinder);
+              context.push(Routes.Tinder);
             },
             child: const Icon(
               Icons.search,
@@ -248,7 +248,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
-                context.pushNamed(Routes.Tinder);
+                context.push(Routes.Tinder);
               }),
               const Sizer(),
             ],

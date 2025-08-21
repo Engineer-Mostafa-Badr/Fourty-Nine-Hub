@@ -170,7 +170,7 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       ManageVibration.vibrate();
-                                      context.pushNamed(Routes.RideRequestHOME);
+                                      context.push(Routes.RideRequestHOME);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.colorNavy,

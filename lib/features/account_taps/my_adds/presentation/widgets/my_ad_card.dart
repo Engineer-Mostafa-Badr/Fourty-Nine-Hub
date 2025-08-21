@@ -27,7 +27,7 @@ class MyAdCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(Routes.ADdetails, extra: item.id);
+        context.push(Routes.ADdetails, extra: item.id);
       },
       child: Container(
         margin: const EdgeInsets.all(5),

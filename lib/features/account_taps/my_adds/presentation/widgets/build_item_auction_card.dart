@@ -36,7 +36,7 @@ class BuildItemAuctionCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-        context.pushNamed(Routes.ADdetails, extra: item.id);
+        context.push(Routes.ADdetails, extra: item.id);
       },
       child: Container(
         margin: const EdgeInsets.all(5),
@@ -96,7 +96,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                               color: AppColors.AUTH_CONTAINER_COLOR,
                               label: LocaleKeys.edit.localize,
                               onPressed: () {
-                                context.pushNamed(Routes.EDITAD, extra: item);
+                                context.push(Routes.EDITAD, extra: item);
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(

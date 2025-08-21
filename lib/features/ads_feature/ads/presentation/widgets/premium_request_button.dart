@@ -226,7 +226,7 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
           } else {
             return pleaseLoginDialog(context);
 
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           }
         },
       );
@@ -368,7 +368,7 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
       //         );
       //       }
       //     } else {
-      //       context.pushNamed(Routes.LOGIN);
+      //       context.push(Routes.LOGIN);
       //     }
       //   },
       // );

@@ -51,7 +51,7 @@ class CustomBottomSheetPhoneIsRequired extends StatelessWidget {
                 onPressed: () {
                   ManageVibration.vibrate();
                   Navigator.pop(context);
-                  context.pushNamed(Routes.EDITPROFILE);
+                  context.push(Routes.EDITPROFILE);
                 },
               ),
             ),

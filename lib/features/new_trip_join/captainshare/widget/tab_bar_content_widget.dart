@@ -237,7 +237,7 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          context.pushNamed(Routes.captainShareInfoScreen);
+                          context.push(Routes.captainShareInfoScreen);
                         },
                         child: Container(
                           height: 48.h,
@@ -390,7 +390,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
-                          context.pushNamed(Routes.newRouteScreen);
+                          context.push(Routes.newRouteScreen);
                         },
                       ),
                     ],
@@ -524,7 +524,7 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                           TripJoinFloatingActionButton(
                             title: LocaleKeys.createRoute.localize,
                             onTap: () {
-                              context.pushNamed(Routes.newRouteScreen);
+                              context.push(Routes.newRouteScreen);
                             },
                           ),
                         ],
@@ -669,7 +669,7 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
                       TripJoinFloatingActionButton(
                         title: LocaleKeys.createRoute.localize,
                         onTap: () {
-                          context.pushNamed(Routes.newRouteScreen);
+                          context.push(Routes.newRouteScreen);
                         },
                       ),
                     ],

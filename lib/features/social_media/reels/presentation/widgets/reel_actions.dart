@@ -72,7 +72,7 @@ class ReelActions extends StatelessWidget {
         InkWell(
           onTap: () {
             ManageVibration.vibrate();
-            context.pushNamed(Routes.MUSICREELS);
+            context.push(Routes.MUSICREELS);
           },
           child: CircleAvatar(
             backgroundColor: Colors.blueGrey,

@@ -134,7 +134,7 @@ class OfferRideCardWidget extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  context.pushNamed(Routes.TripRideRating,
+                                  context.push(Routes.TripRideRating,
                                       extra: ReviewRideTripModel(
                                         comments:
                                             model.driverId?.review?.comments ??

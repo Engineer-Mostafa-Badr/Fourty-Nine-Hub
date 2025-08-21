@@ -105,7 +105,7 @@ class TiktokOptionBottomSheetWidget extends StatelessWidget {
             onTap: () async {
               ManageVibration.vibrate();
               Navigator.pop(context);
-              context.pushNamed(
+              context.push(
                 Routes.LIVEView,
                 extra: ZegoArgs(
                   randomNumber.toString(),
@@ -120,7 +120,7 @@ class TiktokOptionBottomSheetWidget extends StatelessWidget {
               //       context: context,
               //     );
               // if (result == true && context.mounted) {
-              //   context.pushNamed(
+              //   context.push(
               //     Routes.LIVEView,
               //     extra: ZegoArgs(
               //       context
@@ -156,7 +156,7 @@ class TiktokOptionBottomSheetWidget extends StatelessWidget {
             onTap: () {
               ManageVibration.vibrate();
               context.pop();
-              context.pushNamed(Routes.LIVE);
+              context.push(Routes.LIVE);
             },
           ),
           const SizedBox(height: 30),

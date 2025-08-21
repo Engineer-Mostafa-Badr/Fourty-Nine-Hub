@@ -141,7 +141,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
 
                     context.pop();
                   } else {
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                     return pleaseLoginDialog(context);
                   }
                 }

@@ -267,7 +267,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                             categoryId: ChatCategoriesIds.social,
       //                           );
       //                           context.pop();
-      //                           context.pushNamed(
+      //                           context.push(
       //                             Routes.CHAT,
       //                             extra: ChatsViewParams(
       //                               isFromStartChat: true,
@@ -283,7 +283,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                             categoryId: ChatCategoriesIds.greet,
       //                           );
       //                           context.pop();
-      //                           context.pushNamed(
+      //                           context.push(
       //                             Routes.CHAT,
       //                             extra: ChatsViewParams(
       //                               isFromStartChat: true,
@@ -293,7 +293,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                           );
       //                         }
       //                       } else {
-      //                         context.pushNamed(Routes.LOGIN);
+      //                         context.push(Routes.LOGIN);
       //                       }
       //                     },
       //                     anonymousPress: () async {
@@ -304,7 +304,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                           otherId: widget.post.user.id,
       //                         );
       //                         context.pop();
-      //                         context.pushNamed(
+      //                         context.push(
       //                           Routes.CHAT,
       //                           extra: ChatsViewParams(
       //                             isFromStartChat: true,
@@ -313,7 +313,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       //                           ),
       //                         );
       //                       } else {
-      //                         context.pushNamed(Routes.LOGIN);
+      //                         context.push(Routes.LOGIN);
       //                       }
       //                     },
       //                   ),
@@ -655,7 +655,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //               onTap: () {
         ManageVibration.vibrate();
         //                 if (widget.fromProfile == false) {
-        //                   context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+        //                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
         //                 }
         //               },
         //               child: Stack(
@@ -683,7 +683,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //               onTap: () {
         ManageVibration.vibrate();
         //                 if (widget.fromProfile == false) {
-        //                   context.pushNamed(Routes.OTHERSACCOUNT,
+        //                   context.push(Routes.OTHERSACCOUNT,
         //                       extra: post.user.id);
         //                 }
         //               },
@@ -886,8 +886,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 onTap: () {
                   ManageVibration.vibrate();
                   if (widget.fromProfile == false) {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
                 child: ImageFromInternet(
@@ -903,8 +902,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   onTap: () {
                     ManageVibration.vibrate();
                     if (widget.fromProfile == false) {
-                      context.pushNamed(Routes.OTHERSACCOUNT,
-                          extra: post.user.id);
+                      context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                     }
                   },
                   child: Column(
@@ -916,7 +914,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           onPressed: () {
                             ManageVibration.vibrate();
                             if (widget.fromProfile == false) {
-                              context.pushNamed(Routes.OTHERSACCOUNT,
+                              context.push(Routes.OTHERSACCOUNT,
                                   extra: post.user.id);
                             }
                           }),
@@ -1007,7 +1005,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             onTap: () {
               ManageVibration.vibrate();
               if (widget.fromProfile == false) {
-                context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
             },
             child: ImageFromInternet(
@@ -1026,8 +1024,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 onTap: () {
                   ManageVibration.vibrate();
                   if (widget.fromProfile == false) {
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.user.id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
                 child: Column(
@@ -1045,7 +1042,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             onPressed: () {
                               ManageVibration.vibrate();
                               if (widget.fromProfile == false) {
-                                context.pushNamed(Routes.OTHERSACCOUNT,
+                                context.push(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
                               }
                             }),
@@ -1058,7 +1055,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             onPressed: () {
                               ManageVibration.vibrate();
                               // if (widget.fromProfile == false) {
-                              //   context.pushNamed(Routes.OTHERSACCOUNT,
+                              //   context.push(Routes.OTHERSACCOUNT,
                               //       extra: post.user.id);
                               // }
                             }),
@@ -1396,8 +1393,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 GestureDetector(
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.pushNamed(Routes.OTHERSACCOUNT,
-                        extra: post.users[0].id);
+                    context.push(Routes.OTHERSACCOUNT, extra: post.users[0].id);
                   },
                   child: Label(
                     text:
@@ -1531,7 +1527,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                   onTap: () {
                                     ManageVibration.vibrate();
                                     if (widget.fromProfile == false) {
-                                      context.pushNamed(
+                                      context.push(
                                         Routes.OTHERSACCOUNT,
                                         extra: users[userIndex].id,
                                       );
@@ -1564,7 +1560,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                   onTap: () {
                                     ManageVibration.vibrate();
                                     if (widget.fromProfile == false) {
-                                      context.pushNamed(
+                                      context.push(
                                         Routes.OTHERSACCOUNT,
                                         extra: users[userIndex].id,
                                       );
@@ -1774,7 +1770,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 //                               ClickableWidget(
 //                                 onTap: () {
 //                                   if (widget.fromProfile == false) {
-//                                     context.pushNamed(Routes.OTHERSACCOUNT,
+//                                     context.push(Routes.OTHERSACCOUNT,
 //                                         extra: state.posts![index].likedUsers![index].id);
 //                                   }
 //                                 },
@@ -1804,7 +1800,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 //                               ClickableWidget(
 //                                 onTap: () {
 //                                   if (widget.fromProfile == false) {
-//                                     context.pushNamed(Routes.OTHERSACCOUNT,
+//                                     context.push(Routes.OTHERSACCOUNT,
 //                                         extra: state.posts![index].likedUsers![index].id);
 //                                   }
 //                                 },

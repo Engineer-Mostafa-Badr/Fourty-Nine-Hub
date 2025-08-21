@@ -138,7 +138,7 @@ class BottomSheetHelper {
         );
 
     if (chat != null) {
-      context.pushNamed(
+      context.push(
         Routes.CHAT,
         extra: ChatsViewParams(
           isFromStartChat: true,

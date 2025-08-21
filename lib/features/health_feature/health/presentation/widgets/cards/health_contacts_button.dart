@@ -105,7 +105,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                     bottomTextColor: AppColors.getTextColor(context),
                   ),
                   // !context.read<UserCubit>().isLoggedIn
-                  //     ? () => context.pushNamed(Routes.LOGIN)
+                  //     ? () => context.push(Routes.LOGIN)
                   //     :
                   // snap.data == true
                   //         ?
@@ -266,7 +266,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
                           pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : snap.data == true
                           ? () async {
@@ -276,7 +276,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                                     otherId: widget.otherUserId,
                                     categoryId: widget.subcategoryId,
                                   );
-                              context.pushNamed(
+                              context.push(
                                 Routes.CHAT,
                                 extra: ChatsViewParams(
                                   isFromStartChat: true,
@@ -302,7 +302,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
                           pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : () {
                           bottomSheet(

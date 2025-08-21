@@ -47,8 +47,8 @@ class CreatePostBanner extends StatelessWidget {
               ManageVibration.vibrate();
               !context.read<UserCubit>().isLoggedIn
                   ? pleaseLoginDialog(context)
-                  // context.pushNamed(Routes.LOGIN)
-                  : context.pushNamed(Routes.CREATEPOST, extra: 'facebook');
+                  // context.push(Routes.LOGIN)
+                  : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child: Container(
               width: double.infinity, // Ensure full width
@@ -81,9 +81,9 @@ class CreatePostBanner extends StatelessWidget {
           // InkWell(
           //   onTap: () {
           //     if (context.isUserLoggedIn) {
-          //       context.pushNamed(Routes.ZOOM);
+          //       context.push(Routes.ZOOM);
           //     } else {
-          //       context.pushNamed(Routes.LOGIN);
+          //       context.push(Routes.LOGIN);
           //     }
           //   },
           //   child:  SvgPicture.asset(

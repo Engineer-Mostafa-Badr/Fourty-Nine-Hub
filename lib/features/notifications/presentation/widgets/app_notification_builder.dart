@@ -100,7 +100,7 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
                         .then(
                           (value) => getUnreadNotificationsCountCubit
                               .getUnreadNotificationsCount()
-                              .then((value) => context.pushNamed(
+                              .then((value) => context.push(
                                   notificationEntity.path ?? '',
                                   extra: notificationEntity.payload)),
                         );

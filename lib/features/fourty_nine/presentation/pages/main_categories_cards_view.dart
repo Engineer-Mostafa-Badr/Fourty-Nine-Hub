@@ -157,10 +157,10 @@ class _MainCategoriesFlipCardsViewState
                           print('item id is ${item.id}');
                           // print('item id is ${item}');
                           if (item.id == '62c8b5b09332225799fe335e') {
-                            context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+                            context.push(Routes.MARRIAGESUBCATEGORIES,
                                 extra: item);
                           } else {
-                            context.pushNamed(
+                            context.push(
                               Routes.CustomPageSubCategoriesView,
                               extra: CustomPageSubCategoriesParams(
                                 mainCategory: item,
@@ -274,10 +274,10 @@ class _MainCategoriesFlipCardsViewState
           //         onTap: () {
           //           if (mainCategories[index].id ==
           //               '62c8b5b09332225799fe335e') {
-          //             context.pushNamed(Routes.MARRIAGESUBCATEGORIES,
+          //             context.push(Routes.MARRIAGESUBCATEGORIES,
           //                 extra: mainCategories[index]);
           //           } else {
-          //             context.pushNamed(
+          //             context.push(
           //               Routes.CustomPageSubCategoriesView,
           //               extra: mainCategories[index],
           //             );

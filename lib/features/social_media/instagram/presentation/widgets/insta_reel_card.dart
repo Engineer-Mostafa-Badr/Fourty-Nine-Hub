@@ -113,7 +113,7 @@ class _ControlsOverlay extends StatelessWidget {
             if (controller.value.isPlaying) {
               controller.pause();
             } else {
-              context.pushNamed(Routes.REELS);
+              context.push(Routes.REELS);
               // controller.play();
             }
           },

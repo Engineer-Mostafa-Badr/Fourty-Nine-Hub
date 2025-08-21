@@ -38,7 +38,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.pushNamed(Routes.ADS,
+      onTap: () => context.push(Routes.ADS,
           extra: AdsViewParams(
               mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
@@ -90,12 +90,12 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                     onPressed: () {
                       ManageVibration.vibrate();
                       if (AuthHelper().isLoggedIn()) {
-                        context.pushNamed(Routes.CREATEAD,
+                        context.push(Routes.CREATEAD,
                             extra: CategorizationEntity(
                                 mainCategory: widget.mainCategory,
                                 subCategory: widget.item));
                       } else {
-                        // context.pushNamed(Routes.LOGIN);
+                        // context.push(Routes.LOGIN);
 
                         return pleaseLoginDialog(context);
                       }

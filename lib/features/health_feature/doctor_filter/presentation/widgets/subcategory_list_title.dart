@@ -33,11 +33,11 @@ class SubcategoryListTitle extends StatelessWidget {
             specialty;
         if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==
             BookingTypes.call) {
-          context.pushNamed(Routes.VISITADOCTORLIST,
+          context.push(Routes.VISITADOCTORLIST,
               extra: DoctorsListParams(
                   fromHome: false, subCategoryId: '', type: type));
         } else {
-          context.pushNamed(Routes.FILTERDOCTORGOVERNORATE, extra: type);
+          context.push(Routes.FILTERDOCTORGOVERNORATE, extra: type);
         }
       },
       child: Container(

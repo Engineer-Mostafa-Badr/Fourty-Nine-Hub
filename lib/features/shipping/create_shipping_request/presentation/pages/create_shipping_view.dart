@@ -194,13 +194,12 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                       if (context
                                           .read<UserCubit>()
                                           .isLoggedIn) {
-                                        context.pushNamed(
-                                            Routes.SHIPPING_REGISTER);
+                                        context.push(Routes.SHIPPING_REGISTER);
                                       } else {
                                         return pleaseLoginDialog(context);
 
-                                        // context.pushNamed(Routes.SHIPPING_REGISTER);
-                                        // context.pushNamed(Routes.LOGIN);
+                                        // context.push(Routes.SHIPPING_REGISTER);
+                                        // context.push(Routes.LOGIN);
                                       }
                                     },
                                     child: Padding(
@@ -528,7 +527,7 @@ class RequestOfferCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             ManageVibration.vibrate();
-                            context.pushNamed(Routes.TripRating, extra: model);
+                            context.push(Routes.TripRating, extra: model);
                           },
                           child: Row(
                             children: [

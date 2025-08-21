@@ -117,7 +117,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 premuimRequestOnTap: () async {
@@ -150,7 +150,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 requestOnTap: () async {
@@ -175,7 +175,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 callOnTap: () async {
@@ -192,7 +192,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 messageOnTap: () async {
@@ -205,7 +205,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
                 subscribeMessageOnTap: () async {
@@ -218,7 +218,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   } else {
                     return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                   }
                 },
               );

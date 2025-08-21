@@ -26,7 +26,7 @@ class TenPercentView extends StatelessWidget {
             CustomWinnerAppbar(
               onPressed: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.WinnersTenPercent);
+                context.push(Routes.WinnersTenPercent);
               },
             ),
           ],

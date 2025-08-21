@@ -453,14 +453,14 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                             ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               Navigator.pop(context);
-                              context.pushNamed(Routes.CREATEAD,
+                              context.push(Routes.CREATEAD,
                                   extra: CategorizationEntity(
                                       mainCategory: widget.mainCategory,
                                       subCategory: item));
                             } else {
                               return pleaseLoginDialog(context);
 
-                              // context.pushNamed(Routes.LOGIN);
+                              // context.push(Routes.LOGIN);
                             }
                           },
                         ),

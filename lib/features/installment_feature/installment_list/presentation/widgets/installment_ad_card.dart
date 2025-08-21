@@ -26,7 +26,7 @@ class InstallmentAdCard extends StatelessWidget {
         onTap: () {
           ManageVibration.vibrate();
           print(item.id);
-          context.pushNamed(Routes.INSTALLMENTDETAILS, extra: item.id);
+          context.push(Routes.INSTALLMENTDETAILS, extra: item.id);
         },
         child: isVertical
             ? _buildVerticalView(context: context)

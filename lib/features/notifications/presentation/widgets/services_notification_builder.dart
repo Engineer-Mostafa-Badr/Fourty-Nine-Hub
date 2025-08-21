@@ -104,7 +104,7 @@ class _ServicesNotificationBuilderState
                         .then(
                           (value) => getUnreadNotificationsCountCubit
                               .getUnreadNotificationsCount()
-                              .then((value) => context.pushNamed(
+                              .then((value) => context.push(
                                   notificationEntity.path ?? '',
                                   extra: notificationEntity.payload)),
                         );

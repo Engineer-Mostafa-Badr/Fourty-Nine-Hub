@@ -83,7 +83,7 @@ class _ReelActionsState extends State<ReelActions> {
                             GestureDetector(
                               onTap: () {
                                 ManageVibration.vibrate();
-                                context.pushNamed(Routes.TiktokOptionScreen);
+                                context.push(Routes.TiktokOptionScreen);
                               },
                               child: const TagWidget(),
                             ),
@@ -180,9 +180,9 @@ class _UserAvatarState extends State<_UserAvatar> {
           ManageVibration.vibrate();
           if (!serviceLocator<UserCubit>().isLoggedIn) {
             context.read<PreloadBloc>().pauseTheVideo();
-            context.pushNamed(Routes.LOGIN);
+            context.push(Routes.LOGIN);
           } else {
-            context.pushNamed(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+            context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
           }
         },
         child: Stack(
@@ -231,7 +231,7 @@ class _UserAvatarState extends State<_UserAvatar> {
                             }
                           }
                         } else {
-                          context.pushNamed(Routes.LOGIN);
+                          context.push(Routes.LOGIN);
                         }
                       },
                       child: Container(
@@ -287,10 +287,9 @@ class _UserInfoState extends State<_UserInfo> {
               ManageVibration.vibrate();
               if (!serviceLocator<UserCubit>().isLoggedIn) {
                 context.read<PreloadBloc>().pauseTheVideo();
-                context.pushNamed(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
-                context.pushNamed(Routes.OTHERSACCOUNT,
-                    extra: widget.reel.user.id);
+                context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
               }
             },
             child: Row(
@@ -330,7 +329,7 @@ class _UserInfoState extends State<_UserInfo> {
                               }
                             }
                           } else {
-                            context.pushNamed(Routes.LOGIN);
+                            context.push(Routes.LOGIN);
                           }
                         },
                         child: Container(
@@ -960,9 +959,9 @@ class _AudioAndButtons extends StatelessWidget {
 //         onTap: () {
 //           if (!serviceLocator<UserCubit>().isLoggedIn) {
 //             context.read<PreloadBloc>().pauseTheVideo();
-//             context.pushNamed(Routes.LOGIN);
+//             context.push(Routes.LOGIN);
 //           } else {
-//             context.pushNamed(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+//             context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
 //           }
 //         },
 //         child: Stack(
@@ -1019,7 +1018,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                           }
 //                         } else {
 //                           context.read<PreloadBloc>().pauseTheVideo();
-//                           context.pushNamed(Routes.LOGIN);
+//                           context.push(Routes.LOGIN);
 //                         }
 //                       },
 //                       child: CircleAvatar(
@@ -1070,9 +1069,9 @@ class _AudioAndButtons extends StatelessWidget {
 //             onTap: () {
 //               if (!serviceLocator<UserCubit>().isLoggedIn) {
 //                 context.read<PreloadBloc>().pauseTheVideo();
-//                 context.pushNamed(Routes.LOGIN);
+//                 context.push(Routes.LOGIN);
 //               } else {
-//                 context.pushNamed(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+//                 context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
 //               }
 //             },
 //             child: Row(
@@ -1153,7 +1152,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                             }
 //                           } else {
 //                             context.read<PreloadBloc>().pauseTheVideo();
-//                             context.pushNamed(Routes.LOGIN);
+//                             context.push(Routes.LOGIN);
 //                           }
 //                         },
 //                         child: Container(
@@ -1351,7 +1350,7 @@ class _AudioAndButtons extends StatelessWidget {
 //         //   onTap: () {
 //         //     if (!serviceLocator<UserCubit>().isLoggedIn) {
 //         //      context.read<PreloadBloc>().pauseTheVideo();
-//         //       context.pushNamed(Routes.LOGIN);
+//         //       context.push(Routes.LOGIN);
 //         //     } else {
 //         //       _showGiftBottomSheet(context);
 //         //     }
@@ -1367,7 +1366,7 @@ class _AudioAndButtons extends StatelessWidget {
 //           // onTap: () {
 //           //   if (!serviceLocator<UserCubit>().isLoggedIn) {
 //           // context.read<PreloadBloc>().pauseTheVideo();
-//           //     context.pushNamed(Routes.LOGIN);
+//           //     context.push(Routes.LOGIN);
 //           //   } else {
 //           //     _handleLikeAction(context, reelsCubit);
 //           //   }
@@ -1386,7 +1385,7 @@ class _AudioAndButtons extends StatelessWidget {
 //           onTap: () {
 //             if (!serviceLocator<UserCubit>().isLoggedIn) {
 //               context.read<PreloadBloc>().pauseTheVideo();
-//               context.pushNamed(Routes.LOGIN);
+//               context.push(Routes.LOGIN);
 //             } else {
 //               _handleCommentAction(
 //                 context,
@@ -1423,7 +1422,7 @@ class _AudioAndButtons extends StatelessWidget {
 //             );
 //             // if (!serviceLocator<UserCubit>().isLoggedIn) {
 //             // context.read<PreloadBloc>().pauseTheVideo();
-//             //   context.pushNamed(Routes.LOGIN);
+//             //   context.push(Routes.LOGIN);
 //             // } else {
 //             //   _handleShareAction(context, reel.videoMedia);
 //             // }
@@ -1455,7 +1454,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                         onTap: () {
 //                           if (!serviceLocator<UserCubit>().isLoggedIn) {
 //                             context.read<PreloadBloc>().pauseTheVideo();
-//                             context.pushNamed(Routes.LOGIN);
+//                             context.push(Routes.LOGIN);
 //                           } else {
 //                             _showReportBottomSheet(context);
 //                           }
@@ -1476,7 +1475,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                         onTap: () {
 //                           if (!serviceLocator<UserCubit>().isLoggedIn) {
 //                             context.read<PreloadBloc>().pauseTheVideo();
-//                             context.pushNamed(Routes.LOGIN);
+//                             context.push(Routes.LOGIN);
 //                           } else {
 //                             _handleSaveAction(context, reelsCubit);
 //                           }
@@ -1761,7 +1760,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                       SvgPicture.asset(Assets.dividerIcon),
 //                       SoundOptionBottomSheet(
 //                         onTap: () {
-//                           context.pushNamed(Routes.UseSoundScreen);
+//                           context.push(Routes.UseSoundScreen);
 //                         },
 //                         icon: Assets.useSoundIcon,
 //                         title: context.isArabic

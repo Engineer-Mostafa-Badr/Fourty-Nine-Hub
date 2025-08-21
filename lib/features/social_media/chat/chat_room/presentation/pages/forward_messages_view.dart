@@ -265,7 +265,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                                 setState(() {
                                   isLoading = false;
                                 });
-                                // context.pushNamed(Routes.CHAT);
+                                // context.push(Routes.CHAT);
                                 context.pop();
                                 context.pop();
                               },

@@ -30,7 +30,7 @@ class DriverInfoRideTap extends StatelessWidget {
         listener: (context, state) {
           if (state is SuccessDeleteDriverState) {
             showSuccessMessage(context, LocaleKeys.deleteSuccessfully.tr());
-            context.pushNamed(Routes.HOME);
+            context.push(Routes.HOME);
           }
         },
         child: BlocBuilder<GetDriverInfoCubit, RiderState>(
@@ -49,7 +49,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       label: LocaleKeys.registrationForm.tr(),
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.pushNamed(Routes.updateDriverRide);
+                        context.push(Routes.updateDriverRide);
                       },
                       backColor: Colors.white,
                       color: AppColors.PRIMARY_COLOR,
@@ -82,7 +82,7 @@ class DriverInfoRideTap extends StatelessWidget {
                         ManageVibration.vibrate();
                         // serviceLocator<SubscriptionController>()
                         //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
-                        // context.pushNamed(Routes.)
+                        // context.push(Routes.)
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
@@ -319,7 +319,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       label: "",
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.pushNamed(Routes.MyRating);
+                        context.push(Routes.MyRating);
                       },
                       backColor: Colors.white,
                     ),

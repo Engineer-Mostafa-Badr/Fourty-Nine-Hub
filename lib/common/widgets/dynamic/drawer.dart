@@ -147,7 +147,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //     onTap: () {
                             //       ManageVibration.vibrate();
                             //       context.pop();
-                            //       context.pushNamed(Routes.SETTINGS);
+                            //       context.push(Routes.SETTINGS);
                             //     }),
                             // drawerListTile(
                             //     // icon: Icons.privacy_tip,
@@ -162,7 +162,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //         AdInterstitialTop.showInterstitialAd();
                             //
                             //         context.pop();
-                            //         context.pushNamed(Routes.PRIVACY);
+                            //         context.push(Routes.PRIVACY);
                             //       }
                             //     },),
                             drawerListTile(
@@ -174,7 +174,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   AdInterstitialTop.showInterstitialAd();
 
                                   context.pop();
-                                  context.pushNamed(
+                                  context.push(
                                       context.read<UserCubit>().isLoggedIn
                                           ? Routes.PRIVACY
                                           : Routes.FirstLoginScreen);
@@ -188,7 +188,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   AdInterstitialTop.loadIntersitialAd();
                                   AdInterstitialTop.showInterstitialAd();
                                   context.pop();
-                                  return context.pushNamed(Routes.POLICY,
+                                  return context.push(Routes.POLICY,
                                       extra: false);
                                 }),
                             drawerListTile(
@@ -201,7 +201,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
-                                  context.pushNamed(Routes.SHAREAPP);
+                                  context.push(Routes.SHAREAPP);
                                 }),
                             drawerListTile(
                                 // icon: Icons.message,
@@ -213,7 +213,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     return pleaseLoginDialog(context);
                                   }
                                   context.pop();
-                                  context.pushNamed(Routes.CONTACTUS);
+                                  context.push(Routes.CONTACTUS);
                                 }),
                             drawerListTile(
                                 // icon: Icons.logout,
@@ -266,7 +266,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               context.pop();
-                              context.pushNamed(Routes.QURAAN);
+                              context.push(Routes.QURAAN);
                             }),
                         drawerRollWidget(
                             image: Assets.azkar,
@@ -276,7 +276,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               context.pop();
-                              context.pushNamed(Routes.AZKAAR);
+                              context.push(Routes.AZKAAR);
                             }),
                         drawerRollWidget(
                             label: LocaleKeys.ride.localize,
@@ -284,7 +284,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             onTap: () {
                               ManageVibration.vibrate();
                               context.pop();
-                              context.pushNamed(Routes.RIDE_HOME);
+                              context.push(Routes.RIDE_HOME);
                             }),
                         drawerRollWidget(
                             label: LocaleKeys.tripJoin.localize,
@@ -294,10 +294,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount('tripJoinCount', context);
-                              context.pushNamed(
-                                  context.read<UserCubit>().isLoggedIn
-                                      ? Routes.newRideModeScreen
-                                      : Routes.FirstLoginScreen);
+                              context.push(context.read<UserCubit>().isLoggedIn
+                                  ? Routes.newRideModeScreen
+                                  : Routes.FirstLoginScreen);
                             }),
                         // drawerRollWidget(
                         //   label: LocaleKeys.loading.localize,
@@ -315,7 +314,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.pushNamed(Routes.VISITA);
+                            context.push(Routes.VISITA);
                           },
                         ),
                         drawerRollWidget(
@@ -324,7 +323,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.pushNamed(Routes.FOOD);
+                            context.push(Routes.FOOD);
                           },
                         ),
                         drawerRollWidget(
@@ -333,7 +332,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.pushNamed(Routes.MARRIAGESUBCATEGORIES);
+                            context.push(Routes.MARRIAGESUBCATEGORIES);
                           },
                         ),
                         drawerRollWidget(
@@ -344,7 +343,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             AdInterstitialTop.loadIntersitialAd();
                             AdInterstitialTop.showInterstitialAd();
                             HandleCashback.setCount('beAStarCount', context);
-                            context.pushNamed(Routes.BE_STAR);
+                            context.push(Routes.BE_STAR);
                           },
                         ),
                         drawerRollWidget(
@@ -356,7 +355,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             AdInterstitialTop.showInterstitialAd();
                             HandleCashback.setCount('bookingCount', context);
                             soonDialog(context);
-                            // context.pushNamed(Routes.BE_STAR);
+                            // context.push(Routes.BE_STAR);
                           },
                         ),
                         drawerRollWidget(
@@ -365,7 +364,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.pushNamed(Routes.Tinder);
+                            context.push(Routes.Tinder);
                           },
                         ),
                         drawerRollWidget(
@@ -374,7 +373,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.pushNamed(Routes.REELS);
+                            context.push(Routes.REELS);
                           },
                         ),
                         drawerRollWidget(
@@ -386,7 +385,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.pushNamed(Routes.SPOTLIGHT);
+                            context.push(Routes.SPOTLIGHT);
                           },
                         ),
                         // drawerRollWidget(
@@ -395,7 +394,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         //   onTap: () {
 
                         //     context.pop();
-                        //     context.pushNamed(Routes.MEETINGROOM);
+                        //     context.push(Routes.MEETINGROOM);
                         //   },
                         // ),
                         drawerRollWidget(
@@ -407,7 +406,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.pushNamed(Routes.LIVE);
+                            context.push(Routes.LIVE);
                           },
                         ),
                         // drawerRollWidget(
@@ -415,7 +414,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         //   image: Assets.snap,
                         //   onTap: () {
                         //     context.pop();
-                        //     context.pushNamed(Routes.SNAP);
+                        //     context.push(Routes.SNAP);
                         //   },
                         // ),
 
@@ -428,8 +427,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.pushNamed(Routes.CHAT,
-                                extra: ChatsViewParams());
+                            context.push(Routes.CHAT, extra: ChatsViewParams());
                           },
                         ),
                         drawerRollWidget(
@@ -439,7 +437,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ManageVibration.vibrate();
                             context.pop();
                             soonDialog(context);
-                            // context.pushNamed(Routes.CHAT,
+                            // context.push(Routes.CHAT,
                             //     extra: ChatsViewParams());
                           },
                         ),
@@ -450,7 +448,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           onTap: () {
                             ManageVibration.vibrate();
                             context.pop();
-                            context.pushNamed(Routes.CREATECOMPANYAD);
+                            context.push(Routes.CREATECOMPANYAD);
                           },
                         ),
                         drawerRollWidget(
@@ -462,7 +460,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.pushNamed(Routes.MAZADAT);
+                            context.push(Routes.MAZADAT);
                           },
                         ),
                         drawerRollWidget(
@@ -474,7 +472,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.pushNamed(Routes.CHANCE);
+                            context.push(Routes.CHANCE);
                           },
                         ),
                         drawerRollWidget(
@@ -525,7 +523,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           : AppColors.PRIMARY_COLOR,
                       onPressed: () {
                         context.pop();
-                        context.pushNamed(Routes.LOGIN);
+                        context.push(Routes.LOGIN);
                       },
                     ),
                     Label(
@@ -551,7 +549,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             : AppColors.PRIMARY_COLOR,
                         onPressed: () {
                           context.pop();
-                          context.pushNamed(Routes.REGISTER);
+                          context.push(Routes.REGISTER);
                         }),
                     Label(
                       text: LocaleKeys.register.localize,
@@ -1236,7 +1234,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     GestureDetector(
                       onTap: () {
                         ManageVibration.vibrate();
-                        // context.pushNamed(
+                        // context.push(
                         //   Routes.WALLET,
                         // );
                       },
@@ -1267,8 +1265,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     GestureDetector(
                       onTap: () {
                         ManageVibration.vibrate();
-                        context.pushNamed(Routes.EDITPROFILE);
-                        // context.pushNamed(
+                        context.push(Routes.EDITPROFILE);
+                        // context.push(
                         //   Routes.WALLET,
                         // );
                       },

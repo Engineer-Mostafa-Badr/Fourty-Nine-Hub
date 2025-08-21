@@ -48,10 +48,10 @@ class _HealthBannerState extends State<HealthBanner> {
             canRegister: state.isDoctor == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.pushNamed(Routes.CREATEDOCTOR);
+                context.push(Routes.CREATEDOCTOR);
               } else {
                 return pleaseLoginDialog(context);
-                // context.pushNamed(Routes.REGISTER);
+                // context.push(Routes.REGISTER);
               }
             },
             onFavorite: () {

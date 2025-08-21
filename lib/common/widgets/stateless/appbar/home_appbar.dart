@@ -133,7 +133,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             borderRadius: BorderRadius.circular(40.r),
             onTap: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.SEARCH);
+              context.push(Routes.SEARCH);
             },
             child: Icon(
               Icons.search,
@@ -215,7 +215,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           //           return;
           //         }
           //         HandleCashback.setCount('chatCount', context);
-          //         context.pushNamed(Routes.CHAT, extra: ChatsViewParams());
+          //         context.push(Routes.CHAT, extra: ChatsViewParams());
           //       },
           //       child: Container(
           //         padding: const EdgeInsets.all(12),
@@ -246,7 +246,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     return;
                   }
                   HandleCashback.setCount('notificationCount', context);
-                  context.pushNamed(
+                  context.push(
                     context.read<UserCubit>().isLoggedIn
                         ? Routes.NOTIFICATIONS
                         : Routes.FirstLoginScreen,
@@ -304,7 +304,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           //       return;
           //     }
           //     HandleCashback.setCount('notificationCount', context);
-          //     context.pushNamed(
+          //     context.push(
           //       context.read<UserCubit>().isLoggedIn
           //           ? Routes.NOTIFICATIONS
           //           : Routes.LOGIN,

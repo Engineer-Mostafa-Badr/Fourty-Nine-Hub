@@ -615,7 +615,7 @@ pleaseLoginWidget(context) {
           onPressed: () {
             ManageVibration.vibrate();
             return pleaseLoginDialog(context);
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           },
           style: ButtonStyle(
               foregroundColor: WidgetStatePropertyAll(

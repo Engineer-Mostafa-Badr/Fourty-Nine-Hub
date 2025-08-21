@@ -22,8 +22,8 @@ class AllPickMeFloatingActionButton extends StatelessWidget {
             ManageVibration.vibrate();
             // context.read<UserCubit>().isLoggedIn
             //  ?
-            context.pushNamed(Routes.AddNewPickMe);
-            //   : context.pushNamed(Routes.LOGIN);
+            context.push(Routes.AddNewPickMe);
+            //   : context.push(Routes.LOGIN);
           },
           fillColor: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(

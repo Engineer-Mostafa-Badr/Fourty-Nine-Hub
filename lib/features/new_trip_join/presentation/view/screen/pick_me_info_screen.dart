@@ -27,7 +27,7 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
       floatingActionButton: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
-          context.pushNamed(Routes.AddNewPickMe);
+          context.push(Routes.AddNewPickMe);
         },
         child: Container(
           width: 300.w,

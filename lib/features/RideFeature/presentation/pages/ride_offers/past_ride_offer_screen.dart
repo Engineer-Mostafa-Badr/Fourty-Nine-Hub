@@ -218,7 +218,7 @@ class ClientPastWidget extends StatelessWidget {
             ClickableWidget(
               onTap: () {
                 ManageVibration.vibrate();
-                context.pushNamed(
+                context.push(
                   Routes.allDriverRatingScreen,
                   extra: offers?.driverDetails?.userId,
                 );

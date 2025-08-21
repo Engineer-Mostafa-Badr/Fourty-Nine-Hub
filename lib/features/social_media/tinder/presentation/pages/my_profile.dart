@@ -293,8 +293,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                   child: Stack(
                     children: [
                       ClickableWidget(
-                        onTap: () =>
-                            context.pushNamed(Routes.EditProfileTinder),
+                        onTap: () => context.push(Routes.EditProfileTinder),
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(

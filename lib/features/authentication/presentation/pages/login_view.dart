@@ -145,7 +145,7 @@ class _LoginViewState extends State<LoginView> {
               print(serviceLocator<UserCubit>().state.data.toString());
 
               // Navigator.pop(context);
-              // context.pushNamed(Routes.HOME);
+              // context.push(Routes.HOME);
 
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
@@ -575,7 +575,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 style: Styles.smallText(
                     fontSize: 24, color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
-                onPressed: () => context.pushNamed(Routes.FORGOTPASSWORD)),
+                onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
         const Sizer(),
@@ -602,7 +602,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         //           log('Google sign in pressed');
         //           try {
         //             final user = await loginCubit.signInWithGoogle();
-        //             context.pushNamed(Routes.HOME);
+        //             context.push(Routes.HOME);
         //             // if (user != null && mounted) {
         //             // }
         //           } on FirebaseAuthException catch (error) {
@@ -670,7 +670,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     log("uid: ${loginCubit.user?.uid ?? ''}");
                     log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
                     await loginCubit.signInWithGoogle();
-                    context.pushNamed(Routes.HOME);
+                    context.push(Routes.HOME);
                   } on FirebaseAuthException catch (error) {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -702,7 +702,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     log("uid: ${loginCubit.user?.uid ?? ''}");
                     log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
                     await loginCubit.signInWithFacebook();
-                    context.pushNamed(Routes.HOME);
+                    context.push(Routes.HOME);
                   } on FirebaseAuthException catch (error) {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -734,7 +734,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       log("uid: ${loginCubit.user?.uid ?? ''}");
                       log("Refresh Token: ${loginCubit.user?.refreshToken ?? ''}");
                       await loginCubit.signInWithApple();
-                      context.pushNamed(Routes.HOME);
+                      context.push(Routes.HOME);
                     } on FirebaseAuthException catch (error) {
                       print(error.message);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -1041,7 +1041,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.pushNamed(Routes.POLICY, extra: true);
+                        context.push(Routes.POLICY, extra: true);
                       },
                       child: Text(
                         LocaleKeys.conditions.localize,
@@ -1102,7 +1102,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //       TextSpan(
                 //         text: "Login",
                 //         recognizer: TapGestureRecognizer()
-                //           ..onTap = () => context.pushNamed(Routes.LOGIN),
+                //           ..onTap = () => context.push(Routes.LOGIN),
                 //         style: Styles.headerText(
                 //           color: Colors.black,
                 //         ),

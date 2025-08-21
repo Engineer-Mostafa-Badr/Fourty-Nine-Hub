@@ -251,7 +251,7 @@ class _RideDetailsRatingWidgetState extends State<RideDetailsRatingWidget> {
                             ? widget.onRating!(rateController.text, _rating)
                             : null;
                       }
-                      // context.pushNamed(Routes.connectionCallScreen);
+                      // context.push(Routes.connectionCallScreen);
                     },
                     child: Text(LocaleKeys.send.localize),
                   ),

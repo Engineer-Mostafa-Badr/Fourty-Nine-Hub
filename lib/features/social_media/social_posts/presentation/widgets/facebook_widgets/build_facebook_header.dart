@@ -194,7 +194,7 @@ class BuildFacebookHeader extends StatelessWidget {
                           const WidgetSpan(child: Sizer()),
                           // TextSpan(text: "${users?.first.firstName??''} ${users?.first.lastName??''}",
                           //     onEnter: (event) {
-                          //       context.pushNamed(Routes.OTHERSACCOUNT,
+                          //       context.push(Routes.OTHERSACCOUNT,
                           //           extra: users?[0].id??'');
                           //     },
                           //     style: const TextStyle(
@@ -204,7 +204,7 @@ class BuildFacebookHeader extends StatelessWidget {
                           WidgetSpan(
                               child: ClickableWidget(
                             onTap: () {
-                              context.pushNamed(Routes.OTHERSACCOUNT,
+                              context.push(Routes.OTHERSACCOUNT,
                                   extra: users?[0].id ?? '');
                             },
                             child: Text(

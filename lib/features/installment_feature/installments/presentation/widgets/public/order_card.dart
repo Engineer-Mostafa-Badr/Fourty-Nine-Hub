@@ -16,7 +16,7 @@ class InstallmentOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.pushNamed(Routes.INSTALLMENTORDERDETAILS),
+      onTap: () => context.push(Routes.INSTALLMENTORDERDETAILS),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(

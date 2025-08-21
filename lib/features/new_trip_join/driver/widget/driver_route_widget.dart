@@ -79,7 +79,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: ()=>context.pushNamed(Routes.routeDetailsScreen,extra: widget.model),
+      // onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
         decoration: BoxDecoration(

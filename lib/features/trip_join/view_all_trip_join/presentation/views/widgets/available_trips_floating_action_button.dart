@@ -26,11 +26,11 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
           onPressed: () {
             ManageVibration.vibrate();
             if (context.read<UserCubit>().isLoggedIn) {
-              context.pushNamed(Routes.TRIP_JOIN);
+              context.push(Routes.TRIP_JOIN);
             } else {
               return pleaseLoginDialog(context);
 
-              // context.pushNamed(Routes.LOGIN);
+              // context.push(Routes.LOGIN);
             }
           },
           fillColor: AppColors.PRIMARY_COLOR,

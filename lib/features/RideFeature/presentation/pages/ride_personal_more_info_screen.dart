@@ -1083,7 +1083,7 @@ class _RidePersonalMoreInfoScreenState
                               onPressed: () {
                                 ManageVibration.vibrate();
                                 if (!context.isUserLoggedIn) {
-                                  context.pushNamed(Routes.LOGIN);
+                                  context.push(Routes.LOGIN);
                                   return;
                                 }
                                 final price =
@@ -1199,7 +1199,7 @@ class _RidePersonalMoreInfoScreenState
                                 ManageVibration.vibrate();
                                 print("normal price ${cubit.offerPrice}");
                                 if (!context.isUserLoggedIn) {
-                                  context.pushNamed(Routes.LOGIN);
+                                  context.push(Routes.LOGIN);
                                   return;
                                 }
 

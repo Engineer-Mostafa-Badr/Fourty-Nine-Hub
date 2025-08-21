@@ -24,7 +24,7 @@ class UserSection extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 ManageVibration.vibrate();
-                context.pushNamed(Routes.AllLocationScreen);
+                context.push(Routes.AllLocationScreen);
               },
               child: const LocationReelsWidget(),
             ),
@@ -37,9 +37,9 @@ class UserSection extends StatelessWidget {
                 //   onTap: () {
                 //     // if (!serviceLocator<UserCubit>().isLoggedIn) {
                 //     //   context.read<PreloadBloc>().pauseTheVideo();
-                //     //   context.pushNamed(Routes.LOGIN);
+                //     //   context.push(Routes.LOGIN);
                 //     // } else {
-                //     //   context.pushNamed(Routes.OTHERSACCOUNT, extra: reel.user.id);
+                //     //   context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
                 //     // }
                 //   },
                 //   child: Stack(

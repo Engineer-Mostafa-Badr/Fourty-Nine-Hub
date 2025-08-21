@@ -266,7 +266,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                 return pleaseLoginDialog(
                                                     context);
 
-                                                // context.pushNamed(Routes.LOGIN);
+                                                // context.push(Routes.LOGIN);
                                               }
                                             },
                                             color: controller
@@ -411,7 +411,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                 return pleaseLoginDialog(
                                                     context);
 
-                                                // context.pushNamed(Routes.LOGIN);
+                                                // context.push(Routes.LOGIN);
                                               }
                                             },
                                             color: Colors.grey,
@@ -458,7 +458,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                     onTap: () {
                                       ManageVibration.vibrate();
                                       pleaseLoginDialog(context);
-                                      // context.pushNamed(Routes.LOGIN);
+                                      // context.push(Routes.LOGIN);
                                     },
                                     child: Label(
                                         text: LocaleKeys.showComments.localize))
@@ -476,7 +476,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
                                           pleaseLoginDialog(context);
-                                          // context.pushNamed(Routes.LOGIN);
+                                          // context.push(Routes.LOGIN);
                                         },
                                       style: Styles.mediumText(
                                         color: context.isDarkMode
@@ -565,11 +565,11 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
           onTap: () {
             ManageVibration.vibrate();
             if (context.read<UserCubit>().isLoggedIn) {
-              context.pushNamed(Routes.OTHERSACCOUNT, extra: post.user.id);
+              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             } else {
               return pleaseLoginDialog(context);
 
-              // context.pushNamed(Routes.LOGIN);
+              // context.push(Routes.LOGIN);
             }
           },
           child: CircleAvatar(
@@ -590,12 +590,12 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                   onTap: () {
                     ManageVibration.vibrate();
                     if (context.read<UserCubit>().isLoggedIn) {
-                      context.pushNamed(Routes.INSTAGRAMPROFILE,
+                      context.push(Routes.INSTAGRAMPROFILE,
                           extra: post.user.id);
                     } else {
                       return pleaseLoginDialog(context);
 
-                      // context.pushNamed(Routes.LOGIN);
+                      // context.push(Routes.LOGIN);
                     }
                   },
                   child: TextAppButton(
@@ -604,12 +604,12 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                       onPressed: () {
                         ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
-                          context.pushNamed(Routes.INSTAGRAMPROFILE,
+                          context.push(Routes.INSTAGRAMPROFILE,
                               extra: post.user.id);
                         } else {
                           return pleaseLoginDialog(context);
 
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       }),
                 ),

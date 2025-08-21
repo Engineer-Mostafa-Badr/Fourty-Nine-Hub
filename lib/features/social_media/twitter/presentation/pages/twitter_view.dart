@@ -68,11 +68,11 @@ class _Twitter11State extends State<Twitter11> {
             onPressed: () {
               ManageVibration.vibrate();
               if (context.read<UserCubit>().isLoggedIn) {
-                context.pushNamed(Routes.CREATEPOST, extra: 'twitter');
+                context.push(Routes.CREATEPOST, extra: 'twitter');
               } else {
                 return pleaseLoginDialog(context);
 
-                // context.pushNamed(Routes.LOGIN);
+                // context.push(Routes.LOGIN);
               }
             },
             backgoundColor: AppColors.getButtonPrimaryColor(context),

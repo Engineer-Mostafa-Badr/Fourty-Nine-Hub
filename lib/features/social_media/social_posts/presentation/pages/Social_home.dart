@@ -177,7 +177,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: InkWell(
-        onTap: () => context.pushNamed(Routes.GIFT),
+        onTap: () => context.push(Routes.GIFT),
         child: Label(
           text: LocaleKeys.socialExplain.localize,
           style: Styles.headerText(
@@ -383,7 +383,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
         manageVibration.ManageVibration.vibrate();
         if (index == 1) {
           context.read<UserCubit>().isLoggedIn
-              ? context.pushNamed(Routes.OTHERSACCOUNT, extra: user?.id)
+              ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
               : pleaseLoginDialog(context);
         }
       },

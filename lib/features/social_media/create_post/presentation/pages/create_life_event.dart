@@ -88,7 +88,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
                               .text);
                       context.read<CreatePostCubit>().setLifeEvent(selected);
 
-                      context.pushNamed(Routes.CREATEPOST, extra: 'lifeEvent');
+                      context.push(Routes.CREATEPOST, extra: 'lifeEvent');
                     } else {
                       showErrorMessage(context, "Please select a date");
                     }

@@ -29,7 +29,7 @@ class StoresInstagramWidget extends StatelessWidget {
                   //   isScrollControlled: true,
                   //   widget: AddStoryView(),
                   // );
-                  context.pushNamed(Routes.ADDSTORYINSTAGRAM);
+                  context.push(Routes.ADDSTORYINSTAGRAM);
                 },
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(

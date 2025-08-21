@@ -38,7 +38,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
         print(
             'mainCategory: ${context.read<HealthCubit>().state.mainCategory!.id}');
         if (context.read<HealthCubit>().state.mainCategory != null) {
-          context.pushNamed(
+          context.push(
             Routes.ADS,
             extra: AdsViewParams(
                 mainCategory: context.read<HealthCubit>().state.mainCategory!,
@@ -126,7 +126,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                       if (context.read<HealthCubit>().state.mainCategory !=
                               null &&
                           UserCubit.to.isLoggedIn) {
-                        context.pushNamed(
+                        context.push(
                           Routes.CREATEAD,
                           extra: CategorizationEntity(
                               mainCategory: context
@@ -138,7 +138,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                       } else {
                         return pleaseLoginDialog(context);
 
-                        // context.pushNamed(Routes.LOGIN);
+                        // context.push(Routes.LOGIN);
                       }
                     },
                   )

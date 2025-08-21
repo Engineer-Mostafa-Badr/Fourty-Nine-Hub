@@ -528,7 +528,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
               ManageVibration.vibrate();
-              // context.pushNamed(Routes.RESTAURANTDETAILS, extra: item);
+              // context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
           ),
         ],

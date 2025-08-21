@@ -396,7 +396,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       if ('$currentLocation' == Paths.rideModeScreen) {
         return;
       }
-      context.pushNamed(Routes.rideModeScreen,
+      context.push(Routes.rideModeScreen,
           extra: const RideModeParams(
               modeType: 'ride', isSocket: true, currentIndex: 0));
     });
@@ -409,7 +409,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       if ('$currentLocation' == Paths.rideModeScreen) {
         return;
       }
-      context.pushNamed(Routes.rideModeScreen,
+      context.push(Routes.rideModeScreen,
           extra: const RideModeParams(
               modeType: 'ride', currentIndex: 1, isSocket: true));
     });

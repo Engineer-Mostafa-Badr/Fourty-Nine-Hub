@@ -17,7 +17,7 @@ class RestaurantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.pushNamed(Routes.RESTAURANTDETAILS, extra: item),
+        onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
         child: isVert ? _buildVerticalCard(context) : _buildHorizontalCard());
   }
 

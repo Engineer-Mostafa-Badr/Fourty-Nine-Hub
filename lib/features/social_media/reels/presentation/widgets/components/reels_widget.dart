@@ -202,7 +202,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       //   onTap: () {
                       //     if (!serviceLocator<UserCubit>().isLoggedIn) {
                       //       context.read<PreloadBloc>().pauseTheVideo();
-                      //       context.pushNamed(Routes.LOGIN);
+                      //       context.push(Routes.LOGIN);
                       //     } else {
                       //       _showGiftBottomSheet(context);
                       //     }

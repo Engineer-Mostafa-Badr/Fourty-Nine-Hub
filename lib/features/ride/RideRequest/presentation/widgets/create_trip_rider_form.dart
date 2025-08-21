@@ -158,7 +158,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                 }
                               } else {
                                 return pleaseLoginDialog(context);
-                                // context.pushNamed(Routes.LOGIN);
+                                // context.push(Routes.LOGIN);
                               }
 
                               setState(() {});
@@ -195,7 +195,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                               } else {
                                 return pleaseLoginDialog(context);
 
-                                // context.pushNamed(Routes.LOGIN);
+                                // context.push(Routes.LOGIN);
                               }
 
                               setState(() {});
@@ -411,7 +411,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                               } else {
                                 return pleaseLoginDialog(context);
 
-                                // context.pushNamed(Routes.LOGIN);
+                                // context.push(Routes.LOGIN);
                               }
                             },
                           ),
@@ -447,7 +447,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                               } else {
                                 return pleaseLoginDialog(context);
 
-                                // context.pushNamed(Routes.LOGIN);
+                                // context.push(Routes.LOGIN);
                               }
                             },
                           ),

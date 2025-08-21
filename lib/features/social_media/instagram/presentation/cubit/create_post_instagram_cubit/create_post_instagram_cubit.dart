@@ -30,12 +30,12 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   // void nextPage(BuildContext context) {
   //   log('nextPage ------------------------------------------------------------');
   //   if (state.postTypeSelectedIndex == 0) {
-  //     context.pushNamed(
+  //     context.push(
   //       Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
   //       extra: state.selectedGalleryPost,
   //     );
   //   } else if (state.postTypeSelectedIndex == 2) {
-  //     context.pushNamed(
+  //     context.push(
   //       Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
   //       extra: state.selectedGalleryReels,
   //     );

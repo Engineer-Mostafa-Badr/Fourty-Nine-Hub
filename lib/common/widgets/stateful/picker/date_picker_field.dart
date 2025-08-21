@@ -73,7 +73,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
             }
           } else {
             return pleaseLoginDialog(context);
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           }
         } else {
           final DateTime? picked = await showDatePicker(

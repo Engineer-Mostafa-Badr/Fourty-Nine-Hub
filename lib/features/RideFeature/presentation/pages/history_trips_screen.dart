@@ -339,7 +339,7 @@ class TripCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.pushNamed(Routes.RIDEDETAILSTRIPS,
+        context.push(Routes.RIDEDETAILSTRIPS,
             extra: RideHistoryDetailsScreenParams(
               rideCubit: serviceLocator<RideCubit>(),
               historyTripEntity: trip,

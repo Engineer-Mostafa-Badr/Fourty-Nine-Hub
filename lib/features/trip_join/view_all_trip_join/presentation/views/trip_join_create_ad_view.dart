@@ -91,7 +91,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                     color: Colors.green,
                     text: currentAddress,
                     onPressed: () async {
-                      context.pushNamed(
+                      context.push(
                         Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                         extra: RideOpenStreetMapSearchAndPickParams(
                           onPicked: (pickedData) async {
@@ -118,7 +118,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                     color: Colors.blue,
                     text: toAddress,
                     onPressed: () async {
-                      context.pushNamed(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                      context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                           extra: RideOpenStreetMapSearchAndPickParams(
                             onPicked: (pickedData) async {
                               toAddress = pickedData.addressName;
@@ -877,7 +877,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                         text: currentAddress,
                         onPressed: () async {
                           ManageVibration.vibrate();
-                          context.pushNamed(
+                          context.push(
                             Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                             extra: RideOpenStreetMapSearchAndPickParams(
                               onPicked: (pickedData) async {
@@ -905,7 +905,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           text: toAddress,
                           onPressed: () async {
                             ManageVibration.vibrate();
-                            context.pushNamed(
+                            context.push(
                               Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                               extra: RideOpenStreetMapSearchAndPickParams(
                                 onPicked: (pickedData) async {
@@ -946,7 +946,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           /*
                       onPressed: () async {
       ManageVibration.vibrate();
-                        context.pushNamed(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                             extra: RideOpenStreetMapSearchAndPickParams(
                               onPicked: (pickedData) async {
                                 toAddress = pickedData.addressName;

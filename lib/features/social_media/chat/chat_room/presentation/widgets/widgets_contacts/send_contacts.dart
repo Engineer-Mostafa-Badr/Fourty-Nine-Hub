@@ -144,7 +144,7 @@ class _SentContactsCardState extends State<SentContactsCard> {
                                         if (widget.messageEntity.sharedContacts
                                                 .length ==
                                             1) {
-                                          context.pushNamed(Routes.CONTACTSVIEW,
+                                          context.push(Routes.CONTACTSVIEW,
                                               extra: ContactsViewParams(
                                                   chatRoomCubit: chatRoomCubit,
                                                   messageEntity:
@@ -229,7 +229,7 @@ class _SentContactsCardState extends State<SentContactsCard> {
                                     TextButton(
                                       onPressed: () {
                                         ManageVibration.vibrate();
-                                        context.pushNamed(Routes.CONTACTSVIEW,
+                                        context.push(Routes.CONTACTSVIEW,
                                             extra: ContactsViewParams(
                                                 chatRoomCubit: chatRoomCubit,
                                                 messageEntity:

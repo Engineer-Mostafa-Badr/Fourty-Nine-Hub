@@ -323,7 +323,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
           listener: (context, state) {
             if (state is SuccessDeleteDriver) {
               showSuccessMessage(context, state.message);
-              context.pushNamed(Routes.HOME);
+              context.push(Routes.HOME);
             }
           },
           child: BlocBuilder<DriverStatisticsCubit, ShippingState>(
@@ -343,7 +343,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         label: LocaleKeys.registrationForm.tr(),
                         onPressed: () {
                           ManageVibration.vibrate();
-                          context.pushNamed(Routes.EDITDRIVERSCREEN);
+                          context.push(Routes.EDITDRIVERSCREEN);
                         },
                         backColor: Colors.white,
                         color: AppColors.PRIMARY_COLOR,
@@ -373,7 +373,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           ManageVibration.vibrate();
                           // serviceLocator<SubscriptionController>()
                           //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
-                          // context.pushNamed(Routes.)
+                          // context.push(Routes.)
                           showModalBottomSheet(
                             context: context,
                             builder: (context) {
@@ -582,7 +582,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         label: "",
                         onPressed: () {
                           ManageVibration.vibrate();
-                          context.pushNamed(Routes.MyRating);
+                          context.push(Routes.MyRating);
                         },
                         backColor: Colors.white,
                       ),

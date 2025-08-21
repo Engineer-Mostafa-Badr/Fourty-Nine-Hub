@@ -87,7 +87,7 @@ class _MarriageCallMessageButtonsState
                         ? () {
                             ManageVibration.vibrate();
                             return pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : snap.data == true
                             ? () {
@@ -268,7 +268,7 @@ class _MarriageCallMessageButtonsState
                       ? () {
                           ManageVibration.vibrate();
                           return pleaseLoginDialog(context);
-                          // context.pushNamed(Routes.LOGIN);
+                          // context.push(Routes.LOGIN);
                         }
                       : snap.data == true
                           ? () async {
@@ -279,7 +279,7 @@ class _MarriageCallMessageButtonsState
                                     otherId: widget.otherUserId,
                                     categoryId: widget.subcategoryId,
                                   );
-                              context.pushNamed(
+                              context.push(
                                 Routes.CHAT,
                                 extra: ChatsViewParams(
                                   isFromStartChat: true,
@@ -317,7 +317,7 @@ class _MarriageCallMessageButtonsState
                         ? () {
                             ManageVibration.vibrate();
                             return pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : () {
                             ManageVibration.vibrate();

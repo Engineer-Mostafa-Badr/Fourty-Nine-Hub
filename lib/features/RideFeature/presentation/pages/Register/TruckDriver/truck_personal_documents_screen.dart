@@ -99,8 +99,7 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
           ),
           RegisterNextRow(
             index: 3,
-            onTap: () =>
-                context.pushNamed(Routes.truckVehicleInformationScreen),
+            onTap: () => context.push(Routes.truckVehicleInformationScreen),
           ),
         ],
       ),

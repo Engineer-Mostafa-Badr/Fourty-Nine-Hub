@@ -204,7 +204,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                  onTap: () => context.pushNamed(Routes.OTHERSACCOUNT,
+                  onTap: () => context.push(Routes.OTHERSACCOUNT,
                       extra: widget.reel.user.id),
                   child: Row(
                     children: [

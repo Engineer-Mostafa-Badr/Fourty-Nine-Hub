@@ -64,7 +64,7 @@ class DoctorReviewCard extends StatelessWidget {
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
                             pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : () {
                             bottomSheet(
@@ -102,7 +102,7 @@ class DoctorReviewCard extends StatelessWidget {
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
                             pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : review.openCall == true
                             ? () {
@@ -129,7 +129,7 @@ class DoctorReviewCard extends StatelessWidget {
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
                             pleaseLoginDialog(context);
-                            // context.pushNamed(Routes.LOGIN);
+                            // context.push(Routes.LOGIN);
                           }
                         : review.openCall == true
                             ? () {}

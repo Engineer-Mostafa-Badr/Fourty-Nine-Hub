@@ -590,7 +590,7 @@ class ChatStories extends StatelessWidget {
             );
           } else {
             return pleaseLoginDialog(context);
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           }
 
           BlocProvider.of<StoryCubit>(context)
@@ -712,7 +712,7 @@ class ChatStories extends StatelessWidget {
           } else {
             return pleaseLoginDialog(context);
 
-            // context.pushNamed(Routes.LOGIN);
+            // context.push(Routes.LOGIN);
           }
 
           context.read<StoryCubit>()

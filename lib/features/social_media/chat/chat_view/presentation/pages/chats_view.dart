@@ -442,7 +442,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       offset: const Offset(0, 50),
                       onSelected: (int value) async {
                         if (value == 2) {
-                          context.pushNamed(Routes.CHATPROFILEVIEW);
+                          context.push(Routes.CHATPROFILEVIEW);
                         }
                         if (value == 1) {
                           await context
@@ -511,7 +511,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                     onTap: () {
                                       ManageVibration.vibrate();
                                       return pleaseLoginDialog(context);
-                                      // context.pushNamed(Routes.LOGIN);
+                                      // context.push(Routes.LOGIN);
                                     },
                                     child: Label(
                                       text: LocaleKeys.login.localize,
@@ -567,7 +567,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               TextButton(
                 onPressed: () {
                   ManageVibration.vibrate();
-                  context.pushNamed(Routes.SEEALLBROADCASTS);
+                  context.push(Routes.SEEALLBROADCASTS);
                 },
                 child: Text(
                   LocaleKeys.seeAll.localize,
@@ -658,7 +658,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         await context
             .read<ChatsCubit>()
             .getOnlineOfflineStatus(chat: widget.chatsViewParams.selectedChat!);
-        context.pushNamed(Routes.CHATROOM, extra: chatsCubit);
+        context.push(Routes.CHATROOM, extra: chatsCubit);
       });
     } else {
       chatsCubit = context.read<ChatsCubit>()..init();
@@ -717,7 +717,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
 
         if (didAuthenticate) {
           // User authenticated successfully
-          final result = await context.pushNamed(
+          final result = await context.push(
             Routes.ARCHIVEDCHATS,
             extra: OptionsChatsViewParams(
               category: 'LockedChats',
@@ -1012,7 +1012,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               text: context.isArabic ? "المؤرشفة" : "Archived",
               onTap: () async {
                 ManageVibration.vibrate();
-                final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
                       chatsCubit: chatsCubit,
@@ -1045,7 +1045,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                           ? "الدردشات المغلقة"
                           : "Locked chats",
                       // onTap: () async {
-                      //   final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
                       //       extra: OptionsChatsViewParams(
                       //         category: 'LockedChats',
                       //         chatsCubit: chatsCubit,
@@ -1082,13 +1082,12 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       text: LocaleKeys.anonymous.localize,
                       onTap: () async {
                         ManageVibration.vibrate();
-                        final result =
-                            await context.pushNamed(Routes.ARCHIVEDCHATS,
-                                extra: OptionsChatsViewParams(
-                                  category: ChatCategoriesIds.anonymous,
-                                  chatsCubit: chatsCubit,
-                                  isSecret: false,
-                                ));
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.anonymous,
+                              chatsCubit: chatsCubit,
+                              isSecret: false,
+                            ));
 
                         // Check if the result is true, refresh the home page
                         if (result == true) {
@@ -1116,13 +1115,12 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       text: LocaleKeys.greet.localize,
                       onTap: () async {
                         ManageVibration.vibrate();
-                        final result =
-                            await context.pushNamed(Routes.ARCHIVEDCHATS,
-                                extra: OptionsChatsViewParams(
-                                  category: ChatCategoriesIds.greet,
-                                  chatsCubit: chatsCubit,
-                                  isSecret: false,
-                                ));
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.greet,
+                              chatsCubit: chatsCubit,
+                              isSecret: false,
+                            ));
 
                         // Check if the result is true, refresh the home page
                         if (result == true) {
@@ -1167,7 +1165,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               text: context.isArabic ? "المؤرشفة" : "Archived",
               onTap: () async {
                 ManageVibration.vibrate();
-                final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
                       chatsCubit: chatsCubit,
@@ -1199,7 +1197,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                           ? "الدردشات المغلقة"
                           : "Locked chats",
                       // onTap: () async {
-                      //   final result = await context.pushNamed(Routes.ARCHIVEDCHATS,
+                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
                       //       extra: OptionsChatsViewParams(
                       //         category: 'LockedChats',
                       //         chatsCubit: chatsCubit,

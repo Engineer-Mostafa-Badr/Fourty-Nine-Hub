@@ -70,20 +70,20 @@ class SafetyCard extends StatelessWidget {
                   flex: 2,
                   child: _buildFeatureButton(
                       Icons.share, LocaleKeys.shareMyRide.localize, () {
-                    context.pushNamed(Routes.rideFindingScreen);
+                    context.push(Routes.rideFindingScreen);
                   }, context)),
               Expanded(
                   flex: 2,
                   child: _buildFeatureButton(
                       Icons.support_agent, LocaleKeys.support.localize, () {
-                    context.pushNamed(Routes.rideFindingScreen);
+                    context.push(Routes.rideFindingScreen);
                   }, context)),
               Expanded(
                   flex: 2,
                   child: _buildFeatureButton(
                       Icons.contacts, LocaleKeys.emergencyContacts.localize,
                       () {
-                    context.pushNamed(Routes.rideFindingScreen);
+                    context.push(Routes.rideFindingScreen);
                   }, context)),
             ],
           ),
@@ -91,7 +91,7 @@ class SafetyCard extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () {
               ManageVibration.vibrate();
-              context.pushNamed(Routes.rideFindingScreen);
+              context.push(Routes.rideFindingScreen);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

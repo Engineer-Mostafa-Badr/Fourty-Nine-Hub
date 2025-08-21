@@ -44,7 +44,7 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
       onTap: () {
         ManageVibration.vibrate();
 
-        context.pushNamed(Routes.loadingDashboardDetailsScreen,
+        context.push(Routes.loadingDashboardDetailsScreen,
             extra: widget.tripEntity);
       },
       child: Padding(

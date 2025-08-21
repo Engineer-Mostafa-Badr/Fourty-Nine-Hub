@@ -88,7 +88,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                     // } else {
                     //   return pleaseLoginDialog(context);
 
-                    // context.pushNamed(Routes.LOGIN);
+                    // context.push(Routes.LOGIN);
                     // }
                   },
                   child: _tabButton(LocaleKeys.people.localize, _showPeople),
@@ -113,7 +113,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                       // } else {
                       //   return pleaseLoginDialog(context);
                       //
-                      //   // context.pushNamed(Routes.LOGIN);
+                      //   // context.push(Routes.LOGIN);
                       // }
                     },
                     child:
@@ -138,7 +138,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                     // } else {
                     //   return pleaseLoginDialog(context);
                     //
-                    //   // context.pushNamed(Routes.LOGIN);
+                    //   // context.push(Routes.LOGIN);
                     // }
                   },
                   child: _tabButton(
@@ -168,7 +168,7 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
                   // } else {
                   //   return pleaseLoginDialog(context);
 
-                  // context.pushNamed(Routes.LOGIN);
+                  // context.push(Routes.LOGIN);
                   //}
                 },
                 child: Icon(Icons.search, color: AppColors.Facebook_Red_DARK),

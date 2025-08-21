@@ -77,7 +77,7 @@ class _MyAdCardState extends State<MyAdCard> {
             if (widget.item.userId != userId) {
               serviceLocator<AdvertisementCubit>().adViewToAds(widget.item.id);
             }
-            context.pushNamed(Routes.ADdetails, extra: widget.item.id);
+            context.push(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
             // REMOVED IntrinsicHeight and Column wrapper
@@ -463,7 +463,7 @@ class _MyAdCardState extends State<MyAdCard> {
                 ManageVibration.vibrate();
                 if (!context.read<UserCubit>().isLoggedIn) {
                   return pleaseLoginDialog(context);
-                  // context.pushNamed(Routes.LOGIN);
+                  // context.push(Routes.LOGIN);
                 } else {
                   bottomSheet(
                     context: context,
