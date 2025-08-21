@@ -12,6 +12,7 @@ import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../instagram/presentation/cubit/instagram_cubit.dart';
 import '../../../instagram/presentation/pages/instgram_view.dart';
+import '../../../twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../widgets/facebook_widgets/build_facebook_body.dart';
 import '../widgets/facebook_widgets/build_global_facebook_body.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
@@ -343,7 +344,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
   Widget _buildTwitterTab() {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: const TwitterView(),
+      child: const Twitter11(),
     );
   }
 

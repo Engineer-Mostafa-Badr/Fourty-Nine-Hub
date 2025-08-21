@@ -448,6 +448,7 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -2018,12 +2019,280 @@ class AppPages {
                       return customTransition(
                           context,
                           state,
-                          BlocProvider<SocialPostsCubit>(
-                            create: (_) {
-                              return serviceLocator();
-                            },
-                            child: FaceBookPostDetails(
-                              payload: state.extra as dynamic,
+                          BlocProvider.value(
+                            value: cubit,
+                            child: const CreatePostSecondPageInstagramView(
+                                // selectedImages: state.extra as List<Future<File?>>,
+                                ),
+                          ));
+                    },
+                  ),
+                ],
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  const CreatePostInstagramView(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.InstagramSuggestPeople,
+                name: Routes.InstagramSuggestPeople,
+                routes: const [],
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider<InstagramCubit>(
+                    create: (_) => serviceLocator(),
+                    child: const InstagramAllDiscoverPeople(),
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: Paths.followersScreen,
+                name: Routes.followersScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider<InstagramCubit>(
+                    create: (_) => serviceLocator(),
+                    child: FollowersScreen(
+                      args: state.extra as FollowersScreenArguments,
+                    ),
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: Paths.INSTAGRAMCOMMENT,
+                name: Routes.INSTAGRAMCOMMENT,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  CommentInstagramView(
+                    postId: state.extra as String,
+                  ),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.INSTAGRAM,
+                name: Routes.INSTAGRAM,
+                // routes: [
+                //   GoRoute(
+                //     path: Paths.INSTAGRAMPROFILE,
+                //     name: Routes.INSTAGRAMPROFILE,
+                //    pageBuilder: (context, state) {
+                //       final String? id = state.extra as String?;
+                //
+                //       return BlocProvider<ProfileInstagramCubit>(
+                //         create: (_) => serviceLocator<ProfileInstagramCubit>()
+                //           ..getUserProfile(id: id ?? ''),
+                //         child: const ProfileInstagramView(),
+                //       );
+                //     },
+                //   ),
+                //   GoRoute(
+                //     path: Paths.CREATEPOSTINSTAGRAM,
+                //     name: Routes.CREATEPOSTINSTAGRAM,
+                //     routes: [
+                //       GoRoute(
+                //         path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                //         name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                //        pageBuilder: (context, state) =>
+                //     customTransition(context, state,
+                //             CreatePostSecondPageInstagramView(
+                //                 // selectedImages: state.extra as List<Future<File?>>,
+                //                 ),
+                //       ),),
+                //     ],
+                //    pageBuilder: (context, state) =>
+                //     customTransition(context, state,
+                //         const CreatePostInstagramView(),
+                //   ),),
+                //   GoRoute(
+                //     path: Paths.InstagramSuggestPeople,
+                //     name: Routes.InstagramSuggestPeople,
+                //     routes: const [],
+                //    pageBuilder: (context, state) =>
+                //     customTransition(context, state, BlocProvider<InstagramCubit>(
+                //       create: (_) => serviceLocator(),
+                //       child: const InstagramAllDiscoverPeople(),
+                //     ),
+                //   ),),
+                //   GoRoute(
+                //     path: Paths.INSTAGRAMCOMMENT,
+                //     name: Routes.INSTAGRAMCOMMENT,
+                //    pageBuilder: (context, state) =>
+                //     customTransition(context, state, CommentInstagramView(
+                //       postId: state.extra as String,
+                //     ),
+                //   ),),
+                // ],
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<InstagramCubit>()..loadData(),
+                      ),
+                      BlocProvider(
+                        create: (context) => serviceLocator<StoryCubit>(),
+                      ),
+                      // BlocProvider(
+                      //   create: (context) => CreatePostInstagramCubit(
+                      //       repository: serviceLocator()),
+                      // ),
+                      BlocProvider(
+                        create: (context) => GetPostsInstagramCubit(
+                            getPostsUseCase: serviceLocator()),
+                      ),
+                    ],
+                    child: const InstagramView(),
+                  ),
+                ),
+              ),
+
+              //social home
+              GoRoute(
+                path: Paths.POSTDETAILS,
+                name: Routes.POSTDETAILS,
+                pageBuilder: (context, state) {
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider<SocialPostsCubit>(
+                        create: (_) {
+                          return serviceLocator();
+                        },
+                        child: FaceBookPostDetails(
+                          payload: state.extra as dynamic,
+                        ),
+                      ));
+                },
+              ),
+              GoRoute(
+                  path: Paths.SOCIAL,
+                  name: Routes.SOCIAL,
+                  pageBuilder: (context, state) {
+                    final params = state.extra as dynamic;
+                    return customTransition(
+                        context,
+                        state,
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<SocialPostsCubit>()..loadData(),
+                          child: SocialHomeView(
+                            payload: params ??
+                                SocialParams(
+                                    userId: '', index: 0, hideAppBar: false),
+                          ),
+                        ));
+                  },
+                  routes: [
+                    GoRoute(
+                      path: Paths.CREATEPOST,
+                      name: Routes.CREATEPOST,
+                      pageBuilder: (context, state) => customTransition(
+                          context, state, const CreatePostView()),
+                    ),
+                    GoRoute(
+                      path: Paths.LIFEEVENT,
+                      name: Routes.LIFEEVENT,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const LifeEvent(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.LIFEEVENTSub,
+                      name: Routes.LIFEEVENTSub,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          LifeEventSubCategories(
+                            lifeEvent: state.extra as LifeEventEntity,
+                          )),
+                    ),
+                    GoRoute(
+                      path: Paths.CREATELIFEEVENT,
+                      name: Routes.CREATELIFEEVENT,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            CreateLifeEvent(
+                              lifeEventData: state.extra as LifeEventEntity,
+                            ));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.FacebookSuggestPeople,
+                      name: Routes.FacebookSuggestPeople,
+                      pageBuilder: (context, state) {
+                        // final social = state.extra as String?;
+
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider<SocialPostsCubit>(
+                              create: (_) => serviceLocator(),
+                              child: const FacebookSuggestedPeople(),
+                            ));
+                      },
+                    ),
+                    GoRoute(
+                        path: Paths.TWITTER,
+                        name: Routes.TWITTER,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              const Twitter11(),
+                            ),
+                        routes: const []),
+                    GoRoute(
+                      path: Paths.TWITTERPOSTDETAILS,
+                      name: Routes.TWITTERPOSTDETAILS,
+                      pageBuilder: (context, state) {
+                        // state.extra can be null / String / Map – pass it through as-is
+                        final dynamic payload = state.extra;
+
+                        return customTransition(
+                          context,
+                          state,
+                          BlocProvider<TwitterCubit>(
+                            create: (_) => serviceLocator<TwitterCubit>(),
+                            child: TwitterPostDetailsNotify.fromPayload(payload: payload),
+                          ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                        path: Paths.OTHERSACCOUNT,
+                        name: Routes.OTHERSACCOUNT,
+                        pageBuilder: (context, state) {
+                          return customTransition(
+                              context,
+                              state,
+                              BlocProvider<SocialPostsCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: OtherAccountView(
+                                    payload: state.extra,
+                                  )));
+                        },
+                        routes: [
+                          GoRoute(
+                            path: Paths.EDITPROFILE,
+                            name: Routes.EDITPROFILE,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<EditProfileCubit>(
+                                  create: (_) =>
+                                      serviceLocator<EditProfileCubit>()
+                                        ..fetchRideGovernorates(),
+                                  child: const EditProfileView()),
                             ),
                           ));
                     },
@@ -2274,19 +2543,38 @@ class AppPages {
                           child: const MazadatView(),
                           create: (_) => serviceLocator()),
                     ),
-                    routes: [
-                      GoRoute(
-                          path: Paths.MAZADDETAILS,
-                          name: Routes.MAZADDETAILS,
-                          pageBuilder: (context, state) => customTransition(
-                                context,
-                                state,
-                                BlocProvider<AuctionDetailsCubit>(
-                                  create: (_) => serviceLocator(),
-                                  child:
-                                      MazadDetails(id: state.extra as String),
-                                ),
-                              )),
+                    // CreateAuctionView
+                    GoRoute(
+                      path: Paths.CREATEAUCTION,
+                      name: Routes.CREATEAUCTION,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          BlocProvider.value(
+                            value: serviceLocator<CreateAuctionCubit>(),
+                            child: CreateAuctionView(
+                              adId: state.extra as String,
+                            ),
+                          )),
+                    ),
+                    // OtherAccountView
+                  ]),
+
+              // ChatView
+              GoRoute(
+                path: Paths.CHAT,
+                name: Routes.CHAT,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider<ChatsCubit>(
+                        create: (_) => serviceLocator(),
+                      ),
+                      // BlocProvider(
+                      //   create: (context) => serviceLocator<ChatRoomCubit>(),
+                      // ),
                     ],
                   ),
                   // ChatView

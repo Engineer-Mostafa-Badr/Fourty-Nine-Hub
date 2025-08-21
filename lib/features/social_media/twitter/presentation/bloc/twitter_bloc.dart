@@ -27,8 +27,6 @@ import '../../domain/usecases/share_twitter_post_usecase.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
 part 'twitter_state.dart';
