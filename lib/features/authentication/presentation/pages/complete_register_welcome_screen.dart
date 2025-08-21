@@ -23,14 +23,18 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
           Expanded(
             flex: 5,
             child: Image.asset(
               context.isDarkMode ? Assets.logo : Assets.logoWithBlackText,
             ),
           ),
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -56,7 +60,9 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
           Text(
             LocaleKeys.congratulations.localize,
             style: Styles.headerText(
@@ -69,7 +75,9 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Styles.mediumText(),
           ),
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
           SizedBox(
             width: MediaQuery.sizeOf(context).width * .4,
             height: 50,
@@ -86,12 +94,14 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
                     : AppColors.AUTH_CONTAINER_COLOR,
               ),
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 context.go(Routes.HOME);
               },
             ),
           ),
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
         ],
       ),
     );

@@ -10,10 +10,14 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 class SupportClientDetailsScreen extends StatelessWidget {
   SupportClientDetailsScreen({super.key});
 
-  final TextEditingController nameController = TextEditingController(text: "Ahmed mohammed");
-  final TextEditingController phoneController = TextEditingController(text: "01578731541");
-  final TextEditingController emailController = TextEditingController(text: "Ahmedmohammed@gmail.com");
-  final TextEditingController deviceIdController = TextEditingController(text: "145.545.725.75");
+  final TextEditingController nameController =
+      TextEditingController(text: "Ahmed mohammed");
+  final TextEditingController phoneController =
+      TextEditingController(text: "01578731541");
+  final TextEditingController emailController =
+      TextEditingController(text: "Ahmedmohammed@gmail.com");
+  final TextEditingController deviceIdController =
+      TextEditingController(text: "145.545.725.75");
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +43,32 @@ class SupportClientDetailsScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               _buildLabel(LocaleKeys.clientName.localize),
-              CustomSupportTextField(validator: (String? value) {  },hintText: LocaleKeys.enterYourName.localize, controller: nameController),
+              CustomSupportTextField(
+                  validator: (String? value) {},
+                  hintText: LocaleKeys.enterYourName.localize,
+                  controller: nameController),
               SizedBox(height: 16),
               _buildLabel(LocaleKeys.clientPhone.localize),
-              CustomSupportTextField(validator: (String? value) {  },hintText: LocaleKeys.enterYourPhoneNumber.localize, controller: phoneController),
+              CustomSupportTextField(
+                  validator: (String? value) {},
+                  hintText: LocaleKeys.enterYourPhoneNumber.localize,
+                  controller: phoneController),
               SizedBox(height: 16),
               _buildLabel(LocaleKeys.email.localize),
-              CustomSupportTextField(validator: (String? value) {  },hintText: LocaleKeys.enterYourEmail.localize, controller: emailController),
+              CustomSupportTextField(
+                  validator: (String? value) {},
+                  hintText: LocaleKeys.enterYourEmail.localize,
+                  controller: emailController),
               SizedBox(height: 16),
               _buildLabel(LocaleKeys.deviceID.localize),
-              CustomSupportTextField(validator: (String? value) {  },hintText: LocaleKeys.enterYourDeviceID.localize, controller: deviceIdController),
+              CustomSupportTextField(
+                  validator: (String? value) {},
+                  hintText: LocaleKeys.enterYourDeviceID.localize,
+                  controller: deviceIdController),
               SizedBox(height: 30),
               ElevatedButton.icon(
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   context.push(Routes.emergencyContactsScreen);
                 },
                 icon: Icon(Icons.download, color: Colors.white),

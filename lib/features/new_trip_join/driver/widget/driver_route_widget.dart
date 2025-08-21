@@ -20,6 +20,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
 class DriverRouteWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
@@ -41,14 +42,10 @@ class DriverRouteWidget extends StatefulWidget {
 }
 
 class _DriverRouteWidgetState extends State<DriverRouteWidget> {
-
-
-
-
   String getBookingStatus(String status) {
     switch (status) {
       case 'pending':
-        return context.isArabic?'انتظار':'Pending';
+        return context.isArabic ? 'انتظار' : 'Pending';
       case 'accepted':
         return LocaleKeys.accepted.localize;
       case 'expired':
@@ -88,8 +85,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color:
-            context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
           ),
         ),
         child: Padding(
@@ -131,7 +127,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                         ),
                       ),
                       Text(
-                        context.isArabic?'لكل مقعد':'Per Seat',
+                        context.isArabic ? 'لكل مقعد' : 'Per Seat',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppColors.getRedColor(context),
@@ -157,14 +153,14 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                           ),
                         ),
                         SizedBox(height: 8.h),
-                          SvgPicture.asset(Assets.bookedMan),
+                        SvgPicture.asset(Assets.bookedMan),
                       ],
                     ),
                     Column(
                       children: [
                         Text(
                           ((widget.model?.availableSeats ?? 0) >= 2)
-                              ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
+                              ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                               : LocaleKeys.booked.localize,
                           style: TextStyle(
                             fontSize: 20.sp,
@@ -187,7 +183,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                           padding: const EdgeInsets.only(left: 13),
                           child: Text(
                             ((widget.model?.availableSeats ?? 0) >= 1)
-                                ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
+                                ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
                                 : LocaleKeys.booked.localize,
                             style: TextStyle(
                               fontSize: 20.sp,
@@ -253,7 +249,11 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                         thickness: 2,
                       ),
                     ),
-                    Icon(Icons.circle, color:((widget.model?.availableSeats ?? 0) <= 1)?Colors.red: Colors.green, size: 12),
+                    Icon(Icons.circle,
+                        color: ((widget.model?.availableSeats ?? 0) <= 1)
+                            ? Colors.red
+                            : Colors.green,
+                        size: 12),
                     Expanded(
                       child: Divider(
                         color: context.isDarkMode
@@ -262,7 +262,11 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                         thickness: 2,
                       ),
                     ),
-                    Icon(Icons.circle, color: ((widget.model?.availableSeats ?? 0) < 1)?Colors.red:Colors.green, size: 12),
+                    Icon(Icons.circle,
+                        color: ((widget.model?.availableSeats ?? 0) < 1)
+                            ? Colors.red
+                            : Colors.green,
+                        size: 12),
                     Expanded(
                       child: Divider(
                         color: context.isDarkMode
@@ -360,8 +364,7 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                     },
                     child: Text(
                       isComfort(widget.model?.features ?? [])
@@ -379,17 +382,18 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                 ],
               ),
               SizedBox(height: 8),
-              if(widget.hasAcceptButton==true)AppButton(
-                  width: context.screenWidth ,
-                  label: context.isArabic ? 'قبول' : 'Accept',
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {
-      ManageVibration.vibrate();
-                    if(widget.onAccept!=null){
-                      widget.onAccept!();
-                    }
-                    // cubit
-                  }),
+              if (widget.hasAcceptButton == true)
+                AppButton(
+                    width: context.screenWidth,
+                    label: context.isArabic ? 'قبول' : 'Accept',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      if (widget.onAccept != null) {
+                        widget.onAccept!();
+                      }
+                      // cubit
+                    }),
             ],
           ),
         ),
@@ -404,41 +408,40 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
     List<dynamic> polyLine = model?.polyLine ?? [];
 
     List<List<double>> parsedPolyline = polyLine
-        .map<List<double>>((item) =>
-        (item as List).map((e) => (e as num).toDouble()).toList())
+        .map<List<double>>(
+            (item) => (item as List).map((e) => (e as num).toDouble()).toList())
         .toList();
-    routePoints =
-        _convertPolylineToLatLng(parsedPolyline);
-
-
+    routePoints = _convertPolylineToLatLng(parsedPolyline);
 
     List<BookingClientEntity> clients = List.from(model?.clients ?? []);
     if (clients.isNotEmpty) {
       clients.removeWhere((e) => e.id == model?.creatorId);
     }
 
-    List<gmap.LatLng> convertClientsToLatLng(List<BookingClientEntity> clients) {
+    List<gmap.LatLng> convertClientsToLatLng(
+        List<BookingClientEntity> clients) {
       return clients.map((client) {
         final coords = client.location.location;
         return gmap.LatLng(coords[1], coords[0]); // [latitude, longitude]
       }).toList();
     }
 
-
     return GestureDetector(
-      onTap: (){
-      ManageVibration.vibrate();
+      onTap: () {
+        ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              appBar: AppBar(title: Text(context.isArabic?'تفاصيل الرحلة':'Route Details')),
+              appBar: AppBar(
+                  title: Text(
+                      context.isArabic ? 'تفاصيل الرحلة' : 'Route Details')),
               body: MapViewDetails(
                 startLocation: gmap.LatLng(model?.startLocation?.location[1],
                     model?.startLocation?.location[0]),
                 targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
                     model?.targetLocation?.location[0]),
-                polylinePoints:routePoints,
+                polylinePoints: routePoints,
                 clientLocations: convertClientsToLatLng(clients),
               ),
             ),
@@ -448,11 +451,15 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
       child: AbsorbPointer(
         absorbing: true,
         child: CustomGoogleMap(
-          startLocation:model?.startLocation==null?null: gmap.LatLng(model?.startLocation?.location[1],
-              model?.startLocation?.location[0]),
-          targetLocation: model?.targetLocation==null?null:gmap.LatLng(model?.targetLocation?.location[1],
-              model?.targetLocation?.location[0]),
-          polylinePoints:routePoints,
+          startLocation: model?.startLocation == null
+              ? null
+              : gmap.LatLng(model?.startLocation?.location[1],
+                  model?.startLocation?.location[0]),
+          targetLocation: model?.targetLocation == null
+              ? null
+              : gmap.LatLng(model?.targetLocation?.location[1],
+                  model?.targetLocation?.location[0]),
+          polylinePoints: routePoints,
           clientLocations: convertClientsToLatLng(clients),
         ),
       ),

@@ -44,7 +44,7 @@ class CreatePostBanner extends StatelessWidget {
           Expanded(
               child: InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               !context.read<UserCubit>().isLoggedIn
                   ? pleaseLoginDialog(context)
                   // context.push(Routes.LOGIN)

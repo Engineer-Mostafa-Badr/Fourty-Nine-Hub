@@ -61,7 +61,8 @@ class BottomSheetHelper {
                   child: AvaialbleTripsButton(
                     title: context.isArabic ? "خدمة الاتصال" : "Service Call",
                     color: AppColors.SECONDARY_COLOR,
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     onTap: () {
                       ManageVibration.vibrate();
                       Navigator.pop(context);
@@ -75,19 +76,23 @@ class BottomSheetHelper {
                   child: AvaialbleTripsButton(
                     title: context.isArabic ? "اتصال مميز" : "Premium Call",
                     color: AppColors.SECONDARY_COLOR,
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     onTap: () async {
                       ManageVibration.vibrate();
                       Navigator.pop(context);
 
-                      if (await Permission.microphone.request() != PermissionStatus.granted ||
-                          await Permission.camera.request() != PermissionStatus.granted) {
+                      if (await Permission.microphone.request() !=
+                              PermissionStatus.granted ||
+                          await Permission.camera.request() !=
+                              PermissionStatus.granted) {
                         await Permission.microphone.request();
                         await Permission.camera.request();
                       }
 
-                      final fcmToken = await serviceLocator<FcmNotificationHelper>()
-                          .getFcmUserToken();
+                      final fcmToken =
+                          await serviceLocator<FcmNotificationHelper>()
+                              .getFcmUserToken();
 
                       Navigator.push(
                         context,
@@ -100,7 +105,7 @@ class BottomSheetHelper {
                               firstName: receiverName,
                               lastName: '',
                               firebaseToken:
-                              'f8pcALRKSje_HWSPy865gD:APA91bGFQy7NEKUePDgiMRynntFkkZdW66G7k48gfQH5GgHU70fOg_7cxDPjagL25qzT35GA1fU2zrvd5ltKyEkAb0_tYMPktfn8tmg0r8pa9D3u17lnqQQ',
+                                  'f8pcALRKSje_HWSPy865gD:APA91bGFQy7NEKUePDgiMRynntFkkZdW66G7k48gfQH5GgHU70fOg_7cxDPjagL25qzT35GA1fU2zrvd5ltKyEkAb0_tYMPktfn8tmg0r8pa9D3u17lnqQQ',
                             ),
                             sender: UserModel(
                               id: senderId,
@@ -122,16 +127,15 @@ class BottomSheetHelper {
     );
   }
 
-
   static Future<void> startChatAndNavigate({
     required BuildContext context,
     required String otherUserId,
     required String categoryId,
   }) async {
     final chat = await context.read<UserCubit>().createNormalChat(
-      otherId: otherUserId,
-      categoryId: categoryId,
-    );
+          otherId: otherUserId,
+          categoryId: categoryId,
+        );
 
     if (chat != null) {
       context.push(
@@ -144,7 +148,11 @@ class BottomSheetHelper {
       );
     } else {
       // Optional: handle null chat (e.g. show error/snackbar)
-      showErrorMessage(context,context.isArabic?'حدث حطأ حاول مرة اخري.':'Unable to start chat.');
+      showErrorMessage(
+          context,
+          context.isArabic
+              ? 'حدث حطأ حاول مرة اخري.'
+              : 'Unable to start chat.');
     }
   }
 }

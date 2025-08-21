@@ -90,7 +90,7 @@ class YoutubeVideoCard extends StatelessWidget {
               IconAppButton(
                   icon: Icons.more_vert,
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     bottomSheet(
                       context: context,
                       widget: const Column(

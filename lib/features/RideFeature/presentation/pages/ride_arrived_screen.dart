@@ -94,10 +94,12 @@ class RideArrivedScreen extends StatelessWidget {
                               to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               hasTitle: true,
                             ),
-                            CustomRideButton(text: "I've Arrived",onPressed: (){
-
-      ManageVibration.vibrate();
-                            },),
+                            CustomRideButton(
+                              text: "I've Arrived",
+                              onPressed: () {
+                                ManageVibration.vibrate();
+                              },
+                            ),
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 10, // المسافة بين الأزرار
@@ -170,7 +172,7 @@ class CustomRideButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
 
-  const CustomRideButton({super.key, required this.text,this.onPressed});
+  const CustomRideButton({super.key, required this.text, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

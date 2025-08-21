@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath 'com.android.tools.build:gradle:8.6.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:4.4.2"
         configurations.all {
@@ -18,29 +18,24 @@ buildscript {
 }
 
 subprojects {
-    afterEvaluate {project ->
-        if (project.hasProperty('android')) {
-            // Get Android extension safely
-            def androidExt = project.extensions.findByName('android')
-            if (androidExt != null) {
-                // Safely check if kotlinOptions exists on this extension
-                try {
-                    androidExt.compileOptions {
-                        sourceCompatibility JavaVersion.VERSION_1_8
-                        targetCompatibility JavaVersion.VERSION_1_8
-                    }
-                    if (project.plugins.hasPlugin('kotlin-android')) {
-                        project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-                            kotlinOptions {
-                                jvmTarget = "1.8"
-                                freeCompilerArgs += ['-Xskip-metadata-version-check']
-                            }
+    afterEvaluate { project ->
+        def androidExt = project.extensions.findByName('android')
+        if (androidExt != null) {
+            try {
+                androidExt.compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+                if (project.plugins.hasPlugin('kotlin-android')) {
+                    project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                        kotlinOptions {
+                            jvmTarget = "1.8"
+                            freeCompilerArgs += ['-Xskip-metadata-version-check']
                         }
                     }
-                } catch (Exception e) {
-                    // Log the error but continue with the build
-                    println "Warning: Could not apply Kotlin options to ${project.name}: ${e.message}"
                 }
+            } catch (Exception e) {
+                println "Warning: Could not apply Kotlin options to ${project.name}: ${e.message}"
             }
         }
     }

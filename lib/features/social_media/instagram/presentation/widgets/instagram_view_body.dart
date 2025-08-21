@@ -193,7 +193,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
         if (state.status.isLoading || state.status.isInitial) {
           return const CustomLoading();
         }
-        if (state.errMessage == "Unauthorized" ) {
+        if (state.errMessage == "Unauthorized") {
           return CustomFailureWidget(
             title: 'Please login',
             buttonTitle: "Login",
@@ -201,7 +201,6 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
               ManageVibration.vibrate();
               pleaseLoginDialog(context);
             },
-
           );
         }
         if (state.status.isFailure) {
@@ -548,7 +547,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                       ManageVibration.vibrate();
                       // يقوم بنقلك لصفحة انشاء منشور او ريلز للانستقرام
                       if (index == 1) {
-                        context.goNamed(
+                        context.go(
                           Routes.CREATEPOSTINSTAGRAM,
                         );
                       }

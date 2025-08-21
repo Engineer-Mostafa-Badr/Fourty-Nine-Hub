@@ -205,7 +205,7 @@ class MessageCard extends StatelessWidget {
             },
       child: InkWell(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           log("message sender id : ${messageEntity.sender.id}");
           if (messageEntity.isSelected) {
             context
@@ -317,7 +317,7 @@ class MessageCard extends StatelessWidget {
             },
       child: InkWell(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           log("message sender id : ${messageEntity.sender.id}");
           if (messageEntity.isSelected) {
             context
@@ -502,12 +502,12 @@ class MessageCard extends StatelessWidget {
                     context,
                     AlertDialog(
                       title: const Text("Show Deleted Message"),
-                      content: Text(
-                          chatRoomCubit.deletedMessage?.text ?? LocaleKeys.loading.localize),
+                      content: Text(chatRoomCubit.deletedMessage?.text ??
+                          LocaleKeys.loading.localize),
                       actions: [
                         TextButton(
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             Navigator.of(context).pop();
                           },
                           child: const Text("OK"),
@@ -521,7 +521,7 @@ class MessageCard extends StatelessWidget {
                 //   actions: [
                 //     TextButton(
                 //       onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 //         Navigator.of(context).pop();
                 //       },
                 //       child: const Text("OK"),
@@ -549,7 +549,7 @@ class MessageCard extends StatelessWidget {
         showAlert(context, messageEntity, chatRoomCubit);
       },
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         log("message sender id : ${messageEntity.sender.id}");
         if (messageEntity.isSelected) {
           context
@@ -916,7 +916,7 @@ class MessageCard extends StatelessWidget {
                                     : const SizedBox(),
                                 InkWell(
                                   onTap: () async {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     if ((!messageEntity.isOneTimeSeenMessage) &&
                                         (messageEntity.media.isEmpty)) {
                                       await chatRoomCubit.getOneTimeViewMessage(
@@ -943,7 +943,8 @@ class MessageCard extends StatelessWidget {
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () {
-      ManageVibration.vibrate();
+                                                            ManageVibration
+                                                                .vibrate();
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
@@ -965,7 +966,7 @@ class MessageCard extends StatelessWidget {
                                                   //   actions: [
                                                   //     TextButton(
                                                   //       onPressed: () {
-      ManageVibration.vibrate();
+                                                  ManageVibration.vibrate();
                                                   //         Navigator.of(context)
                                                   //             .pop();
                                                   //       },
@@ -1269,7 +1270,7 @@ class MessageCard extends StatelessWidget {
     final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         log("message sender id : ${messageEntity.sender.id}");
         if (messageEntity.isSelected) {
           context
@@ -1534,7 +1535,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
     final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (widget.messageEntity.isSelected) {
           context
               .read<ChatRoomCubit>()
@@ -1648,7 +1649,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                           width: MediaQuery.of(context).size.width * 0.7,
                           child: GestureDetector(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               log("voice message card tap is listened : ${widget.messageEntity.isListened}");
                               log("voice message card tap : ${widget.messageEntity.toString()}");
                             },
@@ -1668,7 +1669,9 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.7-50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7 -
+                                          50,
                                   child: VoiceMessageView(
                                     activeSliderColor: Colors.black,
                                     playIcon: const Icon(
@@ -1700,15 +1703,19 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                                     innerPadding: 0,
                                     cornerRadius: 12,
                                     controller: VoiceController(
-                                      audioSrc: widget.messageEntity.media[0].url,
-                                      maxDuration: const Duration(minutes: 1000),
+                                      audioSrc:
+                                          widget.messageEntity.media[0].url,
+                                      maxDuration:
+                                          const Duration(minutes: 1000),
                                       isFile: false,
                                       onComplete: () async {
                                         isListeningNotifier.value = false;
                                         if (!widget.messageEntity.byMe &&
                                             !widget.messageEntity.isListened) {
-                                          await chatRoomCubit.setRecordAsListened(
-                                              message: widget.messageEntity);
+                                          await chatRoomCubit
+                                              .setRecordAsListened(
+                                                  message:
+                                                      widget.messageEntity);
                                           // setState(() {
                                           // widget.messageEntity.isListened = true;
                                           // });
@@ -1724,8 +1731,10 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                                         isListeningNotifier.value = false;
                                         if (!widget.messageEntity.byMe &&
                                             !widget.messageEntity.isListened) {
-                                          await chatRoomCubit.setRecordAsListened(
-                                              message: widget.messageEntity);
+                                          await chatRoomCubit
+                                              .setRecordAsListened(
+                                                  message:
+                                                      widget.messageEntity);
                                           // setState(() {
                                           // widget.messageEntity.isListened = true;
                                           // });
@@ -1738,8 +1747,10 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                                         isListeningNotifier.value = true;
                                         if (!widget.messageEntity.byMe &&
                                             !widget.messageEntity.isListened) {
-                                          await chatRoomCubit.setRecordAsListened(
-                                              message: widget.messageEntity);
+                                          await chatRoomCubit
+                                              .setRecordAsListened(
+                                                  message:
+                                                      widget.messageEntity);
                                           // setState(() {
                                           // widget.messageEntity.isListened = true;
                                           // });
@@ -2114,7 +2125,7 @@ class FourOrMoreMediaCard extends StatelessWidget {
             right: 8,
             child: GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 context.push(Routes.SHOWIMAGEVIEW, extra: messageEntity);
               },
               child: Container(
@@ -2294,7 +2305,7 @@ class CustomVideoCard extends StatelessWidget {
         builder: (context, snapshot) {
           return InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(
                 Routes.IMAGESPAGEVIEW,
                 extra: ImagesPageViewParams(
@@ -2370,7 +2381,7 @@ class _CustomChachedNetworkImageState extends State<CustomChachedNetworkImage> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         context.push(
           Routes.IMAGESPAGEVIEW,
           extra: ImagesPageViewParams(

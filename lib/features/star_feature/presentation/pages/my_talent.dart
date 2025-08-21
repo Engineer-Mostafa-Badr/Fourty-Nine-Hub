@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
 import 'all_winner_view.dart';
-import 'widgets/get_my_talents.dart';
+import '../widgets/get_my_talents.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/localization/locale_keys.g.dart';

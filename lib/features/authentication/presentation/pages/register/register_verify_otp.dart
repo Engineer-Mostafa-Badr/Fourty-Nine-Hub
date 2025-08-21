@@ -109,7 +109,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                         horizontal: 8),
                                     child: ElevatedButton(
                                       onPressed: () {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         Navigator.of(context).pop();
                                       },
                                       style: ElevatedButton.styleFrom(

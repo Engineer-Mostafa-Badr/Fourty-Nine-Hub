@@ -217,6 +217,7 @@ class LoginCubit extends Cubit<LoginState> {
       // Sign in with Firebase
       final userCredential = await _socialAuthService.signInWithApple();
 
+      print('userCredential: $userCredential');
       if (userCredential?.user != null) {
         log('LoginCubit: Apple sign-in successful, handling social login...');
         await _handleSocialLogin(userCredential!);

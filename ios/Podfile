@@ -1,5 +1,9 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '16.0'
+source 'https://github.com/CocoaPods/Specs.git'
+# source 'https://cdn.cocoapods.org/'
+platform :ios, '14.0'
+
+# Add Firebase modules explicitly
+$FirebaseSDKVersion = '11.10.0'  # Match version from Podfile.lock
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -27,9 +31,13 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  # IMPORTANT: static linkage fixes 'Flutter/Flutter.h' not found with ZEGO & others
   use_frameworks! :linkage => :static
   use_modular_headers!
+  # Explicit Firebase dependencies
+  pod 'Firebase/Core', $FirebaseSDKVersion
+  pod 'Firebase/Auth', $FirebaseSDKVersion
+  pod 'Firebase/Messaging', $FirebaseSDKVersion
+  pod 'ZegoExpressEngine', :path => 'ZegoExpressEngine/'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
@@ -42,22 +50,24 @@ post_install do |installer|
   # Standard Flutter extra settings
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-
     target.build_configurations.each do |config|
-
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
         '$(inherited)',
-
-        ## dart: PermissionGroup.camera
-         'PERMISSION_CAMERA=1',
-
-        ## dart: PermissionGroup.microphone
-         'PERMISSION_MICROPHONE=1',
+        'PERMISSION_CAMERA=1',
+        'PERMISSION_MICROPHONE=1',
       ]
-      # Keep deployment target consistent with the platform line
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
-      # Bitcode is deprecated; avoid odd warnings
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      # Exclude arm64 for simulator (optional, fixes Apple Silicon sim issues)
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+
+      # Optional: skip embedding if needed
+#       if target.name == 'deepar_flutter_plus'
+#         config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -framework "DeepAR"'
+#         config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
+#           '$(inherited)',
+#           '$(PODS_ROOT)/deepar_flutter_plus/ios'
+#         ]
+#       end
     end
 
     # Prevent duplicate-embed from deepar_flutter (your original intent)

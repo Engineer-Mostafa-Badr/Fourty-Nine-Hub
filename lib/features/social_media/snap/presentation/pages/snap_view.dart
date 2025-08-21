@@ -389,7 +389,7 @@ class _AdvancedSnapchatCameraScreenState
 
                                 return GestureDetector(
                                   onTap: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     if (selectedFilterIndex == index) {
                                       _showOverlay(context);
                                       _capturePng().then((value) {
@@ -465,7 +465,7 @@ class _AdvancedSnapchatCameraScreenState
                               ],
                             ),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -499,13 +499,12 @@ class _AdvancedSnapchatCameraScreenState
             children: [
               GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
                   } else {
-
-                      return pleaseLoginDialog(context);
+                    return pleaseLoginDialog(context);
 
                     // context.go(Routes.LOGIN);
                   }
@@ -532,7 +531,7 @@ class _AdvancedSnapchatCameraScreenState
           ),
           IconButton(
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 showDialog(
                     context: context, builder: (_) => const SearchAppUsers());
               },

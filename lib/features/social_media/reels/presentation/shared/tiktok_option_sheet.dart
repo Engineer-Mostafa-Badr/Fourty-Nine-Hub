@@ -103,7 +103,7 @@ class TiktokOptionBottomSheetWidget extends StatelessWidget {
               ),
             ),
             onTap: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               Navigator.pop(context);
               context.push(
                 Routes.LIVEView,
@@ -154,7 +154,7 @@ class TiktokOptionBottomSheetWidget extends StatelessWidget {
               ),
             ),
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.pop();
               context.push(Routes.LIVE);
             },

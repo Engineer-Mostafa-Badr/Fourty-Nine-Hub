@@ -90,9 +90,10 @@ class FirstLoginScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 SizedBox(
+                  height: 60.h,
                   width: MediaQuery.sizeOf(context).width * .4,
-                  height: 50,
                   child: DefaultButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,
@@ -111,9 +112,10 @@ class FirstLoginScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 SizedBox(
-                  height: 50,
+                  height: 60.h,
                   width: MediaQuery.sizeOf(context).width * .4,
                   child: DefaultButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,

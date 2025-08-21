@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -62,10 +61,12 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
     }
   }
 
-   _fetchMoreTrips() {
+  _fetchMoreTrips() {
     if (isFetching) return;
     setState(() => isFetching = true);
-    widget.params.rideCubit.fetchAllHistoryTrips(limit: limit, page: ++page).then((_) {
+    widget.params.rideCubit
+        .fetchAllHistoryTrips(limit: limit, page: ++page)
+        .then((_) {
       if (mounted) setState(() => isFetching = false);
     }).catchError((_) {
       if (mounted) setState(() => isFetching = false);
@@ -91,93 +92,97 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
               title: Transform(
                 transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
                 child: Text(
-                  context.isArabic? "الرحلات السابقة": "Your Past Trips",
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+                  context.isArabic ? "الرحلات السابقة" : "Your Past Trips",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 24),
                 ),
               ),
             ),
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
                 if (state.status == RideStates.loading && page == 1) {
-
                   return const Center(child: CustomLoadingSearchWidget());
                 } else if (state.status == RideStates.error) {
-
                   return const SizedBox();
-                } {
-
-                  if(state.historyTrips?.isEmpty??true) {
-                    return Center(child: Text(context.isArabic ? "لا يوجد رحلات سابقة" : "No past trips"));
+                }
+                {
+                  if (state.historyTrips?.isEmpty ?? true) {
+                    return Center(
+                        child: Text(context.isArabic
+                            ? "لا يوجد رحلات سابقة"
+                            : "No past trips"));
                   }
                   return OlxPaginationWidget(
-                      itemsPerPage: 2,
-                      loadPage: (page) {
-                        print('==> page $page');
-                        return _fetchMoreTrips();
-                      },
-                      banners: bannersList,
-                      items: List.generate(
-                          state.historyTrips?.length ?? 0,
-                              (index){
-                                {
-                                  if (index == state.historyTrips?.length) {
-                                    return const Center(child: CustomLoadingSearchWidget());
-                                  }
-                                  final trip = state.historyTrips?[index];
-                                  if (trip == null) return const SizedBox.shrink();
-                                  // return Padding(
-                                  //   padding: const EdgeInsets.all(16),
-                                  //   child: Row(
-                                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                                  //     children: [
-                                  //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
-                                  //       const SizedBox(width: 16),
-                                  //       PriceColumn(
-                                  //         startAddressTitle: trip.address,
-                                  //         date: context.isArabic
-                                  //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
-                                  //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
-                                  //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
-                                  //       ),
-                                  //       const Spacer(),
-                                  //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
-                                  //     ],
-                                  //   ),
-                                  // );
-                                  return TripCard(trip: trip);
-                                }
-                              }), scrollController: newScrollController,);
-                //   return ListView.builder(
-                //     controller: _scrollController,
-                //     itemCount: (state.historyTrips?.length ?? 0) + (isFetching ? 1 : 0),
-                //     itemBuilder: (context, index) {
-                //       if (index == state.historyTrips?.length) {
-                //         return const Center(child: CustomLoadingSearchWidget());
-                //       }
-                //       final trip = state.historyTrips?[index];
-                //       if (trip == null) return const SizedBox.shrink();
-                //       // return Padding(
-                //       //   padding: const EdgeInsets.all(16),
-                //       //   child: Row(
-                //       //     crossAxisAlignment: CrossAxisAlignment.start,
-                //       //     children: [
-                //       //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
-                //       //       const SizedBox(width: 16),
-                //       //       PriceColumn(
-                //       //         startAddressTitle: trip.address,
-                //       //         date: context.isArabic
-                //       //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
-                //       //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
-                //       //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
-                //       //       ),
-                //       //       const Spacer(),
-                //       //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
-                //       //     ],
-                //       //   ),
-                //       // );
-                //       return TripCard(trip: trip);
-                //     },
-                //   );
+                    itemsPerPage: 2,
+                    loadPage: (page) {
+                      print('==> page $page');
+                      return _fetchMoreTrips();
+                    },
+                    banners: bannersList,
+                    items:
+                        List.generate(state.historyTrips?.length ?? 0, (index) {
+                      {
+                        if (index == state.historyTrips?.length) {
+                          return const Center(
+                              child: CustomLoadingSearchWidget());
+                        }
+                        final trip = state.historyTrips?[index];
+                        if (trip == null) return const SizedBox.shrink();
+                        // return Padding(
+                        //   padding: const EdgeInsets.all(16),
+                        //   child: Row(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
+                        //       const SizedBox(width: 16),
+                        //       PriceColumn(
+                        //         startAddressTitle: trip.address,
+                        //         date: context.isArabic
+                        //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
+                        //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
+                        //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
+                        //       ),
+                        //       const Spacer(),
+                        //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
+                        //     ],
+                        //   ),
+                        // );
+                        return TripCard(trip: trip);
+                      }
+                    }),
+                    scrollController: newScrollController,
+                  );
+                  //   return ListView.builder(
+                  //     controller: _scrollController,
+                  //     itemCount: (state.historyTrips?.length ?? 0) + (isFetching ? 1 : 0),
+                  //     itemBuilder: (context, index) {
+                  //       if (index == state.historyTrips?.length) {
+                  //         return const Center(child: CustomLoadingSearchWidget());
+                  //       }
+                  //       final trip = state.historyTrips?[index];
+                  //       if (trip == null) return const SizedBox.shrink();
+                  //       // return Padding(
+                  //       //   padding: const EdgeInsets.all(16),
+                  //       //   child: Row(
+                  //       //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //       //     children: [
+                  //       //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
+                  //       //       const SizedBox(width: 16),
+                  //       //       PriceColumn(
+                  //       //         startAddressTitle: trip.address,
+                  //       //         date: context.isArabic
+                  //       //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
+                  //       //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
+                  //       //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
+                  //       //       ),
+                  //       //       const Spacer(),
+                  //       //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
+                  //       //     ],
+                  //       //   ),
+                  //       // );
+                  //       return TripCard(trip: trip);
+                  //     },
+                  //   );
                 }
                 // return const Center(child: Text("No expired trips available"));
               },
@@ -195,7 +200,6 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
   }
 }
 
-
 class PriceColumn extends StatelessWidget {
   final String? startAddressTitle;
   final String? targetAddressTitle;
@@ -211,7 +215,7 @@ class PriceColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if(startAddressTitle != null)
+        if (startAddressTitle != null)
           Row(
             children: [
               const Icon(
@@ -221,7 +225,8 @@ class PriceColumn extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.45),
                 child: Label(
                   text: startAddressTitle!,
                   style: const TextStyle(
@@ -233,7 +238,7 @@ class PriceColumn extends StatelessWidget {
             ],
           ),
         const SizedBox(height: 4),
-        if(targetAddressTitle != null)
+        if (targetAddressTitle != null)
           Row(
             children: [
               const Icon(
@@ -243,7 +248,8 @@ class PriceColumn extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               ConstrainedBox(
-                constraints:  BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.45),
                 child: Label(
                   text: targetAddressTitle!,
                   style: const TextStyle(
@@ -282,12 +288,10 @@ class PriceColumn extends StatelessWidget {
         //     //         fontWeight: FontWeight.w700))
         //   ],
         // ),
-
       ],
     );
   }
 }
-
 
 class TripCard extends StatelessWidget {
   final HistoryTripsEntity trip;
@@ -323,11 +327,13 @@ class TripCard extends StatelessWidget {
       print('Error processing client locations: $e');
     }
 
-    if(trip.wayPointOneAddressTitle !=null && (trip.wayPointOneAddressTitle?.isNotEmpty??false)){
+    if (trip.wayPointOneAddressTitle != null &&
+        (trip.wayPointOneAddressTitle?.isNotEmpty ?? false)) {
       clientsAddress.add(trip.wayPointOneAddressTitle!);
     }
 
-    if(trip.wayPointTwoAddressTitle!=null && (trip.wayPointTwoAddressTitle?.isNotEmpty??false)){
+    if (trip.wayPointTwoAddressTitle != null &&
+        (trip.wayPointTwoAddressTitle?.isNotEmpty ?? false)) {
       clientsAddress.add(trip.wayPointTwoAddressTitle!);
     }
 
@@ -386,17 +392,25 @@ class TripCard extends StatelessWidget {
             //       ),
             //     ),
             //   ),
-            if(trip.startLocationLat != null && trip.startLocationLng != null && trip.targetLocationLat != null && trip.targetLocationLng != null)
+            if (trip.startLocationLat != null &&
+                trip.startLocationLng != null &&
+                trip.targetLocationLat != null &&
+                trip.targetLocationLng != null)
               ClipRRect(
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16)),
                 child: SizedBox(
                   height: 130,
                   child: CustomGoogleMap(
-                    startLocation: gmap.LatLng(trip.startLocationLng?? 0, trip.startLocationLat?? 0),
-                    targetLocation: gmap.LatLng(trip.targetLocationLng?? 0, trip.targetLocationLat?? 0),
+                    startLocation: gmap.LatLng(
+                        trip.startLocationLng ?? 0, trip.startLocationLat ?? 0),
+                    targetLocation: gmap.LatLng(trip.targetLocationLng ?? 0,
+                        trip.targetLocationLat ?? 0),
                     clientAddresses: clientsAddress,
                     clientLocations: clients,
-                    polylinePoints: _convertPolylineToLatLng(trip.polyline ?? []),
+                    polylinePoints:
+                        _convertPolylineToLatLng(trip.polyline ?? []),
                   ),
                 ),
               ),
@@ -408,10 +422,13 @@ class TripCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CarContainer(
-                    title: isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn,
+                    title: isArabic
+                        ? trip.subCategoryNameAr
+                        : trip.subCategoryNameEn,
                     image: trip.subCategoryPicture,
                     date: dateFormat.format(trip.createdAt!),
-                    price: '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
+                    price:
+                        '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
                   ),
                   const SizedBox(width: 8),
                   PriceColumn(

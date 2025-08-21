@@ -38,7 +38,7 @@ class DoctorStatisticsView extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // context.push(Routes.ALLDOCTORRESERVATIONS);
                       },
                       child: DoctorHistoryCard(

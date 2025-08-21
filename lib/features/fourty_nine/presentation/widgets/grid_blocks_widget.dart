@@ -160,8 +160,6 @@
 //   }
 // }
 
-
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -229,7 +227,7 @@ class GridBlocksWidget extends StatelessWidget {
       _buildStarWidget(
         context,
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
           }
@@ -306,7 +304,7 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.pinkAccent.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
-        title: context.isArabic?'عملات':'Exchange',
+        title: context.isArabic ? 'عملات' : 'Exchange',
       ),
       _buildStarWidget(
         context,
@@ -318,9 +316,8 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.green.withValues(alpha: 0.9),
         image: Assets.bidImage,
-        title: context.isArabic?'مزاد':'Auction',
+        title: context.isArabic ? 'مزاد' : 'Auction',
       ),
-
       _buildStarWidget(
         context,
         onTap: () {
@@ -332,26 +329,25 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.grey.withValues(alpha: 0.9),
         image: Assets.gamesImage,
-        title: context.isArabic?'العاب':'Games',
+        title: context.isArabic ? 'العاب' : 'Games',
       ),
     ];
 
     return Directionality(
-      textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+      textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: CarouselSlider(
         options: CarouselOptions(
-          height:140.h, // Adjust depending on card height
+          height: 140.h, // Adjust depending on card height
           autoPlay: true,
           enlargeCenterPage: false,
           enlargeStrategy: CenterPageEnlargeStrategy.scale,
-          viewportFraction:0.3, // Show 3 cards: center + partial sides
+          viewportFraction: 0.3, // Show 3 cards: center + partial sides
           enableInfiniteScroll: true,
           autoPlayInterval: const Duration(seconds: 3),
-      
         ),
         items: items.map((item) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: item,
           );
         }).toList(),
@@ -360,16 +356,16 @@ class GridBlocksWidget extends StatelessWidget {
   }
 
   static Widget _buildStarWidget(
-      BuildContext context, {
-        void Function()? onTap,
-        required Color shadowColor,
-        required String title,
-        required String image,
-      }) {
+    BuildContext context, {
+    void Function()? onTap,
+    required Color shadowColor,
+    required String title,
+    required String image,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height:140.h, // Adjust depending on card height
+        height: 140.h, // Adjust depending on card height
         width: 200.w,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,

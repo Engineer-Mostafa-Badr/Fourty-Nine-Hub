@@ -22,7 +22,7 @@ class RouteButtonWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 1),
           child: GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.push(Routes.captainShareInfoScreen);
             },
             child: Container(
@@ -43,7 +43,7 @@ class RouteButtonWidget extends StatelessWidget {
         const Spacer(),
         GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             context.push(Routes.newRouteScreen);
           },
           child: Container(

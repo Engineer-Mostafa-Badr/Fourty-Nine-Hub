@@ -21,8 +21,8 @@ class AddStoryAndSoundButton extends StatelessWidget {
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () {
-      ManageVibration.vibrate();
-                context.pushNamed(Routes.AddStoryScreen);
+                ManageVibration.vibrate();
+                context.push(Routes.AddStoryScreen);
               },
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Colors.white),
@@ -48,8 +48,8 @@ class AddStoryAndSoundButton extends StatelessWidget {
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () {
-      ManageVibration.vibrate();
-          },
+                ManageVibration.vibrate();
+              },
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Color(0xffFF3308)),
                 side: WidgetStateProperty.all(

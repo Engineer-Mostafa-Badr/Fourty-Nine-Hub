@@ -36,7 +36,7 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   height: 1.22,
                 ),
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   context.push(Routes.EDITPROFILE);
                 },
               ),
@@ -56,8 +56,7 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   height: 1.22,
                 ),
                 onPressed: () {
-
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                 },
               ),
             ),
@@ -83,8 +82,7 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   height: 1.22,
                 ),
                 onPressed: () {
-
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                 },
               ),
             ),
@@ -103,8 +101,7 @@ class ButtonsProfileInstagramSection extends StatelessWidget {
                   height: 1.22,
                 ),
                 onPressed: () {
-
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                 },
               ),
             ),

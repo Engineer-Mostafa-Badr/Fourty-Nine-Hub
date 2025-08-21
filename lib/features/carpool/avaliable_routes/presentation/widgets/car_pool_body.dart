@@ -293,12 +293,12 @@ class _CarPoolBodyState extends State<CarPoolBody>
                   ),
                   CarpoolFloatingActionButton(
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context.read<UserCubit>().isLoggedIn
                           ? context.pushReplacement(Routes.ADD_NEW_ROUTE)
                           : pleaseLoginDialog(context);
 
-                        // context.push(Routes.LOGIN);
+                      // context.push(Routes.LOGIN);
                     },
                   ),
                 ],

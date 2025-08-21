@@ -41,7 +41,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.go(
                 Routes.INSTAGRAMPROFILE,
                 extra: userId,
@@ -96,7 +96,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.white,

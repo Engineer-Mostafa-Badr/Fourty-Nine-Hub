@@ -130,13 +130,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     ),
                                   );
                                 }),
-                            if (context.read<UserCubit>().isLoggedIn)drawerListTile(
-                                image: Assets.changePassword,
-                                label: LocaleKeys.changePassword.localize,
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context.push(Routes.CHANGEPASSWORDSECOND);
-                                }),
+                            if (context.read<UserCubit>().isLoggedIn)
+                              drawerListTile(
+                                  image: Assets.changePassword,
+                                  label: LocaleKeys.changePassword.localize,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    context
+                                        .pushNamed(Routes.CHANGEPASSWORDSECOND);
+                                  }),
 
                             // drawerListTile(
                             //   // icon: Icons.settings,
@@ -172,8 +174,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   AdInterstitialTop.showInterstitialAd();
 
                                   context.pop();
-                                  context.push(context.read<UserCubit>().isLoggedIn?Routes.PRIVACY:Routes.FirstLoginScreen);
-
+                                  context.push(
+                                      context.read<UserCubit>().isLoggedIn
+                                          ? Routes.PRIVACY
+                                          : Routes.FirstLoginScreen);
                                 }),
 
                             drawerListTile(
@@ -188,7 +192,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       extra: false);
                                 }),
                             drawerListTile(
-                              // icon: Icons.share,
+                                // icon: Icons.share,
                                 image: Assets.share_app_icon,
                                 label: LocaleKeys.shareApp.localize,
                                 onTap: () {
@@ -200,7 +204,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   context.push(Routes.SHAREAPP);
                                 }),
                             drawerListTile(
-                              // icon: Icons.message,
+                                // icon: Icons.message,
                                 image: Assets.contact_us_icon,
                                 label: LocaleKeys.contactUs.localize,
                                 onTap: () {
@@ -212,7 +216,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   context.push(Routes.CONTACTUS);
                                 }),
                             drawerListTile(
-                              // icon: Icons.logout,
+                                // icon: Icons.logout,
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
@@ -225,22 +229,22 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .drawerTheme
                                           .backgroundColor,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
                                       content: const LogoutWidget(),
                                     ),
                                   );
                                 }),
                             drawerListTile(
-                              // icon: Icons.logout,
+                                // icon: Icons.logout,
                                 image: Assets.deleteAccount,
                                 requireLogin: true,
                                 label: LocaleKeys.deleteAccount.localize,
                                 onTap: () async {
                                   ManageVibration.vibrate();
                                   context.read<SettingCubit>().deleteAccount();
-                                  final prefs = await SharedPreferences.getInstance();
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
                                   await prefs.setBool("ISLOGIN", false);
                                   context.go(Routes.HOME);
                                 }),
@@ -290,10 +294,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               AdInterstitialTop.loadIntersitialAd();
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount('tripJoinCount', context);
-                              context.push(context.read<UserCubit>().isLoggedIn?
-                              Routes.newRideModeScreen:
-                              Routes.FirstLoginScreen
-                              );
+                              context.push(context.read<UserCubit>().isLoggedIn
+                                  ? Routes.newRideModeScreen
+                                  : Routes.FirstLoginScreen);
                             }),
                         // drawerRollWidget(
                         //   label: LocaleKeys.loading.localize,
@@ -424,12 +427,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.CHAT,
-                                extra: ChatsViewParams());
+                            context.push(Routes.CHAT, extra: ChatsViewParams());
                           },
                         ),
                         drawerRollWidget(
-                          label: context.isArabic?'العاب':"Games",
+                          label: context.isArabic ? 'العاب' : "Games",
                           image: Assets.gamesIcon,
                           onTap: () {
                             ManageVibration.vibrate();
@@ -450,7 +452,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           },
                         ),
                         drawerRollWidget(
-                          label: context.isArabic?'المزاد':"Auction",
+                          label: context.isArabic ? 'المزاد' : "Auction",
                           image: Assets.bidIcon,
                           onTap: () {
                             ManageVibration.vibrate();
@@ -474,7 +476,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           },
                         ),
                         drawerRollWidget(
-                          label: context.isArabic?'عملات':"Exchange",
+                          label: context.isArabic ? 'عملات' : "Exchange",
                           image: Assets.moneyExchange,
                           onTap: () {
                             ManageVibration.vibrate();
@@ -575,10 +577,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               SizedBox(
                 width: 4.w,
               ),
-              Label(
-                  text: context.isArabic
-                      ? "اهتزاز"
-                      : "Vibration"),
+              Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
           ),
         ],
@@ -816,24 +815,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget drawerRollWidget(
       {required String label,
-      required String image, bool? isSvg=false,
+      required String image,
+      bool? isSvg = false,
       required void Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Column(
         children: [
-          if(isSvg!=true)Image.asset(
-            image,
-            width: 35.h,
-            height: 35.h,
-            fit: BoxFit.cover,
-          ),
-          if(isSvg==true)SvgPicture.asset(
-            image,
-            width: 35.h,
-            height: 35.h,
-            fit: BoxFit.cover,
-          ),
+          if (isSvg != true)
+            Image.asset(
+              image,
+              width: 35.h,
+              height: 35.h,
+              fit: BoxFit.cover,
+            ),
+          if (isSvg == true)
+            SvgPicture.asset(
+              image,
+              width: 35.h,
+              height: 35.h,
+              fit: BoxFit.cover,
+            ),
           Label(
             text: label,
             style: Styles.mediumText(
@@ -991,7 +993,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     // context.read<GetWalletCubit>();
     return Padding(
-      padding: const EdgeInsets.only(top:8.0,left: 8,right: 8),
+      padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
       child: Column(
         children: [
           Row(
@@ -1306,8 +1308,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CustomSwitchButton(
-                      value:
-                          context.read<CustomPageCubit>().state.activate!.customPage,
+                      value: context
+                          .read<CustomPageCubit>()
+                          .state
+                          .activate!
+                          .customPage,
                       onChanged: (value) async {
                         showAnimatedDialog(
                           context,
@@ -1357,7 +1362,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     SizedBox(
                       width: 4.w,
                     ),
-                    Label(text: context.isArabic?"مخصصه":"Custom"),
+                    Label(text: context.isArabic ? "مخصصه" : "Custom"),
                   ],
                 ),
               ),
@@ -1373,7 +1378,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           value: floatingNavigatorCubit.floatingNavigatorEnable,
                           onChanged: (value) async {
                             Navigator.pop(context);
-                            floatingNavigatorCubit.changeFloatingNavigatorEnable();
+                            floatingNavigatorCubit
+                                .changeFloatingNavigatorEnable();
                           },
                         );
                       },
@@ -1381,17 +1387,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     SizedBox(
                       width: 4.w,
                     ),
-                    Label(text: context.isArabic?"تحكم":"Control"),
+                    Label(text: context.isArabic ? "تحكم" : "Control"),
                   ],
                 ),
               ),
             ],
           ),
-
           Row(
             children: [
               Expanded(
-                child:Row(
+                child: Row(
                   children: [
                     BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
                       builder: (context, state) {
@@ -1409,11 +1414,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       width: 4.w,
                     ),
                     Label(
-                      text: context.isArabic?"مسطره":"Ruler",
+                      text: context.isArabic ? "مسطره" : "Ruler",
                     ),
                   ],
                 ),
-
               ),
               Expanded(
                 child: BlocBuilder<ThemeCubit, ThemeStates>(
@@ -1437,10 +1441,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ),
                         themeCubit.isDarkTheme
                             ? Label(
-                                text: context.isArabic?"فاتح":"Light",
+                                text: context.isArabic ? "فاتح" : "Light",
                               )
                             : Label(
-                                text: context.isArabic?"غامق":"Dark",
+                                text: context.isArabic ? "غامق" : "Dark",
                               ),
                       ],
                     );
@@ -1464,10 +1468,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               SizedBox(
                 width: 4.w,
               ),
-              Label(
-                  text: context.isArabic
-                      ? "اهتزاز"
-                      : "Vibration"),
+              Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
           )
         ],
