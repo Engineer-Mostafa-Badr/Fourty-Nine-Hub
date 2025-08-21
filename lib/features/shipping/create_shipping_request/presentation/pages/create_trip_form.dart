@@ -229,7 +229,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       condition: time == null);
                                 },
                                 onTap: () async {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     TimeOfDay? pickedTime =
                                         await showTimePicker(
@@ -268,7 +268,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       condition: date == null);
                                 },
                                 onTap: () async {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     DateTime? pickedDate = await showDatePicker(
                                       context: context,
@@ -452,8 +452,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 label: LocaleKeys.premiumRequest.tr(),
                                 style: Styles.headerText(color: Colors.white),
                                 onPressed: () {
-
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                 },
                               ),
                             ),
@@ -466,7 +465,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 label: LocaleKeys.request.tr(),
                                 style: Styles.headerText(color: Colors.white),
                                 onPressed: () async {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   if (context.isUserLoggedIn) {
                                     if (widget.formKey.currentState!
                                         .validate()) {
@@ -574,7 +573,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     //   });
                     // },
                     onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   setState(() {
                     List<SubCategoryEntity> workingList =
                         category.subcategories!.map((e) {

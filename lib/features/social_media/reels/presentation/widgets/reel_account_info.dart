@@ -41,8 +41,7 @@ class ReelAccountInfo extends StatelessWidget {
               padding: 20,
               label: 'Follow',
               onPressed: () {
-
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
             )
           ],

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../core/extensions/string_extension.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../helpers/manage_vibration.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../custom_page/presentation/page/widget/edit_page.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../core/extensions/string_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../helpers/manage_vibration.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../custom_page/presentation/page/widget/edit_page.dart';
 import 'create_star.dart';
 
 class FloatingActionButtonStar extends StatelessWidget {

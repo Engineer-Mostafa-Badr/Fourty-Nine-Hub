@@ -18,9 +18,8 @@ import 'loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class PastLoadingWidget extends StatefulWidget {
-  final GetLoadingHistoryEntity ? tripEntity;
-  const PastLoadingWidget(
-      {super.key, required  this.tripEntity});
+  final GetLoadingHistoryEntity? tripEntity;
+  const PastLoadingWidget({super.key, required this.tripEntity});
 
   @override
   State<PastLoadingWidget> createState() => _PastLoadingWidgetState();
@@ -31,23 +30,26 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
   initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(
-        widget.tripEntity?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+        widget.tripEntity?.tripDetails?.createdAt ??
+            '2025-03-11T21:50:21.998Z');
     String formattedDate =
         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
     String formattedTime =
         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
 
-        context.push(Routes.loadingDashboardDetailsScreen, extra: widget.tripEntity);
+        context.push(Routes.loadingDashboardDetailsScreen,
+            extra: widget.tripEntity);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child:Row(
+        child: Row(
           spacing: 2,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,12 +66,15 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
               flex: 3,
               child: PriceColumnNonSocket(
                 status: widget.tripEntity?.tripDetails?.status ?? "",
-                title: widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
-                date: formatPickupTime(widget.tripEntity?.tripDetails?.pickupTime,context),
-                price:formatPrice( widget.tripEntity?.tripDetails?.price?.toDouble() ?? 0,context),
+                title:
+                    widget.tripEntity?.tripDetails?.startLocation?.title ?? '',
+                date: formatPickupTime(
+                    widget.tripEntity?.tripDetails?.pickupTime, context),
+                price: formatPrice(
+                    widget.tripEntity?.tripDetails?.price?.toDouble() ?? 0,
+                    context),
               ),
             ),
-
 
             // Profile column
             Expanded(
@@ -83,17 +88,22 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
                         child: Container(
                           width: 50,
                           height: 50,
-                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: widget.tripEntity?.clientDetails?.profilePictureUrl == null ||
-                              widget.tripEntity!.clientDetails!.profilePictureUrl!.isEmpty
+                          child: widget.tripEntity?.clientDetails
+                                          ?.profilePictureUrl ==
+                                      null ||
+                                  widget.tripEntity!.clientDetails!
+                                      .profilePictureUrl!.isEmpty
                               ? Image.asset(
-                            Assets.maleImagePlaceholder,
-                            fit: BoxFit.cover,
-                          )
+                                  Assets.maleImagePlaceholder,
+                                  fit: BoxFit.cover,
+                                )
                               : ImageFromInternet(
-                            image: widget.tripEntity!.clientDetails!.profilePictureUrl!,
-                          ),
+                                  image: widget.tripEntity!.clientDetails!
+                                      .profilePictureUrl!,
+                                ),
                         ),
                       ),
                       Positioned(
@@ -105,14 +115,21 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Row(
                               children: [
-                                SvgPicture.asset(Assets.star2, width: 8, height: 8),
+                                SvgPicture.asset(Assets.star2,
+                                    width: 8, height: 8),
                                 const Sizer(width: 4),
                                 Label(
-                                  text:formatPrice(widget.tripEntity?.clientDetails?.rating?.count  ?? 0,context),
-                                  style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                                  text: formatPrice(
+                                      widget.tripEntity?.clientDetails?.rating
+                                              ?.count ??
+                                          0,
+                                      context),
+                                  style: Styles.smallText(
+                                      color: AppColors.PRIMARY_COLOR),
                                 ),
                               ],
                             ),
@@ -120,7 +137,6 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
                         ),
                       ),
                       const VerifiedWidget(),
-
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -128,14 +144,14 @@ class _PastLoadingWidgetState extends State<PastLoadingWidget> {
                     widget.tripEntity?.clientDetails?.firstName ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
             ),
           ],
         ),
-
       ),
     );
   }

@@ -51,11 +51,11 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
   Widget build(BuildContext context) {
     return DefaultTextFormField(
       currentController: widget.controller,
-      fillColor: widget.color??AppColors.GREYBG,
+      fillColor: widget.color ?? AppColors.GREYBG,
       borderColor: Colors.transparent,
       readOnly: true,
       onTap: () async {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (widget.isAuthentcation) {
           if (context.isUserLoggedIn) {
             final DateTime? picked = await showDatePicker(
@@ -72,10 +72,8 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
               widget.onDateSelected(_selectedDate);
             }
           } else {
-
-              return pleaseLoginDialog(context);
-              // context.push(Routes.LOGIN);
-
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
           }
         } else {
           final DateTime? picked = await showDatePicker(
@@ -93,7 +91,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
           }
         }
       },
-      hint: widget.hintText??'',
+      hint: widget.hintText ?? '',
       keyboardType: TextInputType.number,
       validator: (v) {
         if (v == null || v.isEmpty) {

@@ -17,10 +17,13 @@ class MusicReels extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {
-
-      ManageVibration.vibrate();
-        }, icon: const Icon(Icons.share))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                ManageVibration.vibrate();
+              },
+              icon: const Icon(Icons.share))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

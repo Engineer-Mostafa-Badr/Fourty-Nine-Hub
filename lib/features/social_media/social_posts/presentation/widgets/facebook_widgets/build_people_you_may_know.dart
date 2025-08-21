@@ -89,10 +89,9 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                   ? 'People you may know'
                                   : 'أشخاص قد تعرفهم',
                               style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w400
-                              ),
+                                  fontSize: 14,
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
@@ -115,14 +114,17 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                         extra: controller
                                             .suggestedFriends[index].id);
                                   },
-                                  child:Container(
+                                  child: Container(
                                     width: 350.w,
                                     // padding: const EdgeInsets.only(bottom: 10,left: 8,right: 8),
-                                    margin: const EdgeInsetsDirectional.only(end: 10),
+                                    margin: const EdgeInsetsDirectional.only(
+                                        end: 10),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12), // Rounded corners
+                                      borderRadius: BorderRadius.circular(
+                                          12), // Rounded corners
                                       // border: Border.all(color: AppColors.DIVIDER_GRAY_COLOR),
-                                      color: Colors.white, // White background for the entire container
+                                      color: Colors
+                                          .white, // White background for the entire container
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.1),
@@ -132,56 +134,75 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                       ],
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         // Top Half: Profile Image
                                         Expanded(
-                                          flex: 3, // Takes half of the container height
+                                          flex:
+                                              3, // Takes half of the container height
                                           child: ClipRRect(
-                                            borderRadius: const BorderRadius.vertical(
-                                              top: Radius.circular(12), // Rounded top corners
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                              top: Radius.circular(
+                                                  12), // Rounded top corners
                                             ),
                                             child: ImageFromInternet(
                                               image: item.profilePicture,
-                                              fit: BoxFit.fill, // Ensures the image covers the area
+                                              fit: BoxFit
+                                                  .fill, // Ensures the image covers the area
                                             ),
                                           ),
                                         ),
                                         // Bottom Half: White Container with Details and Buttons
                                         Expanded(
-                                          flex: 2, // Takes the other half of the container height
+                                          flex:
+                                              2, // Takes the other half of the container height
                                           child: Container(
-                                            padding: const EdgeInsets.only(bottom: 10,left: 8,right: 8,top: 8),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 10,
+                                                left: 8,
+                                                right: 8,
+                                                top: 8),
                                             // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
                                             decoration: const BoxDecoration(
-                                              color: Colors.white, // White background
-                                              borderRadius: BorderRadius.vertical(
-                                                bottom: Radius.circular(12), // Rounded bottom corners
+                                              color: Colors
+                                                  .white, // White background
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                bottom: Radius.circular(
+                                                    12), // Rounded bottom corners
                                               ),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
                                               children: [
                                                 // User Name
                                                 Label(
-                                                  text: "${item.firstName} ${item.lastName}",
+                                                  text:
+                                                      "${item.firstName} ${item.lastName}",
                                                   maxLines: 1,
                                                   style: const TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 14,
-                                                      color: AppColors.PRIMARY_COLOR
-                                                  ),
+                                                      color: AppColors
+                                                          .PRIMARY_COLOR),
                                                 ),
-                                                const SizedBox(height: 4), // Spacing
+                                                const SizedBox(
+                                                    height: 4), // Spacing
                                                 // Mutual Friends Count
                                                 Label(
-                                                  text: "${item.mutualFriendsCount} ${LocaleKeys.mutualFriend.localize}",
+                                                  text:
+                                                      "${item.mutualFriendsCount} ${LocaleKeys.mutualFriend.localize}",
                                                   maxLines: 1,
-                                                  style:  TextStyle(
-                                                      fontWeight: FontWeight.w400,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                       fontSize: 12,
-                                                      color: AppColors.black.withOpacity(0.5)
-                                                  ),
+                                                      color: AppColors.black
+                                                          .withOpacity(0.5)),
                                                 ),
                                                 const Spacer(),
                                                 // Action Buttons
@@ -192,183 +213,315 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                       flex: 2,
                                                       child: ClickableWidget(
                                                         onTap: () async {
-                                                          if (item.addedSuccessfully == false) {
-                                                            var response = await controller.friendRequest(
+                                                          if (item.addedSuccessfully ==
+                                                              false) {
+                                                            var response =
+                                                                await controller
+                                                                    .friendRequest(
                                                               context: context,
                                                               userId: item.id,
                                                             );
-                                                            if (response == true) {
-                                                              item.addedSuccessfully = true;
+                                                            if (response ==
+                                                                true) {
+                                                              item.addedSuccessfully =
+                                                                  true;
                                                               setState(() {});
                                                             }
-                                                          } else if (item.addedSuccessfully == true &&
-                                                              item.followSuccessfully == false) {
-                                                            var response = await controller.followRequest(
+                                                          } else if (item
+                                                                      .addedSuccessfully ==
+                                                                  true &&
+                                                              item.followSuccessfully ==
+                                                                  false) {
+                                                            var response =
+                                                                await controller
+                                                                    .followRequest(
                                                               context: context,
                                                               userId: item.id,
                                                             );
-                                                            if (response == true) {
-                                                              item.followSuccessfully = true;
+                                                            if (response ==
+                                                                true) {
+                                                              item.followSuccessfully =
+                                                                  true;
                                                               setState(() {});
                                                             }
-                                                          } else if (item.addedSuccessfully == true &&
-                                                              item.followSuccessfully == true) {
-                                                            showAnimatedDialog(context,AlertDialog(
-                                                              backgroundColor: AppColors.BACKGROUND_COLOR,
-                                                              surfaceTintColor: AppColors.BACKGROUND_COLOR,
-                                                              title: Label(
-                                                                text: LocaleKeys.enterGreetMessage.localize,
-                                                                style: Styles.headerText(),
-                                                              ),
-                                                              content: TextField(
-                                                                controller: messageController,
-                                                                maxLines: null,
-                                                                maxLength: 150,
-                                                                decoration: InputDecoration(
-                                                                  hintText: LocaleKeys.greetMessage.localize,
-                                                                  fillColor: Colors.white,
-                                                                  hintStyle: Styles.mediumText(
-                                                                    color: AppColors.DARK_GRAY_COLOR,
+                                                          } else if (item
+                                                                      .addedSuccessfully ==
+                                                                  true &&
+                                                              item.followSuccessfully ==
+                                                                  true) {
+                                                            showAnimatedDialog(
+                                                              context,
+                                                              AlertDialog(
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .BACKGROUND_COLOR,
+                                                                surfaceTintColor:
+                                                                    AppColors
+                                                                        .BACKGROUND_COLOR,
+                                                                title: Label(
+                                                                  text: LocaleKeys
+                                                                      .enterGreetMessage
+                                                                      .localize,
+                                                                  style: Styles
+                                                                      .headerText(),
+                                                                ),
+                                                                content:
+                                                                    TextField(
+                                                                  controller:
+                                                                      messageController,
+                                                                  maxLines:
+                                                                      null,
+                                                                  maxLength:
+                                                                      150,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    hintText: LocaleKeys
+                                                                        .greetMessage
+                                                                        .localize,
+                                                                    fillColor:
+                                                                        Colors
+                                                                            .white,
+                                                                    hintStyle:
+                                                                        Styles
+                                                                            .mediumText(
+                                                                      color: AppColors
+                                                                          .DARK_GRAY_COLOR,
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              actions: <Widget>[
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    Navigator.of(context).pop();
-                                                                  },
-                                                                  child: Container(
-                                                                    width: 100,
-                                                                    padding: const EdgeInsets.all(2),
-                                                                    decoration: BoxDecoration(
-                                                                      color: Colors.white,
-                                                                      borderRadius: BorderRadius.circular(4),
-                                                                      border: Border.all(
-                                                                        color: AppColors.PRIMARY_COLOR,
+                                                                actions: <Widget>[
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          100,
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .all(
+                                                                              2),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(4),
+                                                                        border:
+                                                                            Border.all(
+                                                                          color:
+                                                                              AppColors.PRIMARY_COLOR,
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                    alignment: Alignment.center,
-                                                                    child: Label(
-                                                                      text: LocaleKeys.cancel.localize,
-                                                                      style: Styles.headerText(
-                                                                        color: Colors.red,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                ClickableWidget(
-                                                                  onTap: () async {
-                                                                    if (messageController.text.isNotEmpty) {
-                                                                      await controller.sendGreetMessage(
-                                                                        context: context,
-                                                                        userId: item.id,
-                                                                        message: messageController.text,
-                                                                      );
-                                                                      controller.suggestedFriends.removeWhere((element) =>
-                                                                      element.id ==
-                                                                          controller.suggestedFriends[index]
-                                                                              .id);
-                                                                      showSuccessMessage(
-                                                                        context,
-                                                                        LocaleKeys.messageSentSuccessfully
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child:
+                                                                          Label(
+                                                                        text: LocaleKeys
+                                                                            .cancel
                                                                             .localize,
-                                                                      );
-                                                                      Navigator.of(context).pop();
-                                                                      setState(() {});
-                                                                    }
-                                                                  },
-                                                                  child: Container(
-                                                                    width: 100,
-                                                                    padding: const EdgeInsets.all(2),
-                                                                    decoration: BoxDecoration(
-                                                                      color: AppColors.PRIMARY_COLOR,
-                                                                      borderRadius: BorderRadius.circular(4),
-                                                                    ),
-                                                                    alignment: Alignment.center,
-                                                                    child: Label(
-                                                                      text: LocaleKeys.send.localize,
-                                                                      style: Styles.headerText(
-                                                                        color: Colors.white,
+                                                                        style: Styles
+                                                                            .headerText(
+                                                                          color:
+                                                                              Colors.red,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                                  ClickableWidget(
+                                                                    onTap:
+                                                                        () async {
+                                                                      if (messageController
+                                                                          .text
+                                                                          .isNotEmpty) {
+                                                                        await controller
+                                                                            .sendGreetMessage(
+                                                                          context:
+                                                                              context,
+                                                                          userId:
+                                                                              item.id,
+                                                                          message:
+                                                                              messageController.text,
+                                                                        );
+                                                                        controller.suggestedFriends.removeWhere((element) =>
+                                                                            element.id ==
+                                                                            controller.suggestedFriends[index].id);
+                                                                        showSuccessMessage(
+                                                                          context,
+                                                                          LocaleKeys
+                                                                              .messageSentSuccessfully
+                                                                              .localize,
+                                                                        );
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        setState(
+                                                                            () {});
+                                                                      }
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          100,
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .all(
+                                                                              2),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: AppColors
+                                                                            .PRIMARY_COLOR,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(4),
+                                                                      ),
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child:
+                                                                          Label(
+                                                                        text: LocaleKeys
+                                                                            .send
+                                                                            .localize,
+                                                                        style: Styles
+                                                                            .headerText(
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             );
                                                           }
                                                         },
                                                         child: Container(
                                                           height: 31.h,
                                                           // width: 84.w,
-                                                          alignment: Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                            border: item.followSuccessfully == true
-                                                                ? Border.all(color: AppColors.PRIMARY_COLOR_DARK)
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: item.followSuccessfully ==
+                                                                    true
+                                                                ? Border.all(
+                                                                    color: AppColors
+                                                                        .PRIMARY_COLOR_DARK)
                                                                 : null,
-                                                            borderRadius: BorderRadius.circular(8.r),
-                                                            color: item.addedSuccessfully == false
-                                                                ? AppColors.PRIMARY_COLOR
-                                                                : item.addedSuccessfully == true &&
-                                                                item.followSuccessfully == false
-                                                                ? AppColors.PRIMARY_COLOR_DARK
-                                                                : Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.r),
+                                                            color: item.addedSuccessfully ==
+                                                                    false
+                                                                ? AppColors
+                                                                    .PRIMARY_COLOR
+                                                                : item.addedSuccessfully ==
+                                                                            true &&
+                                                                        item.followSuccessfully ==
+                                                                            false
+                                                                    ? AppColors
+                                                                        .PRIMARY_COLOR_DARK
+                                                                    : Colors
+                                                                        .white,
                                                           ),
                                                           child: Label(
-                                                            text: item.addedSuccessfully == false
-                                                                ? LocaleKeys.addFriend.localize
-                                                                : item.addedSuccessfully == true &&
-                                                                item.followSuccessfully == false
-                                                                ? LocaleKeys.follow.localize
-                                                                : LocaleKeys.sendGreetMessage.localize,
+                                                            text: item.addedSuccessfully ==
+                                                                    false
+                                                                ? LocaleKeys
+                                                                    .addFriend
+                                                                    .localize
+                                                                : item.addedSuccessfully ==
+                                                                            true &&
+                                                                        item.followSuccessfully ==
+                                                                            false
+                                                                    ? LocaleKeys
+                                                                        .follow
+                                                                        .localize
+                                                                    : LocaleKeys
+                                                                        .sendGreetMessage
+                                                                        .localize,
                                                             style: TextStyle(
-                                                              color: item.followSuccessfully == true
-                                                                  ? AppColors.PRIMARY_COLOR_DARK
-                                                                  : Colors.white,
+                                                              color: item.followSuccessfully ==
+                                                                      true
+                                                                  ? AppColors
+                                                                      .PRIMARY_COLOR_DARK
+                                                                  : Colors
+                                                                      .white,
                                                               fontSize: 12,
-                                                              fontWeight: FontWeight.w600,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
                                                             ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 10), // Spacing
+                                                    const SizedBox(
+                                                        width: 10), // Spacing
                                                     // Remove Button
-                                                    if (item.addedSuccessfully == false)
-                                                      Expanded(child:    ClickableWidget(
-                                                        onTap: () async {
-                                                          bool data = await controller.removeSuggestUser(
-                                                            context: context,
-                                                            userId: item.id,
-                                                          );
-                                                          if (data == true) {
-                                                            controller.suggestedFriends.removeWhere((e) =>
-                                                            e.id ==
-                                                                controller.suggestedFriends[index].id);
-                                                            setState(() {});
-                                                          }
-                                                        },
-                                                        child: Container(
-                                                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                                          height: 31.h,
-                                                          alignment: Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(8.r),
-                                                              color: AppColors.whiteColor,
-                                                              border: Border.all(
-                                                                  color: AppColors.PRIMARY_COLOR_DARK
-                                                              )
-                                                          ),
-                                                          child: Label(
-                                                            text: LocaleKeys.deleteRequest.localize,
-                                                            style: const TextStyle(
-                                                              color: AppColors.PRIMARY_COLOR_DARK,
-                                                              fontSize: 12,
-                                                              fontWeight: FontWeight.w600,
+                                                    if (item.addedSuccessfully ==
+                                                        false)
+                                                      Expanded(
+                                                        child: ClickableWidget(
+                                                          onTap: () async {
+                                                            bool data =
+                                                                await controller
+                                                                    .removeSuggestUser(
+                                                              context: context,
+                                                              userId: item.id,
+                                                            );
+                                                            if (data == true) {
+                                                              controller
+                                                                  .suggestedFriends
+                                                                  .removeWhere((e) =>
+                                                                      e.id ==
+                                                                      controller
+                                                                          .suggestedFriends[
+                                                                              index]
+                                                                          .id);
+                                                              setState(() {});
+                                                            }
+                                                          },
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        10.w),
+                                                            height: 31.h,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(8
+                                                                            .r),
+                                                                color: AppColors
+                                                                    .whiteColor,
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .PRIMARY_COLOR_DARK)),
+                                                            child: Label(
+                                                              text: LocaleKeys
+                                                                  .deleteRequest
+                                                                  .localize,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: AppColors
+                                                                    .PRIMARY_COLOR_DARK,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),),
+                                                      ),
                                                   ],
                                                 ),
                                               ],

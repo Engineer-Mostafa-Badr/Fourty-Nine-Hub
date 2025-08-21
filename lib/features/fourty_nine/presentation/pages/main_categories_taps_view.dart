@@ -85,7 +85,6 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
           isFloatingButtonVisible = false;
         } else {
           isFloatingButtonVisible = true;
-
         }
         setState(() {});
       });
@@ -94,7 +93,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     //   stateSubCategories: [],
     // );
     context.read<MainCategoriesTapsCubit>().scrollController.addListener(() {
-      if (context.read<MainCategoriesTapsCubit>().scrollController.position.userScrollDirection ==
+      if (context
+              .read<MainCategoriesTapsCubit>()
+              .scrollController
+              .position
+              .userScrollDirection ==
           ScrollDirection.reverse) {
         isFloatingButtonVisible = false;
       } else {

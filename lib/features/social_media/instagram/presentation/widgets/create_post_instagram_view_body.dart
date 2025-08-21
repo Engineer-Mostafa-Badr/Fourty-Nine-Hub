@@ -116,17 +116,18 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           .index,
                       onPressed: () {
                         if (state.postTypeSelectedIndex == 0) {
-                          bool isGalleryPostEmpty = serviceLocator<CreatePostInstagramCubit>()
-                              .state
-                              .selectedGalleryPost
-                              .isEmpty;
+                          bool isGalleryPostEmpty =
+                              serviceLocator<CreatePostInstagramCubit>()
+                                  .state
+                                  .selectedGalleryPost
+                                  .isEmpty;
                           if (isGalleryPostEmpty) {
                             showErrorMessage(
                               context,
                               LocaleKeys.youMustSelectAtLeastOneImage.localize,
                             );
                           } else {
-                            context.pushNamed(
+                            context.push(
                               Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
                               extra: serviceLocator<CreatePostInstagramCubit>(),
                             );
@@ -134,8 +135,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                             //     .read<CreatePostInstagramCubit>()
                             //     .nextPage(context);
                           }
-                        }
-                        else if (state.postTypeSelectedIndex == 2) {
+                        } else if (state.postTypeSelectedIndex == 2) {
                           context.push(Routes.REELS);
                           // bool isGalleryReelEmpty = context
                           //     .read<CreatePostInstagramCubit>()
@@ -148,7 +148,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           //     LocaleKeys.youMustSelectAtLeastOneVideo.localize,
                           //   );
                           // } else {
-                          //   context.pushNamed(
+                          //   context.push(
                           //     Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
                           //     extra: context.read<CreatePostInstagramCubit>(),
                           //   );
@@ -383,13 +383,14 @@ class _ReelBodyCreatePostInstagramState
   Widget _buildVideoThumbnail(AssetEntity assets) {
     return GestureDetector(
       onTap: () => serviceLocator<CreatePostInstagramCubit>().onTapGalleryReel(
-            itemOfGallery: assets,
-          ),
+        itemOfGallery: assets,
+      ),
       onLongPress: () {
         serviceLocator<CreatePostInstagramCubit>().onTapGalleryReel(
-              itemOfGallery: assets,
-            );
-        serviceLocator<CreatePostInstagramCubit>().changeMultiSelectGalleryReel();
+          itemOfGallery: assets,
+        );
+        serviceLocator<CreatePostInstagramCubit>()
+            .changeMultiSelectGalleryReel();
       },
       child: Stack(
         alignment: Alignment.center,

@@ -139,7 +139,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               Icons.search,
               size: 25,
               color:
-              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
           // if (showLanguage)
@@ -148,7 +148,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isWithBackArrow)
             Expanded(
               child: IconAppButton(
-                onPressed: () => onBackPressed != null ? onBackPressed!() : context.pop(),
+                onPressed: () =>
+                    onBackPressed != null ? onBackPressed!() : context.pop(),
                 icon: Icons.arrow_back_ios,
                 size: 20,
               ),
@@ -237,9 +238,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           Builder(
             builder: (context) {
               final getUnreadNotificationsCountCubit =
-              context.watch<GetUnreadNotificationsCountCubit>();
+                  context.watch<GetUnreadNotificationsCountCubit>();
               return ClickableWidget(
-                onTap: (){
+                onTap: () {
                   ManageVibration.vibrate();
                   if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
                     return;
@@ -260,35 +261,36 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                           ? Colors.white
                           : AppColors.PRIMARY_COLOR,
                     ),
-                    height:  20,
+                    height: 20,
                     unreadCount: !context.read<UserCubit>().isLoggedIn
                         ? 0
                         : getUnreadNotificationsCountCubit
-                        .unreadNotificationsCountEntity
-                        ?.total ??
-                        0,
+                                .unreadNotificationsCountEntity?.total ??
+                            0,
                   ),
                 ),
               );
             },
           ),
-          if(isMenu)ClickableWidget(
-            onTap: (){
-              var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-              ManageVibration.vibrate();
-              HandleCashback.setCount('drawerCount', context);
-              Scaffold.of(context).openDrawer();
-            },
-            child: Container(
-              padding: const EdgeInsetsDirectional.only(end: 12),
-              child: SvgPicture.asset(
-                Assets.menuSvg,
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR,
+          if (isMenu)
+            ClickableWidget(
+              onTap: () {
+                var currentContext =
+                    AppPages.router.configuration.navigatorKey.currentContext!;
+                ManageVibration.vibrate();
+                HandleCashback.setCount('drawerCount', context);
+                Scaffold.of(context).openDrawer();
+              },
+              child: Container(
+                padding: const EdgeInsetsDirectional.only(end: 12),
+                child: SvgPicture.asset(
+                  Assets.menuSvg,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                ),
               ),
             ),
-          ),
           // if(inChat == null)
 
           const Sizer(),

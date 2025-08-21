@@ -103,12 +103,13 @@ class _FollowersViewState extends State<FollowersView> {
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.followers.length) {
-                    return const Center(child: CustomCircularProgressIndicator());
+                    return const Center(
+                        child: CustomCircularProgressIndicator());
                   }
                   final followers = _cubit.followers[index];
                   return GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context.push(Routes.INSTAGRAMPROFILE,
                           extra: followers.userId);
                     },

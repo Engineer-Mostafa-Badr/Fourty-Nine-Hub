@@ -174,9 +174,10 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                 ? 'rent'
                                 : 'user',
                           );
-                          userType = widget.params.subCategory.hasAuction == true
-                              ? 'rent'
-                              : 'user';
+                          userType =
+                              widget.params.subCategory.hasAuction == true
+                                  ? 'rent'
+                                  : 'user';
                         }
                       } else {
                         if (widget.params.mainCategory.nameEn == 'Dating') {
@@ -184,7 +185,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                             subCategoryId: widget.params.subCategory.id,
                             filter: 'male',
                           );
-                          userType ='male';
+                          userType = 'male';
                         } else {
                           controller.loadAdsData(
                             subCategoryId: widget.params.subCategory.id,
@@ -192,9 +193,10 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                 ? 'sale'
                                 : 'provider',
                           );
-                          userType = widget.params.subCategory.hasAuction == true
-                              ? 'sale'
-                              : 'provider';
+                          userType =
+                              widget.params.subCategory.hasAuction == true
+                                  ? 'sale'
+                                  : 'provider';
                         }
                       }
                     },
@@ -274,7 +276,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       floatingActionButton: isFloatingButtonVisible
           ? CustomFloatingActionButton(
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
                   context.push(Routes.CREATEAD,
                       extra: CategorizationEntity(
@@ -296,7 +298,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   Widget buildFloatingAction(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (context.isUserLoggedIn) {
           context.push(Routes.CREATEAD,
               extra: CategorizationEntity(

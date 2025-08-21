@@ -49,7 +49,7 @@ class RideBannerWidget extends StatelessWidget {
                                 horizontal: 10, vertical: 5),
                             child: DashboardBanner(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (state
                                         .model.mainCategory?.isSocketCategory ??
                                     false) {
@@ -57,7 +57,8 @@ class RideBannerWidget extends StatelessWidget {
                                   context.push(Routes.ALLTRIPRIDER);
                                 } else {
                                   log("No Socket Screen");
-                                  context.push(Routes.ALLTRIPNOSOCKETSCREEN);
+                                  context
+                                      .pushNamed(Routes.ALLTRIPNOSOCKETSCREEN);
                                 }
                               },
                               title: LocaleKeys.rideDashboard.tr(),
@@ -78,7 +79,7 @@ class RideBannerWidget extends StatelessWidget {
                           horizontal: 10, vertical: 5),
                       child: DashboardBanner(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (state.model.mainCategory?.isSocketCategory ??
                               false) {
                             log("Socket Screen");

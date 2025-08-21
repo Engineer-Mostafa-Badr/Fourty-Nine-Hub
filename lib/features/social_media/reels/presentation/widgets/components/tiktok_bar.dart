@@ -59,7 +59,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           children: [
             GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (context.read<ReelsCubit>().state.controllers[
                         context.read<ReelsCubit>().state.focusedIndex] !=
                     null) {
@@ -86,7 +86,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             Row(
               children: [
                 _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (context
                       .read<ReelsCubit>()
                       .state
@@ -109,7 +109,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 SizedBox(width: 16),
                 // Following Tab
                 _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   if (context
@@ -134,7 +134,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 SizedBox(width: 16),
                 // For You Tab with rounded underline
                 _buildTab("Reel", 2, onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   setState(() {
                     _selectedIndex = 2;
                   });
@@ -175,11 +175,14 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           ],
         ),
         SizedBox(height: 18),
-       Align(
-         alignment: AlignmentDirectional.topEnd,
-         child: Icon(Icons.volume_mute,color: AppColors.whiteColor,        size: 30,
-         ),
-       )
+        Align(
+          alignment: AlignmentDirectional.topEnd,
+          child: Icon(
+            Icons.volume_mute,
+            color: AppColors.whiteColor,
+            size: 30,
+          ),
+        )
 
         // Image.asset(
         //   Assets.volumeOff,

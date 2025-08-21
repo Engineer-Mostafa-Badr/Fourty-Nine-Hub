@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/helper/numbers_helper.dart';
@@ -67,7 +68,10 @@ class AuctionCard extends StatelessWidget {
                 ],
               ),
               Label(
-                text: item.ad.address?.addressAr ?? '',
+                text: (context.isArabic
+                        ? item.ad.address?.addressAr
+                        : item.ad.address?.addressEn) ??
+                    '',
                 style: Styles.mediumText(),
                 maxLines: 1,
               ),
@@ -89,8 +93,8 @@ class AuctionCard extends StatelessWidget {
                     child: item.isMine
                         ? AppButton(
                             label: 'Details',
-                            onPressed: () => context.push(Routes.MAZADDETAILS,
-                                extra: item.id))
+                            onPressed: () => context
+                                .pushNamed(Routes.MAZADDETAILS, extra: item.id))
                         : AppButton(
                             label: 'Bidding',
                             onPressed: () => context.push(Routes.MAZADDETAILS,

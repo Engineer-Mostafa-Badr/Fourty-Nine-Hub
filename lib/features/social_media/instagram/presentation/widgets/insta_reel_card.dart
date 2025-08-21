@@ -57,14 +57,14 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
             child: _controller == null
                 ? const SizedBox.shrink()
                 : ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: AspectRatio(
-                                aspectRatio: 9 / 16,
+                    borderRadius: BorderRadius.circular(6),
+                    child: AspectRatio(
+                      aspectRatio: 9 / 16,
                       child: VideoPlayer(
                         _controller!,
                       ),
                     ),
-                ),
+                  ),
           ),
         ),
         if (_controller?.value.caption.text != null) ...[
@@ -109,7 +109,7 @@ class _ControlsOverlay extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (controller.value.isPlaying) {
               controller.pause();
             } else {

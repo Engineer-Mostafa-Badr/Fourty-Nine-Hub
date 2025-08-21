@@ -93,8 +93,7 @@ class FirstLoginScreen extends StatelessWidget {
                   height: 60.h,
                   width: MediaQuery.sizeOf(context).width * .4,
                   child: DefaultButton(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,
@@ -116,8 +115,7 @@ class FirstLoginScreen extends StatelessWidget {
                   height: 60.h,
                   width: MediaQuery.sizeOf(context).width * .4,
                   child: DefaultButton(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     backgroundColor: themeCubit.isDarkTheme
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR,

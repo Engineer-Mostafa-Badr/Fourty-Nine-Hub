@@ -49,7 +49,7 @@ class WalletHistory extends StatelessWidget {
             ),
             MaterialButton(
               onPressed: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 // if (await LocalAuth().checkBiometrics()) {
                 //   context.push(Routes.PAYMENT);
                 // }
@@ -87,8 +87,7 @@ class WalletHistory extends StatelessWidget {
               title: '${item.amount}',
               subTitle: item.description,
               onTap: () {
-
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
               },
               icon: FontAwesomeIcons.check);
         },

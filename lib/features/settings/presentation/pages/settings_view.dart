@@ -106,14 +106,16 @@ class SettingsView extends StatelessWidget {
                     trailing:
                         Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                     label: LocaleKeys.privacy.localize,
-                      onTap: () {
-                        ManageVibration.vibrate();
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
 
-                          context.pop();
-                          context.push(context.read<UserCubit>().isLoggedIn?Routes.PRIVACY:Routes.FirstLoginScreen);
-                      },
+                      context.pop();
+                      context.push(context.read<UserCubit>().isLoggedIn
+                          ? Routes.PRIVACY
+                          : Routes.FirstLoginScreen);
+                    },
                   ),
                 if (context.read<UserCubit>().isLoggedIn)
                   listTileWidget(

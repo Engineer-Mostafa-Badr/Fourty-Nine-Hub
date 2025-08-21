@@ -375,7 +375,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     );
   }
 
-
   Widget _buildLoggedInView(RestaurantsListState state) {
     return Padding(
       padding: EdgeInsets.all(10.w),
@@ -403,7 +402,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               ),
             if (_showExpire)
               BlocProvider(
-                key: ValueKey("expired-${DateTime.now().millisecondsSinceEpoch}"),
+                key: ValueKey(
+                    "expired-${DateTime.now().millisecondsSinceEpoch}"),
                 create: (context) => serviceLocator<RestaurantsCubit>()
                   ..loadInitialExpiredOrders(),
                 child: RestaurantExpiredRequestsScreen(
@@ -463,7 +463,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             itemBuilder: (context, i) =>
                                 const PropertyCardShimmer(),
                           )
-                        : context.read<RestaurantsCubit>().restaurants.isNotEmpty
+                        : context
+                                .read<RestaurantsCubit>()
+                                .restaurants
+                                .isNotEmpty
                             ? SizedBox(
                                 height: MediaQuery.sizeOf(context).height * .7,
                                 child: OlxPaginationWidget(
@@ -479,13 +482,15 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                     (index) {
                                       // final request = controller.reqLogs[index];
                                       return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
                                         child: SubCategoriesRestaurantCard(
                                           item: context
                                               .read<RestaurantsCubit>()
                                               .restaurants[index],
                                           mealId: '',
-                                          favouriteRestaurant: (String id) async {
+                                          favouriteRestaurant:
+                                              (String id) async {
                                             var result = await context
                                                 .read<RestaurantsCubit>()
                                                 .toggleFavoriteRestaurant(id);

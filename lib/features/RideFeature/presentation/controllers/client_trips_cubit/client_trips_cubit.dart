@@ -320,7 +320,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         ));
 
         // ✅ Always navigate to the loading request screen
-        context.goNamed(Routes.rideOffer, extra: 'ride');
+        context.go(Routes.rideOffer, extra: 'ride');
       },
     );
   }
@@ -354,7 +354,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         ));
 
         // ✅ Always navigate to the loading request screen
-        context.goNamed(Routes.rideOffer, extra: 'shipping');
+        context.go(Routes.rideOffer, extra: 'shipping');
       },
     );
   }

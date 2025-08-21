@@ -327,8 +327,15 @@ class _LoginViewState extends State<LoginView> {
                                 if (registerCubit.accept) {
                                   if (formKeyRegister.currentState!
                                       .validate()) {
-                                    if(registerCubit.isLessThan14YearsOld(registerCubit.birthDateTextController.text.trim())){
-                                      showErrorMessage(context, context.isArabic?'يجب ان يكون المستخدم اكبر من 14 سنة':'The user must be older than 14 years');
+                                    if (registerCubit.isLessThan14YearsOld(
+                                        registerCubit
+                                            .birthDateTextController.text
+                                            .trim())) {
+                                      showErrorMessage(
+                                          context,
+                                          context.isArabic
+                                              ? 'يجب ان يكون المستخدم اكبر من 14 سنة'
+                                              : 'The user must be older than 14 years');
                                       return;
                                     }
 
@@ -460,7 +467,6 @@ class _LoginViewState extends State<LoginView> {
         break;
     }
   }
-
 
   Future<void> _handleSocialLoginSuccess(UserTokensEntity userTokens) async {
     try {
@@ -669,14 +675,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.message ?? "Something went wrong",
-                        )));
+                      error.message ?? "Something went wrong",
+                    )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.toString(),
-                        )));
+                      error.toString(),
+                    )));
                   }
                 },
               ),
@@ -701,14 +707,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.message ?? "Something went wrong",
-                        )));
+                      error.message ?? "Something went wrong",
+                    )));
                   } catch (error) {
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          error.toString(),
-                        )));
+                      error.toString(),
+                    )));
                   }
                 },
               ),
@@ -733,14 +739,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                       print(error.message);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                            error.message ?? "Something went wrong",
-                          )));
+                        error.message ?? "Something went wrong",
+                      )));
                     } catch (error) {
                       print(error);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                            error.toString(),
-                          )));
+                        error.toString(),
+                      )));
                     }
                   },
                 ),

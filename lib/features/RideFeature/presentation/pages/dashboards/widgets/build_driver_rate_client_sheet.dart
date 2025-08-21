@@ -9,16 +9,19 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class BuildDriverRateClientSheet extends StatefulWidget {
-  const BuildDriverRateClientSheet(
-      {super.key, required this.onPressed, });
-  final Function(String message , double rate ) onPressed;
+  const BuildDriverRateClientSheet({
+    super.key,
+    required this.onPressed,
+  });
+  final Function(String message, double rate) onPressed;
 
   @override
-  State<BuildDriverRateClientSheet> createState() => _BuildDriverRateClientSheetState();
+  State<BuildDriverRateClientSheet> createState() =>
+      _BuildDriverRateClientSheetState();
 }
 
-class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet> {
-
+class _BuildDriverRateClientSheetState
+    extends State<BuildDriverRateClientSheet> {
   TextEditingController otherController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   String? selectedTag;
@@ -33,19 +36,18 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(16),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), // changes position of shadow
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
               ),
-            ]
-          ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ]),
           child: SingleChildScrollView(
             controller: scrollController,
             child: Padding(
@@ -55,28 +57,40 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(children: [
-                      const  SizedBox(width: 25,),
-                      const  Spacer(),
-                      Text(
-                        LocaleKeys.rateTheClient.localize,
-                        style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Container(
-                        height: 25,
-                        width: 25,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey.shade200,
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 25,
                         ),
-                        child: const Icon(Icons.close,color: Colors.black,),
-                      ),
-                    ],),
-                    const SizedBox(height: 8,),
+                        const Spacer(),
+                        Text(
+                          LocaleKeys.rateTheClient.localize,
+                          style: const TextStyle(
+                              fontSize: FontSize.s20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const Spacer(),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade200,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                       getRatingText(_rating),
-                      style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: FontSize.s20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     RatingBar.builder(
@@ -101,9 +115,13 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
                     const SizedBox(height: 12),
                     DefaultTextFormField(
                       currentController: otherController,
-                      fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                      fillColor: context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : AppColors.GREYBG,
                       borderColor: Colors.transparent,
-                      hint: context.isArabic ? 'اكتب رسالة شكر' : 'Write a thank-you message',
+                      hint: context.isArabic
+                          ? 'اكتب رسالة شكر'
+                          : 'Write a thank-you message',
                       // label: LocaleKeys.firstName.localize,
                       validator: (v) {
                         if (v == null || v.isEmpty) {
@@ -119,15 +137,15 @@ class _BuildDriverRateClientSheetState extends State<BuildDriverRateClientSheet>
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.PRIMARY_COLOR,
                           foregroundColor: Colors.white,
-                          padding:const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         onPressed: () {
-                          if(formKey.currentState!.validate()){
+                          if (formKey.currentState!.validate()) {
                             widget.onPressed(otherController.text, _rating);
-                          }else{
+                          } else {
                             ManageVibration.vibrate();
                           }
                           // context.push(Routes.connectionCallScreen);

@@ -14,9 +14,8 @@ import 'widgets/map_section.dart';
 import 'widgets/otp_input_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-
 class CurrentRideScreen extends StatefulWidget {
-   const CurrentRideScreen({super.key});
+  const CurrentRideScreen({super.key});
 
   @override
   State<CurrentRideScreen> createState() => _CurrentRideScreenState();
@@ -34,13 +33,12 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
   //   _mapController = controller;
   // }
 
-   bool isOpenKeyBoard(){
-     return MediaQuery.of(context).viewInsets.bottom >0?true:false;
-   }
+  bool isOpenKeyBoard() {
+    return MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('Your current ride'),
@@ -50,7 +48,7 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
         body: SafeArea(
           child: Column(
             children: [
-             const Expanded(
+              const Expanded(
                 flex: 3,
                 child: MapSection(),
                 // Image.network(
@@ -65,16 +63,21 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: context.isDarkMode ? const Color(0xff2C2C2C) : Colors.white,
+                      color: context.isDarkMode
+                          ? const Color(0xff2C2C2C)
+                          : Colors.white,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: context.isDarkMode ? Colors.black54 : Colors.grey.shade300,
+                          color: context.isDarkMode
+                              ? Colors.black54
+                              : Colors.grey.shade300,
                           blurRadius: 8,
                           spreadRadius: 2,
                           offset: const Offset(0, -2),
@@ -106,7 +109,9 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                   Text(
                                     'أول العاشر من رمضان',
                                     style: TextStyle(
-                                      color: context.isDarkMode ? AppColors.whiteColor : Colors.grey,
+                                      color: context.isDarkMode
+                                          ? AppColors.whiteColor
+                                          : Colors.grey,
                                       fontSize: FontSize.s14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -136,7 +141,9 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                       'المنطقة الصناعية العاشرة من رمضان (10th of Ramadan City 1) الثانية',
                                       style: TextStyle(
                                         fontSize: FontSize.s14,
-                                        color: context.isDarkMode ? AppColors.whiteColor : Colors.grey,
+                                        color: context.isDarkMode
+                                            ? AppColors.whiteColor
+                                            : Colors.grey,
                                       ),
                                     ),
                                   ),
@@ -162,22 +169,24 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       context.push(Routes.RideRequestHOME);
-
-
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.colorNavy,
                                       foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
                                     child: Text(
-                                      isOpenKeyBoard() ? LocaleKeys.done.tr() : LocaleKeys.openGoogleMap.tr(),
-                                      style: const TextStyle(fontSize: FontSize.s16),
+                                      isOpenKeyBoard()
+                                          ? LocaleKeys.done.tr()
+                                          : LocaleKeys.openGoogleMap.tr(),
+                                      style: const TextStyle(
+                                          fontSize: FontSize.s16),
                                     ),
                                   ),
                                 ),
@@ -186,8 +195,9 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                   Expanded(
                                     child: ElevatedButton(
                                       onPressed: () {
-      ManageVibration.vibrate();
-                                        showCustomDialogTrip(context,const ConfirmRecordDialog());
+                                        ManageVibration.vibrate();
+                                        showCustomDialogTrip(context,
+                                            const ConfirmRecordDialog());
                                         // showCustomDialogTrip(context,WhyDoHaveCancelDialog());
                                         // showCustomDialogTrip(context,ClientCancelTripDialog());
                                         // showCustomDialogTrip(context,WrongOtpDialog());
@@ -195,14 +205,17 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: AppColors.colorRed,
                                         foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                       ),
                                       child: Text(
                                         LocaleKeys.start.tr(),
-                                        style: const TextStyle(fontSize: FontSize.s16),
+                                        style: const TextStyle(
+                                            fontSize: FontSize.s16),
                                       ),
                                     ),
                                   ),
@@ -214,20 +227,25 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                             // **معلومات الرحلة**
                             Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 16),
                               decoration: BoxDecoration(
-                                color: context.isDarkMode ? const Color(0xff3A3A3A) : AppColors.colorGreyLight,
+                                color: context.isDarkMode
+                                    ? const Color(0xff3A3A3A)
+                                    : AppColors.colorGreyLight,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Row(
-                                children:  [
+                                children: [
                                   const Icon(Icons.info, color: Colors.red),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       'Travel time: ~14 min. Distance: 6.58 Km.',
                                       style: TextStyle(
-                                        color:context.isDarkMode?AppColors.whiteColor: Colors.black87,
+                                        color: context.isDarkMode
+                                            ? AppColors.whiteColor
+                                            : Colors.black87,
                                         fontSize: FontSize.s14,
                                       ),
                                     ),
@@ -242,12 +260,14 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                               width: double.infinity,
                               child: OutlinedButton(
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                 },
                                 style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   foregroundColor: AppColors.colorRed,
-                                  side: const BorderSide(color: Color(0xFFFF4C4C), width: 1.5),
+                                  side: const BorderSide(
+                                      color: Color(0xFFFF4C4C), width: 1.5),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -265,8 +285,7 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                   ),
                 ),
               ),
-
-          ],
+            ],
           ),
         ),
       ),

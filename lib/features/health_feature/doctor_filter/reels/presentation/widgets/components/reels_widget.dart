@@ -203,7 +203,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       ),
                       GestureDetector(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (!serviceLocator<UserCubit>().isLoggedIn) {
                               return pleaseLoginDialog(context);
                               // context.push(Routes.LOGIN);
@@ -249,30 +249,30 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // if (reel.audio.audioName.isNotEmpty)
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 30,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  reel.audio.audioName.isNotEmpty
-                                      ? reel.audio.audioName
-                                      : "No audio",
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_back_ios,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 30,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                reel.audio.audioName.isNotEmpty
+                                    ? reel.audio.audioName
+                                    : "No audio",
+                                style: const TextStyle(
                                   color: Colors.white70,
-                                  size: 20,
+                                  fontSize: 14,
                                 ),
-                              ],
-                            ),
+                              ),
+                              Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
+                            ],
                           ),
+                        ),
                         SizedBox(height: 5),
                         CustomProgressBar(
                           videoPlayerController: widget.controller,

@@ -23,7 +23,7 @@ class HealthBookingTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (context.read<UserCubit>().isLoggedIn) {
           serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
               bookingFilterModel.bookingType;
@@ -44,7 +44,8 @@ class HealthBookingTypeCard extends StatelessWidget {
           children: [
             Expanded(child: Image.asset(bookingFilterModel.image)),
             Text(
-              getTranslatedName(context,bookingFilterModel.bookingType.translatedName),
+              getTranslatedName(
+                  context, bookingFilterModel.bookingType.translatedName),
               style: Styles.mediumText(),
             ),
           ],

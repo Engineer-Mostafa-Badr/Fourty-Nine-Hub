@@ -277,7 +277,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 children: List.generate(widget.items.length, (index) {
                   return GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       widget.onTap(index);
                     },
                     child: Column(

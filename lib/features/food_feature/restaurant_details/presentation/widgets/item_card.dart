@@ -177,7 +177,7 @@ class _ItemCardState extends State<ItemCard> {
                         padding: const EdgeInsets.only(top: 0),
                         child: GestureDetector(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (context.isUserLoggedIn) {
                               _addToCart();
                             } else {
@@ -197,7 +197,7 @@ class _ItemCardState extends State<ItemCard> {
                               //       label: LocaleKeys.login.localize,
                               //       textColor: Colors.white,
                               //       onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               //        // context.push(Routes.LOGIN);
                               //       },
                               //     ),

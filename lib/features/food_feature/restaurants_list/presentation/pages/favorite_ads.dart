@@ -426,10 +426,9 @@ class FavoriteButtonAds extends StatelessWidget {
         color: AppColors.getRedColor(context),
       ),
       onPressed: () async {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         await favouriteRestaurant(item.id!);
       },
     );
   }
 }
-
