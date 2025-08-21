@@ -257,7 +257,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
             ],
           ),
           SizedBox(height: 15.h),
-          if (remainingTime != null&&widget.client?.status != 'pickedUp')
+          if (remainingTime != null&&widget.client?.status != 'pickedUp'&&widget.client?.status != 'cancelled'&&widget.client?.status != 'completed')
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Text(
@@ -274,20 +274,26 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+                    print("widget.client?.status ${widget.client?.status}");
                     if(widget.client?.status == 'cancelled'|| widget.client?.status == 'completed'){
                       return;
                     }
-                    if (widget.client?.status == 'pickedUp') {
+                    if (widget.client?.status == RouteClientStatus.pickedUp.name) {
                       widget.onDropOffClient();
+                      return;
                     }
                     if (isGoingToClient) {
                       setState(() {
                         isGoingToClient = false;
                         showArrived = true;
                       });
+                      return;
+
                     } else {
                       if (showArrived) {
                         widget.onDriverArrived();
+                        return;
+
                       }
                       if (showArrived == false && isGoingToClient == false) {
                         if (showClientNotShown || remainingTime != null) {
@@ -296,12 +302,16 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
                           }
                           if (otp.length == 6) {
                             widget.onPickClient(otp);
+                            return;
                           }
                           if (otp.length < 6) {
                             showErrorMessage(context, context.isArabic ? 'يرجى إدخال كود التأكيد' : 'Please Enter OTP');
+                            return;
                           }
                         } else if (showClientNotShown == false && remainingTime == null) {
                           widget.onPickClient('');
+                          return;
+
                         }
                       }
                     }
@@ -414,7 +424,7 @@ class _RunningTripClientWidgetState extends State<RunningTripClientWidget> {
               ],
             ),
           SizedBox(height: 15.h)],
-          if (remainingTime != null&&widget.client?.status != 'pickedUp')
+          if (remainingTime != null&&widget.client?.status != 'pickedUp'&&widget.client?.status != 'cancelled'&&widget.client?.status != 'completed')
             Visibility(
               visible: !isGoingToClient && !showArrived,
               child: PinCodeTextField(

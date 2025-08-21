@@ -167,7 +167,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
           isWithBackArrow: false,
             scaffoldKey:_scaffoldKey,
           language: true,
-            isMenu:true
+            isMenu:false
           // isHaveLeading: true,
         ),
         bottomNavigationBar: _isScrollingDown

@@ -32,6 +32,7 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, MyBookingEntity>> getDriverRunningRoute();
   Future<Either<Failure, bool>> cancelMyBooking(String id);
   Future<Either<Failure, bool>> acceptRoute(String id);
+  Future<Either<Failure, bool>> completeRoute(String id);
   Future<Either<Failure, String>> pickClient(PickClientParams params);
   Future<Either<Failure, bool>> dropClient(DropClientParams params);
   Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params);
@@ -259,6 +260,23 @@ class CaptainShareRemoteDataSourceImplementation
     try {
       final result = await _apiConsumer.put(
         EndPoints.acceptRoute(id),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(response['status']??false);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> completeRoute(String id) async {
+    try {
+      final result = await _apiConsumer.put(
+        EndPoints.completeRoute(id),
       );
       return result.fold(
             (failure) => Left(failure),

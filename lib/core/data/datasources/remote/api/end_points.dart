@@ -500,6 +500,9 @@ class EndPoints {
   static String acceptRoute(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
 
+  static String completeRoute(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/complete";
+
   static String pickClient(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/pick-up-passenger";
 
