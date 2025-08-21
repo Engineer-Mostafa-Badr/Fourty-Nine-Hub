@@ -9,6 +9,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/build_gradient_border.dart';
 
 class ChatCard extends StatefulWidget {
   final bool isSecret;
@@ -107,27 +108,30 @@ class _ChatCardState extends State<ChatCard> {
 
   _userImage() {
     if (widget.isSecret || widget.isService) {
-      return CircleAvatar(
-        backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: CircleAvatar(
-            backgroundColor: Colors.red,
-            child: Image.asset(
-              // widget.chat!.gender == 'female'
-              //     ?
-              // Assets.femaleImagePlacehlder
-              //     :
-              Assets.maleImagePlaceholder,
-              // UIConst.profilePlaceHolder,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+      return GradientProfileBorder(imageUrl: '',segments: 4,
+          firstChar: 'A'
       );
+      // return CircleAvatar(
+      //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+      //
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.circular(50),
+      //     child: CircleAvatar(
+      //       backgroundColor: Colors.red,
+      //       child: Image.asset(
+      //         // widget.chat!.gender == 'female'
+      //         //     ?
+      //         // Assets.femaleImagePlacehlder
+      //         //     :
+      //         Assets.maleImagePlaceholder,
+      //         // UIConst.profilePlaceHolder,
+      //         width: 50,
+      //         height: 50,
+      //         fit: BoxFit.cover,
+      //       ),
+      //     ),
+      //   ),
+      // );
     } else {
       return Center(
         child: GestureDetector(
@@ -146,17 +150,21 @@ class _ChatCardState extends State<ChatCard> {
           child: Stack(
             children: [
               // if (widget.chat!.isAdmin != 'admin')
-              CircleAvatar(
-                backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: ProfileWithStoriesBorder(
-                    profilePictureUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
-                    storiesCount: 0,
-                  ),
-                ),
-              )
+              GradientProfileBorder(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
+                  segments: 4,
+              firstChar: 'A'
+          ),
+              // CircleAvatar(
+              //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+              //   child: SizedBox(
+              //     height: 50,
+              //     width: 50,
+              //     child: ProfileWithStoriesBorder(
+              //       profilePictureUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
+              //       storiesCount: 4,
+              //     ),
+              //   ),
+              // )
               // else
               //   ClipRRect(
               //     borderRadius: BorderRadius.circular(50),

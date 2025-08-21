@@ -105,7 +105,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       cacheKey: 'chatCount',
       image: Assets.whatsAppIcon,
       index: 3,
-      route: Routes.CHAT,
+      route: Routes.conversationsScreen,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
@@ -186,9 +186,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           HandleCashback.setCount('chatCount', context);
           context.push(
             context.read<UserCubit>().isLoggedIn
-                ? Routes.CHAT
+                ? Routes.conversationsScreen
                 : Routes.FirstLoginScreen,
-            extra: ChatsViewParams(),
           );
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         } else {
