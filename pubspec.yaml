@@ -177,7 +177,7 @@ dependency_overrides:
   web: ^1.0.0
 #  webview_flutter_android: ^3.13.1
 #  web: ^1.0.0
-  shared_preferences_android: 2.4.0
+  shared_preferences_android: 2.4.11
 
 #  wakelock_plus: ^1.2.8
 dev_dependencies:
