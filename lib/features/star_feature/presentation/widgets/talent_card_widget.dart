@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/video_details_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/history_tab_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -18,7 +19,7 @@ import '../../domain/entity/star_entity.dart';
 import '../controller/cubit/star_cubit.dart';
 import '../controller/cubit/star_state.dart';
 import '../helper/youtube_style_video_player.dart';
-import '../pages/talent_video_player.dart';
+import '../helper/talent_video_player.dart';
 
 // Data class for option items
 class OptionItem {
@@ -363,6 +364,298 @@ class TalentCard {
     );
   }
 
+
+  // static Widget _buildMyTalentsVideoItem(
+  //   BuildContext context,
+  //   StarEntity talent,
+  //   StarCubit cubit,
+  //   int index,
+  // ) {
+  //   final mediaUrl =
+  //       talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+  //   final createdAt = talent.createdAt ?? DateTime.now();
+  //   final isVideo = true;
+
+  //   return GestureDetector(
+  //     onTap: () {
+  //       // Navigate to the new VideoDetailsView instead of TalentVideoPlayer
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => VideoDetailsView(
+  //             talent: talent,
+  //             mediaUrl: mediaUrl,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //       color: Colors.white,
+  //       child: Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           // Video thumbnail (same as before)
+  //           Container(
+  //             width: 140,
+  //             height: 90,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Stack(
+  //               children: [
+  //                 Container(
+  //                   decoration: BoxDecoration(
+  //                     borderRadius: BorderRadius.circular(8),
+  //                     color: Colors.grey[300],
+  //                     image: DecorationImage(
+  //                       image: AssetImage('assets/images/testforvideo.jpg'),
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Positioned(
+  //                   top: 8,
+  //                   left: 8,
+  //                   child: Container(
+  //                     padding: EdgeInsets.all(4),
+  //                     decoration: BoxDecoration(
+  //                       color: Colors.black.withOpacity(0.7),
+  //                       borderRadius: BorderRadius.circular(4),
+  //                     ),
+  //                     child: Icon(
+  //                       Icons.volume_up,
+  //                       color: Colors.white,
+  //                       size: 16,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Positioned(
+  //                   bottom: 8,
+  //                   left: 8,
+  //                   child: Container(
+  //                     padding: const EdgeInsets.symmetric(
+  //                         horizontal: 6, vertical: 3),
+  //                     decoration: BoxDecoration(
+  //                       color: Colors.black.withOpacity(0.8),
+  //                       borderRadius: BorderRadius.circular(4),
+  //                     ),
+  //                     child: Text(
+  //                       '7:54',
+  //                       style: const TextStyle(
+  //                         color: Colors.white,
+  //                         fontSize: 12,
+  //                         fontWeight: FontWeight.w500,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           const SizedBox(width: 12),
+  //           // Video info (same as before)
+  //           Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   talent.title,
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.w600,
+  //                     fontSize: 15,
+  //                     color: Colors.black87,
+  //                   ),
+  //                   maxLines: 2,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //                 const SizedBox(height: 4),
+  //                 Text(
+  //                   "${talent.user.firstName} ${talent.user.lastName}",
+  //                   style: TextStyle(
+  //                     color: Colors.grey[600],
+  //                     fontSize: 13,
+  //                     fontWeight: FontWeight.w400,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 2),
+  //                 Text(
+  //                   "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+  //                   style: TextStyle(
+  //                     color: Colors.grey[600],
+  //                     fontSize: 13,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           // More options button (same as before)
+  //           GestureDetector(
+  //             onTap: () => _showHistoryOptions(context, talent, cubit),
+  //             child: Padding(
+  //               padding: const EdgeInsets.only(top: 4),
+  //               child: Icon(
+  //                 Icons.more_vert,
+  //                 size: 20,
+  //                 color: Colors.grey[700],
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  static Widget _buildMyTalentsVideoItem(
+  BuildContext context,
+  StarEntity talent,
+  StarCubit cubit,
+  int index, {
+  Function(StarEntity, String)? onVideoTap, // Add callback parameter
+}) {
+  final mediaUrl =
+      talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+  final createdAt = talent.createdAt ?? DateTime.now();
+  final isVideo = true;
+
+  return GestureDetector(
+    onTap: () {
+      // Use callback instead of navigation
+      if (onVideoTap != null) {
+        onVideoTap(talent, mediaUrl);
+      } else {
+        // Fallback to original navigation behavior
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VideoDetailsView(
+              talent: talent,
+              mediaUrl: mediaUrl,
+            ),
+          ),
+        );
+      }
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      color: Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Video thumbnail (same as before)
+          Container(
+            width: 140,
+            height: 90,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.grey[300],
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/testforvideo.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Icon(
+                      Icons.volume_up,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      '7:54',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Video info (same as before)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  talent.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "${talent.user.firstName} ${talent.user.lastName}",
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // More options button (same as before)
+          GestureDetector(
+            onTap: () => _showHistoryOptions(context, talent, cubit),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Icon(
+                Icons.more_vert,
+                size: 20,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
   static void _showHistoryOptions(
       BuildContext context, StarEntity talent, StarCubit cubit) {
     OptionsBottomSheet.showOptions(
@@ -454,44 +747,101 @@ class TalentCard {
     );
   }
 
+  // static Widget buildMyTalentContentSliver({
+  //   required BuildContext context,
+  //   required StarCubit cubit,
+  // }) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       final myTalent = cubit.allTalents.take(8).toList();
+  //       if (cubit.loadMyTalents) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       if (myTalent.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: CustomEmptyWidget(
+  //               label: LocaleKeys.noResultsFound.localize,
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       // return SliverList(
+  //       //   delegate: SliverChildBuilderDelegate(
+  //       //     (context, index) {
+  //       //       final talent = cubit.myTalents[index];
+  //       //       return _buildTalentCard(context, talent, cubit, isMyTalent: true);
+  //       //     },
+  //       //     childCount: cubit.myTalents.length,
+  //       //   ),
+  //       // );
+  //       return SliverList(
+  //         delegate: SliverChildBuilderDelegate(
+  //           (context, index) {
+  //             final talent = myTalent[index];
+  //             return _buildMyTalentsVideoItem(context, talent, cubit, index);
+  //           },
+  //           childCount: myTalent.length,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   static Widget buildMyTalentContentSliver({
-    required BuildContext context,
-    required StarCubit cubit,
-  }) {
-    return BlocBuilder<StarCubit, StarState>(
-      builder: (context, state) {
-        if (cubit.loadMyTalents) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: const Center(child: CustomCircularProgressIndicator()),
-            ),
-          );
-        }
-
-        if (cubit.myTalents.isEmpty) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: LocaleKeys.noResultsFound.localize,
-              ),
-            ),
-          );
-        }
-
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final talent = cubit.myTalents[index];
-              return _buildTalentCard(context, talent, cubit, isMyTalent: true);
-            },
-            childCount: cubit.myTalents.length,
+  required BuildContext context,
+  required StarCubit cubit,
+  Function(StarEntity, String)? onVideoTap, // Add callback parameter
+}) {
+  return BlocBuilder<StarCubit, StarState>(
+    builder: (context, state) {
+      final myTalent = cubit.allTalents.take(8).toList();
+      if (cubit.loadMyTalents) {
+        return SliverToBoxAdapter(
+          child: SizedBox(
+            height: 200,
+            child: const Center(child: CustomCircularProgressIndicator()),
           ),
         );
-      },
-    );
-  }
+      }
+
+      if (myTalent.isEmpty) {
+        return SliverToBoxAdapter(
+          child: SizedBox(
+            height: 200,
+            child: CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
+            ),
+          ),
+        );
+      }
+
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final talent = myTalent[index];
+            return _buildMyTalentsVideoItem(
+              context, 
+              talent, 
+              cubit, 
+              index, 
+              onVideoTap: onVideoTap, // Pass callback
+            );
+          },
+          childCount: myTalent.length,
+        ),
+      );
+    },
+  );
+}
 
   static Widget _buildTalentCard(
     BuildContext context,

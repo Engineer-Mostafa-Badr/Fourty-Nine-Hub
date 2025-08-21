@@ -26,7 +26,7 @@ import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../social_media/twitter/presentation/widgets/report_view.dart';
-import 'talent_video_player.dart';
+import '../helper/talent_video_player.dart';
 
 // class GetAllTalents extends StatelessWidget {
 //   final bool isMyTalent;

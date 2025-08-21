@@ -10,7 +10,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../controller/cubit/star_cubit.dart';
 import '../controller/cubit/star_state.dart';
-import '../pages/talent_video_player.dart';
+import '../helper/talent_video_player.dart';
 import 'talent_video.dart';
 import '../../../../res/style/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
