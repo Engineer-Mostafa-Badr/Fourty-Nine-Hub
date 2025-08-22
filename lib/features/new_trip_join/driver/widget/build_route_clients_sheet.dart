@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_trip_client_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class BuildRouteClientsSheet extends StatelessWidget {
   const BuildRouteClientsSheet({super.key, required this.clients});
@@ -83,6 +87,33 @@ class BuildRouteClientsSheet extends StatelessWidget {
                           cubit.onClientNotShown(routeId: state.runningRoute?.id ?? '', passengerId: clients[2].id);
                         },
                       ),
+                    if(clients.every((c) =>
+                    c.status == 'cancelled' ||
+                        c.status == 'completed',
+                    ))ClickableWidget(
+                      onTap: (){
+                        ManageVibration.vibrate();
+                        cubit.onCompleteRoute(id: cubit.state.runningRoute?.id??'', context: context);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppColors.SECONDARY_COLOR,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          context.isArabic?'انهاء الرحله':'Finish Trip',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
