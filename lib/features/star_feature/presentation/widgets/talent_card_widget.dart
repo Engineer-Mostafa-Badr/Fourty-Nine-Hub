@@ -747,55 +747,6 @@ class TalentCard {
     );
   }
 
-  // static Widget buildMyTalentContentSliver({
-  //   required BuildContext context,
-  //   required StarCubit cubit,
-  // }) {
-  //   return BlocBuilder<StarCubit, StarState>(
-  //     builder: (context, state) {
-  //       final myTalent = cubit.allTalents.take(8).toList();
-  //       if (cubit.loadMyTalents) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: const Center(child: CustomCircularProgressIndicator()),
-  //           ),
-  //         );
-  //       }
-
-  //       if (myTalent.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: CustomEmptyWidget(
-  //               label: LocaleKeys.noResultsFound.localize,
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       // return SliverList(
-  //       //   delegate: SliverChildBuilderDelegate(
-  //       //     (context, index) {
-  //       //       final talent = cubit.myTalents[index];
-  //       //       return _buildTalentCard(context, talent, cubit, isMyTalent: true);
-  //       //     },
-  //       //     childCount: cubit.myTalents.length,
-  //       //   ),
-  //       // );
-  //       return SliverList(
-  //         delegate: SliverChildBuilderDelegate(
-  //           (context, index) {
-  //             final talent = myTalent[index];
-  //             return _buildMyTalentsVideoItem(context, talent, cubit, index);
-  //           },
-  //           childCount: myTalent.length,
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   static Widget buildMyTalentContentSliver({
   required BuildContext context,
   required StarCubit cubit,
