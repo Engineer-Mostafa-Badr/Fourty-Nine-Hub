@@ -59,15 +59,16 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
 
   void listenToNewRoute(BuildContext context) {
     CliLogger.info('listenToNewDriverRoute');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     // TripsResponseEntity
     listenToNewRouteDriverUseCase((route) {
         if(state.tapIndex==0){
           availableBookings.insert(0, route);
-          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+          showSuccessMessage(currentContext, currentContext.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }else{
-          changeTapIndex(0,context);
-          loadInitialAvailableData(context);
-          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+          changeTapIndex(0,currentContext);
+          loadInitialAvailableData(currentContext);
+          showSuccessMessage(currentContext, currentContext.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }
         emit(state.copyWith(status: CaptainShareDashboardStates.success));
     });
