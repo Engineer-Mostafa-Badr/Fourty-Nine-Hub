@@ -1984,6 +1984,33 @@ class AppPages {
                 },
               ),
               GoRoute(
+                path: Paths.REELS,
+                name: Routes.REELS,
+                pageBuilder: (context, state) {
+                  // context.read<ReelsCubit>().fetchReels();
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<SocialPostsCubit>(),
+                        child: const ReelView(),
+                      ));
+                },
+                routes: [
+                  GoRoute(
+                    path: Paths.MUSICREELS,
+                    name: Routes.MUSICREELS,
+                    pageBuilder: (context, state) => customTransition(
+                      context,
+                      state,
+                      const MusicReels(),
+                    ),
+                  ),
+                ],
+              ),
+
+              GoRoute(
                   path: Paths.SOCIAL,
                   name: Routes.SOCIAL,
                   pageBuilder: (context, state) {
@@ -2108,32 +2135,6 @@ class AppPages {
                             ),
                           ),
                         ]),
-                    GoRoute(
-                      path: Paths.REELS,
-                      name: Routes.REELS,
-                      pageBuilder: (context, state) {
-                        // context.read<ReelsCubit>().fetchReels();
-                        return customTransition(
-                            context,
-                            state,
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<SocialPostsCubit>(),
-                              child: const ReelView(),
-                            ));
-                      },
-                      routes: [
-                        GoRoute(
-                          path: Paths.MUSICREELS,
-                          name: Routes.MUSICREELS,
-                          pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            const MusicReels(),
-                          ),
-                        ),
-                      ],
-                    ),
                     GoRoute(
                       path: Paths.TINDER,
                       name: Routes.Tinder,

@@ -60,7 +60,7 @@ abstract class Routes {
   static const FacebookSuggestPeople = '/Social/FacebookSuggestPeople';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
-  static const REELS = '/Social/REELS';
+  static const REELS = '/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const AllLocationScreen = '/AllLocationScreen';
   static const TiktokOptionScreen = '/TiktokOptionScreen';
@@ -385,7 +385,7 @@ abstract class Paths {
   static const truckPersonalInformationScreen =
       'TruckPersonalInformationScreen';
   static const MEDIASLIDER = 'MediaSlider';
-  static const REELS = 'Reels';
+  static const REELS = 'REELS';
   static const MUSICREELS = 'MUSICREELS';
   static const TiktokOptionScreen = 'TiktokOptionScreen';
   static const AllLocationScreen = 'AllLocationScreen';
