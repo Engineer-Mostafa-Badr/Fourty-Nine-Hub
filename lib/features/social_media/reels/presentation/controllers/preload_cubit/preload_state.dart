@@ -7,6 +7,8 @@ class PreloadState {
   final int focusedIndex;
   final int reloadCounter;
   final bool isLoading;
+  // map from original url to cached path (or original url if not cached)
+  final Map<String, String> cachedPaths;
 
   PreloadState({
     required this.urls,
@@ -14,6 +16,7 @@ class PreloadState {
     required this.focusedIndex,
     required this.reloadCounter,
     required this.isLoading,
+    required this.cachedPaths,
   });
 
   // Initial state
@@ -24,6 +27,7 @@ class PreloadState {
       focusedIndex: 0,
       reloadCounter: 0,
       isLoading: false,
+      cachedPaths: {},
     );
   }
 
@@ -34,6 +38,7 @@ class PreloadState {
     int? focusedIndex,
     int? reloadCounter,
     bool? isLoading,
+    Map<String, String>? cachedPaths,
   }) {
     return PreloadState(
       urls: urls ?? this.urls,
@@ -41,6 +46,7 @@ class PreloadState {
       focusedIndex: focusedIndex ?? this.focusedIndex,
       reloadCounter: reloadCounter ?? this.reloadCounter,
       isLoading: isLoading ?? this.isLoading,
+      cachedPaths: cachedPaths ?? this.cachedPaths,
     );
   }
 }
