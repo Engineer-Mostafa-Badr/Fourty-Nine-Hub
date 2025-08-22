@@ -15,7 +15,10 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		B373C455577B93FCFB75ADD0 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F94771E8F0D7E53C523ABC /* Pods_RunnerTests.framework */; };
+		9C3F68752DC329BA00644FCA /* deepar_flutter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3F68742DC329BA00644FCA /* deepar_flutter.framework */; };
+		9C3F68802DC3307100644FCA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E92CFCF31041BE2EDA0CD703 /* Pods_Runner.framework */; };
+		9C3F68812DC3307100644FCA /* Pods_Runner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E92CFCF31041BE2EDA0CD703 /* Pods_Runner.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E12A9FF707EE9E1A39ED3203 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 961DEEB3ABDF810E61B5B4E1 /* Pods_RunnerTests.framework */; };
 		E44CBD802474E349463393A1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E8B5C9B603DB5DEBA2A232DC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -97,7 +100,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E2CC6C9BB4C94805B1745CB /* Pods_Runner.framework in Frameworks */,
+				9C3F68802DC3307100644FCA /* Pods_Runner.framework in Frameworks */,
+				9C3F68752DC329BA00644FCA /* deepar_flutter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +355,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		748EC38EC5133128C09CFA60 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -794,7 +798,7 @@
 					"$(PROJECT_DIR)/../Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -817,6 +821,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fourtyninehub.fourtynine.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -835,6 +840,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fourtyninehub.fourtynine.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -851,6 +857,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fourtyninehub.fourtynine.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1234,7 +1241,7 @@
 					"$(PROJECT_DIR)/../Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1512,7 +1519,7 @@
 					"$(PROJECT_DIR)/../Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

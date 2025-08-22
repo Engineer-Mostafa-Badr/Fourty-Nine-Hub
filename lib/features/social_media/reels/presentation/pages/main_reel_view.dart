@@ -21,7 +21,6 @@ class ReelView extends StatelessWidget {
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
-        
       ),
     );
     return PopScope(
@@ -135,9 +134,22 @@ class ReelsScreenState extends State<ReelsScreen> {
                         final bool isLoading =
                             (state.isLoading && index == state.urls.length - 1);
                         final controller = state.controllers[index];
+                        final preloadBloc = context.read<PreloadBloc>();
+
                         if (controller == null) {
-                          return _buildCustomLoading();
+                          // If no controller is available, try to initialize it
+                          if (index == preloadBloc.state.focusedIndex) {
+                            // Only auto-initialize the focused video to avoid performance issues
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              preloadBloc.initializeControllerAtIndex(index);
+                            });
+                          }
+
+                          // Show loading indicator with better messaging
+                          return _buildVideoLoadingWidget(
+                              index, preloadBloc.isVideoLoading(index));
                         }
+
                         return state.focusedIndex == index
                             ? ReelsWidget(
                                 index: index,
@@ -169,5 +181,43 @@ class ReelsScreenState extends State<ReelsScreen> {
         child: CircularProgressIndicator(
       color: AppColors.SECONDARY_COLOR,
     ));
+  }
+
+  Widget _buildVideoLoadingWidget(int index, bool isLoading) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (isLoading)
+            const CircularProgressIndicator(
+              color: AppColors.SECONDARY_COLOR,
+            )
+          else
+            const Icon(
+              Icons.error_outline,
+              color: Colors.white54,
+              size: 48,
+            ),
+          const SizedBox(height: 16),
+          Text(
+            isLoading ? 'Loading video...' : 'Video failed to load',
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+          ),
+          if (!isLoading) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Swipe to next video',
+              style: const TextStyle(
+                color: Colors.white54,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }
