@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,6 +65,8 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
   Widget _buildTopMap(BuildContext context, CaptainShareDashboardState state) {
     List<LatLng> driverRoutePoints = [];
     List<LatLng> routePoints = [];
+    String estimatedTime = '';
+    num duration=0;
     // routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.polyLine??[]);
     List<BookingClientEntity> clients = context.read<CaptainShareDashboardCubit>().clients;
     LatLng? startLocation;
@@ -77,19 +80,27 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
       routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().clients[0].polyLine??[]);
       startLocation = routePoints.isNotEmpty?routePoints.first:null;
       targetLocation = routePoints.isNotEmpty?routePoints.last:null;
+      estimatedTime = state.runningRoute?.acceptedAt??'';
+      duration = clients[0].expectedArrivalDuration??0;
     }else if(clients.length>1&&(clients[1].status==RouteClientStatus.acceptedByDriver.name||clients[1].status==RouteClientStatus.driverNoShowPassenger.name)){
       routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().clients[1].polyLine??[]);
       startLocation = routePoints.isNotEmpty?routePoints.first:null;
       targetLocation = routePoints.isNotEmpty?routePoints.last:null;
+      estimatedTime = clients[0].pickupTime??'';
+      duration = clients[1].expectedArrivalDuration??0;
     }else if(clients.length>=2&&(clients[2].status==RouteClientStatus.acceptedByDriver.name||clients[2].status==RouteClientStatus.driverNoShowPassenger.name)){
       routePoints = _convertPolylineToLatLng(context.read<CaptainShareDashboardCubit>().clients[2].polyLine??[]);
       startLocation = routePoints.isNotEmpty?routePoints.first:null;
       targetLocation = routePoints.isNotEmpty?routePoints.last:null;
+      estimatedTime = clients[1].pickupTime??'';
+      duration = clients[2].expectedArrivalDuration??0;
     }else{
       print("objectElse");
       routePoints = _convertRoutePolylineToLatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.polyLine??[]);
       startLocation = LatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.startLocation?.location[1]??0, context.read<CaptainShareDashboardCubit>().state.runningRoute?.startLocation?.location[0]??0);
       targetLocation = LatLng(context.read<CaptainShareDashboardCubit>().state.runningRoute?.targetLocation?.location[1]??0, context.read<CaptainShareDashboardCubit>().state.runningRoute?.targetLocation?.location[0]??0);
+      estimatedTime = clients[2].pickupTime??'';
+      duration = state.runningRoute?.expectedArrivalDuration??0;
     }
 
     log("routePoints $routePoints");
@@ -105,7 +116,9 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
           targetLocation: targetLocation,
           enableScrolling: true,
           polylinePoints: routePoints,
-          // fromClient: false,
+          fromClient: false,
+            estimatedTime:estimatedTime.isNotEmpty?DateFormat('h:mm a').format(DateTime.parse(estimatedTime)
+                .toLocal().add(Duration(minutes: int.parse("$duration")))):'',
         ),
       ),
     );

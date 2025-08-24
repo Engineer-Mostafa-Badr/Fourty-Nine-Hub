@@ -365,22 +365,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             Row(
                               children: [
                                 drawerRollWidget(
-                                  label: LocaleKeys.book.localize,
-                                  image: Assets.booking,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    HandleCashback.setCount(
-                                        'bookingCount', context);
-                                    floatingNavigatorCubit
-                                        .changeFloatingNavigator();
-                                    soonDialog(context);
-                                    // context.push(Routes.BE_STAR);
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                drawerRollWidget(
                                   label: LocaleKeys.find.localize,
                                   image: Assets.find,
                                   onTap: () {
@@ -390,10 +374,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     context.push(Routes.Tinder);
                                   },
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
                                 drawerRollWidget(
                                   label: LocaleKeys.reel.localize,
                                   image: Assets.reel,
@@ -404,9 +387,10 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     context.push(Routes.REELS);
                                   },
                                 ),
-                                SizedBox(
-                                  width: 20,
-                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
                                 drawerRollWidget(
                                   label: LocaleKeys.live.localize,
                                   image: Assets.liveIcon,
@@ -420,27 +404,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                             : Routes.FirstLoginScreen);
                                   },
                                 ),
-                              ],
-                            ),
-                            // drawerRollWidget(
-                            //   label: LocaleKeys.meet.localize,
-                            //   image: Assets.meet,
-                            //   onTap: () {
-
-                            //     context.pop();
-                            //     context.push(Routes.MEETINGROOM);
-                            //   },
-                            // ),
-                            // drawerRollWidget(
-                            //   label: LocaleKeys.snap.localize,
-                            //   image: Assets.snap,
-                            //   onTap: () {
-                            //     context.pop();
-                            //     context.push(Routes.SNAP);
-                            //   },
-                            // ),
-                            Row(
-                              children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
                                 drawerRollWidget(
                                   label: LocaleKeys.chat.localize,
                                   image: Assets.whatsApp,
@@ -448,18 +414,20 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     ManageVibration.vibrate();
                                     floatingNavigatorCubit
                                         .changeFloatingNavigator();
-                                    if (!context.read<UserCubit>().isLoggedIn)
+                                    if (!context.read<UserCubit>().isLoggedIn) {
                                       context
                                           .pushNamed(Routes.FirstLoginScreen);
+                                    }
                                     if (context.read<UserCubit>().isLoggedIn) {
                                       context.push(Routes.CHAT,
                                           extra: ChatsViewParams());
                                     }
                                   },
                                 ),
-                                SizedBox(
-                                  width: 20,
-                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
                                 drawerRollWidget(
                                   label: context.isArabic ? 'العاب' : "Games",
                                   image: Assets.gamesIcon,
@@ -472,10 +440,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     //     extra: ChatsViewParams());
                                   },
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
                                 drawerRollWidget(
                                   label: LocaleKeys.ads.localize,
                                   image: Assets.spcialAdsIcon,
@@ -487,9 +454,10 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                     context.push(Routes.CREATECOMPANYAD);
                                   },
                                 ),
-                                SizedBox(
-                                  width: 20,
-                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
                                 drawerRollWidget(
                                   label:
                                       context.isArabic ? 'المزاد' : "Auction",
@@ -504,10 +472,9 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                             : Routes.FirstLoginScreen);
                                   },
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
                                 drawerRollWidget(
                                   label: LocaleKeys.chance.localize,
                                   image: Assets.chanceIcon,
@@ -519,20 +486,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                         context.read<UserCubit>().isLoggedIn
                                             ? Routes.CHANCE
                                             : Routes.FirstLoginScreen);
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                drawerRollWidget(
-                                  label:
-                                      context.isArabic ? 'عملات' : "Exchange",
-                                  image: Assets.moneyExchange,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    floatingNavigatorCubit
-                                        .changeFloatingNavigator();
-                                    soonDialog(context);
                                   },
                                 ),
                               ],
