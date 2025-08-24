@@ -43,7 +43,7 @@ class _RunningRouteTabWidgetState extends State<RunningRouteTabWidget> {
         return _emptyMessage();
       }
 
-      int currentIndex = cubit.getCurrentClientIndex(state.runningRoute?.clients ?? []);
+      cubit.getCurrentClientIndex(state.runningRoute?.clients ?? []);
       print("state.runningRoute?.clients??[] ${state.runningRoute?.clients?.length}");
       return Stack(
         // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),

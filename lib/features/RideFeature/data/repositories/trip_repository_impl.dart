@@ -174,6 +174,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToComingClient(Function(String remainingTime) params) {
+    remoteDataSource.listenToComingClient(params);
+  }
+
+  @override
   Future<Either<Failure, RunningTripEntity>> getRunningTrip() async{
     return await remoteDataSource.getRunningTrip();
   }

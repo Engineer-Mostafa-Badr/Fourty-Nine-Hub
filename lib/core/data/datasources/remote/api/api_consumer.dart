@@ -216,18 +216,18 @@ class BaseApiConsumer extends ApiConsumer {
         ),
       );
       log("result.toString()${result.toString()}", name: url);
-      print('Welcome ${result.data['status']}');
+      log('Welcome ${result.data['status']}');
       if (result.data['status']) {
-        print('result os io');
+        log('result os io');
         return Right(result.data as Map<String, dynamic>);
       } else {
-        print('reselt 2');
+        log('reselt 2');
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
-      print('result 3');
-      print(e.toString());
+      log('result 3');
+      log(e.toString());
       if (e is DioException) {
         pr(e.response?.data);
       }
@@ -416,7 +416,7 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   Future<void> refreshToken() async {
-    print('==> refreshToken');
+    log('==> refreshToken');
     if (_token == null) return;
     final result = await post(
       EndPoints.refreshToken,

@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/accept_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/arrived_to_client_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/client_not_shown_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/complete_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/drop_client_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_available_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_past_bookings_use_case.dart';
@@ -39,13 +40,14 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final GetDriverRunningRouteUseCase getDriverRunningRouteUseCase;
   final ListenToNewRouteDriverUseCase listenToNewRouteDriverUseCase;
   final AcceptRouteUseCase acceptRouteUseCase;
+  final CompleteRouteUseCase completeRouteUseCase;
   final PickClientUseCase pickClientUseCase;
   final DropClientUseCase dropClientUseCase;
   final CaptainArrivedToClientUseCase arrivedToClientUseCase;
   final ClientNotShownUseCase clientNotShownUseCase;
   final GetDriverPastBookingsUseCase getDriverPastBookingsUseCase;
 
-  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.getRunningTripUseCase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
+  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.completeRouteUseCase,this.getRunningTripUseCase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
       : super(const CaptainShareDashboardState());
 
 
@@ -332,6 +334,24 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
     });
   }
 
+  Future<void> onCompleteRoute(
+      {required String id, required BuildContext context}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await completeRouteUseCase(id);
+    response.fold((l) {
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
+      showSuccessMessage(currentContext,  errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareDashboardStates.error));
+    }, (data) {
+      currentContext.pop();
+      showSuccessMessage(currentContext,currentContext.isArabic?'تم انهاء الرحله بنجاح':'Trip Completed Successfully');
+      changeTapIndex(0, currentContext);
+      emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    });
+  }
+
   Future<void> startClientRoute(
       {required String id,required String passengerId,required String otp, required BuildContext context,required int index}) async {
     showLoadingDialog(context);
@@ -505,7 +525,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   Future<void> dropOffClient(
       {required String routeId,required String passengerId, required BuildContext context}) async {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-    if(clients.any((c)=>c.status=='acceptedByDriver')){
+    if(clients.any((c)=>c.status=='acceptedByDriver'||c.status=='cancelled')){
       showErrorMessage(currentContext, currentContext.isArabic?"برجاء التقاط جميع الركاب اولا":"Please pick all clients first");
       return;
     }

@@ -89,6 +89,7 @@ abstract class TripRepository {
    void listenToNewRoute(Function(MyBookingEntity newBooking) params);
    void listenToDriverTheOnWay(Function(MyBookingEntity newBooking) params);
    void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
+   void listenToComingClient(Function(String remainingTime) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);
    void listenToLeaveAvailableRoutes(Function(String routeId) params);
    Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);
