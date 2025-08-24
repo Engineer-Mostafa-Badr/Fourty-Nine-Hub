@@ -68,527 +68,444 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
     }
   }
 
+  Widget buildStep(String title, bool booked, String? imageUrl, Color pointColor,bool showSeat) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Text on top
+        Text(
+          title,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        ),
+
+        const SizedBox(height: 6),
+
+        // Avatar (optional)
+        if (imageUrl != null||showSeat) ...[
+          if(showSeat)SvgPicture.asset(
+            Assets.freeIcon,
+            color: AppColors.getTextColor(context),
+            height: 30,
+            width: 30,
+          ),
+          if(!showSeat)ImageFromInternet(
+              image: imageUrl??'',
+              isCircle: true,
+              defaultLogo: false,
+              width: 30,
+              height: 30,
+              firstChar: '',
+              charPadding:0
+          ),
+          const SizedBox(height: 6),
+        ] else
+          const SizedBox(height: 36), // keeps alignment when no image
+
+        // Dot
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: pointColor,
+            shape: BoxShape.circle,
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 12.h),
-          child: Row(
+    return SizedBox(
+      height: 80,
+      child:  Stack(
+        children: [
+          PositionedDirectional(
+            bottom: 6,
+            start: 0,
+            end: 0,
+            child: SizedBox(
+              // width: 80,
+              child: Divider(
+              ),
+            ),
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Text(
-                    LocaleKeys.booked.localize,
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  if (!(widget.myRoute))
-                    ImageFromInternet(
-                        image:  '',
-                        isCircle: true,
-                        defaultLogo: false,
-                        width: 30,
-                        height: 30,
-                        firstChar: '',
-                        charPadding:0
+              buildStep(LocaleKeys.booked.localize, true, widget.myRoute?UserCubit.to.state.data?.profilePicture??'':'', Colors.red,false),
+              ClickableWidget(
+                onTap: () {
+                  if((widget.model?.availableSeats??0)<2){
+                    return;
+                  }
+                  if ((widget.model?.clients ?? []).any(
+                          (e) => e.id == UserCubit.to.state.data?.id)) {
+                    return;
+                  }
+                  if (widget.onJoin != null) {
+                    showModalBottomSheet(
+                      backgroundColor: Colors.white,
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32.0),
+                          topRight: Radius.circular(32.0),
                         ),
-                  if (widget.myRoute)
-                    ImageFromInternet(
-                        image:  UserCubit.to.state.data?.profilePicture??'',
-                        isCircle: true,
-                        defaultLogo: false,
-                        width: 30,
-                        height: 30,
-                        firstChar: UserCubit.to.state.data?.firstName[0].toUpperCase(),
-                        charPadding:0
-                    ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    ((widget.model?.availableSeats ?? 0) >= 2)
-                        ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
-                        : LocaleKeys.booked.localize,
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  if (((widget.model?.availableSeats ?? 0) >= 2))
-                    ClickableWidget(
-                      onTap: () {
-                        if ((widget.model?.clients ?? []).any(
-                                (e) => e.id == UserCubit.to.state.data?.id)) {
-                          return;
-                        }
-                        if (widget.onJoin != null) {
-                          showModalBottomSheet(
-                            backgroundColor: Colors.white,
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(32.0),
-                                topRight: Radius.circular(32.0),
-                              ),
+                      ),
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return AnimatedPadding(
+                          padding:
+                          MediaQuery.of(context).viewInsets,
+                          duration:
+                          const Duration(milliseconds: 50),
+                          child: Container(
+                            height: 400.h,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.h,
+                              horizontal: 10,
                             ),
-                            isDismissible: true,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return AnimatedPadding(
-                                padding:
-                                MediaQuery.of(context).viewInsets,
-                                duration:
-                                const Duration(milliseconds: 50),
-                                child: Container(
-                                  height: 400.h,
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10.h,
-                                    horizontal: 10,
+                            child: Form(
+                              key: widget.formKey,
+                              child: Column(
+                                children: [
+                                  Label(
+                                    text: context.isArabic
+                                        ? "ادخل رقم هاتفك"
+                                        : "Enter your phone number",
+                                    style: Styles.headerText(),
                                   ),
-                                  child: Form(
-                                    key: widget.formKey,
-                                    child: Column(
+                                  Sizer(
+                                    height: 30.h,
+                                  ),
+                                  CustomPhoneTextFormField(
+                                    currentFocusNode: FocusNode(),
+                                    nextFocusNode: FocusNode(),
+                                    currentController:
+                                    widget.phoneController,
+                                    onInputChanged: (value) =>
+                                        widget.formKey.currentState!
+                                            .validate(),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .digitsOnly,
+                                      LengthLimitingTextInputFormatter(
+                                          11),
+                                    ],
+                                    validator: (value) {
+                                      final input =
+                                          value?.trim() ?? '';
+
+                                      if (input.isEmpty) {
+                                        return LocaleKeys
+                                            .required.localize;
+                                      }
+
+                                      final numericValue =
+                                      convertDigits(input,
+                                          toArabic: false)
+                                          .replaceAll(
+                                          RegExp(r'[^0-9]'),
+                                          '');
+
+                                      if (numericValue.length !=
+                                          11) {
+                                        return context.isArabic
+                                            ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
+                                            : 'Phone number must be exactly 11 digits.';
+                                      }
+
+                                      if (![
+                                        '010',
+                                        '011',
+                                        '012',
+                                        '015'
+                                      ].any(numericValue
+                                          .startsWith)) {
+                                        return context.isArabic
+                                            ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
+                                            : 'Phone number must start with 010, 011, 012, or 015.';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                  Expanded(
+                                    child: Row(
                                       children: [
-                                        Label(
-                                          text: context.isArabic
-                                              ? "ادخل رقم هاتفك"
-                                              : "Enter your phone number",
-                                          style: Styles.headerText(),
-                                        ),
-                                        Sizer(
-                                          height: 30.h,
-                                        ),
-                                        CustomPhoneTextFormField(
-                                          currentFocusNode: FocusNode(),
-                                          nextFocusNode: FocusNode(),
-                                          currentController:
-                                          widget.phoneController,
-                                          onInputChanged: (value) =>
-                                              widget.formKey.currentState!
-                                                  .validate(),
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter
-                                                .digitsOnly,
-                                            LengthLimitingTextInputFormatter(
-                                                11),
-                                          ],
-                                          validator: (value) {
-                                            final input =
-                                                value?.trim() ?? '';
-
-                                            if (input.isEmpty) {
-                                              return LocaleKeys
-                                                  .required.localize;
-                                            }
-
-                                            final numericValue =
-                                            convertDigits(input,
-                                                toArabic: false)
-                                                .replaceAll(
-                                                RegExp(r'[^0-9]'),
-                                                '');
-
-                                            if (numericValue.length !=
-                                                11) {
-                                              return context.isArabic
-                                                  ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                  : 'Phone number must be exactly 11 digits.';
-                                            }
-
-                                            if (![
-                                              '010',
-                                              '011',
-                                              '012',
-                                              '015'
-                                            ].any(numericValue
-                                                .startsWith)) {
-                                              return context.isArabic
-                                                  ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                  : 'Phone number must start with 010, 011, 012, or 015.';
-                                            }
-
-                                            return null;
-                                          },
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              if (widget.formKey
+                                                  .currentState!
+                                                  .validate()) {
+                                                Navigator.of(
+                                                    context)
+                                                    .pop();
+                                                widget.onJoin!(
+                                                    widget.phoneController
+                                                        .text);
+                                              }
+                                              // if (messageController.text.isNotEmpty) {
+                                              //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
+                                              //   if (result == true) {
+                                              //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
+                                              //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
+                                              //     Navigator.of(context).pop();
+                                              //     setState(() {});
+                                              //   } else {
+                                              //     print(state.failure);
+                                              //     Navigator.of(context).pop();
+                                              //   }
+                                              // }
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 80.h,
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(5),
+                                              decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .PRIMARY_COLOR,
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(
+                                                      15)),
+                                              alignment:
+                                              Alignment.center,
+                                              child: Label(
+                                                text: LocaleKeys
+                                                    .join.localize,
+                                                style: Styles
+                                                    .headerText(
+                                                    color: Colors
+                                                        .white),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         Expanded(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () async {
-                                                    if (widget.formKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                      Navigator.of(
-                                                          context)
-                                                          .pop();
-                                                      widget.onJoin!(
-                                                          widget.phoneController
-                                                              .text);
-                                                    }
-                                                    // if (messageController.text.isNotEmpty) {
-                                                    //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
-                                                    //   if (result == true) {
-                                                    //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                    //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
-                                                    //     Navigator.of(context).pop();
-                                                    //     setState(() {});
-                                                    //   } else {
-                                                    //     print(state.failure);
-                                                    //     Navigator.of(context).pop();
-                                                    //   }
-                                                    // }
-                                                  },
-                                                  child: Container(
-                                                    width: 100,
-                                                    height: 80.h,
-                                                    padding:
-                                                    const EdgeInsets
-                                                        .all(5),
-                                                    decoration: BoxDecoration(
-                                                        color: AppColors
-                                                            .PRIMARY_COLOR,
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(
-                                                            15)),
-                                                    alignment:
-                                                    Alignment.center,
-                                                    child: Label(
-                                                      text: LocaleKeys
-                                                          .join.localize,
-                                                      style: Styles
-                                                          .headerText(
-                                                          color: Colors
-                                                              .white),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
-                                                  },
-                                                  child: Label(
-                                                    text: LocaleKeys
-                                                        .cancel.localize,
-                                                    style: Styles
-                                                        .headerText(),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the dialog
+                                            },
+                                            child: Label(
+                                              text: LocaleKeys
+                                                  .cancel.localize,
+                                              style: Styles
+                                                  .headerText(),
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        }
-                      },
-                      child: SvgPicture.asset(
-                        Assets.freeIcon,
-                        color: AppColors.getTextColor(context),
-                      ),
-                    ),
-                  if (((widget.model?.availableSeats ?? 0) < 2))
-                    CircleAvatar(
-                      radius: 30.w,
-                      backgroundColor: Colors.white,
-                      backgroundImage: CachedNetworkImageProvider(
-                          UIConst.profilePlaceHolder),
-                    ),
-                ],
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 13),
-                    child: Text(
-                      ((widget.model?.availableSeats ?? 0) >= 1)
-                          ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
-                          : LocaleKeys.booked.localize,
-                      style: TextStyle(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  if (((widget.model?.availableSeats ?? 0) >= 1))
-                    ClickableWidget(
-                      onTap: () {
-                        if ((widget.model?.clients ?? []).any(
-                                (e) => e.id == UserCubit.to.state.data?.id)) {
-                          return;
-                        }
-                        if (widget.onJoin != null) {
-                          showModalBottomSheet(
-                            backgroundColor: Colors.white,
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(32.0),
-                                topRight: Radius.circular(32.0),
+                                ],
                               ),
                             ),
-                            isDismissible: true,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return AnimatedPadding(
-                                padding:
-                                MediaQuery.of(context).viewInsets,
-                                duration:
-                                const Duration(milliseconds: 50),
-                                child: Container(
-                                  height: 400.h,
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10.h,
-                                    horizontal: 10,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+                child: buildStep(((widget.model?.availableSeats ?? 0) >= 2)
+                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
+                    : LocaleKeys.booked.localize, true, '', Colors.red,(widget.model?.availableSeats ?? 0) >= 2),),
+              ClickableWidget(
+                onTap: () {
+                  if((widget.model?.availableSeats??0)<1){
+                    return;
+                  }
+                  if ((widget.model?.clients ?? []).any(
+                          (e) => e.id == UserCubit.to.state.data?.id)) {
+                    return;
+                  }
+                  if (widget.onJoin != null) {
+                    showModalBottomSheet(
+                      backgroundColor: Colors.white,
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32.0),
+                          topRight: Radius.circular(32.0),
+                        ),
+                      ),
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return AnimatedPadding(
+                          padding:
+                          MediaQuery.of(context).viewInsets,
+                          duration:
+                          const Duration(milliseconds: 50),
+                          child: Container(
+                            height: 400.h,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.h,
+                              horizontal: 10,
+                            ),
+                            child: Form(
+                              key: widget.formKey,
+                              child: Column(
+                                children: [
+                                  Label(
+                                    text: context.isArabic
+                                        ? 'ادخل رقم هاتفك'
+                                        : 'Enter your phone number',
+                                    style: Styles.headerText(),
                                   ),
-                                  child: Form(
-                                    key: widget.formKey,
-                                    child: Column(
+                                  Sizer(
+                                    height: 30.h,
+                                  ),
+                                  CustomPhoneTextFormField(
+                                    currentFocusNode: FocusNode(),
+                                    nextFocusNode: FocusNode(),
+                                    currentController:
+                                    widget.phoneController,
+                                    onInputChanged: (value) =>
+                                        widget.formKey.currentState!
+                                            .validate(),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .digitsOnly,
+                                      LengthLimitingTextInputFormatter(
+                                          11),
+                                    ],
+                                    validator: (value) {
+                                      final input =
+                                          value?.trim() ?? '';
+
+                                      if (input.isEmpty)
+                                        return LocaleKeys
+                                            .required.localize;
+
+                                      final numericValue =
+                                      convertDigits(input,
+                                          toArabic: false)
+                                          .replaceAll(
+                                          RegExp(r'[^0-9]'),
+                                          '');
+
+                                      if (numericValue.length !=
+                                          11) {
+                                        return context.isArabic
+                                            ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
+                                            : 'Phone number must be exactly 11 digits.';
+                                      }
+
+                                      if (![
+                                        '010',
+                                        '011',
+                                        '012',
+                                        '015'
+                                      ].any(numericValue
+                                          .startsWith)) {
+                                        return context.isArabic
+                                            ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
+                                            : 'Phone number must start with 010, 011, 012, or 015.';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                  Expanded(
+                                    child: Row(
                                       children: [
-                                        Label(
-                                          text: context.isArabic
-                                              ? 'ادخل رقم هاتفك'
-                                              : 'Enter your phone number',
-                                          style: Styles.headerText(),
-                                        ),
-                                        Sizer(
-                                          height: 30.h,
-                                        ),
-                                        CustomPhoneTextFormField(
-                                          currentFocusNode: FocusNode(),
-                                          nextFocusNode: FocusNode(),
-                                          currentController:
-                                          widget.phoneController,
-                                          onInputChanged: (value) =>
-                                              widget.formKey.currentState!
-                                                  .validate(),
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter
-                                                .digitsOnly,
-                                            LengthLimitingTextInputFormatter(
-                                                11),
-                                          ],
-                                          validator: (value) {
-                                            final input =
-                                                value?.trim() ?? '';
-
-                                            if (input.isEmpty)
-                                              return LocaleKeys
-                                                  .required.localize;
-
-                                            final numericValue =
-                                            convertDigits(input,
-                                                toArabic: false)
-                                                .replaceAll(
-                                                RegExp(r'[^0-9]'),
-                                                '');
-
-                                            if (numericValue.length !=
-                                                11) {
-                                              return context.isArabic
-                                                  ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                  : 'Phone number must be exactly 11 digits.';
-                                            }
-
-                                            if (![
-                                              '010',
-                                              '011',
-                                              '012',
-                                              '015'
-                                            ].any(numericValue
-                                                .startsWith)) {
-                                              return context.isArabic
-                                                  ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                  : 'Phone number must start with 010, 011, 012, or 015.';
-                                            }
-
-                                            return null;
-                                          },
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              if (widget.formKey
+                                                  .currentState!
+                                                  .validate()) {
+                                                Navigator.of(
+                                                    context)
+                                                    .pop();
+                                                widget.onJoin!(
+                                                    widget.phoneController
+                                                        .text);
+                                              }
+                                              // if (messageController.text.isNotEmpty) {
+                                              //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
+                                              //   if (result == true) {
+                                              //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
+                                              //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
+                                              //     Navigator.of(context).pop();
+                                              //     setState(() {});
+                                              //   } else {
+                                              //     print(state.failure);
+                                              //     Navigator.of(context).pop();
+                                              //   }
+                                              // }
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 80.h,
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(5),
+                                              decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .PRIMARY_COLOR,
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(
+                                                      15)),
+                                              alignment:
+                                              Alignment.center,
+                                              child: Label(
+                                                text: LocaleKeys
+                                                    .join.localize,
+                                                style: Styles
+                                                    .headerText(
+                                                    color: Colors
+                                                        .white),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         Expanded(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () async {
-                                                    if (widget.formKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                      Navigator.of(
-                                                          context)
-                                                          .pop();
-                                                      widget.onJoin!(
-                                                          widget.phoneController
-                                                              .text);
-                                                    }
-                                                    // if (messageController.text.isNotEmpty) {
-                                                    //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
-                                                    //   if (result == true) {
-                                                    //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                    //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
-                                                    //     Navigator.of(context).pop();
-                                                    //     setState(() {});
-                                                    //   } else {
-                                                    //     print(state.failure);
-                                                    //     Navigator.of(context).pop();
-                                                    //   }
-                                                    // }
-                                                  },
-                                                  child: Container(
-                                                    width: 100,
-                                                    height: 80.h,
-                                                    padding:
-                                                    const EdgeInsets
-                                                        .all(5),
-                                                    decoration: BoxDecoration(
-                                                        color: AppColors
-                                                            .PRIMARY_COLOR,
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(
-                                                            15)),
-                                                    alignment:
-                                                    Alignment.center,
-                                                    child: Label(
-                                                      text: LocaleKeys
-                                                          .join.localize,
-                                                      style: Styles
-                                                          .headerText(
-                                                          color: Colors
-                                                              .white),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
-                                                  },
-                                                  child: Label(
-                                                    text: LocaleKeys
-                                                        .cancel.localize,
-                                                    style: Styles
-                                                        .headerText(),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the dialog
+                                            },
+                                            child: Label(
+                                              text: LocaleKeys
+                                                  .cancel.localize,
+                                              style: Styles
+                                                  .headerText(),
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        }
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
                       },
-                      child: SvgPicture.asset(
-                        Assets.freeIcon,
-                        color: AppColors.getTextColor(context),
-                      ),
-                    ),
-                  if (((widget.model?.availableSeats ?? 0) < 1))
-                    CircleAvatar(
-                      radius: 30.w,
-                      backgroundColor: Colors.white,
-                      backgroundImage: CachedNetworkImageProvider(
-                          UIConst.profilePlaceHolder),
-                    ),
-                ],
+                    );
+                  }
+                },
+                child: buildStep( ((widget.model?.availableSeats ?? 0) >= 1)
+                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
+                    : LocaleKeys.booked.localize, true, '', Colors.red,(widget.model?.availableSeats ?? 0) >= 1),
               ),
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 0.h, left: 8.h),
-                    child: SizedBox(
-                      // width: 60.w,
-                      child: Text(
-                        getBookingStatus(widget.statusDriver ?? ""),
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w900,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 60.h,
-                  )
-                ],
-              ),
+              buildStep( getBookingStatus(widget.statusDriver ?? ""), false, null, Colors.blue,false),
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: [
-              Icon(Icons.circle,
-                  color: AppColors.getRedColor(context), size: 12),
-              Expanded(
-                child: Divider(
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.PRIMARY_COLOR,
-                  thickness: 2,
-                ),
-              ),
-              Icon(Icons.circle,
-                  color: ((widget.model?.availableSeats ?? 0) <= 1)
-                      ? Colors.red
-                      : Colors.green,
-                  size: 12),
-              Expanded(
-                child: Divider(
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.PRIMARY_COLOR,
-                  thickness: 2,
-                ),
-              ),
-              Icon(Icons.circle,
-                  color: ((widget.model?.availableSeats ?? 0) < 1)
-                      ? Colors.red
-                      : Colors.green,
-                  size: 12),
-              Expanded(
-                child: Divider(
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.PRIMARY_COLOR,
-                  thickness: 2,
-                ),
-              ),
-              const Icon(Icons.circle, color: Colors.blue, size: 12),
-            ],
-          ),
-        ),
-      ],
+
+        ],
+      ),
     );
   }
 }
