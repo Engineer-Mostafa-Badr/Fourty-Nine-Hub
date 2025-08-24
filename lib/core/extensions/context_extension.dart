@@ -25,7 +25,14 @@ extension ContextExtensions on BuildContext {
   // Get the current color scheme
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
-  bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
+  bool get isArabic {
+    try {
+      return Localizations.localeOf(this).languageCode == 'ar';
+    } catch (e) {
+      // If context is deactivated, return a default value
+      return false;
+    }
+  }
   TextDirection get textDirection =>
       isArabic ? TextDirection.rtl : TextDirection.ltr;
 

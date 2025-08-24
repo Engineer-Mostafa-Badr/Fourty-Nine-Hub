@@ -109,11 +109,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      localeKey: LocaleKeys.book,
-      cacheKey: 'bookingCount',
+      localeKey: LocaleKeys.chance,
+      cacheKey: 'changeCount',
       index: 4,
-      image: Assets.booking,
-      route: Routes.RIDE_HOME,
+      image: Assets.chanceIcon,
+      route: Routes.CHANCE,
     ),
   ];
 
