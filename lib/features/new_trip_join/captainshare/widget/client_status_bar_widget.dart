@@ -316,7 +316,7 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                   }
                 },
                 child: buildStep(((widget.model?.availableSeats ?? 0) >= 2)
-                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
+                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : ''}${LocaleKeys.free.localize}")
                     : LocaleKeys.booked.localize, true, '', Colors.red,(widget.model?.availableSeats ?? 0) >= 2),),
               ClickableWidget(
                 onTap: () {
@@ -497,7 +497,7 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                   }
                 },
                 child: buildStep( ((widget.model?.availableSeats ?? 0) >= 1)
-                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : '${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
+                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : ''}${LocaleKeys.free.localize}")
                     : LocaleKeys.booked.localize, true, '', Colors.red,(widget.model?.availableSeats ?? 0) >= 1),
               ),
               buildStep( getBookingStatus(widget.statusDriver ?? ""), false, null, Colors.blue,false),
