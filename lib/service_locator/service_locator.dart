@@ -34,6 +34,7 @@ import 'captain_share_service_locator.dart';
 import 'carpool_service_locator.dart';
 import 'club_voice_service_locator.dart';
 import 'competition_service_locator.dart';
+import 'conversations_service_locator.dart';
 import 'edit_food_service_locator.dart';
 import 'face_book_service_locator.dart';
 import 'follow_service_locator.dart';
@@ -325,6 +326,8 @@ class DI {
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Updated
     RideServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
+    // Conversations
+    ConversationsServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Updated
     RideDashboardServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
     // Club Voice
