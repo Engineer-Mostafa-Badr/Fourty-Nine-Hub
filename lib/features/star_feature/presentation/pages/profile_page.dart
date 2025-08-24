@@ -7,31 +7,15 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_style_video_player.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/widgets/profile_video_cards.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/talent_video_player.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
-// Mock Playlist Entity
-class PlaylistEntity {
-  final String id;
-  final String name;
-  final String description;
-  final List<StarEntity> videos;
-  final String thumbnailUrl;
-  final DateTime createdAt;
-
-  PlaylistEntity({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.videos,
-    required this.thumbnailUrl,
-    required this.createdAt,
-  });
-}
 
 class ProfilePageView extends StatefulWidget {
   final UserStarEntity user;
@@ -51,9 +35,12 @@ class _ProfilePageViewState extends State<ProfilePageView>
     with TickerProviderStateMixin {
   late TabController _tabController;
   bool _isSubscribed = false;
-  
+
   // Mock playlists data
   late List<PlaylistEntity> _mockPlaylists;
+
+  // Extended videos list for better scrolling
+  late List<StarEntity> _extendedUserVideos;
 
   @override
   void initState() {
@@ -63,12 +50,38 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   void _initializeMockPlaylists() {
+    // Create more mock videos for better scrolling experience
+    final List<StarEntity> extendedVideos = [];
+
+    // Add original videos multiple times with variations
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < widget.userVideos.length; j++) {
+        final originalVideo = widget.userVideos[j];
+        extendedVideos.add(StarEntity(
+          id: '${originalVideo.id}_$i$j',
+          title: '${originalVideo.title}',
+          description: '${originalVideo.description}',
+          user: originalVideo.user,
+          mediaUrl: originalVideo.mediaUrl,
+          totalViews: originalVideo.totalViews + (i * 1000),
+          averageRating: originalVideo.averageRating,
+          isApproved: originalVideo.isApproved,
+          haveStories: originalVideo.haveStories,
+          storyCount: originalVideo.storyCount,
+          createdAt: DateTime.now().subtract(Duration(days: i + j)),
+        ));
+      }
+    }
+
+    // Update userVideos with extended list
+    _extendedUserVideos = extendedVideos;
+
     _mockPlaylists = [
       PlaylistEntity(
         id: '1',
         name: 'Heart Touching - Playlist',
         description: 'Beautiful collection of heart touching nasheeds',
-        videos: widget.userVideos.take(5).toList(),
+        videos: _extendedUserVideos.take(25).toList(),
         thumbnailUrl: 'assets/images/testforvideo.jpg',
         createdAt: DateTime.now().subtract(Duration(days: 30)),
       ),
@@ -76,25 +89,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
         id: '2',
         name: 'Heart Touching - Playlist',
         description: 'Another beautiful collection',
-        videos: widget.userVideos.skip(2).take(8).toList(),
+        videos: _extendedUserVideos.skip(10).take(30).toList(),
         thumbnailUrl: 'assets/images/testforvideo.jpg',
         createdAt: DateTime.now().subtract(Duration(days: 60)),
-      ),
-      PlaylistEntity(
-        id: '3',
-        name: 'Heart Touching - Playlist',
-        description: 'More inspiring content',
-        videos: widget.userVideos.take(3).toList(),
-        thumbnailUrl: 'assets/images/testforvideo.jpg',
-        createdAt: DateTime.now().subtract(Duration(days: 90)),
-      ),
-      PlaylistEntity(
-        id: '4',
-        name: 'Heart Touching - Playlist',
-        description: 'Latest collection',
-        videos: widget.userVideos.skip(1).take(6).toList(),
-        thumbnailUrl: 'assets/images/testforvideo.jpg',
-        createdAt: DateTime.now().subtract(Duration(days: 15)),
       ),
     ];
   }
@@ -108,49 +105,71 @@ class _ProfilePageViewState extends State<ProfilePageView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          // App Bar
-          SliverAppBar(
-            backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
-            elevation: 0,
-            floating: false,
-            pinned: true,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: context.isDarkMode ? Colors.white : Colors.black,
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          // Fixed App Bar
+          SafeArea(
+            child: Container(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Winners 🏆',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 48), // Balance the back button
+                ],
               ),
-              onPressed: () => Navigator.pop(context),
             ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                ),
-                onPressed: () => _showProfileOptions(),
-              ),
-            ],
           ),
 
           // Profile Header
-          SliverToBoxAdapter(
-            child: _buildProfileHeader(),
-          ),
+          _buildProfileHeader(),
 
-          // Sticky Tab Bar
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _ProfileTabBarDelegate(
-              tabController: _tabController,
-              context: context,
+          // Tab Bar
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: _tabController,
+              isScrollable: false,
+              indicatorColor: Colors.black,
+              indicatorWeight: 3,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey[600],
+              labelStyle: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.normal,
+              ),
+              tabs: [
+                Tab(text: 'Home'),
+                Tab(text: 'Videos'),
+                Tab(text: 'Playlists'),
+              ],
             ),
           ),
 
           // Tab Content
-          SliverFillRemaining(
+          Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
@@ -167,19 +186,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildProfileHeader() {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Column(
         children: [
           // Banner Section
           _buildBannerSection(),
-          SizedBox(height: 16.h),
+          SizedBox(height: 20.h),
 
           // Profile Info Section
           _buildProfileInfoSection(),
-          SizedBox(height: 16.h),
-
-          // Subscribe Button Section
-          _buildSubscribeSection(),
         ],
       ),
     );
@@ -188,55 +204,70 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget _buildBannerSection() {
     return Container(
       width: double.infinity,
-      height: 150.h,
+      height: 140.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(16.r),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF4A90E2),
-            Color(0xFF7B68EE),
-            Color(0xFF9A7AA0),
+            Color(0xFF5A8F9C),
+            Color(0xFF7BA5B0),
+            Color(0xFF6A99A6),
           ],
         ),
       ),
       child: Stack(
         children: [
-          // Decorative shapes
+          // Decorative buildings/shapes
           Positioned(
-            top: 20,
-            left: 20,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 40,
-            right: 30,
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 20,
+            bottom: 0,
             left: 40,
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(4),
+            child: _buildBuilding(60, 80, Colors.black87),
+          ),
+          Positioned(
+            bottom: 0,
+            left: MediaQuery.of(context).size.width / 2 - 50,
+            child: _buildBuilding(80, 100, Colors.black87),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 60,
+            child: _buildBuilding(65, 85, Colors.black87),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBuilding(double width, double height, Color color) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(6),
+          topRight: Radius.circular(6),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Building windows pattern
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(6),
+              child: Wrap(
+                spacing: 3,
+                runSpacing: 3,
+                children: List.generate(
+                  16,
+                  (index) => Container(
+                    width: 10,
+                    height: 10,
+                    color: Colors.grey[300]?.withOpacity(0.3),
+                  ),
+                ),
               ),
             ),
           ),
@@ -246,133 +277,71 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   Widget _buildProfileInfoSection() {
-    return Row(
+    return Column(
       children: [
-        // Profile Picture
-        Container(
-          width: 80.w,
-          height: 80.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: context.isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
-              width: 2,
-            ),
-          ),
-          child: ClipOval(
-            child: widget.user.image.isNotEmpty
-                ? CachedNetworkImage(
-                    imageUrl: widget.user.image,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: Colors.grey[300],
-                      child: Icon(Icons.person, size: 40, color: Colors.grey[600]),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey[300],
-                      child: Icon(Icons.person, size: 40, color: Colors.grey[600]),
-                    ),
-                  )
-                : Container(
-                    color: Colors.grey[300],
-                    child: Icon(Icons.person, size: 40, color: Colors.grey[600]),
-                  ),
-          ),
-        ),
-        SizedBox(width: 16.w),
-
-        // Name and Stats
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${widget.user.firstName} ${widget.user.lastName}",
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
+        Row(
+          children: [
+            // Profile Picture
+            Container(
+              width: 80.w,
+              height: 80.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.grey[300]!,
+                  width: 2,
                 ),
               ),
-              SizedBox(height: 4.h),
-              Text(
-                "@${widget.user.firstName.toLowerCase()}",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                "${widget.userVideos.length} videos",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSubscribeSection() {
-    return Row(
-      children: [
-        // Subscribe Button
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _isSubscribed = !_isSubscribed;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _isSubscribed ? Colors.grey[300] : Colors.black,
-              foregroundColor: _isSubscribed ? Colors.black : Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 12.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.r),
+              child: ClipOval(
+                child: widget.user.image.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: widget.user.image,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[300],
+                          child: Icon(Icons.person,
+                              size: 40, color: Colors.grey[600]),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[300],
+                          child: Icon(Icons.person,
+                              size: 40, color: Colors.grey[600]),
+                        ),
+                      )
+                    : Container(
+                        color: Colors.grey[300],
+                        child:
+                            Icon(Icons.person, size: 40, color: Colors.grey[600]),
+                      ),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _isSubscribed ? 'Subscribed' : 'Subscribe',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
+            SizedBox(width: 16.w),
+
+            // Name and Stats
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Heart Touching",
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                if (_isSubscribed) ...[
-                  SizedBox(width: 8.w),
-                  Icon(Icons.notifications, size: 18.sp),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "@heart • ${widget.userVideos.length} videos",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.grey[600],
+                    ),
+                  ),
                 ],
-              ],
+              ),
             ),
-          ),
-        ),
-        SizedBox(width: 12.w),
-
-        // Join Button
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: context.isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
-            ),
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: IconButton(
-            onPressed: () {
-              // Handle join action
-            },
-            icon: Icon(
-              Icons.group_add,
-              color: context.isDarkMode ? Colors.white : Colors.black,
-            ),
-          ),
+          ],
         ),
       ],
     );
@@ -380,82 +349,86 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildHomeTab() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.only(bottom: 30.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // For You Section
-          _buildSectionHeader('For You'),
-          SizedBox(height: 12.h),
-          _buildForYouGrid(),
-          SizedBox(height: 24.h),
+          // For You Section - Horizontal Scroll
+          Padding(
+            padding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 16.h),
+            child: Text(
+              'For You',
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
 
-          // New Song 2020 Section
-          _buildSectionHeader('New Song 2020'),
-          SizedBox(height: 12.h),
-          _buildVideosList(widget.userVideos.take(3).toList()),
+              // Horizontal scrollable For You section
+              SizedBox(
+                height: 280.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 20.w),
+                  itemCount: _extendedUserVideos.length,
+                  itemBuilder: (context, index) {
+                    final video = _extendedUserVideos[index];
+                    return Container(
+                      width: 180.w,
+                      margin: EdgeInsets.only(right: 12.w),
+                      child: _buildVideoCard(video, index),
+                    );
+                  },
+                ),
+              ),
+
+          SizedBox(height: 32.h),
+
+          // New Song 2020 Section - Vertical Scroll
+          Padding(
+            padding: EdgeInsets.only(left: 20.w, bottom: 16.h),
+            child: Text(
+              'New Song 2020',
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
+
+          // Vertical scrollable New Song section
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemCount: 8,
+            itemBuilder: (context, index) {
+              final video = _extendedUserVideos[index % _extendedUserVideos.length];
+              return Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: _buildListVideoItem(video, index),
+              );
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildVideosTab() {
-    return _buildVideosList(widget.userVideos);
-  }
-
-  Widget _buildPlaylistsTab() {
-    return GridView.builder(
-      padding: EdgeInsets.all(16.w),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 12.w,
-        mainAxisSpacing: 12.h,
-      ),
-      itemCount: _mockPlaylists.length,
-      itemBuilder: (context, index) {
-        final playlist = _mockPlaylists[index];
-        return _buildPlaylistCard(playlist);
-      },
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 18.sp,
-        fontWeight: FontWeight.bold,
-        color: context.isDarkMode ? Colors.white : Colors.black,
-      ),
-    );
-  }
-
-  Widget _buildForYouGrid() {
-    final forYouVideos = widget.userVideos.take(2).toList();
-    return Row(
-      children: forYouVideos.map((video) => Expanded(
-        child: Container(
-          margin: EdgeInsets.only(right: forYouVideos.last == video ? 0 : 8.w),
-          child: _buildGridVideoCard(video),
-        ),
-      )).toList(),
-    );
-  }
-
-  Widget _buildGridVideoCard(StarEntity video) {
+  Widget _buildVideoCard(StarEntity video, int index) {
     return GestureDetector(
-      onTap: () {
-        // Navigate to video player
-      },
+      onTap: () => _navigateToVideo(video),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Thumbnail
+          // Thumbnail with overlay elements
           Container(
             height: 120.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(10.r),
               color: Colors.grey[300],
               image: DecorationImage(
                 image: AssetImage('assets/images/testforvideo.jpg'),
@@ -464,55 +437,55 @@ class _ProfilePageViewState extends State<ProfilePageView>
             ),
             child: Stack(
               children: [
-                // Heart icon
+                // Heart icon - top left
                 Positioned(
                   top: 8,
                   left: 8,
                   child: Container(
-                    padding: EdgeInsets.all(4),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.white,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.favorite,
                       color: Colors.red,
-                      size: 16,
+                      size: 18,
                     ),
                   ),
                 ),
-                // Volume icon
+                // Volume icon - top right
                 Positioned(
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: EdgeInsets.all(4),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withOpacity(0.5),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.volume_off,
+                      Icons.volume_up,
                       color: Colors.white,
                       size: 16,
                     ),
                   ),
                 ),
-                // Duration
+                // Duration - bottom right
                 Positioned(
                   bottom: 8,
                   right: 8,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       '7:54',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -521,16 +494,21 @@ class _ProfilePageViewState extends State<ProfilePageView>
               ],
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 12.h),
 
-          // Video info
+          // Video info with profile pic
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                radius: 12,
+                radius: 16,
                 backgroundColor: Colors.grey[300],
-                child: Icon(Icons.person, size: 12, color: Colors.grey[600]),
+                backgroundImage: video.user.image.isNotEmpty
+                    ? NetworkImage(video.user.image)
+                    : null,
+                child: video.user.image.isEmpty
+                    ? Icon(Icons.person, size: 16, color: Colors.grey[600])
+                    : null,
               ),
               SizedBox(width: 8.w),
               Expanded(
@@ -538,42 +516,51 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      video.title,
+                      "Heart Touching Nasheed",
                       style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 3.h),
                     Text(
-                      "${video.totalViews.toShortScale.toArabicNumbers(context)} views • ${timeago.format(video.createdAt ?? DateTime.now(), locale: context.locale.languageCode).toArabicNumbers(context)}",
+                      "507K views • 10 months ago",
                       style: TextStyle(
-                        fontSize: 10.sp,
-                        color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        fontSize: 11.sp,
+                        color: Colors.grey[600],
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 4.h),
+                    // Star rating
                     Row(
-                      children: List.generate(5, (starIndex) => 
-                        Icon(
-                          starIndex < video.averageRating ? Icons.star : Icons.star_outline,
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(
+                        5,
+                        (starIndex) => Icon(
+                          starIndex < 3 ? Icons.star : Icons.star_border,
                           size: 12,
-                          color: starIndex < video.averageRating ? Colors.amber : Colors.grey[400],
+                          color: starIndex < 3 ? Colors.amber : Colors.grey[400],
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
+              SizedBox(width: 4.w),
               GestureDetector(
-                onTap: () => _showVideoOptions(video),
-                child: Icon(
-                  Icons.more_vert,
-                  size: 16,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
+                onTap: () => _showMoreOptions(context, video),
+                child: Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.more_vert,
+                    size: 18,
+                    color: Colors.grey[700],
+                  ),
                 ),
               ),
             ],
@@ -583,33 +570,20 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
-  Widget _buildVideosList(List<StarEntity> videos) {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      itemCount: videos.length,
-      itemBuilder: (context, index) {
-        final video = videos[index];
-        return _buildVideoListItem(video);
-      },
-    );
-  }
-
-  Widget _buildVideoListItem(StarEntity video) {
+  Widget _buildListVideoItem(StarEntity video, int index) {
     return GestureDetector(
-      onTap: () {
-        // Navigate to video player
-      },
+      onTap: () => _navigateToVideo(video),
       child: Container(
-        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thumbnail
             Container(
-              width: 120.w,
-              height: 68.h,
+              width: 160.w,
+              height: 90.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(10.r),
                 color: Colors.grey[300],
                 image: DecorationImage(
                   image: AssetImage('assets/images/testforvideo.jpg'),
@@ -618,38 +592,38 @@ class _ProfilePageViewState extends State<ProfilePageView>
               ),
               child: Stack(
                 children: [
-                  // Volume icon
+                  // Volume icon overlay
                   Positioned(
-                    top: 4,
-                    right: 4,
+                    top: 8,
+                    left: 8,
                     child: Container(
-                      padding: EdgeInsets.all(2),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.6),
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: Icon(
-                        Icons.volume_off,
+                        Icons.volume_up,
                         color: Colors.white,
-                        size: 12,
+                        size: 16,
                       ),
                     ),
                   ),
                   // Duration
                   Positioned(
-                    bottom: 4,
-                    right: 4,
+                    bottom: 8,
+                    right: 8,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(2),
+                        color: Colors.black.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         '7:54',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 8.sp,
+                          fontSize: 11.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -658,7 +632,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 ],
               ),
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: 16.w),
 
             // Video info
             Expanded(
@@ -666,44 +640,44 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    video.title,
+                    "Heart Touching Nasheed",
                     style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: context.isDarkMode ? Colors.white : Colors.black,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 6.h),
                   Text(
                     "RAV",
                     style: TextStyle(
-                      fontSize: 12.sp,
-                      color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      fontSize: 14.sp,
+                      color: Colors.grey[600],
                     ),
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 4.h),
                   Text(
-                    "${video.totalViews.toShortScale.toArabicNumbers(context)} Views • ${timeago.format(video.createdAt ?? DateTime.now(), locale: context.locale.languageCode).toArabicNumbers(context)}",
+                    "507K Views • 10 Months Ago",
                     style: TextStyle(
-                      fontSize: 12.sp,
-                      color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      fontSize: 13.sp,
+                      color: Colors.grey[600],
                     ),
                   ),
                 ],
               ),
             ),
 
-            // More options
+            // More button
             GestureDetector(
-              onTap: () => _showVideoOptions(video),
+              onTap: () => _showMoreOptions(context, video),
               child: Padding(
-                padding: EdgeInsets.only(left: 8.w),
+                padding: EdgeInsets.only(top: 8.h),
                 child: Icon(
                   Icons.more_vert,
                   size: 20,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  color: Colors.grey[700],
                 ),
               ),
             ),
@@ -713,193 +687,53 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
-  Widget _buildPlaylistCard(PlaylistEntity playlist) {
-    return GestureDetector(
-      onTap: () {
-        // Navigate to playlist view
+  Widget _buildVideosTab() {
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      itemCount: _extendedUserVideos.length,
+      itemBuilder: (context, index) {
+        final video = _extendedUserVideos[index];
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: _buildListVideoItem(video, index),
+        );
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Playlist thumbnail stack
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
-                color: Colors.grey[300],
-              ),
-              child: Stack(
-                children: [
-                  // Main thumbnail
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/testforvideo.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Playlist indicator
-                  Positioned(
-                    bottom: 8,
-                    right: 8,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.playlist_play,
-                            color: Colors.white,
-                            size: 12,
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '${playlist.videos.length}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-
-          // Playlist info
-          Text(
-            playlist.name,
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w500,
-              color: context.isDarkMode ? Colors.white : Colors.black,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(height: 2.h),
-          Text(
-            "Heart Touching • Playlist",
-            style: TextStyle(
-              fontSize: 11.sp,
-              color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
-  void _showProfileOptions() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        margin: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: context.isDarkMode ? Colors.grey[900] : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              margin: EdgeInsets.only(top: 12, bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.share, color: context.isDarkMode ? Colors.white : Colors.black),
-              title: Text('Share', style: TextStyle(color: context.isDarkMode ? Colors.white : Colors.black)),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-              leading: Icon(Icons.block, color: Colors.red),
-              title: Text('Block user', style: TextStyle(color: Colors.red)),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-              leading: Icon(Icons.report, color: Colors.red),
-              title: Text('Report user', style: TextStyle(color: Colors.red)),
-              onTap: () => Navigator.pop(context),
-            ),
-            SizedBox(height: 16),
-          ],
+  Widget _buildPlaylistsTab() {
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      itemCount: _mockPlaylists.length,
+      itemBuilder: (context, index) {
+        final playlist = _mockPlaylists[index];
+        return ProfileVideoCards.buildPlaylistItem(
+          context,
+          playlist,
+          onTap: () => _navigateToPlaylist(playlist),
+        );
+      },
+    );
+  }
+
+  void _navigateToVideo(StarEntity video) {
+    final mediaUrl = video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TalentVideoPlayer(
+          videoUrl: mediaUrl,
+          talent: video,
         ),
       ),
     );
   }
 
-  void _showVideoOptions(StarEntity video) {
-    // Implement video options similar to TalentCard
+  void _navigateToPlaylist(PlaylistEntity playlist) {
+    print('Navigate to playlist: ${playlist.name}');
+  }
+
+  void _showMoreOptions(BuildContext context, StarEntity video) {
     TalentCard.showYouTubeOptions(context, video);
-  }
-}
-
-class _ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabController tabController;
-  final BuildContext context;
-
-  _ProfileTabBarDelegate({
-    required this.tabController,
-    required this.context,
-  });
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Material(
-      color: context.isDarkMode ? Colors.black : Colors.white,
-      elevation: overlapsContent ? 4.0 : 0.0,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        child: TabBar(
-          controller: tabController,
-          isScrollable: false,
-          indicatorColor: context.isDarkMode ? Colors.white : Colors.black,
-          indicatorWeight: 2,
-          labelColor: context.isDarkMode ? Colors.white : Colors.black,
-          unselectedLabelColor: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
-          labelStyle: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.normal,
-          ),
-          tabs: [
-            Tab(text: 'Home'),
-            Tab(text: 'Videos'),
-            Tab(text: 'Playlists'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => 56.0;
-
-  @override
-  double get minExtent => 56.0;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }

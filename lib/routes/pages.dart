@@ -610,18 +610,18 @@ class AppPages {
                   ),
                 ),
               ),
-              GoRoute(
-                path: Paths.MY_TALENT,
-                name: Routes.MY_TALENT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<StarCubit>(),
-                    child: const MyTalentView(),
-                  ),
-                ),
-              ),
+              // GoRoute(
+              //   path: Paths.MY_TALENT,
+              //   name: Routes.MY_TALENT,
+              //   pageBuilder: (context, state) => customTransition(
+              //     context,
+              //     state,
+              //     BlocProvider(
+              //       create: (context) => serviceLocator<StarCubit>(),
+              //       child: const MyTalentView(),
+              //     ),
+              //   ),
+              // ),
               // GoRoute(
               //   path: Paths.RESTAURANTORDERS,
               //   name: Routes.RESTAURANTORDERS,
