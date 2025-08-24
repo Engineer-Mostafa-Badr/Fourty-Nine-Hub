@@ -54,6 +54,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
     });
   }
 
+
   Future<void> _loadNextPage() async {
     await _loadPage(_currentPage + 1);
   }

@@ -1,36 +1,829 @@
-// import 'dart:async';
+// // import 'package:flutter/material.dart';
+// // import 'package:video_player/video_player.dart';
+// // import 'package:visibility_detector/visibility_detector.dart';
 
+// // class YouTubeStyleVideoPlayer extends StatefulWidget {
+// //   final String videoUrl;
+// //   final String title;
+// //   final bool autoPlay;
+// //   final bool startMuted;
+// //   final VoidCallback? onTap;
+// //   final bool showLiveIndicator;
+// //   final String? thumbnailUrl;
+
+// //   const YouTubeStyleVideoPlayer({
+// //     super.key,
+// //     required this.videoUrl,
+// //     required this.title,
+// //     this.autoPlay = false,
+// //     this.startMuted = true,
+// //     this.onTap,
+// //     this.showLiveIndicator = false,
+// //     this.thumbnailUrl,
+// //   });
+
+// //   @override
+// //   State<YouTubeStyleVideoPlayer> createState() =>
+// //       _YouTubeStyleVideoPlayerState();
+// // }
+
+// // class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
+// //   late VideoPlayerController _controller;
+// //   bool _isInitialized = false;
+// //   bool _isPlaying = false;
+// //   bool _isMuted = false;
+// //   bool _showControls = true;
+// //   bool _isFavorite = false;
+// //   bool _isDragging = false; // ← أضفنا المتغير ده
+// //   double _visibilityFraction = 0;
+
+// //   @override
+// //   void initState() {
+// //     super.initState();
+// //     _initializeVideo();
+// //   }
+
+// //   void _initializeVideo() {
+// //     _controller = VideoPlayerController.network(widget.videoUrl)
+// //       ..initialize().then((_) {
+// //         if (mounted) {
+// //           setState(() {
+// //             _isInitialized = true;
+// //             _isMuted = widget.startMuted;
+// //             _controller.setVolume(_isMuted ? 0 : 1);
+// //           });
+
+// //           // Auto-play if specified and visible
+// //           if (widget.autoPlay && _visibilityFraction > 0.5) {
+// //             _controller.play();
+// //             setState(() => _isPlaying = true);
+// //           }
+// //         }
+// //       });
+
+// //     _controller.addListener(_videoListener);
+// //   }
+
+// //   void _videoListener() {
+// //     if (_controller.value.isPlaying != _isPlaying) {
+// //       setState(() {
+// //         _isPlaying = _controller.value.isPlaying;
+// //       });
+// //     }
+// //   }
+
+// //   void _togglePlayPause() {
+// //     if (_controller.value.isPlaying) {
+// //       _controller.pause();
+// //     } else {
+// //       _controller.play();
+// //     }
+// //     setState(() {
+// //       _isPlaying = !_isPlaying;
+// //     });
+// //   }
+
+// //   void _toggleMute() {
+// //     setState(() {
+// //       _isMuted = !_isMuted;
+// //       _controller.setVolume(_isMuted ? 0 : 1);
+// //     });
+// //   }
+
+// //   void _toggleFavorite() {
+// //     setState(() {
+// //       _isFavorite = !_isFavorite;
+// //     });
+// //     // يمكنك إضافة منطق حفظ الفيديو هنا
+// //   }
+
+// //   void _handleVisibilityChanged(VisibilityInfo info) {
+// //     _visibilityFraction = info.visibleFraction;
+
+// //     if (!_isInitialized) return;
+
+// //     // Play when 50% or more is visible
+// //     if (info.visibleFraction > 0.5) {
+// //       if (!_controller.value.isPlaying && widget.autoPlay) {
+// //         _controller.play();
+// //         setState(() => _isPlaying = true);
+// //       }
+// //     } else {
+// //       // Pause when less than 50% is visible
+// //       if (_controller.value.isPlaying) {
+// //         _controller.pause();
+// //         setState(() => _isPlaying = false);
+// //       }
+// //     }
+// //   }
+
+// //   String _formatDuration(Duration duration) {
+// //     final hours = duration.inHours;
+// //     final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+// //     final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+// //     if (hours > 0) {
+// //       return '$hours:$minutes:$seconds';
+// //     } else {
+// //       return '$minutes:$seconds';
+// //     }
+// //   }
+
+// //   void _seekToPosition(double localX) {
+// //     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+// //     if (renderBox != null && _controller.value.duration.inMilliseconds > 0) {
+// //       final position = (localX / renderBox.size.width).clamp(0.0, 1.0);
+// //       final duration = _controller.value.duration;
+// //       final newPosition = Duration(
+// //         milliseconds: (position * duration.inMilliseconds).round(),
+// //       );
+// //       _controller.seekTo(newPosition);
+// //     }
+// //   }
+
+// //   @override
+// //   void dispose() {
+// //     _controller.removeListener(_videoListener);
+// //     _controller.dispose();
+// //     super.dispose();
+// //   }
+
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return VisibilityDetector(
+// //       key: Key('video-${widget.videoUrl}'),
+// //       onVisibilityChanged: _handleVisibilityChanged,
+// //       child: GestureDetector(
+// //         onTap: () {
+// //           setState(() => _showControls = !_showControls);
+// //           widget.onTap?.call();
+// //         },
+// //         child: Container(
+// //           height: MediaQuery.sizeOf(context).height * 0.3,
+// //           width: double.infinity,
+// //           color: Colors.black,
+// //           child: Stack(
+// //             alignment: Alignment.center,
+// //             children: [
+// //               // Background Thumbnail - يظهر دائماً لما الفيديو مش شغال
+// //               if (widget.thumbnailUrl != null && !_isPlaying)
+// //                 Positioned.fill(
+// //                   child: Container(
+// //                     decoration: BoxDecoration(
+// //                       image: DecorationImage(
+// //                         image: AssetImage(widget.thumbnailUrl!),
+// //                         fit: BoxFit.cover,
+// //                       ),
+// //                     ),
+// //                   ),
+// //                 ),
+
+// //               // Video Player - يظهر فقط لما الفيديو متهيأ
+// //               if (_isInitialized)
+// //                 AnimatedOpacity(
+// //                   opacity: _isPlaying ? 1.0 : 0.0,
+// //                   duration: const Duration(milliseconds: 300),
+// //                   child: AspectRatio(
+// //                     aspectRatio: _controller.value.aspectRatio,
+// //                     child: VideoPlayer(_controller),
+// //                   ),
+// //                 ),
+
+// //               // Loading Indicator - يظهر فقط لما الفيديو لسه بيتحمل
+// //               if (!_isInitialized)
+// //                 const Center(
+// //                   child: CircularProgressIndicator(
+// //                     color: Colors.white,
+// //                   ),
+// //                 ),
+
+// //               // Top Left Controls (Favorite)
+// //               Positioned(
+// //                 top: 8,
+// //                 left: 8,
+// //                 child: Container(
+// //                   decoration: BoxDecoration(
+// //                     color: _isPlaying
+// //                         ? Colors.black12
+// //                         : Color(0xffD9D9D9).withValues(alpha: .5),
+// //                     borderRadius: BorderRadius.circular(20),
+// //                   ),
+// //                   child: IconButton(
+// //                     icon: Icon(
+// //                       _isFavorite
+// //                           ? Icons.favorite_border_rounded
+// //                           : Icons.favorite_rounded,
+// //                       color: Color(0xffFF0000),
+// //                       size: 25,
+// //                     ),
+// //                     onPressed: _toggleFavorite,
+// //                     padding: const EdgeInsets.all(8),
+// //                     constraints: const BoxConstraints(),
+// //                   ),
+// //                 ),
+// //               ),
+
+// //               // Top Right Controls (Mute)
+// //               if (_isInitialized)
+// //                 Positioned(
+// //                   top: 10,
+// //                   right: 8,
+// //                   child: Container(
+// //                     decoration: BoxDecoration(
+// //                       color: _isPlaying
+// //                           ? Colors.black12
+// //                           : Color(0xffD9D9D9).withValues(alpha: .5),
+// //                       borderRadius: BorderRadius.circular(20),
+// //                     ),
+// //                     child: IconButton(
+// //                       icon: Icon(
+// //                         _isMuted ? Icons.volume_off : Icons.volume_up,
+// //                         color: _isPlaying ? Colors.white : Colors.black,
+// //                         size: 25,
+// //                       ),
+// //                       onPressed: _toggleMute,
+// //                       padding: const EdgeInsets.all(8),
+// //                       constraints: const BoxConstraints(),
+// //                     ),
+// //                   ),
+// //                 ),
+
+// //               // Bottom Right Controls (Remaining Time)
+// //               if (_isInitialized)
+// //                 Positioned(
+// //                   bottom: _isPlaying || _isDragging ? 18 : 10, // ← عدلنا الشرط
+// //                   right: 8,
+// //                   child: Container(
+// //                     padding: const EdgeInsets.symmetric(
+// //                       horizontal: 8,
+// //                       vertical: 4,
+// //                     ),
+// //                     decoration: BoxDecoration(
+// //                       color: Colors.black.withOpacity(0.8),
+// //                       borderRadius: BorderRadius.circular(4),
+// //                     ),
+// //                     child: ValueListenableBuilder<VideoPlayerValue>(
+// //                       valueListenable: _controller,
+// //                       builder: (context, value, child) {
+// //                         if (!_isPlaying && !_isDragging) {
+// //                           // ← عدلنا الشرط
+// //                           // عرض الزمن الكلي للفيديو لو مش شغال
+// //                           return Text(
+// //                             _formatDuration(value.duration),
+// //                             style: const TextStyle(
+// //                               color: Colors.white,
+// //                               fontSize: 12,
+// //                               fontWeight: FontWeight.w500,
+// //                             ),
+// //                           );
+// //                         } else {
+// //                           // عرض الوقت المتبقي لو شغال أو بيتسحب
+// //                           final remainingTime = value.duration - value.position;
+// //                           return Text(
+// //                             _formatDuration(remainingTime),
+// //                             style: const TextStyle(
+// //                               color: Colors.white,
+// //                               fontSize: 12,
+// //                               fontWeight: FontWeight.w500,
+// //                             ),
+// //                           );
+// //                         }
+// //                       },
+// //                     ),
+// //                   ),
+// //                 ),
+
+// //               // Progress Bar - يظهر لو الفيديو شغال أو بيتسحب
+// //               if (_isInitialized &&
+// //                   (_isPlaying || _isDragging)) // ← عدلنا الشرط
+// //                 Positioned(
+// //                   bottom: 0,
+// //                   left: 0,
+// //                   right: 0,
+// //                   child: GestureDetector(
+// //                     onTapDown: (details) {
+// //                       _seekToPosition(details.localPosition.dx);
+// //                     },
+// //                     onPanUpdate: (details) {
+// //                       _seekToPosition(details.localPosition.dx);
+// //                     },
+// //                     onPanStart: (details) {
+// //                       setState(() {
+// //                         _isDragging = true; // ← بدأ السحب
+// //                       });
+// //                       if (_controller.value.isPlaying) {
+// //                         _controller.pause();
+// //                       }
+// //                     },
+// //                     onPanEnd: (details) {
+// //                       setState(() {
+// //                         _isDragging = false; // ← انتهى السحب
+// //                       });
+// //                       if (_isPlaying) {
+// //                         _controller.play();
+// //                       }
+// //                     },
+// //                     child: Container(
+// //                       height: 30,
+// //                       padding: EdgeInsets.symmetric(vertical: 10),
+// //                       child: Stack(
+// //                         clipBehavior: Clip.none,
+// //                         alignment: Alignment.center,
+// //                         children: [
+// //                           // Progress Bar Background
+// //                           Container(
+// //                             height: 4,
+// //                             width: double.infinity,
+// //                             decoration: BoxDecoration(
+// //                               color: Colors.white.withOpacity(0.3),
+// //                               borderRadius: BorderRadius.circular(2),
+// //                             ),
+// //                           ),
+// //                           // Progress Bar Fill
+// //                           ValueListenableBuilder<VideoPlayerValue>(
+// //                             valueListenable: _controller,
+// //                             builder: (context, value, child) {
+// //                               final progress = value.duration.inMilliseconds > 0
+// //                                   ? value.position.inMilliseconds /
+// //                                       value.duration.inMilliseconds
+// //                                   : 0.0;
+// //                               return Align(
+// //                                 alignment: Alignment.centerLeft,
+// //                                 child: Container(
+// //                                   height: 4,
+// //                                   width: MediaQuery.of(context).size.width *
+// //                                       progress.clamp(0.0, 1.0),
+// //                                   decoration: BoxDecoration(
+// //                                     color: Colors.red,
+// //                                     borderRadius: BorderRadius.circular(2),
+// //                                   ),
+// //                                 ),
+// //                               );
+// //                             },
+// //                           ),
+// //                           // Progress Indicator Circle
+// //                           ValueListenableBuilder<VideoPlayerValue>(
+// //                             valueListenable: _controller,
+// //                             builder: (context, value, child) {
+// //                               final progress = value.duration.inMilliseconds > 0
+// //                                   ? value.position.inMilliseconds /
+// //                                       value.duration.inMilliseconds
+// //                                   : 0.0;
+// //                               final clampedProgress = progress.clamp(0.0, 1.0);
+// //                               return Positioned(
+// //                                 left: (MediaQuery.of(context).size.width *
+// //                                         clampedProgress) -
+// //                                     5,
+// //                                 child: Container(
+// //                                   width: 10,
+// //                                   height: 10,
+// //                                   decoration: BoxDecoration(
+// //                                     color: Colors.red,
+// //                                     shape: BoxShape.circle,
+// //                                   ),
+// //                                 ),
+// //                               );
+// //                             },
+// //                           ),
+// //                         ],
+// //                       ),
+// //                     ),
+// //                   ),
+// //                 ),
+// //             ],
+// //           ),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+
+// import 'dart:async';
 // import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/exclusion_entity.dart';
+// import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 // import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
+// import 'package:fourtyninehub/features/star_feature/presentation/helper/custom_video_player.dart';
 // import 'package:fourtyninehub/features/star_feature/presentation/pages/profile_page.dart';
 // import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
+// import 'package:fourtyninehub/helpers/manage_vibration.dart';
+// import 'package:fourtyninehub/main.dart';
 // import 'package:fourtyninehub/res/style/app_colors.dart';
-// import '../../../../common/functions/helper/numbers_helper.dart';
-// import '../../../../core/extensions/context_extension.dart';
-// import '../../../../core/extensions/string_extension.dart';
-// import '../../../../core/widget/custom_circular_progress_indicator.dart';
-// import '../controller/cubit/star_cubit.dart';
-// import '../controller/cubit/star_state.dart';
-// import '../../../../service_locator/service_locator.dart';
-// import 'package:timeago/timeago.dart' as timeago;
 // import 'package:video_player/video_player.dart';
+// import 'package:visibility_detector/visibility_detector.dart';
 
-// import '../../../../common/widgets/dynamic/sizer.dart';
-// import '../../../../core/extensions/numbers_extensions.dart';
-// import '../../../../core/localization/locale_keys.g.dart';
-// import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-// import '../../domain/entity/star_entity.dart';
-// import '../helper/custom_video_player.dart';
-// import '../../../../helpers/manage_vibration.dart' as manageVibration;
-// import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
-// import '../../../../core/widget/olx_pagination/banner.dart';
+// // YouTube Style Video Player - للعرض في القائمة
+// class YouTubeStyleVideoPlayer extends StatefulWidget {
+//   final String videoUrl;
+//   final String title;
+//   final bool autoPlay;
+//   final bool startMuted;
+//   final VoidCallback? onTap;
+//   final bool showLiveIndicator;
+//   final String? thumbnailUrl;
+//   final StarEntity? talent; // إضافة talent للانتقال للصفحة الكاملة
 
+//   const YouTubeStyleVideoPlayer({
+//     super.key,
+//     required this.videoUrl,
+//     required this.title,
+//     this.autoPlay = false,
+//     this.startMuted = true,
+//     this.onTap,
+//     this.showLiveIndicator = false,
+//     this.thumbnailUrl,
+//     this.talent,
+//   });
+
+//   @override
+//   State<YouTubeStyleVideoPlayer> createState() =>
+//       _YouTubeStyleVideoPlayerState();
+// }
+
+// class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
+//   late VideoPlayerController _controller;
+//   bool _isInitialized = false;
+//   bool _isPlaying = false;
+//   bool _isMuted = false;
+//   bool _showControls = true;
+//   bool _isFavorite = false;
+//   bool _isDragging = false;
+//   double _visibilityFraction = 0;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initializeVideo();
+//   }
+
+//   void _initializeVideo() {
+//     _controller = VideoPlayerController.network(widget.videoUrl)
+//       ..initialize().then((_) {
+//         if (mounted) {
+//           setState(() {
+//             _isInitialized = true;
+//             _isMuted = widget.startMuted;
+//             _controller.setVolume(_isMuted ? 0 : 1);
+//           });
+
+//           if (widget.autoPlay && _visibilityFraction > 0.5) {
+//             _controller.play();
+//             setState(() => _isPlaying = true);
+//           }
+//         }
+//       });
+
+//     _controller.addListener(_videoListener);
+//   }
+
+//   void _videoListener() {
+//     if (_controller.value.isPlaying != _isPlaying) {
+//       setState(() {
+//         _isPlaying = _controller.value.isPlaying;
+//       });
+//     }
+//   }
+
+//   void _togglePlayPause() {
+//     if (_controller.value.isPlaying) {
+//       _controller.pause();
+//     } else {
+//       _controller.play();
+//     }
+//     setState(() {
+//       _isPlaying = !_isPlaying;
+//     });
+//   }
+
+//   void _toggleMute() {
+//     setState(() {
+//       _isMuted = !_isMuted;
+//       _controller.setVolume(_isMuted ? 0 : 1);
+//     });
+//   }
+
+//   void _toggleFavorite() {
+//     setState(() {
+//       _isFavorite = !_isFavorite;
+//     });
+//   }
+
+//   void _handleVisibilityChanged(VisibilityInfo info) {
+//     _visibilityFraction = info.visibleFraction;
+
+//     if (!_isInitialized) return;
+
+//     if (info.visibleFraction > 0.5) {
+//       if (!_controller.value.isPlaying && widget.autoPlay) {
+//         _controller.play();
+//         setState(() => _isPlaying = true);
+//       }
+//     } else {
+//       if (_controller.value.isPlaying) {
+//         _controller.pause();
+//         setState(() => _isPlaying = false);
+//       }
+//     }
+//   }
+
+//   String _formatDuration(Duration duration) {
+//     final hours = duration.inHours;
+//     final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+//     final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+//     if (hours > 0) {
+//       return '$hours:$minutes:$seconds';
+//     } else {
+//       return '$minutes:$seconds';
+//     }
+//   }
+
+//   void _seekToPosition(double localX) {
+//     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+//     if (renderBox != null && _controller.value.duration.inMilliseconds > 0) {
+//       final position = (localX / renderBox.size.width).clamp(0.0, 1.0);
+//       final duration = _controller.value.duration;
+//       final newPosition = Duration(
+//         milliseconds: (position * duration.inMilliseconds).round(),
+//       );
+//       _controller.seekTo(newPosition);
+//     }
+//   }
+
+//   void _openFullVideoPlayer() {
+//     if (widget.talent != null) {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => TalentVideoPlayer(
+//             videoUrl: widget.videoUrl,
+//             talent: widget.talent!,
+//           ),
+//         ),
+//       );
+//     }
+//   }
+
+//   @override
+//   void dispose() {
+//     _controller.removeListener(_videoListener);
+//     _controller.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return VisibilityDetector(
+//       key: Key('video-${widget.videoUrl}'),
+//       onVisibilityChanged: _handleVisibilityChanged,
+//       child: GestureDetector(
+//         onTap: () {
+//           setState(() => _showControls = !_showControls);
+//           widget.onTap?.call();
+//           // فتح الفيديو الكامل عند الضغط
+//           _openFullVideoPlayer();
+//         },
+//         child: Container(
+//           height: MediaQuery.sizeOf(context).height * 0.3,
+//           width: double.infinity,
+//           color: Colors.black,
+//           child: Stack(
+//             alignment: Alignment.center,
+//             children: [
+//               // Background Thumbnail
+//               if (widget.thumbnailUrl != null && !_isPlaying)
+//                 Positioned.fill(
+//                   child: Container(
+//                     decoration: BoxDecoration(
+//                       image: DecorationImage(
+//                         image: AssetImage(widget.thumbnailUrl!),
+//                         fit: BoxFit.cover,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+
+//               // Video Player
+//               if (_isInitialized)
+//                 AnimatedOpacity(
+//                   opacity: _isPlaying ? 1.0 : 0.0,
+//                   duration: const Duration(milliseconds: 300),
+//                   child: AspectRatio(
+//                     aspectRatio: _controller.value.aspectRatio,
+//                     child: VideoPlayer(_controller),
+//                   ),
+//                 ),
+
+//               // Loading Indicator
+//               if (!_isInitialized)
+//                 const Center(
+//                   child: CircularProgressIndicator(
+//                     color: Colors.white,
+//                   ),
+//                 ),
+
+//               // Top Left Controls (Favorite)
+//               Positioned(
+//                 top: 8,
+//                 left: 8,
+//                 child: Container(
+//                   decoration: BoxDecoration(
+//                     color: _isPlaying
+//                         ? Colors.black12
+//                         : Color(0xffD9D9D9).withValues(alpha: .5),
+//                     borderRadius: BorderRadius.circular(20),
+//                   ),
+//                   child: IconButton(
+//                     icon: Icon(
+//                       _isFavorite
+//                           ? Icons.favorite_border_rounded
+//                           : Icons.favorite_rounded,
+//                       color: Color(0xffFF0000),
+//                       size: 25,
+//                     ),
+//                     onPressed: _toggleFavorite,
+//                     padding: const EdgeInsets.all(8),
+//                     constraints: const BoxConstraints(),
+//                   ),
+//                 ),
+//               ),
+
+//               // Top Right Controls (Mute)
+//               if (_isInitialized)
+//                 Positioned(
+//                   top: 10,
+//                   right: 8,
+//                   child: Container(
+//                     decoration: BoxDecoration(
+//                       color: _isPlaying
+//                           ? Colors.black12
+//                           : Color(0xffD9D9D9).withValues(alpha: .5),
+//                       borderRadius: BorderRadius.circular(20),
+//                     ),
+//                     child: IconButton(
+//                       icon: Icon(
+//                         _isMuted ? Icons.volume_off : Icons.volume_up,
+//                         color: _isPlaying ? Colors.white : Colors.black,
+//                         size: 25,
+//                       ),
+//                       onPressed: _toggleMute,
+//                       padding: const EdgeInsets.all(8),
+//                       constraints: const BoxConstraints(),
+//                     ),
+//                   ),
+//                 ),
+
+//               // Bottom Right Controls (Remaining Time)
+//               if (_isInitialized)
+//                 Positioned(
+//                   bottom: _isPlaying || _isDragging ? 18 : 10,
+//                   right: 8,
+//                   child: Container(
+//                     padding: const EdgeInsets.symmetric(
+//                       horizontal: 8,
+//                       vertical: 4,
+//                     ),
+//                     decoration: BoxDecoration(
+//                       color: Colors.black.withOpacity(0.8),
+//                       borderRadius: BorderRadius.circular(4),
+//                     ),
+//                     child: ValueListenableBuilder<VideoPlayerValue>(
+//                       valueListenable: _controller,
+//                       builder: (context, value, child) {
+//                         if (!_isPlaying && !_isDragging) {
+//                           return Text(
+//                             _formatDuration(value.duration),
+//                             style: const TextStyle(
+//                               color: Colors.white,
+//                               fontSize: 12,
+//                               fontWeight: FontWeight.w500,
+//                             ),
+//                           );
+//                         } else {
+//                           final remainingTime = value.duration - value.position;
+//                           return Text(
+//                             _formatDuration(remainingTime),
+//                             style: const TextStyle(
+//                               color: Colors.white,
+//                               fontSize: 12,
+//                               fontWeight: FontWeight.w500,
+//                             ),
+//                           );
+//                         }
+//                       },
+//                     ),
+//                   ),
+//                 ),
+
+//               // Progress Bar
+//               if (_isInitialized && (_isPlaying || _isDragging))
+//                 Positioned(
+//                   bottom: 0,
+//                   left: 0,
+//                   right: 0,
+//                   child: GestureDetector(
+//                     onTapDown: (details) {
+//                       _seekToPosition(details.localPosition.dx);
+//                     },
+//                     onPanUpdate: (details) {
+//                       _seekToPosition(details.localPosition.dx);
+//                     },
+//                     onPanStart: (details) {
+//                       setState(() {
+//                         _isDragging = true;
+//                       });
+//                       if (_controller.value.isPlaying) {
+//                         _controller.pause();
+//                       }
+//                     },
+//                     onPanEnd: (details) {
+//                       setState(() {
+//                         _isDragging = false;
+//                       });
+//                       if (_isPlaying) {
+//                         _controller.play();
+//                       }
+//                     },
+//                     child: Container(
+//                       height: 30,
+//                       padding: EdgeInsets.symmetric(vertical: 10),
+//                       child: Stack(
+//                         clipBehavior: Clip.none,
+//                         alignment: Alignment.center,
+//                         children: [
+//                           // Progress Bar Background
+//                           Container(
+//                             height: 4,
+//                             width: double.infinity,
+//                             decoration: BoxDecoration(
+//                               color: Colors.white.withOpacity(0.3),
+//                               borderRadius: BorderRadius.circular(2),
+//                             ),
+//                           ),
+//                           // Progress Bar Fill
+//                           ValueListenableBuilder<VideoPlayerValue>(
+//                             valueListenable: _controller,
+//                             builder: (context, value, child) {
+//                               final progress = value.duration.inMilliseconds > 0
+//                                   ? value.position.inMilliseconds /
+//                                       value.duration.inMilliseconds
+//                                   : 0.0;
+//                               return Align(
+//                                 alignment: Alignment.centerLeft,
+//                                 child: Container(
+//                                   height: 4,
+//                                   width: MediaQuery.of(context).size.width *
+//                                       progress.clamp(0.0, 1.0),
+//                                   decoration: BoxDecoration(
+//                                     color: Colors.red,
+//                                     borderRadius: BorderRadius.circular(2),
+//                                   ),
+//                                 ),
+//                               );
+//                             },
+//                           ),
+//                           // Progress Indicator Circle
+//                           ValueListenableBuilder<VideoPlayerValue>(
+//                             valueListenable: _controller,
+//                             builder: (context, value, child) {
+//                               final progress = value.duration.inMilliseconds > 0
+//                                   ? value.position.inMilliseconds /
+//                                       value.duration.inMilliseconds
+//                                   : 0.0;
+//                               final clampedProgress = progress.clamp(0.0, 1.0);
+//                               return Positioned(
+//                                 left: (MediaQuery.of(context).size.width *
+//                                         clampedProgress) -
+//                                     5,
+//                                 child: Container(
+//                                   width: 10,
+//                                   height: 10,
+//                                   decoration: BoxDecoration(
+//                                     color: Colors.red,
+//                                     shape: BoxShape.circle,
+//                                   ),
+//                                 ),
+//                               );
+//                             },
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// // Full Video Player - الصفحة الكاملة للفيديو
 // class TalentVideoPlayer extends StatefulWidget {
 //   final String videoUrl;
 //   final StarEntity talent;
@@ -1852,6 +2645,277 @@
 //             ),
 //           ),
 //         ],
+//       ),
+//     );
+//   }
+// }
+
+
+// // Keep the existing FloatingVideoManager classes as they are
+// class FloatingVideoManager {
+//   static OverlayEntry? _overlayEntry;
+
+//   static void showFloatingPlayer({
+//     required BuildContext context,
+//     required String videoUrl,
+//     required String title,
+//     required VideoPlayerController controller,
+//     required bool isPlaying,
+//   }) {
+//     closeFloatingPlayer();
+
+//     _overlayEntry = OverlayEntry(
+//       builder: (context) => FloatingVideoPlayer(
+//         controller: controller,
+//         title: title,
+//         videoUrl: videoUrl,
+//         isPlaying: isPlaying,
+//       ),
+//     );
+
+//     Overlay.of(context).insert(_overlayEntry!);
+//   }
+
+//   static void closeFloatingPlayer() {
+//     if (_overlayEntry != null) {
+//       _overlayEntry?.remove();
+//       _overlayEntry = null;
+//     }
+//   }
+
+//   static bool get isPlayerVisible => _overlayEntry != null;
+// }
+
+// class FloatingVideoPlayer extends StatefulWidget {
+//   final VideoPlayerController controller;
+//   final String title;
+//   final String videoUrl;
+//   final bool isPlaying;
+
+//   const FloatingVideoPlayer({
+//     super.key,
+//     required this.controller,
+//     required this.title,
+//     required this.videoUrl,
+//     required this.isPlaying,
+//   });
+
+//   @override
+//   State<FloatingVideoPlayer> createState() => _FloatingVideoPlayerState();
+// }
+
+// class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
+//   late bool _isPlaying;
+//   late VideoPlayerController _controller;
+//   late Offset _position;
+
+//   bool _showControls = false;
+//   bool _isDragging = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = widget.controller;
+//     _isPlaying = widget.isPlaying;
+//     if (_isPlaying) {
+//       _controller.play();
+//     }
+//     _position = Offset(
+//       MediaQuery.of(navigatorKey.currentContext!).size.width -
+//           _floatingSize.width -
+//           4,
+//       MediaQuery.of(navigatorKey.currentContext!).size.height -
+//           _floatingSize.height -
+//           4,
+//     );
+//   }
+
+//   void _togglePlayPause() {
+//     setState(() {
+//       _isPlaying = !_isPlaying;
+//       _isPlaying ? _controller.play() : _controller.pause();
+//     });
+//   }
+
+//   Size get _floatingSize {
+//     var width = MediaQuery.of(navigatorKey.currentContext!).size.width;
+//     final baseWidth = _showControls ? width * .9 : width * .6;
+
+//     if (!_controller.value.isInitialized) {
+//       return Size(baseWidth, baseWidth * 16 / 9);
+//     }
+
+//     final videoWidth = _controller.value.size.width;
+//     final videoHeight = _controller.value.size.height;
+
+//     if (videoWidth > videoHeight) {
+//       return Size(baseWidth, baseWidth * videoHeight / videoWidth);
+//     } else {
+//       return Size(baseWidth * videoWidth / videoHeight, baseWidth);
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Positioned(
+//       left: _position.dx,
+//       top: _position.dy,
+//       child: Material(
+//         color: Colors.transparent,
+//         child: GestureDetector(
+//           onPanStart: (details) {
+//             setState(() {
+//               _isDragging = true;
+//               _showControls = true;
+//             });
+//           },
+//           onPanUpdate: (details) {
+//             setState(() {
+//               _position = Offset(
+//                 _position.dx + details.delta.dx,
+//                 _position.dy + details.delta.dy,
+//               );
+//             });
+//           },
+//           onPanEnd: (details) {
+//             setState(() => _isDragging = false);
+//             Future.delayed(const Duration(seconds: 2), () {
+//               if (!_isDragging && mounted) {
+//                 setState(() => _showControls = false);
+//               }
+//             });
+//           },
+//           onTap: () => setState(() => _showControls = !_showControls),
+//           child: AnimatedContainer(
+//             duration: const Duration(milliseconds: 300),
+//             width: _floatingSize.width,
+//             height: _floatingSize.height,
+//             decoration: BoxDecoration(
+//               color: Colors.black,
+//               borderRadius: BorderRadius.circular(12),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.black.withOpacity(0.5),
+//                   blurRadius: 10,
+//                   spreadRadius: 2,
+//                 )
+//               ],
+//             ),
+//             child: ClipRRect(
+//               borderRadius: BorderRadius.circular(12),
+//               child: Stack(
+//                 children: [
+//                   if (_controller.value.isInitialized)
+//                     Center(
+//                       child: AspectRatio(
+//                         aspectRatio: _controller.value.aspectRatio,
+//                         child: VideoPlayer(_controller),
+//                       ),
+//                     )
+//                   else
+//                     const Center(child: CircularProgressIndicator()),
+
+//                   if (_showControls)
+//                     Positioned(
+//                       top: 0,
+//                       left: 0,
+//                       right: 0,
+//                       child: Container(
+//                         height: 40,
+//                         padding: const EdgeInsets.symmetric(horizontal: 8),
+//                         decoration: BoxDecoration(
+//                           gradient: LinearGradient(
+//                             begin: Alignment.topCenter,
+//                             end: Alignment.bottomCenter,
+//                             colors: [
+//                               Colors.black.withOpacity(0.7),
+//                               Colors.transparent,
+//                             ],
+//                           ),
+//                         ),
+//                         child: Row(
+//                           children: [
+//                             Expanded(
+//                               child: Text(
+//                                 widget.title,
+//                                 maxLines: 1,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 style: const TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 14,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                             IconButton(
+//                               icon: const Icon(Icons.close,
+//                                   color: Colors.white, size: 20),
+//                               onPressed:
+//                                   FloatingVideoManager.closeFloatingPlayer,
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+
+//                   if (_showControls)
+//                     Positioned(
+//                       bottom: 0,
+//                       left: 0,
+//                       right: 0,
+//                       child: Container(
+//                         height: 40,
+//                         padding: const EdgeInsets.symmetric(horizontal: 8),
+//                         decoration: BoxDecoration(
+//                           gradient: LinearGradient(
+//                             begin: Alignment.bottomCenter,
+//                             end: Alignment.topCenter,
+//                             colors: [
+//                               Colors.black.withOpacity(0.7),
+//                               Colors.transparent,
+//                             ],
+//                           ),
+//                         ),
+//                         child: Row(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             IconButton(
+//                               icon: Icon(
+//                                 _isPlaying ? Icons.pause : Icons.play_arrow,
+//                                 color: Colors.white,
+//                                 size: 20,
+//                               ),
+//                               onPressed: _togglePlayPause,
+//                             ),
+//                             IconButton(
+//                               icon: const Icon(Icons.open_in_full,
+//                                   color: Colors.white, size: 20),
+//                               onPressed: () {
+//                                 ManageVibration.vibrate();
+//                                 FloatingVideoManager.closeFloatingPlayer();
+//                               },
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+
+//                   if (!_showControls)
+//                     Center(
+//                       child: IconButton(
+//                         icon: Icon(
+//                           _isPlaying ? Icons.pause : Icons.play_arrow,
+//                           color: Colors.white,
+//                           size: 24,
+//                         ),
+//                         onPressed: _togglePlayPause,
+//                       ),
+//                     ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
 //       ),
 //     );
 //   }
