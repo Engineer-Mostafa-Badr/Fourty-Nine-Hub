@@ -11,6 +11,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_auth
   firebase_core
   flutter_secure_storage_windows
+  flutter_volume_controller
   geolocator_windows
   iris_method_channel
   local_auth_windows
