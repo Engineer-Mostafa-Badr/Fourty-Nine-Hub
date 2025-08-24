@@ -151,7 +151,7 @@ class _ChatCardState extends State<ChatCard> {
           child: Stack(
             children: [
               // if (widget.chat!.isAdmin != 'admin')
-              GradientProfileBorder(imageUrl: widget.chat?.profile?.profilePictureUrl ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
+              GradientProfileBorder(imageUrl: widget.chat?.profile?.profilePictureUrl ?? "",
                   segments: 3,
               firstChar: widget.chat?.profile?.userName?[0] ?? 'A'
           ),
