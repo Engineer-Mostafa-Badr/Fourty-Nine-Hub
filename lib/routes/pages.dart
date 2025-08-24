@@ -318,6 +318,8 @@ import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
+import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
+import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
@@ -443,6 +445,7 @@ import '../features/social_media/create_post/presentation/pages/create_life_even
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
 import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
+import '../features/social_media/instagram/presentation/widgets/create_post_second_page_instagram_view_body.dart';
 import '../features/social_media/instagram/presentation/widgets/tag_user_view.dart';
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
@@ -1748,19 +1751,24 @@ class AppPages {
                 path: Paths.INSTAGRAMADDMUSIC,
                 name: Routes.INSTAGRAMADDMUSIC,
                 pageBuilder: (context, state) {
-                  final cubit = state.extra as CreatePostInstagramCubit;
+                  final cubit = state.extra as MusicScreenParams;
                   return customTransition(
                     context,
                     state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<InstagramAddMusicCubit>(),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<InstagramAddMusicCubit>(),
+                        ),
+                        BlocProvider.value(
+                          value: cubit.cubit,
+                        ),
+                      ],
+                      child: InstagramAddMusicView(
+                        refreshUI: cubit.refreshUI,
                       ),
-                      BlocProvider.value(
-                        value: cubit,
-                      ),
-                    ], child: const InstagramAddMusicView()),
+                    ),
                   );
                 },
               ),
@@ -2291,6 +2299,19 @@ class AppPages {
                   BlocProvider<ChatCubit>(
                     create: (_) => serviceLocator(),
                     child: const ChatHomePage(),
+                  ),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.conversationsScreen,
+                name: Routes.conversationsScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider.value(
+                    value: serviceLocator<ConversationsCubit>(),
+                    child: const ConversationsScreen(),
                   ),
                 ),
               ),
