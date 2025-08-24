@@ -5,20 +5,21 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../helpers/date_time_helper.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/build_gradient_border.dart';
+import '../../../Domain/Entities/conversation_entity.dart';
 
 class ChatCard extends StatefulWidget {
-  final bool isSecret;
-  final bool isService;
+
+  final ConversationEntity? chat;
 
   const ChatCard(
       {super.key,
-        this.isSecret = false,
-        this.isService = false,
+        required this.chat,
       });
 
   @override
@@ -107,32 +108,32 @@ class _ChatCardState extends State<ChatCard> {
   }
 
   _userImage() {
-    if (widget.isSecret || widget.isService) {
-      return GradientProfileBorder(imageUrl: '',segments: 4,
-          firstChar: 'A'
-      );
-      // return CircleAvatar(
-      //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-      //
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.circular(50),
-      //     child: CircleAvatar(
-      //       backgroundColor: Colors.red,
-      //       child: Image.asset(
-      //         // widget.chat!.gender == 'female'
-      //         //     ?
-      //         // Assets.femaleImagePlacehlder
-      //         //     :
-      //         Assets.maleImagePlaceholder,
-      //         // UIConst.profilePlaceHolder,
-      //         width: 50,
-      //         height: 50,
-      //         fit: BoxFit.cover,
-      //       ),
-      //     ),
-      //   ),
-      // );
-    } else {
+    // if (widget.isSecret || widget.isService) {
+    //   return GradientProfileBorder(imageUrl: '',segments: 4,
+    //       firstChar: 'A'
+    //   );
+    //   // return CircleAvatar(
+    //   //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+    //   //
+    //   //   child: ClipRRect(
+    //   //     borderRadius: BorderRadius.circular(50),
+    //   //     child: CircleAvatar(
+    //   //       backgroundColor: Colors.red,
+    //   //       child: Image.asset(
+    //   //         // widget.chat!.gender == 'female'
+    //   //         //     ?
+    //   //         // Assets.femaleImagePlacehlder
+    //   //         //     :
+    //   //         Assets.maleImagePlaceholder,
+    //   //         // UIConst.profilePlaceHolder,
+    //   //         width: 50,
+    //   //         height: 50,
+    //   //         fit: BoxFit.cover,
+    //   //       ),
+    //   //     ),
+    //   //   ),
+    //   // );
+    // } else {
       return Center(
         child: GestureDetector(
           onTap: () {
@@ -150,9 +151,9 @@ class _ChatCardState extends State<ChatCard> {
           child: Stack(
             children: [
               // if (widget.chat!.isAdmin != 'admin')
-              GradientProfileBorder(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
-                  segments: 4,
-              firstChar: 'A'
+              GradientProfileBorder(imageUrl: widget.chat?.profile?.profilePictureUrl ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
+                  segments: 3,
+              firstChar: widget.chat?.profile?.userName?[0] ?? 'A'
           ),
               // CircleAvatar(
               //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
@@ -237,7 +238,7 @@ class _ChatCardState extends State<ChatCard> {
           ),
         ),
       );
-    }
+    // }
   }
 
   _nameAndLastMessage() {
@@ -248,7 +249,7 @@ class _ChatCardState extends State<ChatCard> {
           Row(
             children: [
               Label(
-                text: "Ahmed Nasr",
+                text: widget.chat?.profile?.userName ?? "Ahmed Nasr",
                 // widget.isSecret
                 //     ? 'UNKNOWN'
                 //     : widget.isService
@@ -420,9 +421,9 @@ class _ChatCardState extends State<ChatCard> {
               ,
                                 Expanded(
                                   child: Label(
-                                    text:context.isArabic
+                                    text:widget.chat?.lastMessage?.content == null ? context.isArabic
     ? "لا توجد رسائل حتي الان"
-        : "No messages until now",
+        : "No messages until now" : '${widget.chat?.lastMessage?.content}',
                                     // widget.chat?.lastMessage?.text == null
                                     //     ? context.isArabic
                                     //     ? "لا توجد رسائل حتي الان"
@@ -464,7 +465,7 @@ class _ChatCardState extends State<ChatCard> {
   }
 
   _unreadMessagesCount() {
-    // if (widget.chat?.unreadCount == 0) return const SizedBox();
+    if (widget.chat?.unreadMessagesCount == 0) return const SizedBox();
 
     return Container(
       margin: const EdgeInsetsDirectional.only(end: 8),
@@ -476,7 +477,7 @@ class _ChatCardState extends State<ChatCard> {
       width: 20,
       child: Center(
         child: Label(
-          text: '6',
+          text: widget.chat?.unreadMessagesCount.toString() ?? '0',
           style: Styles.smallText(
             color: Colors.white ,
           ),
@@ -485,12 +486,22 @@ class _ChatCardState extends State<ChatCard> {
     );
   }
 
+  String _getFormattedLastMessageTime() {
+    // Replace widget.chat?.lastMessageTime with your actual DateTime property
+    final DateTime? lastMessageTime = widget.chat?.lastMessage?.createdAt; // أو أي property تاني
+
+    return DateTimeHelper.formatLastMessageTime(
+        lastMessageTime,
+        context.isArabic
+    );
+  }
+
   _lastMessageTime() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Label(
-          text: '12:00 PM',
+          text:  _getFormattedLastMessageTime(),
           style: Styles.mediumText(
             fontSize: 24,
             color: context.isDarkMode ? Colors.white : Colors.black,

@@ -315,6 +315,7 @@ import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
+import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
@@ -1741,17 +1742,20 @@ class AppPages {
                   return customTransition(
                     context,
                     state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<InstagramAddMusicCubit>(),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<InstagramAddMusicCubit>(),
+                        ),
+                        BlocProvider.value(
+                          value: cubit.cubit,
+                        ),
+                      ],
+                      child: InstagramAddMusicView(
+                        refreshUI: cubit.refreshUI,
                       ),
-                      BlocProvider.value(
-                        value: cubit.cubit,
-                      ),
-                    ], child: InstagramAddMusicView(
-                      refreshUI: cubit.refreshUI,
-                    ),),
+                    ),
                   );
                 },
               ),
@@ -2244,8 +2248,7 @@ class AppPages {
                           )),
                     ),
                     // OtherAccountView
-                  ]
-              ),
+                  ]),
 
               // ChatView
               GoRoute(
@@ -2269,11 +2272,17 @@ class AppPages {
                 ),
               ),
 
-
               GoRoute(
                 path: Paths.conversationsScreen,
                 name: Routes.conversationsScreen,
-                builder: (context, state) => const ConversationsScreen(),
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider.value(
+                    value: serviceLocator<ConversationsCubit>(),
+                    child: const ConversationsScreen(),
+                  ),
+                ),
               ),
 
               // Chat Room
@@ -4726,11 +4735,11 @@ class AppPages {
                     )),
               ),
               GoRoute(
-                  path: Paths.CHANCE,
-                  name: Routes.CHANCE,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,ChanceView()),),
+                path: Paths.CHANCE,
+                name: Routes.CHANCE,
+                pageBuilder: (context, state) =>
+                    customTransition(context, state, ChanceView()),
+              ),
             ],
           ),
         ]);

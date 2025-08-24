@@ -1746,4 +1746,7 @@ class EndPoints {
   static String addRemoveSongsFromFavs({required String songId}) => '/songs/add-to-favorites/$songId';
   static String searchSongs({required String query}) => '/songs/search?query=$query';
 
+
+  // Chat Endpoints
+  static getSocialConversations({int page = 1, int limit = 10}) => '/conversations?page=$page&limit=$limit';
 }

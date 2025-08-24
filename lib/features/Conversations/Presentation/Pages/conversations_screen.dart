@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/Conversations/Presentation/Pages/Widgets/chat_card.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -19,6 +21,8 @@ import '../../../social_media/chat/chat_view/presentation/widgets/calling_card.d
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/end_to_end_Encrypted_widget.dart';
 import '../../../social_media/stories/presentation/cubit/stories_cubit.dart';
+import '../Controllers/cubits/conversation_states.dart';
+import '../Controllers/cubits/conversations_cubit.dart';
 
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({super.key});
@@ -35,13 +39,15 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
 
   @override
   void initState() {
-
+    context.read<ConversationsCubit>().loadInitialSocialConversations();
     tabController =
     TabController(length: 4, vsync: this)
       ..addListener(() {
         if (tabController.previousIndex != tabController.index) {
-          // chatsCubit.getChatsByCategory(
-          //     ChatCategories.values[tabController.index]);
+          if(tabController.index == 0)
+            {
+              context.read<ConversationsCubit>().loadInitialSocialConversations();
+            }
           setState(() {
 
           });
@@ -50,6 +56,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
 
     scrollController = ScrollController()
       ..addListener(() {
+        if (scrollController.position.pixels >=
+            scrollController.position.maxScrollExtent - 200) {
+          context.read<ConversationsCubit>().getSocialConversations();
+        }
         if (lastOffset > scrollController.offset) {
           // Scrolled down
           if (!expandedOptions) {
@@ -528,7 +538,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   : const SizedBox.shrink(),
             ),
             // const Divider(),
-            _buildCategoryChats(),
+            _buildSocialConversations(),
 
             const MessagesAreEndToEndEncrypted(),
           ],
@@ -689,6 +699,104 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
   //   }
   // }
 
+  Widget _buildSocialConversations() {
+    return Expanded(
+      child: Scrollbar(
+        // isAlwaysShown: true,  // Ensures the scrollbar is always visible
+        interactive: true,
+        thumbVisibility: true,
+        thickness: 3,
+        child: BlocBuilder<ConversationsCubit, ConversationsState>(
+          builder: (context, state) {
+            if (state.status == ConversationsStates.loading &&
+                context.read<ConversationsCubit>().socialConversations.isEmpty) {
+              return GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: AppColors.SECONDARY_COLOR,
+                child: ListView.separated(
+                    itemCount: 15,
+                    separatorBuilder: (context, index) => const SizedBox(),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Shimmer.fromColors(
+                                baseColor: context.isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
+                                highlightColor: context.isDarkMode ? Colors.grey[700]! : Colors.grey[100]!,
+                                child: ChatCard(
+                                  chat: null,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              );
+            }
+            if (state.status != ConversationsStates.loading &&
+                context.read<ConversationsCubit>().socialConversations.isEmpty) {
+              return Center(child: Label(text: context.isArabic ? "لا يوجد دردشات" : "No conversations", style: Styles.headerText(color: AppColors.PRIMARY_COLOR, fontWeight: FontWeight.w500, fontSize: 34),));
+            }
+
+            return GlowingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              color: AppColors.SECONDARY_COLOR,
+              child: ListView.separated(
+                shrinkWrap: false,
+                physics: const AlwaysScrollableScrollPhysics(),
+                // Enable scrolling
+                itemBuilder: (context, index) {
+                  if(index >= context.read<ConversationsCubit>().socialConversations.length){
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Shimmer.fromColors(
+                              baseColor: context.isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
+                              highlightColor: context.isDarkMode ? Colors.grey[700]! : Colors.grey[100]!,
+                              child: ChatCard(
+                                chat: null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                  return Slidable(
+                    key: ValueKey(index),
+                    closeOnScroll: false,
+
+                    child: ChatCard(
+                      chat: context.read<ConversationsCubit>().socialConversations[index],
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox();
+                },
+                itemCount: context.read<ConversationsCubit>().socialConversations.length +
+                    ((context.read<ConversationsCubit>().isLoadingMoreSocialConversation &&
+                        context.read<ConversationsCubit>().socialConversations.isNotEmpty)
+                        ? 10
+                        : 0),
+              ),
+            );
+          }
+        ),
+      ),
+    );
+    }
+  }
+
   Widget _buildCategoryChats({bool isSecret = false}) {
     return Expanded(
       child: Scrollbar(
@@ -739,7 +847,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
               ],
             ),
             child: ChatCard(
-              isSecret: isSecret,
+              chat: null,
             ),
           ),
           separatorBuilder: (context, index) {
@@ -925,7 +1033,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
   //     ),
   //   );
   // }
-}
+
 
 // _selectedChatAppBar(ChatsCubit chatsCubit) {
 //   return SliverAppBar(
