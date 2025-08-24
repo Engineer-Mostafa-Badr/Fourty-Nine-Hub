@@ -7,8 +7,10 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_style_video_player.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/profile_video_cards.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/talent_video_player.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -104,58 +106,80 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            // App Bar
-            SliverAppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              floating: false,
-              pinned: true,
-              expandedHeight: 0,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                onPressed: () => Navigator.pop(context),
+      body: Column(
+        children: [
+          // Fixed App Bar
+          SafeArea(
+            child: Container(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Winners 🏆',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 48), // Balance the back button
+                ],
               ),
-              title: Text(
-                'Winners 🏆',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              centerTitle: true,
             ),
+          ),
 
-            // Profile Header
-            SliverToBoxAdapter(
-              child: _buildProfileHeader(),
-            ),
+          // Profile Header
+          _buildProfileHeader(),
 
-            // Sticky Tab Bar
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _ProfileTabBarDelegate(
-                tabController: _tabController,
-                context: context,
+          // Tab Bar
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: _tabController,
+              isScrollable: false,
+              indicatorColor: Colors.black,
+              indicatorWeight: 3,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey[600],
+              labelStyle: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
               ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.normal,
+              ),
+              tabs: [
+                Tab(text: 'Home'),
+                Tab(text: 'Videos'),
+                Tab(text: 'Playlists'),
+              ],
             ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildHomeTab(),
-            _buildVideosTab(),
-            _buildPlaylistsTab(),
-          ],
-        ),
+          ),
+
+          // Tab Content
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildHomeTab(),
+                _buildVideosTab(),
+                _buildPlaylistsTab(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -163,12 +187,12 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget _buildProfileHeader() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Column(
         children: [
           // Banner Section
           _buildBannerSection(),
-          SizedBox(height: 16.h),
+          SizedBox(height: 20.h),
 
           // Profile Info Section
           _buildProfileInfoSection(),
@@ -180,9 +204,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget _buildBannerSection() {
     return Container(
       width: double.infinity,
-      height: 100.h,
+      height: 140.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(16.r),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -198,19 +222,18 @@ class _ProfilePageViewState extends State<ProfilePageView>
           // Decorative buildings/shapes
           Positioned(
             bottom: 0,
-            left: 30,
-            child: _buildBuilding(50, 60, Colors.black87),
+            left: 40,
+            child: _buildBuilding(60, 80, Colors.black87),
           ),
           Positioned(
             bottom: 0,
-            // center: true,
-            left: MediaQuery.of(context).size.width / 2 - 40,
-            child: _buildBuilding(70, 90, Colors.black87),
+            left: MediaQuery.of(context).size.width / 2 - 50,
+            child: _buildBuilding(80, 100, Colors.black87),
           ),
           Positioned(
             bottom: 0,
-            right: 50,
-            child: _buildBuilding(55, 70, Colors.black87),
+            right: 60,
+            child: _buildBuilding(65, 85, Colors.black87),
           ),
         ],
       ),
@@ -224,8 +247,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(4),
-          topRight: Radius.circular(4),
+          topLeft: Radius.circular(6),
+          topRight: Radius.circular(6),
         ),
       ),
       child: Column(
@@ -233,15 +256,15 @@ class _ProfilePageViewState extends State<ProfilePageView>
           // Building windows pattern
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(6),
               child: Wrap(
-                spacing: 2,
-                runSpacing: 2,
+                spacing: 3,
+                runSpacing: 3,
                 children: List.generate(
-                  12,
+                  16,
                   (index) => Container(
-                    width: 8,
-                    height: 8,
+                    width: 10,
+                    height: 10,
                     color: Colors.grey[300]?.withOpacity(0.3),
                   ),
                 ),
@@ -260,13 +283,13 @@ class _ProfilePageViewState extends State<ProfilePageView>
           children: [
             // Profile Picture
             Container(
-              width: 56.w,
-              height: 56.w,
+              width: 80.w,
+              height: 80.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: Colors.grey[300]!,
-                  width: 1,
+                  width: 2,
                 ),
               ),
               child: ClipOval(
@@ -277,22 +300,22 @@ class _ProfilePageViewState extends State<ProfilePageView>
                         placeholder: (context, url) => Container(
                           color: Colors.grey[300],
                           child: Icon(Icons.person,
-                              size: 28, color: Colors.grey[600]),
+                              size: 40, color: Colors.grey[600]),
                         ),
                         errorWidget: (context, url, error) => Container(
                           color: Colors.grey[300],
                           child: Icon(Icons.person,
-                              size: 28, color: Colors.grey[600]),
+                              size: 40, color: Colors.grey[600]),
                         ),
                       )
                     : Container(
                         color: Colors.grey[300],
                         child:
-                            Icon(Icons.person, size: 28, color: Colors.grey[600]),
+                            Icon(Icons.person, size: 40, color: Colors.grey[600]),
                       ),
               ),
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: 16.w),
 
             // Name and Stats
             Expanded(
@@ -302,16 +325,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   Text(
                     "Heart Touching",
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 24.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 4.h),
                   Text(
-                    "@heart · ${widget.userVideos.length} videos",
+                    "@heart • ${widget.userVideos.length} videos",
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       color: Colors.grey[600],
                     ),
                   ),
@@ -326,64 +349,68 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildHomeTab() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: 20.h),
+      padding: EdgeInsets.only(bottom: 30.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // For You Section
+          // For You Section - Horizontal Scroll
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w).copyWith(top: 16.h),
+            padding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 16.h),
             child: Text(
               'For You',
               style: TextStyle(
-                fontSize: 18.sp,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
           ),
-          SizedBox(height: 12.h),
 
-          // For You Grid - 2 columns
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildVideoCard(_extendedUserVideos[0], 0),
+              // Horizontal scrollable For You section
+              SizedBox(
+                height: 280.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 20.w),
+                  itemCount: _extendedUserVideos.length,
+                  itemBuilder: (context, index) {
+                    final video = _extendedUserVideos[index];
+                    return Container(
+                      width: 180.w,
+                      margin: EdgeInsets.only(right: 12.w),
+                      child: _buildVideoCard(video, index),
+                    );
+                  },
                 ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: _buildVideoCard(_extendedUserVideos[1], 1),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20.h),
+              ),
 
-          // New Song 2020 Section
+          SizedBox(height: 32.h),
+
+          // New Song 2020 Section - Vertical Scroll
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.only(left: 20.w, bottom: 16.h),
             child: Text(
               'New Song 2020',
               style: TextStyle(
-                fontSize: 18.sp,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
           ),
-          SizedBox(height: 12.h),
 
-          // Vertical list of videos
+          // Vertical scrollable New Song section
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
-            itemCount: 6,
+            itemCount: 8,
             itemBuilder: (context, index) {
               final video = _extendedUserVideos[index % _extendedUserVideos.length];
-              return _buildListVideoItem(video, index);
+              return Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: _buildListVideoItem(video, index),
+              );
             },
           ),
         ],
@@ -399,9 +426,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
         children: [
           // Thumbnail with overlay elements
           Container(
-            height: 180.h,
+            height: 120.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(10.r),
               color: Colors.grey[300],
               image: DecorationImage(
                 image: AssetImage('assets/images/testforvideo.jpg'),
@@ -423,7 +450,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     child: Icon(
                       Icons.favorite,
                       color: Colors.red,
-                      size: 20,
+                      size: 18,
                     ),
                   ),
                 ),
@@ -440,7 +467,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     child: Icon(
                       Icons.volume_up,
                       color: Colors.white,
-                      size: 18,
+                      size: 16,
                     ),
                   ),
                 ),
@@ -449,16 +476,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   bottom: 8,
                   right: 8,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       '7:54',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 11.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -467,7 +494,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
               ],
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 12.h),
 
           // Video info with profile pic
           Row(
@@ -498,22 +525,25 @@ class _ProfilePageViewState extends State<ProfilePageView>
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 3.h),
                     Text(
-                      "507K views · 10 months ago",
+                      "507K views • 10 months ago",
                       style: TextStyle(
                         fontSize: 11.sp,
                         color: Colors.grey[600],
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 4.h),
                     // Star rating
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: List.generate(
                         5,
                         (starIndex) => Icon(
                           starIndex < 3 ? Icons.star : Icons.star_border,
-                          size: 14,
+                          size: 12,
                           color: starIndex < 3 ? Colors.amber : Colors.grey[400],
                         ),
                       ),
@@ -521,12 +551,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   ],
                 ),
               ),
+              SizedBox(width: 4.w),
               GestureDetector(
                 onTap: () => _showMoreOptions(context, video),
-                child: Icon(
-                  Icons.more_vert,
-                  size: 18,
-                  color: Colors.grey[700],
+                child: Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.more_vert,
+                    size: 18,
+                    color: Colors.grey[700],
+                  ),
                 ),
               ),
             ],
@@ -540,16 +574,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
     return GestureDetector(
       onTap: () => _navigateToVideo(video),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thumbnail
             Container(
-              width: 120.w,
-              height: 75.h,
+              width: 160.w,
+              height: 90.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.r),
+                borderRadius: BorderRadius.circular(10.r),
                 color: Colors.grey[300],
                 image: DecorationImage(
                   image: AssetImage('assets/images/testforvideo.jpg'),
@@ -560,36 +594,36 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 children: [
                   // Volume icon overlay
                   Positioned(
-                    top: 4,
-                    left: 4,
+                    top: 8,
+                    left: 8,
                     child: Container(
-                      padding: EdgeInsets.all(4),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: Icon(
                         Icons.volume_up,
                         color: Colors.white,
-                        size: 14,
+                        size: 16,
                       ),
                     ),
                   ),
                   // Duration
                   Positioned(
-                    bottom: 4,
-                    right: 4,
+                    bottom: 8,
+                    right: 8,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         '7:54',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 10.sp,
+                          fontSize: 11.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -598,7 +632,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 ],
               ),
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: 16.w),
 
             // Video info
             Expanded(
@@ -608,26 +642,26 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   Text(
                     "Heart Touching Nasheed",
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.black87,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 6.h),
                   Text(
                     "RAV",
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       color: Colors.grey[600],
                     ),
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 4.h),
                   Text(
-                    "507K Views · 10 Months Ago",
+                    "507K Views • 10 Months Ago",
                     style: TextStyle(
-                      fontSize: 11.sp,
+                      fontSize: 13.sp,
                       color: Colors.grey[600],
                     ),
                   ),
@@ -639,10 +673,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
             GestureDetector(
               onTap: () => _showMoreOptions(context, video),
               child: Padding(
-                padding: EdgeInsets.only(top: 4.h),
+                padding: EdgeInsets.only(top: 8.h),
                 child: Icon(
                   Icons.more_vert,
-                  size: 18,
+                  size: 20,
                   color: Colors.grey[700],
                 ),
               ),
@@ -655,18 +689,21 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildVideosTab() {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       itemCount: _extendedUserVideos.length,
       itemBuilder: (context, index) {
         final video = _extendedUserVideos[index];
-        return _buildListVideoItem(video, index);
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: _buildListVideoItem(video, index),
+        );
       },
     );
   }
 
   Widget _buildPlaylistsTab() {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       itemCount: _mockPlaylists.length,
       itemBuilder: (context, index) {
         final playlist = _mockPlaylists[index];
@@ -680,7 +717,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   void _navigateToVideo(StarEntity video) {
-    print('Navigate to video: ${video.title}');
+    final mediaUrl = video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TalentVideoPlayer(
+          videoUrl: mediaUrl,
+          talent: video,
+        ),
+      ),
+    );
   }
 
   void _navigateToPlaylist(PlaylistEntity playlist) {
@@ -689,55 +735,5 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   void _showMoreOptions(BuildContext context, StarEntity video) {
     TalentCard.showYouTubeOptions(context, video);
-  }
-}
-
-class _ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabController tabController;
-  final BuildContext context;
-
-  _ProfileTabBarDelegate({
-    required this.tabController,
-    required this.context,
-  });
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: TabBar(
-        controller: tabController,
-        isScrollable: false,
-        indicatorColor: Colors.black,
-        indicatorWeight: 2,
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.grey[600],
-        labelStyle: TextStyle(
-          fontSize: 15.sp,
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: 15.sp,
-          fontWeight: FontWeight.normal,
-        ),
-        tabs: [
-          Tab(text: 'Home'),
-          Tab(text: 'Videos'),
-          Tab(text: 'Playlists'),
-        ],
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => 48.0;
-
-  @override
-  double get minExtent => 48.0;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }

@@ -2,7 +2,6 @@ import '../../../../../core/error/failure.dart';
 import '../../../domain/entity/banner_talent_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/star_winner_entity.dart';
-
 import '../../../../../common/functions/global/upload_file.dart';
 
 enum StarStates { loading, initial, success, uploadSuccess, error }
@@ -14,7 +13,7 @@ class StarState {
   final List<StarWinnerEntity>? winner;
   final List<UploadFileEntity>? video;
   final BannerTalentEntity? banner;
-  // final List<VideoModel>? videos;
+  final Set<String>? favoriteIds; // Add favorites
 
   StarState({
     this.status = StarStates.loading,
@@ -23,7 +22,7 @@ class StarState {
     this.winner,
     this.video,
     this.banner,
-    // this.videos,
+    this.favoriteIds,
   });
 
   StarState copyWith({
@@ -34,7 +33,7 @@ class StarState {
     List<StarWinnerEntity>? winner,
     List<UploadFileEntity>? video,
     BannerTalentEntity? banner,
-    // List<VideoModel>? videos,
+    Set<String>? favoriteIds,
   }) {
     return StarState(
       status: status ?? this.status,
@@ -43,7 +42,7 @@ class StarState {
       winner: winner ?? this.winner,
       video: video ?? this.video,
       banner: banner ?? this.banner,
-      // videos: videos ?? this.videos,
+      favoriteIds: favoriteIds ?? this.favoriteIds,
     );
   }
 }

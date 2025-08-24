@@ -2,8 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/video_details_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/history_tab_widget.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/profile_page.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -101,7 +104,7 @@ class OptionsBottomSheet {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.only(left: 16, right: 16),
+        padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
         child: Row(
           children: [
             Container(
@@ -167,6 +170,16 @@ class TalentCard {
           );
         }
 
+        // return OlxPaginationWidget(
+        //   items: List.generate(
+        //     talentsToShow.length,
+        //     (index) => _buildTalentCard(context, talentsToShow[index], cubit),
+        //   ),
+        //   banners: bannersList,
+        //   loadPage: (page) => cubit.getAllTalent(),
+        //   scrollController: ScrollController(),
+        // );
+
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
@@ -180,14 +193,35 @@ class TalentCard {
     );
   }
 
-  static Widget buildFavoriteContentSliver() {
-    return SliverToBoxAdapter(
-      child: SizedBox(
-        height: 200,
-        child: const Center(
-          child: Text('Favorite Content - To be implemented'),
-        ),
-      ),
+  static Widget buildFavoriteContentSliver({
+    required BuildContext context,
+    required StarCubit cubit,
+  }) {
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, state) {
+        final favoriteTalents = cubit.favoriteTalents;
+
+        if (favoriteTalents.isEmpty) {
+          return SliverToBoxAdapter(
+            child: SizedBox(
+              height: 200,
+              child: CustomEmptyWidget(
+                label: 'No favorite videos yet',
+              ),
+            ),
+          );
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final talent = favoriteTalents[index];
+              return _buildTalentCard(context, talent, cubit);
+            },
+            childCount: favoriteTalents.length,
+          ),
+        );
+      },
     );
   }
 
@@ -235,12 +269,165 @@ class TalentCard {
     final mediaUrl =
         talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
     final createdAt = talent.createdAt ?? DateTime.now();
-    final isVideo = true;
 
     return GestureDetector(
       onTap: () {
-        if (isVideo) {
-          _navigateToVideoPlayer(context, mediaUrl, talent);
+        _navigateToVideoPlayer(context, mediaUrl, talent);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        color: Colors.white,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Video thumbnail
+            GestureDetector(
+              onTap: () => _navigateToProfile(context, talent),
+              child: Container(
+                width: 140,
+                height: 90,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Stack(
+                  children: [
+                    // Thumbnail image
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey[300],
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/testforvideo.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    // Sound icon in top left
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Icon(
+                          Icons.volume_up,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                    // Duration overlay
+                    Positioned(
+                      bottom: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '7:54',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Video info
+            Expanded(
+              child: GestureDetector(
+                onTap: () => _navigateToProfile(context, talent),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      talent.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Colors.black87,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${talent.user.firstName} ${talent.user.lastName}",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // More options button
+            GestureDetector(
+              onTap: () => _showHistoryOptions(context, talent, cubit),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Icon(
+                  Icons.more_vert,
+                  size: 20,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget _buildMyTalentsVideoItem(
+    BuildContext context,
+    StarEntity talent,
+    StarCubit cubit,
+    int index, {
+    Function(StarEntity, String)? onVideoTap,
+  }) {
+    final mediaUrl =
+        talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+    final createdAt = talent.createdAt ?? DateTime.now();
+
+    return GestureDetector(
+      onTap: () {
+        // Use callback instead of navigation
+        if (onVideoTap != null) {
+          onVideoTap(talent, mediaUrl);
+        } else {
+          // Fallback to original navigation behavior
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VideoDetailsView(
+                talent: talent,
+                mediaUrl: mediaUrl,
+              ),
+            ),
+          );
         }
       },
       child: Container(
@@ -258,7 +445,6 @@ class TalentCard {
               ),
               child: Stack(
                 children: [
-                  // Thumbnail image
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -269,7 +455,6 @@ class TalentCard {
                       ),
                     ),
                   ),
-                  // Sound icon in top left
                   Positioned(
                     top: 8,
                     left: 8,
@@ -286,7 +471,6 @@ class TalentCard {
                       ),
                     ),
                   ),
-                  // Duration overlay
                   Positioned(
                     bottom: 8,
                     left: 8,
@@ -313,37 +497,40 @@ class TalentCard {
             const SizedBox(width: 12),
             // Video info
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    talent.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                      color: Colors.black87,
+              child: GestureDetector(
+                onTap: () => _navigateToProfile(context, talent),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      talent.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Colors.black87,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "${talent.user.firstName} ${talent.user.lastName}",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
+                    const SizedBox(height: 4),
+                    Text(
+                      "${talent.user.firstName} ${talent.user.lastName}",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 13,
+                    const SizedBox(height: 2),
+                    Text(
+                      "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             // More options button
@@ -363,298 +550,6 @@ class TalentCard {
       ),
     );
   }
-
-
-  // static Widget _buildMyTalentsVideoItem(
-  //   BuildContext context,
-  //   StarEntity talent,
-  //   StarCubit cubit,
-  //   int index,
-  // ) {
-  //   final mediaUrl =
-  //       talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
-  //   final createdAt = talent.createdAt ?? DateTime.now();
-  //   final isVideo = true;
-
-  //   return GestureDetector(
-  //     onTap: () {
-  //       // Navigate to the new VideoDetailsView instead of TalentVideoPlayer
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => VideoDetailsView(
-  //             talent: talent,
-  //             mediaUrl: mediaUrl,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //     child: Container(
-  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-  //       color: Colors.white,
-  //       child: Row(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           // Video thumbnail (same as before)
-  //           Container(
-  //             width: 140,
-  //             height: 90,
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(8),
-  //             ),
-  //             child: Stack(
-  //               children: [
-  //                 Container(
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(8),
-  //                     color: Colors.grey[300],
-  //                     image: DecorationImage(
-  //                       image: AssetImage('assets/images/testforvideo.jpg'),
-  //                       fit: BoxFit.cover,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Positioned(
-  //                   top: 8,
-  //                   left: 8,
-  //                   child: Container(
-  //                     padding: EdgeInsets.all(4),
-  //                     decoration: BoxDecoration(
-  //                       color: Colors.black.withOpacity(0.7),
-  //                       borderRadius: BorderRadius.circular(4),
-  //                     ),
-  //                     child: Icon(
-  //                       Icons.volume_up,
-  //                       color: Colors.white,
-  //                       size: 16,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Positioned(
-  //                   bottom: 8,
-  //                   left: 8,
-  //                   child: Container(
-  //                     padding: const EdgeInsets.symmetric(
-  //                         horizontal: 6, vertical: 3),
-  //                     decoration: BoxDecoration(
-  //                       color: Colors.black.withOpacity(0.8),
-  //                       borderRadius: BorderRadius.circular(4),
-  //                     ),
-  //                     child: Text(
-  //                       '7:54',
-  //                       style: const TextStyle(
-  //                         color: Colors.white,
-  //                         fontSize: 12,
-  //                         fontWeight: FontWeight.w500,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           const SizedBox(width: 12),
-  //           // Video info (same as before)
-  //           Expanded(
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   talent.title,
-  //                   style: TextStyle(
-  //                     fontWeight: FontWeight.w600,
-  //                     fontSize: 15,
-  //                     color: Colors.black87,
-  //                   ),
-  //                   maxLines: 2,
-  //                   overflow: TextOverflow.ellipsis,
-  //                 ),
-  //                 const SizedBox(height: 4),
-  //                 Text(
-  //                   "${talent.user.firstName} ${talent.user.lastName}",
-  //                   style: TextStyle(
-  //                     color: Colors.grey[600],
-  //                     fontSize: 13,
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                 ),
-  //                 const SizedBox(height: 2),
-  //                 Text(
-  //                   "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
-  //                   style: TextStyle(
-  //                     color: Colors.grey[600],
-  //                     fontSize: 13,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           // More options button (same as before)
-  //           GestureDetector(
-  //             onTap: () => _showHistoryOptions(context, talent, cubit),
-  //             child: Padding(
-  //               padding: const EdgeInsets.only(top: 4),
-  //               child: Icon(
-  //                 Icons.more_vert,
-  //                 size: 20,
-  //                 color: Colors.grey[700],
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  static Widget _buildMyTalentsVideoItem(
-  BuildContext context,
-  StarEntity talent,
-  StarCubit cubit,
-  int index, {
-  Function(StarEntity, String)? onVideoTap, // Add callback parameter
-}) {
-  final mediaUrl =
-      talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
-  final createdAt = talent.createdAt ?? DateTime.now();
-  final isVideo = true;
-
-  return GestureDetector(
-    onTap: () {
-      // Use callback instead of navigation
-      if (onVideoTap != null) {
-        onVideoTap(talent, mediaUrl);
-      } else {
-        // Fallback to original navigation behavior
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VideoDetailsView(
-              talent: talent,
-              mediaUrl: mediaUrl,
-            ),
-          ),
-        );
-      }
-    },
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Video thumbnail (same as before)
-          Container(
-            width: 140,
-            height: 90,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/testforvideo.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Icon(
-                      Icons.volume_up,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      '7:54',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Video info (same as before)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  talent.title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    color: Colors.black87,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "${talent.user.firstName} ${talent.user.lastName}",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // More options button (same as before)
-          GestureDetector(
-            onTap: () => _showHistoryOptions(context, talent, cubit),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Icon(
-                Icons.more_vert,
-                size: 20,
-                color: Colors.grey[700],
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 
   static void _showHistoryOptions(
       BuildContext context, StarEntity talent, StarCubit cubit) {
@@ -693,11 +588,24 @@ class TalentCard {
             // Add save to playlist logic
           },
         ),
+        OptionItem(
+          icon: cubit.isFavorite(talent.id)
+              ? Icons.favorite
+              : Icons.favorite_border,
+          title: cubit.isFavorite(talent.id)
+              ? 'Remove from favorites'
+              : 'Add to favorites',
+          onTap: () {
+            Navigator.pop(context);
+            cubit.toggleFavorite(talent.id);
+          },
+        ),
       ],
     );
   }
 
   static void showYouTubeOptions(BuildContext context, StarEntity talent) {
+    final cubit = context.read<StarCubit>();
     OptionsBottomSheet.showOptions(
       context: context,
       options: [
@@ -726,11 +634,15 @@ class TalentCard {
           },
         ),
         OptionItem(
-          icon: Icons.bookmark_border,
-          title: 'Save',
+          icon: cubit.isFavorite(talent.id)
+              ? Icons.favorite
+              : Icons.favorite_border,
+          title: cubit.isFavorite(talent.id)
+              ? 'Remove from favorites'
+              : 'Add to favorites',
           onTap: () {
             Navigator.pop(context);
-            // Handle save
+            cubit.toggleFavorite(talent.id);
           },
         ),
         OptionItem(
@@ -748,51 +660,102 @@ class TalentCard {
   }
 
   static Widget buildMyTalentContentSliver({
-  required BuildContext context,
-  required StarCubit cubit,
-  Function(StarEntity, String)? onVideoTap, // Add callback parameter
-}) {
-  return BlocBuilder<StarCubit, StarState>(
-    builder: (context, state) {
-      final myTalent = cubit.allTalents.take(8).toList();
-      if (cubit.loadMyTalents) {
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: 200,
-            child: const Center(child: CustomCircularProgressIndicator()),
-          ),
-        );
-      }
-
-      if (myTalent.isEmpty) {
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: 200,
-            child: CustomEmptyWidget(
-              label: LocaleKeys.noResultsFound.localize,
+    required BuildContext context,
+    required StarCubit cubit,
+    Function(StarEntity, String)? onVideoTap,
+  }) {
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, state) {
+        final myTalent = cubit.allTalents.take(8).toList();
+        if (cubit.loadMyTalents) {
+          return SliverToBoxAdapter(
+            child: SizedBox(
+              height: 200,
+              child: const Center(child: CustomCircularProgressIndicator()),
             ),
+          );
+        }
+
+        if (myTalent.isEmpty) {
+          return SliverToBoxAdapter(
+            child: SizedBox(
+              height: 200,
+              child: CustomEmptyWidget(
+                label: LocaleKeys.noResultsFound.localize,
+              ),
+            ),
+          );
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final talent = myTalent[index];
+              return _buildMyTalentsVideoItem(
+                context,
+                talent,
+                cubit,
+                index,
+                onVideoTap: onVideoTap,
+              );
+            },
+            childCount: myTalent.length,
           ),
         );
-      }
+      },
+    );
+  }
 
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final talent = myTalent[index];
-            return _buildMyTalentsVideoItem(
-              context, 
-              talent, 
-              cubit, 
-              index, 
-              onVideoTap: onVideoTap, // Pass callback
-            );
-          },
-          childCount: myTalent.length,
-        ),
-      );
-    },
-  );
-}
+  // static Widget buildMyTalentContentSliver({
+  //   required BuildContext context,
+  //   required StarCubit cubit,
+  //   Function(StarEntity, String)? onVideoTap,
+  // }) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       // Use myTalents instead of allTalents.take(8)
+  //       if (cubit.loadMyTalents) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       if (cubit.myTalents.isEmpty) {
+  //         // Initialize loading if not done yet
+  //         if (!cubit.loadMyTalents) {
+  //           cubit.loadMyTalentsData();
+  //         }
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: CustomEmptyWidget(
+  //               label: LocaleKeys.noResultsFound.localize,
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       return SliverList(
+  //         delegate: SliverChildBuilderDelegate(
+  //           (context, index) {
+  //             final talent = cubit.myTalents[index];
+  //             return _buildMyTalentsVideoItem(
+  //               context,
+  //               talent,
+  //               cubit,
+  //               index,
+  //               onVideoTap: onVideoTap,
+  //             );
+  //           },
+  //           childCount: cubit.myTalents.length,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   static Widget _buildTalentCard(
     BuildContext context,
@@ -817,7 +780,7 @@ class TalentCard {
           GestureDetector(
             onTap: isVideo
                 ? () => _navigateToVideoPlayer(context, mediaUrl, talent)
-                : null,
+                : () => _navigateToProfile(context, talent),
             child: isVideo
                 ? YouTubeStyleVideoPlayer(
                     videoUrl: mediaUrl,
@@ -825,8 +788,8 @@ class TalentCard {
                     autoPlay: true,
                     startMuted: true,
                     thumbnailUrl: "assets/images/testforvideo.jpg",
-                    onTap: () =>
-                        _navigateToVideoPlayer(context, mediaUrl, talent),
+                    talent: talent,
+                    onTap: () => _navigateToProfile(context, talent),
                   )
                 : Container(
                     height: 250,
@@ -849,71 +812,78 @@ class TalentCard {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Profile Picture
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: talent.user.image.isNotEmpty == true
-                      ? NetworkImage(talent.user.image)
-                      : null,
-                  child: talent.user.image.isEmpty ?? true
-                      ? Icon(Icons.person, size: 18, color: Colors.grey[600])
-                      : null,
+                GestureDetector(
+                  onTap: () => _navigateToProfile(context, talent),
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: talent.user.image.isNotEmpty
+                        ? NetworkImage(talent.user.image)
+                        : null,
+                    child: talent.user.image.isEmpty
+                        ? Icon(Icons.person, size: 18, color: Colors.grey[600])
+                        : null,
+                  ),
                 ),
                 SizedBox(width: 12),
                 // Title and Info
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        talent.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black,
-                          height: 1.3,
+                  child: GestureDetector(
+                    onTap: () => _navigateToProfile(context, talent),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          talent.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            height: 1.3,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        "${talent.user.firstName} ${talent.user.lastName}",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: context.isDarkMode
-                              ? Colors.grey[400]
-                              : Colors.grey[600],
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.visibility,
-                            size: 14,
+                        SizedBox(height: 4),
+                        Text(
+                          "${talent.user.firstName} ${talent.user.lastName}",
+                          style: TextStyle(
+                            fontSize: 13,
                             color: context.isDarkMode
                                 ? Colors.grey[400]
                                 : Colors.grey[600],
                           ),
-                          SizedBox(width: 4),
-                          Text(
-                            "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
-                            style: TextStyle(
-                              fontSize: 13,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.visibility,
+                              size: 14,
                               color: context.isDarkMode
                                   ? Colors.grey[400]
                                   : Colors.grey[600],
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ],
+                            SizedBox(width: 4),
+                            Text(
+                              "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: context.isDarkMode
+                                    ? Colors.grey[400]
+                                    : Colors.grey[600],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 // More Options and Stars
@@ -998,8 +968,37 @@ class TalentCard {
       context,
       MaterialPageRoute(
         builder: (context) => TalentVideoPlayer(
-          videoUrl: mediaUrl,
           talent: talent,
+          videoUrl: mediaUrl,
+        ),
+      ),
+    );
+  }
+
+  static void _navigateToProfile(BuildContext context, StarEntity talent) {
+    // Generate mock videos for the profile
+    final mockVideos = List.generate(
+        10,
+        (index) => StarEntity(
+              id: '${talent.id}_mock_$index',
+              title: '${talent.title} - Part ${index + 1}',
+              description: 'Mock video ${index + 1}',
+              user: talent.user,
+              mediaUrl: talent.mediaUrl,
+              totalViews: talent.totalViews + (index * 1000),
+              averageRating: talent.averageRating,
+              isApproved: talent.isApproved,
+              haveStories: talent.haveStories,
+              storyCount: talent.storyCount,
+              createdAt: DateTime.now().subtract(Duration(days: index * 30)),
+            ));
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePageView(
+          user: talent.user,
+          userVideos: mockVideos,
         ),
       ),
     );
