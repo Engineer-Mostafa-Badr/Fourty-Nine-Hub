@@ -95,8 +95,9 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   void listenToComingClient(BuildContext context) {
     CliLogger.info('listenToComingClient');
     // Store the context safely by getting it when needed
-    listenToClientComingUseCase((route) {
+    listenToClientComingUseCase((params) {
       var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      clients.where((element) => element.id == params.clientId).first.driverWaitingTime = params.remainingTime;
       showSuccessMessage(currentContext, currentContext.isArabic?'العميل في طريقه اليك':'Client on the way');
 
       emit(state.copyWith(status: CaptainShareDashboardStates.success));
