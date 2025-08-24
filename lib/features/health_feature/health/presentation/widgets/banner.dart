@@ -24,7 +24,7 @@ class _HealthBannerState extends State<HealthBanner> {
       builder: (context, state) {
         if (state.mainCategory != null || state.banner != null) {
           return MainCategoryBanner(
-            fromHome:false,
+            fromHome: false,
             category: state.mainCategory != null
                 ? MainCategoryEntity(
                     id: state.mainCategory?.id ?? "",

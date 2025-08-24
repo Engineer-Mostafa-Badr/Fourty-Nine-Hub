@@ -21,7 +21,7 @@ class BuildCreatePostAppBar extends StatelessWidget {
       child: Row(
         children: [
           ClickableWidget(
-              onTap: (){
+              onTap: () {
                 context.go(Routes.SOCIAL,
                     extra: SocialParams(
                         userId: UserCubit.to.state.data?.id ?? '', index: 0));
@@ -30,29 +30,33 @@ class BuildCreatePostAppBar extends StatelessWidget {
           const SizedBox(
             width: 18,
           ),
-          Text(LocaleKeys.createPost.localize,style:  TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color:context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR
-          ),),
+          Text(
+            LocaleKeys.createPost.localize,
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
+          ),
           const Spacer(),
           ClickableWidget(
               onTap: onTap,
               child: Container(
-            height: 38,
-            width: 74,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.r),
-              color: AppColors.getButtonPrimaryColor(context)
-            ),
-            alignment: Alignment.center,
-            child: Text(LocaleKeys.post.localize,style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              color: AppColors.getReversedTextColor(context)
-            ),),
-          ))
-
+                height: 38,
+                width: 74,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.r),
+                    color: AppColors.getButtonPrimaryColor(context)),
+                alignment: Alignment.center,
+                child: Text(
+                  LocaleKeys.post.localize,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.getReversedTextColor(context)),
+                ),
+              ))
         ],
       ),
     );

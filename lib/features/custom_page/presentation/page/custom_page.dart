@@ -68,7 +68,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -84,7 +84,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(Routes.PAGEPREVIEW,
                         extra: state.activate?.customPage == true);
                   },
@@ -136,25 +136,28 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                     context,
                     AlertDialog(
                       title: Label(
-                          text:context.isArabic? LocaleKeys.restartToApply.localize:'Restart to Apply',
-                          style: Styles.mediumText(
-                              fontSize: 65.sp, fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.center,),
+                        text: context.isArabic
+                            ? LocaleKeys.restartToApply.localize
+                            : 'Restart to Apply',
+                        style: Styles.mediumText(
+                            fontSize: 65.sp, fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.center,
+                      ),
                       actions: [
                         AppButton(
-                        onPressed: () {
-      ManageVibration.vibrate();
-                          controller.updateActivate(v);
-                          Restart.restartApp();
-                        },
-                        label: LocaleKeys.restart.localize,
-                        color: AppColors.getReversedTextColor(context),
-                        backColor: AppColors.getButtonPrimaryColor(context),
-                      ),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            controller.updateActivate(v);
+                            Restart.restartApp();
+                          },
+                          label: LocaleKeys.restart.localize,
+                          color: AppColors.getReversedTextColor(context),
+                          backColor: AppColors.getButtonPrimaryColor(context),
+                        ),
                         Sizer(),
                         AppButton(
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             Navigator.pop(context);
                           },
                           label: LocaleKeys.cancel.localize,
@@ -164,7 +167,6 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                       alignment: Alignment.center,
                     ),
                   );
-
                 },
               ),
             ],

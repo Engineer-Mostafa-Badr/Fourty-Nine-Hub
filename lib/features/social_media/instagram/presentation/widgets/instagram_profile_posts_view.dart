@@ -203,7 +203,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
@@ -244,7 +244,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   IconAppButton(
                                     icon: FontAwesomeIcons.comment,
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       // if (!serviceLocator<UserCubit>()
                                       //     .isLoggedIn) {
                                       //   context.push(Routes.LOGIN);
@@ -272,7 +272,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                             child: GestureDetector(
                                               behavior: HitTestBehavior.opaque,
                                               onTap: () {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
@@ -389,7 +389,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   text: WidgetSpan(
                                       child: GestureDetector(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       setState(() {
                                         _isExpanded = !_isExpanded;
                                       });
@@ -775,7 +775,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
@@ -816,7 +816,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   IconAppButton(
                                     icon: FontAwesomeIcons.comment,
                                     onPressed: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       // if (!serviceLocator<UserCubit>()
                                       //     .isLoggedIn) {
                                       //   context.push(Routes.LOGIN);
@@ -844,7 +844,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                             child: GestureDetector(
                                               behavior: HitTestBehavior.opaque,
                                               onTap: () {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
@@ -958,7 +958,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                   text: WidgetSpan(
                                       child: GestureDetector(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       setState(() {
                                         _isExpanded = !_isExpanded;
                                       });
@@ -1023,16 +1023,16 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
       children: [
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
             radius: 32.r,
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(
-                (post.user.image != null && (post.user.image?.isNotEmpty??false))
-                    ? post.user.image??''
-                    : UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage((post.user.image != null &&
+                    (post.user.image?.isNotEmpty ?? false))
+                ? post.user.image ?? ''
+                : UIConst.profilePlaceHolder),
           ),
         ),
         const Sizer(),
@@ -1044,7 +1044,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
               children: [
                 InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
                   },
                   child: TextAppButton(
@@ -1053,7 +1053,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                           fontSize: 30.sp),
                       label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context.push(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);
                       }),

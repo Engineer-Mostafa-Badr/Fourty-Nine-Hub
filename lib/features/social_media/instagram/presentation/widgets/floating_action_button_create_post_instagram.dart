@@ -58,7 +58,7 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 16),
                   child: InkWell(
                     onTap: () async {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (index == 1) {
                         context.read<UserCubit>().isLoggedIn
                             ? await Navigator.push(
@@ -91,9 +91,9 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const ReelsRecordingScreen(
-                                          voiceMediaId:'',
-                                          voiceSignedUrl: '',
-                                      ),
+                                    voiceMediaId: '',
+                                    voiceSignedUrl: '',
+                                  ),
                                 ),
                               )
                             : pleaseLoginDialog(context);

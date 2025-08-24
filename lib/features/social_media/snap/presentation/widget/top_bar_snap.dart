@@ -165,7 +165,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
             children: [
               GestureDetector(
                 onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
@@ -191,8 +191,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
               ),
               IconButton(
                   onPressed: () {
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   },
                   icon: const Icon(
                     FontAwesomeIcons.shareNodes,

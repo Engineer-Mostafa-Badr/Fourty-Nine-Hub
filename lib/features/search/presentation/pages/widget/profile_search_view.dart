@@ -115,7 +115,7 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
                 final user = _cubit.usersSearch[index];
                 return InkWell(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(Routes.OTHERSACCOUNT, extra: user.id);
                   },
                   child: Padding(

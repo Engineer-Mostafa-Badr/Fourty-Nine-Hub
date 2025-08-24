@@ -28,7 +28,7 @@ class SubcategoryListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             specialty;
         if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==

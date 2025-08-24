@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/friends_stories_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_basic_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_with_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/logic/spot_light_cubit.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
@@ -19,7 +22,7 @@ import 'package:story_view/controller/story_controller.dart';
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../spot_light/data/models/friends_response_model.dart';
-import '../../../stories/data/models/friends_stories_model.dart'; // Add this import
+import '../../../stories/data/models/friends_stories_model.dart'; 
 
 class FriendsStories extends StatefulWidget {
   const FriendsStories({super.key});
@@ -454,6 +457,7 @@ class _FriendsStoriesState extends State<FriendsStories> {
       );
     }
   }
+
 
   ImageProvider _getProfileImage(UserBasicEntity user) {
     if (user.userProfileUrl != null && user.userProfileUrl!.isNotEmpty) {

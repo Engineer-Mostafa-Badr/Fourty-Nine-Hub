@@ -203,12 +203,15 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                           }
                         },
                         onJoin: (phone) {
-                          print("(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)}");
-                          if ((!(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)) &&
+                          print(
+                              "(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients ?? []).any((e) => e.id == UserCubit.to.state.data?.id)}");
+                          if ((!(cubit.availableBookings[index].clients ?? [])
+                                  .any((e) =>
+                                      e.id == UserCubit.to.state.data?.id)) &&
                               cubit.availableBookings[index].status ==
                                   'pending') {
                             cubit.joinToRoute(
-                                phone:phone,
+                                phone: phone,
                                 id: cubit.availableBookings[index].id,
                                 context: context);
                           }

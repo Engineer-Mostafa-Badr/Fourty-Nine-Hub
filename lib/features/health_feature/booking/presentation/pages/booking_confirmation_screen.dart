@@ -35,13 +35,11 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
   void initState() {
     super.initState();
     context.read<BookDoctorAppointmentCubit>().init(widget.doctorDetailsCubit);
-
   }
 
   @override
   Widget build(BuildContext context) {
     final bookingController = context.read<BookDoctorAppointmentCubit>();
-
 
     final user = context.read<UserCubit>().state.data;
     return CustomScaffold(
@@ -51,8 +49,8 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
       body:
           BlocConsumer<BookDoctorAppointmentCubit, BookDoctorAppointmentState>(
         builder: (context, state) {
-          bookingController.phoneNumberTextController.text=user?.phone??"";
-          bookingController.nameTextController.text=user?.fullName??"";
+          bookingController.phoneNumberTextController.text = user?.phone ?? "";
+          bookingController.nameTextController.text = user?.fullName ?? "";
           return Form(
             key: bookingController.formKey,
             child: SingleChildScrollView(
@@ -67,7 +65,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
 
                   /// Doctor Information
                   DoctorInfo(
-                    doctor:bookingController.doctor,
+                    doctor: bookingController.doctor,
                   ),
 
                   /// Booking on behalf checkbox
@@ -89,29 +87,27 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
 
                   /// User Information
                   CustomUserInfoSection(
-                      isBookingForSomeoneElse: _isBookingForSomeoneElse,
-                      currentFocusNode: bookingController.phoneFousNode,
-                      nextFocusNode: bookingController.phoneFousNode,
-                      context: context,
-                      phoneController:
-                          bookingController.phoneNumberTextController,
-                      nameController: bookingController.nameTextController,
-                      Time:
-                          "${widget.doctorDetailsCubit.selectedAppointment.startTime} : ${widget.doctorDetailsCubit.selectedAppointment.endTime}  ",
-                      location:
-                          bookingController.doctor.address.address.trim() ?? "no address",
-                      fees:
-                          "${bookingController.doctor.priceToShow} ${LocaleKeys.egp.localize} " ??
-                              " ",
-
-
+                    isBookingForSomeoneElse: _isBookingForSomeoneElse,
+                    currentFocusNode: bookingController.phoneFousNode,
+                    nextFocusNode: bookingController.phoneFousNode,
+                    context: context,
+                    phoneController:
+                        bookingController.phoneNumberTextController,
+                    nameController: bookingController.nameTextController,
+                    Time:
+                        "${widget.doctorDetailsCubit.selectedAppointment.startTime} : ${widget.doctorDetailsCubit.selectedAppointment.endTime}  ",
+                    location: bookingController.doctor.address.address.trim() ??
+                        "no address",
+                    fees:
+                        "${bookingController.doctor.priceToShow} ${LocaleKeys.egp.localize} " ??
+                            " ",
                   ),
 
                   const Sizer(height: 170),
                   // Submit Button
                   BookingButton(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       bookingController.regularBooking();
                     },
                     title: LocaleKeys.submit.localize,
@@ -124,10 +120,8 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
         listener: (BuildContext context, state) {
           switch (state) {
             case BookDoctorAppointmentSuccessState _:
-            context.pushNamed(Routes.SUCCESSFULLBOOKING
-            ,extra: widget.doctorDetailsCubit
-
-            );
+              context.push(Routes.SUCCESSFULLBOOKING,
+                  extra: widget.doctorDetailsCubit);
               Future.delayed(const Duration(seconds: 1));
               // context.pushAndRemoveUntil(
               //     Routes.VISITA, (route) => route == Routes.HOME);
@@ -149,7 +143,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
 
           // {
           //       if(state is ){
-          // context.pushNamed(Routes.SUCCESSFULLBOOKING
+          // context.push(Routes.SUCCESSFULLBOOKING
           // ,extra: widget.doctorDetailsCubit
           //
           // );

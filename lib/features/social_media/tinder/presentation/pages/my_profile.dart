@@ -438,9 +438,8 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                 ),
                 if (getMore)
                   Label(
-                    text: bottomText ?? (context.isArabic
-                            ? 'جمع المزيد'
-                            : 'Get More'),
+                    text: bottomText ??
+                        (context.isArabic ? 'جمع المزيد' : 'Get More'),
                     style: Styles.mediumText(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -483,8 +482,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
         if (trailing != null)
           ClickableWidget(
             onTap: () {
-
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
             },
             child: Row(
               children: [
@@ -558,8 +556,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
   }) {
     return ClickableWidget(
       onTap: () {
-
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
       },
       child: Container(
         width: double.infinity,

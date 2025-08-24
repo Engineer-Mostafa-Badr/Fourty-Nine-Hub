@@ -63,9 +63,9 @@ class DoctorReviewCard extends StatelessWidget {
                 ClickableWidget(
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-                      pleaseLoginDialog(context);
-                      // context.push(Routes.LOGIN);
-                    }
+                            pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : () {
                             bottomSheet(
                                 context: context,
@@ -101,9 +101,9 @@ class DoctorReviewCard extends StatelessWidget {
                     icon: Icons.call,
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-                      pleaseLoginDialog(context);
-                      // context.push(Routes.LOGIN);
-                    }
+                            pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : review.openCall == true
                             ? () {
                                 LaunchURLHelper()
@@ -128,9 +128,9 @@ class DoctorReviewCard extends StatelessWidget {
                     icon: Icons.email,
                     onTap: !context.read<UserCubit>().isLoggedIn
                         ? () {
-                      pleaseLoginDialog(context);
-                      // context.push(Routes.LOGIN);
-                    }
+                            pleaseLoginDialog(context);
+                            // context.push(Routes.LOGIN);
+                          }
                         : review.openCall == true
                             ? () {}
                             : () {

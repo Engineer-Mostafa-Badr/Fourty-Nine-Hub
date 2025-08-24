@@ -91,7 +91,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         leadingWidth: 20,
                         leading: InkWell(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (context
                                 .read<ChatRoomCubit>()
                                 .chat
@@ -456,7 +456,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 : Colors.black,
                                           ),
                                           onPressed: () async {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             if (await Permission.microphone
                                                         .request() !=
                                                     PermissionStatus.granted ||
@@ -520,7 +520,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 : Colors.black,
                                           ),
                                           onPressed: () async {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             if (await Permission.microphone
                                                         .request() !=
                                                     PermissionStatus.granted ||
@@ -638,7 +638,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         icon: Icons.copy,
                                         size: 20,
                                         onPressed: () async {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           await widget.chatRoomCubit
                                               .copyMessage(
                                             widget.chatRoomCubit
@@ -656,7 +656,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         1)
                                       IconButton(
                                         onPressed: () async {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           await widget.chatRoomCubit.pinMessage(
                                             message: widget.chatRoomCubit
                                                 .selectedMessages.first,
@@ -672,7 +672,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                       ),
                                     IconButton(
                                       onPressed: () async {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         // await chatsCubit.deleteChat();
                                         await widget.chatRoomCubit
                                             .deleteMessages();
@@ -687,7 +687,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                     ),
                                     IconButton(
                                       onPressed: () async {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         context.push(
                                           Routes.FORWARDMESSAGES,
                                           extra: ForwardMessagesViewParams(
@@ -716,7 +716,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
             if (widget.chatRoomCubit.chat.isBirthdayMonth)
               InkWell(
                 onTap: () async {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   await showGiftBottomSheet(
                     context,
                     receiverId: widget.chatRoomCubit.chat.userId,
@@ -823,7 +823,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                       children: [
                                         InkWell(
                                           onTap: () {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             setState(() {
                                               newLabelColor = LabelColorsMap
                                                   .getRandomColor();
@@ -898,7 +898,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           .PRIMARY_COLOR_DARK,
                                                 ),
                                                 onPressed: () async {
-      ManageVibration.vibrate();
+                                                  ManageVibration.vibrate();
                                                   await chatRoomCubit
                                                       .createLable(
                                                           name:
@@ -920,7 +920,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           .PRIMARY_COLOR_DARK,
                                                 ),
                                                 onPressed: () async {
-      ManageVibration.vibrate();
+                                                  ManageVibration.vibrate();
                                                   setState(() {
                                                     isEditingNewLabel = false;
                                                     newLabelController.clear();
@@ -933,7 +933,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                 } else {
                                   return InkWell(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       setState(() {
                                         isEditingNewLabel = true;
                                       });
@@ -1039,7 +1039,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                           ),
                         ),
                         onPressed: () async {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           // Action to save or perform when Save is tapped
                           await chatRoomCubit.assignLabels();
                           Navigator.pop(context);
@@ -1106,7 +1106,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                       const Spacer(),
                       InkWell(
                         onTap: () async {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           await widget.chatRoomCubit.unpinMessage();
                         },
                         child: Icon(
@@ -1397,7 +1397,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                 ),
               ),
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 Navigator.of(context).pop();
               },
             ),
@@ -1407,7 +1407,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                 style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
               ),
               onPressed: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();

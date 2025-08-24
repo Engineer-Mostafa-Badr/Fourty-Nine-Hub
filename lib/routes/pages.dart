@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -231,6 +232,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/pages/chat_home_page.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/controllers/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
@@ -450,6 +453,7 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -471,6 +475,15 @@ class AppPages {
         navigatorKey: navigatorKey,
         initialLocation: initialRoute,
         routes: <RouteBase>[
+          GoRoute(
+            path: Routes.splash,
+            name: Routes.splash,
+            pageBuilder: (context, state) => customTransition(
+              context,
+              state,
+              const SplashScreen(),
+            ),
+          ),
           GoRoute(
             path: Routes.HOME,
             pageBuilder: (context, state) => customTransition(
@@ -600,18 +613,18 @@ class AppPages {
                   ),
                 ),
               ),
-              GoRoute(
-                path: Paths.MY_TALENT,
-                name: Routes.MY_TALENT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<StarCubit>(),
-                    child: const MyTalentView(),
-                  ),
-                ),
-              ),
+              // GoRoute(
+              //   path: Paths.MY_TALENT,
+              //   name: Routes.MY_TALENT,
+              //   pageBuilder: (context, state) => customTransition(
+              //     context,
+              //     state,
+              //     BlocProvider(
+              //       create: (context) => serviceLocator<StarCubit>(),
+              //       child: const MyTalentView(),
+              //     ),
+              //   ),
+              // ),
               // GoRoute(
               //   path: Paths.RESTAURANTORDERS,
               //   name: Routes.RESTAURANTORDERS,
@@ -1979,6 +1992,33 @@ class AppPages {
                 },
               ),
               GoRoute(
+                path: Paths.REELS,
+                name: Routes.REELS,
+                pageBuilder: (context, state) {
+                  // context.read<ReelsCubit>().fetchReels();
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<SocialPostsCubit>(),
+                        child: const ReelView(),
+                      ));
+                },
+                routes: [
+                  GoRoute(
+                    path: Paths.MUSICREELS,
+                    name: Routes.MUSICREELS,
+                    pageBuilder: (context, state) => customTransition(
+                      context,
+                      state,
+                      const MusicReels(),
+                    ),
+                  ),
+                ],
+              ),
+
+              GoRoute(
                   path: Paths.SOCIAL,
                   name: Routes.SOCIAL,
                   pageBuilder: (context, state) {
@@ -2055,22 +2095,25 @@ class AppPages {
                         pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              const TwitterView(),
+                              const Twitter11(),
                             ),
                         routes: const []),
                     GoRoute(
                       path: Paths.TWITTERPOSTDETAILS,
                       name: Routes.TWITTERPOSTDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<TwitterCubit>(
-                            create: (_) {
-                              return serviceLocator();
-                            },
-                            child: TwitterPostDetailsNotify(
-                                payload: state.extra as dynamic)),
-                      ),
+                      pageBuilder: (context, state) {
+                        // state.extra can be null / String / Map – pass it through as-is
+                        final dynamic payload = state.extra;
+
+                        return customTransition(
+                          context,
+                          state,
+                          BlocProvider<TwitterCubit>(
+                            create: (_) => serviceLocator<TwitterCubit>(),
+                            child: TwitterPostDetailsNotify.fromPayload(payload: payload),
+                          ),
+                        );
+                      },
                     ),
                     GoRoute(
                         path: Paths.OTHERSACCOUNT,
@@ -2100,32 +2143,6 @@ class AppPages {
                             ),
                           ),
                         ]),
-                    GoRoute(
-                      path: Paths.REELS,
-                      name: Routes.REELS,
-                      pageBuilder: (context, state) {
-                        // context.read<ReelsCubit>().fetchReels();
-                        return customTransition(
-                            context,
-                            state,
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<SocialPostsCubit>(),
-                              child: const ReelView(),
-                            ));
-                      },
-                      routes: [
-                        GoRoute(
-                          path: Paths.MUSICREELS,
-                          name: Routes.MUSICREELS,
-                          pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            const MusicReels(),
-                          ),
-                        ),
-                      ],
-                    ),
                     GoRoute(
                       path: Paths.TINDER,
                       name: Routes.Tinder,
@@ -2268,6 +2285,20 @@ class AppPages {
                     ],
                     child: ChatView(
                         chatsViewParams: state.extra as ChatsViewParams),
+                  ),
+                ),
+              ),
+
+              // Chat Home
+              GoRoute(
+                path: Paths.CHAT_HOME,
+                name: Routes.CHAT_HOME,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider<ChatCubit>(
+                    create: (_) => serviceLocator(),
+                    child: const ChatHomePage(),
                   ),
                 ),
               ),

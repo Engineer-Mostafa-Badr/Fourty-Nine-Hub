@@ -148,7 +148,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   condition: time == null);
                             },
                             onTap: () async {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 TimeOfDay? pickedTime = await showTimePicker(
                                     context: context,
@@ -184,7 +184,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   condition: date == null);
                             },
                             onTap: () async {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 DateTime? pickedDate = await showDatePicker(
                                   context: context,
@@ -389,7 +389,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                             label: LocaleKeys.premiumRequest.tr(),
                             style: Styles.headerText(color: Colors.white),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 if (formKey.currentState!.validate()) {
                                   createRequestCubit.createRequestPremium(
@@ -425,7 +425,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                             label: LocaleKeys.request.tr(),
                             style: Styles.headerText(color: Colors.white),
                             onPressed: () async {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (context.isUserLoggedIn) {
                                 if (formKey.currentState!.validate()) {
                                   createRequestCubit.request(
@@ -501,7 +501,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return GestureDetector(onTap: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   setState(() {
                     shippingCubit.sortData(category.subcategories![index].id);
                     scrollController.jumpTo(0);

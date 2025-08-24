@@ -20,7 +20,6 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 
-
 class ShareTheAppViewBody extends StatelessWidget {
   const ShareTheAppViewBody({super.key});
 
@@ -93,7 +92,8 @@ class ShareTheAppViewBody extends StatelessWidget {
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-         context.push(Routes.WALLET);},
+        context.push(Routes.WALLET);
+      },
       child: Row(
         children: [
           Expanded(
@@ -200,7 +200,7 @@ class ShareTheAppViewBody extends StatelessWidget {
           radius: 15,
           height: 52,
           onPressed: () async {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (referralId.isNotEmpty) {
               await Share.share("""
 سجل للحصول على $referralGift جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً

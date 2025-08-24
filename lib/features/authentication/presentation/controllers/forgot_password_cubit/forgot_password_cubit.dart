@@ -51,14 +51,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
       result.fold(
-        (failure)  {
+        (failure) {
           var currentContext =
               AppPages.router.configuration.navigatorKey.currentContext!;
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
-          emit(ForgotPasswordSendOTPFailure(failure));},
+          emit(ForgotPasswordSendOTPFailure(failure));
+        },
         (questions) {
-          context.pushNamed(Routes.VERIFICATION, extra: questions);
+          context.push(Routes.VERIFICATION, extra: questions);
           emit(ForgotPasswordSendOTPSuccess());
         },
       );
@@ -69,15 +70,16 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
       result.fold(
-        (failure)  {
+        (failure) {
           var currentContext =
               AppPages.router.configuration.navigatorKey.currentContext!;
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
-          emit(ForgotPasswordSendOTPFailure(failure));},
+          emit(ForgotPasswordSendOTPFailure(failure));
+        },
         (_) {
           print('is email');
-          context.pushNamed(
+          context.push(
             Routes.FORGOTPASSWORDOTP,
             extra: emailController.text.trim(),
           );
@@ -100,12 +102,13 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       ),
     );
     result.fold(
-      (failure)  {
+      (failure) {
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(ChangePasswordFailure(failure));},
+        emit(ChangePasswordFailure(failure));
+      },
       (userToken) async {
         log("Token logout ${await CacheManager.getAccessToken()}");
         log("Token userToken access ${userToken.accessToken}");
@@ -140,14 +143,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       ),
     );
     result.fold(
-      (failure)  {
+      (failure) {
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(VerifyQuestionsFailure(failure));},
+        emit(VerifyQuestionsFailure(failure));
+      },
       (_) {
-        context.pushNamed(Routes.CREATENEWFORGOTPASSWORD,
+        context.push(Routes.CREATENEWFORGOTPASSWORD,
             extra: {"userId": userId, "email": null});
         emit(VerifyQuestionsSuccess());
       },

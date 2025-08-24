@@ -34,7 +34,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         // context.push(
         //   Routes.ADS,
         //   extra: AdsViewParams(
@@ -111,7 +111,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                           : AppColors.PRIMARY_COLOR,
                       size: 40.h,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // if (AuthHelper().isLoggedIn()) {
                         //   context.push(Routes.CREATEAD,
                         //       extra: CategorizationEntity(

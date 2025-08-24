@@ -48,7 +48,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: LocaleKeys.registrationForm.tr(),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context.push(Routes.updateDriverRide);
                       },
                       backColor: Colors.white,
@@ -79,7 +79,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: LocaleKeys.deadlineSubscription.tr(),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // serviceLocator<SubscriptionController>()
                         //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
                         // context.push(Routes.)
@@ -120,7 +120,7 @@ class DriverInfoRideTap extends StatelessWidget {
                                       backColor: AppColors.PRIMARY_COLOR,
                                       label: LocaleKeys.addSubscription.tr(),
                                       onPressed: () {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         serviceLocator<SubscriptionController>()
                                             .showSubscriptionPlans(
                                                 subCategoryId:
@@ -156,7 +156,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: LocaleKeys.deadlineSubscription.tr(),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         log('message');
                         serviceLocator<SubscriptionController>()
                             .showSubscriptionPlans(subCategoryId: "");
@@ -185,8 +185,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: LocaleKeys.deadlineId.tr(),
                       onPressed: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
                       backColor: Colors.white,
                     ),
@@ -212,8 +211,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: LocaleKeys.deadlineDriverLicense.tr(),
                       onPressed: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
                       backColor: Colors.white,
                     ),
@@ -239,8 +237,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: "",
                       onPressed: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
                       backColor: Colors.white,
                     ),
@@ -269,8 +266,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: "",
                       onPressed: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
                       backColor: Colors.white,
                     ),
@@ -296,8 +292,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: "",
                       onPressed: () {
-
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                       },
                       backColor: Colors.white,
                     ),
@@ -323,7 +318,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: "",
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context.push(Routes.MyRating);
                       },
                       backColor: Colors.white,
@@ -334,7 +329,7 @@ class DriverInfoRideTap extends StatelessWidget {
                     AppButton(
                       label: LocaleKeys.deleteRegistration.tr(),
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         context.read<DeleteDriverRideCubit>().delete();
                       },
                       color: Colors.white,

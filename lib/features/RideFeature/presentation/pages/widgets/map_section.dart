@@ -65,10 +65,11 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
-      ManageVibration.vibrate();
-              if(context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.rideModeScreen, extra: const RideModeParams(modeType: 'truk'));
-              }else {
+              ManageVibration.vibrate();
+              if (context.read<UserCubit>().isLoggedIn) {
+                context.push(Routes.rideModeScreen,
+                    extra: const RideModeParams(modeType: 'truk'));
+              } else {
                 return pleaseLoginDialog(context);
               }
               // customBottomSheet(context,
@@ -81,7 +82,7 @@ class _MapSectionState extends State<MapSection> {
               //               radius: 15,
               //               label: LocaleKeys.ride.tr(),
               //               onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               //                 context.push(Routes.welcomeRideRegister);
               //               },
               //               backColor: AppColors.PRIMARY_COLOR,
@@ -90,7 +91,7 @@ class _MapSectionState extends State<MapSection> {
               //               radius: 15,
               //               label: LocaleKeys.shipping.tr(),
               //               onPressed: () {},
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               //               backColor: AppColors.PRIMARY_COLOR,
               //               width: double.infinity),
               //         ],

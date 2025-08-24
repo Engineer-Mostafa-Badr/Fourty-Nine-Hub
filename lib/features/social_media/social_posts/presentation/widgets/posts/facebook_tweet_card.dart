@@ -49,7 +49,7 @@ class FacebookTweetCard extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               bottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -87,10 +87,8 @@ class FacebookTweetCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5)),
                     child: Column(
                       children: [
-                        _buildAccountHeader(
-                            context: context,
-                            user: post.user),
-                         _buildContent(context: context, post: post),
+                        _buildAccountHeader(context: context, user: post.user),
+                        _buildContent(context: context, post: post),
                       ],
                     ),
                   ),
@@ -178,7 +176,7 @@ class FacebookTweetCard extends StatelessWidget {
                 itemCount: post.images.length < 4 ? post.images.length : 4,
                 itemBuilder: (context, index) => InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (index != 3 ||
                             (index == 3 && post.images.length == 4)) {
                           showDialog(
@@ -272,7 +270,7 @@ class FacebookTweetCard extends StatelessWidget {
                   itemCount: post.images!.length < 4 ? post.images!.length : 4,
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (index != 3 ||
                               (index == 3 && post.images!.length == 4)) {
                             showDialog(

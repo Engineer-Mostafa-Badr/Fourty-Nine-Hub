@@ -69,7 +69,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
               ),
               leading: IconButton(
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   Navigator.of(context).pop();
                 },
                 icon: const Icon(
@@ -225,7 +225,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                             right: 10,
                             child: FloatingActionButton(
                               onPressed: () async {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 if (_messageController.text.isNotEmpty) {
                                   MessageEntity message = MessageEntity(
                                     id: '',
@@ -325,7 +325,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                               : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
                           // Highlight color on tap
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             // setState(() {
                             if (!state.chats![index].isSelected) {
                               context
@@ -623,7 +623,7 @@ class _StoryCardState extends State<StoryCard> {
           : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
       // Highlight color on tap
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         // setState(() {
         setState(() {
           if (!isStorySelected) {

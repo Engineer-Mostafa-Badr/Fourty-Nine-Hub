@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/friends_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/paginated_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_media_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_profile_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/story_basic_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/upload_media_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_basic_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_with_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/repos/spotlight_repo.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 
@@ -85,6 +89,108 @@ class SpotlightCubit extends Cubit<SpotLightState> {
         emit(SpotlightFriendsStoriesLoaded(friendsStories: friendsStories));
       },
     );
+  }
+
+   // Stories Action Methods
+  Future<void> viewStory(String storyId) async {
+    final result = await repository.markStoryAsViewed(storyId);
+    result.fold(
+      (failure) {
+        // يمكن عدم إظهار خطأ للمستخدم لأن الـ view عملية صامتة
+        print('Failed to mark story as viewed: $failure');
+      },
+      (success) {
+        if (success) {
+          _updateStoryViewStatus(storyId, true);
+        }
+      },
+    );
+  }
+
+  Future<void> likeStory(String storyId) async {
+    final result = await repository.likeStory(storyId);
+    result.fold(
+      (failure) => emit(SpotlightError(failureMessage: failure)),
+      (success) {
+        if (success) {
+          emit(SpotlightActionSuccess(message: 'Story liked successfully'));
+        }
+      },
+    );
+  }
+
+  // Helper Methods for Stories
+  void _updateStoryViewStatus(String storyId, bool isViewed) {
+    if (_friendsStoriesCache != null) {
+      // Update the viewed status in cache
+      final updatedStories = _friendsStoriesCache!.stories.map((userStories) {
+        final updatedUserStories = userStories.stories.map((story) {
+          if (story.id == storyId) {
+            return StoryBasicEntity(
+              id: story.id,
+              isViewed: isViewed,
+              type: story.type,
+              content: story.content,
+              thumbnailUrl: story.thumbnailUrl,
+              createdAt: story.createdAt,
+              color: story.color,
+              fontFamily: story.fontFamily,
+            );
+          }
+          return story;
+        }).toList();
+
+        return UserWithStoriesEntity(
+          user: userStories.user,
+          stories: updatedUserStories,
+          storyCount: userStories.storyCount,
+        );
+      }).toList();
+
+      _friendsStoriesCache = FriendsStoriesEntity(
+        stories: updatedStories,
+        paginationDetails: _friendsStoriesCache!.paginationDetails,
+      );
+
+      // Emit updated state
+      emit(SpotlightFriendsStoriesLoaded(friendsStories: _friendsStoriesCache!));
+    }
+  }
+
+  // Method to get specific user's stories for detailed view
+  List<StoryBasicEntity> getUserStories(String userId) {
+    if (_friendsStoriesCache == null) return [];
+    
+    final userStories = _friendsStoriesCache!.stories.firstWhere(
+      (userStory) => userStory.user.userId == userId,
+      orElse: () => const UserWithStoriesEntity(
+        user: UserBasicEntity(userId: '', firstName: '', lastName: '', username: ''),
+        stories: [],
+        storyCount: 0,
+      ),
+    );
+    
+    return userStories.stories;
+  }
+
+  // Method to check if user has unviewed stories
+  bool hasUnviewedStories(String userId) {
+    if (_friendsStoriesCache == null) return false;
+    
+    try {
+      final userStories = _friendsStoriesCache!.stories.firstWhere(
+        (userStory) => userStory.user.userId == userId,
+      );
+      
+      return userStories.stories.any((story) => !story.isViewed);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  List<UserBasicEntity> getUsersWithStories() {
+    if (_friendsStoriesCache == null) return [];
+    return _friendsStoriesCache!.stories.map((userStory) => userStory.user).toList();
   }
 
   // Media Methods

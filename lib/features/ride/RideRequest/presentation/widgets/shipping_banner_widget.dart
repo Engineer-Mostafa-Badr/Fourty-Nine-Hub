@@ -67,7 +67,7 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
                   // onTap: () => context
                   //     .push(Routes.SHIPPING_REGISTER),
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.push(Routes.SHIPPING_REGISTER);
                   },
                   child: Padding(

@@ -43,7 +43,7 @@ class _ReceivedContactsCardState extends State<ReceivedContactsCard> {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (widget.messageEntity.isSelected) {
           context
               .read<ChatRoomCubit>()
@@ -152,7 +152,7 @@ class _ReceivedContactsCardState extends State<ReceivedContactsCard> {
                                         ),
                                         child: GestureDetector(
                                           onTap: () {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             if (widget.messageEntity
                                                     .sharedContacts.length ==
                                                 1) {
@@ -245,7 +245,7 @@ class _ReceivedContactsCardState extends State<ReceivedContactsCard> {
                                         const Divider(),
                                         TextButton(
                                           onPressed: () {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             context.push(Routes.CONTACTSVIEW,
                                                 extra: ContactsViewParams(
                                                     chatRoomCubit:

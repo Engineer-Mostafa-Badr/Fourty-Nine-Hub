@@ -58,15 +58,12 @@ class RiderequestCubit extends Cubit<RiderequestState> {
         passengers: state.passengers ?? 1,
         phone: state.phone ?? '');
     final response = await _addNormalRequest(item);
-    response.fold(
-        (l) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-           emit(
-            state.copyWith(status: RideRequestStatusesEnum.error, failure: l));},
-        (data) {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(status: RideRequestStatusesEnum.error, failure: l));
+    }, (data) {
       final service = item.service;
 
       if (service == RideServicesEnum.pickMe ||
@@ -93,6 +90,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   void changeExpectedPrice(String v) {
     emit(state.copyWith(offerPrice: double.tryParse(v) ?? state.offerPrice));
   }
+
 // change change phone number
   void changePhoneNumber(String v) {
     emit(state.copyWith(phone: v));
@@ -103,7 +101,7 @@ class RiderequestCubit extends Cubit<RiderequestState> {
     required SubCategoryEntity item,
   }) =>
       emit(state.copyWith(subCategory: item));
-Future<void> getCarTypes() async {
+  Future<void> getCarTypes() async {
     // final carTypes = await _getCarTypesUseCase.call('62c8ba9e8e28a58a3edf57e9');
     // carTypes.fold(
     //     (failure) => emit(state.copyWith(
@@ -125,17 +123,17 @@ Future<void> getCarTypes() async {
         toLat: to.lat,
         toLng: to.lng));
 
-    response.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          
-           emit(state.copyWith(
-            status: RideRequestStatusesEnum.error,
-            errorMessage: 'Unable to get expected price',
-            failure: failure));},
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+
+      emit(state.copyWith(
+          status: RideRequestStatusesEnum.error,
+          errorMessage: 'Unable to get expected price',
+          failure: failure));
+    },
         (response) => emit(state.copyWith(
             status: RideRequestStatusesEnum.success,
             minimumPrice: response.price.toDouble(),
@@ -156,9 +154,9 @@ Future<void> getCarTypes() async {
             userId: user ?? ''));
     subCategories.fold((failure) {
       var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(
         failure: failure,
         status: RideRequestStatusesEnum.error,

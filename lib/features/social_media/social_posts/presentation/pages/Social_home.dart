@@ -12,6 +12,7 @@ import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../instagram/presentation/cubit/instagram_cubit.dart';
 import '../../../instagram/presentation/pages/instgram_view.dart';
+import '../../../twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../widgets/facebook_widgets/build_facebook_body.dart';
 import '../widgets/facebook_widgets/build_global_facebook_body.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
@@ -214,12 +215,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
           label: context.isArabic ? 'فيس' : LocaleKeys.Face.localize,
         ),
         if (widget.params?.hideAppBar == false)
-        _buildTab(
-          icon: context.isDarkMode
-              ? Assets.instagramAppBarIconDark
-              : Assets.instagramAppBarIcon,
-          label: LocaleKeys.Insta.localize,
-        ),
+          _buildTab(
+            icon: context.isDarkMode
+                ? Assets.instagramAppBarIconDark
+                : Assets.instagramAppBarIcon,
+            label: LocaleKeys.Insta.localize,
+          ),
         _buildTab(
           icon: context.isDarkMode
               ? Assets.twitterAppBarIconDark
@@ -251,7 +252,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 right: 0,
                 child: InkWell(
                   onTap: () {
-      manageVibration.ManageVibration.vibrate();
+                    manageVibration.ManageVibration.vibrate();
                     setState(() {
                       isShowExplain = !isShowExplain;
                     });
@@ -323,8 +324,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
     );
   }
 
-
-
   Widget _buildInstagramTab() {
     return MultiBlocProvider(
       providers: [
@@ -345,7 +344,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
   Widget _buildTwitterTab() {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: const TwitterView(),
+      child: const Twitter11(),
     );
   }
 
@@ -381,7 +380,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     final isSelected = index == 0;
     return GestureDetector(
       onTap: () {
-      manageVibration.ManageVibration.vibrate();
+        manageVibration.ManageVibration.vibrate();
         if (index == 1) {
           context.read<UserCubit>().isLoggedIn
               ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)

@@ -157,7 +157,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                         : Colors.white,
                   ),
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     if (groupValue != null) {
                       context.push(Routes.PAYMENT,
                           extra: PaymobLink(
@@ -183,7 +183,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     fontSize: 36,
                   ),
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.pop();
                   },
                 ),

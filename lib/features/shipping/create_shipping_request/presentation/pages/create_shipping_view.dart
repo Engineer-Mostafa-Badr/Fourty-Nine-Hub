@@ -190,7 +190,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                     // onTap: () => context
                                     //     .push(Routes.SHIPPING_REGISTER),
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       if (context
                                           .read<UserCubit>()
                                           .isLoggedIn) {
@@ -526,7 +526,7 @@ class RequestOfferCard extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.push(Routes.TripRating, extra: model);
                           },
                           child: Row(
@@ -563,7 +563,7 @@ class RequestOfferCard extends StatelessWidget {
                           // padding: EdgeInsets.symmetric(vertical: 0),
                           width: double.infinity,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.read<AcceptDeclineTripCubit>().complete(
                                 loadingTrip: model.loadingTripId ?? "");
                           },
@@ -581,7 +581,7 @@ class RequestOfferCard extends StatelessWidget {
                                 // padding: EdgeInsets.symmetric(vertical: 0),
                                 width: double.infinity,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   context
                                       .read<AcceptDeclineTripCubit>()
                                       .decline(
@@ -604,7 +604,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   context
                                       .read<AcceptDeclineTripCubit>()
                                       .accept(loadingRequestId: model.id ?? "");
@@ -637,7 +637,7 @@ class RequestOfferCard extends StatelessWidget {
                                         ? AppColors.PRIMARY_COLOR
                                         : AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   if (state.data &&
                                       (model.isAccepted ?? false)) {
                                     launchUrlString(
@@ -662,8 +662,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 15, color: Colors.white),
                                 onPressed: () {
-
-      ManageVibration.vibrate(); 
+                                  ManageVibration.vibrate();
                                 },
                               ),
                             ),
@@ -678,7 +677,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   // tripCubit.report(
                                   //     loadingTripId: widget.model.id ?? "");
                                   // showBottomSheet(
@@ -709,7 +708,7 @@ class RequestOfferCard extends StatelessWidget {
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:
@@ -732,7 +731,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:
@@ -751,7 +750,7 @@ class RequestOfferCard extends StatelessWidget {
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   showBottomSheet(
                                     context: context,
                                     builder: (context) => const ReportView(
@@ -775,7 +774,7 @@ class RequestOfferCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     //هتروح لي صفحه subscription
                     serviceLocator<SubscriptionController>()
                         .showSubscriptionPlans(

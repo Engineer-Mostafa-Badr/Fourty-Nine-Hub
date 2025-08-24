@@ -30,7 +30,8 @@ class PastRideOfferScreen extends StatefulWidget {
   final String type;
 
   const PastRideOfferScreen({
-    super.key,required this.type,
+    super.key,
+    required this.type,
   });
 
   @override
@@ -51,8 +52,10 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      if(widget.type=='ride')context.read<ClientTripsCubit>().getClientPastTrips();
-      if(widget.type=='shipping')context.read<ClientTripsCubit>().getClientPastShippingTrips();
+      if (widget.type == 'ride')
+        context.read<ClientTripsCubit>().getClientPastTrips();
+      if (widget.type == 'shipping')
+        context.read<ClientTripsCubit>().getClientPastShippingTrips();
     }
   }
 
@@ -107,30 +110,30 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                             style: const TextStyle(color: Colors.red)),
                       )
                     : context
-                                .read<ClientTripsCubit>()
-                                .clientPastTripsData
-                                .isEmpty
+                            .read<ClientTripsCubit>()
+                            .clientPastTripsData
+                            .isEmpty
                         ? Center(
                             child: Label(
-                                text: LocaleKeys.youDontHavePastOffer.localize,
+                              text: LocaleKeys.youDontHavePastOffer.localize,
                             ),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: context
-                                        .read<ClientTripsCubit>()
-                                        .clientPastTripsData
-                                        .isEmpty
+                                    .read<ClientTripsCubit>()
+                                    .clientPastTripsData
+                                    .isEmpty
                                 ? const EmptyPage()
                                 : ListView.separated(
                                     physics: BouncingScrollPhysics(),
                                     // Shows default Android glow (wave effect)
                                     itemBuilder: (context, index) {
                                       return ClientPastWidget(
-                                          offers: context
-                                              .read<ClientTripsCubit>()
-                                              .clientPastTripsData[index],
-                                        );
+                                        offers: context
+                                            .read<ClientTripsCubit>()
+                                            .clientPastTripsData[index],
+                                      );
                                     },
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 5),
@@ -146,6 +149,7 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
     );
   }
 }
+
 class ClientPastWidget extends StatelessWidget {
   final ClientPastTripEntity? offers;
 
@@ -176,8 +180,8 @@ class ClientPastWidget extends StatelessWidget {
     // Format date with Arabic digits if needed
     final formattedDate = isArabic
         ? _formatNumber(
-        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
-        context)
+            "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
+            context)
         : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
 
     // Format time with Arabic digits if needed
@@ -187,11 +191,11 @@ class ClientPastWidget extends StatelessWidget {
         "${_formatNumber(hour.toString(), context)} ${isArabic ? (period == 'AM' ? 'ص' : 'م') : period}";
 
     // Format price with Arabic digits if needed
-    final priceText = _formatNumber(
-        "${offers?.tripDetails?.price?.toInt() ?? 300}", context);
+    final priceText =
+        _formatNumber("${offers?.tripDetails?.price?.toInt() ?? 300}", context);
     return ClickableWidget(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -204,9 +208,8 @@ class ClientPastWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: context.isDarkMode
-              ? AppColors.PRIMARY_COLOR
-              : AppColors.cF5F5F5,
+          color:
+              context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -214,10 +217,10 @@ class ClientPastWidget extends StatelessWidget {
           children: [
             ClickableWidget(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 context.push(
                   Routes.allDriverRatingScreen,
-                  extra:offers?.driverDetails?.userId,
+                  extra: offers?.driverDetails?.userId,
                 );
               },
               child: Column(
@@ -234,15 +237,15 @@ class ClientPastWidget extends StatelessWidget {
                           ),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           child: offers?.driverDetails?.pictureUrl == null ||
-                              offers!.driverDetails!.pictureUrl!.isEmpty
+                                  offers!.driverDetails!.pictureUrl!.isEmpty
                               ? Image.asset(
-                            Assets.maleImagePlaceholder,
-                            fit: BoxFit.cover,
-                          )
+                                  Assets.maleImagePlaceholder,
+                                  fit: BoxFit.cover,
+                                )
                               : ImageFromInternet(
-                            fit: BoxFit.cover,
-                            image: offers!.driverDetails!.pictureUrl!,
-                          ),
+                                  fit: BoxFit.cover,
+                                  image: offers!.driverDetails!.pictureUrl!,
+                                ),
                         ),
                       ),
                       Positioned(
@@ -255,7 +258,8 @@ class ClientPastWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Row(
                               children: [
                                 SvgPicture.asset(
@@ -267,7 +271,7 @@ class ClientPastWidget extends StatelessWidget {
                                 Label(
                                   text: _formatNumber(
                                       offers?.driverDetails?.rating?.count
-                                          .toString() ??
+                                              .toString() ??
                                           '0',
                                       context),
                                   style: Styles.smallText(
@@ -285,18 +289,20 @@ class ClientPastWidget extends StatelessWidget {
                     style: Styles.mediumText(),
                   ),
                   Label(
-                      text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.brandAr ?? '': offers?.driverDetails!.vehicleDetails?.brandEn ?? '',
+                      text: context.isArabic
+                          ? offers?.driverDetails!.vehicleDetails?.brandAr ?? ''
+                          : offers?.driverDetails!.vehicleDetails?.brandEn ??
+                              '',
                       style: Styles.mediumText()),
                   Label(
-                      text:context.isArabic ? offers?.driverDetails!.vehicleDetails?.modelAr ?? '':
-                      offers?.driverDetails!.vehicleDetails?.modelEn ?? '',
+                      text: context.isArabic
+                          ? offers?.driverDetails!.vehicleDetails?.modelAr ?? ''
+                          : offers?.driverDetails!.vehicleDetails?.modelEn ??
+                              '',
                       style: Styles.mediumText()),
                   Label(
-                    text: '(${_formatNumber(
-                        offers?.driverDetails?.rating?.average
-                            ?.toStringAsFixed(1) ??
-                            '0',
-                        context)})',
+                    text:
+                        '(${_formatNumber(offers?.driverDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)})',
                     style: Styles.smallText(),
                   ),
                 ],
@@ -334,7 +340,7 @@ class ClientPastWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                       text: offers?.tripDetails?.location
-                                          ?.fromTitle ??
+                                              ?.fromTitle ??
                                           'Cairo International Airport',
                                       style: Styles.headerText(),
                                     ),
@@ -356,7 +362,7 @@ class ClientPastWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                       text: offers?.tripDetails?.location
-                                          ?.toTitle ??
+                                              ?.toTitle ??
                                           'Cairo International Airport',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.w300),
@@ -366,7 +372,7 @@ class ClientPastWidget extends StatelessWidget {
                               ),
                               Label(
                                 text:
-                                '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                                    '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
                                 style: Styles.mediumText(),
                               ),
                             ],
@@ -382,18 +388,14 @@ class ClientPastWidget extends StatelessWidget {
                                 //     :
                                 ImageFromInternet(
                                     image:
-                                        offers?.subCategory?.pictureUrl??'',
+                                        offers?.subCategory?.pictureUrl ?? '',
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
                                 Label(
                                     text: context.isArabic
-                                        ? (offers
-                                                ?.subCategory?.nameAr ??
-                                            '')
-                                        : (offers
-                                                ?.subCategory?.nameEn ??
-                                            ''),
+                                        ? (offers?.subCategory?.nameAr ?? '')
+                                        : (offers?.subCategory?.nameEn ?? ''),
                                     style: Styles.mediumText(fontSize: 25))
                               ],
                             )),
@@ -403,7 +405,8 @@ class ClientPastWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Label(
-                          text: formatPrice(offers?.tripDetails?.price ?? 0, context),
+                          text: formatPrice(
+                              offers?.tripDetails?.price ?? 0, context),
                           style: Styles.mediumText(fontWeight: FontWeight.w700),
                         ),
                         const Sizer(width: 4),
@@ -420,14 +423,15 @@ class ClientPastWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: formatTimeOnly(offers?.tripDetails?.pickupTime, context),
+                          text: formatTimeOnly(
+                              offers?.tripDetails?.pickupTime, context),
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Label(
-                          text: formatPickupDate(offers?.tripDetails?.pickupTime, context),
-
+                          text: formatPickupDate(
+                              offers?.tripDetails?.pickupTime, context),
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w700,
                           ),

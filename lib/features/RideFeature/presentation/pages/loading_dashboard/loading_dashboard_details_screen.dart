@@ -60,7 +60,8 @@ class _LoadingDashboardDetailsScreenState
             tripId: widget.tripEntity.tripDetails?.id ?? '',
             tripType: 'tracking',
             userType: 'driver'));
-    currentTripRating = widget.tripEntity.clientDetails!.rating!.average!.toDouble();
+    currentTripRating =
+        widget.tripEntity.clientDetails!.rating!.average!.toDouble();
 
     super.initState();
   }
@@ -181,7 +182,7 @@ class _LoadingDashboardDetailsScreenState
           ),
           TextButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               Navigator.pop(context);
               Printing.layoutPdf(
                 onLayout: (_) => File(path).readAsBytes(),
@@ -253,13 +254,12 @@ class _LoadingDashboardDetailsScreenState
                               //     context, // To check current locale
                               //   ),
                               Label(
-                                text: "${formatPrice(
-                                    widget.tripEntity.tripDetails!.price!,
-                                    context)} ${LocaleKeys.EGP.localize}",
+                                text:
+                                    "${formatPrice(widget.tripEntity.tripDetails!.price!, context)} ${LocaleKeys.EGP.localize}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w700, fontSize: 16),
                               )
-                             ]),
+                            ]),
                       ),
                       Expanded(
                         child: Align(
@@ -276,7 +276,8 @@ class _LoadingDashboardDetailsScreenState
                   ),
                 ),
                 Label(
-                    text: "${LocaleKeys.cargoDescription.tr()} : ${widget.tripEntity.tripDetails?.cargoDescription ?? ""}",
+                    text:
+                        "${LocaleKeys.cargoDescription.tr()} : ${widget.tripEntity.tripDetails?.cargoDescription ?? ""}",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, fontSize: 16)),
                 Row(
@@ -311,10 +312,13 @@ class _LoadingDashboardDetailsScreenState
                         ],
                       ),
                     ),
-                     Label(
-                      text:formatTimeOnly( widget.tripEntity.tripDetails?.createdAt,context),
+                    Label(
+                      text: formatTimeOnly(
+                          widget.tripEntity.tripDetails?.createdAt, context),
                       style: TextStyle(
-                          color:context.isDarkMode ? AppColors.whiteColor :  AppColors.c5A5A5A,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.c5A5A5A,
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
@@ -352,10 +356,13 @@ class _LoadingDashboardDetailsScreenState
                         ],
                       ),
                     ),
-                     Label(
-                       text:formatTimeOnly( widget.tripEntity.tripDetails?.pickupTime,context),
+                    Label(
+                      text: formatTimeOnly(
+                          widget.tripEntity.tripDetails?.pickupTime, context),
                       style: TextStyle(
-                          color:context.isDarkMode ? AppColors.whiteColor :  AppColors.c5A5A5A,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.c5A5A5A,
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
@@ -384,9 +391,6 @@ class _LoadingDashboardDetailsScreenState
                     isRate: isClientRate,
                     rate: clientRate,
                     title: LocaleKeys.clientRateYou.tr()),
-
-
-
 
                 if (!(state.supportStatus ==
                     RequestEmergencyStatus.approved.status))
@@ -435,7 +439,7 @@ class _LoadingDashboardDetailsScreenState
                               ? const Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                                   onPressed: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     if (state.supportStatus ==
                                         RequestEmergencyStatus
                                             .noRequest.status) {
@@ -555,7 +559,7 @@ class _LoadingDashboardDetailsScreenState
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton.icon(
                                 onPressed: () async {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   setState(() => isLoading = true);
                                   final path = await _generatePdf(
                                       details: state.supportDetails,
@@ -606,6 +610,7 @@ class _LoadingDashboardDetailsScreenState
     );
   }
 }
+
 String formatTimeOnlyLoading(String? dateTimeString, BuildContext context) {
   if (dateTimeString == null) return '--:--';
 
@@ -616,7 +621,8 @@ String formatTimeOnlyLoading(String? dateTimeString, BuildContext context) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     // Format to time only
-    String formattedTime = DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+    String formattedTime =
+        DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
 
     // Optional: Arabic numeral conversion
     if (isArabic) {
@@ -636,10 +642,12 @@ String formatPickupTimeLoading(String? dateTimeString, BuildContext context) {
   if (dateTimeString == null) return 'No time';
 
   try {
-    final dateTime = DateTime.parse(dateTimeString).toLocal(); // 👈 convert to local
+    final dateTime =
+        DateTime.parse(dateTimeString).toLocal(); // 👈 convert to local
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
-    return DateFormat('yyyy-MM-dd hh:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+    return DateFormat('yyyy-MM-dd hh:mm a', isArabic ? 'ar' : 'en')
+        .format(dateTime);
   } catch (e) {
     return 'Invalid time';
   }
@@ -653,7 +661,8 @@ String formatTimeOnly(String? dateTimeString, BuildContext context) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     // Format with locale
-    String formattedTime = DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
+    String formattedTime =
+        DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(dateTime);
 
     // Force Arabic numerals if needed (some devices need this)
     if (isArabic) {
@@ -718,8 +727,7 @@ String formatPickupDate(String? dateTimeString, BuildContext context) {
     final dateTime = DateTime.parse(dateTimeString);
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
-    return DateFormat('yyyy-MM-dd', isArabic ? 'ar' : 'en')
-        .format(dateTime);
+    return DateFormat('yyyy-MM-dd', isArabic ? 'ar' : 'en').format(dateTime);
   } catch (e) {
     return 'Invalid date';
   }
