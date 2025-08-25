@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../controllers/preload_cubit/preload_bloc.dart';
 import '../controllers/preload_cubit/preload_state.dart';
 import '../widgets/components/reels_widget.dart';
+import '../widgets/components/tiktok_bar.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../controllers/preload_cubit/preload_bloc.dart';
-import '../widgets/components/tiktok_bar.dart';
-import 'package:flutter/services.dart';
 
 // Entry point of the reels view
 class ReelView extends StatelessWidget {
@@ -23,28 +24,16 @@ class ReelView extends StatelessWidget {
         statusBarBrightness: Brightness.light,
       ),
     );
+
     return PopScope(
       onPopInvoked: (res) {
-        if (context
-            .read<PreloadBloc>()
-            .state
-            .controllers[context.read<PreloadBloc>().state.focusedIndex]!
-            .value
-            .isPlaying) {
-          context
-              .read<PreloadBloc>()
-              .state
-              .controllers[context.read<PreloadBloc>().state.focusedIndex]
-              ?.pause();
-        }
-        context
-            .read<PreloadBloc>()
-            .resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
-        //   context.pop();
-        // return Future.value(true);
+        final b = context.read<PreloadBloc>();
+        // pause safely (no direct map indexing)
+        b.pauseCurrent();
+        b.resetFocusedIndex(b.state.focusedIndex);
       },
       canPop: true,
-      child: CustomScaffold(
+      child: const CustomScaffold(
         resizeToAvoidBottomInset: false,
         body: ReelsScreen(),
       ),
@@ -59,16 +48,24 @@ class ReelsScreen extends StatefulWidget {
   ReelsScreenState createState() => ReelsScreenState();
 }
 
-class ReelsScreenState extends State<ReelsScreen> {
+class ReelsScreenState extends State<ReelsScreen>
+    with AutomaticKeepAliveClientMixin {
+  /// we skip the first onPageChanged callback so initial reel can auto-play
+  bool _didHandleFirstPageChange = false;
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+
+    // Ensure controllers are fresh & first items are initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       context.read<PreloadBloc>().handleScreenReturn();
     });
+
     _checkAndReloadIfNeeded();
   }
 
@@ -86,24 +83,12 @@ class ReelsScreenState extends State<ReelsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return PopScope(
       onPopInvoked: (res) {
-        if (context
-                .read<PreloadBloc>()
-                .state
-                .controllers[context.read<PreloadBloc>().state.focusedIndex]
-                ?.value
-                .isPlaying ??
-            false) {
-          context
-              .read<PreloadBloc>()
-              .state
-              .controllers[context.read<PreloadBloc>().state.focusedIndex]
-              ?.pause();
-        }
-        context
-            .read<PreloadBloc>()
-            .resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
+        final b = context.read<PreloadBloc>();
+        b.pauseCurrent();
+        b.resetFocusedIndex(b.state.focusedIndex);
       },
       canPop: true,
       child: BlocBuilder<PreloadBloc, PreloadState>(
@@ -111,63 +96,78 @@ class ReelsScreenState extends State<ReelsScreen> {
           if (state.urls.isEmpty) {
             return _buildCustomLoading();
           }
+
           return Stack(
             children: [
               Positioned.fill(
-                  child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.black,
-              )),
-              Stack(
-                children: [
-                  Positioned.fill(
-                    child: PageView.builder(
-                      // physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: state.urls.length,
-                      onPageChanged: (index) async {
-                        context.read<PreloadBloc>().onVideoIndexChanged(index);
-                      },
-                      itemBuilder: (context, index) {
-                        // Is at end and isLoading
-                        final bool isLoading =
-                            (state.isLoading && index == state.urls.length - 1);
-                        final controller = state.controllers[index];
-                        final preloadBloc = context.read<PreloadBloc>();
+                child: Container(color: Colors.black),
+              ),
+              Positioned.fill(
+                child: PageView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: state.urls.length,
+                  onPageChanged: (index) {
+                    final b = context.read<PreloadBloc>();
 
-                        if (controller == null) {
-                          // If no controller is available, try to initialize it
-                          if (index == preloadBloc.state.focusedIndex) {
-                            // Only auto-initialize the focused video to avoid performance issues
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              preloadBloc.initializeControllerAtIndex(index);
-                            });
-                          }
+                    // Skip the very first call at startup (keep the initial reel playing)
+                    if (!_didHandleFirstPageChange) {
+                      _didHandleFirstPageChange = true;
+                      // still update focus so state stays consistent
+                      b.onVideoIndexChanged(index);
+                      return;
+                    }
 
-                          // Show loading indicator with better messaging
-                          return _buildVideoLoadingWidget(
-                              index, preloadBloc.isVideoLoading(index));
-                        }
+                    // Pause neighbors FIRST, then update index (frees codec)
+                    b.forcePauseAround(index);
+                    b.onVideoIndexChanged(index);
+                  },
+                  itemBuilder: (context, index) {
+                    final b = context.read<PreloadBloc>();
+                    final controller = state.controllers[index];
 
-                        return state.focusedIndex == index
-                            ? ReelsWidget(
-                                index: index,
-                                isLoading: isLoading,
-                                controller: controller,
-                                receiverId: 1,
-                              )
-                            : const SizedBox();
-                      },
-                    ),
-                  ),
-                  const Positioned(
-                    top: 57,
-                    right: 16,
-                    left: 16,
-                    child: AdvancedTikTokTabBar(),
-                  ),
-                ],
+                    // show loader at the very end while urls still loading
+                    final bool isTailLoading =
+                        (state.isLoading && index == state.urls.length - 1);
+
+                    // If no controller yet…
+                    if (controller == null) {
+                      // …and this item is focused, initialize it (preferNetwork for faster first frame)
+                      if (index == state.focusedIndex) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          // preferNetwork speeds up first play vs waiting for cache
+                          b.initializeControllerAtIndex(index,
+                              preferNetwork: true);
+                        });
+                      }
+
+                      return _buildVideoLoadingWidget(
+                        index,
+                        b.isVideoLoading(index) || isTailLoading,
+                      );
+                    }
+
+                    // Only render the focused page’s video to keep resource usage low
+                    if (state.focusedIndex == index) {
+                      return ReelsWidget(
+                        index: index,
+                        isLoading: isTailLoading,
+                        controller: controller,
+                        receiverId: 1,
+                      );
+                    } else {
+                      // Keep offscreen items lightweight
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+
+              // Top bar
+              const Positioned(
+                top: 57,
+                right: 16,
+                left: 16,
+                child: AdvancedTikTokTabBar(),
               ),
             ],
           );
@@ -178,9 +178,10 @@ class ReelsScreenState extends State<ReelsScreen> {
 
   Widget _buildCustomLoading() {
     return const Center(
-        child: CircularProgressIndicator(
-      color: AppColors.SECONDARY_COLOR,
-    ));
+      child: CircularProgressIndicator(
+        color: AppColors.SECONDARY_COLOR,
+      ),
+    );
   }
 
   Widget _buildVideoLoadingWidget(int index, bool isLoading) {
@@ -208,9 +209,9 @@ class ReelsScreenState extends State<ReelsScreen> {
           ),
           if (!isLoading) ...[
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Swipe to next video',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white54,
                 fontSize: 14,
               ),

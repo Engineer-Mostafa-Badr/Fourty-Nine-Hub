@@ -1,22 +1,30 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../core/extensions/string_extension.dart';
-import '../explore_reels_cubit/reel_cubit.dart';
-import '../../../../../../main.dart';
-import '../../../../../../service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/isolates/video_cache_isolate.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import '../../shared/constants.dart';
+import '../explore_reels_cubit/reel_cubit.dart';
 import 'preload_state.dart';
+
+// Optional helper to silence unawaited-futures lint
+void _unawaited(Future<void> f) {}
 
 class PreloadBloc extends Cubit<PreloadState> {
   PreloadBloc() : super(PreloadState.initial());
+
   StreamSubscription<ReelsState>? _reelsSubscription;
 
-  // Set the loading state
+  /// Serialize all controller initializations to avoid MediaCodec contention
+  Future<void> _initSerial = Future.value();
+
+  // -------------------- Public API --------------------
+
   void setLoading(bool isLoading) {
     emit(state.copyWith(isLoading: isLoading));
   }
@@ -28,70 +36,50 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   Future<void> getVideosFromApi() async {
     try {
-      // Cancel any existing subscription to avoid duplication
       await _reelsSubscription?.cancel();
       _reelsSubscription = null;
 
       setLoading(true);
       final reelsCubit = serviceLocator<ReelsCubit>();
-
       Future<void> applyUrlsFromCubit() async {
         final urls =
             reelsCubit.state.globalReels.map((e) => e.videoMedia).toList();
-        if (urls.isEmpty) return;
+        if (urls.isEmpty) {
+          emit(state.copyWith(isLoading: false));
+          return;
+        }
 
-        // Reset controllers
-        for (var controller in state.controllers.values) {
-          controller.dispose();
+        // 🔄 Reset serialized init queue so old timeouts don’t block first video
+        _initSerial = Future.value();
+
+        // Dispose any previous controllers
+        for (var c in state.controllers.values) {
+          try {
+            c.dispose();
+          } catch (_) {}
         }
 
         emit(state.copyWith(
           urls: urls,
           controllers: {},
-          isLoading: false,
+          isLoading: true,
           reloadCounter: state.reloadCounter + 1,
+          focusedIndex: 0, // ✅ ensure first reel is focused
         ));
 
-        await _ensureTripleBufferCached(0);
+        // Warm cache for index 0 ± 1 (async, won’t block UI)
+        _unawaited(_ensureTripleBufferCached(0));
 
-        // Try to initialize the first video with retry mechanism
-        bool firstVideoInitialized = false;
-        int retryCount = 0;
-        const maxRetries = 3;
+        // Try to init index 0 directly from network (non-fatal if timeout)
+        await initializeControllerAtIndex(0, preferNetwork: true);
 
-        while (!firstVideoInitialized && retryCount < maxRetries) {
-          try {
-            await initializeControllerAtIndex(0);
-            firstVideoInitialized = true;
-            log('✅ First video initialized successfully');
-          } catch (e) {
-            retryCount++;
-            log('❌ Failed to initialize first video (attempt $retryCount/$maxRetries): $e');
-
-            if (retryCount >= maxRetries) {
-              // If all retries failed, try to initialize the next video
-              if (urls.length > 1) {
-                log('🔄 All retries failed, trying next video');
-                try {
-                  await initializeControllerAtIndex(1);
-                  emit(state.copyWith(focusedIndex: 1));
-                  log('✅ Second video initialized as fallback');
-                } catch (e2) {
-                  log('❌ Failed to initialize fallback video: $e2');
-                }
-              }
-            } else {
-              // Wait before retry
-              await Future.delayed(Duration(seconds: retryCount));
-            }
-          }
+        // Also init index 1 in background (non-fatal, no autoplay)
+        if (urls.length > 1) {
+          _unawaited(initializeControllerAtIndex(1, preferNetwork: true));
         }
 
-        if (firstVideoInitialized) {
-          _playControllerAtIndex(0);
-        }
-
-        if (urls.length > 1) await initializeControllerAtIndex(1);
+        // ✅ Mark ready — widget handles autoplay
+        emit(state.copyWith(isLoading: false));
       }
 
       if (reelsCubit.state.globalReels.isNotEmpty) {
@@ -100,14 +88,14 @@ class PreloadBloc extends Cubit<PreloadState> {
 
       _reelsSubscription = reelsCubit.stream.listen((reelsState) async {
         if (!reelsState.isLoading && reelsState.globalReels.isNotEmpty) {
-          // Append any newly added URLs
           final updated =
               reelsState.globalReels.map((e) => e.videoMedia).toList();
+
           if (updated.length != state.urls.length) {
+            _initSerial = Future.value();
             emit(state.copyWith(urls: updated));
-            // Pre-cache around current focus
+            // Continue background caching/init for neighbors
             _ensureTripleBufferCached(state.focusedIndex);
-            // Ensure next controller prepared
             initializeControllerAtIndex(state.focusedIndex + 1);
           }
           setLoading(false);
@@ -124,63 +112,19 @@ class PreloadBloc extends Cubit<PreloadState> {
     }
   }
 
-  // Add this to PreloadBloc class
+  /// Called when returning to the screen
   void handleScreenReturn() {
-    // Dispose all existing controllers to start fresh
-    for (var entry in state.controllers.entries) {
-      try {
-        entry.value.pause();
-        entry.value.dispose();
-      } catch (_) {}
-    }
+    _disposeAllControllers();
+    _initSerial = Future.value();
 
     emit(state.copyWith(controllers: {}, focusedIndex: 0, isLoading: true));
-
     Future.microtask(() async {
       if (state.urls.isNotEmpty) {
-        await _ensureTripleBufferCached(0);
-
-        // Try to initialize the first video with retry mechanism
-        bool firstVideoInitialized = false;
-        int retryCount = 0;
-        const maxRetries = 3;
-
-        while (!firstVideoInitialized && retryCount < maxRetries) {
-          try {
-            await initializeControllerAtIndex(0);
-            firstVideoInitialized = true;
-            log('✅ First video initialized successfully on screen return');
-          } catch (e) {
-            retryCount++;
-            log('❌ Failed to initialize first video on screen return (attempt $retryCount/$maxRetries): $e');
-
-            if (retryCount >= maxRetries) {
-              // If all retries failed, try to initialize the next video
-              if (state.urls.length > 1) {
-                log('🔄 All retries failed on screen return, trying next video');
-                try {
-                  await initializeControllerAtIndex(1);
-                  emit(state.copyWith(focusedIndex: 1));
-                  log('✅ Second video initialized as fallback on screen return');
-                } catch (e2) {
-                  log('❌ Failed to initialize fallback video on screen return: $e2');
-                }
-              }
-            } else {
-              // Wait before retry
-              await Future.delayed(Duration(seconds: retryCount));
-            }
-          }
-        }
-
-        if (firstVideoInitialized) {
-          _playControllerAtIndex(0);
-        }
-
+        _unawaited(_ensureTripleBufferCached(0));
+        await initializeControllerAtIndex(0, preferNetwork: true);
         if (state.urls.length > 1) {
-          await initializeControllerAtIndex(1);
+          _unawaited(initializeControllerAtIndex(1, preferNetwork: true));
         }
-
         emit(state.copyWith(isLoading: false));
       } else {
         getVideosFromApi();
@@ -188,12 +132,11 @@ class PreloadBloc extends Cubit<PreloadState> {
     });
   }
 
-  // Handle video index change and preload logic
+  /// Caller should pause neighbors first (use [forcePauseAround]) then call this.
   void onVideoIndexChanged(int index) {
     final reelsCubit = serviceLocator<ReelsCubit>();
     final shouldFetch = index + kPreloadLimit >= state.urls.length;
     if (shouldFetch) {
-      // trigger backend fetch through cubit; listener will append
       reelsCubit.fetchReels();
     }
 
@@ -205,19 +148,91 @@ class PreloadBloc extends Cubit<PreloadState> {
       _playPrevious(index);
     }
 
-    // Use the new efficient preloading method
     preloadVideosAroundIndex(index);
-
     emit(state.copyWith(focusedIndex: index));
   }
 
-  // Ensure we have cached files for [index-1, index, index+1]
+  /// Pause focused and neighbors to free codec resources before init
+  void forcePauseAround(int index) {
+    _stopControllerAtIndex(state.focusedIndex);
+    _stopControllerAtIndex(index - 1);
+    _stopControllerAtIndex(index + 1);
+  }
+
+  /// Pause the currently focused reel (safe: checks bounds/initialized).
+  void pauseCurrent() {
+    final i = state.focusedIndex;
+    if (i < 0 || i >= state.urls.length) return;
+    final c = state.controllers[i];
+    if (c == null) return;
+    try {
+      if (c.value.isInitialized && c.value.isPlaying) {
+        c.pause();
+        log('⏸️ pauseCurrent: $i');
+      }
+    } catch (e) {
+      log('⚠️ pauseCurrent error: $e');
+    }
+  }
+
+  void pauseIndex(int index) {
+    if (index < 0 || index >= state.urls.length) return;
+    final c = state.controllers[index];
+    if (c == null) return;
+    try {
+      if (c.value.isInitialized && c.value.isPlaying) {
+        c.pause();
+        log('⏸️ pauseIndex: $index');
+      }
+    } catch (e) {
+      log('⚠️ pauseIndex error: $e');
+    }
+  }
+
+  void pauseAll() {
+    for (final entry in state.controllers.entries) {
+      final i = entry.key;
+      final c = entry.value;
+      try {
+        if (c.value.isInitialized && c.value.isPlaying) {
+          c.pause();
+          log('⏸️ pauseAll: $i');
+        }
+      } catch (e) {
+        log('⚠️ pauseAll error at $i: $e');
+      }
+    }
+  }
+
+  Future<void> retryVideoLoad(int index) async {
+    if (index < 0 || index >= state.urls.length) return;
+
+    log('🔄 Retrying video load for index $index');
+
+    if (state.controllers.containsKey(index)) {
+      state.controllers.remove(index);
+      emit(state.copyWith(
+          controllers:
+              Map<int, VideoPlayerController>.from(state.controllers)));
+    }
+
+    try {
+      await initializeControllerAtIndex(index, preferNetwork: true);
+      log('✅ Video retry successful for index $index');
+    } catch (e) {
+      log('❌ Video retry failed for index $index: $e');
+      await _handleVideoLoadError(index, 'Retry failed: $e');
+    }
+  }
+
+  // -------------------- Caching --------------------
+
   Future<void> _ensureTripleBufferCached(int index) async {
     final List<String> toPrefetch = [];
     for (final i in [index - 1, index, index + 1]) {
       if (i < 0 || i >= state.urls.length) continue;
       final url = state.urls[i];
-      if (!(state.cachedPaths.containsKey(url))) {
+      if (!state.cachedPaths.containsKey(url)) {
         toPrefetch.add(url);
       }
     }
@@ -237,28 +252,61 @@ class PreloadBloc extends Cubit<PreloadState> {
     return state.cachedPaths[url] ?? url;
   }
 
-  // Private helper methods for managing video player controllers
+  // -------------------- Navigation helpers --------------------
+
   void _playNext(int index) {
+    if (index < 0 || index >= state.urls.length) return;
+
     _stopControllerAtIndex(index - 1);
+    _unawaited(initializeControllerAtIndex(index));
     _disposeControllerAtIndex(index - 2);
-    _playControllerAtIndex(index);
-    initializeControllerAtIndex(index + 1);
   }
 
   void _playPrevious(int index) {
+    if (index < 0 || index >= state.urls.length) return;
+
     _stopControllerAtIndex(index + 1);
+    _unawaited(initializeControllerAtIndex(index));
     _disposeControllerAtIndex(index + 2);
-    _playControllerAtIndex(index);
-    if (index == 0) return;
-    initializeControllerAtIndex(index - 1);
   }
 
-  Future<void> initializeControllerAtIndex(int index) async {
+  // -------------------- Initialization (serialized) --------------------
+
+  Future<void> initializeControllerAtIndex(
+    int index, {
+    bool preferNetwork = false,
+  }) {
+    _initSerial = _initSerial.then(
+      (_) =>
+          _doInitializeControllerAtIndex(index, preferNetwork: preferNetwork),
+    );
+    return _initSerial;
+  }
+
+  Future<void> _doInitializeControllerAtIndex(
+    int index, {
+    bool preferNetwork = false,
+  }) async {
     if (index < 0 || index >= state.urls.length) return;
+
+    final existing = state.controllers[index];
+    if (existing != null) {
+      if (existing.value.isInitialized) {
+        return; // already ready
+      } else {
+        try {
+          existing.dispose();
+        } catch (_) {}
+        state.controllers.remove(index);
+        emit(state.copyWith(
+            controllers:
+                Map<int, VideoPlayerController>.from(state.controllers)));
+      }
+    }
 
     try {
       final String url = state.urls[index];
-      final String pathOrUrl = _effectivePathForUrl(url);
+      final String pathOrUrl = preferNetwork ? url : _effectivePathForUrl(url);
 
       final Uri sourceUri =
           pathOrUrl.startsWith('http') ? pathOrUrl.toUri : Uri.file(pathOrUrl);
@@ -267,171 +315,170 @@ class PreloadBloc extends Cubit<PreloadState> {
           ? VideoPlayerController.networkUrl(sourceUri)
           : VideoPlayerController.file(File(pathOrUrl));
 
+      // ⬇️ add first, then emit so UI can build ReelsWidget immediately
       state.controllers[index] = controller;
+      emit(state.copyWith(
+          controllers:
+              Map<int, VideoPlayerController>.from(state.controllers)));
 
-      // Add timeout for initialization
-      await controller.initialize().timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          log('❌ Timeout initializing video at index $index');
-          throw TimeoutException(
-              'Video initialization timeout', const Duration(seconds: 15));
-        },
-      );
+      await controller.initialize().timeout(const Duration(seconds: 15));
 
-      log('🚀🚀🚀 INITIALIZED $index');
-    } catch (e) {
-      log('❌ Error initializing video at index $index: $e');
+      controller.setLooping(true);
+      await controller.seekTo(Duration.zero); // prime first frame
 
-      // Remove failed controller from state
-      state.controllers.remove(index);
-
-      // If this is the first video (index 0), try to initialize the next one
-      if (index == 0 && state.urls.length > 1) {
-        log('🔄 Retrying with next video at index 1');
-        await initializeControllerAtIndex(1);
-        // Update focused index to the working video
-        emit(state.copyWith(focusedIndex: 1));
+      log('🚀 INITIALIZED (primed) $index [preferNetwork=$preferNetwork]');
+    } on TimeoutException catch (e) {
+      log('⏳ Init timeout at index $index: $e');
+      if (state.controllers.containsKey(index)) {
+        state.controllers.remove(index);
+        emit(state.copyWith(
+            controllers:
+                Map<int, VideoPlayerController>.from(state.controllers)));
+      }
+      return;
+    } on PlatformException catch (e) {
+      log('❌ PlatformException at index $index: $e');
+      if (state.controllers.containsKey(index)) {
+        state.controllers.remove(index);
+        emit(state.copyWith(
+            controllers:
+                Map<int, VideoPlayerController>.from(state.controllers)));
       }
 
-      // Re-throw to let caller handle the error
-      rethrow;
+      final msg = e.toString();
+      if (msg.contains('MediaCodecVideoRenderer')) {
+        log('🧯 Codec resources likely exhausted; will retry when focused.');
+        return;
+      }
+      return;
+    } catch (e) {
+      log('❌ Unexpected init error at index $index: $e');
+      if (state.controllers.containsKey(index)) {
+        state.controllers.remove(index);
+        emit(state.copyWith(
+            controllers:
+                Map<int, VideoPlayerController>.from(state.controllers)));
+      }
+      return;
     }
   }
 
-  void _playControllerAtIndex(int index) {
-    final controller = state.controllers[index];
-    controller?.setLooping(true);
-    controller?.play();
-    log('🚀🚀🚀 PLAYING $index');
-  }
+  // -------------------- Pause / Dispose / Error handling --------------------
 
   void _stopControllerAtIndex(int index) {
+    if (index < 0 || index >= state.urls.length) return;
     final controller = state.controllers[index];
-    controller?.pause();
-    log('🚀🚀🚀 STOPPED $index');
+    if (controller == null) return;
+    try {
+      if (controller.value.isInitialized && controller.value.isPlaying) {
+        controller.pause();
+        log('⏸️ STOPPED $index');
+      }
+    } catch (e) {
+      log('⚠️ STOP error at index $index: $e');
+    }
   }
 
-  void _disposeControllerAtIndex(int index) {
-    final controller = state.controllers.remove(index);
-    controller?.dispose();
-    log('🚀🚀🚀 DISPOSED $index');
+  bool _disposeControllerAtIndex(int index, {bool force = false}) {
+    if (index < 0 || index >= state.urls.length) return false;
+    if (!force && index == state.focusedIndex) return false;
+
+    final controller = state.controllers[index];
+    if (controller == null) return false;
+
+    try {
+      if (controller.value.isInitialized && controller.value.isPlaying) {
+        controller.pause();
+      }
+    } catch (_) {}
+
+    try {
+      state.controllers.remove(index);
+      emit(state.copyWith(
+          controllers:
+              Map<int, VideoPlayerController>.from(state.controllers)));
+      controller.dispose();
+      log('🗑️ DISPOSED $index');
+      return true;
+    } catch (e) {
+      log('❌ DISPOSE failed at $index: $e');
+      return false;
+    }
   }
 
   void _disposeAllControllers() {
-    for (var controller in state.controllers.values) {
-      controller.dispose();
+    if (state.controllers.isEmpty) return;
+    final map = Map<int, VideoPlayerController>.from(state.controllers);
+    state.controllers.clear();
+    emit(state.copyWith(controllers: {}));
+    for (var controller in map.values) {
+      try {
+        controller.dispose();
+      } catch (_) {}
     }
   }
 
-  // Handle video loading errors gracefully
   Future<void> _handleVideoLoadError(int index, String error) async {
-    log('❌ Video load error at index $index: $error');
+    log('❌ Video load error at $index: $error');
+    if (state.controllers.containsKey(index)) {
+      state.controllers.remove(index);
+      emit(state.copyWith(
+          controllers:
+              Map<int, VideoPlayerController>.from(state.controllers)));
+    }
 
-    // Remove the failed controller
-    state.controllers.remove(index);
-
-    // If this is the current focused video, try to move to the next one
     if (index == state.focusedIndex) {
       if (index + 1 < state.urls.length) {
-        log('🔄 Moving to next video due to load error');
         emit(state.copyWith(focusedIndex: index + 1));
-
-        // Try to initialize the next video
         try {
-          await initializeControllerAtIndex(index + 1);
-          _playControllerAtIndex(index + 1);
+          await initializeControllerAtIndex(index + 1, preferNetwork: true);
         } catch (e) {
-          log('❌ Failed to initialize next video after error: $e');
+          log('❌ Failed to initialize next after error: $e');
         }
       } else if (index > 0) {
-        log('🔄 Moving to previous video due to load error');
         emit(state.copyWith(focusedIndex: index - 1));
-
-        // Try to initialize the previous video
         try {
-          await initializeControllerAtIndex(index - 1);
-          _playControllerAtIndex(index - 1);
+          await initializeControllerAtIndex(index - 1, preferNetwork: true);
         } catch (e) {
-          log('❌ Failed to initialize previous video after error: $e');
+          log('❌ Failed to initialize prev after error: $e');
         }
       }
     }
   }
 
-  // Check if a video is ready to play
   bool isVideoReady(int index) {
     final controller = state.controllers[index];
     return controller != null && controller.value.isInitialized;
   }
 
-  // Get the loading status for a specific video
   bool isVideoLoading(int index) {
     return !isVideoReady(index) &&
         state.urls.isNotEmpty &&
         index < state.urls.length;
   }
 
-  // Retry loading a specific video
-  Future<void> retryVideoLoad(int index) async {
-    if (index < 0 || index >= state.urls.length) return;
+  // -------------------- Preloading (sequential) --------------------
 
-    log('🔄 Retrying video load for index $index');
-
-    // Remove existing controller if any
-    state.controllers.remove(index);
-
-    try {
-      await initializeControllerAtIndex(index);
-      if (index == state.focusedIndex) {
-        _playControllerAtIndex(index);
-      }
-      log('✅ Video retry successful for index $index');
-    } catch (e) {
-      log('❌ Video retry failed for index $index: $e');
-      // If retry fails, try to move to next available video
-      await _handleVideoLoadError(index, 'Retry failed: $e');
-    }
-  }
-
-  // Preload videos around the current index more efficiently
   Future<void> preloadVideosAroundIndex(int index) async {
     if (state.urls.isEmpty) return;
 
     final List<int> indicesToPreload = [];
-
-    // Add current index and adjacent indices
     for (int i = index - 1; i <= index + 1; i++) {
-      if (i >= 0 &&
-          i < state.urls.length &&
-          !state.controllers.containsKey(i)) {
+      if (i >= 0 && i < state.urls.length && !isVideoReady(i)) {
         indicesToPreload.add(i);
       }
     }
 
-    // Preload videos in parallel for better performance
-    if (indicesToPreload.isNotEmpty) {
-      log('🔄 Preloading videos around index $index: $indicesToPreload');
-
-      final futures =
-          indicesToPreload.map((i) => initializeControllerAtIndex(i));
+    for (final i in indicesToPreload) {
       try {
-        await Future.wait(futures);
-        log('✅ Preloading completed for indices: $indicesToPreload');
+        await initializeControllerAtIndex(i); // serialized under _initSerial
       } catch (e) {
-        log('❌ Some videos failed to preload: $e');
-        // Continue with available videos
+        log('❌ Preload failed at $i: $e');
       }
     }
   }
 
-  pauseTheVideo() {
-    final preloadBloc = navigatorKey.currentContext!.read<PreloadBloc>();
-    final currentIndex = preloadBloc.state.focusedIndex;
-    if (preloadBloc.state.controllers[currentIndex]?.value.isPlaying ?? false) {
-      preloadBloc.state.controllers[currentIndex]?.pause();
-    }
-  }
+  // -------------------- Cleanup --------------------
 
   void dispose() {
     _reelsSubscription?.cancel();

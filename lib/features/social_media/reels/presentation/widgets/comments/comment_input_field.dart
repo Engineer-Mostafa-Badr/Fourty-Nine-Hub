@@ -147,7 +147,7 @@ class CommentInputFieldState extends State<CommentInputField> {
                               onTap: () {
                                 manageVibration.ManageVibration.vibrate();
                                 if (!serviceLocator<UserCubit>().isLoggedIn) {
-                                  context.read<PreloadBloc>().pauseTheVideo();
+                                  context.read<PreloadBloc>().pauseCurrent();
                                   context.push(Routes.LOGIN);
                                 } else {
                                   _showGiftBottomSheet(context);
