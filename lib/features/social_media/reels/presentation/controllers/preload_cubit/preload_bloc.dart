@@ -79,10 +79,10 @@ class PreloadBloc extends Cubit<PreloadState> {
         ));
 
         // ✅ Hydrate cache map from disk for first few URLs (instant file usage)
-        await _hydrateCacheFromDisk(urls.take(3).toList());
+        await _hydrateCacheFromDisk(urls.take(5).toList());
 
         // Pre-cache first 3 without blocking UI
-        _unawaited(_ensureRangeCached(0, 2));
+        _unawaited(_ensureRangeCached(0, 4));
 
         // Initialize first controller USING FILE if present
         await initializeControllerAtIndex(0,
@@ -113,7 +113,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
             // as new items appear, keep caching ahead of the feed
             final i = state.focusedIndex;
-            _unawaited(_ensureRangeCached(i, i + 2)); // small runway
+            _unawaited(_ensureRangeCached(i, i + 4)); // small runway
             initializeControllerAtIndex(i + 1, epoch: _focusEpoch);
           }
           setLoading(false);
@@ -132,23 +132,22 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   /// Called when returning to the screen
   void handleScreenReturn() {
-    _disposeAllControllers(); // keep cached files
+    _disposeAllControllers();
     _initSerial = Future.value();
 
     emit(state.copyWith(controllers: {}, focusedIndex: 0, isLoading: true));
     Future.microtask(() async {
       if (state.urls.isNotEmpty) {
-        // ✅ Hydrate from disk on re-entry so first reel uses file immediately
-        await _hydrateCacheFromDisk(state.urls.take(3).toList());
+        // ✅ Hydrate from disk for FIRST 5 items
+        await _hydrateCacheFromDisk(state.urls.take(5).toList());
 
-        // pre-cache first 3 in background
-        _unawaited(_ensureRangeCached(0, 2));
+        // Pre-cache 0..4 in background
+        _unawaited(_ensureRangeCached(0, 4)); // keep
 
-        // first reel: file-first if available
+        // file-first init
         await initializeControllerAtIndex(0,
             preferNetwork: false, epoch: _focusEpoch);
 
-        // neighbor reel: try cache briefly then init (file-first)
         if (state.urls.length > 1) {
           await _ensureCachedFor(1, timeout: const Duration(milliseconds: 900));
           _unawaited(initializeControllerAtIndex(1,
@@ -337,7 +336,9 @@ class PreloadBloc extends Cubit<PreloadState> {
   /// Keep triple buffer cached (index-1..index+1). No eviction.
   Future<void> _ensureTripleBufferCached(int index) async {
     final List<String> toPrefetch = [];
-    for (final i in [index - 1, index, index + 1]) {
+
+    // cache a 5-wide window: index-2 .. index+2
+    for (int i = index - 2; i <= index + 2; i++) {
       if (i < 0 || i >= state.urls.length) continue;
       final url = state.urls[i];
       if (!state.cachedPaths.containsKey(url)) {
@@ -352,8 +353,8 @@ class PreloadBloc extends Cubit<PreloadState> {
         ..addAll(result.urlToPath);
       emit(state.copyWith(cachedPaths: newMap));
 
-      // optional: quietly swap non-focused items to cached
-      for (final i in [index - 1, index, index + 1]) {
+      // Optionally swap non-focused neighbors to cached if they were network
+      for (int i = index - 2; i <= index + 2; i++) {
         if (i < 0 || i >= state.urls.length) continue;
         if (i == state.focusedIndex) continue;
         _unawaited(_maybeSwapToCached(i));
