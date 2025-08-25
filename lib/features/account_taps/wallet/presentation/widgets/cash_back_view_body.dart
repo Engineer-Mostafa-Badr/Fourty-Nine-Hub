@@ -62,6 +62,7 @@ class _CashbackViewBodyState extends State<CashbackViewBody> {
                 ),
                 HeaderTotalAccountWidget(
                   balance: cashback.balance.toString(),
+                  holdingAmount: 0,
                   currency: context.isArabic
                       ? cashback.currencyAr!
                       : cashback.currencyEn!,
