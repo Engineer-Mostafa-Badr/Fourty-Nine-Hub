@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
+
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/isolates/video_cache_isolate.dart';
@@ -20,7 +24,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   StreamSubscription<ReelsState>? _reelsSubscription;
 
-  /// Serialize all controller initializations to avoid MediaCodec contention
+  /// Serialize controller initializations to avoid MediaCodec contention
   Future<void> _initSerial = Future.value();
 
   // -------------------- Public API --------------------
@@ -72,16 +76,20 @@ class PreloadBloc extends Cubit<PreloadState> {
           focusedIndex: 0,
         ));
 
-        // 1) pre-cache first 3 videos (0..2) without blocking UI
+        // ✅ Hydrate cache map from disk for first few URLs (instant file usage)
+        await _hydrateCacheFromDisk(urls.take(3).toList());
+
+        // Pre-cache first 3 without blocking UI
         _unawaited(_ensureRangeCached(0, 2));
 
-        // 2) init first focused item from NETWORK (fastest first frame)
-        await initializeControllerAtIndex(0, preferNetwork: true);
+        // Initialize first controller USING FILE if present
+        await initializeControllerAtIndex(0, preferNetwork: false);
 
-        // 3) for second item, try to use cache first (short wait); then init
+        // Initialize second after a short cache wait (still file-first)
         if (urls.length > 1) {
-          await _ensureCachedFor(1, timeout: const Duration(milliseconds: 900));
-          _unawaited(initializeControllerAtIndex(1)); // preferNetwork=false
+          await _ensureCachedFor(1,
+              timeout: const Duration(milliseconds: 900));
+          _unawaited(initializeControllerAtIndex(1, preferNetwork: false));
         }
 
         emit(state.copyWith(isLoading: false));
@@ -102,7 +110,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
             // as new items appear, keep caching ahead of the feed
             final i = state.focusedIndex;
-            _unawaited(_ensureRangeCached(i, i + 2)); // keep a small runway
+            _unawaited(_ensureRangeCached(i, i + 2)); // small runway
             initializeControllerAtIndex(i + 1);
           }
           setLoading(false);
@@ -127,16 +135,20 @@ class PreloadBloc extends Cubit<PreloadState> {
     emit(state.copyWith(controllers: {}, focusedIndex: 0, isLoading: true));
     Future.microtask(() async {
       if (state.urls.isNotEmpty) {
+        // ✅ Hydrate from disk on re-entry so first reel uses file immediately
+        await _hydrateCacheFromDisk(state.urls.take(3).toList());
+
         // pre-cache first 3 in background
         _unawaited(_ensureRangeCached(0, 2));
 
-        // first reel: network-first (fast)
-        await initializeControllerAtIndex(0, preferNetwork: true);
+        // first reel: file-first if available
+        await initializeControllerAtIndex(0, preferNetwork: false);
 
-        // neighbor reel: try cache briefly then init
+        // neighbor reel: try cache briefly then init (file-first)
         if (state.urls.length > 1) {
-          await _ensureCachedFor(1, timeout: const Duration(milliseconds: 900));
-          _unawaited(initializeControllerAtIndex(1));
+          await _ensureCachedFor(1,
+              timeout: const Duration(milliseconds: 900));
+          _unawaited(initializeControllerAtIndex(1, preferNetwork: false));
         }
         emit(state.copyWith(isLoading: false));
       } else {
@@ -152,15 +164,19 @@ class PreloadBloc extends Cubit<PreloadState> {
   }
 
   /// Make the focused index ready ASAP:
-  /// - short wait for cache (to prefer file path)
+  /// - hydrate & short wait for cache (to prefer file)
   /// - reset queue so this init runs now
   Future<void> prioritizedFocusInit(int index) async {
     _resetInitQueue();
+
+    if (index >= 0 && index < state.urls.length) {
+      await _hydrateCacheFromDisk([state.urls[index]]);
+    }
     try {
       await _ensureCachedFor(index, timeout: const Duration(milliseconds: 600));
     } catch (_) {}
-    await initializeControllerAtIndex(
-        index); // preferNetwork=false -> file if cached
+    await initializeControllerAtIndex(index,
+        preferNetwork: false); // prefer file if present
   }
 
   /// On page change (debounced from UI)
@@ -171,7 +187,7 @@ class PreloadBloc extends Cubit<PreloadState> {
       reelsCubit.fetchReels();
     }
 
-    // 1) Focus first: preempt queue and init this index immediately
+    // 1) Focus first
     _unawaited(prioritizedFocusInit(index));
 
     // 2) Triple buffer cache around index, in background
@@ -186,10 +202,10 @@ class PreloadBloc extends Cubit<PreloadState> {
       _disposeControllerAtIndex(index + 2);
     }
 
-    // 4) Preload neighbors sequentially after focus is handled
+    // 4) Preload neighbors sequentially after focus
     _unawaited(preloadVideosAroundIndex(index));
 
-    // 5) Cache ONE more ahead
+    // 5) Cache one more ahead
     final nextIndex = index + 1;
     if (nextIndex < state.urls.length) {
       _unawaited(_ensureRangeCached(nextIndex, nextIndex));
@@ -270,6 +286,44 @@ class PreloadBloc extends Cubit<PreloadState> {
     }
   }
 
+  // -------------------- Disk hydration (cache-first on startup/re-entry) --------------------
+
+  // Must match your isolate’s naming logic exactly
+  String _safeFileNameFromUrl(String url) {
+    final uri = Uri.tryParse(url);
+    final last =
+        uri?.pathSegments.isNotEmpty == true ? uri!.pathSegments.last : 'video.mp4';
+    final sanitized = last.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
+    final hash = url.hashCode.toUnsigned(20).toRadixString(16);
+    final ext = p.extension(sanitized).isNotEmpty ? p.extension(sanitized) : '.mp4';
+    final base = p.basenameWithoutExtension(sanitized);
+    return '${base}_$hash$ext';
+  }
+
+  Future<String> _predictCachedPathForUrl(String url) async {
+    final baseDir = await getTemporaryDirectory(); // SAME as isolate
+    final cacheDir = Directory(p.join(baseDir.path, 'reels_video_cache'));
+    return p.join(cacheDir.path, _safeFileNameFromUrl(url));
+  }
+
+  Future<void> _hydrateCacheFromDisk(List<String> urls) async {
+    if (urls.isEmpty) return;
+    final Map<String, String> additions = {};
+    for (final url in urls) {
+      try {
+        final path = await _predictCachedPathForUrl(url);
+        if (await File(path).exists()) {
+          additions[url] = path;
+        }
+      } catch (_) {}
+    }
+    if (additions.isNotEmpty) {
+      final newMap =
+          Map<String, String>.from(state.cachedPaths)..addAll(additions);
+      emit(state.copyWith(cachedPaths: newMap));
+    }
+  }
+
   // -------------------- Caching --------------------
 
   /// Keep triple buffer cached (index-1..index+1)
@@ -290,7 +344,7 @@ class PreloadBloc extends Cubit<PreloadState> {
         ..addAll(result.urlToPath);
       emit(state.copyWith(cachedPaths: newMap));
 
-      // optional: try swapping non-focused items to cached (quietly)
+      // optional: quietly swap non-focused items to cached
       for (final i in [index - 1, index, index + 1]) {
         if (i < 0 || i >= state.urls.length) continue;
         if (i == state.focusedIndex) continue;
@@ -604,7 +658,8 @@ class PreloadBloc extends Cubit<PreloadState> {
     for (final i in indicesToPreload) {
       final isFocused = (i == state.focusedIndex);
       if (!isFocused) {
-        await _ensureCachedFor(i, timeout: const Duration(milliseconds: 900));
+        await _ensureCachedFor(i,
+            timeout: const Duration(milliseconds: 900));
       }
       try {
         await initializeControllerAtIndex(i, preferNetwork: isFocused);

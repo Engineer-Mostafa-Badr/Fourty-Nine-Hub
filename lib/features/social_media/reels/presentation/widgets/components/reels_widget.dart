@@ -9,7 +9,6 @@ import '../full_screen_widget.dart';
 import 'animated_heart_wiidget.dart';
 import 'custom_progress_bar.dart';
 import '../../pages/reel_actions.dart';
-
 import 'unified_widget_view.dart';
 
 class ReelsWidget extends StatefulWidget {
@@ -65,7 +64,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
         AnimationController(vsync: this, duration: const Duration(seconds: 5))
           ..repeat();
 
-    // Optional: light status bar on reels
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
@@ -111,7 +109,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   @override
   void dispose() {
-    // ensure no ghost audio on unmount
     try {
       if (widget.controller.value.isInitialized &&
           widget.controller.value.isPlaying) {
@@ -129,13 +126,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
     if (_hasAutoPlayed) return;
     _hasAutoPlayed = true;
 
-    // Defer play until the next frame to ensure the texture is attached
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (widget.controller.value.isInitialized) {
         _playVideo();
       } else {
-        // Edge case: if init completes right after this, attach a one-shot listener
         void onInitListener() {
           if (widget.controller.value.isInitialized) {
             widget.controller.removeListener(onInitListener);
@@ -201,15 +196,13 @@ class _ReelsWidgetState extends State<ReelsWidget>
           onDoubleTap: () async {
             final reelCubit = context.read<ReelsCubit>();
             await reelCubit.likeReel(reel.id);
-            // keep your like/unlike counting logic if needed
           },
           child: Stack(
             children: [
-              // 🔑 Rebuild when controller value changes (init -> ready)
+              // Rebuild as controller value changes (init → ready)
               ValueListenableBuilder<VideoPlayerValue>(
                 valueListenable: widget.controller,
                 builder: (context, value, _) {
-                  // kick off first play once when it turns initialized
                   if (value.isInitialized && !_hasAutoPlayed) {
                     _autoPlayOnce();
                   }
@@ -297,7 +290,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                 ),
               ),
 
-              // Extra UI (keep yours)
+              // Extra UI
               Positioned(
                 bottom: MediaQuery.of(context).size.height * 0.5,
                 left: MediaQuery.of(context).size.width * 0.115,

@@ -52,7 +52,7 @@ class ReelsScreenState extends State<ReelsScreen>
     with AutomaticKeepAliveClientMixin {
   bool _didHandleFirstPageChange = false;
 
-  // NEW: page controller + debounce
+  // Page controller + debounce to handle flings
   final _pageController = PageController();
   Timer? _pageChangeDebounce;
 
@@ -112,10 +112,11 @@ class ReelsScreenState extends State<ReelsScreen>
           return Stack(
             children: [
               Positioned.fill(child: Container(color: Colors.black)),
+
               Positioned.fill(
                 child: PageView.builder(
-                  controller: _pageController, // NEW
-                  allowImplicitScrolling: true, // NEW
+                  controller: _pageController,
+                  allowImplicitScrolling: true,
                   scrollDirection: Axis.vertical,
                   itemCount: state.urls.length,
                   onPageChanged: (index) {
@@ -127,7 +128,7 @@ class ReelsScreenState extends State<ReelsScreen>
                       return;
                     }
 
-                    // NEW: debounce rapid flings
+                    // debounce rapid flings
                     _pageChangeDebounce?.cancel();
                     _pageChangeDebounce =
                         Timer(const Duration(milliseconds: 100), () {
@@ -144,7 +145,7 @@ class ReelsScreenState extends State<ReelsScreen>
                     if (controller == null) {
                       if (index == state.focusedIndex) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          b.prioritizedFocusInit(index); // NEW: focus-first
+                          b.prioritizedFocusInit(index); // focus-first
                         });
                       }
                       return _buildVideoLoadingWidget(
@@ -166,6 +167,7 @@ class ReelsScreenState extends State<ReelsScreen>
                   },
                 ),
               ),
+
               const Positioned(
                 top: 57,
                 right: 16,
