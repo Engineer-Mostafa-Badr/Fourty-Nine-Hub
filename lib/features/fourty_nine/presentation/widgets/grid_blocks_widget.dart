@@ -217,7 +217,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          HandleCashback.setCount('beAStarCount', context);
+          HandleCashback.setCount('foodCount', context);
           context.push(Routes.FOOD);
         },
         shadowColor: const Color(0xffFF7F00).withValues(alpha: 0.4),
@@ -280,19 +280,7 @@ class GridBlocksWidget extends StatelessWidget {
         image: Assets.chanceImage,
         title: LocaleKeys.chance.localize,
       ),
-      _buildStarWidget(
-        context,
-        onTap: () {
-          ManageVibration.vibrate();
-          soonDialog(context);
-          // AdInterstitialTop.loadIntersitialAd();
-          // AdInterstitialTop.showInterstitialAd();
-          // context.push(Routes.MARRIAGESUBCATEGORIES);
-        },
-        shadowColor: const Color(0xFF161F68).withValues(alpha: 0.9),
-        image: Assets.bookingImage,
-        title: LocaleKeys.book.localize,
-      ),
+
       _buildStarWidget(
         context,
         onTap: () {

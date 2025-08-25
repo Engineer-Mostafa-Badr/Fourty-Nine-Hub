@@ -232,6 +232,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/pages/chat_home_page.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/controllers/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
@@ -471,1641 +473,1542 @@ class AppPages {
         initialLocation: initialRoute,
         routes: <RouteBase>[
           GoRoute(
-            path: Routes.splash,
-            name: Routes.splash,
-            pageBuilder: (context, state) => customTransition(
-              context,
-              state,
-              const SplashScreen(),
-            ),
-          ),
-          GoRoute(
-            path: Routes.HOME,
-            pageBuilder: (context, state) => customTransition(
-              context,
-              state,
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) => serviceLocator<SliderCubit>(),
+              path: Routes.splash,
+              name: Routes.splash,
+              pageBuilder: (context, state) => customTransition(
+                    context,
+                    state,
+                    const SplashScreen(),
                   ),
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<StarCubit>()..getAllTalent(),
-                  ),
-                  BlocProvider(
-                    create: (context) => serviceLocator<MainCategoriesCubit>()
-                      ..loadData(context),
-                  ),
-                  // BlocProvider(
-                  //   create: (context) => serviceLocator<ThumbnailsCubit>(),
-                  // ),
-                ],
-                child: const FourtyNineView(),
-                // child: const BeStarView(),
-                // child: const GetAllTalents(),
-              ),
-            ),
-            routes: [
-              GoRoute(
-                path: Paths.RIDEHOME,
-                name: Routes.RIDE_HOME,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(
-                        value: serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const RideHome(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                  path: Routes.CUSTOMPAGE,
-                  name: Routes.CUSTOMPAGE,
+              routes: <RouteBase>[
+                GoRoute(
+                  path: Routes.HOME,
                   pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        const CustomPage(),
-                      ),
+                    context,
+                    state,
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) => serviceLocator<SliderCubit>(),
+                        ),
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<StarCubit>()..getAllTalent(),
+                        ),
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<MainCategoriesCubit>()
+                                ..loadData(context),
+                        ),
+                        // BlocProvider(
+                        //   create: (context) => serviceLocator<ThumbnailsCubit>(),
+                        // ),
+                      ],
+                      child: const FourtyNineView(),
+                      // child: const BeStarView(),
+                      // child: const GetAllTalents(),
+                    ),
+                  ),
                   routes: [
                     GoRoute(
-                      path: Paths.PAGEPREVIEW,
-                      name: Routes.PAGEPREVIEW,
+                      path: Paths.RIDEHOME,
+                      name: Routes.RIDE_HOME,
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
                         MultiBlocProvider(
                           providers: [
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<SliderCubit>(),
+                            BlocProvider.value(
+                              value: serviceLocator<RideCubit>(),
                             ),
-                            // BlocProvider(
-                            //   create: (context) =>
-                            //       serviceLocator<ThumbnailsCubit>(),
-                            // ),
                           ],
-                          child: PagePreview(
-                            state: state.extra as dynamic,
-                          ),
+                          child: const RideHome(),
                         ),
                       ),
                     ),
-                  ]),
-              GoRoute(
-                path: Routes.onBoardingScreen,
-                name: Routes.onBoardingScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const OnBoardingScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Routes.ChooseLangScreen,
-                name: Routes.ChooseLangScreen,
-                pageBuilder: (context, state) =>
-                    customTransition(context, state, const ChooseLangScreen()),
-              ),
-              GoRoute(
-                path: Routes.FirstLoginScreen,
-                name: Routes.FirstLoginScreen,
-                pageBuilder: (context, state) =>
-                    customTransition(context, state, FirstLoginScreen()),
-              ),
-              GoRoute(
-                path: Routes.CompleteRegisterWelcomeScreen,
-                name: Routes.CompleteRegisterWelcomeScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  CompleteRegisterWelcomeScreen(
-                    giftMessageEntity: state.extra as String,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RestaurantDashboard,
-                name: Routes.RestaurantDashboard,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<RestaurantDashboardCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<RestaurantsCubit>(),
-                      ),
-                    ],
-                    child: RestaurantDashboardView(payload: state.extra),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.MY_TALENT,
-                name: Routes.MY_TALENT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<StarCubit>(),
-                    child: const MyTalentView(),
-                  ),
-                ),
-              ),
-              // GoRoute(
-              //   path: Paths.RESTAURANTORDERS,
-              //   name: Routes.RESTAURANTORDERS,
-              //  pageBuilder: (context, state) =>
-              //             customTransition(context, state, BlocProvider(
-              //       create: (context) =>
-              //           serviceLocator<RestaurantDashboardCubit>(),
-              //       child: const RestaurantDashboardOrders()),
-              // ),),
-              GoRoute(
-                path: Paths.RIDEACTIVITY,
-                name: Routes.RIDEACTIVITY,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  ActivityTripScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RIDERUNNINGTRIPS,
-                name: Routes.RIDERUNNINGTRIPS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  RunningTripScreen(params: state.extra as RunningTripParams),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RIDEEXPIREDTRIPE,
-                name: Routes.RIDEEXPIREDTRIPE,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  ExpiredTripsScreen(
-                    params: state.extra as ExpiredTripsScreenParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RIDEDETAILSTRIPS,
-                name: Routes.RIDEDETAILSTRIPS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  RideHistoryDetailsScreen(
-                    params: state.extra as RideHistoryDetailsScreenParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.TripReceiptScreen,
-                name: Routes.TripReceiptScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  TripReceiptScreen(
-                    params: state.extra as TripReceiptScreenParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RIDEHISTORYTRIPS,
-                name: Routes.RIDEHISTORYTRIPS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  HistoryTripsScreen(
-                    params: state.extra as HistoryTripsScreenParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
-                name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  RideOpenStreetMapSearchAndPick(
-                    params: state.extra as RideOpenStreetMapSearchAndPickParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.GoogleMapsSearchAndPick,
-                name: Routes.GoogleMapsSearchAndPick,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  RideOpenGoogleMapSearchAndPickScreen(
-                    params: state.extra as RideGoogleMapSearchAndPickParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.EditFoodView,
-                name: Routes.EditFoodView,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(
-                        value: RestaurantMenuCubit(serviceLocator()),
-                      ),
-                      BlocProvider<CreateRestaurantCubit>.value(
-                        value: serviceLocator()..loadData(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<EditFoodCubit>(),
-                      )
-                    ],
-                    child: EditFoodView(
-                      payload: state.extra,
-                    ),
-                  ),
-                ),
-              ),
-              // FLIP CARDS
-              GoRoute(
-                path: Paths.SEARCH,
-                name: Routes.SEARCH,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                      create: (context) => serviceLocator<SearchCubit>(),
-                      child: const SearchView()),
-                ),
-              ),
-              GoRoute(
-                path: Paths.MAINCATEGORIESCARDS,
-                name: Routes.MAINCATEGORIESCARDS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<MainCategoriesCubit>(),
-                    child: MainCategoriesFlipCardsView(
-                      mainCategoriesCardsParams:
-                          state.extra as MainCategoriesCardsParams,
-                    ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.CONTACTS_VIEW,
-                name: Routes.CONTACTSVIEW,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  ContactsView(
-                    contactsViewParams: state.extra as ContactsViewParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.ONETIMEVOICEMESSAGEVIEW,
-                name: Routes.ONETIMEVOICEMESSAGE,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  OneTimeVoiceMessageView(
-                    messageEntity: state.extra as MessageEntity,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.ONETIMEDOCUMENTMESSAGEVIEW,
-                name: Routes.ONETIMEDOCUMENTMESSAGE,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  OneTimeDocumentMessageView(
-                    oneTimeDocumentMessageViewParams:
-                        state.extra as OneTimeDocumentMessageViewParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.FORWARDMESSAGESVIEW,
-                name: Routes.FORWARDMESSAGES,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  ForwardMessagesView(
-                    forwardMessagesViewParams:
-                        state.extra as ForwardMessagesViewParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.ARCHIVEDCHATS,
-                name: Routes.ARCHIVEDCHATS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  OptionsChatsView(
-                    params: state.extra as OptionsChatsViewParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.BROADCAST,
-                name: Routes.BROADCAST,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const BroadcastView(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.IMAGESPAGEVIEW,
-                name: Routes.IMAGESPAGEVIEW,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  ImagesPageView(
-                    params: state.extra as ImagesPageViewParams,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.SHOWIMAGESVIEW,
-                name: Routes.SHOWIMAGEVIEW,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  ShowImagesView(
-                    messageEntity: state.extra as MessageEntity,
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.SEEALLBROADCASTS,
-                name: Routes.SEEALLBROADCASTS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const SeeAllBroadcasts(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.CHATPROFILEVIEW,
-                name: Routes.CHATPROFILEVIEW,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const ChatProfileView(),
-                ),
-              ),
-              //GRID VIEW
-              GoRoute(
-                path: Paths.MAINCATEGORIESTREE,
-                name: Routes.MAINCATEGORIESTREE,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(providers: [
-                    BlocProvider(
-                      create: (context) =>
-                          serviceLocator<MainCategoriesTapsCubit>(),
-                    ),
-                  ], child: const MainCategoriesGridView()),
-                ),
-              ),
-              GoRoute(
-                path: Paths.SUBCATEGORIES,
-                name: Routes.SUBCATEGORIES,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<SubcategoriesCubit>(),
-                    child: SubCategoriesView(
-                      mainCategory: state.extra as MainCategoryEntity,
-                    ),
-                  ),
-                ),
-                routes: [
-                  GoRoute(
-                    path: Paths.ADS,
-                    name: Routes.ADS,
-                    pageBuilder: (context, state) => customTransition(
-                      context,
-                      state,
-                      BlocProvider(
-                        create: (_) => serviceLocator<AdvertisementCubit>(),
-                        child: AdsView(
-                          params: state.extra as AdsViewParams,
-                        ),
-                      ),
-                    ),
-                    routes: [
-                      GoRoute(
-                        path: Paths.ADdetails,
-                        name: Routes.ADdetails,
+                    GoRoute(
+                        path: Routes.CUSTOMPAGE,
+                        name: Routes.CUSTOMPAGE,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              const CustomPage(),
+                            ),
                         routes: [
                           GoRoute(
-                            path: Paths.ADRequests,
-                            name: Routes.ADRequests,
+                            path: Paths.PAGEPREVIEW,
+                            name: Routes.PAGEPREVIEW,
                             pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              BlocProvider<AdRequestsCubit>(
-                                create: (_) => serviceLocator(),
-                                child: AdRequestsView(payload: state.extra),
+                              MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) =>
+                                        serviceLocator<SliderCubit>(),
+                                  ),
+                                  // BlocProvider(
+                                  //   create: (context) =>
+                                  //       serviceLocator<ThumbnailsCubit>(),
+                                  // ),
+                                ],
+                                child: PagePreview(
+                                  state: state.extra as dynamic,
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                        pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            MultiBlocProvider(
-                              providers: [
-                                BlocProvider<AdDetailsCubit>(
-                                  create: (_) => serviceLocator(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      serviceLocator<SubcategoriesCubit>(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      serviceLocator<AdvertisementCubit>(),
-                                ),
-                              ],
-                              child: AdDetailsView(payload: state.extra),
-                            )),
-                      ),
-                      GoRoute(
-                        path: Paths.CREATEAD,
-                        name: Routes.CREATEAD,
-                        pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<CreateAdCubit>(),
-                              child: CreateAdView(
-                                categorization:
-                                    state.extra as CategorizationEntity,
-                              )),
-                        ),
-                      ),
-                      GoRoute(
-                        path: Paths.FILTERADS,
-                        name: Routes.FILTERADS,
-                        pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider.value(
-                            value: serviceLocator<CreateAdCubit>(),
-                            child: FilterAdsView(
-                              filterAdsParams: state.extra as FilterAdsParams,
-                            ),
-                          ),
-                        ),
-                      ),
-                      GoRoute(
-                        path: Paths.GOVERNORATEFILTERADS,
-                        name: Routes.GOVERNORATEFILTERADS,
-                        pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider.value(
-                              value: serviceLocator<CreateAdCubit>(),
-                              child: GovernorateFilterAdsView(
-                                categorization:
-                                    state.extra as CategorizationEntity,
-                              )),
-                        ),
-                      ),
-                      // CreateCompanyAdView
-                      GoRoute(
-                        path: Paths.CREATECOMPANYAD,
-                        name: Routes.CREATECOMPANYAD,
-                        pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          const CreateCompanyAdView(),
-                        ),
-                      ),
-                      GoRoute(
-                        path: Paths.CREATECOMPANYPOSTAD,
-                        name: Routes.CREATECOMPANYPOSTAD,
-                        pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<CreateCompanyAdCubit>(
-                              create: (_) => serviceLocator(),
-                              child: CreatePostCompany(
-                                params: state.extra as CreatePostCompanyParams,
-                              )),
-                        ),
-                      ),
-                      GoRoute(
-                        path: Paths.CREATECOMPANYPOSTREALAD,
-                        name: Routes.CREATECOMPANYPOSTREALAD,
-                        pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<CreateCompanyAdCubit>(
-                              create: (_) => serviceLocator(),
-                              child: CreatePostReelCompany(
-                                totalPrice: state.extra as num,
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              GoRoute(
-                path: Paths.CustomPageSubCategoriesView,
-                name: Routes.CustomPageSubCategoriesView,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider.value(
-                    value: serviceLocator<SubcategoriesCubit>(),
-                    child: CustomPageSubCategoriesView(
-                      params: state.extra as CustomPageSubCategoriesParams,
-                    ),
-                  ),
-                ),
-              ),
-              // GoRoute(
-              //   path: Paths.NavigatorSubCategoriesView,
-              //   name: Routes.NavigatorSubCategoriesView,
-              //  pageBuilder: (context, state) =>
-              //     customTransition(context, state, NavigatorSubCategoriesView(
-              //     mainCategory: state.extra as CustomPageCategoriesEntity,
-              //   ),
-              // ),),
-              GoRoute(
-                path: Paths.MARRIAGESUBCATEGORIES,
-                name: Routes.MARRIAGESUBCATEGORIES,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<SubcategoriesCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<AdvertisementCubit>(),
-                      ),
-                    ],
-                    child: const MarriageSubCategoriesView(
-                        // mainCategory: state.extra as MainCategoryEntity,
-                        ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                name: Routes.LOGIN,
-                path: Paths.LOGIN,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (_) => serviceLocator<LoginCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<VerifyOtpCubit>(),
-                      ),
-                      // BlocProvider(
-                      //   create: (_) => serviceLocator<GetWalletCubit>(),
-                      // ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<UserCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<RegisterCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (_) =>
-                            serviceLocator<WalletCubit>()..loadData(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<GiftCubit>()..loadData(),
-                      ),
-                    ],
-                    child: LoginView(
-                      authType: AuthType.LOGIN,
-                    ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.FORGOTPASSWORD,
-                name: Routes.FORGOTPASSWORD,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<ForgotPasswordCubit>(
-                    create: (_) => serviceLocator(),
-                    child: const EnterEmailForgotPasswordView(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.FORGOTPASSWORDOTP,
-                name: Routes.FORGOTPASSWORDOTP,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider<VerifyForgotPasswordOtpCubit>(
-                        create: (_) => serviceLocator(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<VerifyOtpCubit>(),
-                      ),
-                    ],
-                    child: ForgetPasswordOtpVerificationView(
-                      email: state.extra as String,
-                    ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.CREATENEWFORGOTPASSWORD,
-                name: Routes.CREATENEWFORGOTPASSWORD,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<CreateNewForgotPasswordCubit>(
-                    create: (_) => serviceLocator(),
-                    child: CreateNewForgetPasswordView(
-                      emailOrUserId: state.extra as Map<String, dynamic>,
-                    ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                name: Routes.REGISTER,
-                path: Paths.REGISTER,
-                //pageBuilder: (context, state) =>
-                //  customTransition(context, state, BlocProvider<RegisterCubit>(
-                //   create: (_) => serviceLocator(),
-                //   child:
-                // ),),
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (_) => serviceLocator<LoginCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<VerifyOtpCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<RegisterCubit>(),
-                      ),
-                    ],
-                    child: LoginView(
-                      authType: AuthType.REGISTER,
-                    ),
-                  ),
-                ),
-                routes: [
-                  GoRoute(
-                    name: Routes.VERIFYMAIL,
-                    path: Paths.VERIFYMAIL,
-                    pageBuilder: (context, state) => customTransition(
-                      context,
-                      state,
-                      BlocProvider<VerifyOtpCubit>(
-                        create: (context) => serviceLocator(),
-                        child: RegisterVerifyOTP(
-                          email: state.extra as String,
-                        ),
-                      ),
-                    ),
-                  ),
-                  GoRoute(
-                    name: Routes.registerVerifyPhoneOTP,
-                    path: Paths.registerVerifyPhoneOTP,
-                    pageBuilder: (context, state) => customTransition(
-                      context,
-                      state,
-                      BlocProvider<VerifyOtpCubit>(
-                        create: (context) => serviceLocator(),
-                        child: RegisterVerifyPhoneOTP(
-                          phoneNumber: state.extra as String,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // DriverRegister
-                  GoRoute(
-                    name: Routes.REGISTERDRIVER,
-                    path: Paths.REGISTERDRIVER,
-                    pageBuilder: (context, state) => customTransition(
-                      context,
-                      state,
-                      BlocProvider<DriverRegisterCubit>(
-                        create: (_) => serviceLocator(),
-                        child: DriverRegister(
-                          subCategoryId: state.extra as String,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              GoRoute(
-                name: Routes.LUCKYWHEEL,
-                path: Paths.LUCKYWHEEL,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider<WheelCubit>(
-                        create: (_) => serviceLocator(),
-                      ),
-                      BlocProvider<SpinWheelCubit>(
-                        create: (_) => serviceLocator(),
-                      ),
-                      BlocProvider<WheelWalletCubit>(
-                        create: (_) => serviceLocator(),
-                      ),
-                    ],
-                    child: const LuckyWheelView(),
-                  ),
-                ),
-              ),
-              // CompetitionView
-              GoRoute(
-                name: Routes.COMPETITIONS,
-                path: Paths.COMPETITIONS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const CompetitionView(
-                    list: [],
-                  ),
-                ),
-                routes: const [],
-              ),
-              // PaymentView
-              GoRoute(
-                name: Routes.PAYMENT,
-                path: Paths.PAYMENT,
-                pageBuilder: (context, state) {
-                  final args = state.extra as PaymobLink;
-
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider(
-                        create: (context) {
-                          return serviceLocator<PaymentCubit>()
-                            ..getPaymentProvider()
-                            ..getSavedCards();
-                          // ..getPaymobData(
-                          //     amountId: args.amountId,
-                          //     providerId: args.providerId
-                          // );
-                          // ..chargeWithCard(
-                          //   cardNumber: params.cardNumber,
-                          //   cardExpiryYear: params.cardExpiryYear,
-                          //   cardExpiryMonth: params.cardExpiryMonth,
-                          //   cvv: params.cvv,
-                          //   amountId: params.amountId,
-                          //   providerId: params.providerId,
-                          //   paymentMethod: params.paymentMethod,
-                          // );
-                        },
-                        child: PaymentView(
-                          amountId: args.amountId,
-                          // providerId: args.providerId,
-                          amount: args.amount,
-                        ),
-                      ));
-                },
-                routes: const [],
-              ),
-              // GoRoute(
-              //   path: Paths.WINNERS,
-              //   name: Routes.WINNERS,
-              //  pageBuilder: (context, state) =>
-              //    customTransition(context, state, const Winners(),
-              // ),),
-              GoRoute(
-                path: Paths.WINNERSCASHBACK,
-                name: Routes.WINNERSCASHBACK,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<WinnersCashbackCubit>()
-                      ..getWinners(context),
-                    child: const WinnersCashbackView(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.WINNERSGift,
-                name: Routes.WINNERSGift,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<WinnersGiftCubit>()..getWinners(context),
-                    child: const WinnersGiftView(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.QURAAN,
-                name: Routes.QURAAN,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<QuranCubit>(
-                      create: (_) => serviceLocator(),
-                      child: const QuraanView()),
-                ),
-              ),
-              GoRoute(
-                path: Paths.AZKAAR,
-                name: Routes.AZKAAR,
-                routes: [
-                  GoRoute(
-                    path: Paths.AZKAARDETAILS,
-                    name: Routes.AZKAARDETAILS,
-                    pageBuilder: (context, state) => customTransition(
+                        ]),
+                    GoRoute(
+                      path: Routes.onBoardingScreen,
+                      name: Routes.onBoardingScreen,
+                      pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<AzkarCubit>(
-                          create: (_) => serviceLocator(),
-                          child: AzkarDetails(
-                            category: state.extra as String,
-                          ),
-                        )),
-                  ),
-                ],
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    BlocProvider<AzkarCubit>(
-                      create: (_) => serviceLocator(),
-                      child: const AzkarView(),
-                    )),
-              ),
-
-              // WalletView
-              GoRoute(
-                  path: Paths.WALLET,
-                  name: Routes.WALLET,
-                  pageBuilder: (context, state) => customTransition(
+                        const OnBoardingScreen(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Routes.ChooseLangScreen,
+                      name: Routes.ChooseLangScreen,
+                      pageBuilder: (context, state) => customTransition(
+                          context, state, const ChooseLangScreen()),
+                    ),
+                    GoRoute(
+                      path: Routes.FirstLoginScreen,
+                      name: Routes.FirstLoginScreen,
+                      pageBuilder: (context, state) =>
+                          customTransition(context, state, FirstLoginScreen()),
+                    ),
+                    GoRoute(
+                      path: Routes.CompleteRegisterWelcomeScreen,
+                      name: Routes.CompleteRegisterWelcomeScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        CompleteRegisterWelcomeScreen(
+                          giftMessageEntity: state.extra as String,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.RestaurantDashboard,
+                      name: Routes.RestaurantDashboard,
+                      pageBuilder: (context, state) => customTransition(
                         context,
                         state,
                         MultiBlocProvider(
                           providers: [
                             BlocProvider(
-                              create: (_) => serviceLocator<WalletTwoCubit>()
-                                ..getAllDataWalletScreen(context),
+                              create: (context) =>
+                                  serviceLocator<RestaurantDashboardCubit>(),
                             ),
                             BlocProvider(
-                              create: (_) =>
-                                  serviceLocator<SubscriptionWalletCubit>(),
+                              create: (context) =>
+                                  serviceLocator<RestaurantsCubit>(),
                             ),
                           ],
-                          child: const WalletView(
-                              // type: state.extra as WalletTypes,
-                              ),
+                          child: RestaurantDashboardView(payload: state.extra),
                         ),
                       ),
-                  routes: [
+                    ),
+                    // GoRoute(
+                    //   path: Paths.MY_TALENT,
+                    //   name: Routes.MY_TALENT,
+                    //   pageBuilder: (context, state) => customTransition(
+                    //     context,
+                    //     state,
+                    //     BlocProvider(
+                    //       create: (context) => serviceLocator<StarCubit>(),
+                    //       child: const MyTalentView(),
+                    //     ),
+                    //   ),
+                    // ),
+                    // GoRoute(
+                    //   path: Paths.RESTAURANTORDERS,
+                    //   name: Routes.RESTAURANTORDERS,
+                    //  pageBuilder: (context, state) =>
+                    //             customTransition(context, state, BlocProvider(
+                    //       create: (context) =>
+                    //           serviceLocator<RestaurantDashboardCubit>(),
+                    //       child: const RestaurantDashboardOrders()),
+                    // ),),
                     GoRoute(
-                        path: Paths.WALLETHISTORY,
-                        name: Routes.WALLETHISTORY,
-                        pageBuilder: (context, state) {
-                          final item = state.extra as List<WalletHistoryEntity>;
-                          return customTransition(
-                              context,
-                              state,
-                              WalletHistory(
-                                list: item,
-                              ));
-                        }),
-                    GoRoute(
-                      path: Paths.TRANSFERMONEY,
-                      name: Routes.TRANSFERMONEY,
+                      path: Paths.RIDEACTIVITY,
+                      name: Routes.RIDEACTIVITY,
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        const TransferMoneyView(),
+                        ActivityTripScreen(),
                       ),
                     ),
-                  ]),
-
-              // CashBack
-              GoRoute(
-                path: Paths.CASHBACK,
-                name: Routes.CASHBACK,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const CashbackView(),
-                ),
-              ),
-
-              GoRoute(
-                path: Paths.BALANCE,
-                name: Routes.BALANCE,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<BalanceCubit>(
-                    create: (_) => serviceLocator(),
-                    child: const BalanceWalletView(),
-                  ),
-                ),
-              ),
-
-              // Gift
-              GoRoute(
-                path: Paths.GIFT,
-                name: Routes.GIFT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const GiftView(),
-                ),
-              ),
-              // GoRoute(
-              //   path: Paths.GIFT,
-              //   name: Routes.GIFT,
-              //  pageBuilder: (context, state) =>
-              //    customTransition(context, state, BlocProvider<WalletCubit>(
-              //     create: (_) => serviceLocator(),
-              //     child: const GiftWalletView(),
-              //   ),
-              // ),),
-
-              // Winners
-              // GoRoute(
-              //   path: Paths.WINNERS,
-              //   name: Routes.WINNERS,
-              //  pageBuilder: (context, state) =>
-              //       customTransition(context, state, GiftView(),
-              // ),),
-
-              // Change Password
-              GoRoute(
-                path: Paths.CHANGEPASSWORD,
-                name: Routes.CHANGEPASSWORD,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const ChangePasswordView(),
-                ),
-              ),
-
-              GoRoute(
-                path: Paths.CHANGEPASSWORDSECOND,
-                name: Routes.CHANGEPASSWORDSECOND,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const ChangePasswordSecondView(),
-                ),
-              ),
-
-              GoRoute(
-                path: Paths.VERIFICATION,
-                name: Routes.VERIFICATION,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<ForgotPasswordCubit>(),
-                    child: VerificationView(
-                      questions: state.extra as ForgetPasswordQuestionsEntity,
+                    GoRoute(
+                      path: Paths.RIDERUNNINGTRIPS,
+                      name: Routes.RIDERUNNINGTRIPS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        RunningTripScreen(
+                            params: state.extra as RunningTripParams),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-
-              GoRoute(
-                  path: Paths.ACCOUNT,
-                  name: Routes.ACCOUNT,
-                  pageBuilder: (context, state) => customTransition(
+                    GoRoute(
+                      path: Paths.RIDEEXPIREDTRIPE,
+                      name: Routes.RIDEEXPIREDTRIPE,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        ExpiredTripsScreen(
+                          params: state.extra as ExpiredTripsScreenParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.RIDEDETAILSTRIPS,
+                      name: Routes.RIDEDETAILSTRIPS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        RideHistoryDetailsScreen(
+                          params: state.extra as RideHistoryDetailsScreenParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.TripReceiptScreen,
+                      name: Routes.TripReceiptScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        TripReceiptScreen(
+                          params: state.extra as TripReceiptScreenParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.RIDEHISTORYTRIPS,
+                      name: Routes.RIDEHISTORYTRIPS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        HistoryTripsScreen(
+                          params: state.extra as HistoryTripsScreenParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
+                      name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        RideOpenStreetMapSearchAndPick(
+                          params: state.extra
+                              as RideOpenStreetMapSearchAndPickParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.GoogleMapsSearchAndPick,
+                      name: Routes.GoogleMapsSearchAndPick,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        RideOpenGoogleMapSearchAndPickScreen(
+                          params:
+                              state.extra as RideGoogleMapSearchAndPickParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.EditFoodView,
+                      name: Routes.EditFoodView,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: RestaurantMenuCubit(serviceLocator()),
+                            ),
+                            BlocProvider<CreateRestaurantCubit>.value(
+                              value: serviceLocator()..loadData(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<EditFoodCubit>(),
+                            )
+                          ],
+                          child: EditFoodView(
+                            payload: state.extra,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // FLIP CARDS
+                    GoRoute(
+                      path: Paths.SEARCH,
+                      name: Routes.SEARCH,
+                      pageBuilder: (context, state) => customTransition(
                         context,
                         state,
                         BlocProvider(
-                            create: (context) =>
-                                serviceLocator<NotificationSeenCubit>(),
-                            child: const NotificationView()),
+                            create: (context) => serviceLocator<SearchCubit>(),
+                            child: const SearchView()),
                       ),
-                  routes: [
-                    // GoRoute(
-                    //   path: Paths.NOTIFICATIONS,
-                    //   name: Routes.NOTIFICATIONS,
-                    //  pageBuilder: (context, state) =>
-                    // customTransition(context, state, MultiBlocProvider(
-                    //     providers: [
-                    //       BlocProvider<GetAppNotificationsCubit>(
-                    //         create: (context) =>
-                    //             serviceLocator<GetAppNotificationsCubit>(),
-                    //       ),
-                    //       BlocProvider<GetStatusAllServicesNotificationsCubit>(
-                    //         create: (context) => serviceLocator<
-                    //             GetStatusAllServicesNotificationsCubit>(),
-                    //       ),
-                    //       BlocProvider<GetSocialNotificationsCubit>(
-                    //         create: (context) => GetSocialNotificationsCubit(
-                    //           getNotficationsUseCase: serviceLocator(),
-                    //           context: context,
-                    //         ),
-                    //       ),
-                    //       BlocProvider<GetServicesNotificationsCubit>(
-                    //         create: (context) => GetServicesNotificationsCubit(
-                    //           getNotficationsUseCase: serviceLocator(),
-                    //           context: context,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //     child: const NotificationView(),
-                    //   ),
-                    // ),),
+                    ),
                     GoRoute(
-                      path: Paths.NOTIFICATIONS,
-                      name: Routes.NOTIFICATIONS,
+                      path: Paths.MAINCATEGORIESCARDS,
+                      name: Routes.MAINCATEGORIESCARDS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<MainCategoriesCubit>(),
+                          child: MainCategoriesFlipCardsView(
+                            mainCategoriesCardsParams:
+                                state.extra as MainCategoriesCardsParams,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.CONTACTS_VIEW,
+                      name: Routes.CONTACTSVIEW,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        ContactsView(
+                          contactsViewParams: state.extra as ContactsViewParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.ONETIMEVOICEMESSAGEVIEW,
+                      name: Routes.ONETIMEVOICEMESSAGE,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        OneTimeVoiceMessageView(
+                          messageEntity: state.extra as MessageEntity,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.ONETIMEDOCUMENTMESSAGEVIEW,
+                      name: Routes.ONETIMEDOCUMENTMESSAGE,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        OneTimeDocumentMessageView(
+                          oneTimeDocumentMessageViewParams:
+                              state.extra as OneTimeDocumentMessageViewParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.FORWARDMESSAGESVIEW,
+                      name: Routes.FORWARDMESSAGES,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        ForwardMessagesView(
+                          forwardMessagesViewParams:
+                              state.extra as ForwardMessagesViewParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.ARCHIVEDCHATS,
+                      name: Routes.ARCHIVEDCHATS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        OptionsChatsView(
+                          params: state.extra as OptionsChatsViewParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.BROADCAST,
+                      name: Routes.BROADCAST,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const BroadcastView(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.IMAGESPAGEVIEW,
+                      name: Routes.IMAGESPAGEVIEW,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        ImagesPageView(
+                          params: state.extra as ImagesPageViewParams,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.SHOWIMAGESVIEW,
+                      name: Routes.SHOWIMAGEVIEW,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        ShowImagesView(
+                          messageEntity: state.extra as MessageEntity,
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.SEEALLBROADCASTS,
+                      name: Routes.SEEALLBROADCASTS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const SeeAllBroadcasts(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.CHATPROFILEVIEW,
+                      name: Routes.CHATPROFILEVIEW,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const ChatProfileView(),
+                      ),
+                    ),
+                    //GRID VIEW
+                    GoRoute(
+                      path: Paths.MAINCATEGORIESTREE,
+                      name: Routes.MAINCATEGORIESTREE,
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
                         MultiBlocProvider(providers: [
                           BlocProvider(
                             create: (context) =>
-                                serviceLocator<NotificationSeenCubit>(),
+                                serviceLocator<MainCategoriesTapsCubit>(),
                           ),
-                          BlocProvider(
-                            create: (context) =>
-                                serviceLocator<AllNotficationsSeenCubit>(),
-                          ),
-                          BlocProvider(
-                            create: (context) =>
-                                serviceLocator<DeleteNotificationCubit>(),
-                          ),
-                          BlocProvider(
-                            create: (context) =>
-                                serviceLocator<DeleteAllNotificationsCubit>(),
-                          ),
-                        ], child: const NotificationView()),
+                        ], child: const MainCategoriesGridView()),
                       ),
                     ),
                     GoRoute(
-                      path: Paths.SETTINGS,
-                      name: Routes.SETTINGS,
-                      pageBuilder: (context, state) => customTransition(
-                          context, state, const SettingsView()),
-                    ),
-                    GoRoute(
-                      path: Paths.PRIVACY,
-                      name: Routes.PRIVACY,
-                      pageBuilder: (context, state) =>
-                          customTransition(context, state, PrivacyView()),
-                    ),
-                    GoRoute(
-                      path: Paths.POLICY,
-                      name: Routes.POLICY,
-                      pageBuilder: (context, state) => customTransition(context,
-                          state, PolicyView(fromTerms: state.extra as bool)),
-                    ),
-                    GoRoute(
-                      path: Paths.Lists,
-                      name: Routes.Lists,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<ListsCubit>(
-                            create: (_) => serviceLocator()..loadFriends(''),
-                            child: const ListsView(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.SHAREAPP,
-                      name: Routes.SHAREAPP,
-                      //
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<ShareAppCubit>(
-                            create: (_) =>
-                                serviceLocator<ShareAppCubit>()..shareApp(),
-                            child: const ShareTheApp(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.FAVOURITE,
-                      name: Routes.FAVOURITE,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider.value(
-                              value: serviceLocator<FavouriteDrawerCubit>(),
-                              child: const FavouriteView())),
-                    ),
-                    GoRoute(
-                      path: Paths.FAVOURITECATEGORIES,
-                      name: Routes.FAVOURITECATEGORIES,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<FavouriteCategoryCubit>(
-                            create: (_) => serviceLocator(),
-                            child: const FavouriteCategoryView(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.FAVOURITESUBCATEGORIES,
-                      name: Routes.FAVOURITESUBCATEGORIES,
+                      path: Paths.SUBCATEGORIES,
+                      name: Routes.SUBCATEGORIES,
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<FavouriteSubCategoryCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const FavSubCategoryView(),
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<SubcategoriesCubit>(),
+                          child: SubCategoriesView(
+                            mainCategory: state.extra as MainCategoryEntity,
+                          ),
                         ),
                       ),
-                    ),
-                    GoRoute(
-                      path: Paths.MYADDS,
-                      name: Routes.MYADDS,
                       routes: [
                         GoRoute(
-                            path: Paths.EDITAD,
-                            name: Routes.EDITAD,
-                            pageBuilder: (context, state) => customTransition(
+                          path: Paths.ADS,
+                          name: Routes.ADS,
+                          pageBuilder: (context, state) => customTransition(
+                            context,
+                            state,
+                            BlocProvider(
+                              create: (_) =>
+                                  serviceLocator<AdvertisementCubit>(),
+                              child: AdsView(
+                                params: state.extra as AdsViewParams,
+                              ),
+                            ),
+                          ),
+                          routes: [
+                            GoRoute(
+                              path: Paths.ADdetails,
+                              name: Routes.ADdetails,
+                              routes: [
+                                GoRoute(
+                                  path: Paths.ADRequests,
+                                  name: Routes.ADRequests,
+                                  pageBuilder: (context, state) =>
+                                      customTransition(
+                                    context,
+                                    state,
+                                    BlocProvider<AdRequestsCubit>(
+                                      create: (_) => serviceLocator(),
+                                      child:
+                                          AdRequestsView(payload: state.extra),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              pageBuilder: (context, state) => customTransition(
+                                  context,
+                                  state,
+                                  MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider<AdDetailsCubit>(
+                                        create: (_) => serviceLocator(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => serviceLocator<
+                                            SubcategoriesCubit>(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => serviceLocator<
+                                            AdvertisementCubit>(),
+                                      ),
+                                    ],
+                                    child: AdDetailsView(payload: state.extra),
+                                  )),
+                            ),
+                            GoRoute(
+                              path: Paths.CREATEAD,
+                              name: Routes.CREATEAD,
+                              pageBuilder: (context, state) => customTransition(
                                 context,
                                 state,
-                                BlocProvider<CreateAdCubit>(
-                                  create: (_) => serviceLocator(),
-                                  child: EditMyAds(
-                                    categorization:
-                                        state.extra as MyAuctionAdsEntity,
+                                BlocProvider(
+                                    create: (context) =>
+                                        serviceLocator<CreateAdCubit>(),
+                                    child: CreateAdView(
+                                      categorization:
+                                          state.extra as CategorizationEntity,
+                                    )),
+                              ),
+                            ),
+                            GoRoute(
+                              path: Paths.FILTERADS,
+                              name: Routes.FILTERADS,
+                              pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider.value(
+                                  value: serviceLocator<CreateAdCubit>(),
+                                  child: FilterAdsView(
+                                    filterAdsParams:
+                                        state.extra as FilterAdsParams,
                                   ),
-                                ))),
-                      ],
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<MyAddsCubit>(
-                            create: (_) => serviceLocator(),
-                            child: const MyAddsView(),
-                          )),
-                    ),
-                  ]),
-
-              GoRoute(
-                path: Paths.ADDSTORYINSTAGRAM,
-                name: Routes.ADDSTORYINSTAGRAM,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const AddStoryView(),
-                ),
-              ),
-
-              GoRoute(
-                path: Paths.TAGUSER,
-                name: Routes.TAGUSER,
-                pageBuilder: (context, state) {
-                  final cubit = state.extra as CreatePostInstagramCubit;
-                  return customTransition(
-                      context,
-                      state,
-                      MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (context) =>
-                                serviceLocator<TagUsersCubit>(),
-                          ),
-                          BlocProvider.value(
-                            value: cubit,
-                          ),
-                        ],
-                        child: const TagUserView(),
-                      ));
-                },
-              ),
-              GoRoute(
-                path: Paths.INSTAGRAMADDLOCATION,
-                name: Routes.INSTAGRAMADDLOCATION,
-                pageBuilder: (context, state) {
-                  final cubit = state.extra as CreatePostInstagramCubit;
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (context) =>
-                              serviceLocator<InstagramAddLocationCubit>(),
-                        ),
-                        BlocProvider.value(
-                          value: cubit,
-                        ),
-                      ],
-                      child: const InstagramAddLocationView(),
-                    ),
-                  );
-                },
-              ),
-
-              GoRoute(
-                path: Paths.INSTAGRAMADDMUSIC,
-                name: Routes.INSTAGRAMADDMUSIC,
-                pageBuilder: (context, state) {
-                  final cubit = state.extra as CreatePostInstagramCubit;
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<InstagramAddMusicCubit>(),
-                      ),
-                      BlocProvider.value(
-                        value: cubit,
-                      ),
-                    ], child: const InstagramAddMusicView()),
-                  );
-                },
-              ),
-
-              GoRoute(
-                path: Paths.INSTAGRAMPROFILE,
-                name: Routes.INSTAGRAMPROFILE,
-                pageBuilder: (context, state) {
-                  final String? id = state.extra as String?;
-                  return customTransition(
-                    context,
-                    state,
-                    BlocProvider.value(
-                      value: serviceLocator<ProfileInstagramCubit>()
-                        ..getUserProfile(userId: id ?? ''),
-                      child: ProfileInstagramView(
-                        userId: id ?? '',
-                      ),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.FOLLOWREQUESTSINSTAGRAM,
-                name: Routes.FOLLOWREQUESTSINSTAGRAM,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    BlocProvider(
-                      create: (_) =>
-                          serviceLocator<FollowRequestsInstagramCubit>()
-                            ..fetchInitialData(),
-                      child: const FollowRequestsInstagramView(),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.SINGLEPOSTINSTAGRAM,
-                name: Routes.SINGLEPOSTINSTAGRAM,
-                pageBuilder: (context, state) {
-                  final String postId = state.extra as String;
-
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<SinglePostInstagramCubit>()
-                              ..getPost(postId),
-                        child: SinglePostInstagramView(
-                          postId: postId,
-                        ),
-                      ));
-                },
-              ),
-              GoRoute(
-                path: Paths.CREATEPOSTINSTAGRAM,
-                name: Routes.CREATEPOSTINSTAGRAM,
-                routes: [
-                  GoRoute(
-                    path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
-                    name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                    pageBuilder: (context, state) {
-                      final CreatePostInstagramCubit cubit =
-                          state.extra as CreatePostInstagramCubit;
-                      return customTransition(
-                          context,
-                          state,
-                          BlocProvider.value(
-                            value: cubit,
-                            child: const CreatePostSecondPageInstagramView(
-                                // selectedImages: state.extra as List<Future<File?>>,
                                 ),
-                          ));
-                    },
-                  ),
-                ],
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const CreatePostInstagramView(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.InstagramSuggestPeople,
-                name: Routes.InstagramSuggestPeople,
-                routes: const [],
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<InstagramCubit>(
-                    create: (_) => serviceLocator(),
-                    child: const InstagramAllDiscoverPeople(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.followersScreen,
-                name: Routes.followersScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<InstagramCubit>(
-                    create: (_) => serviceLocator(),
-                    child: FollowersScreen(
-                      args: state.extra as FollowersScreenArguments,
-                    ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.INSTAGRAMCOMMENT,
-                name: Routes.INSTAGRAMCOMMENT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  CommentInstagramView(
-                    postId: state.extra as String,
-                  ),
-                ),
-              ),
-
-              GoRoute(
-                path: Paths.INSTAGRAM,
-                name: Routes.INSTAGRAM,
-                // routes: [
-                //   GoRoute(
-                //     path: Paths.INSTAGRAMPROFILE,
-                //     name: Routes.INSTAGRAMPROFILE,
-                //    pageBuilder: (context, state) {
-                //       final String? id = state.extra as String?;
-                //
-                //       return BlocProvider<ProfileInstagramCubit>(
-                //         create: (_) => serviceLocator<ProfileInstagramCubit>()
-                //           ..getUserProfile(id: id ?? ''),
-                //         child: const ProfileInstagramView(),
-                //       );
-                //     },
-                //   ),
-                //   GoRoute(
-                //     path: Paths.CREATEPOSTINSTAGRAM,
-                //     name: Routes.CREATEPOSTINSTAGRAM,
-                //     routes: [
-                //       GoRoute(
-                //         path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
-                //         name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                //        pageBuilder: (context, state) =>
-                //     customTransition(context, state,
-                //             CreatePostSecondPageInstagramView(
-                //                 // selectedImages: state.extra as List<Future<File?>>,
-                //                 ),
-                //       ),),
-                //     ],
-                //    pageBuilder: (context, state) =>
-                //     customTransition(context, state,
-                //         const CreatePostInstagramView(),
-                //   ),),
-                //   GoRoute(
-                //     path: Paths.InstagramSuggestPeople,
-                //     name: Routes.InstagramSuggestPeople,
-                //     routes: const [],
-                //    pageBuilder: (context, state) =>
-                //     customTransition(context, state, BlocProvider<InstagramCubit>(
-                //       create: (_) => serviceLocator(),
-                //       child: const InstagramAllDiscoverPeople(),
-                //     ),
-                //   ),),
-                //   GoRoute(
-                //     path: Paths.INSTAGRAMCOMMENT,
-                //     name: Routes.INSTAGRAMCOMMENT,
-                //    pageBuilder: (context, state) =>
-                //     customTransition(context, state, CommentInstagramView(
-                //       postId: state.extra as String,
-                //     ),
-                //   ),),
-                // ],
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<InstagramCubit>()..loadData(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<StoryCubit>(),
-                      ),
-                      // BlocProvider(
-                      //   create: (context) => CreatePostInstagramCubit(
-                      //       repository: serviceLocator()),
-                      // ),
-                      BlocProvider(
-                        create: (context) => GetPostsInstagramCubit(
-                            getPostsUseCase: serviceLocator()),
-                      ),
-                    ],
-                    child: const InstagramView(),
-                  ),
-                ),
-              ),
-
-              //social home
-              GoRoute(
-                path: Paths.POSTDETAILS,
-                name: Routes.POSTDETAILS,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider<SocialPostsCubit>(
-                        create: (_) {
-                          return serviceLocator();
-                        },
-                        child: FaceBookPostDetails(
-                          payload: state.extra as dynamic,
+                              ),
+                            ),
+                            GoRoute(
+                              path: Paths.GOVERNORATEFILTERADS,
+                              name: Routes.GOVERNORATEFILTERADS,
+                              pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider.value(
+                                    value: serviceLocator<CreateAdCubit>(),
+                                    child: GovernorateFilterAdsView(
+                                      categorization:
+                                          state.extra as CategorizationEntity,
+                                    )),
+                              ),
+                            ),
+                            // CreateCompanyAdView
+                            GoRoute(
+                              path: Paths.CREATECOMPANYAD,
+                              name: Routes.CREATECOMPANYAD,
+                              pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                const CreateCompanyAdView(),
+                              ),
+                            ),
+                            GoRoute(
+                              path: Paths.CREATECOMPANYPOSTAD,
+                              name: Routes.CREATECOMPANYPOSTAD,
+                              pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<CreateCompanyAdCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: CreatePostCompany(
+                                      params: state.extra
+                                          as CreatePostCompanyParams,
+                                    )),
+                              ),
+                            ),
+                            GoRoute(
+                              path: Paths.CREATECOMPANYPOSTREALAD,
+                              name: Routes.CREATECOMPANYPOSTREALAD,
+                              pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<CreateCompanyAdCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: CreatePostReelCompany(
+                                      totalPrice: state.extra as num,
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
-                      ));
-                },
-              ),
-              GoRoute(
-                  path: Paths.SOCIAL,
-                  name: Routes.SOCIAL,
-                  pageBuilder: (context, state) {
-                    final params = state.extra as dynamic;
-                    return customTransition(
+                      ],
+                    ),
+                    GoRoute(
+                      path: Paths.CustomPageSubCategoriesView,
+                      name: Routes.CustomPageSubCategoriesView,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider.value(
+                          value: serviceLocator<SubcategoriesCubit>(),
+                          child: CustomPageSubCategoriesView(
+                            params:
+                                state.extra as CustomPageSubCategoriesParams,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // GoRoute(
+                    //   path: Paths.NavigatorSubCategoriesView,
+                    //   name: Routes.NavigatorSubCategoriesView,
+                    //  pageBuilder: (context, state) =>
+                    //     customTransition(context, state, NavigatorSubCategoriesView(
+                    //     mainCategory: state.extra as CustomPageCategoriesEntity,
+                    //   ),
+                    // ),),
+                    GoRoute(
+                      path: Paths.MARRIAGESUBCATEGORIES,
+                      name: Routes.MARRIAGESUBCATEGORIES,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<SubcategoriesCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<AdvertisementCubit>(),
+                            ),
+                          ],
+                          child: const MarriageSubCategoriesView(
+                              // mainCategory: state.extra as MainCategoryEntity,
+                              ),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      name: Routes.LOGIN,
+                      path: Paths.LOGIN,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) => serviceLocator<LoginCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<VerifyOtpCubit>(),
+                            ),
+                            // BlocProvider(
+                            //   create: (_) => serviceLocator<GetWalletCubit>(),
+                            // ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<UserCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<RegisterCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  serviceLocator<WalletCubit>()..loadData(),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  serviceLocator<GiftCubit>()..loadData(),
+                            ),
+                          ],
+                          child: LoginView(
+                            authType: AuthType.LOGIN,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.FORGOTPASSWORD,
+                      name: Routes.FORGOTPASSWORD,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<ForgotPasswordCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const EnterEmailForgotPasswordView(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.FORGOTPASSWORDOTP,
+                      name: Routes.FORGOTPASSWORDOTP,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider<VerifyForgotPasswordOtpCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<VerifyOtpCubit>(),
+                            ),
+                          ],
+                          child: ForgetPasswordOtpVerificationView(
+                            email: state.extra as String,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.CREATENEWFORGOTPASSWORD,
+                      name: Routes.CREATENEWFORGOTPASSWORD,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<CreateNewForgotPasswordCubit>(
+                          create: (_) => serviceLocator(),
+                          child: CreateNewForgetPasswordView(
+                            emailOrUserId: state.extra as Map<String, dynamic>,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      name: Routes.REGISTER,
+                      path: Paths.REGISTER,
+                      //pageBuilder: (context, state) =>
+                      //  customTransition(context, state, BlocProvider<RegisterCubit>(
+                      //   create: (_) => serviceLocator(),
+                      //   child:
+                      // ),),
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) => serviceLocator<LoginCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<VerifyOtpCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<RegisterCubit>(),
+                            ),
+                          ],
+                          child: LoginView(
+                            authType: AuthType.REGISTER,
+                          ),
+                        ),
+                      ),
+                      routes: [
+                        GoRoute(
+                          name: Routes.VERIFYMAIL,
+                          path: Paths.VERIFYMAIL,
+                          pageBuilder: (context, state) => customTransition(
+                            context,
+                            state,
+                            BlocProvider<VerifyOtpCubit>(
+                              create: (context) => serviceLocator(),
+                              child: RegisterVerifyOTP(
+                                email: state.extra as String,
+                              ),
+                            ),
+                          ),
+                        ),
+                        GoRoute(
+                          name: Routes.registerVerifyPhoneOTP,
+                          path: Paths.registerVerifyPhoneOTP,
+                          pageBuilder: (context, state) => customTransition(
+                            context,
+                            state,
+                            BlocProvider<VerifyOtpCubit>(
+                              create: (context) => serviceLocator(),
+                              child: RegisterVerifyPhoneOTP(
+                                phoneNumber: state.extra as String,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // DriverRegister
+                        GoRoute(
+                          name: Routes.REGISTERDRIVER,
+                          path: Paths.REGISTERDRIVER,
+                          pageBuilder: (context, state) => customTransition(
+                            context,
+                            state,
+                            BlocProvider<DriverRegisterCubit>(
+                              create: (_) => serviceLocator(),
+                              child: DriverRegister(
+                                subCategoryId: state.extra as String,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    GoRoute(
+                      name: Routes.LUCKYWHEEL,
+                      path: Paths.LUCKYWHEEL,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider<WheelCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            BlocProvider<SpinWheelCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            BlocProvider<WheelWalletCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                          ],
+                          child: const LuckyWheelView(),
+                        ),
+                      ),
+                    ),
+                    // CompetitionView
+                    GoRoute(
+                      name: Routes.COMPETITIONS,
+                      path: Paths.COMPETITIONS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const CompetitionView(
+                          list: [],
+                        ),
+                      ),
+                      routes: const [],
+                    ),
+                    // PaymentView
+                    GoRoute(
+                      name: Routes.PAYMENT,
+                      path: Paths.PAYMENT,
+                      pageBuilder: (context, state) {
+                        final args = state.extra as PaymobLink;
+
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider(
+                              create: (context) {
+                                return serviceLocator<PaymentCubit>()
+                                  ..getPaymentProvider()
+                                  ..getSavedCards();
+                                // ..getPaymobData(
+                                //     amountId: args.amountId,
+                                //     providerId: args.providerId
+                                // );
+                                // ..chargeWithCard(
+                                //   cardNumber: params.cardNumber,
+                                //   cardExpiryYear: params.cardExpiryYear,
+                                //   cardExpiryMonth: params.cardExpiryMonth,
+                                //   cvv: params.cvv,
+                                //   amountId: params.amountId,
+                                //   providerId: params.providerId,
+                                //   paymentMethod: params.paymentMethod,
+                                // );
+                              },
+                              child: PaymentView(
+                                amountId: args.amountId,
+                                // providerId: args.providerId,
+                                amount: args.amount,
+                              ),
+                            ));
+                      },
+                      routes: const [],
+                    ),
+                    // GoRoute(
+                    //   path: Paths.WINNERS,
+                    //   name: Routes.WINNERS,
+                    //  pageBuilder: (context, state) =>
+                    //    customTransition(context, state, const Winners(),
+                    // ),),
+                    GoRoute(
+                      path: Paths.WINNERSCASHBACK,
+                      name: Routes.WINNERSCASHBACK,
+                      pageBuilder: (context, state) => customTransition(
                         context,
                         state,
                         BlocProvider(
                           create: (context) =>
-                              serviceLocator<SocialPostsCubit>()..loadData(),
-                          child: SocialHomeView(
-                            payload: params ??
-                                SocialParams(
-                                    userId: '', index: 0, hideAppBar: false),
-                          ),
-                        ));
-                  },
-                  routes: [
-                    GoRoute(
-                      path: Paths.CREATEPOST,
-                      name: Routes.CREATEPOST,
-                      pageBuilder: (context, state) => customTransition(
-                          context, state, const CreatePostView()),
-                    ),
-                    GoRoute(
-                      path: Paths.LIFEEVENT,
-                      name: Routes.LIFEEVENT,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        const LifeEvent(),
+                              serviceLocator<WinnersCashbackCubit>()
+                                ..getWinners(context),
+                          child: const WinnersCashbackView(),
+                        ),
                       ),
                     ),
                     GoRoute(
-                      path: Paths.LIFEEVENTSub,
-                      name: Routes.LIFEEVENTSub,
+                      path: Paths.WINNERSGift,
+                      name: Routes.WINNERSGift,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<WinnersGiftCubit>()
+                                ..getWinners(context),
+                          child: const WinnersGiftView(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.QURAAN,
+                      name: Routes.QURAAN,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<QuranCubit>(
+                            create: (_) => serviceLocator(),
+                            child: const QuraanView()),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.AZKAAR,
+                      name: Routes.AZKAAR,
+                      routes: [
+                        GoRoute(
+                          path: Paths.AZKAARDETAILS,
+                          name: Routes.AZKAARDETAILS,
+                          pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<AzkarCubit>(
+                                create: (_) => serviceLocator(),
+                                child: AzkarDetails(
+                                  category: state.extra as String,
+                                ),
+                              )),
+                        ),
+                      ],
                       pageBuilder: (context, state) => customTransition(
                           context,
                           state,
-                          LifeEventSubCategories(
-                            lifeEvent: state.extra as LifeEventEntity,
+                          BlocProvider<AzkarCubit>(
+                            create: (_) => serviceLocator(),
+                            child: const AzkarView(),
                           )),
                     ),
-                    GoRoute(
-                      path: Paths.CREATELIFEEVENT,
-                      name: Routes.CREATELIFEEVENT,
-                      pageBuilder: (context, state) {
-                        return customTransition(
-                            context,
-                            state,
-                            CreateLifeEvent(
-                              lifeEventData: state.extra as LifeEventEntity,
-                            ));
-                      },
-                    ),
-                    GoRoute(
-                      path: Paths.FacebookSuggestPeople,
-                      name: Routes.FacebookSuggestPeople,
-                      pageBuilder: (context, state) {
-                        // final social = state.extra as String?;
 
-                        return customTransition(
-                            context,
-                            state,
-                            BlocProvider<SocialPostsCubit>(
-                              create: (_) => serviceLocator(),
-                              child: const FacebookSuggestedPeople(),
-                            ));
-                      },
-                    ),
+                    // WalletView
                     GoRoute(
-                        path: Paths.TWITTER,
-                        name: Routes.TWITTER,
+                        path: Paths.WALLET,
+                        name: Routes.WALLET,
                         pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              const Twitter11(),
+                              MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (_) =>
+                                        serviceLocator<WalletTwoCubit>()
+                                          ..getAllDataWalletScreen(context),
+                                  ),
+                                  BlocProvider(
+                                    create: (_) => serviceLocator<
+                                        SubscriptionWalletCubit>(),
+                                  ),
+                                ],
+                                child: const WalletView(
+                                    // type: state.extra as WalletTypes,
+                                    ),
+                              ),
                             ),
-                        routes: const []),
-                    GoRoute(
-                      path: Paths.TWITTERPOSTDETAILS,
-                      name: Routes.TWITTERPOSTDETAILS,
-                      pageBuilder: (context, state) {
-                        // state.extra can be null / String / Map – pass it through as-is
-                        final dynamic payload = state.extra;
+                        routes: [
+                          GoRoute(
+                              path: Paths.WALLETHISTORY,
+                              name: Routes.WALLETHISTORY,
+                              pageBuilder: (context, state) {
+                                final item =
+                                    state.extra as List<WalletHistoryEntity>;
+                                return customTransition(
+                                    context,
+                                    state,
+                                    WalletHistory(
+                                      list: item,
+                                    ));
+                              }),
+                          GoRoute(
+                            path: Paths.TRANSFERMONEY,
+                            name: Routes.TRANSFERMONEY,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              const TransferMoneyView(),
+                            ),
+                          ),
+                        ]),
 
+                    // CashBack
+                    GoRoute(
+                      path: Paths.CASHBACK,
+                      name: Routes.CASHBACK,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const CashbackView(),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.BALANCE,
+                      name: Routes.BALANCE,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<BalanceCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const BalanceWalletView(),
+                        ),
+                      ),
+                    ),
+
+                    // Gift
+                    GoRoute(
+                      path: Paths.GIFT,
+                      name: Routes.GIFT,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const GiftView(),
+                      ),
+                    ),
+                    // GoRoute(
+                    //   path: Paths.GIFT,
+                    //   name: Routes.GIFT,
+                    //  pageBuilder: (context, state) =>
+                    //    customTransition(context, state, BlocProvider<WalletCubit>(
+                    //     create: (_) => serviceLocator(),
+                    //     child: const GiftWalletView(),
+                    //   ),
+                    // ),),
+
+                    // Winners
+                    // GoRoute(
+                    //   path: Paths.WINNERS,
+                    //   name: Routes.WINNERS,
+                    //  pageBuilder: (context, state) =>
+                    //       customTransition(context, state, GiftView(),
+                    // ),),
+
+                    // Change Password
+                    GoRoute(
+                      path: Paths.CHANGEPASSWORD,
+                      name: Routes.CHANGEPASSWORD,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const ChangePasswordView(),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.CHANGEPASSWORDSECOND,
+                      name: Routes.CHANGEPASSWORDSECOND,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const ChangePasswordSecondView(),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.VERIFICATION,
+                      name: Routes.VERIFICATION,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<ForgotPasswordCubit>(),
+                          child: VerificationView(
+                            questions:
+                                state.extra as ForgetPasswordQuestionsEntity,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    GoRoute(
+                        path: Paths.ACCOUNT,
+                        name: Routes.ACCOUNT,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider(
+                                  create: (context) =>
+                                      serviceLocator<NotificationSeenCubit>(),
+                                  child: const NotificationView()),
+                            ),
+                        routes: [
+                          // GoRoute(
+                          //   path: Paths.NOTIFICATIONS,
+                          //   name: Routes.NOTIFICATIONS,
+                          //  pageBuilder: (context, state) =>
+                          // customTransition(context, state, MultiBlocProvider(
+                          //     providers: [
+                          //       BlocProvider<GetAppNotificationsCubit>(
+                          //         create: (context) =>
+                          //             serviceLocator<GetAppNotificationsCubit>(),
+                          //       ),
+                          //       BlocProvider<GetStatusAllServicesNotificationsCubit>(
+                          //         create: (context) => serviceLocator<
+                          //             GetStatusAllServicesNotificationsCubit>(),
+                          //       ),
+                          //       BlocProvider<GetSocialNotificationsCubit>(
+                          //         create: (context) => GetSocialNotificationsCubit(
+                          //           getNotficationsUseCase: serviceLocator(),
+                          //           context: context,
+                          //         ),
+                          //       ),
+                          //       BlocProvider<GetServicesNotificationsCubit>(
+                          //         create: (context) => GetServicesNotificationsCubit(
+                          //           getNotficationsUseCase: serviceLocator(),
+                          //           context: context,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //     child: const NotificationView(),
+                          //   ),
+                          // ),),
+                          GoRoute(
+                            path: Paths.NOTIFICATIONS,
+                            name: Routes.NOTIFICATIONS,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              MultiBlocProvider(providers: [
+                                BlocProvider(
+                                  create: (context) =>
+                                      serviceLocator<NotificationSeenCubit>(),
+                                ),
+                                BlocProvider(
+                                  create: (context) => serviceLocator<
+                                      AllNotficationsSeenCubit>(),
+                                ),
+                                BlocProvider(
+                                  create: (context) =>
+                                      serviceLocator<DeleteNotificationCubit>(),
+                                ),
+                                BlocProvider(
+                                  create: (context) => serviceLocator<
+                                      DeleteAllNotificationsCubit>(),
+                                ),
+                              ], child: const NotificationView()),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.SETTINGS,
+                            name: Routes.SETTINGS,
+                            pageBuilder: (context, state) => customTransition(
+                                context, state, const SettingsView()),
+                          ),
+                          GoRoute(
+                            path: Paths.PRIVACY,
+                            name: Routes.PRIVACY,
+                            pageBuilder: (context, state) =>
+                                customTransition(context, state, PrivacyView()),
+                          ),
+                          GoRoute(
+                            path: Paths.POLICY,
+                            name: Routes.POLICY,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                PolicyView(fromTerms: state.extra as bool)),
+                          ),
+                          GoRoute(
+                            path: Paths.Lists,
+                            name: Routes.Lists,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<ListsCubit>(
+                                  create: (_) =>
+                                      serviceLocator()..loadFriends(''),
+                                  child: const ListsView(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.SHAREAPP,
+                            name: Routes.SHAREAPP,
+                            //
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<ShareAppCubit>(
+                                  create: (_) => serviceLocator<ShareAppCubit>()
+                                    ..shareApp(),
+                                  child: const ShareTheApp(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.FAVOURITE,
+                            name: Routes.FAVOURITE,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider.value(
+                                    value:
+                                        serviceLocator<FavouriteDrawerCubit>(),
+                                    child: const FavouriteView())),
+                          ),
+                          GoRoute(
+                            path: Paths.FAVOURITECATEGORIES,
+                            name: Routes.FAVOURITECATEGORIES,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<FavouriteCategoryCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: const FavouriteCategoryView(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.FAVOURITESUBCATEGORIES,
+                            name: Routes.FAVOURITESUBCATEGORIES,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<FavouriteSubCategoryCubit>(
+                                create: (_) => serviceLocator(),
+                                child: const FavSubCategoryView(),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.MYADDS,
+                            name: Routes.MYADDS,
+                            routes: [
+                              GoRoute(
+                                  path: Paths.EDITAD,
+                                  name: Routes.EDITAD,
+                                  pageBuilder: (context, state) =>
+                                      customTransition(
+                                          context,
+                                          state,
+                                          BlocProvider<CreateAdCubit>(
+                                            create: (_) => serviceLocator(),
+                                            child: EditMyAds(
+                                              categorization: state.extra
+                                                  as MyAuctionAdsEntity,
+                                            ),
+                                          ))),
+                            ],
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<MyAddsCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: const MyAddsView(),
+                                )),
+                          ),
+                        ]),
+
+                    GoRoute(
+                      path: Paths.ADDSTORYINSTAGRAM,
+                      name: Routes.ADDSTORYINSTAGRAM,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const AddStoryView(),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.TAGUSER,
+                      name: Routes.TAGUSER,
+                      pageBuilder: (context, state) {
+                        final cubit = state.extra as CreatePostInstagramCubit;
+                        return customTransition(
+                            context,
+                            state,
+                            MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                  create: (context) =>
+                                      serviceLocator<TagUsersCubit>(),
+                                ),
+                                BlocProvider.value(
+                                  value: cubit,
+                                ),
+                              ],
+                              child: const TagUserView(),
+                            ));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.INSTAGRAMADDLOCATION,
+                      name: Routes.INSTAGRAMADDLOCATION,
+                      pageBuilder: (context, state) {
+                        final cubit = state.extra as CreatePostInstagramCubit;
                         return customTransition(
                           context,
                           state,
-                          BlocProvider<TwitterCubit>(
-                            create: (_) => serviceLocator<TwitterCubit>(),
-                            child: TwitterPostDetailsNotify.fromPayload(payload: payload),
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<InstagramAddLocationCubit>(),
+                              ),
+                              BlocProvider.value(
+                                value: cubit,
+                              ),
+                            ],
+                            child: const InstagramAddLocationView(),
+                          ),
+                        );
+                      },
+                    ),
+
+                    GoRoute(
+                      path: Paths.INSTAGRAMADDMUSIC,
+                      name: Routes.INSTAGRAMADDMUSIC,
+                      pageBuilder: (context, state) {
+                        final cubit = state.extra as CreatePostInstagramCubit;
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<InstagramAddMusicCubit>(),
+                            ),
+                            BlocProvider.value(
+                              value: cubit,
+                            ),
+                          ], child: const InstagramAddMusicView()),
+                        );
+                      },
+                    ),
+
+                    GoRoute(
+                      path: Paths.INSTAGRAMPROFILE,
+                      name: Routes.INSTAGRAMPROFILE,
+                      pageBuilder: (context, state) {
+                        final String? id = state.extra as String?;
+                        return customTransition(
+                          context,
+                          state,
+                          BlocProvider.value(
+                            value: serviceLocator<ProfileInstagramCubit>()
+                              ..getUserProfile(userId: id ?? ''),
+                            child: ProfileInstagramView(
+                              userId: id ?? '',
+                            ),
                           ),
                         );
                       },
                     ),
                     GoRoute(
-                        path: Paths.OTHERSACCOUNT,
-                        name: Routes.OTHERSACCOUNT,
-                        pageBuilder: (context, state) {
-                          return customTransition(
-                              context,
-                              state,
-                              BlocProvider<SocialPostsCubit>(
-                                  create: (_) => serviceLocator(),
-                                  child: OtherAccountView(
-                                    payload: state.extra,
-                                  )));
-                        },
-                        routes: [
-                          GoRoute(
-                            path: Paths.EDITPROFILE,
-                            name: Routes.EDITPROFILE,
-                            pageBuilder: (context, state) => customTransition(
-                              context,
-                              state,
-                              BlocProvider<EditProfileCubit>(
-                                  create: (_) =>
-                                      serviceLocator<EditProfileCubit>()
-                                        ..fetchRideGovernorates(),
-                                  child: const EditProfileView()),
-                            ),
+                      path: Paths.FOLLOWREQUESTSINSTAGRAM,
+                      name: Routes.FOLLOWREQUESTSINSTAGRAM,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          BlocProvider(
+                            create: (_) =>
+                                serviceLocator<FollowRequestsInstagramCubit>()
+                                  ..fetchInitialData(),
+                            child: const FollowRequestsInstagramView(),
                           ),
-                        ]),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.SINGLEPOSTINSTAGRAM,
+                      name: Routes.SINGLEPOSTINSTAGRAM,
+                      pageBuilder: (context, state) {
+                        final String postId = state.extra as String;
+
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<SinglePostInstagramCubit>()
+                                    ..getPost(postId),
+                              child: SinglePostInstagramView(
+                                postId: postId,
+                              ),
+                            ));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.CREATEPOSTINSTAGRAM,
+                      name: Routes.CREATEPOSTINSTAGRAM,
+                      routes: [
+                        GoRoute(
+                          path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                          name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                          pageBuilder: (context, state) {
+                            final CreatePostInstagramCubit cubit =
+                                state.extra as CreatePostInstagramCubit;
+                            return customTransition(
+                                context,
+                                state,
+                                BlocProvider.value(
+                                  value: cubit,
+                                  child: const CreatePostSecondPageInstagramView(
+                                      // selectedImages: state.extra as List<Future<File?>>,
+                                      ),
+                                ));
+                          },
+                        ),
+                      ],
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const CreatePostInstagramView(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.InstagramSuggestPeople,
+                      name: Routes.InstagramSuggestPeople,
+                      routes: const [],
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<InstagramCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const InstagramAllDiscoverPeople(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.followersScreen,
+                      name: Routes.followersScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<InstagramCubit>(
+                          create: (_) => serviceLocator(),
+                          child: FollowersScreen(
+                            args: state.extra as FollowersScreenArguments,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.INSTAGRAMCOMMENT,
+                      name: Routes.INSTAGRAMCOMMENT,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        CommentInstagramView(
+                          postId: state.extra as String,
+                        ),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.INSTAGRAM,
+                      name: Routes.INSTAGRAM,
+                      // routes: [
+                      //   GoRoute(
+                      //     path: Paths.INSTAGRAMPROFILE,
+                      //     name: Routes.INSTAGRAMPROFILE,
+                      //    pageBuilder: (context, state) {
+                      //       final String? id = state.extra as String?;
+                      //
+                      //       return BlocProvider<ProfileInstagramCubit>(
+                      //         create: (_) => serviceLocator<ProfileInstagramCubit>()
+                      //           ..getUserProfile(id: id ?? ''),
+                      //         child: const ProfileInstagramView(),
+                      //       );
+                      //     },
+                      //   ),
+                      //   GoRoute(
+                      //     path: Paths.CREATEPOSTINSTAGRAM,
+                      //     name: Routes.CREATEPOSTINSTAGRAM,
+                      //     routes: [
+                      //       GoRoute(
+                      //         path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                      //         name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                      //        pageBuilder: (context, state) =>
+                      //     customTransition(context, state,
+                      //             CreatePostSecondPageInstagramView(
+                      //                 // selectedImages: state.extra as List<Future<File?>>,
+                      //                 ),
+                      //       ),),
+                      //     ],
+                      //    pageBuilder: (context, state) =>
+                      //     customTransition(context, state,
+                      //         const CreatePostInstagramView(),
+                      //   ),),
+                      //   GoRoute(
+                      //     path: Paths.InstagramSuggestPeople,
+                      //     name: Routes.InstagramSuggestPeople,
+                      //     routes: const [],
+                      //    pageBuilder: (context, state) =>
+                      //     customTransition(context, state, BlocProvider<InstagramCubit>(
+                      //       create: (_) => serviceLocator(),
+                      //       child: const InstagramAllDiscoverPeople(),
+                      //     ),
+                      //   ),),
+                      //   GoRoute(
+                      //     path: Paths.INSTAGRAMCOMMENT,
+                      //     name: Routes.INSTAGRAMCOMMENT,
+                      //    pageBuilder: (context, state) =>
+                      //     customTransition(context, state, CommentInstagramView(
+                      //       postId: state.extra as String,
+                      //     ),
+                      //   ),),
+                      // ],
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<InstagramCubit>()..loadData(),
+                            ),
+                            BlocProvider(
+                              create: (context) => serviceLocator<StoryCubit>(),
+                            ),
+                            // BlocProvider(
+                            //   create: (context) => CreatePostInstagramCubit(
+                            //       repository: serviceLocator()),
+                            // ),
+                            BlocProvider(
+                              create: (context) => GetPostsInstagramCubit(
+                                  getPostsUseCase: serviceLocator()),
+                            ),
+                          ],
+                          child: const InstagramView(),
+                        ),
+                      ),
+                    ),
+
+                    //social home
+                    GoRoute(
+                      path: Paths.POSTDETAILS,
+                      name: Routes.POSTDETAILS,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider<SocialPostsCubit>(
+                              create: (_) {
+                                return serviceLocator();
+                              },
+                              child: FaceBookPostDetails(
+                                payload: state.extra as dynamic,
+                              ),
+                            ));
+                      },
+                    ),
                     GoRoute(
                       path: Paths.REELS,
                       name: Routes.REELS,
@@ -2132,723 +2035,781 @@ class AppPages {
                         ),
                       ],
                     ),
+
                     GoRoute(
-                      path: Paths.TINDER,
-                      name: Routes.Tinder,
+                        path: Paths.SOCIAL,
+                        name: Routes.SOCIAL,
+                        pageBuilder: (context, state) {
+                          final params = state.extra as dynamic;
+                          return customTransition(
+                              context,
+                              state,
+                              BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<SocialPostsCubit>()
+                                      ..loadData(),
+                                child: SocialHomeView(
+                                  payload: params ??
+                                      SocialParams(
+                                          userId: '',
+                                          index: 0,
+                                          hideAppBar: false),
+                                ),
+                              ));
+                        },
+                        routes: [
+                          GoRoute(
+                            path: Paths.CREATEPOST,
+                            name: Routes.CREATEPOST,
+                            pageBuilder: (context, state) => customTransition(
+                                context, state, const CreatePostView()),
+                          ),
+                          GoRoute(
+                            path: Paths.LIFEEVENT,
+                            name: Routes.LIFEEVENT,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              const LifeEvent(),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.LIFEEVENTSub,
+                            name: Routes.LIFEEVENTSub,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                LifeEventSubCategories(
+                                  lifeEvent: state.extra as LifeEventEntity,
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.CREATELIFEEVENT,
+                            name: Routes.CREATELIFEEVENT,
+                            pageBuilder: (context, state) {
+                              return customTransition(
+                                  context,
+                                  state,
+                                  CreateLifeEvent(
+                                    lifeEventData:
+                                        state.extra as LifeEventEntity,
+                                  ));
+                            },
+                          ),
+                          GoRoute(
+                            path: Paths.FacebookSuggestPeople,
+                            name: Routes.FacebookSuggestPeople,
+                            pageBuilder: (context, state) {
+                              // final social = state.extra as String?;
+
+                              return customTransition(
+                                  context,
+                                  state,
+                                  BlocProvider<SocialPostsCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: const FacebookSuggestedPeople(),
+                                  ));
+                            },
+                          ),
+                          GoRoute(
+                              path: Paths.TWITTER,
+                              name: Routes.TWITTER,
+                              pageBuilder: (context, state) => customTransition(
+                                    context,
+                                    state,
+                                    const Twitter11(),
+                                  ),
+                              routes: const []),
+                          GoRoute(
+                            path: Paths.TWITTERPOSTDETAILS,
+                            name: Routes.TWITTERPOSTDETAILS,
+                            pageBuilder: (context, state) {
+                              // state.extra can be null / String / Map – pass it through as-is
+                              final dynamic payload = state.extra;
+
+                              return customTransition(
+                                context,
+                                state,
+                                BlocProvider<TwitterCubit>(
+                                  create: (_) => serviceLocator<TwitterCubit>(),
+                                  child: TwitterPostDetailsNotify.fromPayload(
+                                      payload: payload),
+                                ),
+                              );
+                            },
+                          ),
+                          GoRoute(
+                              path: Paths.OTHERSACCOUNT,
+                              name: Routes.OTHERSACCOUNT,
+                              pageBuilder: (context, state) {
+                                return customTransition(
+                                    context,
+                                    state,
+                                    BlocProvider<SocialPostsCubit>(
+                                        create: (_) => serviceLocator(),
+                                        child: OtherAccountView(
+                                          payload: state.extra,
+                                        )));
+                              },
+                              routes: [
+                                GoRoute(
+                                  path: Paths.EDITPROFILE,
+                                  name: Routes.EDITPROFILE,
+                                  pageBuilder: (context, state) =>
+                                      customTransition(
+                                    context,
+                                    state,
+                                    BlocProvider<EditProfileCubit>(
+                                        create: (_) =>
+                                            serviceLocator<EditProfileCubit>()
+                                              ..fetchRideGovernorates(),
+                                        child: const EditProfileView()),
+                                  ),
+                                ),
+                              ]),
+                          GoRoute(
+                            path: Paths.TINDER,
+                            name: Routes.Tinder,
+                            pageBuilder: (context, state) => customTransition(
+                                context, state, const TinderView()),
+                          ),
+                          GoRoute(
+                            path: Paths.UserProfilePage,
+                            name: Routes.UserProfilePage,
+                            pageBuilder: (context, state) => customTransition(
+                                context, state, const UserProfilePage()),
+                          ),
+                          GoRoute(
+                            path: Paths.FindMyProfileScreen,
+                            name: Routes.FindMyProfileScreen,
+                            pageBuilder: (context, state) => customTransition(
+                                context, state, const FindMyProfileScreen()),
+                          ),
+                          GoRoute(
+                            path: Paths.EditProfileTinder,
+                            name: Routes.EditProfileTinder,
+                            pageBuilder: (context, state) => customTransition(
+                                context, state, const EditProfileTinder()),
+                          ),
+                          GoRoute(
+                              path: Paths.LIVE,
+                              name: Routes.LIVE,
+                              pageBuilder: (context, state) => customTransition(
+                                    context,
+                                    state,
+                                    MultiBlocProvider(
+                                      providers: [
+                                        //club voice
+                                        BlocProvider<ClubVoiceCubit>(
+                                          create: (context) =>
+                                              serviceLocator()..loadData(),
+                                          child: const ClubHouseHome(),
+                                        ),
+                                      ],
+                                      child: const LiveStreamHomeScreen(),
+                                    ),
+                                  ),
+                              routes: [
+                                GoRoute(
+                                    path: Paths.LIVEVIEW,
+                                    name: Routes.LIVEView,
+                                    pageBuilder: (context, state) {
+                                      var extras = state.extra as ZegoArgs;
+                                      return customTransition(
+                                          context,
+                                          state,
+                                          LiveStreamView(
+                                            isHost: extras.isHost,
+                                            liveID: extras.liveId,
+                                          ));
+                                    }),
+
+                                // ClubHouseHome
+
+                                GoRoute(
+                                  path: Paths.CLUBHOUSEROOM,
+                                  name: Routes.AUDIOSTREAMSCREEN,
+                                  pageBuilder: (context, state) {
+                                    final extras = state.extra as RoomArgs;
+                                    return customTransition(
+                                        context,
+                                        state,
+                                        AudioStreamScreen(
+                                          liveId: extras.liveId,
+                                          roomSubject: extras.subject,
+                                          isHost: extras.isHost,
+                                        ));
+                                  },
+                                  routes: const [],
+                                ),
+                              ]),
+                        ]),
+                    GoRoute(
+                      path: Paths.Married,
+                      name: Routes.Married,
                       pageBuilder: (context, state) =>
-                          customTransition(context, state, const TinderView()),
+                          customTransition(context, state, const MarriedView()),
                     ),
+                    // MazadatView
                     GoRoute(
-                      path: Paths.UserProfilePage,
-                      name: Routes.UserProfilePage,
+                        path: Paths.MAZADAT,
+                        name: Routes.MAZADAT,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<AuctionListCubit>(
+                                  child: const MazadatView(),
+                                  create: (_) => serviceLocator()),
+                            ),
+                        routes: [
+                          GoRoute(
+                            path: Paths.MAZADDETAILS,
+                            name: Routes.MAZADDETAILS,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<AuctionDetailsCubit>(
+                                create: (_) => serviceLocator(),
+                                child: MazadDetails(id: state.extra as String),
+                              ),
+                            ),
+                          ),
+                          // CreateAuctionView
+                          GoRoute(
+                            path: Paths.CREATEAUCTION,
+                            name: Routes.CREATEAUCTION,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider.value(
+                                  value: serviceLocator<CreateAuctionCubit>(),
+                                  child: CreateAuctionView(
+                                    adId: state.extra as String,
+                                  ),
+                                )),
+                          ),
+                          // OtherAccountView
+                        ]),
+
+                    // ChatView
+                    GoRoute(
+                      path: Paths.CHAT,
+                      name: Routes.CHAT,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const UserProfilePage()),
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider<ChatsCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            // BlocProvider(
+                            //   create: (context) => serviceLocator<ChatRoomCubit>(),
+                            // ),
+                          ],
+                          child: ChatView(
+                              chatsViewParams: state.extra as ChatsViewParams),
+                        ),
+                      ),
                     ),
+
+                    // Chat Home
                     GoRoute(
-                      path: Paths.FindMyProfileScreen,
-                      name: Routes.FindMyProfileScreen,
+                      path: Paths.CHAT_HOME,
+                      name: Routes.CHAT_HOME,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const FindMyProfileScreen()),
+                        context,
+                        state,
+                        BlocProvider<ChatCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const ChatHomePage(),
+                        ),
+                      ),
                     ),
+
+                    // Chat Room
                     GoRoute(
-                      path: Paths.EditProfileTinder,
-                      name: Routes.EditProfileTinder,
+                        path: Paths.CHATROOM,
+                        name: Routes.CHATROOM,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              ChatRoomView(
+                                  chatsCubit: state.extra as ChatsCubit),
+                            ),
+                        routes: [
+                          GoRoute(
+                            path: Paths.CHATROOMCAMERAPICKER,
+                            name: Routes.CHATROOMCAMERAPICKER,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              CameraPickerView(
+                                prams: state.extra as CameraPickerViewPrams,
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.MEDIASLIDER,
+                            name: Routes.MEDIASLIDER,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              MediaSliderView(
+                                  chatRoomCubit:
+                                      (state.extra) as ChatRoomCubit),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.VIEWCONTACT,
+                            name: Routes.VIEWCONTACT,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              ViewContactView(
+                                chatsCubit: state.extra as ChatsCubit,
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.ATTACHMENTSVIEW,
+                            name: Routes.ATTACHMENTSVIEW,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              AttachementsView(
+                                chatRoomCubit: state.extra as ChatRoomCubit,
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.SELECTCONTACTSTOSHARE,
+                            name: Routes.SELECTCONTACTSTOSHARE,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              SelectContactsToShareView(
+                                chatRoomCubit: state.extra as ChatRoomCubit,
+                              ),
+                            ),
+                          ),
+                        ]),
+                    // Snap
+
+                    GoRoute(
+                      path: Paths.SNAP,
+                      name: Routes.SNAP,
+                      pageBuilder: (context, state) =>
+                          customTransition(context, state, const SnapView()),
+                    ),
+                    // Spotlight
+                    GoRoute(
+                      path: Paths.SPOTLIGHT,
+                      name: Routes.SPOTLIGHT,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const EditProfileTinder()),
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                  create: (context) =>
+                                      serviceLocator<ReelsCubit>()),
+                              BlocProvider<StoryCubit>(
+                                create: (_) => serviceLocator<StoryCubit>(),
+                              ),
+                            ],
+                            child: const SpotlightView(),
+                          )),
                     ),
+                    // _________________ services ____________
+
                     GoRoute(
-                        path: Paths.LIVE,
-                        name: Routes.LIVE,
+                        path: Paths.VISITA,
+                        name: Routes.VISITA,
                         pageBuilder: (context, state) => customTransition(
                               context,
                               state,
                               MultiBlocProvider(
                                 providers: [
-                                  //club voice
-                                  BlocProvider<ClubVoiceCubit>(
+                                  BlocProvider<HealthCubit>(
+                                    create: (_) => serviceLocator<HealthCubit>()
+                                      ..loadData(),
+                                  ),
+                                  BlocProvider(
                                     create: (context) =>
-                                        serviceLocator()..loadData(),
-                                    child: const ClubHouseHome(),
+                                        serviceLocator<SubcategoriesCubit>(),
                                   ),
                                 ],
-                                child: const LiveStreamHomeScreen(),
+                                child: const HealthView(),
                               ),
                             ),
                         routes: [
                           GoRoute(
-                              path: Paths.LIVEVIEW,
-                              name: Routes.LIVEView,
-                              pageBuilder: (context, state) {
-                                var extras = state.extra as ZegoArgs;
-                                return customTransition(
-                                    context,
-                                    state,
-                                    LiveStreamView(
-                                      isHost: extras.isHost,
-                                      liveID: extras.liveId,
-                                    ));
-                              }),
-
-                          // ClubHouseHome
-
+                            path: Paths.CREATERESTURANT,
+                            name: Routes.CREATERESTURANT,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<CreateResturantCubit>(
+                                create: (context) => serviceLocator(),
+                                child: const CreateResturantView(),
+                              ),
+                            ),
+                          ),
                           GoRoute(
-                            path: Paths.CLUBHOUSEROOM,
-                            name: Routes.AUDIOSTREAMSCREEN,
-                            pageBuilder: (context, state) {
-                              final extras = state.extra as RoomArgs;
-                              return customTransition(
-                                  context,
-                                  state,
-                                  AudioStreamScreen(
-                                    liveId: extras.liveId,
-                                    roomSubject: extras.subject,
-                                    isHost: extras.isHost,
-                                  ));
-                            },
-                            routes: const [],
-                          ),
-                        ]),
-                  ]),
-              GoRoute(
-                path: Paths.Married,
-                name: Routes.Married,
-                pageBuilder: (context, state) =>
-                    customTransition(context, state, const MarriedView()),
-              ),
-              // MazadatView
-              GoRoute(
-                  path: Paths.MAZADAT,
-                  name: Routes.MAZADAT,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<AuctionListCubit>(
-                            child: const MazadatView(),
-                            create: (_) => serviceLocator()),
-                      ),
-                  routes: [
-                    GoRoute(
-                      path: Paths.MAZADDETAILS,
-                      name: Routes.MAZADDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<AuctionDetailsCubit>(
-                          create: (_) => serviceLocator(),
-                          child: MazadDetails(id: state.extra as String),
-                        ),
-                      ),
-                    ),
-                    // CreateAuctionView
-                    GoRoute(
-                      path: Paths.CREATEAUCTION,
-                      name: Routes.CREATEAUCTION,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider.value(
-                            value: serviceLocator<CreateAuctionCubit>(),
-                            child: CreateAuctionView(
-                              adId: state.extra as String,
-                            ),
-                          )),
-                    ),
-                    // OtherAccountView
-                  ]),
-
-              // ChatView
-              GoRoute(
-                path: Paths.CHAT,
-                name: Routes.CHAT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider<ChatsCubit>(
-                        create: (_) => serviceLocator(),
-                      ),
-                      // BlocProvider(
-                      //   create: (context) => serviceLocator<ChatRoomCubit>(),
-                      // ),
-                    ],
-                    child: ChatView(
-                        chatsViewParams: state.extra as ChatsViewParams),
-                  ),
-                ),
-              ),
-
-              // Chat Room
-              GoRoute(
-                  path: Paths.CHATROOM,
-                  name: Routes.CHATROOM,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        ChatRoomView(chatsCubit: state.extra as ChatsCubit),
-                      ),
-                  routes: [
-                    GoRoute(
-                      path: Paths.CHATROOMCAMERAPICKER,
-                      name: Routes.CHATROOMCAMERAPICKER,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        CameraPickerView(
-                          prams: state.extra as CameraPickerViewPrams,
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.MEDIASLIDER,
-                      name: Routes.MEDIASLIDER,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        MediaSliderView(
-                            chatRoomCubit: (state.extra) as ChatRoomCubit),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.VIEWCONTACT,
-                      name: Routes.VIEWCONTACT,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        ViewContactView(
-                          chatsCubit: state.extra as ChatsCubit,
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.ATTACHMENTSVIEW,
-                      name: Routes.ATTACHMENTSVIEW,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        AttachementsView(
-                          chatRoomCubit: state.extra as ChatRoomCubit,
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.SELECTCONTACTSTOSHARE,
-                      name: Routes.SELECTCONTACTSTOSHARE,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        SelectContactsToShareView(
-                          chatRoomCubit: state.extra as ChatRoomCubit,
-                        ),
-                      ),
-                    ),
-                  ]),
-              // Snap
-
-              GoRoute(
-                path: Paths.SNAP,
-                name: Routes.SNAP,
-                pageBuilder: (context, state) =>
-                    customTransition(context, state, const SnapView()),
-              ),
-              // Spotlight
-              GoRoute(
-                path: Paths.SPOTLIGHT,
-                name: Routes.SPOTLIGHT,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                            create: (context) => serviceLocator<ReelsCubit>()),
-                        BlocProvider<StoryCubit>(
-                          create: (_) => serviceLocator<StoryCubit>(),
-                        ),
-                      ],
-                      child: const SpotlightView(),
-                    )),
-              ),
-              // _________________ services ____________
-
-              GoRoute(
-                  path: Paths.VISITA,
-                  name: Routes.VISITA,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        MultiBlocProvider(
-                          providers: [
-                            BlocProvider<HealthCubit>(
-                              create: (_) =>
-                                  serviceLocator<HealthCubit>()..loadData(),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<SubcategoriesCubit>(),
-                            ),
-                          ],
-                          child: const HealthView(),
-                        ),
-                      ),
-                  routes: [
-                    GoRoute(
-                      path: Paths.CREATERESTURANT,
-                      name: Routes.CREATERESTURANT,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<CreateResturantCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const CreateResturantView(),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.VISITAEMERGENCY,
-                      name: Routes.VISITAEMERGENCY,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<HealthEmergencyCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const HealthEmergencyView(),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.EMERGENCYREQUESTS,
-                      name: Routes.EMERGENCYREQUESTS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<EmergencyRequestsCubit>(
-                          create: (context) => serviceLocator(),
-                          child: EmergencyRequestsView(
-                            subCategoryId: state.extra as String,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.ALLAPPOINTMENTS,
-                      name: Routes.ALLAPPOINTMENTS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<AllAppointmentsCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const AllAppointmentsView(),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.CREATEDOCTOR,
-                      name: Routes.CREATEDOCTOR,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<CreateDoctorCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const CreateDoctorView(),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.FILTERDOCTORSUBCATEGORY,
-                      name: Routes.FILTERDOCTORSUBCATEGORY,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<DoctorSubcategoryFilterCubit>(
-                          create: (context) => serviceLocator(),
-                          child: DoctorSubcategoryFilterView(
-                            type: state.extra as String,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.FILTERDOCTORGOVERNORATE,
-                      name: Routes.FILTERDOCTORGOVERNORATE,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<DoctorGovernorateFilterCubit>(
-                          create: (context) => serviceLocator(),
-                          child: DoctorGovernorateFilterView(
-                            type: state.extra as String,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.FILTERDOCTORCITY,
-                      name: Routes.FILTERDOCTORCITY,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<DoctorCityFilterCubit>(
-                          create: (context) => serviceLocator(),
-                          child: DoctorCityFilterView(
-                            type: state.extra as String,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                      path: Paths.VISITADOCTORLIST,
-                      name: Routes.VISITADOCTORLIST,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<DoctorsListCubit>(
-                          // BlocProvider<HealthCubit>(
-                          create: (context) => serviceLocator(),
-                          child: DoctorsListView(
-                            params: state.extra as DoctorsListParams,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                        path: Paths.VISITADOCTORDETAILS,
-                        name: Routes.VISITADOCTORDETAILS,
-                        pageBuilder: (context, state) {
-                          return customTransition(
+                            path: Paths.VISITAEMERGENCY,
+                            name: Routes.VISITAEMERGENCY,
+                            pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              BlocProvider<DoctorDetailsCubit>(
-                                  child: DoctorDetailsView(
-                                    payload: state.extra as dynamic,
-                                  ),
-                                  create: (_) => serviceLocator()));
-                        }),
-                    GoRoute(
-                      path: Paths.VISITABOOKING,
-                      name: Routes.VISITABOOKING,
-                      // BookDoctorAppointmentCubit
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<BookDoctorAppointmentCubit>(
-                              create: (_) => serviceLocator(),
-                              child: BookingConfirmationScreen(
-                                doctorDetailsCubit:
-                                    (state.extra) as DoctorDetailsCubit,
-                              )
-
-                              // child: VisitaBooking(
-                              //   doctorDetailsCubit:
-                              //       (state.extra) as DoctorDetailsCubit,
-                              // )
-                              )),
-                    ),
-                    GoRoute(
-                      path: Paths.SUCCESSFULLBOOKING,
-                      name: Routes.SUCCESSFULLBOOKING,
-                      // BookDoctorAppointmentCubit
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<BookDoctorAppointmentCubit>(
-                              create: (_) => serviceLocator(),
-                              child: SuccessfulBookingScreen(
-                                doctorDetailsCubit:
-                                    (state.extra) as DoctorDetailsCubit,
-                              ))),
-                    ),
-                    GoRoute(
-                      path: Paths.DOCTORDASHBOARD,
-                      name: Routes.DOCTORDASHBOARD,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<DoctorDashboardCubit>(
-                              create: (_) => serviceLocator()..loadData(),
-                              child: const DoctorDashboardView())),
-                    ),
-                    GoRoute(
-                      path: Paths.EDITDOCTORPROFILE,
-                      name: Routes.EDITDOCTORPROFILE,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<EditDoctorProfileCubit>(
-                            create: (context) => serviceLocator(),
-                            child: const EditDoctorProfileView(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.EDITDOCTORPERSONALINFO,
-                      name: Routes.EDITDOCTORPERSONALINFO,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider(
-                              create: (_) =>
-                                  serviceLocator<EditDoctorPersonalInfoCubit>(),
-                              child: EditDoctorPersonalInfoView(
-                                doctor: state.extra as DoctorEntity,
-                              ))),
-                    ),
-                    GoRoute(
-                      path: Paths.EDITDOCTORTIMETABLE,
-                      name: Routes.EDITDOCTORTIMETABLE,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider(
-                              create: (_) =>
-                                  serviceLocator<EditDoctorTimetableCubit>(),
-                              child: EditDoctorTimetableView(
-                                params: state.extra as CheckBoxParams,
-                              ))),
-                    ),
-                    GoRoute(
-                      path: Paths.DOCTORSTATISTICS,
-                      name: Routes.DOCTORSTATISTICS,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<DoctorStatisticsCubit>(
-                            create: (context) => serviceLocator(),
-                            child: DoctorStatisticsView(
-                              totalEarnedMoney:
-                                  state.extra as List<EarnedMoneyEntity>,
+                              BlocProvider<HealthEmergencyCubit>(
+                                create: (context) => serviceLocator(),
+                                child: const HealthEmergencyView(),
+                              ),
                             ),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.DOCTORREVIEWS,
-                      name: Routes.DOCTORREVIEWS,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<DoctorDetailsCubit>(
-                              create: (_) => serviceLocator(),
-                              child: AllReviews(
-                                doctorId: state.extra as String,
-                              ))),
-                    ),
-                    GoRoute(
-                      path: Paths.DOCTORTODAYAPPOINTMENTS,
-                      name: Routes.DOCTORTODAYAPPOINTMENTS,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<DoctorTodayAppointmentsCubit>(
-                            create: (context) => serviceLocator(),
-                            child: const DoctorTodayAppointmentsView(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.DOCTORUNHANDLEDAPPOINTMENTS,
-                      name: Routes.DOCTORUNHANDLEDAPPOINTMENTS,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<DoctorUnhandledAppointmentsCubit>(
-                            create: (context) => serviceLocator(),
-                            child: const DoctorUnhandledAppointmentsView(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.ALLDOCTORRESERVATIONS,
-                      name: Routes.ALLDOCTORRESERVATIONS,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<AllDoctorReservationsCubit>(
-                            create: (context) => serviceLocator(),
-                            child: const AllDoctorReservationsView(),
-                          )),
-                    ),
-                  ]),
-              GoRoute(
-                  path: Paths.FOOD,
-                  name: Routes.FOOD,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        MultiBlocProvider(
-                          providers: [
-                            BlocProvider<RestaurantsCubit>(
-                              create: (context) => serviceLocator()
-                                ..loadData()
-                                ..getReqCount(),
-                            ),
-                          ],
-                          child: const RestaurantsListsView(),
-                        ),
-                      ),
-                  routes: [
-                    // CusineRestaurantsView
-                    // GoRoute(
-                    //   path: Paths.RestaurantDashboard,
-                    //   name: Routes.RestaurantDashboard,
-                    //  pageBuilder: (context, state) =>
-                    // customTransition(context, state,
-                    //       BlocProvider<RestaurantDashboardCubit>(
-                    //     create: (_) => serviceLocator(),
-                    //     child:  RestaurantDashboardView(),
-                    //   ),
-                    // ),
-                    GoRoute(
-                      path: Paths.CusineRestaurants,
-                      name: Routes.CusineRestaurants,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<CusineRestaurantsCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const CusineRestaurantsView(),
-                        ),
-                      ),
-                    ),
-                    GoRoute(
-                        path: Paths.RESTAURANTDETAILS,
-                        name: Routes.RESTAURANTDETAILS,
-                        pageBuilder: (context, state) => customTransition(
+                          ),
+                          GoRoute(
+                            path: Paths.EMERGENCYREQUESTS,
+                            name: Routes.EMERGENCYREQUESTS,
+                            pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              BlocProvider(
-                                create: (context) =>
-                                    serviceLocator<RestaurantDetailsCubit>(),
-                                child: RestaurantDetailsView(
-                                  restaurant:
-                                      state.extra as GetAllRestaurantEntity,
+                              BlocProvider<EmergencyRequestsCubit>(
+                                create: (context) => serviceLocator(),
+                                child: EmergencyRequestsView(
+                                  subCategoryId: state.extra as String,
                                 ),
                               ),
                             ),
-                        routes: [
+                          ),
                           GoRoute(
-                              path: Paths.FOODCART,
-                              name: Routes.FOODCART,
+                            path: Paths.ALLAPPOINTMENTS,
+                            name: Routes.ALLAPPOINTMENTS,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<AllAppointmentsCubit>(
+                                create: (context) => serviceLocator(),
+                                child: const AllAppointmentsView(),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.CREATEDOCTOR,
+                            name: Routes.CREATEDOCTOR,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<CreateDoctorCubit>(
+                                create: (context) => serviceLocator(),
+                                child: const CreateDoctorView(),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.FILTERDOCTORSUBCATEGORY,
+                            name: Routes.FILTERDOCTORSUBCATEGORY,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<DoctorSubcategoryFilterCubit>(
+                                create: (context) => serviceLocator(),
+                                child: DoctorSubcategoryFilterView(
+                                  type: state.extra as String,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.FILTERDOCTORGOVERNORATE,
+                            name: Routes.FILTERDOCTORGOVERNORATE,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<DoctorGovernorateFilterCubit>(
+                                create: (context) => serviceLocator(),
+                                child: DoctorGovernorateFilterView(
+                                  type: state.extra as String,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.FILTERDOCTORCITY,
+                            name: Routes.FILTERDOCTORCITY,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<DoctorCityFilterCubit>(
+                                create: (context) => serviceLocator(),
+                                child: DoctorCityFilterView(
+                                  type: state.extra as String,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.VISITADOCTORLIST,
+                            name: Routes.VISITADOCTORLIST,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<DoctorsListCubit>(
+                                // BlocProvider<HealthCubit>(
+                                create: (context) => serviceLocator(),
+                                child: DoctorsListView(
+                                  params: state.extra as DoctorsListParams,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                              path: Paths.VISITADOCTORDETAILS,
+                              name: Routes.VISITADOCTORDETAILS,
+                              pageBuilder: (context, state) {
+                                return customTransition(
+                                    context,
+                                    state,
+                                    BlocProvider<DoctorDetailsCubit>(
+                                        child: DoctorDetailsView(
+                                          payload: state.extra as dynamic,
+                                        ),
+                                        create: (_) => serviceLocator()));
+                              }),
+                          GoRoute(
+                            path: Paths.VISITABOOKING,
+                            name: Routes.VISITABOOKING,
+                            // BookDoctorAppointmentCubit
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<BookDoctorAppointmentCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: BookingConfirmationScreen(
+                                      doctorDetailsCubit:
+                                          (state.extra) as DoctorDetailsCubit,
+                                    )
+
+                                    // child: VisitaBooking(
+                                    //   doctorDetailsCubit:
+                                    //       (state.extra) as DoctorDetailsCubit,
+                                    // )
+                                    )),
+                          ),
+                          GoRoute(
+                            path: Paths.SUCCESSFULLBOOKING,
+                            name: Routes.SUCCESSFULLBOOKING,
+                            // BookDoctorAppointmentCubit
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<BookDoctorAppointmentCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: SuccessfulBookingScreen(
+                                      doctorDetailsCubit:
+                                          (state.extra) as DoctorDetailsCubit,
+                                    ))),
+                          ),
+                          GoRoute(
+                            path: Paths.DOCTORDASHBOARD,
+                            name: Routes.DOCTORDASHBOARD,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<DoctorDashboardCubit>(
+                                    create: (_) => serviceLocator()..loadData(),
+                                    child: const DoctorDashboardView())),
+                          ),
+                          GoRoute(
+                            path: Paths.EDITDOCTORPROFILE,
+                            name: Routes.EDITDOCTORPROFILE,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<EditDoctorProfileCubit>(
+                                  create: (context) => serviceLocator(),
+                                  child: const EditDoctorProfileView(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.EDITDOCTORPERSONALINFO,
+                            name: Routes.EDITDOCTORPERSONALINFO,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider(
+                                    create: (_) => serviceLocator<
+                                        EditDoctorPersonalInfoCubit>(),
+                                    child: EditDoctorPersonalInfoView(
+                                      doctor: state.extra as DoctorEntity,
+                                    ))),
+                          ),
+                          GoRoute(
+                            path: Paths.EDITDOCTORTIMETABLE,
+                            name: Routes.EDITDOCTORTIMETABLE,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider(
+                                    create: (_) => serviceLocator<
+                                        EditDoctorTimetableCubit>(),
+                                    child: EditDoctorTimetableView(
+                                      params: state.extra as CheckBoxParams,
+                                    ))),
+                          ),
+                          GoRoute(
+                            path: Paths.DOCTORSTATISTICS,
+                            name: Routes.DOCTORSTATISTICS,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<DoctorStatisticsCubit>(
+                                  create: (context) => serviceLocator(),
+                                  child: DoctorStatisticsView(
+                                    totalEarnedMoney:
+                                        state.extra as List<EarnedMoneyEntity>,
+                                  ),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.DOCTORREVIEWS,
+                            name: Routes.DOCTORREVIEWS,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<DoctorDetailsCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: AllReviews(
+                                      doctorId: state.extra as String,
+                                    ))),
+                          ),
+                          GoRoute(
+                            path: Paths.DOCTORTODAYAPPOINTMENTS,
+                            name: Routes.DOCTORTODAYAPPOINTMENTS,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<DoctorTodayAppointmentsCubit>(
+                                  create: (context) => serviceLocator(),
+                                  child: const DoctorTodayAppointmentsView(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.DOCTORUNHANDLEDAPPOINTMENTS,
+                            name: Routes.DOCTORUNHANDLEDAPPOINTMENTS,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<DoctorUnhandledAppointmentsCubit>(
+                                  create: (context) => serviceLocator(),
+                                  child:
+                                      const DoctorUnhandledAppointmentsView(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.ALLDOCTORRESERVATIONS,
+                            name: Routes.ALLDOCTORRESERVATIONS,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<AllDoctorReservationsCubit>(
+                                  create: (context) => serviceLocator(),
+                                  child: const AllDoctorReservationsView(),
+                                )),
+                          ),
+                        ]),
+                    GoRoute(
+                        path: Paths.FOOD,
+                        name: Routes.FOOD,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              MultiBlocProvider(
+                                providers: [
+                                  BlocProvider<RestaurantsCubit>(
+                                    create: (context) => serviceLocator()
+                                      ..loadData()
+                                      ..getReqCount(),
+                                  ),
+                                ],
+                                child: const RestaurantsListsView(),
+                              ),
+                            ),
+                        routes: [
+                          // CusineRestaurantsView
+                          // GoRoute(
+                          //   path: Paths.RestaurantDashboard,
+                          //   name: Routes.RestaurantDashboard,
+                          //  pageBuilder: (context, state) =>
+                          // customTransition(context, state,
+                          //       BlocProvider<RestaurantDashboardCubit>(
+                          //     create: (_) => serviceLocator(),
+                          //     child:  RestaurantDashboardView(),
+                          //   ),
+                          // ),
+                          GoRoute(
+                            path: Paths.CusineRestaurants,
+                            name: Routes.CusineRestaurants,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<CusineRestaurantsCubit>(
+                                create: (_) => serviceLocator(),
+                                child: const CusineRestaurantsView(),
+                              ),
+                            ),
+                          ),
+                          GoRoute(
+                              path: Paths.RESTAURANTDETAILS,
+                              name: Routes.RESTAURANTDETAILS,
                               pageBuilder: (context, state) => customTransition(
-                                  context,
-                                  state,
-                                  BlocProvider(
-                                    create: (context) => serviceLocator<
-                                        RestaurantDetailsCubit>(),
-                                    child: const FoodCartView(),
-                                  ))),
-                        ])
-                  ]),
-              GoRoute(
-                path: Paths.CONTACTUS,
-                name: Routes.CONTACTUS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider<ContactUsCubit>(
-                    create: (_) => serviceLocator(),
-                    child: const ContactUsView(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.SHIPPING,
-                name: Routes.SHIPPING,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider<ShippingCubit>(
-                        create: (context) =>
-                            serviceLocator<ShippingCubit>()..getBannerData(),
+                                    context,
+                                    state,
+                                    BlocProvider(
+                                      create: (context) => serviceLocator<
+                                          RestaurantDetailsCubit>(),
+                                      child: RestaurantDetailsView(
+                                        restaurant: state.extra
+                                            as GetAllRestaurantEntity,
+                                      ),
+                                    ),
+                                  ),
+                              routes: [
+                                GoRoute(
+                                    path: Paths.FOODCART,
+                                    name: Routes.FOODCART,
+                                    pageBuilder: (context, state) =>
+                                        customTransition(
+                                            context,
+                                            state,
+                                            BlocProvider(
+                                              create: (context) =>
+                                                  serviceLocator<
+                                                      RestaurantDetailsCubit>(),
+                                              child: const FoodCartView(),
+                                            ))),
+                              ])
+                        ]),
+                    GoRoute(
+                      path: Paths.CONTACTUS,
+                      name: Routes.CONTACTUS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider<ContactUsCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const ContactUsView(),
+                        ),
                       ),
-                      BlocProvider<GetMyTripCubit>(
-                        create: (context) =>
-                            serviceLocator<GetMyTripCubit>()..getMyTrip(),
-                      ),
-                      BlocProvider<CreateTripCubit>(
-                        create: (context) => serviceLocator<CreateTripCubit>(),
-                      ),
-                      BlocProvider<GetAllRequestByMyTripCubit>(
-                        create: (context) =>
-                            serviceLocator<GetAllRequestByMyTripCubit>(),
-                      ),
-                      BlocProvider<CallMessageCubit>(
-                        create: (context) => serviceLocator<CallMessageCubit>(),
-                      ),
-                      BlocProvider<AcceptDeclineTripCubit>(
-                        create: (context) =>
-                            serviceLocator<AcceptDeclineTripCubit>(),
-                      ),
-                      BlocProvider<FavoriteMainCateogryCubit>(
-                        create: (context) =>
-                            serviceLocator<FavoriteMainCateogryCubit>(),
-                      ),
-                      BlocProvider<FavoriteShippingCubit>(
-                        create: (context) =>
-                            serviceLocator<FavoriteShippingCubit>(),
-                      ),
-                      BlocProvider<TwitterCubit>(
-                        create: (context) => serviceLocator<TwitterCubit>(),
-                      ),
-                    ],
-                    child: const CreateShippingView(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                  path: Paths.RIDE,
-                  name: Routes.RIDE,
-                  pageBuilder: (context, state) {
-                    return customTransition(
+                    ),
+                    GoRoute(
+                      path: Paths.SHIPPING,
+                      name: Routes.SHIPPING,
+                      pageBuilder: (context, state) => customTransition(
                         context,
                         state,
                         MultiBlocProvider(
                           providers: [
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<GetCateogryRiderCubit>(),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<FavoriteMainCateogryCubit>(),
-                            ),
-                            BlocProvider(
-                                create: (context) =>
-                                    serviceLocator<RiderTripReelTimeCubit>()),
-                            BlocProvider(
-                                create: (context) =>
-                                    serviceLocator<RiderTripReelTimeCubit>()),
-                            BlocProvider(
-                              create: (context) => GetTripInfoCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetTripInfoCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => StartingLocationCubit(
-                                  fetchLocationCordinatesUseCase:
-                                      serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => FetchPriceDistanceCubit(
-                                  fetchPriceDistanceUsecase: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => FavoriteShippingCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => FavoriteShippingCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => RequestRiderTripCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  RaiseFareCubit(repository: serviceLocator()),
-                            ),
                             BlocProvider<ShippingCubit>(
                               create: (context) =>
                                   serviceLocator<ShippingCubit>()
@@ -2886,1112 +2847,1943 @@ class AppPages {
                               create: (context) =>
                                   serviceLocator<TwitterCubit>(),
                             ),
-                            BlocProvider(
-                              create: (context) => CheckDriverTypeCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => DestinationLocationCubit(
-                                  fetchLocationCordinatesUseCase:
-                                      serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => MapBoxCubit(),
-                            ),
-                            BlocProvider(
-                              create: (context) => MapBoxDestCubit(),
-                            ),
-                            BlocProvider(
-                              create: (context) => SelectCateogryCubit(),
-                            ),
-                            BlocProvider(
-                              create: (context) => CreateTripRequestRideCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetLocationFromLatLngRideCubit(
-                                      repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetStartingPointRideCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetDestinationPointRideCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetTripInfoCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetCurrencyCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetCurrencyCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetCurrencyCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetUserLoginTripNoSocketCubit(
-                                      repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetTripOffersNoSocketCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => AcceptOfferNoSocketCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => DeclineOfferNoSocketCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => DeleteOfferRideCubit(
-                                  repository: serviceLocator()),
-                            ),
                           ],
-                          child: const ShippingRiderTabScreen(),
-                        ));
-                  },
-                  routes: [
-                    GoRoute(
-                      path: Paths.registerRidePart,
-                      name: Routes.registerRidePart,
-                      pageBuilder: (context, state) {
-                        return customTransition(
-                            context, state, const RegisterRidePartsScreen());
-                      },
-                    ),
-                    GoRoute(
-                      path: Paths.updateDriverShipping,
-                      name: Routes.updateDriverShipping,
-                      pageBuilder: (context, state) {
-                        return customTransition(
-                            context,
-                            state,
-                            MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                    create: (context) =>
-                                        GetDriverInfoShippingCubit(
-                                            repository: serviceLocator())),
-                              ],
-                              child: const UpdateDriverShippingScreen(),
-                            ));
-                      },
-                    ),
-                    GoRoute(
-                      path: Paths.updateDriverRide,
-                      name: Routes.updateDriverRide,
-                      pageBuilder: (context, state) {
-                        return customTransition(
-                            context,
-                            state,
-                            MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                  create: (context) => GetDriverRideCubit(
-                                      repository: serviceLocator())
-                                    ..get(),
-                                ),
-                                BlocProvider(
-                                    create: (context) => PictureOptionalCubit(
-                                        repository: serviceLocator())
-                                      ..getData()),
-                                BlocProvider(
-                                    create: (context) =>
-                                        SelectCarModelBrandYearRideCubit()),
-                                BlocProvider(
-                                    create: (context) => GetCarBrandRideCubit(
-                                        repository: serviceLocator())
-                                      ..get()),
-                                BlocProvider(
-                                  create: (context) =>
-                                      GetCarYearByModelRideCubit(
-                                          repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                    create: (context) =>
-                                        GetCarModelByBrandRideCubit(
-                                            repository: serviceLocator())),
-                                BlocProvider(
-                                  create: (context) =>
-                                      GetCarYearByModelRideCubit(
-                                          repository: serviceLocator()),
-                                ),
-                                BlocProvider.value(
-                                  value: serviceLocator<HealthCubit>()
-                                    ..getGovernorates(),
-                                ),
-                              ],
-                              child: const UpdateDriverRideScreen(),
-                            ));
-                      },
-                    ),
-                    GoRoute(
-                      path: Paths.TripRideRating,
-                      name: Routes.TripRideRating,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          TripRatingRideScreen(
-                              model: state.extra as ReviewRideTripModel)),
-                    ),
-                    GoRoute(
-                      path: Paths.TRIPINFOBYDRIVERSCREEN,
-                      name: Routes.TRIPINFOBYDRIVERSCREEN,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          MultiBlocProvider(
-                            providers: [
-                              // BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator())),
-                              BlocProvider(
-                                create: (context) => GetReasonsCubit(
-                                    repository: serviceLocator()),
-                              ),
-                              BlocProvider(
-                                create: (context) => RiderInStartLocationCubit(
-                                    repository: serviceLocator()),
-                              ),
-                              BlocProvider(
-                                create: (context) => CancelTripRiderCubit(
-                                    repository: serviceLocator()),
-                              ),
-                              BlocProvider(
-                                create: (context) => CompletedTripRiderCubit(
-                                    repository: serviceLocator()),
-                              ),
-                            ],
-                            child: TripInfoByDriverScreen(
-                                model: state.extra as CheckAcceptByRiderModel),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.TRIPINFOBYRIDERSCREEN,
-                      name: Routes.TRIPINFOBYRIDERSCREEN,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                  create: (context) => GetReasonsCubit(
-                                      repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      RiderInStartLocationCubit(
-                                          repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (context) => CancelTripClientCubit(
-                                      repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (context) => CompletedTripRiderCubit(
-                                      repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (context) => PartialPaymentRiderCubit(
-                                      repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (context) => GetTripInfoCubit(
-                                      repository: serviceLocator()),
-                                ),
-                                // BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator()))
-                              ],
-                              child: TripInfoByRiderScreen(
-                                  model: state.extra
-                                      as CheckAcceptTripFromDriverModel))),
-                    ),
-                    GoRoute(
-                      path: Paths.ALLTRIPRIDER,
-                      name: Routes.ALLTRIPRIDER,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          MultiBlocProvider(providers: [
-                            BlocProvider(
-                              create: (context) => GetExpiredTripCubit(
-                                  repository: serviceLocator())
-                                ..get(),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetDriverInfoCubit(
-                                  repository: serviceLocator())
-                                ..get(),
-                            ),
-                            BlocProvider(
-                              create: (context) => DeleteDriverRideCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            // BlocProvider(
-                            //   create: (context) => GetAllTripRiderCubit(
-                            //       repository: serviceLocator())
-                            //     ..getAllTrip(),
-                            // ),
-                            BlocProvider(
-                              create: (context) => VerifyCompleteDriverCubit(
-                                  verifyOtpCompleteSeatDriverRemoteDataSource:
-                                      serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetCurrencyCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetAvailableTripsForDriversCubit(),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  AcceptTripForDriverCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetRouteRiderCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  ChangeDriverStatusCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetRouteRiderCubit(
-                                  repository: serviceLocator()),
-                            ),
-                          ], child: const AllRiderTripScreen())),
-                      // BlocProvider(
-                      //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
-                      //   child: const AllRiderTripScreen(),
-                      // )
-                    ),
-                    GoRoute(
-                      path: Paths.ALLTRIPNOSOCKETSCREEN,
-                      name: Routes.ALLTRIPNOSOCKETSCREEN,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          MultiBlocProvider(providers: [
-                            BlocProvider(
-                              create: (context) => SendOfferNoSocketCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetDriverInfoCubit(
-                                  repository: serviceLocator())
-                                ..get(),
-                            ),
-                            BlocProvider(
-                              create: (context) => DeleteDriverRideCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  GetUserLoginTripNoSocketCubit(
-                                      repository: serviceLocator())
-                                    ..get(),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetTripOffersNoSocketCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => OfferNoSocketActionsCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  ChangeDriverStatusCubit(serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => GetAllTripNoSocketCubit(
-                                  repository: serviceLocator())
-                                ..get(),
-                            ),
-                            BlocProvider(
-                              create: (context) => DeclineOfferNoSocketCubit(
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) => CallMessageCubit(
-                                  repository: serviceLocator()),
-                            ),
-                          ], child: const AllTripNoSocketScreen())
-                          // BlocProvider(
-                          //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
-                          //   child: const AllRiderTripScreen(),
-                          // )
-                          ),
-                    ),
-                    GoRoute(
-                      path: Paths.REQUESTSHISTORY,
-                      name: Routes.REQUESTSHISTORY,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<RequestHistoryCubit>(
-                            create: (_) => serviceLocator(),
-                            child: BlocProvider(
-                              create: (context) => RequestHistoryRideCubit(
-                                  apiConsumer: serviceLocator()),
-                              child: const HistoryRequestsView(),
-                            ),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.TRIPDETAILS,
-                      name: Routes.TRIPDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider<TripDetailsCubit>(
-                            create: (_) => serviceLocator(),
-                            child: const TripDetailsView(),
-                          )),
-                    ),
-                    GoRoute(
-                      path: Paths.RIDERDASHBOARD,
-                      name: Routes.RIDERDASHBOARD,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          MultiBlocProvider(
-                            providers: [
-                              BlocProvider<DriverDashboardCubit>(
-                                create: (_) => serviceLocator(),
-                              ),
-                              BlocProvider(
-                                create: (context) => DriverStatisticsCubit(
-                                    repository: serviceLocator()),
-                              ),
-                            ],
-                            child: const DriverDashboardView(),
-                          )),
-                    ),
-                    GoRoute(
-                        path: Paths.RIDERREGISTER,
-                        name: Routes.RIDERREGISTER,
-                        pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            MultiBlocProvider(
-                              providers: [
-                                BlocProvider<DriverDashboardCubit>(
-                                  create: (_) => serviceLocator(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      serviceLocator<GetCateogryRiderCubit>(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      serviceLocator<FetchCarBrandsCubit>(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      serviceLocator<FetchCarModelsCubit>(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      serviceLocator<FetchCarYearTypeCubit>(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      SelectCarModelBrandYearRideCubit(),
-                                ),
-                                BlocProvider(
-                                  create: (context) => GetCarColorsRideCubit(
-                                      repository: serviceLocator())
-                                    ..get(),
-                                ),
-                                BlocProvider(
-                                  create: (context) => GetCarBrandRideCubit(
-                                      repository: serviceLocator())
-                                    ..get(),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      GetCarModelByBrandRideCubit(
-                                          repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (context) =>
-                                      GetCarYearByModelRideCubit(
-                                          repository: serviceLocator()),
-                                ),
-                                BlocProvider(
-                                  create: (_) => serviceLocator<HealthCubit>()
-                                    ..getGovernorates(),
-                                ),
-                                BlocProvider(
-                                  create: (context) => PictureOptionalCubit(
-                                      repository: serviceLocator())
-                                    ..getData(),
-                                ),
-                              ],
-                              child: const RiderRegisterView(),
-                            ))),
-                  ]),
-              GoRoute(
-                  path: Paths.YOUTUBE,
-                  name: Routes.YOUTUBE,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        const YouTubeView(),
-                      ),
-                  routes: [
-                    // PlayVideo
-                    GoRoute(
-                      path: Paths.PLAYVIDEO,
-                      name: Routes.PLAYVIDEO,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        const PlayVideo(),
-                      ),
-                    )
-                  ]),
-              GoRoute(
-                  path: Paths.ZOOM,
-                  name: Routes.ZOOM,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<StreamCubit>(
-                          create: (context) => serviceLocator<StreamCubit>()
-                            ..getScheduledMeetings(),
-                          child: const MeetingView(),
+                          child: const CreateShippingView(),
                         ),
                       ),
-                  // create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
-                  // child: const MeetingView(),
-
-                  routes: [
-                    // PlayVideo
-                    GoRoute(
-                      path: Paths.MEETINGROOM,
-                      name: Routes.MEETINGROOM,
-                      pageBuilder: (context, state) {
-                        return customTransition(
-                            context,
-                            state,
-                            MeetingRoom(
-                              payload: state.extra as dynamic,
-                            ));
-                      },
-                    ),
-                  ]),
-              GoRoute(
-                  path: Paths.INSTALLMENT,
-                  name: Routes.INSTALLMENT,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<InstallmentListCubit>(
-                            create: (_) => serviceLocator(),
-                            child: const InstallmentView()),
-                      ),
-                  routes: [
-                    GoRoute(
-                      path: Paths.INSTALLMENTDETAILS,
-                      name: Routes.INSTALLMENTDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<InstallmentDetailsCubit>(
-                            create: (_) => serviceLocator(),
-                            child: InstallmentsDetails(
-                              installmentId: state.extra as String,
-                            )),
-                      ),
-                    ),
-                    // CreateInstallmentView
-                    GoRoute(
-                      path: Paths.CREATEINSTALLMENT,
-                      name: Routes.CREATEINSTALLMENT,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<CreateInstallmentCubit>(
-                            create: (_) => serviceLocator(),
-                            child: CreateInstallmentView(
-                              adId: state.extra as String,
-                            )),
-                      ),
                     ),
                     GoRoute(
-                      path: Paths.INSTALLMENTORDERDETAILS,
-                      name: Routes.INSTALLMENTORDERDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        const InstallmentOrderDetails(),
-                      ),
-                    ),
+                        path: Paths.RIDE,
+                        name: Routes.RIDE,
+                        pageBuilder: (context, state) {
+                          return customTransition(
+                              context,
+                              state,
+                              MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) =>
+                                        serviceLocator<GetCateogryRiderCubit>(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => serviceLocator<
+                                        FavoriteMainCateogryCubit>(),
+                                  ),
+                                  BlocProvider(
+                                      create: (context) => serviceLocator<
+                                          RiderTripReelTimeCubit>()),
+                                  BlocProvider(
+                                      create: (context) => serviceLocator<
+                                          RiderTripReelTimeCubit>()),
+                                  BlocProvider(
+                                    create: (context) => GetTripInfoCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GetTripInfoCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => StartingLocationCubit(
+                                        fetchLocationCordinatesUseCase:
+                                            serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        FetchPriceDistanceCubit(
+                                            fetchPriceDistanceUsecase:
+                                                serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => FavoriteShippingCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => FavoriteShippingCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => RequestRiderTripCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => RaiseFareCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider<ShippingCubit>(
+                                    create: (context) =>
+                                        serviceLocator<ShippingCubit>()
+                                          ..getBannerData(),
+                                  ),
+                                  BlocProvider<GetMyTripCubit>(
+                                    create: (context) =>
+                                        serviceLocator<GetMyTripCubit>()
+                                          ..getMyTrip(),
+                                  ),
+                                  BlocProvider<CreateTripCubit>(
+                                    create: (context) =>
+                                        serviceLocator<CreateTripCubit>(),
+                                  ),
+                                  BlocProvider<GetAllRequestByMyTripCubit>(
+                                    create: (context) => serviceLocator<
+                                        GetAllRequestByMyTripCubit>(),
+                                  ),
+                                  BlocProvider<CallMessageCubit>(
+                                    create: (context) =>
+                                        serviceLocator<CallMessageCubit>(),
+                                  ),
+                                  BlocProvider<AcceptDeclineTripCubit>(
+                                    create: (context) => serviceLocator<
+                                        AcceptDeclineTripCubit>(),
+                                  ),
+                                  BlocProvider<FavoriteMainCateogryCubit>(
+                                    create: (context) => serviceLocator<
+                                        FavoriteMainCateogryCubit>(),
+                                  ),
+                                  BlocProvider<FavoriteShippingCubit>(
+                                    create: (context) =>
+                                        serviceLocator<FavoriteShippingCubit>(),
+                                  ),
+                                  BlocProvider<TwitterCubit>(
+                                    create: (context) =>
+                                        serviceLocator<TwitterCubit>(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => CheckDriverTypeCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        DestinationLocationCubit(
+                                            fetchLocationCordinatesUseCase:
+                                                serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => MapBoxCubit(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => MapBoxDestCubit(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => SelectCateogryCubit(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        CreateTripRequestRideCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetLocationFromLatLngRideCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetStartingPointRideCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetDestinationPointRideCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GetTripInfoCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetCurrencyCubit(serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetCurrencyCubit(serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetCurrencyCubit(serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetUserLoginTripNoSocketCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetTripOffersNoSocketCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        AcceptOfferNoSocketCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        DeclineOfferNoSocketCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => DeleteOfferRideCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                ],
+                                child: const ShippingRiderTabScreen(),
+                              ));
+                        },
+                        routes: [
+                          GoRoute(
+                            path: Paths.registerRidePart,
+                            name: Routes.registerRidePart,
+                            pageBuilder: (context, state) {
+                              return customTransition(context, state,
+                                  const RegisterRidePartsScreen());
+                            },
+                          ),
+                          GoRoute(
+                            path: Paths.updateDriverShipping,
+                            name: Routes.updateDriverShipping,
+                            pageBuilder: (context, state) {
+                              return customTransition(
+                                  context,
+                                  state,
+                                  MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                          create: (context) =>
+                                              GetDriverInfoShippingCubit(
+                                                  repository:
+                                                      serviceLocator())),
+                                    ],
+                                    child: const UpdateDriverShippingScreen(),
+                                  ));
+                            },
+                          ),
+                          GoRoute(
+                            path: Paths.updateDriverRide,
+                            name: Routes.updateDriverRide,
+                            pageBuilder: (context, state) {
+                              return customTransition(
+                                  context,
+                                  state,
+                                  MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                        create: (context) => GetDriverRideCubit(
+                                            repository: serviceLocator())
+                                          ..get(),
+                                      ),
+                                      BlocProvider(
+                                          create: (context) =>
+                                              PictureOptionalCubit(
+                                                  repository: serviceLocator())
+                                                ..getData()),
+                                      BlocProvider(
+                                          create: (context) =>
+                                              SelectCarModelBrandYearRideCubit()),
+                                      BlocProvider(
+                                          create: (context) =>
+                                              GetCarBrandRideCubit(
+                                                  repository: serviceLocator())
+                                                ..get()),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetCarYearByModelRideCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                          create: (context) =>
+                                              GetCarModelByBrandRideCubit(
+                                                  repository:
+                                                      serviceLocator())),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetCarYearByModelRideCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider.value(
+                                        value: serviceLocator<HealthCubit>()
+                                          ..getGovernorates(),
+                                      ),
+                                    ],
+                                    child: const UpdateDriverRideScreen(),
+                                  ));
+                            },
+                          ),
+                          GoRoute(
+                            path: Paths.TripRideRating,
+                            name: Routes.TripRideRating,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                TripRatingRideScreen(
+                                    model: state.extra as ReviewRideTripModel)),
+                          ),
+                          GoRoute(
+                            path: Paths.TRIPINFOBYDRIVERSCREEN,
+                            name: Routes.TRIPINFOBYDRIVERSCREEN,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                MultiBlocProvider(
+                                  providers: [
+                                    // BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator())),
+                                    BlocProvider(
+                                      create: (context) => GetReasonsCubit(
+                                          repository: serviceLocator()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          RiderInStartLocationCubit(
+                                              repository: serviceLocator()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) => CancelTripRiderCubit(
+                                          repository: serviceLocator()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          CompletedTripRiderCubit(
+                                              repository: serviceLocator()),
+                                    ),
+                                  ],
+                                  child: TripInfoByDriverScreen(
+                                      model: state.extra
+                                          as CheckAcceptByRiderModel),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.TRIPINFOBYRIDERSCREEN,
+                            name: Routes.TRIPINFOBYRIDERSCREEN,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                        create: (context) => GetReasonsCubit(
+                                            repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            RiderInStartLocationCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            CancelTripClientCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            CompletedTripRiderCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            PartialPaymentRiderCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => GetTripInfoCubit(
+                                            repository: serviceLocator()),
+                                      ),
+                                      // BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator()))
+                                    ],
+                                    child: TripInfoByRiderScreen(
+                                        model: state.extra
+                                            as CheckAcceptTripFromDriverModel))),
+                          ),
+                          GoRoute(
+                            path: Paths.ALLTRIPRIDER,
+                            name: Routes.ALLTRIPRIDER,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                MultiBlocProvider(providers: [
+                                  BlocProvider(
+                                    create: (context) => GetExpiredTripCubit(
+                                        repository: serviceLocator())
+                                      ..get(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GetDriverInfoCubit(
+                                        repository: serviceLocator())
+                                      ..get(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => DeleteDriverRideCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  // BlocProvider(
+                                  //   create: (context) => GetAllTripRiderCubit(
+                                  //       repository: serviceLocator())
+                                  //     ..getAllTrip(),
+                                  // ),
+                                  BlocProvider(
+                                    create: (context) => VerifyCompleteDriverCubit(
+                                        verifyOtpCompleteSeatDriverRemoteDataSource:
+                                            serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetCurrencyCubit(serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetAvailableTripsForDriversCubit(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        AcceptTripForDriverCubit(
+                                            serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GetRouteRiderCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        ChangeDriverStatusCubit(
+                                            serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GetRouteRiderCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                ], child: const AllRiderTripScreen())),
+                            // BlocProvider(
+                            //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
+                            //   child: const AllRiderTripScreen(),
+                            // )
+                          ),
+                          GoRoute(
+                            path: Paths.ALLTRIPNOSOCKETSCREEN,
+                            name: Routes.ALLTRIPNOSOCKETSCREEN,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                MultiBlocProvider(providers: [
+                                  BlocProvider(
+                                    create: (context) => SendOfferNoSocketCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GetDriverInfoCubit(
+                                        repository: serviceLocator())
+                                      ..get(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => DeleteDriverRideCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetUserLoginTripNoSocketCubit(
+                                            repository: serviceLocator())
+                                          ..get(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetTripOffersNoSocketCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        OfferNoSocketActionsCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        ChangeDriverStatusCubit(
+                                            serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        GetAllTripNoSocketCubit(
+                                            repository: serviceLocator())
+                                          ..get(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        DeclineOfferNoSocketCubit(
+                                            repository: serviceLocator()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => CallMessageCubit(
+                                        repository: serviceLocator()),
+                                  ),
+                                ], child: const AllTripNoSocketScreen())
+                                // BlocProvider(
+                                //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
+                                //   child: const AllRiderTripScreen(),
+                                // )
+                                ),
+                          ),
+                          GoRoute(
+                            path: Paths.REQUESTSHISTORY,
+                            name: Routes.REQUESTSHISTORY,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<RequestHistoryCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: BlocProvider(
+                                    create: (context) =>
+                                        RequestHistoryRideCubit(
+                                            apiConsumer: serviceLocator()),
+                                    child: const HistoryRequestsView(),
+                                  ),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.TRIPDETAILS,
+                            name: Routes.TRIPDETAILS,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                BlocProvider<TripDetailsCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: const TripDetailsView(),
+                                )),
+                          ),
+                          GoRoute(
+                            path: Paths.RIDERDASHBOARD,
+                            name: Routes.RIDERDASHBOARD,
+                            pageBuilder: (context, state) => customTransition(
+                                context,
+                                state,
+                                MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider<DriverDashboardCubit>(
+                                      create: (_) => serviceLocator(),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) =>
+                                          DriverStatisticsCubit(
+                                              repository: serviceLocator()),
+                                    ),
+                                  ],
+                                  child: const DriverDashboardView(),
+                                )),
+                          ),
+                          GoRoute(
+                              path: Paths.RIDERREGISTER,
+                              name: Routes.RIDERREGISTER,
+                              pageBuilder: (context, state) => customTransition(
+                                  context,
+                                  state,
+                                  MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider<DriverDashboardCubit>(
+                                        create: (_) => serviceLocator(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => serviceLocator<
+                                            GetCateogryRiderCubit>(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => serviceLocator<
+                                            FetchCarBrandsCubit>(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => serviceLocator<
+                                            FetchCarModelsCubit>(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => serviceLocator<
+                                            FetchCarYearTypeCubit>(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            SelectCarModelBrandYearRideCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetCarColorsRideCubit(
+                                                repository: serviceLocator())
+                                              ..get(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetCarBrandRideCubit(
+                                                repository: serviceLocator())
+                                              ..get(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetCarModelByBrandRideCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetCarYearByModelRideCubit(
+                                                repository: serviceLocator()),
+                                      ),
+                                      BlocProvider(
+                                        create: (_) =>
+                                            serviceLocator<HealthCubit>()
+                                              ..getGovernorates(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            PictureOptionalCubit(
+                                                repository: serviceLocator())
+                                              ..getData(),
+                                      ),
+                                    ],
+                                    child: const RiderRegisterView(),
+                                  ))),
+                        ]),
                     GoRoute(
-                        path: Paths.INSTALLMENTORDERS,
-                        name: Routes.INSTALLMENTORDERS,
+                        path: Paths.YOUTUBE,
+                        name: Routes.YOUTUBE,
                         pageBuilder: (context, state) => customTransition(
                               context,
                               state,
-                              const InstallmentOrdersList(),
-                            )),
-                  ]),
-              // ___________________ shipping ______________
-              GoRoute(
-                path: Paths.SHIPPING_REGISTER,
-                name: Routes.SHIPPING_REGISTER,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<ShippingCubit>(),
-                    ),
-                    //to be reviewed
+                              const YouTubeView(),
+                            ),
+                        routes: [
+                          // PlayVideo
+                          GoRoute(
+                            path: Paths.PLAYVIDEO,
+                            name: Routes.PLAYVIDEO,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              const PlayVideo(),
+                            ),
+                          )
+                        ]),
+                    GoRoute(
+                        path: Paths.ZOOM,
+                        name: Routes.ZOOM,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<StreamCubit>(
+                                create: (context) =>
+                                    serviceLocator<StreamCubit>()
+                                      ..getScheduledMeetings(),
+                                child: const MeetingView(),
+                              ),
+                            ),
+                        // create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
+                        // child: const MeetingView(),
 
-                    BlocProvider(
-                      create: (context) => serviceLocator<CreateDoctorCubit>(),
-                    ),
-                    BlocProvider(
-                      create: (context) => serviceLocator<HealthCubit>(),
-                    ),
-                  ], child: const RegisterShippingScreen()),
-                ),
-              ),
-              GoRoute(
-                path: Paths.DASHBOARDDRIVERSCREEN,
-                name: Routes.DASHBOARDDRIVERSCREEN,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<RequestHistoryCubit>(
-                          create: (_) => serviceLocator(),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              GetAllTripCubit(repository: serviceLocator()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              CallMessageCubit(repository: serviceLocator()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              TripCubit(repository: serviceLocator()),
-                        ),
-                      ],
-                      child: const DahsboardDriverScreen(),
-                    )),
-              ),
-              GoRoute(
-                path: Paths.TripRating,
-                name: Routes.TripRating,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<RequestHistoryCubit>(
-                          create: (_) => serviceLocator(),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              GetAllTripCubit(repository: serviceLocator()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              CallMessageCubit(repository: serviceLocator()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              TripCubit(repository: serviceLocator()),
-                        ),
-                      ],
-                      child: TripRatingScreen(
-                          model: state.extra as GetRequestsForLoadingModel),
-                    )),
-              ),
+                        routes: [
+                          // PlayVideo
+                          GoRoute(
+                            path: Paths.MEETINGROOM,
+                            name: Routes.MEETINGROOM,
+                            pageBuilder: (context, state) {
+                              return customTransition(
+                                  context,
+                                  state,
+                                  MeetingRoom(
+                                    payload: state.extra as dynamic,
+                                  ));
+                            },
+                          ),
+                        ]),
+                    GoRoute(
+                        path: Paths.INSTALLMENT,
+                        name: Routes.INSTALLMENT,
+                        pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<InstallmentListCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: const InstallmentView()),
+                            ),
+                        routes: [
+                          GoRoute(
+                            path: Paths.INSTALLMENTDETAILS,
+                            name: Routes.INSTALLMENTDETAILS,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<InstallmentDetailsCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: InstallmentsDetails(
+                                    installmentId: state.extra as String,
+                                  )),
+                            ),
+                          ),
+                          // CreateInstallmentView
+                          GoRoute(
+                            path: Paths.CREATEINSTALLMENT,
+                            name: Routes.CREATEINSTALLMENT,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              BlocProvider<CreateInstallmentCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: CreateInstallmentView(
+                                    adId: state.extra as String,
+                                  )),
+                            ),
+                          ),
+                          GoRoute(
+                            path: Paths.INSTALLMENTORDERDETAILS,
+                            name: Routes.INSTALLMENTORDERDETAILS,
+                            pageBuilder: (context, state) => customTransition(
+                              context,
+                              state,
+                              const InstallmentOrderDetails(),
+                            ),
+                          ),
+                          GoRoute(
+                              path: Paths.INSTALLMENTORDERS,
+                              name: Routes.INSTALLMENTORDERS,
+                              pageBuilder: (context, state) => customTransition(
+                                    context,
+                                    state,
+                                    const InstallmentOrdersList(),
+                                  )),
+                        ]),
+                    // ___________________ shipping ______________
+                    GoRoute(
+                      path: Paths.SHIPPING_REGISTER,
+                      name: Routes.SHIPPING_REGISTER,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(providers: [
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<ShippingCubit>(),
+                          ),
+                          //to be reviewed
 
-              // Be a Star
-              GoRoute(
-                path: Paths.BE_STAR,
-                name: Routes.BE_STAR,
-                routes: [
-                  GoRoute(
-                    path: Paths.BE_STAR_DETAILS,
-                    name: Routes.BE_STAR_DETAILS,
-                    pageBuilder: (context, state) {
-                      return customTransition(
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<CreateDoctorCubit>(),
+                          ),
+                          BlocProvider(
+                            create: (context) => serviceLocator<HealthCubit>(),
+                          ),
+                        ], child: const RegisterShippingScreen()),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.DASHBOARDDRIVERSCREEN,
+                      name: Routes.DASHBOARDDRIVERSCREEN,
+                      pageBuilder: (context, state) => customTransition(
                           context,
                           state,
-                          BlocProvider<StarCubit>(
-                              create: (_) => serviceLocator(),
-                              child: const AllWinnerView()));
-                    },
-                  ),
-                ],
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider<StarCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const BeStarView()));
-                },
-              ),
-              GoRoute(
-                path: Paths.TenPercent,
-                name: Routes.TenPercent,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider<TenPercentCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const TenPercentView()));
-                },
-              ),
-              GoRoute(
-                path: Paths.WinnersTenPercent,
-                name: Routes.WinnersTenPercent,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<WinnersTenPercentCubit>()
-                              ..getWinners(),
-                        child: const WinnersTenPercentView(),
-                      ));
-                },
-              ),
-
-              // ___________________ trip join ______________
-              GoRoute(
-                path: Paths.TRIP_JOIN,
-                name: Routes.TRIP_JOIN,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (_) => StartingLocationCubit(
-                          fetchLocationCordinatesUseCase:
-                              serviceLocator<FetchLocationCordinatesUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => DestinationLocationCubit(
-                          fetchLocationCordinatesUseCase:
-                              serviceLocator<FetchLocationCordinatesUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => FetchPriceDistanceCubit(
-                          fetchPriceDistanceUsecase:
-                              serviceLocator<FetchPriceDistanceUsecase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => FetchCarBrandsCubit(
-                          fetchCarBrandUseCase:
-                              serviceLocator<FetchCarBrandUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => FetchCarModelsCubit(
-                          fetchCarModelUseCase:
-                              serviceLocator<FetchCarModelUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => FetchCarYearTypeCubit(
-                          fetchCarYearTypeUseCase:
-                              serviceLocator<FetchCarYearTypeUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => MapBoxCubit(),
-                      ),
-                      BlocProvider(
-                        create: (_) => PublishTripJoinCubit(
-                          publishTripJoinUseCase:
-                              serviceLocator<PublishTripJoinUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => GetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                      BlocProvider(
-                        create: (_) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                      BlocProvider(create: (_) => TripJoinViewCubit()),
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (_) => serviceLocator<ViewAllTripJoinCubit>(),
-                      ),
-                    ],
-                    child: const TripJoinCreateAdView(),
-                    //const TripJoinView(),
-                  ),
-                ),
-              ),
-
-              //________________________AddNewPickMe____________________-
-              GoRoute(
-                path: Paths.AddNewPickMe,
-                name: Routes.AddNewPickMe,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<AddNewPickMeTripCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      )
-                    ],
-                    child: const AddNewPickMeView(),
-                  ),
-                ),
-              ),
-
-              // ___________________ Available Trips ______________
-              GoRoute(
-                path: Paths.AVAILABLE_TRIPS,
-                name: Routes.AVAILABLE_TRIPS,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<ViewAllTripJoinCubit>(),
-
-                        // create: (_) => ViewAllTripJoinCubit(
-                        //   viewAllTripJoinUseCase:
-                        //       serviceLocator<ViewAllTripJoinUseCase>(),
-                        // ),
-                      ),
-                      BlocProvider(
-                        create: (_) => RequestTripJoinCubit(
-                          requestTripJoinUseCase:
-                              serviceLocator<RequstTripJoinUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => ViewAllPickMeCubit(
-                          viewAllPickMeUseCase:
-                              serviceLocator<ViewAllPickMeUseCase>(),
-                        ),
-                      ),
-                      BlocProvider<GetCurrencyCubit>(
-                        create: (context) => GetCurrencyCubit(
-                          serviceLocator(),
-                        ),
-                      ),
-                      // car pool
-                      BlocProvider<GetAllTripsCubit>(
-                        create: (context) =>
-                            GetAllTripsCubit(apiConsumer: serviceLocator()),
-                      ),
-                      BlocProvider<GetCurrencyCubit>(
-                        create: (context) => GetCurrencyCubit(
-                          serviceLocator(),
-                        ),
-                      ),
-                      BlocProvider<JoinTripCarPoolCubit>(
-                        create: (context) => JoinTripCarPoolCubit(
-                            joinTripCarpoolUsecase: serviceLocator()),
-                      ),
-                      BlocProvider<AdvertisementCubit>(
-                        create: (context) =>
-                            serviceLocator<AdvertisementCubit>(),
-                      ),
-                    ],
-                    child: const TripJoinView(
-                      initialIndex: 1,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider<RequestHistoryCubit>(
+                                create: (_) => serviceLocator(),
+                              ),
+                              BlocProvider(
+                                create: (context) => GetAllTripCubit(
+                                    repository: serviceLocator()),
+                              ),
+                              BlocProvider(
+                                create: (context) => CallMessageCubit(
+                                    repository: serviceLocator()),
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    TripCubit(repository: serviceLocator()),
+                              ),
+                            ],
+                            child: const DahsboardDriverScreen(),
+                          )),
                     ),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.All_PickMe_View,
-                name: Routes.All_PickMe_View,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<ViewAllTripJoinCubit>(),
-
-                        // create: (_) => ViewAllTripJoinCubit(
-                        //   viewAllTripJoinUseCase:
-                        //       serviceLocator<ViewAllTripJoinUseCase>(),
-                        // ),
-                      ),
-                      BlocProvider(
-                        create: (_) => RequestTripJoinCubit(
-                          requestTripJoinUseCase:
-                              serviceLocator<RequstTripJoinUseCase>(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => ViewAllPickMeCubit(
-                          viewAllPickMeUseCase:
-                              serviceLocator<ViewAllPickMeUseCase>(),
-                        ),
-                      ),
-                      BlocProvider<GetCurrencyCubit>(
-                        create: (context) => GetCurrencyCubit(
-                          serviceLocator(),
-                        ),
-                      ),
-                      // car pool
-                      BlocProvider<GetAllTripsCubit>(
-                        create: (context) =>
-                            GetAllTripsCubit(apiConsumer: serviceLocator()),
-                      ),
-                      BlocProvider<GetCurrencyCubit>(
-                        create: (context) => GetCurrencyCubit(
-                          serviceLocator(),
-                        ),
-                      ),
-                      BlocProvider<JoinTripCarPoolCubit>(
-                        create: (context) => JoinTripCarPoolCubit(
-                            joinTripCarpoolUsecase: serviceLocator()),
-                      ),
-                      BlocProvider<AdvertisementCubit>(
-                        create: (context) =>
-                            serviceLocator<AdvertisementCubit>(),
-                      ),
-                    ],
-                    child: const TripJoinView(
-                      initialIndex: 2,
+                    GoRoute(
+                      path: Paths.TripRating,
+                      name: Routes.TripRating,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider<RequestHistoryCubit>(
+                                create: (_) => serviceLocator(),
+                              ),
+                              BlocProvider(
+                                create: (context) => GetAllTripCubit(
+                                    repository: serviceLocator()),
+                              ),
+                              BlocProvider(
+                                create: (context) => CallMessageCubit(
+                                    repository: serviceLocator()),
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    TripCubit(repository: serviceLocator()),
+                              ),
+                            ],
+                            child: TripRatingScreen(
+                                model:
+                                    state.extra as GetRequestsForLoadingModel),
+                          )),
                     ),
-                  ),
-                ),
-              ),
 
-              GoRoute(
-                path: Paths.TRIP_JOIN_REQUEST_NOTIFICATIONS,
-                name: Routes.TRIP_JOIN_REQUEST_NOTIFICATIONS,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      RequestTripJoinNotificationView(
-                          payload: state.extra! as Map<String, dynamic>));
-                },
-              ),
-              GoRoute(
-                path: Paths.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
-                name: Routes.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    BlocProvider<GetRequestsPickMeCubit>(
-                      create: (context) => GetRequestsPickMeCubit(
-                          getRequestsPickMeUseCase: serviceLocator()),
-                      child: GetRequestsPickMeView(
-                        pickMeRequests: state.extra as List<PickMeRequest>,
+                    // Be a Star
+                    GoRoute(
+                      path: Paths.BE_STAR,
+                      name: Routes.BE_STAR,
+                      routes: [
+                        GoRoute(
+                          path: Paths.BE_STAR_DETAILS,
+                          name: Routes.BE_STAR_DETAILS,
+                          pageBuilder: (context, state) {
+                            return customTransition(
+                                context,
+                                state,
+                                BlocProvider<StarCubit>(
+                                    create: (_) => serviceLocator(),
+                                    child: const AllWinnerView()));
+                          },
+                        ),
+                      ],
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider<StarCubit>(
+                                create: (_) => serviceLocator(),
+                                child: const BeStarView()));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.TenPercent,
+                      name: Routes.TenPercent,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider<TenPercentCubit>(
+                                create: (_) => serviceLocator(),
+                                child: const TenPercentView()));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.WinnersTenPercent,
+                      name: Routes.WinnersTenPercent,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<WinnersTenPercentCubit>()
+                                    ..getWinners(),
+                              child: const WinnersTenPercentView(),
+                            ));
+                      },
+                    ),
+
+                    // ___________________ trip join ______________
+                    GoRoute(
+                      path: Paths.TRIP_JOIN,
+                      name: Routes.TRIP_JOIN,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) => StartingLocationCubit(
+                                fetchLocationCordinatesUseCase: serviceLocator<
+                                    FetchLocationCordinatesUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => DestinationLocationCubit(
+                                fetchLocationCordinatesUseCase: serviceLocator<
+                                    FetchLocationCordinatesUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => FetchPriceDistanceCubit(
+                                fetchPriceDistanceUsecase:
+                                    serviceLocator<FetchPriceDistanceUsecase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => FetchCarBrandsCubit(
+                                fetchCarBrandUseCase:
+                                    serviceLocator<FetchCarBrandUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => FetchCarModelsCubit(
+                                fetchCarModelUseCase:
+                                    serviceLocator<FetchCarModelUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => FetchCarYearTypeCubit(
+                                fetchCarYearTypeUseCase:
+                                    serviceLocator<FetchCarYearTypeUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => MapBoxCubit(),
+                            ),
+                            BlocProvider(
+                              create: (_) => PublishTripJoinCubit(
+                                publishTripJoinUseCase:
+                                    serviceLocator<PublishTripJoinUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => GetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                            BlocProvider(
+                              create: (_) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                            BlocProvider(create: (_) => TripJoinViewCubit()),
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  serviceLocator<ViewAllTripJoinCubit>(),
+                            ),
+                          ],
+                          child: const TripJoinCreateAdView(),
+                          //const TripJoinView(),
+                        ),
                       ),
-                    )),
-              ),
-              GoRoute(
-                path: Paths.TRIP_JOIN_REQUEST_HISTORY,
-                name: Routes.TRIP_JOIN_REQUEST_HISTORY,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      MultiBlocProvider(
-                        providers: [
-                          BlocProvider<GetRequestCubit>(
-                            create: (context) => GetRequestCubit(
-                                getRequestUsecase: serviceLocator()),
-                          ),
-                          BlocProvider<GetRequestsPickMeCubit>(
-                            create: (context) => GetRequestsPickMeCubit(
-                                getRequestsPickMeUseCase: serviceLocator()),
-                          ),
-                        ],
-                        child: TripJoinRequestHistoryView(
-                            extra: state.extra! as Map<String, dynamic>),
-                      ));
-                },
-              ),
-              GoRoute(
-                path: Paths.CAR_POOL,
-                name: Routes.CAR_POOL,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      MultiBlocProvider(providers: [
-                        BlocProvider<GetAllTripsCubit>(
-                          create: (context) =>
-                              GetAllTripsCubit(apiConsumer: serviceLocator()),
-                        ),
-                        BlocProvider<GetCurrencyCubit>(
-                          create: (context) => GetCurrencyCubit(
-                            serviceLocator(),
-                          ),
-                        ),
-                        BlocProvider<JoinTripCarPoolCubit>(
-                          create: (context) => JoinTripCarPoolCubit(
-                              joinTripCarpoolUsecase: serviceLocator()),
-                        ),
-                      ], child: const CarPoolView()));
-                },
-              ),
-              GoRoute(
-                path: Paths.ADD_NEW_ROUTE,
-                name: Routes.ADD_NEW_ROUTE,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      MultiBlocProvider(providers: [
-                        BlocProvider<StartingLocationCubit>(
-                          create: (context) => StartingLocationCubit(
-                              fetchLocationCordinatesUseCase: serviceLocator()),
-                        ),
-                        BlocProvider<DestinationLocationCubit>(
-                          create: (context) => DestinationLocationCubit(
-                              fetchLocationCordinatesUseCase: serviceLocator()),
-                        ),
-                        BlocProvider<GetPriceCarpoolCubit>(
-                          create: (context) => GetPriceCarpoolCubit(
-                              getPriceCarpoolUsecase: serviceLocator()),
-                        ),
-                        BlocProvider<GetAllTripsCubit>(
-                          create: (context) =>
-                              GetAllTripsCubit(apiConsumer: serviceLocator()),
-                        ),
-                        BlocProvider<CreateCarPoolCubit>(
-                          create: (context) => CreateCarPoolCubit(
-                            createCarpoolUsecase: serviceLocator(),
-                          ),
-                        ),
-                        BlocProvider<MapBoxDestCubit>(
-                          create: (context) => MapBoxDestCubit(),
-                        ),
-                        BlocProvider<GetAllTripsCubit>(
-                          create: (context) =>
-                              GetAllTripsCubit(apiConsumer: serviceLocator()),
-                        ),
-                        BlocProvider<GetCurrencyCubit>(
-                          create: (context) => GetCurrencyCubit(
-                            serviceLocator(),
-                          ),
-                        ),
-                        BlocProvider<MapBoxCubit>(
-                          create: (context) => MapBoxCubit(),
-                        ),
-                        BlocProvider<HereLocationCubit>(
-                          create: (context) => HereLocationCubit(),
-                        ),
-                        BlocProvider<GetLatAndLongCubit>(
-                          create: (context) => GetLatAndLongCubit(
-                              getLatLongFromAddressRemoteDataSource:
-                                  serviceLocator()),
-                        ),
-                        BlocProvider<DestGetLatAndLongCubit>(
-                          create: (context) => DestGetLatAndLongCubit(
-                              getLatLongFromAddressRemoteDataSource:
-                                  serviceLocator()),
-                        ),
-                      ], child: const AddNewRouteView()));
-                },
-              ),
-              GoRoute(
-                path: Paths.welcomeRideRegister,
-                name: Routes.welcomeRideRegister,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      MultiBlocProvider(
+                    ),
+
+                    //________________________AddNewPickMe____________________-
+                    GoRoute(
+                      path: Paths.AddNewPickMe,
+                      name: Routes.AddNewPickMe,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
                           providers: [
                             BlocProvider(
                               create: (context) =>
-                                  serviceLocator<RideRegisterCubit>(),
+                                  serviceLocator<AddNewPickMeTripCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            )
+                          ],
+                          child: const AddNewPickMeView(),
+                        ),
+                      ),
+                    ),
+
+                    // ___________________ Available Trips ______________
+                    GoRoute(
+                      path: Paths.AVAILABLE_TRIPS,
+                      name: Routes.AVAILABLE_TRIPS,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<ViewAllTripJoinCubit>(),
+
+                              // create: (_) => ViewAllTripJoinCubit(
+                              //   viewAllTripJoinUseCase:
+                              //       serviceLocator<ViewAllTripJoinUseCase>(),
+                              // ),
+                            ),
+                            BlocProvider(
+                              create: (_) => RequestTripJoinCubit(
+                                requestTripJoinUseCase:
+                                    serviceLocator<RequstTripJoinUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => ViewAllPickMeCubit(
+                                viewAllPickMeUseCase:
+                                    serviceLocator<ViewAllPickMeUseCase>(),
+                              ),
+                            ),
+                            BlocProvider<GetCurrencyCubit>(
+                              create: (context) => GetCurrencyCubit(
+                                serviceLocator(),
+                              ),
+                            ),
+                            // car pool
+                            BlocProvider<GetAllTripsCubit>(
+                              create: (context) => GetAllTripsCubit(
+                                  apiConsumer: serviceLocator()),
+                            ),
+                            BlocProvider<GetCurrencyCubit>(
+                              create: (context) => GetCurrencyCubit(
+                                serviceLocator(),
+                              ),
+                            ),
+                            BlocProvider<JoinTripCarPoolCubit>(
+                              create: (context) => JoinTripCarPoolCubit(
+                                  joinTripCarpoolUsecase: serviceLocator()),
+                            ),
+                            BlocProvider<AdvertisementCubit>(
+                              create: (context) =>
+                                  serviceLocator<AdvertisementCubit>(),
                             ),
                           ],
-                          child: WelcomeRideRegister(
-                            isShipping: state.extra as bool,
-                          )));
-                },
-              ),
-              GoRoute(
-                path: Paths.UploadRiderImages,
-                name: Routes.UploadRiderImages,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<RideRegisterCubit>(),
-                        child: UploadRiderImages(
-                          params: state.extra as UploadRiderImagesParams?,
+                          child: const TripJoinView(
+                            initialIndex: 1,
+                          ),
                         ),
-                      ));
-                },
-              ),
-              GoRoute(
-                path: Paths.personalInformationScreen,
-                name: Routes.personalInformationScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      BlocProvider(
-                          create: (context) =>
-                              serviceLocator<RideRegisterCubit>(),
-                          child: PersonalInformationScreen(
-                            params: state.extra as RideFeatureRegisterParams,
-                          )));
-                },
-              ),
-              GoRoute(
-                path: Paths.driversLicenseScreen,
-                name: Routes.driversLicenseScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context,
-                      state,
-                      MultiBlocProvider(
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.All_PickMe_View,
+                      name: Routes.All_PickMe_View,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<ViewAllTripJoinCubit>(),
+
+                              // create: (_) => ViewAllTripJoinCubit(
+                              //   viewAllTripJoinUseCase:
+                              //       serviceLocator<ViewAllTripJoinUseCase>(),
+                              // ),
+                            ),
+                            BlocProvider(
+                              create: (_) => RequestTripJoinCubit(
+                                requestTripJoinUseCase:
+                                    serviceLocator<RequstTripJoinUseCase>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (_) => ViewAllPickMeCubit(
+                                viewAllPickMeUseCase:
+                                    serviceLocator<ViewAllPickMeUseCase>(),
+                              ),
+                            ),
+                            BlocProvider<GetCurrencyCubit>(
+                              create: (context) => GetCurrencyCubit(
+                                serviceLocator(),
+                              ),
+                            ),
+                            // car pool
+                            BlocProvider<GetAllTripsCubit>(
+                              create: (context) => GetAllTripsCubit(
+                                  apiConsumer: serviceLocator()),
+                            ),
+                            BlocProvider<GetCurrencyCubit>(
+                              create: (context) => GetCurrencyCubit(
+                                serviceLocator(),
+                              ),
+                            ),
+                            BlocProvider<JoinTripCarPoolCubit>(
+                              create: (context) => JoinTripCarPoolCubit(
+                                  joinTripCarpoolUsecase: serviceLocator()),
+                            ),
+                            BlocProvider<AdvertisementCubit>(
+                              create: (context) =>
+                                  serviceLocator<AdvertisementCubit>(),
+                            ),
+                          ],
+                          child: const TripJoinView(
+                            initialIndex: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.TRIP_JOIN_REQUEST_NOTIFICATIONS,
+                      name: Routes.TRIP_JOIN_REQUEST_NOTIFICATIONS,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            RequestTripJoinNotificationView(
+                                payload: state.extra! as Map<String, dynamic>));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
+                      name: Routes.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          BlocProvider<GetRequestsPickMeCubit>(
+                            create: (context) => GetRequestsPickMeCubit(
+                                getRequestsPickMeUseCase: serviceLocator()),
+                            child: GetRequestsPickMeView(
+                              pickMeRequests:
+                                  state.extra as List<PickMeRequest>,
+                            ),
+                          )),
+                    ),
+                    GoRoute(
+                      path: Paths.TRIP_JOIN_REQUEST_HISTORY,
+                      name: Routes.TRIP_JOIN_REQUEST_HISTORY,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            MultiBlocProvider(
+                              providers: [
+                                BlocProvider<GetRequestCubit>(
+                                  create: (context) => GetRequestCubit(
+                                      getRequestUsecase: serviceLocator()),
+                                ),
+                                BlocProvider<GetRequestsPickMeCubit>(
+                                  create: (context) => GetRequestsPickMeCubit(
+                                      getRequestsPickMeUseCase:
+                                          serviceLocator()),
+                                ),
+                              ],
+                              child: TripJoinRequestHistoryView(
+                                  extra: state.extra! as Map<String, dynamic>),
+                            ));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.CAR_POOL,
+                      name: Routes.CAR_POOL,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            MultiBlocProvider(providers: [
+                              BlocProvider<GetAllTripsCubit>(
+                                create: (context) => GetAllTripsCubit(
+                                    apiConsumer: serviceLocator()),
+                              ),
+                              BlocProvider<GetCurrencyCubit>(
+                                create: (context) => GetCurrencyCubit(
+                                  serviceLocator(),
+                                ),
+                              ),
+                              BlocProvider<JoinTripCarPoolCubit>(
+                                create: (context) => JoinTripCarPoolCubit(
+                                    joinTripCarpoolUsecase: serviceLocator()),
+                              ),
+                            ], child: const CarPoolView()));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.ADD_NEW_ROUTE,
+                      name: Routes.ADD_NEW_ROUTE,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            MultiBlocProvider(providers: [
+                              BlocProvider<StartingLocationCubit>(
+                                create: (context) => StartingLocationCubit(
+                                    fetchLocationCordinatesUseCase:
+                                        serviceLocator()),
+                              ),
+                              BlocProvider<DestinationLocationCubit>(
+                                create: (context) => DestinationLocationCubit(
+                                    fetchLocationCordinatesUseCase:
+                                        serviceLocator()),
+                              ),
+                              BlocProvider<GetPriceCarpoolCubit>(
+                                create: (context) => GetPriceCarpoolCubit(
+                                    getPriceCarpoolUsecase: serviceLocator()),
+                              ),
+                              BlocProvider<GetAllTripsCubit>(
+                                create: (context) => GetAllTripsCubit(
+                                    apiConsumer: serviceLocator()),
+                              ),
+                              BlocProvider<CreateCarPoolCubit>(
+                                create: (context) => CreateCarPoolCubit(
+                                  createCarpoolUsecase: serviceLocator(),
+                                ),
+                              ),
+                              BlocProvider<MapBoxDestCubit>(
+                                create: (context) => MapBoxDestCubit(),
+                              ),
+                              BlocProvider<GetAllTripsCubit>(
+                                create: (context) => GetAllTripsCubit(
+                                    apiConsumer: serviceLocator()),
+                              ),
+                              BlocProvider<GetCurrencyCubit>(
+                                create: (context) => GetCurrencyCubit(
+                                  serviceLocator(),
+                                ),
+                              ),
+                              BlocProvider<MapBoxCubit>(
+                                create: (context) => MapBoxCubit(),
+                              ),
+                              BlocProvider<HereLocationCubit>(
+                                create: (context) => HereLocationCubit(),
+                              ),
+                              BlocProvider<GetLatAndLongCubit>(
+                                create: (context) => GetLatAndLongCubit(
+                                    getLatLongFromAddressRemoteDataSource:
+                                        serviceLocator()),
+                              ),
+                              BlocProvider<DestGetLatAndLongCubit>(
+                                create: (context) => DestGetLatAndLongCubit(
+                                    getLatLongFromAddressRemoteDataSource:
+                                        serviceLocator()),
+                              ),
+                            ], child: const AddNewRouteView()));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.welcomeRideRegister,
+                      name: Routes.welcomeRideRegister,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) =>
+                                        serviceLocator<RideRegisterCubit>(),
+                                  ),
+                                ],
+                                child: WelcomeRideRegister(
+                                  isShipping: state.extra as bool,
+                                )));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.UploadRiderImages,
+                      name: Routes.UploadRiderImages,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<RideRegisterCubit>(),
+                              child: UploadRiderImages(
+                                params: state.extra as UploadRiderImagesParams?,
+                              ),
+                            ));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.personalInformationScreen,
+                      name: Routes.personalInformationScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<RideRegisterCubit>(),
+                                child: PersonalInformationScreen(
+                                  params:
+                                      state.extra as RideFeatureRegisterParams,
+                                )));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.driversLicenseScreen,
+                      name: Routes.driversLicenseScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context,
+                            state,
+                            MultiBlocProvider(
+                                providers: [
+                                  BlocProvider<DestGetLatAndLongCubit>(
+                                    create: (context) => DestGetLatAndLongCubit(
+                                        getLatLongFromAddressRemoteDataSource:
+                                            serviceLocator()),
+                                  ),
+                                ],
+                                child: DriversLicenseScreen(
+                                  params:
+                                      state.extra as UploadRiderImagesParams,
+                                )));
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.drugAnalysisScreen,
+                      name: Routes.drugAnalysisScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context, state, const DragAnalyticsScreen());
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.criminalRecordScreen,
+                      name: Routes.criminalRecordScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                            context, state, const CriminalRecordScreen());
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.technicalExaminationScreen,
+                      name: Routes.technicalExaminationScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          const TechnicalExaminationScreen(),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.personalDocumentsScreen,
+                      name: Routes.personalDocumentsScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                              providers: [
+                                BlocProvider<DestGetLatAndLongCubit>(
+                                  create: (context) => DestGetLatAndLongCubit(
+                                      getLatLongFromAddressRemoteDataSource:
+                                          serviceLocator()),
+                                ),
+                              ],
+                              child: PersonalDocumentsScreen(
+                                  params:
+                                      state.extra as UploadRiderImagesParams)),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.vehicleInformationScreen,
+                      name: Routes.vehicleInformationScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                              providers: [
+                                BlocProvider<DestGetLatAndLongCubit>(
+                                  create: (context) => DestGetLatAndLongCubit(
+                                      getLatLongFromAddressRemoteDataSource:
+                                          serviceLocator()),
+                                ),
+                              ],
+                              child: VehicleInformationScreen(
+                                  params:
+                                      state.extra as UploadRiderImagesParams)),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.moreInfoScreen,
+                      name: Routes.moreInfoScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const MoreInfoScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.truckWelcomeRideRegister,
+                      name: Routes.truckWelcomeRideRegister,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TruckWelcomeRideRegister()),
+                        );
+                      },
+                    ),
+
+                    GoRoute(
+                      path: Paths.truckPersonalInformationScreen,
+                      name: Routes.truckPersonalInformationScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TruckPersonalInformationScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.truckDriversLicenseScreen,
+                      name: Routes.truckDriversLicenseScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TruckDriversLicenseScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.truckPersonalDocumentsScreen,
+                      name: Routes.truckPersonalDocumentsScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TruckPersonalDocumentsScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.truckVehicleInformationScreen,
+                      name: Routes.truckVehicleInformationScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TruckVehicleInformationScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.truckMoreInfoScreen,
+                      name: Routes.truckMoreInfoScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TruckMoreInfoScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.completeRegisterScreen,
+                      name: Routes.completeRegisterScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                              providers: [
+                                BlocProvider<DestGetLatAndLongCubit>(
+                                  create: (context) => DestGetLatAndLongCubit(
+                                      getLatLongFromAddressRemoteDataSource:
+                                          serviceLocator()),
+                                ),
+                              ],
+                              child: CompleteRegisterScreen(
+                                params: state.extra as UploadRiderImagesParams,
+                              )),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.createLoadingTripScreen,
+                      name: Routes.createLoadingTripScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const CreateLoadingTripScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.CURRENTRIDEHOME,
+                      name: Routes.CURRENTRIDEHOME,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: const CurrentRideScreen(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.RideREGUESTHOME,
+                      name: Routes.RideRequestHOME,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: const RideRequestScreen(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.RideStatusScreen,
+                      name: Routes.RideStatusScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: const RideStatusScreen(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.ratingClientScreen,
+                      name: Routes.ratingClientScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: RatingClientScreen(),
+                        ),
+                      ),
+                    ),
+
+                    GoRoute(
+                      path: Paths.connectionCallScreen,
+                      name: Routes.connectionCallScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: const ConnectionCallScreen(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.safetyRideScreen,
+                      name: Routes.safetyRideScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: const SafetyRideScreen(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.rideFindingScreen,
+                      name: Routes.rideFindingScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => serviceLocator<RideCubit>(),
+                            ),
+                          ],
+                          child: const RideFindingScreen(),
+                        ),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.rideModeScreen,
+                      name: Routes.rideModeScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        RideModeScreen(params: state.extra as RideModeParams),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.rideDashboardDetailsScreen,
+                      name: Routes.rideDashboardDetailsScreen,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<DashboardsCubit>(),
+                              ),
+                            ],
+                            child: RideDashboardDetailsScreen(
+                                tripEntity: state.extra as TripEntity),
+                          )),
+                    ),
+                    GoRoute(
+                      path: Paths.routeDetailsScreen,
+                      name: Routes.routeDetailsScreen,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<CaptainShareCubit>(),
+                            child: RouteDetailsScreen(
+                                tripEntity: state.extra as MyBookingEntity),
+                          )),
+                    ),
+
+                    GoRoute(
+                      path: Paths.rideLoadingRequestScreen,
+                      name: Routes.rideLoadingRequestScreen,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<ClientTripsCubit>()
+                                  ..loadInitialClientPendingTrips(),
+                            child: PendingRideOfferScreen(
+                              type: state.extra as String,
+                            ),
+                          )),
+                    ),
+                    GoRoute(
+                      path: Paths.rideOffer,
+                      name: Routes.rideOffer,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<ClientTripsCubit>(),
+                            child: MainTabsRideOffer(
+                              type: state.extra as String,
+                            ),
+                          )),
+                    ),
+                    GoRoute(
+                      path: Paths.supportRideScreen,
+                      name: Routes.supportRideScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        BlocProvider(
+                            create: (context) =>
+                                serviceLocator<DashboardsCubit>(),
+                            child: SupportRideScreen(
+                              params: state.extra as SupportRideParams,
+                            )),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.supportClientDetailsScreen,
+                      name: Routes.supportClientDetailsScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        SupportClientDetailsScreen(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.emergencyContactsScreen,
+                      name: Routes.emergencyContactsScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const EmergencyContactsScreen(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.rideArrivedScreen,
+                      name: Routes.rideArrivedScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const RideArrivedScreen(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.ratingDriverScreen,
+                      name: Routes.ratingDriverScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        RatingDriverScreen(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.completeRideScreen,
+                      name: Routes.completeRideScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        const CompleteRideScreen(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: Paths.newTripJoinScreen,
+                      name: Routes.newTripJoinScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const NewTripJoinScreen()),
+                        );
+                      },
+                    ),
+                    // GoRoute(
+                    //     path: Paths.newTripJoinScreen,
+                    //     name: Routes.newTripJoinScreen,
+                    //    pageBuilder: (context, state) {
+                    //       return MultiBlocProvider(providers: [
+                    //         BlocProvider<DestGetLatAndLongCubit>(
+                    //           create: (context) => DestGetLatAndLongCubit(
+                    //               getLatLongFromAddressRemoteDataSource:
+                    //               serviceLocator()),
+                    //         ),
+                    //       ], child: const NewTripJoinScreen()),);
+                    //     },),
+                    GoRoute(
+                      path: Paths.captainShareScreen,
+                      name: Routes.captainShareScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                              providers: [
+                                BlocProvider<DestGetLatAndLongCubit>(
+                                  create: (context) => DestGetLatAndLongCubit(
+                                      getLatLongFromAddressRemoteDataSource:
+                                          serviceLocator()),
+                                ),
+                              ],
+                              child: const TripJoinView(
+                                initialIndex: 0,
+                              )),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.captainShareInfoScreen,
+                      name: Routes.captainShareInfoScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const CaptainShareInfoScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.tripJoinInfoScreen,
+                      name: Routes.tripJoinInfoScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const TripJoinInfoScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.pickMeInfoScreen,
+                      name: Routes.pickMeInfoScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                          ], child: const PickMeInfoScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.newRouteScreen,
+                      name: Routes.newRouteScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(providers: [
+                            BlocProvider<DestGetLatAndLongCubit>(
+                              create: (context) => DestGetLatAndLongCubit(
+                                  getLatLongFromAddressRemoteDataSource:
+                                      serviceLocator()),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<CaptainShareCubit>(),
+                            ),
+                          ], child: const NewRouteScreen()),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.runningAndPastTripsScreen,
+                      name: Routes.runningAndPastTripsScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<CaptainShareDashboardCubit>()
+                                      ..loadInitData(context),
+                              ),
+                            ],
+                            child: const RunningAndPastTripsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.captainRideDetails,
+                      name: Routes.captainRideDetails,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider<DestGetLatAndLongCubit>(
+                                create: (context) => DestGetLatAndLongCubit(
+                                    getLatLongFromAddressRemoteDataSource:
+                                        serviceLocator()),
+                              ),
+                            ],
+                            child: const CaptainRideDetails(),
+                          ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.newRideModeScreen,
+                      name: Routes.newRideModeScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider<DestGetLatAndLongCubit>(
+                                create: (context) => DestGetLatAndLongCubit(
+                                    getLatLongFromAddressRemoteDataSource:
+                                        serviceLocator()),
+                              ),
+                            ],
+                            child: const NewRideModeScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.useSoundScreen,
+                      name: Routes.UseSoundScreen,
+                      pageBuilder: (context, state) {
+                        return customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider<DestGetLatAndLongCubit>(
+                                create: (context) => DestGetLatAndLongCubit(
+                                    getLatLongFromAddressRemoteDataSource:
+                                        serviceLocator()),
+                              ),
+                            ],
+                            child: const UseSoundScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: Paths.addStoryScreen,
+                      name: Routes.AddStoryScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
+                        MultiBlocProvider(
                           providers: [
                             BlocProvider<DestGetLatAndLongCubit>(
                               create: (context) => DestGetLatAndLongCubit(
@@ -3999,742 +4791,65 @@ class AppPages {
                                       serviceLocator()),
                             ),
                           ],
-                          child: DriversLicenseScreen(
-                            params: state.extra as UploadRiderImagesParams,
-                          )));
-                },
-              ),
-              GoRoute(
-                path: Paths.drugAnalysisScreen,
-                name: Routes.drugAnalysisScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context, state, const DragAnalyticsScreen());
-                },
-              ),
-              GoRoute(
-                path: Paths.criminalRecordScreen,
-                name: Routes.criminalRecordScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                      context, state, const CriminalRecordScreen());
-                },
-              ),
-              GoRoute(
-                path: Paths.technicalExaminationScreen,
-                name: Routes.technicalExaminationScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    const TechnicalExaminationScreen(),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.personalDocumentsScreen,
-                name: Routes.personalDocumentsScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                        providers: [
-                          BlocProvider<DestGetLatAndLongCubit>(
-                            create: (context) => DestGetLatAndLongCubit(
-                                getLatLongFromAddressRemoteDataSource:
-                                    serviceLocator()),
-                          ),
-                        ],
-                        child: PersonalDocumentsScreen(
-                            params: state.extra as UploadRiderImagesParams)),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.vehicleInformationScreen,
-                name: Routes.vehicleInformationScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                        providers: [
-                          BlocProvider<DestGetLatAndLongCubit>(
-                            create: (context) => DestGetLatAndLongCubit(
-                                getLatLongFromAddressRemoteDataSource:
-                                    serviceLocator()),
-                          ),
-                        ],
-                        child: VehicleInformationScreen(
-                            params: state.extra as UploadRiderImagesParams)),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.moreInfoScreen,
-                name: Routes.moreInfoScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
+                          child: const AddStoryScreen(),
+                        ),
                       ),
-                    ], child: const MoreInfoScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.truckWelcomeRideRegister,
-                name: Routes.truckWelcomeRideRegister,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TruckWelcomeRideRegister()),
-                  );
-                },
-              ),
-
-              GoRoute(
-                path: Paths.truckPersonalInformationScreen,
-                name: Routes.truckPersonalInformationScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TruckPersonalInformationScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.truckDriversLicenseScreen,
-                name: Routes.truckDriversLicenseScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TruckDriversLicenseScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.truckPersonalDocumentsScreen,
-                name: Routes.truckPersonalDocumentsScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TruckPersonalDocumentsScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.truckVehicleInformationScreen,
-                name: Routes.truckVehicleInformationScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TruckVehicleInformationScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.truckMoreInfoScreen,
-                name: Routes.truckMoreInfoScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TruckMoreInfoScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.completeRegisterScreen,
-                name: Routes.completeRegisterScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                        providers: [
-                          BlocProvider<DestGetLatAndLongCubit>(
-                            create: (context) => DestGetLatAndLongCubit(
-                                getLatLongFromAddressRemoteDataSource:
-                                    serviceLocator()),
-                          ),
-                        ],
-                        child: CompleteRegisterScreen(
-                          params: state.extra as UploadRiderImagesParams,
-                        )),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.createLoadingTripScreen,
-                name: Routes.createLoadingTripScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const CreateLoadingTripScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.CURRENTRIDEHOME,
-                name: Routes.CURRENTRIDEHOME,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const CurrentRideScreen(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RideREGUESTHOME,
-                name: Routes.RideRequestHOME,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const RideRequestScreen(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.RideStatusScreen,
-                name: Routes.RideStatusScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const RideStatusScreen(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.ratingClientScreen,
-                name: Routes.ratingClientScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: RatingClientScreen(),
-                  ),
-                ),
-              ),
-
-              GoRoute(
-                path: Paths.connectionCallScreen,
-                name: Routes.connectionCallScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const ConnectionCallScreen(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.safetyRideScreen,
-                name: Routes.safetyRideScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const SafetyRideScreen(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.rideFindingScreen,
-                name: Routes.rideFindingScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<RideCubit>(),
-                      ),
-                    ],
-                    child: const RideFindingScreen(),
-                  ),
-                ),
-              ),
-              GoRoute(
-                path: Paths.rideModeScreen,
-                name: Routes.rideModeScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  RideModeScreen(params: state.extra as RideModeParams),
-                ),
-              ),
-              GoRoute(
-                path: Paths.rideDashboardDetailsScreen,
-                name: Routes.rideDashboardDetailsScreen,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
+                    ),
+                    GoRoute(
+                      path: Paths.allDriverRatingScreen,
+                      name: Routes.allDriverRatingScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
                         BlocProvider(
-                          create: (context) =>
-                              serviceLocator<DashboardsCubit>(),
-                        ),
-                      ],
-                      child: RideDashboardDetailsScreen(
-                          tripEntity: state.extra as TripEntity),
-                    )),
-              ),
-              GoRoute(
-                path: Paths.routeDetailsScreen,
-                name: Routes.routeDetailsScreen,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    BlocProvider(
-                      create: (context) => serviceLocator<CaptainShareCubit>(),
-                      child: RouteDetailsScreen(
-                          tripEntity: state.extra as MyBookingEntity),
-                    )),
-              ),
-
-              GoRoute(
-                path: Paths.rideLoadingRequestScreen,
-                name: Routes.rideLoadingRequestScreen,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    BlocProvider(
-                      create: (context) => serviceLocator<ClientTripsCubit>()
-                        ..loadInitialClientPendingTrips(),
-                      child: PendingRideOfferScreen(
-                        type: state.extra as String,
+                            create: (context) =>
+                                serviceLocator<ClientTripsCubit>()
+                                  ..getDriverAllRating(
+                                      params: state.extra as String),
+                            child: AllDriverRatingScreen()),
                       ),
-                    )),
-              ),
-              GoRoute(
-                path: Paths.rideOffer,
-                name: Routes.rideOffer,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    BlocProvider(
-                      create: (context) => serviceLocator<ClientTripsCubit>(),
-                      child: MainTabsRideOffer(
-                        type: state.extra as String,
-                      ),
-                    )),
-              ),
-              GoRoute(
-                path: Paths.supportRideScreen,
-                name: Routes.supportRideScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                      create: (context) => serviceLocator<DashboardsCubit>(),
-                      child: SupportRideScreen(
-                        params: state.extra as SupportRideParams,
-                      )),
-                ),
-              ),
-              GoRoute(
-                path: Paths.supportClientDetailsScreen,
-                name: Routes.supportClientDetailsScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  SupportClientDetailsScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.emergencyContactsScreen,
-                name: Routes.emergencyContactsScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const EmergencyContactsScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.rideArrivedScreen,
-                name: Routes.rideArrivedScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const RideArrivedScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.ratingDriverScreen,
-                name: Routes.ratingDriverScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  RatingDriverScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.completeRideScreen,
-                name: Routes.completeRideScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  const CompleteRideScreen(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.newTripJoinScreen,
-                name: Routes.newTripJoinScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const NewTripJoinScreen()),
-                  );
-                },
-              ),
-              // GoRoute(
-              //     path: Paths.newTripJoinScreen,
-              //     name: Routes.newTripJoinScreen,
-              //    pageBuilder: (context, state) {
-              //       return MultiBlocProvider(providers: [
-              //         BlocProvider<DestGetLatAndLongCubit>(
-              //           create: (context) => DestGetLatAndLongCubit(
-              //               getLatLongFromAddressRemoteDataSource:
-              //               serviceLocator()),
-              //         ),
-              //       ], child: const NewTripJoinScreen()),);
-              //     },),
-              GoRoute(
-                path: Paths.captainShareScreen,
-                name: Routes.captainShareScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                        providers: [
-                          BlocProvider<DestGetLatAndLongCubit>(
-                            create: (context) => DestGetLatAndLongCubit(
-                                getLatLongFromAddressRemoteDataSource:
-                                    serviceLocator()),
-                          ),
-                        ],
-                        child: const TripJoinView(
-                          initialIndex: 0,
-                        )),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.captainShareInfoScreen,
-                name: Routes.captainShareInfoScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const CaptainShareInfoScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.tripJoinInfoScreen,
-                name: Routes.tripJoinInfoScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const TripJoinInfoScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.pickMeInfoScreen,
-                name: Routes.pickMeInfoScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                    ], child: const PickMeInfoScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.newRouteScreen,
-                name: Routes.newRouteScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
-                      ),
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<CaptainShareCubit>(),
-                      ),
-                    ], child: const NewRouteScreen()),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.runningAndPastTripsScreen,
-                name: Routes.runningAndPastTripsScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
+                    ),
+                    GoRoute(
+                      path: Paths.allClientRatingScreen,
+                      name: Routes.allClientRatingScreen,
+                      pageBuilder: (context, state) => customTransition(
+                        context,
+                        state,
                         BlocProvider(
-                          create: (context) =>
-                              serviceLocator<CaptainShareDashboardCubit>()
-                                ..loadInitData(context),
-                        ),
-                      ],
-                      child: const RunningAndPastTripsScreen(),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.captainRideDetails,
-                name: Routes.captainRideDetails,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<DestGetLatAndLongCubit>(
-                          create: (context) => DestGetLatAndLongCubit(
-                              getLatLongFromAddressRemoteDataSource:
-                                  serviceLocator()),
-                        ),
-                      ],
-                      child: const CaptainRideDetails(),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.newRideModeScreen,
-                name: Routes.newRideModeScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<DestGetLatAndLongCubit>(
-                          create: (context) => DestGetLatAndLongCubit(
-                              getLatLongFromAddressRemoteDataSource:
-                                  serviceLocator()),
-                        ),
-                      ],
-                      child: const NewRideModeScreen(),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.useSoundScreen,
-                name: Routes.UseSoundScreen,
-                pageBuilder: (context, state) {
-                  return customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<DestGetLatAndLongCubit>(
-                          create: (context) => DestGetLatAndLongCubit(
-                              getLatLongFromAddressRemoteDataSource:
-                                  serviceLocator()),
-                        ),
-                      ],
-                      child: const UseSoundScreen(),
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Paths.addStoryScreen,
-                name: Routes.AddStoryScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                                serviceLocator()),
+                            create: (context) =>
+                                serviceLocator<ClientTripsCubit>()
+                                  ..getClientAllRating(
+                                      params: state.extra as String),
+                            child: AllClientRatingScreen()),
                       ),
-                    ],
-                    child: const AddStoryScreen(),
-                  ),
+                    ),
+                    GoRoute(
+                      path: Paths.loadingDashboardDetailsScreen,
+                      name: Routes.loadingDashboardDetailsScreen,
+                      pageBuilder: (context, state) => customTransition(
+                          context,
+                          state,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<DashboardsCubit>(),
+                              ),
+                            ],
+                            child: LoadingDashboardDetailsScreen(
+                                tripEntity:
+                                    state.extra as GetLoadingHistoryEntity),
+                          )),
+                    ),
+                    GoRoute(
+                      path: Paths.CHANCE,
+                      name: Routes.CHANCE,
+                      pageBuilder: (context, state) =>
+                          customTransition(context, state, ChanceView()),
+                    ),
+                  ],
                 ),
-              ),
-              GoRoute(
-                path: Paths.allDriverRatingScreen,
-                name: Routes.allDriverRatingScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                      create: (context) => serviceLocator<ClientTripsCubit>()
-                        ..getDriverAllRating(params: state.extra as String),
-                      child: AllDriverRatingScreen()),
-                ),
-              ),
-              GoRoute(
-                path: Paths.allClientRatingScreen,
-                name: Routes.allClientRatingScreen,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                      create: (context) => serviceLocator<ClientTripsCubit>()
-                        ..getClientAllRating(params: state.extra as String),
-                      child: AllClientRatingScreen()),
-                ),
-              ),
-              GoRoute(
-                path: Paths.loadingDashboardDetailsScreen,
-                name: Routes.loadingDashboardDetailsScreen,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (context) =>
-                              serviceLocator<DashboardsCubit>(),
-                        ),
-                      ],
-                      child: LoadingDashboardDetailsScreen(
-                          tripEntity: state.extra as GetLoadingHistoryEntity),
-                    )),
-              ),
-              GoRoute(
-                path: Paths.CHANCE,
-                name: Routes.CHANCE,
-                pageBuilder: (context, state) =>
-                    customTransition(context, state, ChanceView()),
-              ),
-            ],
-          ),
+              ]),
         ]);
   }
 }

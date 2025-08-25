@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
@@ -122,7 +123,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   }
                                   AdInterstitialTop.loadIntersitialAd();
                                   AdInterstitialTop.showInterstitialAd();
-                                  Navigator.pop(context);
+                                  var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                  currentContext.pop();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -347,18 +349,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           },
                         ),
                         drawerRollWidget(
-                          label: LocaleKeys.book.localize,
-                          image: Assets.booking,
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount('bookingCount', context);
-                            soonDialog(context);
-                            // context.push(Routes.BE_STAR);
-                          },
-                        ),
-                        drawerRollWidget(
                           label: LocaleKeys.find.localize,
                           image: Assets.find,
                           onTap: () {
@@ -475,18 +465,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.CHANCE);
                           },
                         ),
-                        drawerRollWidget(
-                          label: context.isArabic ? 'عملات' : "Exchange",
-                          image: Assets.moneyExchange,
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            if (!context.read<UserCubit>().isLoggedIn) {
-                              return pleaseLoginDialog(context);
-                            }
-                            context.pop();
-                            soonDialog(context);
-                          },
-                        ),
+
                       ],
                     ),
                   ),
@@ -856,7 +835,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
         if (context.read<UserCubit>().isLoggedIn) {
-          Navigator.pop(context);
+          var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+          currentContext.pop();
           context.go(Routes.LUCKYWHEEL);
         } else {
           return pleaseLoginDialog(context);
@@ -1144,7 +1124,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                   onTap: () async {
                                     ManageVibration.vibrate();
-                                    Navigator.pop(context);
+                                    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                    currentContext.pop();
 
                                     // Reload user data if needed
                                   },
@@ -1331,7 +1312,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     Expanded(
                                       child: AppButton(
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                          currentContext.pop();
                                         },
                                         label: LocaleKeys.cancel.localize,
                                       ),
@@ -1377,7 +1359,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         return CustomSwitchButton(
                           value: floatingNavigatorCubit.floatingNavigatorEnable,
                           onChanged: (value) async {
-                            Navigator.pop(context);
+                            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                            currentContext.pop();
                             floatingNavigatorCubit
                                 .changeFloatingNavigatorEnable();
                           },
@@ -1404,7 +1387,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         return CustomSwitchButton(
                           value: choiceRulerCubit.choiceRulerEnabled,
                           onChanged: (value) async {
-                            Navigator.pop(context);
+                            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                            currentContext.pop();
                             choiceRulerCubit.changeChoiceRulerEnabled();
                           },
                         );

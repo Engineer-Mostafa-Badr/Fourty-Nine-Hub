@@ -50,6 +50,7 @@ import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
 import '../../../../../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
+import '../../../../../features/social_media/instagram/domain/usecases/get_for_you_songs_usecase.dart';
 import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
@@ -79,7 +80,7 @@ class EndPoints {
   static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh/token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
-  static const addRateRestaurant = '/restaurant/rating-restaurant/';  
+  static const addRateRestaurant = '/restaurant/rating-restaurant/';
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
@@ -499,6 +500,9 @@ class EndPoints {
 
   static String acceptRoute(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
+
+  static String completeRoute(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/complete";
 
   static String pickClient(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/pick-up-passenger";
@@ -1721,14 +1725,14 @@ class EndPoints {
     // Spotlight Profile Endpoints
     static const getMySpotlightProfile = '/spotlight/profile/me';
     static String getSpotlightProfileForUser(String userId) => '/spotlight/profile/$userId';
-  
-  // Spotlight Media Endpoints  
-  static String getMySpotlightMedia({int page = 1, int limit = 10}) => 
+
+  // Spotlight Media Endpoints
+  static String getMySpotlightMedia({int page = 1, int limit = 10}) =>
       '/spotlight/media/me?page=$page&limit=$limit';
-  
-  static String getSpotlightMediaForUser(String userId, {int page = 1, int limit = 10}) => 
+
+  static String getSpotlightMediaForUser(String userId, {int page = 1, int limit = 10}) =>
       '/spotlight/media/$userId?page=$page&limit=$limit';
-  
+
   // Media Upload Endpoints
   static const requestUploadMedia = '/spotlight/media/upload/request';
   static const confirmUploadMedia = '/spotlight/media/upload/confirm';
@@ -1737,5 +1741,15 @@ class EndPoints {
   // Additional endpoints that might be useful
   static const likeMedia = '/spotlight/media/like';
   static const unlikeMedia = '/spotlight/media/unlike';
-  static const deleteMedia = '/spotlight/media/delete'; 
+  static const deleteMedia = '/spotlight/media/delete';
+
+  static String getForYouSongs({required SongsPaginationParams params}) => '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
+  static String getTrendingSongs({required SongsPaginationParams params}) => '/songs/onTrending-songs?page=${params.page}&limit=${params.limit}';
+  static String getSavedSongs({required SongsPaginationParams params}) => '/songs/favorite-songs?page=${params.page}&limit=${params.limit}';
+  static String addRemoveSongsFromFavs({required String songId}) => '/songs/add-to-favorites/$songId';
+  static String searchSongs({required String query}) => '/songs/search?query=$query';
+
+
+  // Chat Endpoints
+  static getSocialConversations({int page = 1, int limit = 10}) => '/conversations?page=$page&limit=$limit';
 }

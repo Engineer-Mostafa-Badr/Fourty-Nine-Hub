@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -119,6 +120,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> listenToLeaveAvailableRoutes(Function(String routeId) params);
   void listenToNewRoute(Function(MyBookingEntity newBooking) params);
   void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
+  void listenToComingClient(Function(ListenToClientComingParams params) params);
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
@@ -550,6 +552,26 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info("New Route data :  $data");
         log("New Route data :  $data");
         params(MyBookingModel.fromJson(data['newAllowedRoute']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToComingClient(Function(ListenToClientComingParams params) params) {
+    try {
+      CliLogger.info("Listen to Coming Client ");
+      log("Listen to Coming Client ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToComingClient, (data) {
+        CliLogger.info("Coming Client data :  $data");
+        log("Coming Client data1 : ${data['passengerIamComing']?['newDriverWaitingTime'] ?? 'N/A'}");
+        // log("New Route data :  $data");
+        ListenToClientComingParams result = ListenToClientComingParams (
+          clientId: data['passengerIamComing']?['clientId']??'',
+          remainingTime: data['passengerIamComing']?['newDriverWaitingTime']??''
+        );
+        params(result);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

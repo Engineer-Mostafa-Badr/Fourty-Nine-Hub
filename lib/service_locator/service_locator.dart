@@ -34,6 +34,7 @@ import 'captain_share_service_locator.dart';
 import 'carpool_service_locator.dart';
 import 'club_voice_service_locator.dart';
 import 'competition_service_locator.dart';
+import 'conversations_service_locator.dart';
 import 'edit_food_service_locator.dart';
 import 'face_book_service_locator.dart';
 import 'follow_service_locator.dart';
@@ -72,6 +73,7 @@ import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
+import 'chat_service_locator.dart';
 import 'chance_service_locator.dart';
 import 'company_add_service_locator.dart';
 import 'custom_page_service_locator.dart';
@@ -324,6 +326,8 @@ class DI {
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Updated
     RideServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
+    // Conversations
+    ConversationsServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Updated
     RideDashboardServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
     // Club Voice
@@ -346,6 +350,7 @@ class DI {
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);
     BalanceServiceLocator.execute(serviceLocator: serviceLocator);
+    ChatServiceLocator.execute(serviceLocator: serviceLocator);
     CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
     PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
     SettingServiceLocator.execute(serviceLocator: serviceLocator);

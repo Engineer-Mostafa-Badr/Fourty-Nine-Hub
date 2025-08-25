@@ -32,11 +32,11 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
         'icon': Icons.attach_file_rounded,
       },
       {
-        'title': LocaleKeys.audioAndVideoCalls.localize,
+        'title': LocaleKeys.locationSharing.localize,
         'icon': Icons.location_pin,
       },
       {
-        'title': LocaleKeys.audioAndVideoCalls.localize,
+        'title': LocaleKeys.statusUpdates.localize,
         'icon': null,
         'image': Assets.chatStatus,
       },
@@ -139,13 +139,16 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  width: 24,),
                 const Icon(
                   Icons.lock_outline,
                   size: 24,
                 ),
+                Spacer(),
                 Column(
                   children: [
                     Label(
@@ -166,11 +169,14 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
                     ),
                   ],
                 ),
+                Spacer(),
                 const Icon(
                   Icons.lock_outline,
                   size: 24,
                   color: Colors.transparent,
                 ),
+                SizedBox(
+                  width: 24,),
               ],
             ),
           ),

@@ -34,6 +34,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_pending_untracked_trips_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 
 import '../../domain/entities/dashboards/settings_dashboard_entity.dart';
@@ -171,6 +172,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params) {
     remoteDataSource.listenToNewRouteDriver(params);
+  }
+
+  @override
+  void listenToComingClient(Function(ListenToClientComingParams params) params) {
+    remoteDataSource.listenToComingClient(params);
   }
 
   @override

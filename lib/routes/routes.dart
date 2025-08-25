@@ -60,7 +60,7 @@ abstract class Routes {
   static const FacebookSuggestPeople = '/Social/FacebookSuggestPeople';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
-  static const REELS = '/Social/REELS';
+  static const REELS = '/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const AllLocationScreen = '/AllLocationScreen';
   static const TiktokOptionScreen = '/TiktokOptionScreen';
@@ -84,6 +84,7 @@ abstract class Routes {
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
   static const ARCHIVEDCHATS = '/ArchivedChatsView';
+  static const CHAT_HOME = '/ChatHome';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const ONETIMEVOICEMESSAGE = '/OneTimeVoiceMessageView';
@@ -308,7 +309,7 @@ abstract class Routes {
   static const allDriverRatingScreen = '/allDriverRatingScreen';
   static const allClientRatingScreen = '/allClientRatingScreen';
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
-
+  static const conversationsScreen = '/ConversationsScreen';
 }
 
 abstract class Paths {
@@ -373,6 +374,7 @@ abstract class Paths {
   static const CREATEAUCTION = 'CreateAuction';
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
+  static const CHAT_HOME = 'ChatHome';
   static const VIEWCONTACT = 'ViewContact';
   static const ATTACHMENTSVIEW = 'AttachmentsView';
   static const CHATPROFILEVIEW = 'ChatProfileView';
@@ -383,7 +385,7 @@ abstract class Paths {
   static const truckPersonalInformationScreen =
       'TruckPersonalInformationScreen';
   static const MEDIASLIDER = 'MediaSlider';
-  static const REELS = 'Reels';
+  static const REELS = 'REELS';
   static const MUSICREELS = 'MUSICREELS';
   static const TiktokOptionScreen = 'TiktokOptionScreen';
   static const AllLocationScreen = 'AllLocationScreen';
@@ -602,5 +604,5 @@ abstract class Paths {
   static const FOLLOWREQUESTSINSTAGRAM = 'FollowRequestsInstagram';
   static const followersScreen = 'FollowersScreen';
   static const allClientRatingScreen = 'allClientRatingScreen';
-
+  static const conversationsScreen = 'ConversationsScreen';
 }

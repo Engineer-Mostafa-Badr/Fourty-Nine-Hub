@@ -76,6 +76,7 @@ abstract class SocketIOListeners {
   static const String listenToAcceptRoute = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
   static const String listenToDriverTheOnWay = 'CAPTAIN_SHARE:DRIVER_ON_THE_WAY';
   static const String listenToNewRoute = 'captain-share:new-route-available';
+  static const String listenToComingClient = 'CAPTAIN_SHARE:PASSENGER_IAM_COMING';
   static const String listenToNewRouteDriver = 'captain-share:new-available-trip';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
   static const String removeLoading = 'LOADING:REMOVE_TRIP';

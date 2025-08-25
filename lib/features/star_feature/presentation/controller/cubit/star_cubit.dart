@@ -33,12 +33,9 @@ class StarCubit extends Cubit<StarState> {
       this._bannerUseCase)
       : super(StarState());
 
-  // TextEditingController starController = TextEditingController();
-
   List<StarEntity> star = [];
   List<StarWinnerEntity> winner = [];
 
-  // List<AzkarDetailsEntity> azkarDetails = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
@@ -55,13 +52,35 @@ class StarCubit extends Cubit<StarState> {
   List<StarEntity> allTalents = [];
   bool loadAllTalents = false;
 
+  // Favorites functionality
+  final Set<String> _favoriteIds = {};
+  Set<String> get favoriteIds => _favoriteIds;
+
+  List<StarEntity> get favoriteTalents {
+    return allTalents
+        .where((talent) => _favoriteIds.contains(talent.id))
+        .toList();
+  }
+
+  void toggleFavorite(String talentId) {
+    if (_favoriteIds.contains(talentId)) {
+      _favoriteIds.remove(talentId);
+    } else {
+      _favoriteIds.add(talentId);
+    }
+    emit(state.copyWith(favoriteIds: _favoriteIds));
+  }
+
+  bool isFavorite(String talentId) {
+    return _favoriteIds.contains(talentId);
+  }
+
   Future loadAllTalentsData() async {
     loadAllTalents = true;
     allTalents.clear();
     allTalentsPage = 1;
     hasMoreAllTalentsData = true;
     emit(state.copyWith(status: StarStates.loading));
-    await getAllTalents();
     await Future.wait([getAllTalents(), fetchBanner()]);
     loadAllTalents = false;
     emit(state.copyWith(status: StarStates.success));
@@ -72,14 +91,11 @@ class StarCubit extends Cubit<StarState> {
   int allTalentsPage = 1;
 
   Future<void> getAllTalents() async {
-    print(hasMoreAllTalentsData);
-    print(isLoadingAllTalentsMore);
-    print('getAllTalents ==>');
     if (!hasMoreAllTalentsData || isLoadingAllTalentsMore) return;
     isLoadingAllTalentsMore = true;
     emit(state.copyWith(status: StarStates.loading));
     final response = await _allStarUseCase(
-      StarPaginationParams(page: currentPage, limit: pageSize),
+      StarPaginationParams(page: allTalentsPage, limit: pageSize),
     );
     response.fold((l) {
       var currentContext =
@@ -88,15 +104,13 @@ class StarCubit extends Cubit<StarState> {
       emit(state.copyWith(failure: l, status: StarStates.error));
     }, (data) async {
       allTalents.addAll(data);
-      allTalents.addAll(data);
-      allTalents.addAll(data);
       if (data.length < pageSize) {
         hasMoreAllTalentsData = false;
       } else {
         allTalentsPage++;
       }
       isLoadingAllTalentsMore = false;
-      emit(state.copyWith(status: StarStates.initial));
+      emit(state.copyWith(status: StarStates.success));
     });
   }
 
@@ -150,7 +164,6 @@ class StarCubit extends Cubit<StarState> {
   }
 
   Future<void> getAllTalent({bool refresh = false}) async {
-    print('getAllTalent ==>');
     if (refresh) {
       star.clear();
       currentPage = 1;
@@ -225,38 +238,6 @@ class StarCubit extends Cubit<StarState> {
     );
   }
 
-  // final PagingController<int, StarEntity> starPagingController =
-  //     PagingController(firstPageKey: 1);
-
-  // Future<List<StarEntity>> getPaginatedMyStar(int page) async {
-  //   emit(state.copyWith(status: StarStates.loading));
-  //   List<StarEntity> main = [];
-  //   final response = await _fetchMylStarUseCase.call(const NoParams());
-  //
-  //   response.fold((l) {
-  //     print('Errrrrrrror :$l');
-  //     emit(state.copyWith(failure: l, status: StarStates.error));
-  //   }, (data) {
-  //     final isLastPage = data.length < pageSize;
-  //     if (page == 1) {
-  //       print("page == 1 $page");
-  //       starPagingController.itemList = [];
-  //     }
-  //     if (isLastPage) {
-  //       print("isLastPage = $isLastPage");
-  //       starPagingController.appendLastPage(data);
-  //     } else {
-  //       print("isNotLastPage = $isLastPage");
-  //       final nextPageKey = page + 1;
-  //       starPagingController.appendPage(data, nextPageKey);
-  //     }
-  //     print('Sussecc :$data');
-  //     main = data;
-  //     emit(state.copyWith(star: data, status: StarStates.success));
-  //   });
-  //   return main;
-  // }
-
   Future<bool> uploadStar({
     required StarParams params,
   }) async {
@@ -321,8 +302,15 @@ class StarCubit extends Cubit<StarState> {
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
       (data) {
+        // Remove from local lists
+        allTalents.removeWhere((talent) => talent.id == id);
+        myTalents.removeWhere((talent) => talent.id == id);
+        star.removeWhere((talent) => talent.id == id);
+        _favoriteIds.remove(id);
+
         emit(state.copyWith(
           status: StarStates.success,
+          favoriteIds: _favoriteIds,
         ));
       },
     );
@@ -332,31 +320,36 @@ class StarCubit extends Cubit<StarState> {
 
   uploadVideo({bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
-    print("objectssssssssss");
     await upload.uploadVideo(
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
-          print("file name ${data.file}");
-          print("mediaId: ${data.mediaId}");
           selectedVideo?.add(data.mediaId);
           final video = state.video ?? [];
-
           video.add(data);
           selectedVideo = video.map((e) => e.mediaId).toList();
-          print("selectedvideo${selectedVideo?.length}");
-          print(video.length);
-          emit(state.copyWith(
-              video: video,
-              // backColor: '#FFFFFFFF',
-              status: StarStates.success));
+          emit(state.copyWith(video: video, status: StarStates.success));
         },
         context: context);
-    print("length${state.video?.length}");
   }
 
   changeRating(String id, int rating) {
+    // Update in all relevant lists
     allTalents = allTalents.map((element) {
+      if (element.id == id) {
+        return element.copyWith(averageRating: rating);
+      }
+      return element;
+    }).toList();
+
+    star = star.map((element) {
+      if (element.id == id) {
+        return element.copyWith(averageRating: rating);
+      }
+      return element;
+    }).toList();
+
+    myTalents = myTalents.map((element) {
       if (element.id == id) {
         return element.copyWith(averageRating: rating);
       }
