@@ -108,12 +108,12 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
                         holdingAmount<=0?Container():AnimatedFancyText(
-                          "${context.isArabic?"مبلغ مجمد":"Holding Amount"} : ${FormatNumbers().formatNumber(
+                          "${context.isArabic?"متحفظ عليه":"Holding Amount"} : ${FormatNumbers().formatNumber(
                             holdingAmount,
                             useArabicNumerals: context.isArabic,
                             // isArabic: context.isArabic,
-                          )}",
-                          mode: FancyTextMode.glow,          // جرّب: blink | pulse | shimmer
+                          )} $currency",
+                          mode: FancyTextMode.blink,          // جرّب: blink | pulse | shimmer
                           textStyle: Styles.mediumText(
                             color: Colors.white,
                             fontSize: 24,
