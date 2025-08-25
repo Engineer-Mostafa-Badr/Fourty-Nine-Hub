@@ -1453,7 +1453,7 @@ class AppPages {
                   state,
                   BlocProvider<BalanceCubit>(
                     create: (_) => serviceLocator(),
-                    child: const BalanceWalletView(),
+                    child: const CashbackView(),
                   ),
                 ),
               ),

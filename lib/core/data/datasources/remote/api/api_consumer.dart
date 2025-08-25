@@ -226,6 +226,24 @@ class BaseApiConsumer extends ApiConsumer {
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
+      if (e is DioException &&
+          e.response?.statusCode == 401 ) {
+        return refreshToken().then(
+              (_) => patch(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+            headers: {
+              ...?headers,
+              "x-api-key":
+              "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
+              // Your custom header
+            },
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
       log('result 3');
       log(e.toString());
       if (e is DioException) {
@@ -427,9 +445,11 @@ class BaseApiConsumer extends ApiConsumer {
     result.fold(
       (_) {
         // _authLocalDataSource.saveUserTokens(null);
+        log("failureToooo ${_.toString()}");
         attachToken(null);
       },
       (response) {
+        log('responseToooo $response');
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
         attachToken(newToken);

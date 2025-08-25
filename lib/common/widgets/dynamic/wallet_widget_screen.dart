@@ -100,8 +100,8 @@ class _WalletWidgetScreenState extends State<WalletWidgetScreen> {
                       ManageVibration.vibrate();
                       AdInterstitialTop.loadIntersitialAd();
                       AdInterstitialTop.showInterstitialAd();
-                      // context.push(Routes.BALANCE);
-                      context.push(Routes.CASHBACK);
+                      context.push(Routes.BALANCE);
+                      // context.push(Routes.CASHBACK);
                     },
                         LocaleKeys.balance.tr(),
                         '${FormatNumbers().formatNumber(
