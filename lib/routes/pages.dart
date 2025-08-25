@@ -492,7 +492,7 @@ class AppPages {
                   MultiBlocProvider(
                     providers: [
                       BlocProvider(
-                        create: (context) => serviceLocator<SliderCubit>(),
+                        create: (context) => serviceLocator<SliderCubit>()..loadData(),
                       ),
                       BlocProvider(
                         create: (context) =>
@@ -548,7 +548,7 @@ class AppPages {
                           providers: [
                             BlocProvider(
                               create: (context) =>
-                                  serviceLocator<SliderCubit>(),
+                                  serviceLocator<SliderCubit>()..loadData(),
                             ),
                             // BlocProvider(
                             //   create: (context) =>

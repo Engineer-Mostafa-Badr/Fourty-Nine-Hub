@@ -461,7 +461,7 @@ class FourtyNineServiceLocator {
       () => GetMyAdByIdUseCase(serviceLocator()),
     );
     serviceLocator.registerSingleton(
-      SliderCubit(serviceLocator())..loadData(),
+      SliderCubit(serviceLocator()),
     );
     // serviceLocator.registerFactory<ThumbnailsCubit>(
     //     () => ThumbnailsCubit(serviceLocator())..loadData());

@@ -56,13 +56,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-  checkLogin() async {
-    try {
-      if (!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  // checkLogin() async {
+  //   try {
+  //     if (!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
   AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   bool isPaused = false;

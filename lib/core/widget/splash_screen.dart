@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToNextScreen() async {
     // انتظار 3 ثواني
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 5));
 
     // تحديد الشاشة التالية
     final isActivate = await CacheManager.getActivation() ?? false;
