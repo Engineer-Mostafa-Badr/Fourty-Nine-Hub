@@ -28,6 +28,9 @@ class CreatePostInstagramState {
   final List<UserTagEntity> usersTag;
   LocationInstagramEntity? location;
   final bool isImageCover;
+  SongsEnum selectedSong;
+  SongEntity? song;
+  final bool isPlaying;
 
    CreatePostInstagramState({
     this.status = CreatePostInstagramStates.loading,
@@ -48,6 +51,9 @@ class CreatePostInstagramState {
     this.usersTag = const [],
     this.location,
     this.isImageCover = false,
+    this.selectedSong = SongsEnum.forYou,
+    this.song,
+     this.isPlaying = false,
   });
 
   CreatePostInstagramState copyWith({
@@ -70,6 +76,10 @@ class CreatePostInstagramState {
     LocationInstagramEntity? location,
     bool? isImageCover,
     bool? clearLocation, // إضافة parameter للـ clear
+    bool? clearSong,
+    SongsEnum? selectedSong,
+    SongEntity? song,
+    bool? isPlaying,
   }) {
     return CreatePostInstagramState(
       status: status ?? this.status,
@@ -93,6 +103,9 @@ class CreatePostInstagramState {
       location: clearLocation == true ? null : (location ?? this.location),
       usersTag: usersTag ?? this.usersTag,
       isImageCover: isImageCover ?? this.isImageCover,
+      selectedSong: selectedSong ?? this.selectedSong,
+      song: clearSong == true ? null : (song ?? this.song),
+      isPlaying: isPlaying ?? this.isPlaying,
     );
   }
 }

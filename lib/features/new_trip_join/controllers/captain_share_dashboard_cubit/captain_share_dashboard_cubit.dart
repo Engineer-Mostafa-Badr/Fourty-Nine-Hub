@@ -24,9 +24,11 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/drop
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_available_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_past_bookings_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/get_driver_running_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_new_route_driver_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/pick_client_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -39,6 +41,7 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final GetDriverAvailableBookingsUseCase getDriverAvailableBookingsUseCase;
   final GetDriverRunningRouteUseCase getDriverRunningRouteUseCase;
   final ListenToNewRouteDriverUseCase listenToNewRouteDriverUseCase;
+  final ListenToClientComingUseCase listenToClientComingUseCase;
   final AcceptRouteUseCase acceptRouteUseCase;
   final CompleteRouteUseCase completeRouteUseCase;
   final PickClientUseCase pickClientUseCase;
@@ -47,41 +50,75 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
   final ClientNotShownUseCase clientNotShownUseCase;
   final GetDriverPastBookingsUseCase getDriverPastBookingsUseCase;
 
-  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.completeRouteUseCase,this.getRunningTripUseCase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
+  CaptainShareDashboardCubit(this.getSettingsDashboardUsecase,this.listenToClientComingUseCase,this.completeRouteUseCase,this.getRunningTripUseCase,this.arrivedToClientUseCase,this.clientNotShownUseCase,this.dropClientUseCase,this.getDriverPastBookingsUseCase,this.pickClientUseCase,this.getDriverRunningRouteUseCase,this.acceptRouteUseCase,this.getDriverAvailableBookingsUseCase,this.listenToNewRouteDriverUseCase)
       : super(const CaptainShareDashboardState());
 
 
   loadInitData(BuildContext context){
     listenToNewRoute(context);
+    listenToComingClient(context);
     loadInitialAvailableData(context);
   }
 
 
   void listenToNewRoute(BuildContext context) {
     CliLogger.info('listenToNewDriverRoute');
-    // TripsResponseEntity
+    // Store the context safely by getting it when needed
     listenToNewRouteDriverUseCase((route) {
+        // Check if cubit is still active before proceeding
+        if (isClosed) return;
+        
+        // Get current context safely
+        final currentContext = AppPages.router.configuration.navigatorKey.currentContext;
+        if (currentContext == null) {
+          CliLogger.info('Context is null, widget may be disposed');
+          return;
+        }
+        
+        // Check if the context is still mounted
+        if (!currentContext.mounted) {
+          CliLogger.info('Context is not mounted, widget may be disposed');
+          return;
+        }
+        
         if(state.tapIndex==0){
           availableBookings.insert(0, route);
-          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+          showSuccessMessage(currentContext, currentContext.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }else{
-          changeTapIndex(0,context);
-          loadInitialAvailableData(context);
-          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+          changeTapIndex(0,currentContext);
+          loadInitialAvailableData(currentContext);
+          showSuccessMessage(currentContext, currentContext.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
         }
         emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    });
+  }
+  void listenToComingClient(BuildContext context) {
+    CliLogger.info('listenToComingClient');
+    // Store the context safely by getting it when needed
+    listenToClientComingUseCase((params) {
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      clients.where((element) => element.id == params.clientId).first.driverWaitingTime = params.remainingTime;
+      showSuccessMessage(currentContext, currentContext.isArabic?'العميل في طريقه اليك':'Client on the way');
+
+      emit(state.copyWith(status: CaptainShareDashboardStates.success));
     });
   }
 
   initData() async {
     emit(state.copyWith(status: CaptainShareDashboardStates.loading));
-    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext;
+    if (currentContext == null) {
+      CliLogger.info('Context is null during initData');
+      return;
+    }
     // showLoadingDialog(currentContext);
     await Future.wait([
       getActiveTrip(currentContext),
       getSettings(currentContext),
     ]);
-    emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    if (!isClosed) {
+      emit(state.copyWith(status: CaptainShareDashboardStates.success));
+    }
   }
 
   RunningTripEntity? activeTrip;
@@ -398,13 +435,23 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       List<List<double>> parsedPolyline = [];
       PolylinePoints polylinePoints = PolylinePoints();
       List<PointLatLng> decoded = polylinePoints.decodePolyline(
-        data,
+        data.polyline,
       );
       parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
       if(index==0){
         clients[1].polyLine = parsedPolyline;
+        clients[0].pickupTime = data.currentPickupTime;
+        clients[1].expectedArrivalDuration = data.expectedArrivalDuration;
+
       }else if(index==1){
         clients[2].polyLine = parsedPolyline;
+        clients[1].pickupTime = data.currentPickupTime;
+        clients[2].expectedArrivalDuration = data.expectedArrivalDuration;
+      }else{
+        clients[3].polyLine = parsedPolyline;
+        clients[2].pickupTime = data.currentPickupTime;
+        state.runningRoute?.startTime = data.currentPickupTime;
+        state.runningRoute?.expectedArrivalDuration = data.expectedArrivalDuration;
       }
       if(otp.isNotEmpty)showSuccessMessage(currentContext, currentContext.isArabic?'تم التقاط الراكب بنجاح':'Client Picked Successfully');
       if(otp.isEmpty)showSuccessMessage(currentContext, currentContext.isArabic?'تم الغاء الرحله لهذا الراكب بنجاح':'Trip Cancelled For This Client Successfully');
@@ -557,5 +604,18 @@ class CaptainShareDashboardCubit extends Cubit<CaptainShareDashboardState> {
       showSuccessMessage(currentContext, currentContext.isArabic?'تم توصيل الراكب بنجاح':'Client Dropped Off Successfully');
       emit(state.copyWith(status: CaptainShareDashboardStates.success));
     });
+  }
+
+  @override
+  Future<void> close() {
+    // Clean up socket listeners when cubit is disposed
+    try {
+      // Remove the socket listener to prevent accessing deactivated context
+      SharedWebSocket.socket?.off('captain-share:new-available-trip');
+      CliLogger.info('CaptainShareDashboardCubit disposed and socket listener removed');
+    } catch (e) {
+      CliLogger.info('Error during cubit disposal: $e');
+    }
+    return super.close();
   }
 }

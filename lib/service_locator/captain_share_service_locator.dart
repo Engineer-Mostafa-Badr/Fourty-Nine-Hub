@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/complete_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 
 import '../features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import '../features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
@@ -154,6 +155,10 @@ class CaptainShareServiceLocator {
         () => CompleteRouteUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<ListenToClientComingUseCase>(
+        () => ListenToClientComingUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
@@ -179,6 +184,7 @@ class CaptainShareServiceLocator {
 
     serviceLocator.registerFactory<CaptainShareDashboardCubit>(
         () => CaptainShareDashboardCubit(
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

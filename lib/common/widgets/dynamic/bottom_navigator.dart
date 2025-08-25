@@ -105,15 +105,15 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       cacheKey: 'chatCount',
       image: Assets.whatsAppIcon,
       index: 3,
-      route: Routes.CHAT_HOME,
+      route: Routes.conversationsScreen,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      localeKey: LocaleKeys.book,
-      cacheKey: 'bookingCount',
+      localeKey: LocaleKeys.chance,
+      cacheKey: 'changeCount',
       index: 4,
-      image: Assets.booking,
-      route: Routes.RIDE_HOME,
+      image: Assets.chanceIcon,
+      route: Routes.CHANCE,
     ),
   ];
 
@@ -186,9 +186,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           HandleCashback.setCount('chatCount', context);
           context.push(
             context.read<UserCubit>().isLoggedIn
-                ? Routes.CHAT_HOME
+                ? Routes.conversationsScreen
                 : Routes.FirstLoginScreen,
-            extra: ChatsViewParams(),
           );
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         } else {

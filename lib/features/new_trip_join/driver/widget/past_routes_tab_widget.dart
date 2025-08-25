@@ -70,7 +70,7 @@ class _PastRoutesTabWidgetState extends State<PastRoutesTabWidget> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) => OneWayWidget(
                         requestType: LocaleKeys.regular.localize,
-                        hasAcceptButton: true,
+                        hasAcceptButton: false,
                         onAccept: () {
                           cubit.acceptRoute(
                               id: cubit.pastBookings[index].id,

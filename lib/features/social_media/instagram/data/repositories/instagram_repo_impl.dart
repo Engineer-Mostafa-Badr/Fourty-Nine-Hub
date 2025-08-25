@@ -1,34 +1,36 @@
 import 'package:dartz/dartz.dart';
-import '../../../../../common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 
-import '../../../../../core/error/failure.dart';
-import '../models/instagram_post_data_model.dart';
-import '../../domain/entities/comment_instagram_data_entiry.dart';
-import '../../domain/entities/create_post_request_entity.dart';
-import '../../domain/entities/data_suggest_follow_instagram_entity.dart';
-import '../../domain/entities/followers_entity.dart';
-import '../../domain/entities/profile_instagram_data_entity.dart';
-import '../../domain/entities/reel_instagram_data_entity.dart';
-import '../../domain/entities/reels_specific_user_entity.dart';
-import '../../domain/entities/single_post_instagram_entity.dart';
-import '../../domain/entities/user_tag_entity.dart';
-import '../../domain/usecases/add_comment_use_case.dart';
-import '../../domain/usecases/create_post_request_use_case.dart';
-import '../../domain/usecases/delete_comment_use_case.dart';
-import '../../domain/usecases/get_instagram_profile_use_case.dart';
-import '../../domain/usecases/get_instagram_reels_specific_user_use_case.dart';
-import '../../domain/usecases/get_instagram_user_media_usecase.dart';
-import '../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
-import '../../domain/usecases/get_user_reels_usecase.dart';
-import '../../domain/usecases/get_user_tag_use_case.dart';
-import '../../domain/usecases/like_post_instagram_use_case.dart';
-import '../../domain/usecases/post_confirm_webhook_use_case.dart';
-import '../../domain/usecases/post_follow_user_instagram_use_case.dart';
-import '../../domain/usecases/save_post_instagram_use_case.dart';
-import '../../../social_posts/domain/entities/post_entity.dart';
-import '../../../twitter/domain/usecases/get_feed_usecase.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_data_entiry.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/create_post_request_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/delete_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_profile_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_specific_user_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/like_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_confirm_webhook_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/save_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
+import '../../domain/entities/song_entity.dart';
 import '../../domain/repositories/social_posts_repo.dart';
 import '../../domain/usecases/get_all_followers_use_case.dart';
+import '../../domain/usecases/get_for_you_songs_usecase.dart';
 import '../datasources/instagram_remote_datasource.dart';
 
 class InstagramRepoImpl implements InstagramRepo {
@@ -177,5 +179,30 @@ class InstagramRepoImpl implements InstagramRepo {
   Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params) {
     return _remoteDataSource.postConfirmWebhook(params);
 
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getForYouSongs({required SongsPaginationParams params}) async {
+   return await _remoteDataSource.getForYouSongs(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getTrendingSongs({required SongsPaginationParams params}) async {
+    return await _remoteDataSource.getTrendingSongs(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> getSavedSongs({required SongsPaginationParams params}) async {
+    return await _remoteDataSource.getSavedSongs(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addRemoveSongsFromFavs({required String songId}) async {
+    return await _remoteDataSource.addRemoveSongsFromFavs(songId: songId);
+  }
+
+  @override
+  Future<Either<Failure, List<SongEntity>>> searchSongs({required String query}) async {
+    return await _remoteDataSource.searchSongs(query: query);
   }
 }

@@ -3,7 +3,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 
 class MyBookingModel extends MyBookingEntity {
   MyBookingModel(
-      {required super.id, super.clients, super.pricePerSeat, super.polyLine,required super.creatorId, super.status, super.isPremium, super.availableSeats, super.startLocation, super.targetLocation, super.features , super.createdAt});
+      {required super.id, super.clients,super.startTime,super.expectedArrivalDuration,super.acceptedAt, super.pricePerSeat, super.polyLine,required super.creatorId, super.status, super.isPremium, super.availableSeats, super.startLocation, super.targetLocation, super.features , super.createdAt});
 
   factory MyBookingModel.fromJson(Map<String, dynamic> json) {
     List<List<double>> parsedPolyline = [];
@@ -27,6 +27,9 @@ class MyBookingModel extends MyBookingEntity {
     return MyBookingModel(
       id: json['id'] ?? '',
       creatorId: json['creatorId'] ?? '',
+      startTime: json['startTime'] ?? '',
+      expectedArrivalDuration: json['expectedArrivalDuration'] ?? 0,
+      acceptedAt: json['acceptedAt'] ?? '',
       pricePerSeat: (json['pricePerSeat'] is num) ? (json['pricePerSeat'] as num).ceil() : 0,
       clients: json['clients'] != null
           ? (json['clients'] as List)
@@ -58,7 +61,7 @@ class MyBookingLocationModel extends MyBookingLocationEntity{
 }
 
 class BookingClientModel extends BookingClientEntity{
-  BookingClientModel( {required super.id, required super.location,super.polyLine,super.phoneNumber,super.pickedAddress, super.driverArrivalTime,super.pickupDistanceFromStart, super.driverWaitingTime,required super.status});
+  BookingClientModel( {required super.id,required super.pickupTime,required super.expectedArrivalDuration, required super.location,super.polyLine,super.phoneNumber,super.pickedAddress, super.driverArrivalTime,super.pickupDistanceFromStart, super.driverWaitingTime,required super.status});
 
   factory BookingClientModel.fromJson(Map<String, dynamic> json) {
     List<List<double>> parsedPolyline = [];
@@ -82,6 +85,8 @@ class BookingClientModel extends BookingClientEntity{
     return BookingClientModel(
       id: json['id'] ?? '',
         status: json['status'] ?? '',
+        pickupTime: json['pickupTime'] ?? '',
+        expectedArrivalDuration: json['expectedArrivalDuration'] ?? 0,
         // phoneNumber: json['phoneNumber'] ?? '',
         // pickedAddress: json['pickupLocation']!=null?json['pickupLocation']['address'] ?? '':'',
         polyLine: parsedPolyline,
