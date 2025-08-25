@@ -272,10 +272,14 @@ Future<String?> _generateAccessKey() async {
 @pragma('vm:entry-point')
 Future<void> _onBackgroundMessage(RemoteMessage message) async {
   if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await DI.execute();
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await DI.execute();
+    } catch (e) {
+      print('Firebase already initialized in background: $e');
+    }
   }
 
   await _handleNotification(message);
@@ -353,10 +357,14 @@ Future<void> _handleNotification(RemoteMessage message,
     }
 
     if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      await DI.execute();
+      try {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        await DI.execute();
+      } catch (e) {
+        print('Firebase already initialized in notification handler: $e');
+      }
     }
 
     if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {

@@ -4,6 +4,7 @@ class WalletHomeEntity {
   final num balance;
   final num balanceRatio;
   final num giftWallet;
+  final num holdingAmount;
   final num giftWalletRatio;
   final String currencyEn;
   final String currencyAr;
@@ -14,6 +15,7 @@ class WalletHomeEntity {
     required this.balance,
     required this.balanceRatio,
     required this.giftWallet,
+    required this.holdingAmount,
     required this.giftWalletRatio,
     required this.currencyAr,
     required this.currencyEn,

@@ -226,6 +226,25 @@ class BaseApiConsumer extends ApiConsumer {
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
+      if (e is DioException &&
+          e.response?.statusCode == 401&&
+          isTokenAttached ) {
+        return refreshToken().then(
+              (_) => patch(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+            headers: {
+              ...?headers,
+              "x-api-key":
+              "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
+              // Your custom header
+            },
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
       log('result 3');
       log(e.toString());
       if (e is DioException) {
@@ -343,7 +362,8 @@ class BaseApiConsumer extends ApiConsumer {
     } catch (e) {
 
       if (e is DioException && isTokenAttached) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401&&
+            isTokenAttached) {
           return refreshToken().then(
                 (_) => put(
               url,
@@ -415,21 +435,59 @@ class BaseApiConsumer extends ApiConsumer {
         error?['message']?.toString() ?? 'Unknown error occurred');
   }
 
+
+  // Future<void> refreshToken() async {
+  //   log('==> refreshToken');
+  //
+  //   try {
+  //     final dio = Dio();
+  //
+  //     final response = await dio.post(
+  //       "https://49backend.com/api/v1/auth/refresh-token",
+  //       data: {
+  //         'refreshToken': _token?.refreshToken??'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoicmVmcmVzaCIsImp0aSI6IjMzYmRkN2FmLWU1ZWItNDA0Ny1hNGY1LTVmNzdkMGU1NDA3NCIsImlhdCI6MTc1NjEyNTUxNywiZXhwIjoxNzU2NzMwMzE3LCJzdWIiOiI2N2U1Mjc5NTNlMjQ5MmRmOWQ2ZDNiY2QifQ.Y9InSU2ZdT_cK_2TMRpyuoyuwTnKon5_SuflCqbc9-s',
+  //       },
+  //       options: Options(
+  //         headers: {
+  //           "x-api-key":"2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
+  //           "Content-Type": "application/json",
+  //         },
+  //       ),
+  //     );
+  //
+  //     log("responseToooo ${response.data}");
+  //
+  //     final accessToken = response.data['data']['accessToken'] as String;
+  //     final newToken = _token!.copyWith(accessToken: accessToken);
+  //
+  //     attachToken(newToken);
+  //     CacheManager.saveAccessToken(accessToken);
+  //
+  //   } on DioError catch (e) {
+  //     log("failureToooo ${e.response?.data ?? e.message}");
+  //     attachToken(null);
+  //   } catch (e) {
+  //     log("failureToooo ${e.toString()}");
+  //     attachToken(null);
+  //   }
+  // }
   Future<void> refreshToken() async {
     log('==> refreshToken');
     if (_token == null) return;
     final result = await post(
       EndPoints.refreshToken,
       data: {
-        'refreshToken': _token!.refreshToken,
+        'refreshToken': _token?.refreshToken??'',
       },
     );
     result.fold(
       (_) {
         // _authLocalDataSource.saveUserTokens(null);
+        log("failureToooo ${_.toString()}");
         attachToken(null);
       },
       (response) {
+        log('responseToooo $response');
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
         attachToken(newToken);

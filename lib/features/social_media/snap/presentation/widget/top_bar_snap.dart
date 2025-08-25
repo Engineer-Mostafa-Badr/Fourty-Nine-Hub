@@ -167,11 +167,11 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
                 onTap: () {
                   ManageVibration.vibrate();
                   if (context.isUserLoggedIn) {
-                    context.push(Routes.OTHERSACCOUNT,
+                    context.pushNamed(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
                   } else {
                     return pleaseLoginDialog(context);
-                    // context.go(Routes.LOGIN);
+                    // context.goNamed(Routes.LOGIN);
                   }
                 },
                 child: CircleAvatar(
