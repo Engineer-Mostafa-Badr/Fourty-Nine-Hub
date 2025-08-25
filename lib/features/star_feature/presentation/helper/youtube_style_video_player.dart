@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -591,7 +592,9 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
       child: BlocBuilder<StarCubit, StarState>(
         builder: (context, state) {
           final cubit = context.read<StarCubit>();
-          final isFavorite = widget.talent != null ? cubit.isFavorite(widget.talent!.id) : false;
+          final isFavorite = widget.talent != null
+              ? cubit.isFavorite(widget.talent!.id)
+              : false;
 
           return GestureDetector(
             onTap: () {
@@ -719,7 +722,8 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                                 ),
                               );
                             } else {
-                              final remainingTime = value.duration - value.position;
+                              final remainingTime =
+                                  value.duration - value.position;
                               return Text(
                                 _formatDuration(remainingTime),
                                 style: const TextStyle(
@@ -783,10 +787,11 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                               ValueListenableBuilder<VideoPlayerValue>(
                                 valueListenable: _controller,
                                 builder: (context, value, child) {
-                                  final progress = value.duration.inMilliseconds > 0
-                                      ? value.position.inMilliseconds /
-                                          value.duration.inMilliseconds
-                                      : 0.0;
+                                  final progress =
+                                      value.duration.inMilliseconds > 0
+                                          ? value.position.inMilliseconds /
+                                              value.duration.inMilliseconds
+                                          : 0.0;
                                   return Align(
                                     alignment: Alignment.centerLeft,
                                     child: Container(
@@ -805,11 +810,13 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                               ValueListenableBuilder<VideoPlayerValue>(
                                 valueListenable: _controller,
                                 builder: (context, value, child) {
-                                  final progress = value.duration.inMilliseconds > 0
-                                      ? value.position.inMilliseconds /
-                                          value.duration.inMilliseconds
-                                      : 0.0;
-                                  final clampedProgress = progress.clamp(0.0, 1.0);
+                                  final progress =
+                                      value.duration.inMilliseconds > 0
+                                          ? value.position.inMilliseconds /
+                                              value.duration.inMilliseconds
+                                          : 0.0;
+                                  final clampedProgress =
+                                      progress.clamp(0.0, 1.0);
                                   return Positioned(
                                     left: (MediaQuery.of(context).size.width *
                                             clampedProgress) -
@@ -1478,7 +1485,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
           Row(
             children: [
               Text(
-                '437K views',
+                context.isArabic ? '437K المشاهدات' : '437K views',
                 style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
               Text(
@@ -1486,7 +1493,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                 style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
               Text(
-                '7 days ago',
+                context.isArabic ? '7 أيام' : '7 days ago',
                 style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
               const Spacer(),
@@ -1756,8 +1763,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        'Comments',
+                       Text(
+                        context.isArabic
+                            ? 'التعليقات'
+                            : 'Comments',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -1956,7 +1965,9 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Text(
-              'Related Videos',
+               context.isArabic
+                    ? 'مقاطع مرتبطة'
+                    : 'Related Videos',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -2891,7 +2902,6 @@ class _CommentsModalState extends State<CommentsModal> {
   }
 }
 
-
 // Keep the existing FloatingVideoManager classes as they are
 class FloatingVideoManager {
   static OverlayEntry? _overlayEntry;
@@ -3055,7 +3065,6 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                     )
                   else
                     const Center(child: CircularProgressIndicator()),
-
                   if (_showControls)
                     Positioned(
                       top: 0,
@@ -3098,7 +3107,6 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                         ),
                       ),
                     ),
-
                   if (_showControls)
                     Positioned(
                       bottom: 0,
@@ -3140,7 +3148,6 @@ class _FloatingVideoPlayerState extends State<FloatingVideoPlayer> {
                         ),
                       ),
                     ),
-
                   if (!_showControls)
                     Center(
                       child: IconButton(

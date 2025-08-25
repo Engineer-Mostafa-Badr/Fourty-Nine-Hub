@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
 import '../../../../core/extensions/context_extension.dart';
 
@@ -16,46 +18,54 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+    var size = MediaQuery.sizeOf(context);
     return Material(
       color: context.isDarkMode ? Colors.black : Colors.white,
       elevation: overlapsContent ? 4.0 : 0.0,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.04, vertical: size.height * 0.01),
         child: Row(
+          textDirection: context.textDirection,
           children: [
             // Search Icon
             GestureDetector(
               onTap: onSearchTap,
               child: Container(
-                width: 40,
-                height: 40,
+                width: size.width * 0.1,
+                height: size.width * 0.1,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(size.width * 0.05),
                 ),
                 child: Icon(
                   Icons.search,
                   color: context.isDarkMode ? Colors.white : Colors.black,
-                  size: 24,
+                  size: size.width * 0.06,
                 ),
               ),
             ),
 
-            SizedBox(width: 8),
+            SizedBox(width: size.width * 0.02),
 
             // Tab Pills
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
+                  textDirection: context.textDirection,
                   children: [
-                    _buildTabPill('Available', 0, tabController.index == 0),
-                    SizedBox(width: 8),
-                    _buildTabPill('Favorite', 1, tabController.index == 1),
-                    SizedBox(width: 8),
-                    _buildTabPill('History', 2, tabController.index == 2),
-                    SizedBox(width: 8),
-                    _buildTabPill('My Talent', 3, tabController.index == 3),
+                    _buildTabPill(context.isArabic ? 'المتاح' : 'Available', 0,
+                        tabController.index == 0),
+                    SizedBox(width: size.width * 0.02),
+                    _buildTabPill(context.isArabic ? 'المفضلة' : 'Favorite', 1,
+                        tabController.index == 1),
+                    SizedBox(width: size.width * 0.02),
+                    _buildTabPill(context.isArabic ? 'السجل' : 'History', 2,
+                        tabController.index == 2),
+                    SizedBox(width: size.width * 0.02),
+                    _buildTabPill(context.isArabic ? 'موهبتي' : 'My Talent', 3,
+                        tabController.index == 3),
                   ],
                 ),
               ),
@@ -67,17 +77,19 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   Widget _buildTabPill(String text, int index, bool isSelected) {
+    final size = MediaQuery.sizeOf(context);
     return GestureDetector(
       onTap: () {
         tabController.animateTo(index);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.04, vertical: size.height * 0.01),
         decoration: BoxDecoration(
           color: isSelected
               ? (context.isDarkMode ? Colors.white : Color(0xff0B1035))
               : Color(0xffE0E0E0),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(size.width * 0.025),
           border: Border.all(
             color: isSelected
                 ? Colors.transparent
@@ -85,13 +97,13 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
             width: 1,
           ),
         ),
-        child: Text(
-          text,
+        child: Label(
+          text: text,
           style: TextStyle(
             color: isSelected
                 ? (context.isDarkMode ? Colors.black : Colors.white)
                 : (context.isDarkMode ? Colors.white : Colors.black),
-            fontSize: 14,
+            fontSize: context.isArabic ? size.width * 0.03 : size.width * 0.025,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

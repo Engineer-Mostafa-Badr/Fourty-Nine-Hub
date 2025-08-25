@@ -71,7 +71,7 @@ class OptionsBottomSheet {
             Container(
               width: 42,
               height: 4,
-              margin: EdgeInsets.only(top: 8, bottom: 16),
+              margin: EdgeInsets.only(top: 8, bottom: 0),
               decoration: BoxDecoration(
                 color: indicatorColor,
                 borderRadius: BorderRadius.circular(2),
@@ -104,12 +104,17 @@ class OptionsBottomSheet {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+        padding: EdgeInsets.only(
+          left: 13,
+          top: 16,
+          right: 13,
+          bottom: 2,
+        ),
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 30,
+              height: 30,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.transparent,
@@ -163,7 +168,9 @@ class TalentCard {
               height: 200,
               child: CustomEmptyWidget(
                 label: isSearching
-                    ? 'No search results found'
+                    ? context.isArabic
+                        ? 'لا يوجد نتائج بحث'
+                        : 'No search results found'
                     : LocaleKeys.noResultsFound.localize,
               ),
             ),
@@ -206,7 +213,9 @@ class TalentCard {
             child: SizedBox(
               height: 200,
               child: CustomEmptyWidget(
-                label: 'No favorite videos yet',
+                label: context.isArabic
+                    ? 'لا يوجد فيديوات مفضلة بعد'
+                    : 'No favorite videos yet',
               ),
             ),
           );
@@ -348,7 +357,7 @@ class TalentCard {
             // Video info
             Expanded(
               child: GestureDetector(
-                onTap: () => _navigateToProfile(context, talent),
+                // onTap: () => _navigateToProfile(context, talent),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -498,7 +507,7 @@ class TalentCard {
             // Video info
             Expanded(
               child: GestureDetector(
-                onTap: () => _navigateToProfile(context, talent),
+                // onTap: () => _navigateToProfile(context, talent),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -558,7 +567,8 @@ class TalentCard {
       options: [
         OptionItem(
           icon: Icons.delete_outline,
-          title: 'Remove from watch history',
+          title:
+              context.isArabic ? 'حذف من التاريخ' : 'Remove from watch history',
           onTap: () {
             Navigator.pop(context);
             // Add remove from history logic
@@ -566,7 +576,9 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.playlist_play_rounded,
-          title: 'Play next in queue',
+          title: context.isArabic
+              ? 'تشغيل التالي في قائمة التشغيل'
+              : 'Play next in queue',
           onTap: () {
             Navigator.pop(context);
             // Add play next logic
@@ -574,7 +586,8 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.access_time,
-          title: 'Save to Watch later',
+          title:
+              context.isArabic ? 'حفظ للمشاهدة لاحقا' : 'Save to Watch later',
           onTap: () {
             Navigator.pop(context);
             // Add save to watch later logic
@@ -582,7 +595,7 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.bookmark_border,
-          title: 'Save to playlist',
+          title: context.isArabic ? 'حفظ في قائمة التشغيل' : 'Save to playlist',
           onTap: () {
             Navigator.pop(context);
             // Add save to playlist logic
@@ -593,8 +606,8 @@ class TalentCard {
               ? Icons.favorite
               : Icons.favorite_border,
           title: cubit.isFavorite(talent.id)
-              ? 'Remove from favorites'
-              : 'Add to favorites',
+              ? (context.isArabic ? 'حذف من المفضلة' : 'Remove from favorites')
+              : (context.isArabic ? 'اضافة للمفضلة' : 'Add to favorites'),
           onTap: () {
             Navigator.pop(context);
             cubit.toggleFavorite(talent.id);
@@ -611,7 +624,7 @@ class TalentCard {
       options: [
         OptionItem(
           icon: Icons.playlist_add,
-          title: 'Play next in queue',
+          title: context.isArabic ? 'انشاء قائمة' : 'Play next in queue',
           onTap: () {
             Navigator.pop(context);
             // Handle play next
@@ -619,7 +632,7 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.block,
-          title: 'Not interested',
+          title: context.isArabic ? 'غير مهتم' : 'Not interested',
           onTap: () {
             Navigator.pop(context);
             // Handle not interested
@@ -627,7 +640,7 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.visibility_off,
-          title: 'Hide',
+          title: context.isArabic ? 'اخفاء' : 'Hide',
           onTap: () {
             Navigator.pop(context);
             // Handle hide
@@ -638,8 +651,10 @@ class TalentCard {
               ? Icons.favorite
               : Icons.favorite_border,
           title: cubit.isFavorite(talent.id)
-              ? 'Remove from favorites'
-              : 'Add to favorites',
+              ? (context.isArabic
+                  ? 'ازالة من المفضلة'
+                  : 'Remove from favorites')
+              : (context.isArabic ? 'اضافة للمفضلة' : 'Add to favorites'),
           onTap: () {
             Navigator.pop(context);
             cubit.toggleFavorite(talent.id);
@@ -647,7 +662,7 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.flag,
-          title: 'Report',
+          title: context.isArabic ? 'ابلاغ' : 'Report',
           iconColor: Colors.red,
           textColor: Colors.red,
           onTap: () {
