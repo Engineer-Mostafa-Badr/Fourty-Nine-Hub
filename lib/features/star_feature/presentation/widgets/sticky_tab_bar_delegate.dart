@@ -8,12 +8,42 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;
   final BuildContext context;
   final VoidCallback onSearchTap;
+  late final ScrollController _scrollController;
 
   StickyTabBarDelegate({
     required this.tabController,
     required this.context,
     required this.onSearchTap,
-  });
+  }) {
+    _scrollController = ScrollController();
+
+    // Add listener for tab changes
+    tabController.addListener(() {
+      if (tabController.indexIsChanging) {
+        _scrollToSelectedTab(tabController.index);
+      }
+    });
+  }
+
+  void _scrollToSelectedTab(int index) {
+    // Calculate the position of each tab pill
+    // Assuming each tab has approximate width including padding and spacing
+    double tabWidth = 120.w; // Approximate width of each tab pill
+    double spacing =
+        MediaQuery.sizeOf(context).width * 0.02; // Spacing between tabs
+
+    // Calculate target scroll position
+    double targetScrollPosition = index * (tabWidth + spacing);
+
+    // Animate to the calculated position
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        targetScrollPosition,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(
@@ -48,9 +78,10 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
 
             SizedBox(width: size.width * 0.02),
 
-            // Tab Pills
+            // Tab Pills with ScrollController
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController, // Add the scroll controller
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   textDirection: context.textDirection,
@@ -81,6 +112,8 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
     return GestureDetector(
       onTap: () {
         tabController.animateTo(index);
+        // Animate scroll when tab is tapped
+        _scrollToSelectedTab(index);
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -109,6 +142,11 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
         ),
       ),
     );
+  }
+
+  // Add dispose method to clean up the scroll controller
+  void dispose() {
+    _scrollController.dispose();
   }
 
   @override
