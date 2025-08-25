@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
@@ -435,7 +436,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                   onPressed: _handleBack,
                 ),
                 Text(
-                  'My Talent',
+                  context.isArabic ? 'الملف الشخصي' : 'My Talent',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -638,17 +639,18 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                       children: [
                         _buildActionButton(
                           icon: Icons.visibility,
-                          label: '${widget.talent.totalViews} views',
+                          label:
+                              '${widget.talent.totalViews} ${context.isArabic ? 'مشاهدات' : 'views'}',
                           onTap: _showViewersModal,
                         ),
                         _buildActionButton(
                           icon: Icons.comment,
-                          label: 'Comments',
+                          label: context.isArabic ? 'تعليقات' : 'Comments',
                           onTap: _showCommentsModal,
                         ),
                         _buildActionButton(
                           icon: Icons.delete,
-                          label: 'Delete',
+                          label: context.isArabic ? 'حذف' : 'Delete',
                           onTap: _handleDelete,
                           isDestructive: true,
                         ),

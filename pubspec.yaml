@@ -13,6 +13,7 @@ dependencies:
   animated_cards_carousel: ^1.0.2
   animated_custom_dropdown: ^3.1.1
   animated_notch_bottom_bar: ^1.0.3
+  app_tracking_transparency: ^2.0.6+1
   audio_service: ^0.18.18
   audio_session: ^0.1.25
   audio_video_progress_bar: ^2.0.3
@@ -41,9 +42,9 @@ dependencies:
   equatable: ^2.0.5
   expandable: ^5.0.1
   file_picker: ^8.0.6
+  firebase_auth: ^5.5.3
   firebase_core: ^3.13.0
   firebase_messaging: ^15.2.5
-  firebase_auth: ^5.5.3
   floating_draggable_widget: ^2.3.0
   flutter:
     sdk: flutter
@@ -160,7 +161,6 @@ dependencies:
   voice_message_package: ^2.2.1
   web_socket_channel: ^3.0.3
   webview_flutter: 4.13.0
-  #  webview_flutter_android: ^4.2.2
   wechat_assets_picker: ^9.5.0
   widget_and_text_animator: null
   widgetbook: ^3.12.0
@@ -168,14 +168,13 @@ dependencies:
   zego_express_engine: ^3.16.2
   zego_uikit_prebuilt_call: ^4.16.22
   zego_uikit_signaling_plugin: ^2.8.8
-  app_tracking_transparency: ^2.0.6+1
 dependency_overrides:
   camera_android_camerax: 0.6.10+1
   record_linux: ^1.1.1
   http: ^0.13.3
   text_scroll: null
   auto_scroll_text: null
-  flutter_date_pickers:
+  flutter_date_pickers: null
   web: ^1.0.0
   #  webview_flutter_android: ^3.13.1
   #  web: ^1.0.0

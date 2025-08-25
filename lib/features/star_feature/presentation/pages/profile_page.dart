@@ -34,7 +34,7 @@ class ProfilePageView extends StatefulWidget {
 class _ProfilePageViewState extends State<ProfilePageView>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  bool _isSubscribed = false;
+  final bool _isSubscribed = false;
 
   // Mock playlists data
   late List<PlaylistEntity> _mockPlaylists;
@@ -59,8 +59,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
         final originalVideo = widget.userVideos[j];
         extendedVideos.add(StarEntity(
           id: '${originalVideo.id}_$i$j',
-          title: '${originalVideo.title}',
-          description: '${originalVideo.description}',
+          title: originalVideo.title,
+          description: originalVideo.description,
           user: originalVideo.user,
           mediaUrl: originalVideo.mediaUrl,
           totalViews: originalVideo.totalViews + (i * 1000),
@@ -109,64 +109,13 @@ class _ProfilePageViewState extends State<ProfilePageView>
       body: Column(
         children: [
           // Fixed App Bar
-          SafeArea(
-            child: Container(
-              color: Colors.white,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Winners 🏆',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48), // Balance the back button
-                ],
-              ),
-            ),
-          ),
+          _buildAppBar(),
 
           // Profile Header
           _buildProfileHeader(),
 
           // Tab Bar
-          Container(
-            color: Colors.white,
-            child: TabBar(
-              controller: _tabController,
-              isScrollable: false,
-              indicatorColor: Colors.black,
-              indicatorWeight: 3,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey[600],
-              labelStyle: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.normal,
-              ),
-              tabs: [
-                Tab(text: 'Home'),
-                Tab(text: 'Videos'),
-                Tab(text: 'Playlists'),
-              ],
-            ),
-          ),
+          _buildTabBar(),
 
           // Tab Content
           Expanded(
@@ -184,15 +133,78 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
+  Widget _buildAppBar() {
+    return SafeArea(
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 4.w),
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+                size: MediaQuery.of(context).size.width < 360 ? 20 : 24,
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+            Expanded(
+              child: Text(
+                'Winners 🏆',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: _getResponsiveFontSize(20),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            SizedBox(width: 48.w), // Balance the back button
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabBar() {
+    return Container(
+      color: Colors.white,
+      child: TabBar(
+        controller: _tabController,
+        isScrollable: false,
+        indicatorColor: Colors.black,
+        indicatorWeight: 3,
+        labelColor: Colors.black,
+        unselectedLabelColor: Colors.grey[600],
+        labelStyle: TextStyle(
+          fontSize: _getResponsiveFontSize(18),
+          fontWeight: FontWeight.w600,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: _getResponsiveFontSize(18),
+          fontWeight: FontWeight.normal,
+        ),
+        tabs: [
+          Tab(text: 'Home'),
+          Tab(text: 'Videos'),
+          Tab(text: 'Playlists'),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProfileHeader() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: _getResponsivePadding(20),
+        vertical: _getResponsivePadding(16),
+      ),
       child: Column(
         children: [
           // Banner Section
           _buildBannerSection(),
-          SizedBox(height: 20.h),
+          SizedBox(height: _getResponsiveSpacing(20)),
 
           // Profile Info Section
           _buildProfileInfoSection(),
@@ -202,11 +214,14 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   Widget _buildBannerSection() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final bannerHeight = screenWidth * 0.4; // 40% of screen width
+
     return Container(
       width: double.infinity,
-      height: 140.h,
+      height: bannerHeight.clamp(120.0, 200.0), // Min 120, Max 200
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(_getResponsiveBorderRadius(16)),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -219,21 +234,33 @@ class _ProfilePageViewState extends State<ProfilePageView>
       ),
       child: Stack(
         children: [
-          // Decorative buildings/shapes
+          // Decorative buildings/shapes - responsive positioning
           Positioned(
             bottom: 0,
-            left: 40,
-            child: _buildBuilding(60, 80, Colors.black87),
+            left: screenWidth * 0.1, // 10% from left
+            child: _buildBuilding(
+              screenWidth * 0.12, // 12% of screen width
+              bannerHeight * 0.5, // 50% of banner height
+              Colors.black87,
+            ),
           ),
           Positioned(
             bottom: 0,
-            left: MediaQuery.of(context).size.width / 2 - 50,
-            child: _buildBuilding(80, 100, Colors.black87),
+            left: screenWidth * 0.4, // 40% from left (center-ish)
+            child: _buildBuilding(
+              screenWidth * 0.15, // 15% of screen width
+              bannerHeight * 0.6, // 60% of banner height
+              Colors.black87,
+            ),
           ),
           Positioned(
             bottom: 0,
-            right: 60,
-            child: _buildBuilding(65, 85, Colors.black87),
+            right: screenWidth * 0.15, // 15% from right
+            child: _buildBuilding(
+              screenWidth * 0.13, // 13% of screen width
+              bannerHeight * 0.52, // 52% of banner height
+              Colors.black87,
+            ),
           ),
         ],
       ),
@@ -253,18 +280,18 @@ class _ProfilePageViewState extends State<ProfilePageView>
       ),
       child: Column(
         children: [
-          // Building windows pattern
+          // Building windows pattern - responsive
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(6),
+              padding: EdgeInsets.all(width * 0.1), // 10% of building width
               child: Wrap(
                 spacing: 3,
                 runSpacing: 3,
                 children: List.generate(
-                  16,
+                  ((width / 15) * (height / 15)).round().clamp(4, 16),
                   (index) => Container(
-                    width: 10,
-                    height: 10,
+                    width: (width * 0.15).clamp(6.0, 12.0),
+                    height: (width * 0.15).clamp(6.0, 12.0),
                     color: Colors.grey[300]?.withOpacity(0.3),
                   ),
                 ),
@@ -277,14 +304,17 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   Widget _buildProfileInfoSection() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final profileSize = screenWidth < 360 ? 60.0 : 80.0;
+
     return Column(
       children: [
         Row(
           children: [
-            // Profile Picture
+            // Profile Picture - responsive size
             Container(
-              width: 80.w,
-              height: 80.w,
+              width: profileSize,
+              height: profileSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -300,22 +330,22 @@ class _ProfilePageViewState extends State<ProfilePageView>
                         placeholder: (context, url) => Container(
                           color: Colors.grey[300],
                           child: Icon(Icons.person,
-                              size: 40, color: Colors.grey[600]),
+                              size: profileSize * 0.5, color: Colors.grey[600]),
                         ),
                         errorWidget: (context, url, error) => Container(
                           color: Colors.grey[300],
                           child: Icon(Icons.person,
-                              size: 40, color: Colors.grey[600]),
+                              size: profileSize * 0.5, color: Colors.grey[600]),
                         ),
                       )
                     : Container(
                         color: Colors.grey[300],
-                        child:
-                            Icon(Icons.person, size: 40, color: Colors.grey[600]),
+                        child: Icon(Icons.person,
+                            size: profileSize * 0.5, color: Colors.grey[600]),
                       ),
               ),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: _getResponsiveSpacing(16)),
 
             // Name and Stats
             Expanded(
@@ -325,16 +355,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   Text(
                     "Heart Touching",
                     style: TextStyle(
-                      fontSize: 24.sp,
+                      fontSize: _getResponsiveFontSize(24),
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: _getResponsiveSpacing(4)),
                   Text(
                     "@heart • ${widget.userVideos.length} videos",
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: _getResponsiveFontSize(16),
                       color: Colors.grey[600],
                     ),
                   ),
@@ -349,50 +379,55 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildHomeTab() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: 30.h),
+      padding: EdgeInsets.only(bottom: _getResponsivePadding(30)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // For You Section - Horizontal Scroll
           Padding(
-            padding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 16.h),
+            padding: EdgeInsets.only(
+                left: _getResponsivePadding(20),
+                top: _getResponsivePadding(20),
+                bottom: _getResponsivePadding(16)),
             child: Text(
               'For You',
               style: TextStyle(
-                fontSize: 22.sp,
+                fontSize: _getResponsiveFontSize(22),
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
           ),
 
-              // Horizontal scrollable For You section
-              SizedBox(
-                height: 280.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.only(left: 20.w),
-                  itemCount: _extendedUserVideos.length,
-                  itemBuilder: (context, index) {
-                    final video = _extendedUserVideos[index];
-                    return Container(
-                      width: 180.w,
-                      margin: EdgeInsets.only(right: 12.w),
-                      child: _buildVideoCard(video, index),
-                    );
-                  },
-                ),
-              ),
+          // Horizontal scrollable For You section - responsive height
+          SizedBox(
+            height: _getVideoCardHeight(),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(left: _getResponsivePadding(20)),
+              itemCount: _extendedUserVideos.length,
+              itemBuilder: (context, index) {
+                final video = _extendedUserVideos[index];
+                return Container(
+                  width: _getVideoCardWidth(),
+                  margin: EdgeInsets.only(right: _getResponsiveSpacing(12)),
+                  child: _buildVideoCard(video, index),
+                );
+              },
+            ),
+          ),
 
-          SizedBox(height: 32.h),
+          SizedBox(height: _getResponsiveSpacing(32)),
 
           // New Song 2020 Section - Vertical Scroll
           Padding(
-            padding: EdgeInsets.only(left: 20.w, bottom: 16.h),
+            padding: EdgeInsets.only(
+                left: _getResponsivePadding(20),
+                bottom: _getResponsivePadding(16)),
             child: Text(
               'New Song 2020',
               style: TextStyle(
-                fontSize: 22.sp,
+                fontSize: _getResponsiveFontSize(22),
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -406,9 +441,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
             padding: EdgeInsets.zero,
             itemCount: 8,
             itemBuilder: (context, index) {
-              final video = _extendedUserVideos[index % _extendedUserVideos.length];
+              final video =
+                  _extendedUserVideos[index % _extendedUserVideos.length];
               return Padding(
-                padding: EdgeInsets.only(bottom: 16.h),
+                padding: EdgeInsets.only(bottom: _getResponsiveSpacing(16)),
                 child: _buildListVideoItem(video, index),
               );
             },
@@ -419,6 +455,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   Widget _buildVideoCard(StarEntity video, int index) {
+    final thumbnailHeight = _getVideoCardWidth() * 0.6; // Maintain aspect ratio
+
     return GestureDetector(
       onTap: () => _navigateToVideo(video),
       child: Column(
@@ -426,9 +464,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
         children: [
           // Thumbnail with overlay elements
           Container(
-            height: 120.h,
+            height: thumbnailHeight,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.r),
+              borderRadius:
+                  BorderRadius.circular(_getResponsiveBorderRadius(10)),
               color: Colors.grey[300],
               image: DecorationImage(
                 image: AssetImage('assets/images/testforvideo.jpg'),
@@ -439,10 +478,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
               children: [
                 // Heart icon - top left
                 Positioned(
-                  top: 8,
-                  left: 8,
+                  top: _getResponsiveSpacing(8),
+                  left: _getResponsiveSpacing(8),
                   child: Container(
-                    padding: EdgeInsets.all(6),
+                    padding: EdgeInsets.all(_getResponsiveSpacing(6)),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
@@ -450,16 +489,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     child: Icon(
                       Icons.favorite,
                       color: Colors.red,
-                      size: 18,
+                      size: _getResponsiveIconSize(18),
                     ),
                   ),
                 ),
                 // Volume icon - top right
                 Positioned(
-                  top: 8,
-                  right: 8,
+                  top: _getResponsiveSpacing(8),
+                  right: _getResponsiveSpacing(8),
                   child: Container(
-                    padding: EdgeInsets.all(6),
+                    padding: EdgeInsets.all(_getResponsiveSpacing(6)),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       shape: BoxShape.circle,
@@ -467,25 +506,28 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     child: Icon(
                       Icons.volume_up,
                       color: Colors.white,
-                      size: 16,
+                      size: _getResponsiveIconSize(16),
                     ),
                   ),
                 ),
                 // Duration - bottom right
                 Positioned(
-                  bottom: 8,
-                  right: 8,
+                  bottom: _getResponsiveSpacing(8),
+                  right: _getResponsiveSpacing(8),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: _getResponsiveSpacing(8),
+                        vertical: _getResponsiveSpacing(4)),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius:
+                          BorderRadius.circular(_getResponsiveBorderRadius(6)),
                     ),
                     child: Text(
                       '7:54',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: _getResponsiveFontSize(12),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -494,23 +536,25 @@ class _ProfilePageViewState extends State<ProfilePageView>
               ],
             ),
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: _getResponsiveSpacing(12)),
 
           // Video info with profile pic
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                radius: 16,
+                radius: _getResponsiveIconSize(16),
                 backgroundColor: Colors.grey[300],
                 backgroundImage: video.user.image.isNotEmpty
                     ? NetworkImage(video.user.image)
                     : null,
                 child: video.user.image.isEmpty
-                    ? Icon(Icons.person, size: 16, color: Colors.grey[600])
+                    ? Icon(Icons.person,
+                        size: _getResponsiveIconSize(16),
+                        color: Colors.grey[600])
                     : null,
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: _getResponsiveSpacing(8)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -518,24 +562,24 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     Text(
                       "Heart Touching Nasheed",
                       style: TextStyle(
-                        fontSize: 13.sp,
+                        fontSize: _getResponsiveFontSize(13),
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 3.h),
+                    SizedBox(height: _getResponsiveSpacing(3)),
                     Text(
                       "507K views • 10 months ago",
                       style: TextStyle(
-                        fontSize: 11.sp,
+                        fontSize: _getResponsiveFontSize(11),
                         color: Colors.grey[600],
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: _getResponsiveSpacing(4)),
                     // Star rating
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -543,22 +587,23 @@ class _ProfilePageViewState extends State<ProfilePageView>
                         5,
                         (starIndex) => Icon(
                           starIndex < 3 ? Icons.star : Icons.star_border,
-                          size: 12,
-                          color: starIndex < 3 ? Colors.amber : Colors.grey[400],
+                          size: _getResponsiveIconSize(12),
+                          color:
+                              starIndex < 3 ? Colors.amber : Colors.grey[400],
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(width: 4.w),
+              SizedBox(width: _getResponsiveSpacing(4)),
               GestureDetector(
                 onTap: () => _showMoreOptions(context, video),
                 child: Padding(
-                  padding: EdgeInsets.all(4),
+                  padding: EdgeInsets.all(_getResponsiveSpacing(4)),
                   child: Icon(
                     Icons.more_vert,
-                    size: 18,
+                    size: _getResponsiveIconSize(18),
                     color: Colors.grey[700],
                   ),
                 ),
@@ -571,19 +616,26 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   Widget _buildListVideoItem(StarEntity video, int index) {
+    final thumbnailWidth =
+        MediaQuery.of(context).size.width * 0.4; // 40% of screen width
+    final thumbnailHeight = thumbnailWidth * 0.56; // 16:9 aspect ratio
+
     return GestureDetector(
       onTap: () => _navigateToVideo(video),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+        padding: EdgeInsets.symmetric(
+            horizontal: _getResponsivePadding(20),
+            vertical: _getResponsivePadding(12)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thumbnail
             Container(
-              width: 160.w,
-              height: 90.h,
+              width: thumbnailWidth,
+              height: thumbnailHeight,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius:
+                    BorderRadius.circular(_getResponsiveBorderRadius(10)),
                 color: Colors.grey[300],
                 image: DecorationImage(
                   image: AssetImage('assets/images/testforvideo.jpg'),
@@ -594,36 +646,40 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 children: [
                   // Volume icon overlay
                   Positioned(
-                    top: 8,
-                    left: 8,
+                    top: _getResponsiveSpacing(8),
+                    left: _getResponsiveSpacing(8),
                     child: Container(
-                      padding: EdgeInsets.all(6),
+                      padding: EdgeInsets.all(_getResponsiveSpacing(6)),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(
+                            _getResponsiveBorderRadius(6)),
                       ),
                       child: Icon(
                         Icons.volume_up,
                         color: Colors.white,
-                        size: 16,
+                        size: _getResponsiveIconSize(16),
                       ),
                     ),
                   ),
                   // Duration
                   Positioned(
-                    bottom: 8,
-                    right: 8,
+                    bottom: _getResponsiveSpacing(8),
+                    right: _getResponsiveSpacing(8),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: _getResponsiveSpacing(6),
+                          vertical: _getResponsiveSpacing(3)),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(
+                            _getResponsiveBorderRadius(4)),
                       ),
                       child: Text(
                         '7:54',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 11.sp,
+                          fontSize: _getResponsiveFontSize(11),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -632,7 +688,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 ],
               ),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: _getResponsiveSpacing(16)),
 
             // Video info
             Expanded(
@@ -642,26 +698,26 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   Text(
                     "Heart Touching Nasheed",
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: _getResponsiveFontSize(16),
                       fontWeight: FontWeight.w600,
                       color: Colors.black87,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 6.h),
+                  SizedBox(height: _getResponsiveSpacing(6)),
                   Text(
                     "RAV",
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: _getResponsiveFontSize(14),
                       color: Colors.grey[600],
                     ),
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: _getResponsiveSpacing(4)),
                   Text(
                     "507K Views • 10 Months Ago",
                     style: TextStyle(
-                      fontSize: 13.sp,
+                      fontSize: _getResponsiveFontSize(13),
                       color: Colors.grey[600],
                     ),
                   ),
@@ -673,10 +729,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
             GestureDetector(
               onTap: () => _showMoreOptions(context, video),
               child: Padding(
-                padding: EdgeInsets.only(top: 8.h),
+                padding: EdgeInsets.only(top: _getResponsiveSpacing(8)),
                 child: Icon(
                   Icons.more_vert,
-                  size: 20,
+                  size: _getResponsiveIconSize(20),
                   color: Colors.grey[700],
                 ),
               ),
@@ -689,12 +745,12 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildVideosTab() {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 12.h),
+      padding: EdgeInsets.symmetric(vertical: _getResponsivePadding(12)),
       itemCount: _extendedUserVideos.length,
       itemBuilder: (context, index) {
         final video = _extendedUserVideos[index];
         return Padding(
-          padding: EdgeInsets.only(bottom: 16.h),
+          padding: EdgeInsets.only(bottom: _getResponsiveSpacing(16)),
           child: _buildListVideoItem(video, index),
         );
       },
@@ -703,7 +759,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildPlaylistsTab() {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 12.h),
+      padding: EdgeInsets.symmetric(vertical: _getResponsivePadding(12)),
       itemCount: _mockPlaylists.length,
       itemBuilder: (context, index) {
         final playlist = _mockPlaylists[index];
@@ -716,8 +772,69 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
+  // Helper methods for responsive design
+  double _getResponsiveFontSize(double baseFontSize) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return baseFontSize * 0.85; // 15% smaller for small screens
+    } else if (screenWidth > 400) {
+      return baseFontSize * 1.1; // 10% larger for bigger screens
+    }
+    return baseFontSize;
+  }
+
+  double _getResponsivePadding(double basePadding) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return basePadding * 0.8; // 20% smaller padding
+    } else if (screenWidth > 400) {
+      return basePadding * 1.15; // 15% larger padding
+    }
+    return basePadding;
+  }
+
+  double _getResponsiveSpacing(double baseSpacing) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return baseSpacing * 0.75; // 25% smaller spacing
+    }
+    return baseSpacing;
+  }
+
+  double _getResponsiveIconSize(double baseSize) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return baseSize * 0.9; // 10% smaller icons
+    }
+    return baseSize;
+  }
+
+  double _getResponsiveBorderRadius(double baseRadius) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return baseRadius * 0.8; // 20% smaller border radius
+    }
+    return baseRadius;
+  }
+
+  double _getVideoCardWidth() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return screenWidth * 0.42; // 42% of screen width for small screens
+    } else if (screenWidth > 400) {
+      return screenWidth * 0.38; // 38% for larger screens
+    }
+    return screenWidth * 0.4; // 40% for medium screens
+  }
+
+  double _getVideoCardHeight() {
+    final cardWidth = _getVideoCardWidth();
+    return cardWidth * 1.55; // Maintain aspect ratio for the entire card
+  }
+
   void _navigateToVideo(StarEntity video) {
-    final mediaUrl = video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
+    final mediaUrl =
+        video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
     Navigator.push(
       context,
       MaterialPageRoute(

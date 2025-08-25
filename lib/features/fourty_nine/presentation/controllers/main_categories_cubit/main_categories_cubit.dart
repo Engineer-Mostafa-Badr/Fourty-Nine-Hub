@@ -115,7 +115,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   Future<void> loadData(BuildContext context) async {
     print("loadData");
     initNotification();
-
+    getQuestion();
+    getWallet();
     emit(state.copyWith(status: StateStatus.loading));
     // await UserCubit.to.getUser();
     // getWallet();

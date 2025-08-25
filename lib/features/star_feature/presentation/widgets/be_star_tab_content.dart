@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/video_details_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 class BeStarTabContent extends StatelessWidget {
   final int selectedTabIndex;
@@ -63,13 +64,15 @@ class BeStarTabContent extends StatelessWidget {
   }
 
   Widget _buildMyTalentTab() {
+    final size = MediaQuery.of(context).size;
+    
     // Show VideoDetailsView if video is selected, otherwise show list
     if (showVideoDetails &&
         selectedVideoTalent != null &&
         selectedVideoUrl != null) {
       return SliverToBoxAdapter(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height - 200,
+          height: size.height * 0.75, // Use responsive height instead of fixed 200
           child: VideoDetailsView(
             talent: selectedVideoTalent!,
             mediaUrl: selectedVideoUrl!,
