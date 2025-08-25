@@ -104,17 +104,26 @@ class DI {
     // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
 
-    await Firebase.initializeApp(
-    name: "49-App",
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    // Initialize Firebase only if not already initialized
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      // Firebase might already be initialized, continue
+      print('Firebase already initialized or error: $e');
+    }
 
-    await FirebaseMessaging.instance.requestPermission(
-      announcement: true,
-      carPlay: true,
-      criticalAlert: true,
-    );
-    FirebaseMessaging.instance.subscribeToTopic('all');
+    try {
+      await FirebaseMessaging.instance.requestPermission(
+        announcement: true,
+        carPlay: true,
+        criticalAlert: true,
+      );
+      FirebaseMessaging.instance.subscribeToTopic('all');
+    } catch (e) {
+      print('Firebase messaging error: $e');
+    }
     serviceLocator.registerSingleton<LocalStorageConsumer>(
       const BaseLocalStorageConsumer(
         storage: FlutterSecureStorage(),
