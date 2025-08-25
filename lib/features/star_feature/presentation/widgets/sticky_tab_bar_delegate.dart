@@ -15,6 +15,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
     required this.context,
     required this.onSearchTap,
   }) {
+    
     _scrollController = ScrollController();
 
     // Add listener for tab changes
