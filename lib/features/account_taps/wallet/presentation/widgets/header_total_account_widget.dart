@@ -7,6 +7,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/holding_text.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -14,12 +17,14 @@ import '../../../../../res/style/styles.dart';
 
 class HeaderTotalAccountWidget extends StatelessWidget {
   final String balance;
+  final num holdingAmount;
   final double? target;
   final WalletTypes type;
   final String currency;
   const HeaderTotalAccountWidget({
     super.key,
     required this.balance,
+    required this.holdingAmount,
     this.target,
     required this.type,
     required this.currency,
@@ -98,8 +103,28 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                   ],
                 ),
                 Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: Label(
+                  alignment: AlignmentDirectional.center,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:[
+                        holdingAmount<=0?Container():AnimatedFancyText(
+                          "${context.isArabic?"مبلغ مجمد":"Holding Amount"} : ${FormatNumbers().formatNumber(
+                            holdingAmount,
+                            useArabicNumerals: context.isArabic,
+                            // isArabic: context.isArabic,
+                          )}",
+                          mode: FancyTextMode.glow,          // جرّب: blink | pulse | shimmer
+                          textStyle: Styles.mediumText(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          baseColor: Colors.white,
+                          highlightColor: Colors.amber,       // للشيمر
+                          glowColor: AppColors.SECONDARY_COLOR,       // للوهج
+                          duration: Duration(seconds: 2),
+                        ),
+                        Label(
                     text: LocaleKeys.hUB.localize,
                     style: Styles.mediumText(
                       color: Colors.white,
@@ -107,6 +132,7 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
+                  ]),
                 ),
               ],
             ),
