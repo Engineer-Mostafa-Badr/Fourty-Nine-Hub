@@ -177,25 +177,32 @@ class TalentCard {
           );
         }
 
-        // return OlxPaginationWidget(
-        //   items: List.generate(
-        //     talentsToShow.length,
-        //     (index) => _buildTalentCard(context, talentsToShow[index], cubit),
-        //   ),
-        //   banners: bannersList,
-        //   loadPage: (page) => cubit.getAllTalent(),
-        //   scrollController: ScrollController(),
-        // );
-
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final talent = talentsToShow[index];
-              return _buildTalentCard(context, talent, cubit);
-            },
-            childCount: talentsToShow.length,
+        return SliverToBoxAdapter(
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).height * .6,
+            child: OlxPaginationWidget(
+              items: List.generate(
+                talentsToShow.length,
+                (index) =>
+                    _buildTalentCard(context, talentsToShow[index], cubit),
+              ),
+              banners: bannersList,
+              loadPage: (page) => cubit.getAllTalent(),
+              scrollController: ScrollController(),
+              itemsPerPage: 1,
+            ),
           ),
         );
+
+        // return SliverList(
+        //   delegate: SliverChildBuilderDelegate(
+        //     (context, index) {
+        //       final talent = talentsToShow[index];
+        //       return _buildTalentCard(context, talent, cubit);
+        //     },
+        //     childCount: talentsToShow.length,
+        //   ),
+        // );
       },
     );
   }

@@ -55,13 +55,13 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
                 child: Row(
                   textDirection: context.textDirection,
                   children: [
-                    _buildTabPill(context.isArabic ? 'المتاح' : 'Available', 0,
+                    _buildTabPill(context.isArabic ? 'متاح' : 'Available', 0,
                         tabController.index == 0),
                     SizedBox(width: size.width * 0.02),
-                    _buildTabPill(context.isArabic ? 'المفضلة' : 'Favorite', 1,
+                    _buildTabPill(context.isArabic ? 'مفضلة' : 'Favorite', 1,
                         tabController.index == 1),
                     SizedBox(width: size.width * 0.02),
-                    _buildTabPill(context.isArabic ? 'السجل' : 'History', 2,
+                    _buildTabPill(context.isArabic ? 'سجل' : 'History', 2,
                         tabController.index == 2),
                     SizedBox(width: size.width * 0.02),
                     _buildTabPill(context.isArabic ? 'موهبتي' : 'My Talent', 3,
@@ -84,7 +84,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.04, vertical: size.height * 0.01),
+            horizontal: size.width * 0.056, vertical: size.height * 0.01),
         decoration: BoxDecoration(
           color: isSelected
               ? (context.isDarkMode ? Colors.white : Color(0xff0B1035))
