@@ -46,6 +46,7 @@ class GiftViewBody extends StatelessWidget {
                     HeaderTotalAccountWidget(
                       balance: gift.giftWallet.amount
                           .toString(), //wheelWalletEntity.amount.toString(),
+                      holdingAmount:0,
                       currency: context.isArabic
                           ? gift.giftWallet.currencyAr
                           : gift.giftWallet.currencyEn,
