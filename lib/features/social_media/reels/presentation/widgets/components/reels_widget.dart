@@ -64,6 +64,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
         AnimationController(vsync: this, duration: const Duration(seconds: 5))
           ..repeat();
 
+    // match your original status bar setup
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
@@ -109,6 +110,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   @override
   void dispose() {
+    // ensure no ghost audio on unmount
     try {
       if (widget.controller.value.isInitialized &&
           widget.controller.value.isPlaying) {
@@ -126,11 +128,13 @@ class _ReelsWidgetState extends State<ReelsWidget>
     if (_hasAutoPlayed) return;
     _hasAutoPlayed = true;
 
+    // Defer play until the next frame to ensure the texture is attached
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (widget.controller.value.isInitialized) {
         _playVideo();
       } else {
+        // Edge case: if init completes right after this, attach a one-shot listener
         void onInitListener() {
           if (widget.controller.value.isInitialized) {
             widget.controller.removeListener(onInitListener);
@@ -185,7 +189,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
     final reel = context.read<ReelsCubit>().state.globalReels[widget.index];
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height,
+      height: MediaProportion.of(context)
+          .screenHeight, // or MediaQuery if you prefer
       child: GestureDetector(
         onTap: _togglePlayPause,
         child: DoubleTapHeart(
@@ -200,37 +205,44 @@ class _ReelsWidgetState extends State<ReelsWidget>
           child: Stack(
             children: [
               // Rebuild as controller value changes (init → ready)
-              ValueListenableBuilder<VideoPlayerValue>(
-                valueListenable: widget.controller,
-                builder: (context, value, _) {
-                  if (value.isInitialized && !_hasAutoPlayed) {
-                    _autoPlayOnce();
-                  }
+              Positioned.fill(
+                child: ValueListenableBuilder<VideoPlayerValue>(
+                  valueListenable: widget.controller,
+                  builder: (context, value, _) {
+                    if (value.isInitialized && !_hasAutoPlayed) {
+                      _autoPlayOnce();
+                    }
 
-                  if (!value.isInitialized) {
-                    return const Center(
-                      child: CircularProgressIndicator(color: Colors.white54),
+                    if (!value.isInitialized) {
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.white54),
+                      );
+                    }
+
+                    // Keep exactly your visual (no extra FittedBox unless you want cover)
+                    return VideoPlayer(
+                      widget.controller,
+                      key: ValueKey('reel_video_${widget.index}'),
                     );
-                  }
-
-                  return VideoPlayer(
-                    widget.controller,
-                    key: ValueKey('reel_video_${widget.index}'),
-                  );
-                },
+                  },
+                ),
               ),
 
               // Play/Pause toast icon
-              AnimatedOpacity(
-                opacity: _showPlayPauseIcon ? 1 : 0,
-                duration: const Duration(milliseconds: 220),
-                child: Center(
-                  child: Icon(
-                    widget.controller.value.isPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                    color: Colors.white.withOpacity(0.6),
-                    size: 84,
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: AnimatedOpacity(
+                    opacity: _showPlayPauseIcon ? 1 : 0,
+                    duration: const Duration(milliseconds: 220),
+                    child: Center(
+                      child: Icon(
+                        widget.controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white.withOpacity(0.6),
+                        size: 84,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -246,7 +258,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                 ),
               ),
 
-              // Bottom bar: audio + progress
+              // Bottom bar: audio + progress (your original black panel)
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -290,7 +302,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                 ),
               ),
 
-              // Extra UI
+              // Your extra overlay
               Positioned(
                 bottom: MediaQuery.of(context).size.height * 0.5,
                 left: MediaQuery.of(context).size.width * 0.115,
@@ -302,4 +314,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
       ),
     );
   }
+}
+
+/// If you don’t have this, replace with MediaQuery.of(context).size.height directly.
+class MediaProportion {
+  final BuildContext context;
+  MediaProportion.of(this.context);
+  double get screenHeight => MediaQuery.of(context).size.height;
 }

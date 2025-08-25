@@ -19,7 +19,6 @@ class CachedResult {
   CachedResult(this.urlToPath);
 }
 
-/// Public API: spawn isolate, download/cache provided URLs, return local paths
 Future<CachedResult> cacheVideosInIsolate(List<String> urls) async {
   final receivePort = ReceivePort();
   await Isolate.spawn(_cacheIsolateEntry, receivePort.sendPort);
@@ -35,16 +34,13 @@ Future<CachedResult> cacheVideosInIsolate(List<String> urls) async {
   final responsePort = ReceivePort();
   isolateSendPort
       .send(_DownloadRequest(urls, cacheDir.path, responsePort.sendPort));
-  final CachedResult result = await responsePort.first as CachedResult;
-  return result;
+  return await responsePort.first as CachedResult;
 }
 
-/// Isolate entry point
 Future<void> _cacheIsolateEntry(SendPort mainSendPort) async {
   final port = ReceivePort();
   mainSendPort.send(port.sendPort);
 
-  // memory index: keep urls->paths so we don't re-download in same isolate
   final LinkedHashMap<String, String> memoryIndex = LinkedHashMap();
   final dio = Dio(BaseOptions(
     receiveTimeout: const Duration(seconds: 30),
@@ -67,7 +63,6 @@ Future<void> _cacheIsolateEntry(SendPort mainSendPort) async {
         final file = File(destPath);
 
         if (await file.exists()) {
-          // ✅ already cached on disk
           result[url] = destPath;
           memoryIndex[url] = destPath;
           _touch(memoryIndex, url);
@@ -79,9 +74,8 @@ Future<void> _cacheIsolateEntry(SendPort mainSendPort) async {
           result[url] = destPath;
           memoryIndex[url] = destPath;
           _touch(memoryIndex, url);
-        } catch (e) {
-          // fallback: if download fails, return original url
-          result[url] = url;
+        } catch (_) {
+          result[url] = url; // fallback
         }
       }
 
@@ -92,9 +86,7 @@ Future<void> _cacheIsolateEntry(SendPort mainSendPort) async {
 
 void _touch(LinkedHashMap<String, String> lru, String key) {
   final value = lru.remove(key);
-  if (value != null) {
-    lru[key] = value;
-  }
+  if (value != null) lru[key] = value;
 }
 
 String _safeFileNameFromUrl(String url) {
