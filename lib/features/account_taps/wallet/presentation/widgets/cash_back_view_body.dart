@@ -18,8 +18,20 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_failure_widget.dart';
 
-class CashbackViewBody extends StatelessWidget {
+class CashbackViewBody extends StatefulWidget {
   const CashbackViewBody({super.key});
+
+  @override
+  State<CashbackViewBody> createState() => _CashbackViewBodyState();
+}
+
+class _CashbackViewBodyState extends State<CashbackViewBody> {
+
+  @override
+  initState(){
+    context.read<CashbackCubit>().getCashback(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

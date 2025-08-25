@@ -209,9 +209,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
             create: (context) =>
-                serviceLocator<MainCategoriesCubit>()..getWallet()),
+                serviceLocator<MainCategoriesCubit>()),
         BlocProvider(
-          create: (context) => serviceLocator<UserCubit>(), //..getUser(),
+          create: (context) => serviceLocator<UserCubit>()..attachToken(), //..getUser(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<CreatePostCubit>()..loadData(),

@@ -30,219 +30,222 @@ class _ScrollableTextWithAnimationState
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<MainCategoriesCubit>(
-      create: (BuildContext context) => serviceLocator()..getQuestion(),
-      child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-        builder: (BuildContext context, state) {
-          var cubit = context.read<MainCategoriesCubit>();
-          return cubit.state.question == null ||
-                  cubit.state.question?.openInfoOrQuestions == false
-              ? const SizedBox.shrink()
-              : ClickableWidget(
-                  onTap: () {
-                    if (cubit.state.question?.enableAnswers == true) {
-                      ManageVibration.vibrate();
-                      showAnimatedDialog(
-                          context,
-                          AlertDialog(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            surfaceTintColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            title: Text(
-                              LocaleKeys.enterYourAnswer.localize,
-                              style: Styles.headerText(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.color),
-                            ),
-                            content: Form(
-                              key: _formKey,
-                              child: TextFormField(
-                                controller: _controller,
-                                decoration: InputDecoration(
-                                  labelText: LocaleKeys.yourAnswer.localize,
-                                  hintText: LocaleKeys.enterSomething.localize,
-                                  border: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                  ),
-                                  disabledBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                  ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return LocaleKeys
-                                        .pleaseEnterAValue.localize;
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-      ManageVibration.vibrate();
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                                child: Text(
-                                  LocaleKeys.cancel.localize,
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-      ManageVibration.vibrate();
-                                  if (_formKey.currentState!.validate()) {
-                                    cubit.answerQuestion(
-                                        id: cubit.state.question?.id ?? '',
-                                        answer: _controller.text,
-                                        context: context);
-                                  }
-                                },
-                                child: Text(
-                                  LocaleKeys.submit.localize,
-                                  style: Styles.mediumText(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ));
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (context) {
-                      //     return AlertDialog(
-                      //       backgroundColor:
-                      //           Theme.of(context).scaffoldBackgroundColor,
-                      //       surfaceTintColor:
-                      //           Theme.of(context).scaffoldBackgroundColor,
-                      //       title: Text(
-                      //         LocaleKeys.enterYourAnswer.localize,
-                      //         style: Styles.headerText(
-                      //             color: Theme.of(context)
-                      //                 .textTheme
-                      //                 .bodyMedium
-                      //                 ?.color),
-                      //       ),
-                      //       content: Form(
-                      //         key: _formKey,
-                      //         child: TextFormField(
-                      //           controller: _controller,
-                      //           decoration: InputDecoration(
-                      //             labelText: LocaleKeys.yourAnswer.localize,
-                      //             hintText: LocaleKeys.enterSomething.localize,
-                      //             border: const OutlineInputBorder(
-                      //               borderRadius:
-                      //                   BorderRadius.all(Radius.circular(20.0)),
-                      //             ),
-                      //             disabledBorder: const OutlineInputBorder(
-                      //               borderRadius:
-                      //                   BorderRadius.all(Radius.circular(20.0)),
-                      //             ),
-                      //             enabledBorder: const OutlineInputBorder(
-                      //               borderRadius:
-                      //                   BorderRadius.all(Radius.circular(20.0)),
-                      //             ),
-                      //             focusedBorder: const OutlineInputBorder(
-                      //               borderRadius:
-                      //                   BorderRadius.all(Radius.circular(20.0)),
-                      //             ),
-                      //           ),
-                      //           validator: (value) {
-                      //             if (value == null || value.trim().isEmpty) {
-                      //               return LocaleKeys
-                      //                   .pleaseEnterAValue.localize;
-                      //             }
-                      //             return null;
-                      //           },
-                      //         ),
-                      //       ),
-                      //       actions: [
-                      //         TextButton(
-                      //           onPressed: () {
-      ManageVibration.vibrate();
-                      //             Navigator.of(context)
-                      //                 .pop(); // Close the dialog
-                      //           },
-                      //           child: Text(
-                      //             LocaleKeys.cancel.localize,
-                      //             style: Styles.mediumText(
-                      //                 color: Theme.of(context)
-                      //                     .textTheme
-                      //                     .bodyMedium
-                      //                     ?.color),
-                      //           ),
-                      //         ),
-                      //         ElevatedButton(
-                      //           onPressed: () {
-      ManageVibration.vibrate();
-                      //             if (_formKey.currentState!.validate()) {
-                      //               cubit.answerQuestion(
-                      //                   id: cubit.state.question?.id ?? '',
-                      //                   answer: _controller.text,
-                      //                   context: context);
-                      //             }
-                      //           },
-                      //           child: Text(
-                      //             LocaleKeys.submit.localize,
-                      //             style: Styles.mediumText(color: Colors.white),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     );
-                      //   },
-                      // );
-                    }
-                  },
-                  child: Container(
-                    height: 60.h,
-                    alignment: Alignment.center,
-                    child: AutoScrollText(
-                      context.isArabic
-                          ? '${context.read<MainCategoriesCubit>().state.question?.messageAr} ${LocaleKeys.clickHere.localize}                                        ' ??
-                              ''
-                          : '${context.read<MainCategoriesCubit>().state.question?.messageEn}                                         ' ??
-                              '',
-                      velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+  initState(){
+    // context.read<MainCategoriesCubit>().getQuestion();
+    super.initState();
+  }
 
-                      style: Styles.headerText(
-                          fontSize: 30,
-                          color: context
-                                      .read<MainCategoriesCubit>()
-                                      .state
-                                      .question
-                                      ?.enableAnswers ==
-                                  true
-                              ? AppColors.PRIMARY_COLOR
-                              : (context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.PRIMARY_COLOR)),
-                      textDirection: widget.textDirection ??
-                          (context.isArabic
-                              ? TextDirection.ltr
-                              : TextDirection.rtl),
-                      // textStyle: TextStyle(fontSize: 24),
-                    ),
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+      builder: (BuildContext context, state) {
+        var cubit = context.read<MainCategoriesCubit>();
+        return cubit.state.question == null ||
+                cubit.state.question?.openInfoOrQuestions == false
+            ? const SizedBox.shrink()
+            : ClickableWidget(
+                onTap: () {
+                  if (cubit.state.question?.enableAnswers == true) {
+                    ManageVibration.vibrate();
+                    showAnimatedDialog(
+                        context,
+                        AlertDialog(
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          surfaceTintColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          title: Text(
+                            LocaleKeys.enterYourAnswer.localize,
+                            style: Styles.headerText(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color),
+                          ),
+                          content: Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                labelText: LocaleKeys.yourAnswer.localize,
+                                hintText: LocaleKeys.enterSomething.localize,
+                                border: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                disabledBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return LocaleKeys
+                                      .pleaseEnterAValue.localize;
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+    ManageVibration.vibrate();
+                                Navigator.of(context)
+                                    .pop(); // Close the dialog
+                              },
+                              child: Text(
+                                LocaleKeys.cancel.localize,
+                                style: Styles.mediumText(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+    ManageVibration.vibrate();
+                                if (_formKey.currentState!.validate()) {
+                                  cubit.answerQuestion(
+                                      id: cubit.state.question?.id ?? '',
+                                      answer: _controller.text,
+                                      context: context);
+                                }
+                              },
+                              child: Text(
+                                LocaleKeys.submit.localize,
+                                style: Styles.mediumText(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ));
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) {
+                    //     return AlertDialog(
+                    //       backgroundColor:
+                    //           Theme.of(context).scaffoldBackgroundColor,
+                    //       surfaceTintColor:
+                    //           Theme.of(context).scaffoldBackgroundColor,
+                    //       title: Text(
+                    //         LocaleKeys.enterYourAnswer.localize,
+                    //         style: Styles.headerText(
+                    //             color: Theme.of(context)
+                    //                 .textTheme
+                    //                 .bodyMedium
+                    //                 ?.color),
+                    //       ),
+                    //       content: Form(
+                    //         key: _formKey,
+                    //         child: TextFormField(
+                    //           controller: _controller,
+                    //           decoration: InputDecoration(
+                    //             labelText: LocaleKeys.yourAnswer.localize,
+                    //             hintText: LocaleKeys.enterSomething.localize,
+                    //             border: const OutlineInputBorder(
+                    //               borderRadius:
+                    //                   BorderRadius.all(Radius.circular(20.0)),
+                    //             ),
+                    //             disabledBorder: const OutlineInputBorder(
+                    //               borderRadius:
+                    //                   BorderRadius.all(Radius.circular(20.0)),
+                    //             ),
+                    //             enabledBorder: const OutlineInputBorder(
+                    //               borderRadius:
+                    //                   BorderRadius.all(Radius.circular(20.0)),
+                    //             ),
+                    //             focusedBorder: const OutlineInputBorder(
+                    //               borderRadius:
+                    //                   BorderRadius.all(Radius.circular(20.0)),
+                    //             ),
+                    //           ),
+                    //           validator: (value) {
+                    //             if (value == null || value.trim().isEmpty) {
+                    //               return LocaleKeys
+                    //                   .pleaseEnterAValue.localize;
+                    //             }
+                    //             return null;
+                    //           },
+                    //         ),
+                    //       ),
+                    //       actions: [
+                    //         TextButton(
+                    //           onPressed: () {
+    ManageVibration.vibrate();
+                    //             Navigator.of(context)
+                    //                 .pop(); // Close the dialog
+                    //           },
+                    //           child: Text(
+                    //             LocaleKeys.cancel.localize,
+                    //             style: Styles.mediumText(
+                    //                 color: Theme.of(context)
+                    //                     .textTheme
+                    //                     .bodyMedium
+                    //                     ?.color),
+                    //           ),
+                    //         ),
+                    //         ElevatedButton(
+                    //           onPressed: () {
+    ManageVibration.vibrate();
+                    //             if (_formKey.currentState!.validate()) {
+                    //               cubit.answerQuestion(
+                    //                   id: cubit.state.question?.id ?? '',
+                    //                   answer: _controller.text,
+                    //                   context: context);
+                    //             }
+                    //           },
+                    //           child: Text(
+                    //             LocaleKeys.submit.localize,
+                    //             style: Styles.mediumText(color: Colors.white),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // );
+                  }
+                },
+                child: Container(
+                  height: 60.h,
+                  alignment: Alignment.center,
+                  child: AutoScrollText(
+                    context.isArabic
+                        ? '${context.read<MainCategoriesCubit>().state.question?.messageAr} ${LocaleKeys.clickHere.localize}                                        ' ??
+                            ''
+                        : '${context.read<MainCategoriesCubit>().state.question?.messageEn}                                         ' ??
+                            '',
+                    velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+
+                    style: Styles.headerText(
+                        fontSize: 30,
+                        color: context
+                                    .read<MainCategoriesCubit>()
+                                    .state
+                                    .question
+                                    ?.enableAnswers ==
+                                true
+                            ? AppColors.PRIMARY_COLOR
+                            : (context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR)),
+                    textDirection: widget.textDirection ??
+                        (context.isArabic
+                            ? TextDirection.ltr
+                            : TextDirection.rtl),
+                    // textStyle: TextStyle(fontSize: 24),
                   ),
-                );
-        },
-      ),
+                ),
+              );
+      },
     );
   }
 }
