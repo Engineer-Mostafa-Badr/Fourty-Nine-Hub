@@ -61,6 +61,7 @@ abstract class Routes {
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/REELS';
+  static const TIKTOK_REELS = '/TIKTOK_REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const AllLocationScreen = '/AllLocationScreen';
   static const TiktokOptionScreen = '/TiktokOptionScreen';
@@ -386,6 +387,7 @@ abstract class Paths {
       'TruckPersonalInformationScreen';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'REELS';
+  static const TIKTOK_REELS = 'TIKTOK_REELS';
   static const MUSICREELS = 'MUSICREELS';
   static const TiktokOptionScreen = 'TiktokOptionScreen';
   static const AllLocationScreen = 'AllLocationScreen';

@@ -265,6 +265,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
+import 'package:fourtyninehub/features/reels_feature/presentation/pages/reels_page.dart';
+import 'package:fourtyninehub/features/reels_feature/presentation/controllers/reels_cubit.dart' as tiktok_reels;
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
@@ -2008,6 +2010,20 @@ class AppPages {
                     ),
                   ),
                 ],
+              ),
+              
+              GoRoute(
+                path: Paths.TIKTOK_REELS,
+                name: Routes.TIKTOK_REELS,
+                pageBuilder: (context, state) {
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider(
+                        create: (context) => serviceLocator<tiktok_reels.TiktokCubit>(),
+                        child: const ReelsPage(),
+                      ));
+                },
               ),
 
               GoRoute(
