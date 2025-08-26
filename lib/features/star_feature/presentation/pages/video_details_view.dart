@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -5,6 +7,8 @@ import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_style_video_player.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,12 +20,14 @@ class VideoDetailsView extends StatefulWidget {
   final StarEntity talent;
   final String mediaUrl;
   final VoidCallback? onBack; // Add callback for back action
+  final Function(String)? onAddComment; // Add callback for adding comments
 
   const VideoDetailsView({
     super.key,
     required this.talent,
     required this.mediaUrl,
     this.onBack, // Optional callback
+    this.onAddComment, // Optional callback for adding comments
   });
 
   @override
@@ -30,11 +36,64 @@ class VideoDetailsView extends StatefulWidget {
 
 class _VideoDetailsViewState extends State<VideoDetailsView> {
   late VideoPlayerController _controller;
+  final TextEditingController _commentController = TextEditingController();
   bool _isInitialized = false;
   bool _isPlaying = false;
   bool _isMuted = true;
   final List<Map<String, dynamic>> _viewers = [];
   final List<Map<String, dynamic>> _comments = [];
+
+  // Mock comments data
+  List<Map<String, dynamic>> comments = [
+    {
+      'username': '@Ahmed',
+      'profileImage': '',
+      'comment': 'Heart Touching Nasheed',
+      'timeAgo': '1 Months Ago',
+      'likes': 4,
+      'isLiked': false,
+    },
+    {
+      'username': '@Ahmed',
+      'profileImage': '',
+      'comment': 'Heart Touching Nasheed',
+      'timeAgo': '1 Months Ago',
+      'likes': 4,
+      'isLiked': false,
+    },
+    {
+      'username': '@Ahmed',
+      'profileImage': '',
+      'comment': 'Heart Touching Nasheed',
+      'timeAgo': '1 Months Ago',
+      'likes': 4,
+      'isLiked': false,
+    },
+    {
+      'username': '@Ahmed',
+      'profileImage': '',
+      'comment': 'Heart Touching Nasheed',
+      'timeAgo': '1 Months Ago',
+      'likes': 4,
+      'isLiked': false,
+    },
+    {
+      'username': '@Ahmed',
+      'profileImage': '',
+      'comment': 'Heart Touching Nasheed',
+      'timeAgo': '1 Months Ago',
+      'likes': 4,
+      'isLiked': false,
+    },
+    {
+      'username': '@Ahmed',
+      'profileImage': '',
+      'comment': 'Reminds me of...',
+      'timeAgo': '1 Months Ago',
+      'likes': 4,
+      'isLiked': false,
+    },
+  ];
 
   @override
   void initState() {
@@ -125,15 +184,19 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
   void _showViewersModal() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color.fromARGB(0, 210, 16, 16),
       isScrollControlled: true,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.6,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
+          ),
+          border: Border.all(
+            color: AppColors.c0B1035,
+            width: 2,
           ),
         ),
         child: Column(
@@ -215,12 +278,16 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.8,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
+          ),
+          border: Border.all(
+            color: AppColors.c0B1035,
+            width: 2,
           ),
         ),
         child: Column(
@@ -350,6 +417,17 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                                     size: 16,
                                     color: Colors.grey[600],
                                   ),
+                                  SizedBox(width: 16),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _showReplyModal(index);
+                                    },
+                                    child: Icon(
+                                      Icons.comment_outlined,
+                                      size: 16,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -361,10 +439,301 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                 },
               ),
             ),
+            // // Add comment section
+            // Container(
+            //   padding: const EdgeInsets.all(16),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     border: Border.all(color: Color(0xff000000)),
+            //     borderRadius: BorderRadius.only(
+            //       topRight: Radius.circular(16),
+            //       topLeft: Radius.circular(16),
+            //     ),
+            //   ),
+            //   child: SafeArea(
+            //     child: Row(
+            //       children: [
+            //         Container(
+            //           width: 32,
+            //           height: 32,
+            //           decoration: BoxDecoration(
+            //             color: Colors.grey[300],
+            //             shape: BoxShape.circle,
+            //           ),
+            //           child: const Icon(Icons.person,
+            //               size: 18, color: Colors.grey),
+            //         ),
+            //         const SizedBox(width: 12),
+            //         Expanded(
+            //           child: TextField(
+            //             controller: _commentController,
+            //             decoration: InputDecoration(
+            //               hintText: 'Reminds me of...',
+            //               hintStyle: TextStyle(color: Colors.grey[500]),
+            //               border: OutlineInputBorder(
+            //                 borderRadius: BorderRadius.circular(10.0),
+            //                 borderSide: const BorderSide(
+            //                     color: AppColors.LIGHT_GRAY_COLOR),
+            //               ),
+            //               enabledBorder: OutlineInputBorder(
+            //                 borderRadius: BorderRadius.circular(10.0),
+            //                 borderSide: const BorderSide(
+            //                     color: AppColors.LIGHT_GRAY_COLOR),
+            //               ),
+            //               errorBorder: OutlineInputBorder(
+            //                 borderRadius: BorderRadius.circular(10.0),
+            //                 borderSide: const BorderSide(
+            //                     color: AppColors.LIGHT_GRAY_COLOR),
+            //               ),
+            //               focusedBorder: OutlineInputBorder(
+            //                 borderRadius: BorderRadius.circular(10.0),
+            //                 borderSide: const BorderSide(
+            //                     color: AppColors.LIGHT_GRAY_COLOR),
+            //               ),
+            //             ),
+            //             onSubmitted: (value) {
+            //               _addComment(value);
+            //             },
+            //           ),
+            //         ),
+            //         IconButton(
+            //           icon: Icon(
+            //             Icons.send,
+            //             color: _commentController.text.isNotEmpty
+            //                 ? Colors.blue
+            //                 : Colors.grey[400],
+            //           ),
+            //           onPressed: () {
+            //             _addComment(_commentController.text);
+            //           },
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
     );
+  }
+
+  // Add this method to _VideoDetailsViewState class
+  void _showReplyModal(int commentIndex) {
+    final TextEditingController _replyController = TextEditingController();
+    final comment = _comments[commentIndex];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            border: Border.all(
+              color: AppColors.c0B1035,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 40,
+                height: 4,
+                margin: EdgeInsets.only(top: 12, bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // Header with original comment
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Reply to Comment',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    // Original comment preview
+                    Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.person,
+                                size: 14, color: Colors.grey),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  comment['username'],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  comment['comment'],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(),
+              // Reply input section
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Color(0xff000000)),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(16),
+                  ),
+                ),
+                child: SafeArea(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.person,
+                            size: 18, color: Colors.grey),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: TextField(
+                          controller: _replyController,
+                          autofocus: true, // Auto focus when modal opens
+                          decoration: InputDecoration(
+                            hintText: 'Write a reply...',
+                            hintStyle: TextStyle(color: Colors.grey[500]),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.LIGHT_GRAY_COLOR),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.LIGHT_GRAY_COLOR),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.LIGHT_GRAY_COLOR),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                  color: AppColors.LIGHT_GRAY_COLOR),
+                            ),
+                          ),
+                          onSubmitted: (value) {
+                            if (value.trim().isNotEmpty) {
+                              _addReply(commentIndex, value.trim());
+                              _replyController.clear();
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () {
+                          if (_replyController.text.trim().isNotEmpty) {
+                            _addReply(
+                                commentIndex, _replyController.text.trim());
+                            _replyController.clear();
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+// Add this method to handle adding replies
+  void _addReply(int commentIndex, String replyText) {
+    setState(() {
+      // Add reply as a new comment (you can modify this logic as needed)
+      _comments.insert(commentIndex + 1, {
+        'username': '@Me',
+        'profileImage': '',
+        'comment': replyText,
+        'timeAgo': 'Just now',
+        'likes': 0,
+        'isLiked': false,
+        'isReply': true, // Mark as reply
+        'replyTo': _comments[commentIndex]
+            ['username'], // Reference original comment
+      });
+    });
   }
 
   void _handleDelete() {

@@ -104,6 +104,7 @@ class StarCubit extends Cubit<StarState> {
       emit(state.copyWith(failure: l, status: StarStates.error));
     }, (data) async {
       allTalents.addAll(data);
+
       if (data.length < pageSize) {
         hasMoreAllTalentsData = false;
       } else {
@@ -162,6 +163,7 @@ class StarCubit extends Cubit<StarState> {
     hasMoreData = true;
     await fetchWinnerStar();
   }
+
 
   Future<void> getAllTalent({bool refresh = false}) async {
     if (refresh) {
