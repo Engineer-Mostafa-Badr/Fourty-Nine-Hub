@@ -372,8 +372,13 @@ class PreloadBloc extends Cubit<PreloadState> {
 
       // Sort ascending by bandwidth and pick the middle one
       variants.sort((a, b) => a.bandwidth.compareTo(b.bandwidth));
-      final midIndex = variants.length ~/ 2; // floor
-      return variants[midIndex].uri;
+      // final midIndex = variants.length ~/ 2; // floor
+      // return lowest resolution variant
+      return variants.first.uri;
+      // return mid resolution variant
+      //return variants[midIndex].uri;
+      // return highest resolution variant
+      // return variants.last.uri;
     } catch (_) {
       return url; // on any error, fall back to original
     }
