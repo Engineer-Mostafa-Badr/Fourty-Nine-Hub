@@ -141,6 +141,11 @@ class PreloadBloc extends Cubit<PreloadState> {
     _focusEpoch++;
     final epoch = _focusEpoch;
 
+    final oldIndex = state.focusedIndex;
+    if (oldIndex != index) {
+      _pauseControllerAtIndex(oldIndex); // ✅ immediately pause old video
+    }
+
     final reelsCubit = serviceLocator<ReelsCubit>();
     if (index + kPreloadLimit >= state.urls.length) {
       reelsCubit.fetchReels();
@@ -148,7 +153,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
     _unawaited(prioritizedFocusInit(index, epoch: epoch));
 
-    // ✅ تخلّص من الكنترولرز اللي بعيد عن نافذة keepAliveWindow
+    // dispose far controllers
     final keys = List<int>.from(state.controllers.keys);
     for (var i in keys) {
       if ((i - index).abs() > keepAliveWindow) {
@@ -158,6 +163,17 @@ class PreloadBloc extends Cubit<PreloadState> {
 
     _unawaited(preloadVideosAroundIndex(index));
     emit(state.copyWith(focusedIndex: index));
+  }
+
+  void _pauseControllerAtIndex(int index) {
+    final c = state.controllers[index];
+    if (c == null) return;
+    try {
+      if (c.value.isInitialized && c.value.isPlaying) {
+        c.pause();
+        log('⏸️ PAUSED $index');
+      }
+    } catch (_) {}
   }
 
   Future<void> prioritizedFocusInit(int index, {required int epoch}) async {
