@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class ReelView extends StatelessWidget {
     return PopScope(
       onPopInvoked: (res) {
         final b = context.read<PreloadBloc>();
-        // 🛑 أوقف كل الفيديوهات ونظّف الكنترولرز
+        // يكفي استدعاء shutdown؛ هي Pause + Dispose لكل الفيديوهات
         b.shutdown();
       },
       canPop: true,
@@ -50,6 +51,9 @@ class ReelsScreenState extends State<ReelsScreen>
     with AutomaticKeepAliveClientMixin {
   bool _didHandleFirstPageChange = false;
   final _pageController = PageController();
+
+  // ✅ Debounce timer
+  Timer? _debounce;
 
   @override
   bool get wantKeepAlive => true;
@@ -77,6 +81,8 @@ class ReelsScreenState extends State<ReelsScreen>
 
   @override
   void dispose() {
+    // ✅ ألغِ أي مؤقت debounce نشط
+    _debounce?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -102,12 +108,20 @@ class ReelsScreenState extends State<ReelsScreen>
                 itemCount: state.urls.length,
                 onPageChanged: (index) {
                   final b = context.read<PreloadBloc>();
+
+                  // أول تغيير نتعامل معاه فورًا زي ما كان
                   if (!_didHandleFirstPageChange) {
                     _didHandleFirstPageChange = true;
                     b.onVideoIndexChanged(index);
                     return;
                   }
-                  b.onVideoIndexChanged(index);
+
+                  // ✅ Debounce 150ms لتقليل re-inits وقت السوايب السريع
+                  _debounce?.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 150), () {
+                    if (!mounted) return;
+                    b.onVideoIndexChanged(index);
+                  });
                 },
                 itemBuilder: (context, index) {
                   final b = context.read<PreloadBloc>();

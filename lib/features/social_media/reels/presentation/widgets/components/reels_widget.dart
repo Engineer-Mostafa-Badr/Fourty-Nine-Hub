@@ -74,8 +74,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       _hasAutoPlayed = false;
+      // don’t dispose here (bloc owns it). a best-effort pause is okay but optional.
       try {
-        oldWidget.controller.pause();
+        if (oldWidget.controller.value.isInitialized) {
+          oldWidget.controller.pause();
+        }
       } catch (_) {}
       widget.controller.setLooping(true);
 
@@ -107,12 +110,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   @override
   void dispose() {
-    try {
-      if (widget.controller.value.isInitialized &&
-          widget.controller.value.isPlaying) {
-        widget.controller.pause();
-      }
-    } catch (_) {}
+    // ❗️don’t pause/dispose the controller here — bloc owns lifecycle
     WidgetsBinding.instance.removeObserver(this);
     _rotationController.dispose();
     super.dispose();
@@ -176,7 +174,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   @override
   Widget build(BuildContext context) {
-    final reel = context.read<ReelsCubit>().state.globalReels[widget.index];
+    final reels = context.read<ReelsCubit>().state.globalReels;
+    // defensive: avoid OOB if list changes while building
+    final reel = (widget.index >= 0 && widget.index < reels.length)
+        ? reels[widget.index]
+        : null;
 
     return GestureDetector(
       onTap: _togglePlayPause,
@@ -185,25 +187,27 @@ class _ReelsWidgetState extends State<ReelsWidget>
         animationDuration: const Duration(seconds: 1),
         heartIcon: Icons.favorite_outline,
         iconColor: Colors.pink,
-        onDoubleTap: () async {
-          final reelCubit = context.read<ReelsCubit>();
-          await reelCubit.likeReel(reel.id);
-        },
+        onDoubleTap: reel == null
+            ? null
+            : () async {
+                final reelCubit = context.read<ReelsCubit>();
+                await reelCubit.likeReel(reel.id);
+              },
         child: Stack(
           children: [
             Positioned.fill(
               child: ValueListenableBuilder<VideoPlayerValue>(
                 valueListenable: widget.controller,
                 builder: (context, value, _) {
-                  if (value.isInitialized && !_hasAutoPlayed) {
-                    _autoPlayOnce();
-                  }
-
-                  if (!value.isInitialized) {
+                  // if controller gets disposed by the bloc mid-frame,
+                  // accessing value may still succeed but initialized can flip false
+                  if (!mounted || !value.isInitialized) {
                     return const Center(
                       child: CircularProgressIndicator(color: Colors.white54),
                     );
                   }
+
+                  if (!_hasAutoPlayed) _autoPlayOnce();
 
                   return VideoPlayer(
                     widget.controller,
@@ -221,7 +225,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   duration: const Duration(milliseconds: 220),
                   child: Center(
                     child: Icon(
-                      widget.controller.value.isPlaying
+                      (widget.controller.value.isInitialized &&
+                              widget.controller.value.isPlaying)
                           ? Icons.pause
                           : Icons.play_arrow,
                       color: Colors.white.withOpacity(0.6),
@@ -233,59 +238,61 @@ class _ReelsWidgetState extends State<ReelsWidget>
             ),
 
             // Right-side actions
-            Positioned(
-              right: 0,
-              bottom: 20,
-              child: ReelActions(
-                reel: reel,
-                itemType: ReelItemType.main,
-                rotationController: _rotationController,
-              ),
-            ),
-
-            // Bottom bar: audio + progress
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 60,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                color: Colors.black,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              reel.audio.audioName.isNotEmpty
-                                  ? reel.audio.audioName
-                                  : "No audio",
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios_rounded,
-                              color: Colors.white70, size: 20),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    CustomProgressBar(
-                      videoPlayerController: widget.controller,
-                    ),
-                  ],
+            if (reel != null)
+              Positioned(
+                right: 0,
+                bottom: 20,
+                child: ReelActions(
+                  reel: reel,
+                  itemType: ReelItemType.main,
+                  rotationController: _rotationController,
                 ),
               ),
-            ),
+
+            // Bottom bar: audio + progress
+            if (reel != null)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 60,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  color: Colors.black,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                reel.audio.audioName.isNotEmpty
+                                    ? reel.audio.audioName
+                                    : "No audio",
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            const Icon(Icons.arrow_forward_ios_rounded,
+                                color: Colors.white70, size: 20),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      CustomProgressBar(
+                        videoPlayerController: widget.controller,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
             Positioned(
               bottom: MediaQuery.of(context).size.height * 0.5,
