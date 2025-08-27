@@ -27,9 +27,7 @@ class ReelView extends StatelessWidget {
 
     return PopScope(
       onPopInvoked: (res) {
-        final b = context.read<PreloadBloc>();
-        // يكفي استدعاء shutdown؛ هي Pause + Dispose لكل الفيديوهات
-        b.shutdown();
+        context.read<PreloadBloc>().shutdown();
       },
       canPop: true,
       child: const CustomScaffold(
@@ -51,8 +49,6 @@ class ReelsScreenState extends State<ReelsScreen>
     with AutomaticKeepAliveClientMixin {
   bool _didHandleFirstPageChange = false;
   final _pageController = PageController();
-
-  // ✅ Debounce timer
   Timer? _debounce;
 
   @override
@@ -81,7 +77,6 @@ class ReelsScreenState extends State<ReelsScreen>
 
   @override
   void dispose() {
-    // ✅ ألغِ أي مؤقت debounce نشط
     _debounce?.cancel();
     _pageController.dispose();
     super.dispose();
@@ -109,14 +104,16 @@ class ReelsScreenState extends State<ReelsScreen>
                 onPageChanged: (index) {
                   final b = context.read<PreloadBloc>();
 
-                  // أول تغيير نتعامل معاه فورًا زي ما كان
+                  // Immediately silence everything except the new page (no debounce)
+                  b.pauseAllExcept(index);
+
                   if (!_didHandleFirstPageChange) {
                     _didHandleFirstPageChange = true;
                     b.onVideoIndexChanged(index);
                     return;
                   }
 
-                  // ✅ Debounce 150ms لتقليل re-inits وقت السوايب السريع
+                  // Debounce heavy init/preload — but audio is already handled above
                   _debounce?.cancel();
                   _debounce = Timer(const Duration(milliseconds: 150), () {
                     if (!mounted) return;
@@ -130,16 +127,17 @@ class ReelsScreenState extends State<ReelsScreen>
                       (state.isLoading && index == state.urls.length - 1);
 
                   if (controller == null) {
+                    // kick init for the focused item if needed
                     if (index == state.focusedIndex) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         b.prioritizedFocusInit(index,
                             epoch: b.state.reloadCounter);
                       });
                     }
-                    return _buildVideoLoadingWidget(
-                      index,
-                      b.isVideoLoading(index) || isTailLoading,
-                    );
+
+                    final bool showLoading =
+                        b.isVideoLoading(index) || isTailLoading;
+                    return _buildVideoLoadingWidget(index, showLoading);
                   }
 
                   if (state.focusedIndex == index) {
