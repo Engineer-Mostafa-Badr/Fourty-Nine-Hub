@@ -27,8 +27,8 @@ class ReelView extends StatelessWidget {
     return PopScope(
       onPopInvoked: (res) {
         final b = context.read<PreloadBloc>();
-        b.pauseCurrent();
-        b.resetFocusedIndex(b.state.focusedIndex);
+        // 🛑 أوقف كل الفيديوهات ونظّف الكنترولرز
+        b.shutdown();
       },
       canPop: true,
       child: const CustomScaffold(
@@ -49,7 +49,6 @@ class ReelsScreen extends StatefulWidget {
 class ReelsScreenState extends State<ReelsScreen>
     with AutomaticKeepAliveClientMixin {
   bool _didHandleFirstPageChange = false;
-
   final _pageController = PageController();
 
   @override
@@ -120,7 +119,7 @@ class ReelsScreenState extends State<ReelsScreen>
                     if (index == state.focusedIndex) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         b.prioritizedFocusInit(index,
-                            epoch: b.state.reloadCounter); // epoch guard
+                            epoch: b.state.reloadCounter);
                       });
                     }
                     return _buildVideoLoadingWidget(

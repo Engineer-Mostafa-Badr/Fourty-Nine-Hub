@@ -32,7 +32,7 @@ class ReelsWidget extends StatefulWidget {
 class _ReelsWidgetState extends State<ReelsWidget>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   bool _showPlayPauseIcon = false;
-  bool _hasAutoPlayed = false; // guard to avoid double-autoplay
+  bool _hasAutoPlayed = false;
   late final AnimationController _rotationController;
 
   @override
@@ -40,10 +40,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Always loop; bloc already primes with seekTo(0)
     widget.controller.setLooping(true);
 
-    // Start playback only after mount + initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (widget.controller.value.isInitialized) {
@@ -64,7 +62,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
         AnimationController(vsync: this, duration: const Duration(seconds: 5))
           ..repeat();
 
-    // match your original status bar setup
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
@@ -76,7 +73,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   void didUpdateWidget(covariant ReelsWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      _hasAutoPlayed = false; // reset guard for new controller
+      _hasAutoPlayed = false;
       try {
         oldWidget.controller.pause();
       } catch (_) {}
@@ -110,7 +107,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   @override
   void dispose() {
-    // ensure no ghost audio on unmount
     try {
       if (widget.controller.value.isInitialized &&
           widget.controller.value.isPlaying) {
@@ -122,19 +118,15 @@ class _ReelsWidgetState extends State<ReelsWidget>
     super.dispose();
   }
 
-  // ---------- playback helpers ----------
-
   void _autoPlayOnce() {
     if (_hasAutoPlayed) return;
     _hasAutoPlayed = true;
 
-    // Defer play until the next frame to ensure the texture is attached
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (widget.controller.value.isInitialized) {
         _playVideo();
       } else {
-        // Edge case: if init completes right after this, attach a one-shot listener
         void onInitListener() {
           if (widget.controller.value.isInitialized) {
             widget.controller.removeListener(onInitListener);
@@ -182,143 +174,127 @@ class _ReelsWidgetState extends State<ReelsWidget>
     }
   }
 
-  // ---------- UI ----------
-
   @override
   Widget build(BuildContext context) {
     final reel = context.read<ReelsCubit>().state.globalReels[widget.index];
 
-    return SizedBox(
-      height: MediaProportion.of(context)
-          .screenHeight, // or MediaQuery if you prefer
-      child: GestureDetector(
-        onTap: _togglePlayPause,
-        child: DoubleTapHeart(
-          iconSize: 40,
-          animationDuration: const Duration(seconds: 1),
-          heartIcon: Icons.favorite_outline,
-          iconColor: Colors.pink,
-          onDoubleTap: () async {
-            final reelCubit = context.read<ReelsCubit>();
-            await reelCubit.likeReel(reel.id);
-          },
-          child: Stack(
-            children: [
-              // Rebuild as controller value changes (init → ready)
-              Positioned.fill(
-                child: ValueListenableBuilder<VideoPlayerValue>(
-                  valueListenable: widget.controller,
-                  builder: (context, value, _) {
-                    if (value.isInitialized && !_hasAutoPlayed) {
-                      _autoPlayOnce();
-                    }
+    return GestureDetector(
+      onTap: _togglePlayPause,
+      child: DoubleTapHeart(
+        iconSize: 40,
+        animationDuration: const Duration(seconds: 1),
+        heartIcon: Icons.favorite_outline,
+        iconColor: Colors.pink,
+        onDoubleTap: () async {
+          final reelCubit = context.read<ReelsCubit>();
+          await reelCubit.likeReel(reel.id);
+        },
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ValueListenableBuilder<VideoPlayerValue>(
+                valueListenable: widget.controller,
+                builder: (context, value, _) {
+                  if (value.isInitialized && !_hasAutoPlayed) {
+                    _autoPlayOnce();
+                  }
 
-                    if (!value.isInitialized) {
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.white54),
-                      );
-                    }
-
-                    // Keep exactly your visual (no extra FittedBox unless you want cover)
-                    return VideoPlayer(
-                      widget.controller,
-                      key: ValueKey('reel_video_${widget.index}'),
+                  if (!value.isInitialized) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.white54),
                     );
-                  },
-                ),
-              ),
+                  }
 
-              // Play/Pause toast icon
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: AnimatedOpacity(
-                    opacity: _showPlayPauseIcon ? 1 : 0,
-                    duration: const Duration(milliseconds: 220),
-                    child: Center(
-                      child: Icon(
-                        widget.controller.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
-                        color: Colors.white.withOpacity(0.6),
-                        size: 84,
-                      ),
+                  return VideoPlayer(
+                    widget.controller,
+                    key: ValueKey('reel_video_${widget.index}'),
+                  );
+                },
+              ),
+            ),
+
+            // Play/Pause toast icon
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedOpacity(
+                  opacity: _showPlayPauseIcon ? 1 : 0,
+                  duration: const Duration(milliseconds: 220),
+                  child: Center(
+                    child: Icon(
+                      widget.controller.value.isPlaying
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                      color: Colors.white.withOpacity(0.6),
+                      size: 84,
                     ),
                   ),
                 ),
               ),
+            ),
 
-              // Right-side actions (likes, comments, etc.)
-              Positioned(
-                right: 0,
-                bottom: 20,
-                child: ReelActions(
-                  reel: reel,
-                  itemType: ReelItemType.main,
-                  rotationController: _rotationController,
-                ),
+            // Right-side actions
+            Positioned(
+              right: 0,
+              bottom: 20,
+              child: ReelActions(
+                reel: reel,
+                itemType: ReelItemType.main,
+                rotationController: _rotationController,
               ),
+            ),
 
-              // Bottom bar: audio + progress (your original black panel)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: 60,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  color: Colors.black,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                reel.audio.audioName.isNotEmpty
-                                    ? reel.audio.audioName
-                                    : "No audio",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                ),
+            // Bottom bar: audio + progress
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 60,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                color: Colors.black,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              reel.audio.audioName.isNotEmpty
+                                  ? reel.audio.audioName
+                                  : "No audio",
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
                               ),
                             ),
-                            const Icon(Icons.arrow_forward_ios_rounded,
-                                color: Colors.white70, size: 20),
-                          ],
-                        ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios_rounded,
+                              color: Colors.white70, size: 20),
+                        ],
                       ),
-                      const SizedBox(height: 5),
-                      CustomProgressBar(
-                        videoPlayerController: widget.controller,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 5),
+                    CustomProgressBar(
+                      videoPlayerController: widget.controller,
+                    ),
+                  ],
                 ),
               ),
+            ),
 
-              // Your extra overlay
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * 0.5,
-                left: MediaQuery.of(context).size.width * 0.115,
-                child: const FullScreenWidget(),
-              ),
-            ],
-          ),
+            Positioned(
+              bottom: MediaQuery.of(context).size.height * 0.5,
+              left: MediaQuery.of(context).size.width * 0.115,
+              child: const FullScreenWidget(),
+            ),
+          ],
         ),
       ),
     );
   }
-}
-
-/// If you don’t have this, replace with MediaQuery.of(context).size.height directly.
-class MediaProportion {
-  final BuildContext context;
-  MediaProportion.of(this.context);
-  double get screenHeight => MediaQuery.of(context).size.height;
 }
