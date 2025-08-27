@@ -487,7 +487,8 @@ class AppPages {
                   ),
                   BlocProvider(
                     create: (context) =>
-                    serviceLocator<StarCubit>()..getAllTalent(),
+                    // serviceLocator<StarCubit>()..getAllTalent(),
+                    serviceLocator<StarCubit>()..allTalents,
                   ),
                   BlocProvider(
                     create: (context) => serviceLocator<MainCategoriesCubit>()

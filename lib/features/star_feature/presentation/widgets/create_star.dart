@@ -138,7 +138,7 @@ class _CreateStarState extends State<CreateStar> {
                       titleController.clear();
                       descController.clear();
                       controller.selectedImages == [];
-                      context.read<StarCubit>().selectedVideo == null;
+                      // context.read<StarCubit>().selectedVideo == null;
                     });
                   }
                   if (state.status == StarStates.error) {
@@ -153,7 +153,7 @@ class _CreateStarState extends State<CreateStar> {
                 },
                 builder: (BuildContext context, state) {
                   controllerStar = context.read<StarCubit>();
-                  _videoControllers = state.video?.map((video) {
+                  _videoControllers = state.videos?.map((video) {
                         return VideoPlayerController.file(File(video.file.path))
                           ..initialize().then((_) {
                             setState(() {});

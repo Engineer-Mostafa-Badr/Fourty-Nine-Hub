@@ -26,9 +26,9 @@ class AllWinnerGridView extends StatelessWidget {
         childAspectRatio: 0.65,
       ),
       itemBuilder: (context, index) {
-        if (index == starCubit.winner.length) {
-          return const Center(child: CustomCircularProgressIndicator());
-        }
+        // if (index == starCubit.winners.length) {
+        //   return const Center(child: CustomCircularProgressIndicator());
+        // }
         return _buildWinnerCard(winner![index]);
       },
       itemCount: winner?.length ?? 0,

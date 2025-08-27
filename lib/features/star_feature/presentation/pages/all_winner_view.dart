@@ -38,13 +38,13 @@ class _AllWinnerViewState extends State<AllWinnerView> {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialDataWinner();
+    // _cubit.loadInitialDataWinner();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchWinnerStar();
+      // _cubit.fetchWinnerStar();
     }
   }
 
@@ -76,7 +76,7 @@ class _AllWinnerViewState extends State<AllWinnerView> {
           return Padding(
             padding: EdgeInsets.all(6.w),
             child: AllWinnerGridView(
-              winner: state.winner,
+              winner: state.winners,
               starCubit: _cubit,
             ),
 

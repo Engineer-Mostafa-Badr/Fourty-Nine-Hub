@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -379,7 +381,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildHomeTab() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: _getResponsivePadding(30)),
+      padding: EdgeInsets.only(bottom: _getResponsivePadding(20)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -409,7 +411,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
               itemBuilder: (context, index) {
                 final video = _extendedUserVideos[index];
                 return Container(
-                  width: _getVideoCardWidth(),
+                  // width: _getVideoCardWidth(),
+                  width: MediaQuery.of(context).size.width * 0.6,
                   margin: EdgeInsets.only(right: _getResponsiveSpacing(12)),
                   child: _buildVideoCard(video, index),
                 );
@@ -455,7 +458,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   Widget _buildVideoCard(StarEntity video, int index) {
-    final thumbnailHeight = _getVideoCardWidth() * 0.6; // Maintain aspect ratio
+    // final thumbnailHeight = _getVideoCardWidth() * 0.8; // Maintain aspect ratio
 
     return GestureDetector(
       onTap: () => _navigateToVideo(video),
@@ -464,11 +467,14 @@ class _ProfilePageViewState extends State<ProfilePageView>
         children: [
           // Thumbnail with overlay elements
           Container(
-            height: thumbnailHeight,
+            // height: thumbnailHeight,
+            height: MediaQuery.of(context).size.width * 0.35,
+            width: MediaQuery.of(context).size.width * 0.6,
             decoration: BoxDecoration(
               borderRadius:
                   BorderRadius.circular(_getResponsiveBorderRadius(10)),
               color: Colors.grey[300],
+              border: Border.all(color: Colors.grey[300]!, width: 2),
               image: DecorationImage(
                 image: AssetImage('assets/images/testforvideo.jpg'),
                 fit: BoxFit.cover,
@@ -539,79 +545,271 @@ class _ProfilePageViewState extends State<ProfilePageView>
           SizedBox(height: _getResponsiveSpacing(12)),
 
           // Video info with profile pic
+          // Row(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     CircleAvatar(
+          //       radius: _getResponsiveIconSize(16),
+          //       backgroundColor: Colors.grey[300],
+          // backgroundImage: video.user.image.isNotEmpty
+          //     ? NetworkImage(video.user.image)
+          //     : null,
+          //       child: video.user.image.isEmpty
+          //           ? Icon(Icons.person,
+          //               size: _getResponsiveIconSize(16),
+          //               color: Colors.grey[600])
+          //           : null,
+          //     ),
+          //     SizedBox(width: _getResponsiveSpacing(8)),
+          //     Expanded(
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text(
+          //             "Heart Touching Nasheed",
+          //             style: TextStyle(
+          //               fontSize: _getResponsiveFontSize(13),
+          //               fontWeight: FontWeight.w600,
+          //               color: Colors.black,
+          //             ),
+          //             maxLines: 2,
+          //             overflow: TextOverflow.ellipsis,
+          //           ),
+          //           SizedBox(height: _getResponsiveSpacing(3)),
+          //           Text(
+          //             "507K views • 10 months ago",
+          //             style: TextStyle(
+          //               fontSize: _getResponsiveFontSize(11),
+          //               color: Colors.grey[600],
+          //             ),
+          //             maxLines: 1,
+          //             overflow: TextOverflow.ellipsis,
+          //           ),
+          //           SizedBox(height: _getResponsiveSpacing(4)),
+          //           // Star rating
+          //           Row(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: List.generate(
+          //               5,
+          //               (starIndex) => Icon(
+          //                 starIndex < 3 ? Icons.star : Icons.star_border,
+          //                 size: _getResponsiveIconSize(12),
+          //                 color:
+          //                     starIndex < 3 ? Colors.amber : Colors.grey[400],
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //     SizedBox(width: _getResponsiveSpacing(4)),
+          //     GestureDetector(
+          //       onTap: () => _showMoreOptions(context, video),
+          //       child: Padding(
+          //         padding: EdgeInsets.all(_getResponsiveSpacing(4)),
+          //         child: Icon(
+          //           Icons.more_vert,
+          //           size: _getResponsiveIconSize(18),
+          //           color: Colors.grey[700],
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: _getResponsiveIconSize(16),
-                backgroundColor: Colors.grey[300],
-                backgroundImage: video.user.image.isNotEmpty
-                    ? NetworkImage(video.user.image)
-                    : null,
-                child: video.user.image.isEmpty
-                    ? Icon(Icons.person,
-                        size: _getResponsiveIconSize(16),
-                        color: Colors.grey[600])
-                    : null,
-              ),
-              SizedBox(width: _getResponsiveSpacing(8)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Heart Touching Nasheed",
-                      style: TextStyle(
-                        fontSize: _getResponsiveFontSize(13),
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: _getResponsiveSpacing(3)),
-                    Text(
-                      "507K views • 10 months ago",
-                      style: TextStyle(
-                        fontSize: _getResponsiveFontSize(11),
-                        color: Colors.grey[600],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: _getResponsiveSpacing(4)),
-                    // Star rating
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(
-                        5,
-                        (starIndex) => Icon(
-                          starIndex < 3 ? Icons.star : Icons.star_border,
-                          size: _getResponsiveIconSize(12),
-                          color:
-                              starIndex < 3 ? Colors.amber : Colors.grey[400],
-                        ),
-                      ),
-                    ),
-                  ],
+              // Profile Picture
+              GestureDetector(
+                onTap: () {},
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.grey[300],
+                  backgroundImage: video.user.image.isNotEmpty
+                      ? NetworkImage(video.user.image)
+                      : null,
+                  child: video.user.image.isEmpty
+                      ? Icon(Icons.person,
+                          size: _getResponsiveIconSize(16),
+                          color: Colors.grey[600])
+                      : null,
                 ),
               ),
-              SizedBox(width: _getResponsiveSpacing(4)),
-              GestureDetector(
-                onTap: () => _showMoreOptions(context, video),
-                child: Padding(
-                  padding: EdgeInsets.all(_getResponsiveSpacing(4)),
-                  child: Icon(
-                    Icons.more_vert,
-                    size: _getResponsiveIconSize(18),
-                    color: Colors.grey[700],
+              SizedBox(width: 12),
+
+              // Title and Info
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePageView(
+                          user: widget.user,
+                          userVideos: widget.userVideos,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "test",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                          height: 1.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Mohamed Ahmed",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: context.isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[600],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.visibility,
+                            size: 14,
+                            color: context.isDarkMode
+                                ? Colors.grey[400]
+                                : Colors.grey[600],
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            "47K ${LocaleKeys.views.localize} • 2 years ago",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: context.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
+
+              // More Options and Stars
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () => showYouTubeOptions(context),
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                      size: 25,
+                    ),
+                    padding: EdgeInsets.all(4),
+                    constraints: BoxConstraints(minWidth: 32, minHeight: 32),
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                      5,
+                      (starIndex) => GestureDetector(
+                        onTap: () {},
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 1),
+                          child: Icon(
+                            starIndex < starIndex + 1
+                                ? Icons.star
+                                : Icons.star_border,
+                            color: starIndex < starIndex + 1
+                                ? Colors.amber
+                                : Colors.grey[400],
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
-          ),
+          )
         ],
       ),
+    );
+  }
+
+  void showYouTubeOptions(BuildContext context) {
+    final cubit = context.read<StarCubit>();
+    OptionsBottomSheet.showOptions(
+      context: context,
+      options: [
+        OptionItem(
+          icon: Icons.playlist_add,
+          title: context.isArabic ? 'انشاء قائمة' : 'Play next in queue',
+          onTap: () {
+            Navigator.pop(context);
+            // Handle play next
+          },
+        ),
+        OptionItem(
+          icon: Icons.block,
+          title: context.isArabic ? 'غير مهتم' : 'Not interested',
+          onTap: () {
+            Navigator.pop(context);
+            // Handle not interested
+          },
+        ),
+        OptionItem(
+          icon: Icons.visibility_off,
+          title: context.isArabic ? 'اخفاء' : 'Hide',
+          onTap: () {
+            Navigator.pop(context);
+            // Handle hide
+          },
+        ),
+        OptionItem(
+          icon: cubit.isFavorite("1") ? Icons.favorite : Icons.favorite_border,
+          title: cubit.isFavorite("1")
+              ? (context.isArabic
+                  ? 'ازالة من المفضلة'
+                  : 'Remove from favorites')
+              : (context.isArabic ? 'اضافة للمفضلة' : 'Add to favorites'),
+          onTap: () {
+            Navigator.pop(context);
+            cubit.toggleFavorite("1");
+          },
+        ),
+        OptionItem(
+          icon: Icons.flag,
+          title: context.isArabic ? 'ابلاغ' : 'Report',
+          iconColor: Colors.red,
+          textColor: Colors.red,
+          onTap: () {
+            Navigator.pop(context);
+            bottomSheet(
+              context: context,
+              widget: ReportView(
+                id: "1",
+                categoryId: "67e952dbbb085740a35d4281",
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 

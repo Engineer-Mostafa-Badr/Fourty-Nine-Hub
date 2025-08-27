@@ -245,16 +245,16 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       }
       serviceLocator<SubscriptionController>().checkIfUserSubscribed(
         onSubscribed: () {
-          context.read<StarCubit>().uploadStar(
-                params: StarParams(
-                  title: _titleController.text,
-                  mediaUrl: _mediaUrl ?? '',
-                  description: _descriptionController.text,
-                  type: _selectedImages == null ? 'video' : 'image',
-                ),
-              );
-          context.pop();
+          // context.read<StarCubit>().uploadStar(
+          //       params: StarParams(
+          //         title: _titleController.text,
+          //         mediaUrl: _mediaUrl ?? '',
+          //         description: _descriptionController.text,
+          //         type: _selectedImages == null ? 'video' : 'image',
+          //       ),
+          //     );
           // context.pop();
+          // // context.pop();
         },
         subCategoryId: Constants.tubeSubCategory,
       );
