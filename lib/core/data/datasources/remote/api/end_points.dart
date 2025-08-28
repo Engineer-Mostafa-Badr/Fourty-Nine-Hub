@@ -1001,11 +1001,11 @@ class EndPoints {
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
@@ -1721,16 +1721,18 @@ class EndPoints {
   static const addRateToClientWithDriverLoadingNonSocket =
       '/loading/trip/rating/';
 
-      //! Spot Light
-    // Spotlight Profile Endpoints
-    static const getMySpotlightProfile = '/spotlight/profile/me';
-    static String getSpotlightProfileForUser(String userId) => '/spotlight/profile/$userId';
+  //! Spot Light
+  // Spotlight Profile Endpoints
+  static const getMySpotlightProfile = '/spotlight/profile/me';
+  static String getSpotlightProfileForUser(String userId) =>
+      '/spotlight/profile/$userId';
 
   // Spotlight Media Endpoints
   static String getMySpotlightMedia({int page = 1, int limit = 10}) =>
       '/spotlight/media/me?page=$page&limit=$limit';
 
-  static String getSpotlightMediaForUser(String userId, {int page = 1, int limit = 10}) =>
+  static String getSpotlightMediaForUser(String userId,
+          {int page = 1, int limit = 10}) =>
       '/spotlight/media/$userId?page=$page&limit=$limit';
 
   // Media Upload Endpoints
@@ -1743,13 +1745,23 @@ class EndPoints {
   static const unlikeMedia = '/spotlight/media/unlike';
   static const deleteMedia = '/spotlight/media/delete';
 
-  static String getForYouSongs({required SongsPaginationParams params}) => '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
-  static String getTrendingSongs({required SongsPaginationParams params}) => '/songs/onTrending-songs?page=${params.page}&limit=${params.limit}';
-  static String getSavedSongs({required SongsPaginationParams params}) => '/songs/favorite-songs?page=${params.page}&limit=${params.limit}';
-  static String addRemoveSongsFromFavs({required String songId}) => '/songs/add-to-favorites/$songId';
-  static String searchSongs({required String query}) => '/songs/search?query=$query';
-
+  static String getForYouSongs({required SongsPaginationParams params}) =>
+      '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
+  static String getTrendingSongs({required SongsPaginationParams params}) =>
+      '/songs/onTrending-songs?page=${params.page}&limit=${params.limit}';
+  static String getSavedSongs({required SongsPaginationParams params}) =>
+      '/songs/favorite-songs?page=${params.page}&limit=${params.limit}';
+  static String addRemoveSongsFromFavs({required String songId}) =>
+      '/songs/add-to-favorites/$songId';
+  static String searchSongs({required String query}) =>
+      '/songs/search?query=$query';
 
   // Chat Endpoints
-  static getSocialConversations({int page = 1, int limit = 10}) => '/conversations?page=$page&limit=$limit';
+  static getSocialConversations({int page = 1, int limit = 10}) =>
+      '/conversations?page=$page&limit=$limit';
+
+  //! Tube Endpoints
+
+  static const String getMyProfile = '/tube-profile';
+  static const String updateProfile = '/tube-profile';
 }

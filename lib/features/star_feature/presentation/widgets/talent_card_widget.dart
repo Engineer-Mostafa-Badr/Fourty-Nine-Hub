@@ -16,9 +16,11 @@ import '../../../../core/extensions/numbers_extensions.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../service_locator/service_locator.dart';
 import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../domain/entity/star_entity.dart';
+import '../controller/cubit/profile_cubit.dart';
 import '../controller/cubit/star_cubit.dart';
 import '../controller/cubit/star_state.dart';
 import '../helper/youtube_style_video_player.dart';
@@ -1052,7 +1054,6 @@ import '../helper/talent_video_player.dart';
 //!
 
 class TalentCard {
-  
   // Available content (main feed)
   static Widget buildAvailableContentSliver({
     required BuildContext context,
@@ -1062,7 +1063,8 @@ class TalentCard {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         // Show loading if first load
-        if (state.status == StarStates.loading && state.availableTalents.isEmpty) {
+        if (state.status == StarStates.loading &&
+            state.availableTalents.isEmpty) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -1072,7 +1074,8 @@ class TalentCard {
         }
 
         // Determine which data to show
-        final talentsToShow = isSearching ? state.searchResults : state.availableTalents;
+        final talentsToShow =
+            isSearching ? state.searchResults : state.availableTalents;
 
         if (talentsToShow.isEmpty) {
           return SliverToBoxAdapter(
@@ -1080,7 +1083,9 @@ class TalentCard {
               height: 200,
               child: CustomEmptyWidget(
                 label: isSearching
-                    ? (context.isArabic ? 'لا يوجد نتائج بحث' : 'No search results found')
+                    ? (context.isArabic
+                        ? 'لا يوجد نتائج بحث'
+                        : 'No search results found')
                     : LocaleKeys.noResultsFound.localize,
               ),
             ),
@@ -1093,11 +1098,12 @@ class TalentCard {
             child: OlxPaginationWidget(
               items: List.generate(
                 talentsToShow.length,
-                (index) => _buildTalentCard(context, talentsToShow[index], cubit),
+                (index) =>
+                    _buildTalentCard(context, talentsToShow[index], cubit),
               ),
               banners: bannersList,
-              loadPage: (page) => isSearching 
-                  ? Future.value() 
+              loadPage: (page) => isSearching
+                  ? Future.value()
                   : cubit.loadTalents(TalentCategory.available),
               scrollController: ScrollController(),
               itemsPerPage: 1,
@@ -1142,13 +1148,14 @@ class TalentCard {
             (context, index) {
               if (index == state.favoriteTalents.length) {
                 // Load more button or loading indicator
-                return _buildLoadMoreWidget(context, state, TalentCategory.favorites, cubit);
+                return _buildLoadMoreWidget(
+                    context, state, TalentCategory.favorites, cubit);
               }
-              
+
               final talent = state.favoriteTalents[index];
               return _buildTalentCard(context, talent, cubit);
             },
-            childCount: state.favoriteTalents.length + 
+            childCount: state.favoriteTalents.length +
                 (state.hasMore(TalentCategory.favorites) ? 1 : 0),
           ),
         );
@@ -1178,7 +1185,9 @@ class TalentCard {
               height: 200,
               child: Center(
                 child: Text(
-                  context.isArabic ? 'لا يوجد فيديوات في التاريخ' : 'No videos in history',
+                  context.isArabic
+                      ? 'لا يوجد فيديوات في التاريخ'
+                      : 'No videos in history',
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ),
@@ -1190,13 +1199,14 @@ class TalentCard {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (index == state.historyTalents.length) {
-                return _buildLoadMoreWidget(context, state, TalentCategory.history, cubit);
+                return _buildLoadMoreWidget(
+                    context, state, TalentCategory.history, cubit);
               }
-              
+
               final talent = state.historyTalents[index];
               return _buildHistoryVideoItem(context, talent, cubit, index);
             },
-            childCount: state.historyTalents.length + 
+            childCount: state.historyTalents.length +
                 (state.hasMore(TalentCategory.history) ? 1 : 0),
           ),
         );
@@ -1236,9 +1246,10 @@ class TalentCard {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (index == state.myTalents.length) {
-                return _buildLoadMoreWidget(context, state, TalentCategory.myTalents, cubit);
+                return _buildLoadMoreWidget(
+                    context, state, TalentCategory.myTalents, cubit);
               }
-              
+
               final talent = state.myTalents[index];
               return _buildMyTalentsVideoItem(
                 context,
@@ -1248,7 +1259,7 @@ class TalentCard {
                 onVideoTap: onVideoTap,
               );
             },
-            childCount: state.myTalents.length + 
+            childCount: state.myTalents.length +
                 (state.hasMore(TalentCategory.myTalents) ? 1 : 0),
           ),
         );
@@ -1300,7 +1311,8 @@ class TalentCard {
     StarCubit cubit, {
     bool isMyTalent = false,
   }) {
-    final mediaUrl = talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+    final mediaUrl =
+        talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
     final createdAt = talent.createdAt ?? DateTime.now();
     final isVideo = _isVideoUrl(mediaUrl);
 
@@ -1360,7 +1372,7 @@ class TalentCard {
     StarCubit cubit,
   ) {
     final createdAt = talent.createdAt ?? DateTime.now();
-    
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
@@ -1405,7 +1417,9 @@ class TalentCard {
                     "${talent.user.firstName} ${talent.user.lastName}",
                     style: TextStyle(
                       fontSize: 13,
-                      color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      color: context.isDarkMode
+                          ? Colors.grey[400]
+                          : Colors.grey[600],
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -1416,14 +1430,18 @@ class TalentCard {
                       Icon(
                         Icons.visibility,
                         size: 14,
-                        color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        color: context.isDarkMode
+                            ? Colors.grey[400]
+                            : Colors.grey[600],
                       ),
                       SizedBox(width: 4),
                       Text(
                         "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
                         style: TextStyle(
                           fontSize: 13,
-                          color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                          color: context.isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[600],
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1470,7 +1488,9 @@ class TalentCard {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 1),
                 child: Icon(
-                  starIndex < talent.averageRating ? Icons.star : Icons.star_border,
+                  starIndex < talent.averageRating
+                      ? Icons.star
+                      : Icons.star_border,
                   color: starIndex < talent.averageRating
                       ? Colors.amber
                       : Colors.grey[400],
@@ -1518,7 +1538,8 @@ class TalentCard {
     StarCubit cubit,
     int index,
   ) {
-    final mediaUrl = talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+    final mediaUrl =
+        talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
     final createdAt = talent.createdAt ?? DateTime.now();
 
     return GestureDetector(
@@ -1532,12 +1553,12 @@ class TalentCard {
             // Video thumbnail
             _buildThumbnailWithOverlays(140, 90),
             const SizedBox(width: 12),
-            
+
             // Video info
             Expanded(
               child: _buildVideoInfoColumn(context, talent, createdAt),
             ),
-            
+
             // More options button
             _buildMoreOptionsButton(context, talent, cubit),
           ],
@@ -1554,7 +1575,8 @@ class TalentCard {
     int index, {
     Function(StarEntity, String)? onVideoTap,
   }) {
-    final mediaUrl = talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+    final mediaUrl =
+        talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
     final createdAt = talent.createdAt ?? DateTime.now();
 
     return GestureDetector(
@@ -1712,9 +1734,9 @@ class TalentCard {
   // Utility methods
   static bool _isVideoUrl(String url) {
     return url.toLowerCase().contains('.mp4') ||
-           url.toLowerCase().contains('.mov') ||
-           url.toLowerCase().contains('.avi') ||
-           url.toLowerCase().contains('.m3u8');
+        url.toLowerCase().contains('.mov') ||
+        url.toLowerCase().contains('.avi') ||
+        url.toLowerCase().contains('.m3u8');
   }
 
   static void _navigateToVideoPlayer(
@@ -1750,13 +1772,15 @@ class TalentCard {
         createdAt: DateTime.now().subtract(Duration(days: index * 30)),
       ),
     );
-
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfilePageView(
-          user: talent.user,
-          userVideos: mockVideos,
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => serviceLocator<ProfileCubit>()..getMyProfile(),
+          child: ProfilePageView(
+            user: talent.user,
+            userVideos: mockVideos,
+          ),
         ),
       ),
     );
@@ -1785,7 +1809,8 @@ class TalentCard {
       options: [
         OptionItem(
           icon: Icons.delete_outline,
-          title: context.isArabic ? 'حذف من التاريخ' : 'Remove from watch history',
+          title:
+              context.isArabic ? 'حذف من التاريخ' : 'Remove from watch history',
           onTap: () {
             Navigator.pop(context);
             // Add remove from history logic
@@ -1803,7 +1828,8 @@ class TalentCard {
         ),
         OptionItem(
           icon: Icons.access_time,
-          title: context.isArabic ? 'حفظ للمشاهدة لاحقا' : 'Save to Watch later',
+          title:
+              context.isArabic ? 'حفظ للمشاهدة لاحقا' : 'Save to Watch later',
           onTap: () {
             Navigator.pop(context);
             // Add save to watch later logic
@@ -1818,7 +1844,9 @@ class TalentCard {
           },
         ),
         OptionItem(
-          icon: cubit.isFavorite(talent.id) ? Icons.favorite : Icons.favorite_border,
+          icon: cubit.isFavorite(talent.id)
+              ? Icons.favorite
+              : Icons.favorite_border,
           title: cubit.isFavorite(talent.id)
               ? (context.isArabic ? 'حذف من المفضلة' : 'Remove from favorites')
               : (context.isArabic ? 'اضافة للمفضلة' : 'Add to favorites'),
@@ -1861,9 +1889,13 @@ class TalentCard {
           },
         ),
         OptionItem(
-          icon: cubit.isFavorite(talent.id) ? Icons.favorite : Icons.favorite_border,
+          icon: cubit.isFavorite(talent.id)
+              ? Icons.favorite
+              : Icons.favorite_border,
           title: cubit.isFavorite(talent.id)
-              ? (context.isArabic ? 'ازالة من المفضلة' : 'Remove from favorites')
+              ? (context.isArabic
+                  ? 'ازالة من المفضلة'
+                  : 'Remove from favorites')
               : (context.isArabic ? 'اضافة للمفضلة' : 'Add to favorites'),
           onTap: () {
             Navigator.pop(context);
@@ -1920,7 +1952,8 @@ class OptionsBottomSheet {
     Color backgroundColor = Colors.white,
     Color indicatorColor = const Color(0xffE4E4E4),
     double borderRadius = 10,
-    EdgeInsets margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+    EdgeInsets margin =
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
   }) {
     showModalBottomSheet(
       context: context,

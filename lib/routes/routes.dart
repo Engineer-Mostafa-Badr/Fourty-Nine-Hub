@@ -16,8 +16,7 @@ abstract class Routes {
   static const RIDEACTIVITY = '/RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       '/RIDEOPENSTREETMAPSEARCHANDPICK';
-  static const GoogleMapsSearchAndPick =
-      '/GoogleMapsSearchAndPick';
+  static const GoogleMapsSearchAndPick = '/GoogleMapsSearchAndPick';
   static const RIDERUNNINGTRIPS = '/RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = '/RIDEEXPIREDTRIPS';
   static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
@@ -42,7 +41,8 @@ abstract class Routes {
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
   static const CREATECOMPANYPOSTAD = '/Subcategories/ADS/CreatePostCompany';
-  static const CREATECOMPANYPOSTREALAD = '/Subcategories/ADS/CreatePostRealCompany';
+  static const CREATECOMPANYPOSTREALAD =
+      '/Subcategories/ADS/CreatePostRealCompany';
 
   // static const CAMERA
 
@@ -310,6 +310,7 @@ abstract class Routes {
   static const allClientRatingScreen = '/allClientRatingScreen';
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
   static const conversationsScreen = '/ConversationsScreen';
+  static const tubeProfile =  '/BeAStar/TubeProfile';
 }
 
 abstract class Paths {
@@ -328,8 +329,7 @@ abstract class Paths {
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       'RIDEOPENSTREETMAPSEARCHANDPICK';
-  static const GoogleMapsSearchAndPick =
-      'GoogleMapsSearchAndPick';
+  static const GoogleMapsSearchAndPick = 'GoogleMapsSearchAndPick';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
   static const RIDEHISTORYTRIPS = 'RIDEHISTORYTRIPS';
@@ -605,4 +605,6 @@ abstract class Paths {
   static const followersScreen = 'FollowersScreen';
   static const allClientRatingScreen = 'allClientRatingScreen';
   static const conversationsScreen = 'ConversationsScreen';
+
+  static const tubeProfile = 'TubeProfile';
 }
