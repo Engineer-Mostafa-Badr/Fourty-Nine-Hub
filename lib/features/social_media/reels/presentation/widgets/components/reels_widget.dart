@@ -4,7 +4,6 @@ import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:http/http.dart' as http;
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
@@ -12,6 +11,7 @@ import '../../controllers/preload_cubit/preload_bloc.dart';
 import '../../controllers/preload_cubit/preload_state.dart';
 import '../full_screen_widget.dart';
 import '../../pages/reel_actions.dart';
+import 'animated_heart_wiidget.dart';
 import 'unified_widget_view.dart';
 
 class ReelsWidget extends StatefulWidget {
@@ -57,21 +57,17 @@ class _ReelsWidgetState extends State<ReelsWidget>
       statusBarBrightness: Brightness.light,
     ));
 
-    _initController(); // async bootstrap
+    _initController();
   }
 
   Future<void> _initController() async {
-    // 1) Resolve the lowest-variant URL if this is a master HLS.
     final effectiveUrl = await _pickLowestVariantIfHls(widget.url);
 
-    // 2) Build data source. IMPORTANT: disable ASMS track switching so it won’t upscale.
     final dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       effectiveUrl,
-      // Keep tracks off so it sticks to the URL we gave it:
       useAsmsTracks: false,
       useAsmsAudioTracks: true,
-      // Optional caching/buffering as you had:
       cacheConfiguration: const BetterPlayerCacheConfiguration(useCache: true),
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: 1000,
@@ -89,18 +85,18 @@ class _ReelsWidgetState extends State<ReelsWidget>
         autoPlay: false,
         looping: true,
         expandToFill: false,
-        fit: BoxFit.fill, // cover = full screen with crop (like Reels)
+        fit: BoxFit.cover, // full screen cover
         handleLifecycle: false,
         showPlaceholderUntilPlay: false,
-        controlsConfiguration: BetterPlayerControlsConfiguration(
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
           showControls: false,
           enableProgressBar: true,
-          enableProgressBarDrag: false,
+          enableProgressBarDrag: true,
           enablePlayPause: false,
           enableMute: false,
           enableSkips: false,
           enableFullscreen: false,
-          enableProgressText: false,
+          enableProgressText: true,
         ),
       ),
       betterPlayerDataSource: dataSource,
@@ -108,7 +104,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
     _controller.addEventsListener(_onBetterPlayerEvent);
 
-    // Keep your pauseCurrent etc. hooks working:
+    // attach to bloc so pauseCurrent/pauseAll keep working
     context.read<PreloadBloc>().attachController(widget.index, _controller);
 
     if (!mounted) return;
@@ -117,7 +113,9 @@ class _ReelsWidgetState extends State<ReelsWidget>
       if (!mounted) return;
       _controller.setLooping(true);
 
-      // Focus logic as you had:
+      // If exiting, don’t start playback.
+      if (context.read<PreloadBloc>().isShuttingDown) return;
+
       final focus = context.read<PreloadBloc>().state.focusedIndex;
       if (focus == widget.index) {
         if (_isInitialized) {
@@ -129,7 +127,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
       } else {
         await _safeSetVolume(0.0);
       }
-      setState(() {}); // to paint player after init
+      setState(() {});
     });
   }
 
@@ -138,10 +136,12 @@ class _ReelsWidgetState extends State<ReelsWidget>
       case BetterPlayerEventType.initialized:
         _isInitialized = true;
         _controller.setLooping(true);
+        // Don’t play if app is exiting
+        if (context.read<PreloadBloc>().isShuttingDown) break;
+
         final focus = context.read<PreloadBloc>().state.focusedIndex;
         if (_pendingPlay || focus == widget.index) {
           _pendingPlay = false;
-          // NEW: pause others before playing
           context.read<PreloadBloc>().pauseOthersExcept(widget.index);
           _playVideo();
           _safeSetVolume(1.0);
@@ -149,8 +149,12 @@ class _ReelsWidgetState extends State<ReelsWidget>
         break;
       case BetterPlayerEventType.play:
         _isPlaying = true;
-        // NEW: just in case a late play sneaks in, pause others now too
-        context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+        // Also guard during exit
+        if (context.read<PreloadBloc>().isShuttingDown) {
+          _pauseVideo();
+        } else {
+          context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+        }
         break;
       case BetterPlayerEventType.pause:
       case BetterPlayerEventType.finished:
@@ -177,6 +181,14 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
     final bp = _bp;
     if (bp != null) {
+      // IMPORTANT: pause+mute before disposing to avoid any final blip
+      try {
+        bp.pause();
+      } catch (_) {}
+      try {
+        bp.setVolume(0.0);
+      } catch (_) {}
+
       bp.removeEventsListener(_onBetterPlayerEvent);
       context.read<PreloadBloc>().detachController(widget.index, bp);
       bp.dispose();
@@ -201,9 +213,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   Future<void> _playVideo() async {
     try {
-      // NEW: ensure others are paused/muted before we play this one
+      if (context.read<PreloadBloc>().isShuttingDown) return;
       context.read<PreloadBloc>().pauseOthersExcept(widget.index);
-
       await _controller.play();
       if (!mounted) return;
       setState(() => _showPlayPauseIcon = true);
@@ -229,7 +240,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     final reels = context.read<ReelsCubit>().state.globalReels;
     final reel = (widget.index >= 0 && widget.index < reels.length)
@@ -240,6 +250,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
       listenWhen: (prev, curr) => prev.focusedIndex != curr.focusedIndex,
       listener: (context, curr) async {
         if (_bp == null) return;
+        if (context.read<PreloadBloc>().isShuttingDown) return;
         if (curr.focusedIndex == widget.index) {
           if (_isInitialized) {
             await _playVideo();
@@ -268,18 +279,22 @@ class _ReelsWidgetState extends State<ReelsWidget>
                 },
           child: Stack(
             children: [
-              Positioned.fill(child: Container(color: Colors.black)),
-
-              // Player
+              const Positioned.fill(child: ColoredBox(color: Colors.black)),
               if (_bp != null)
-                Positioned.fill(
+                const Positioned.fill(
+                  child: SizedBox.expand(), // ensure fill the screen
+                ),
+              if (_bp != null)
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.1,
+                  bottom: MediaQuery.of(context).size.height * 0.1,
+                  left: 0,
+                  right: 0,
                   child: BetterPlayer(
                     key: ValueKey('bp_${widget.index}_${_bp.hashCode}'),
                     controller: _controller,
                   ),
                 ),
-
-              // Play/Pause toast
               Positioned.fill(
                 child: IgnorePointer(
                   child: AnimatedOpacity(
@@ -297,8 +312,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   ),
                 ),
               ),
-
-              // Right-side actions
               if (reel != null)
                 Positioned(
                   right: 0,
@@ -309,8 +322,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
                     rotationController: _rotationController,
                   ),
                 ),
-
-              // Bottom caption
               if (reel != null)
                 Positioned(
                   bottom: 0,
@@ -342,13 +353,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
                     ),
                   ),
                 ),
-
-              // Fullscreen button
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * 0.5,
-                left: MediaQuery.of(context).size.width * 0.115,
-                child: const FullScreenWidget(),
-              ),
+              // Positioned(
+              //   bottom: MediaQuery.of(context).size.height * 0.5,
+              //   left: MediaQuery.of(context).size.width * 0.115,
+              //   child: const FullScreenWidget(),
+              // ),
             ],
           ),
         ),
@@ -357,13 +366,10 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   // --------- LOWEST-RES HLS PICKER ----------
-
   Future<String> _pickLowestVariantIfHls(String url) async {
     final lower = url.toLowerCase();
     if (!lower.endsWith('.m3u8')) return url;
 
-    // Bunny quick path: master ".../video.m3u8" -> ".../240p/video.m3u8"
-    // Comment this out if your paths differ.
     if (lower.endsWith('/video.m3u8')) {
       return url.replaceFirst(
           RegExp(r'/video\.m3u8$', caseSensitive: false), '/240p/video.m3u8');
@@ -375,7 +381,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
       final lines = const LineSplitter().convert(res.body);
       if (!lines.any((l) => l.startsWith('#EXT-X-STREAM-INF'))) {
-        // Not a master manifest, just return as-is
         return url;
       }
 
@@ -394,7 +399,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
       if (variants.isEmpty) return url;
       variants.sort((a, b) => (a['bw'] as int).compareTo(b['bw'] as int));
-      return variants.first['uri'] as String; // lowest BANDWIDTH
+      return variants.first['uri'] as String;
     } catch (_) {
       return url;
     }

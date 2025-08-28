@@ -25,9 +25,14 @@ class ReelView extends StatelessWidget {
       ),
     );
 
-    return PopScope(
-      onPopInvoked: (res) => context.read<PreloadBloc>().shutdown(),
-      canPop: true,
+    return WillPopScope(
+      // << change here
+      onWillPop: () async {
+        final bloc = context.read<PreloadBloc>();
+        bloc.beginExit(); // pause/mute immediately
+        await bloc.shutdown(); // clear refs
+        return true; // allow pop
+      },
       child: const CustomScaffold(
         resizeToAvoidBottomInset: false,
         body: ReelsScreen(),
@@ -119,7 +124,6 @@ class ReelsScreenState extends State<ReelsScreen>
                   final bool isTailLoading =
                       (state.isLoading && index == state.urls.length - 1);
 
-                  // Controller is created inside ReelsWidget; we just pass URL
                   return ReelsWidget(
                     index: index,
                     isLoading: isTailLoading,
@@ -137,25 +141,6 @@ class ReelsScreenState extends State<ReelsScreen>
           ],
         );
       },
-    );
-  }
-
-  Widget _buildVideoLoadingWidget(int index, bool isLoading) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (isLoading)
-            const CircularProgressIndicator(color: AppColors.SECONDARY_COLOR)
-          else
-            const Icon(Icons.error_outline, color: Colors.white54, size: 48),
-          const SizedBox(height: 16),
-          Text(
-            isLoading ? 'Loading video...' : 'Video failed to load',
-            style: const TextStyle(color: Colors.white70, fontSize: 16),
-          ),
-        ],
-      ),
     );
   }
 }

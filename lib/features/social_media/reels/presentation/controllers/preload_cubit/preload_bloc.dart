@@ -1,31 +1,33 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../../../service_locator/service_locator.dart';
 import '../explore_reels_cubit/reel_cubit.dart';
 import 'preload_state.dart';
 
-void _unawaited(Future<void> f) {}
-
 class PreloadBloc extends Cubit<PreloadState> {
   PreloadBloc() : super(PreloadState.initial());
 
   StreamSubscription<ReelsState>? _reelsSubscription;
-  int _focusEpoch = 0;
-  bool _isShuttingDown = false;
+
+  bool _isShuttingDown = false; // << keeps us from playing while leaving
+  bool get isShuttingDown => _isShuttingDown; // optional getter if you need it
 
   // ---------------- Public API ----------------
 
   void setLoading(bool isLoading) => emit(state.copyWith(isLoading: isLoading));
 
+  /// Call this right before leaving the page (we use it from WillPopScope)
+  void beginExit() {
+    _isShuttingDown = true;
+    pauseAll(); // pause/mute everything immediately
+  }
+
   void resetFocusedIndex(int index) {
     emit(state.copyWith(focusedIndex: 0, reloadCounter: 0));
-    // we don't dispose here anymore; widget will own disposal
     _detachControllerAtIndex(index);
   }
 
@@ -35,7 +37,7 @@ class PreloadBloc extends Cubit<PreloadState> {
     await _reelsSubscription?.cancel();
     _reelsSubscription = null;
 
-    // DO NOT dispose here (widgets own them). Just pause/mute & clear refs.
+    // Don’t dispose (widgets own controllers). Just pause/mute.
     for (final c in state.controllers.values) {
       try {
         await c.pause();
@@ -49,9 +51,8 @@ class PreloadBloc extends Cubit<PreloadState> {
     _isShuttingDown = false;
   }
 
-  /// Widgets call this when they create/destroy controllers
   void attachController(int index, BetterPlayerController controller) {
-    if (_isShuttingDown) return;
+    if (_isShuttingDown) return; // don’t attach new ones while exiting
     state.controllers[index] = controller;
     emit(state.copyWith(
       controllers: Map<int, BetterPlayerController>.from(state.controllers),
@@ -84,7 +85,6 @@ class PreloadBloc extends Cubit<PreloadState> {
           return;
         }
 
-        // just update urls; controllers are owned by widgets now
         emit(state.copyWith(
           urls: urls,
           isLoading: false,
@@ -101,7 +101,6 @@ class PreloadBloc extends Cubit<PreloadState> {
         if (!reelsState.isLoading && reelsState.globalReels.isNotEmpty) {
           final updated =
               reelsState.globalReels.map((e) => e.videoMedia).toList();
-          // Update URL list if length changes (new reels)
           if (updated.length != state.urls.length) {
             emit(state.copyWith(urls: updated));
           }
@@ -119,9 +118,7 @@ class PreloadBloc extends Cubit<PreloadState> {
   }
 
   void handleScreenReturn() {
-    // Clear all refs; widgets on screen will re-attach themselves.
     emit(state.copyWith(controllers: {}, focusedIndex: 0, isLoading: true));
-
     Future.microtask(() async {
       if (state.urls.isNotEmpty) {
         emit(state.copyWith(isLoading: false));
@@ -132,13 +129,13 @@ class PreloadBloc extends Cubit<PreloadState> {
   }
 
   void onVideoIndexChanged(int index) {
-    _focusEpoch++;
+    if (_isShuttingDown) return; // << don’t react during exit
 
     // Pause/mute previous focused
     final oldIndex = state.focusedIndex;
     if (oldIndex != index) _pauseControllerAtIndex(oldIndex);
 
-    // Pause/mute everyone else; play/unmute current (if attached)
+    // Pause/mute everyone else; play/unmute current
     for (final entry in state.controllers.entries) {
       final i = entry.key;
       final c = entry.value;
@@ -163,74 +160,25 @@ class PreloadBloc extends Cubit<PreloadState> {
     if (c == null) return;
     try {
       c.pause();
+    } catch (_) {}
+    try {
       c.setVolume(0.0);
     } catch (_) {}
   }
 
   void pauseOthersExcept(int index) {
+    if (_isShuttingDown) return; // << guard during exit
     for (final entry in state.controllers.entries) {
       final i = entry.key;
       final c = entry.value;
       if (i == index) continue;
       try {
         c.pause();
+      } catch (_) {}
+      try {
         c.setVolume(0.0);
       } catch (_) {}
     }
-  }
-
-  // ---------------- NO-OPs kept for compatibility ----------------
-  // These existed before and might be referenced elsewhere.
-  // They are intentionally no-ops now because controllers are widget-owned.
-
-  Future<void> prioritizedFocusInit(int index, {required int epoch}) async {
-    // no-op; widget initializes/attaches controller
-  }
-
-  Future<void> initializeControllerAtIndex(
-    int index, {
-    int? epoch,
-  }) async {
-    // no-op
-  }
-
-  Future<String> _pickLowestVariantIfHls(String url) async {
-    // You can keep this helper if you still want to down-select variants
-    // for other callers; not used by bloc anymore.
-    if (!url.toLowerCase().endsWith('.m3u8')) return url;
-    try {
-      final res = await http.get(Uri.parse(url));
-      if (res.statusCode != 200) return url;
-
-      final lines = const LineSplitter().convert(res.body);
-      if (!lines.any((l) => l.startsWith('#EXT-X-STREAM-INF'))) {
-        return url;
-      }
-
-      final variants = <Map<String, dynamic>>[];
-      for (int i = 0; i < lines.length; i++) {
-        final l = lines[i].trim();
-        if (l.startsWith('#EXT-X-STREAM-INF:')) {
-          final bw = _parseBandwidth(l);
-          final nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
-          if (bw != null && nextLine.isNotEmpty && !nextLine.startsWith('#')) {
-            final resolved = Uri.parse(url).resolve(nextLine).toString();
-            variants.add({'bw': bw, 'uri': resolved});
-          }
-        }
-      }
-      if (variants.isEmpty) return url;
-      variants.sort((a, b) => (a['bw'] as int).compareTo(b['bw'] as int));
-      return variants.first['uri'];
-    } catch (_) {
-      return url;
-    }
-  }
-
-  int? _parseBandwidth(String line) {
-    final reg = RegExp(r'BANDWIDTH=(\d+)');
-    final match = reg.firstMatch(line);
-    return match != null ? int.tryParse(match.group(1)!) : null;
   }
 
   bool _detachControllerAtIndex(int index) {
@@ -243,30 +191,10 @@ class PreloadBloc extends Cubit<PreloadState> {
     return true;
   }
 
-  void _disposeAllControllers() {
-    // widgets own disposal; just clear references
-    emit(state.copyWith(controllers: {}));
-  }
+  Future<void> preloadVideosAroundIndex(int index) async {}
 
-  Future<void> preloadVideosAroundIndex(int index) async {
-    // no-op (preload removed by request)
-  }
-
-  void _enforceMaxControllers() {
-    // no-op (keep-alive window removed by request)
-  }
-
-  // ---------------- Extra APIs for UI ----------------
-
-  bool isVideoReady(int index) {
-    // We can't know; controller is widget-owned. Assume true if attached.
-    return state.controllers.containsKey(index);
-  }
-
-  bool isVideoLoading(int index) {
-    // Without pre-init we don't track; keep compatibility behavior (false).
-    return false;
-  }
+  bool isVideoReady(int index) => state.controllers.containsKey(index);
+  bool isVideoLoading(int index) => false;
 
   void pauseCurrent() => _pauseControllerAtIndex(state.focusedIndex);
 
@@ -276,6 +204,8 @@ class PreloadBloc extends Cubit<PreloadState> {
     for (final entry in state.controllers.entries) {
       try {
         entry.value.pause();
+      } catch (_) {}
+      try {
         entry.value.setVolume(0.0);
       } catch (_) {}
     }
