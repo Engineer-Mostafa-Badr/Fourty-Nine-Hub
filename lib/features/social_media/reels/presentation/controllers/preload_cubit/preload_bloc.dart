@@ -22,7 +22,7 @@ class PreloadBloc extends Cubit<PreloadState> {
   Future<void> _initSerial = Future.value();
   int _focusEpoch = 0;
 
-  /// how many items to keep around the focused one
+  /// How many controllers to keep alive on each side of focus.
   final int keepAliveWindow = 4;
 
   bool _isShuttingDown = false;
@@ -46,6 +46,8 @@ class PreloadBloc extends Cubit<PreloadState> {
     for (final c in state.controllers.values) {
       try {
         await c.pause();
+      } catch (_) {}
+      try {
         await c.setVolume(0.0);
       } catch (_) {}
       try {
@@ -86,9 +88,6 @@ class PreloadBloc extends Cubit<PreloadState> {
         await initializeControllerAtIndex(0, epoch: _focusEpoch);
         _unawaited(preloadVideosAroundIndex(0));
 
-        // Let bloc control playback (don’t auto-play in the widget)
-        _playOnlyIndex(0);
-
         emit(state.copyWith(isLoading: false));
       }
 
@@ -128,7 +127,6 @@ class PreloadBloc extends Cubit<PreloadState> {
       if (state.urls.isNotEmpty) {
         await initializeControllerAtIndex(0, epoch: _focusEpoch);
         _unawaited(preloadVideosAroundIndex(0));
-        _playOnlyIndex(0);
         emit(state.copyWith(isLoading: false));
       } else {
         getVideosFromApi();
@@ -136,23 +134,31 @@ class PreloadBloc extends Cubit<PreloadState> {
     });
   }
 
-  /// Call this when the visible page changes (debounced in UI).
   void onVideoIndexChanged(int index) {
     _focusEpoch++;
     final epoch = _focusEpoch;
+
+    // Pause/mute previous focused
+    final oldIndex = state.focusedIndex;
+    if (oldIndex != index) _pauseControllerAtIndex(oldIndex);
+
+    // Pause/mute everyone else (we will play from the widget when it’s focused)
+    for (final entry in state.controllers.entries) {
+      if (entry.key == index) continue;
+      try {
+        entry.value.pause();
+        entry.value.setVolume(0.0);
+      } catch (_) {}
+    }
 
     final reelsCubit = serviceLocator<ReelsCubit>();
     if (index + kPreloadLimit >= state.urls.length) {
       reelsCubit.fetchReels();
     }
 
-    // ensure focus state is correct ASAP (play focused, mute others)
-    _playOnlyIndex(index);
-
-    // heavy work (init + preload) serialized and debounced
     _unawaited(prioritizedFocusInit(index, epoch: epoch));
 
-    // dispose far controllers
+    // Dispose only controllers outside the sliding window
     final keys = List<int>.from(state.controllers.keys);
     for (var i in keys) {
       if ((i - index).abs() > keepAliveWindow) {
@@ -164,17 +170,13 @@ class PreloadBloc extends Cubit<PreloadState> {
     emit(state.copyWith(focusedIndex: index));
   }
 
-  /// Call this immediately on page change (non-debounced) to avoid audio overlap.
-  void pauseAllExcept(int index) {
-    for (final entry in state.controllers.entries) {
-      final k = entry.key;
-      final c = entry.value;
-      if (k == index) continue;
-      try {
-        c.pause();
-        c.setVolume(0.0);
-      } catch (_) {}
-    }
+  void _pauseControllerAtIndex(int index) {
+    final c = state.controllers[index];
+    if (c == null) return;
+    try {
+      c.pause();
+      c.setVolume(0.0);
+    } catch (_) {}
   }
 
   Future<void> prioritizedFocusInit(int index, {required int epoch}) async {
@@ -194,48 +196,33 @@ class PreloadBloc extends Cubit<PreloadState> {
     return _initSerial;
   }
 
-  bool _bpInitialized(BetterPlayerController c) {
-    try {
-      return c.isVideoInitialized() ?? false;
-    } catch (_) {
-      return false;
-    }
-  }
-
   Future<void> _doInitializeControllerAtIndex(int index, {int? epoch}) async {
     if (_isShuttingDown || isClosed) return;
     if (index < 0 || index >= state.urls.length) return;
     if (epoch != null && epoch != _focusEpoch) return;
 
+    // 👇 If a controller already exists, KEEP IT (don’t recreate — keeps position)
     final existing = state.controllers[index];
     if (existing != null) {
-      // ✅ If already initialized, re-use it. Don’t recreate (prevents “reset” flicker).
-      if (_bpInitialized(existing)) return;
-
-      // Otherwise dispose broken/uninitialized instance and recreate.
-      try {
-        existing.dispose();
-      } catch (_) {}
-      state.controllers.remove(index);
-      emit(state.copyWith(
-        controllers: Map<int, BetterPlayerController>.from(state.controllers),
-      ));
+      return;
     }
 
     try {
       final rawUrl = state.urls[index];
-      final url = await _pickLowestVideoVariantIfHls(rawUrl);
+      final url = await _pickLowestVariantIfHls(rawUrl);
 
       final dataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.network,
         url,
-        // in-memory/network cache only; device persistent cache disabled
-        cacheConfiguration: const BetterPlayerCacheConfiguration(
-          useCache: false,
-        ),
+        cacheConfiguration:
+            const BetterPlayerCacheConfiguration(useCache: true),
+        bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+            minBufferMs: 12000,
+            maxBufferMs: 40000,
+            bufferForPlaybackMs: 800,
+            bufferForPlaybackAfterRebufferMs: 1200),
         notificationConfiguration: const BetterPlayerNotificationConfiguration(
-          showNotification: false,
-        ),
+            showNotification: false),
         videoFormat: url.toLowerCase().endsWith('.m3u8')
             ? BetterPlayerVideoFormat.hls
             : BetterPlayerVideoFormat.other,
@@ -243,15 +230,15 @@ class PreloadBloc extends Cubit<PreloadState> {
 
       final controller = BetterPlayerController(
         BetterPlayerConfiguration(
-          autoPlay: false, // bloc decides when to play
+          autoPlay: false, // widget will decide when to play
           looping: true,
           fit: BoxFit.cover,
-          showPlaceholderUntilPlay: true,
-          placeholder: const ColoredBox(color: Colors.black),
+          handleLifecycle: false, // we manage lifecycle
+          showPlaceholderUntilPlay: false, // show first frame after init
           controlsConfiguration: const BetterPlayerControlsConfiguration(
             showControls: false,
             enableProgressBar: true,
-            enableProgressBarDrag: true,
+            enableProgressBarDrag: false,
             enablePlayPause: false,
             enableMute: false,
             enableSkips: false,
@@ -262,29 +249,15 @@ class PreloadBloc extends Cubit<PreloadState> {
         betterPlayerDataSource: dataSource,
       );
 
+      // keep it muted initially; widget will unmute if focused
+      try {
+        await controller.setVolume(0.0);
+      } catch (_) {}
+
       state.controllers[index] = controller;
       emit(state.copyWith(
         controllers: Map<int, BetterPlayerController>.from(state.controllers),
       ));
-
-      // If focus changed while we were initializing, leave it paused & muted.
-      if (epoch != null && epoch != _focusEpoch) {
-        try {
-          await controller.pause();
-          await controller.setVolume(0.0);
-        } catch (_) {}
-        return;
-      }
-
-      // Enforce correct audio state for current focus (no auto-play here, bloc controls it)
-      if (index == state.focusedIndex) {
-        // we'll call _playOnlyIndex from onVideoIndexChanged/getVideosFromApi
-      } else {
-        try {
-          await controller.pause();
-          await controller.setVolume(0.0);
-        } catch (_) {}
-      }
 
       log('🚀 INITIALIZED $index [$url]');
     } catch (e) {
@@ -292,9 +265,9 @@ class PreloadBloc extends Cubit<PreloadState> {
     }
   }
 
-  // ---------------- HLS Picker (skip audio-only variants) ----------------
+  // ---------------- HLS helper (optional) ----------------
 
-  Future<String> _pickLowestVideoVariantIfHls(String url) async {
+  Future<String> _pickLowestVariantIfHls(String url) async {
     if (!url.toLowerCase().endsWith('.m3u8')) return url;
     try {
       final res = await http.get(Uri.parse(url));
@@ -308,24 +281,16 @@ class PreloadBloc extends Cubit<PreloadState> {
       final variants = <Map<String, dynamic>>[];
       for (int i = 0; i < lines.length; i++) {
         final l = lines[i].trim();
-        if (!l.startsWith('#EXT-X-STREAM-INF:')) continue;
-
-        // require RESOLUTION to avoid audio-only variants
-        final hasResolution =
-            RegExp(r'RESOLUTION=\d+x\d+', caseSensitive: false).hasMatch(l);
-        if (!hasResolution) continue;
-
-        final bwMatch = RegExp(r'BANDWIDTH=(\d+)').firstMatch(l);
-        final bw = bwMatch != null ? int.parse(bwMatch.group(1)!) : 999999999;
-
-        final nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
-        if (nextLine.isEmpty || nextLine.startsWith('#')) continue;
-
-        final resolved = Uri.parse(url).resolve(nextLine).toString();
-        variants.add({'bw': bw, 'uri': resolved});
+        if (l.startsWith('#EXT-X-STREAM-INF:')) {
+          final bw = _parseBandwidth(l);
+          final nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+          if (bw != null && nextLine.isNotEmpty && !nextLine.startsWith('#')) {
+            final resolved = Uri.parse(url).resolve(nextLine).toString();
+            variants.add({'bw': bw, 'uri': resolved});
+          }
+        }
       }
       if (variants.isEmpty) return url;
-
       variants.sort((a, b) => (a['bw'] as int).compareTo(b['bw'] as int));
       return variants.first['uri'];
     } catch (_) {
@@ -340,28 +305,6 @@ class PreloadBloc extends Cubit<PreloadState> {
   }
 
   // ---------------- Helpers ----------------
-
-  void _playOnlyIndex(int index) {
-    for (final entry in state.controllers.entries) {
-      final k = entry.key;
-      final c = entry.value;
-      if (k == index) {
-        _unawaited(() async {
-          try {
-            await c.setVolume(1.0);
-            await c.play();
-          } catch (_) {}
-        }());
-      } else {
-        _unawaited(() async {
-          try {
-            await c.pause();
-            await c.setVolume(0.0);
-          } catch (_) {}
-        }());
-      }
-    }
-  }
 
   bool _disposeControllerAtIndex(int index, {bool force = false}) {
     if (!force && index == state.focusedIndex) return false;
@@ -394,12 +337,12 @@ class PreloadBloc extends Cubit<PreloadState> {
     final start = math.max(0, index - keepAliveWindow);
     final end = math.min(last, index + keepAliveWindow);
 
+    // nearest-first: index-1, index+1, index-2, index+2, ...
     final order = <int>[];
     for (int d = 1; d <= keepAliveWindow; d++) {
-      final left = index - d;
-      final right = index + d;
-      if (left >= start && left >= 0) order.add(left);
-      if (right <= end && right <= last) order.add(right);
+      final l = index - d, r = index + d;
+      if (l >= start && l >= 0) order.add(l);
+      if (r <= end && r <= last) order.add(r);
     }
 
     for (final i in order) {
@@ -411,9 +354,11 @@ class PreloadBloc extends Cubit<PreloadState> {
     _enforceMaxControllers();
   }
 
-  void _enforceMaxControllers([int? hardCap]) {
-    // keep: focused ± keepAliveWindow (plus tiny buffer)
-    final targetMax = hardCap ?? (math.min(2 * keepAliveWindow + 3, 21));
+  void _enforceMaxControllers() {
+    // Keep the whole window ± buffer; never drop focused
+    final required = 2 * keepAliveWindow + 1;
+    final buffer = 2;
+    final targetMax = required + buffer;
 
     if (state.controllers.length <= targetMax) return;
 
@@ -452,42 +397,16 @@ class PreloadBloc extends Cubit<PreloadState> {
       state.urls.isNotEmpty &&
       index < state.urls.length;
 
-  void pauseCurrent() {
-    final i = state.focusedIndex;
-    final c = state.controllers[i];
-    if (c == null) return;
-    try {
-      c.pause();
-      c.setVolume(0.0);
-      log('⏸️ pauseCurrent: $i');
-    } catch (e) {
-      log('⚠️ pauseCurrent error: $e');
-    }
-  }
+  void pauseCurrent() => _pauseControllerAtIndex(state.focusedIndex);
 
-  void pauseIndex(int index) {
-    final c = state.controllers[index];
-    if (c == null) return;
-    try {
-      c.pause();
-      c.setVolume(0.0);
-      log('⏸️ pauseIndex: $index');
-    } catch (e) {
-      log('⚠️ pauseIndex error: $e');
-    }
-  }
+  void pauseIndex(int index) => _pauseControllerAtIndex(index);
 
   void pauseAll() {
     for (final entry in state.controllers.entries) {
-      final i = entry.key;
-      final c = entry.value;
       try {
-        c.pause();
-        c.setVolume(0.0);
-        log('⏸️ pauseAll: $i');
-      } catch (e) {
-        log('⚠️ pauseAll error: $e');
-      }
+        entry.value.pause();
+        entry.value.setVolume(0.0);
+      } catch (_) {}
     }
   }
 }

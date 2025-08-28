@@ -26,9 +26,7 @@ class ReelView extends StatelessWidget {
     );
 
     return PopScope(
-      onPopInvoked: (res) {
-        context.read<PreloadBloc>().shutdown();
-      },
+      onPopInvoked: (res) => context.read<PreloadBloc>().shutdown(),
       canPop: true,
       child: const CustomScaffold(
         resizeToAvoidBottomInset: false,
@@ -104,16 +102,12 @@ class ReelsScreenState extends State<ReelsScreen>
                 onPageChanged: (index) {
                   final b = context.read<PreloadBloc>();
 
-                  // Immediately silence everything except the new page (no debounce)
-                  b.pauseAllExcept(index);
-
                   if (!_didHandleFirstPageChange) {
                     _didHandleFirstPageChange = true;
                     b.onVideoIndexChanged(index);
                     return;
                   }
 
-                  // Debounce heavy init/preload — but audio is already handled above
                   _debounce?.cancel();
                   _debounce = Timer(const Duration(milliseconds: 150), () {
                     if (!mounted) return;
@@ -127,17 +121,16 @@ class ReelsScreenState extends State<ReelsScreen>
                       (state.isLoading && index == state.urls.length - 1);
 
                   if (controller == null) {
-                    // kick init for the focused item if needed
                     if (index == state.focusedIndex) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         b.prioritizedFocusInit(index,
                             epoch: b.state.reloadCounter);
                       });
                     }
-
-                    final bool showLoading =
-                        b.isVideoLoading(index) || isTailLoading;
-                    return _buildVideoLoadingWidget(index, showLoading);
+                    return _buildVideoLoadingWidget(
+                      index,
+                      isTailLoading || b.isVideoLoading(index),
+                    );
                   }
 
                   if (state.focusedIndex == index) {
@@ -148,6 +141,7 @@ class ReelsScreenState extends State<ReelsScreen>
                       receiverId: 1,
                     );
                   } else {
+                    // Offscreen: keep widget lightweight; controller stays alive in bloc
                     return const SizedBox();
                   }
                 },
