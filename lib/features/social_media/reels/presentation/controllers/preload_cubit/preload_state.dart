@@ -1,8 +1,12 @@
-import 'package:video_player/video_player.dart';
+import 'package:better_player_plus/better_player_plus.dart';
 
 class PreloadState {
+  /// Video URLs (filled by your ReelsCubit / API).
   final List<String> urls;
-  final Map<int, VideoPlayerController> controllers;
+
+  /// Controllers are OWNED by widgets. We only keep references for pause APIs.
+  final Map<int, BetterPlayerController> controllers;
+
   final bool isLoading;
   final int focusedIndex;
   final int reloadCounter;
@@ -16,8 +20,8 @@ class PreloadState {
   });
 
   factory PreloadState.initial() => PreloadState(
-        urls: [],
-        controllers: {},
+        urls: const [],
+        controllers: <int, BetterPlayerController>{},
         isLoading: false,
         focusedIndex: 0,
         reloadCounter: 0,
@@ -25,7 +29,7 @@ class PreloadState {
 
   PreloadState copyWith({
     List<String>? urls,
-    Map<int, VideoPlayerController>? controllers,
+    Map<int, BetterPlayerController>? controllers,
     bool? isLoading,
     int? focusedIndex,
     int? reloadCounter,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,13 +25,14 @@ class ReelView extends StatelessWidget {
       ),
     );
 
-    return PopScope(
-      onPopInvoked: (res) {
-        final b = context.read<PreloadBloc>();
-        b.pauseCurrent();
-        b.resetFocusedIndex(b.state.focusedIndex);
+    return WillPopScope(
+      // << change here
+      onWillPop: () async {
+        final bloc = context.read<PreloadBloc>();
+        bloc.beginExit(); // pause/mute immediately
+        await bloc.shutdown(); // clear refs
+        return true; // allow pop
       },
-      canPop: true,
       child: const CustomScaffold(
         resizeToAvoidBottomInset: false,
         body: ReelsScreen(),
@@ -49,8 +51,8 @@ class ReelsScreen extends StatefulWidget {
 class ReelsScreenState extends State<ReelsScreen>
     with AutomaticKeepAliveClientMixin {
   bool _didHandleFirstPageChange = false;
-
   final _pageController = PageController();
+  Timer? _debounce;
 
   @override
   bool get wantKeepAlive => true;
@@ -78,6 +80,7 @@ class ReelsScreenState extends State<ReelsScreen>
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -101,44 +104,31 @@ class ReelsScreenState extends State<ReelsScreen>
                 controller: _pageController,
                 scrollDirection: Axis.vertical,
                 itemCount: state.urls.length,
+                allowImplicitScrolling: true,
                 onPageChanged: (index) {
                   final b = context.read<PreloadBloc>();
+
                   if (!_didHandleFirstPageChange) {
                     _didHandleFirstPageChange = true;
                     b.onVideoIndexChanged(index);
                     return;
                   }
-                  b.onVideoIndexChanged(index);
+
+                  _debounce?.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 150), () {
+                    if (!mounted) return;
+                    b.onVideoIndexChanged(index);
+                  });
                 },
                 itemBuilder: (context, index) {
-                  final b = context.read<PreloadBloc>();
-                  final controller = state.controllers[index];
                   final bool isTailLoading =
                       (state.isLoading && index == state.urls.length - 1);
 
-                  if (controller == null) {
-                    if (index == state.focusedIndex) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        b.prioritizedFocusInit(index,
-                            epoch: b.state.reloadCounter); // epoch guard
-                      });
-                    }
-                    return _buildVideoLoadingWidget(
-                      index,
-                      b.isVideoLoading(index) || isTailLoading,
-                    );
-                  }
-
-                  if (state.focusedIndex == index) {
-                    return ReelsWidget(
-                      index: index,
-                      isLoading: isTailLoading,
-                      controller: controller,
-                      receiverId: 1,
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
+                  return ReelsWidget(
+                    index: index,
+                    isLoading: isTailLoading,
+                    url: state.urls[index],
+                  );
                 },
               ),
             ),
@@ -151,25 +141,6 @@ class ReelsScreenState extends State<ReelsScreen>
           ],
         );
       },
-    );
-  }
-
-  Widget _buildVideoLoadingWidget(int index, bool isLoading) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (isLoading)
-            const CircularProgressIndicator(color: AppColors.SECONDARY_COLOR)
-          else
-            const Icon(Icons.error_outline, color: Colors.white54, size: 48),
-          const SizedBox(height: 16),
-          Text(
-            isLoading ? 'Loading video...' : 'Video failed to load',
-            style: const TextStyle(color: Colors.white70, fontSize: 16),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -1,29 +1,30 @@
 import 'dart:developer';
+import 'dart:convert';
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../controllers/preload_cubit/preload_bloc.dart';
+import '../../controllers/preload_cubit/preload_state.dart';
 import '../full_screen_widget.dart';
-import 'animated_heart_wiidget.dart';
-import 'custom_progress_bar.dart';
 import '../../pages/reel_actions.dart';
+import 'animated_heart_wiidget.dart';
 import 'unified_widget_view.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
     super.key,
     required this.isLoading,
-    required this.controller,
     required this.index,
-    required this.receiverId,
+    required this.url,
   });
 
   final bool isLoading;
-  final VideoPlayerController controller;
   final int index;
-  final int receiverId;
+  final String url;
 
   @override
   State<ReelsWidget> createState() => _ReelsWidgetState();
@@ -32,72 +33,137 @@ class ReelsWidget extends StatefulWidget {
 class _ReelsWidgetState extends State<ReelsWidget>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   bool _showPlayPauseIcon = false;
-  bool _hasAutoPlayed = false; // guard to avoid double-autoplay
+  bool _isInitialized = false;
+  bool _isPlaying = false;
+  bool _pendingPlay = false;
+
   late final AnimationController _rotationController;
+  BetterPlayerController? _bp;
+
+  BetterPlayerController get _controller => _bp!;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Always loop; bloc already primes with seekTo(0)
-    widget.controller.setLooping(true);
-
-    // Start playback only after mount + initialized
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (widget.controller.value.isInitialized) {
-        _autoPlayOnce();
-      } else {
-        void onInitListener() {
-          if (widget.controller.value.isInitialized) {
-            widget.controller.removeListener(onInitListener);
-            if (mounted) _autoPlayOnce();
-          }
-        }
-
-        widget.controller.addListener(onInitListener);
-      }
-    });
-
     _rotationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 5))
           ..repeat();
 
-    // match your original status bar setup
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.light,
     ));
+
+    _initController();
   }
 
-  @override
-  void didUpdateWidget(covariant ReelsWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      _hasAutoPlayed = false; // reset guard for new controller
-      try {
-        oldWidget.controller.pause();
-      } catch (_) {}
-      widget.controller.setLooping(true);
+  Future<void> _initController() async {
+    final effectiveUrl = await _pickLowestVariantIfHls(widget.url);
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        if (widget.controller.value.isInitialized) {
-          _autoPlayOnce();
+    final dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      effectiveUrl,
+      useAsmsTracks: false,
+      useAsmsAudioTracks: true,
+      cacheConfiguration: const BetterPlayerCacheConfiguration(useCache: true),
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: 1000,
+        maxBufferMs: 10000,
+        bufferForPlaybackMs: 500,
+        bufferForPlaybackAfterRebufferMs: 1000,
+      ),
+      videoFormat: effectiveUrl.toLowerCase().endsWith('.m3u8')
+          ? BetterPlayerVideoFormat.hls
+          : BetterPlayerVideoFormat.other,
+    );
+
+    _bp = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: false,
+        looping: true,
+        expandToFill: false,
+        fit: BoxFit.cover, // full screen cover
+        handleLifecycle: false,
+        showPlaceholderUntilPlay: false,
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
+          showControls: false,
+          enableProgressBar: true,
+          enableProgressBarDrag: true,
+          enablePlayPause: false,
+          enableMute: false,
+          enableSkips: false,
+          enableFullscreen: false,
+          enableProgressText: true,
+        ),
+      ),
+      betterPlayerDataSource: dataSource,
+    );
+
+    _controller.addEventsListener(_onBetterPlayerEvent);
+
+    // attach to bloc so pauseCurrent/pauseAll keep working
+    context.read<PreloadBloc>().attachController(widget.index, _controller);
+
+    if (!mounted) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      _controller.setLooping(true);
+
+      // If exiting, don’t start playback.
+      if (context.read<PreloadBloc>().isShuttingDown) return;
+
+      final focus = context.read<PreloadBloc>().state.focusedIndex;
+      if (focus == widget.index) {
+        if (_isInitialized) {
+          await _playVideo();
         } else {
-          void onInitListener() {
-            if (widget.controller.value.isInitialized) {
-              widget.controller.removeListener(onInitListener);
-              if (mounted) _autoPlayOnce();
-            }
-          }
-
-          widget.controller.addListener(onInitListener);
+          _pendingPlay = true;
         }
-      });
+        await _safeSetVolume(1.0);
+      } else {
+        await _safeSetVolume(0.0);
+      }
+      setState(() {});
+    });
+  }
+
+  void _onBetterPlayerEvent(BetterPlayerEvent e) {
+    switch (e.betterPlayerEventType) {
+      case BetterPlayerEventType.initialized:
+        _isInitialized = true;
+        _controller.setLooping(true);
+        // Don’t play if app is exiting
+        if (context.read<PreloadBloc>().isShuttingDown) break;
+
+        final focus = context.read<PreloadBloc>().state.focusedIndex;
+        if (_pendingPlay || focus == widget.index) {
+          _pendingPlay = false;
+          context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+          _playVideo();
+          _safeSetVolume(1.0);
+        }
+        break;
+      case BetterPlayerEventType.play:
+        _isPlaying = true;
+        // Also guard during exit
+        if (context.read<PreloadBloc>().isShuttingDown) {
+          _pauseVideo();
+        } else {
+          context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+        }
+        break;
+      case BetterPlayerEventType.pause:
+      case BetterPlayerEventType.finished:
+        _isPlaying = false;
+        break;
+      default:
+        break;
     }
+    if (mounted) setState(() {});
   }
 
   @override
@@ -110,56 +176,47 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   @override
   void dispose() {
-    // ensure no ghost audio on unmount
-    try {
-      if (widget.controller.value.isInitialized &&
-          widget.controller.value.isPlaying) {
-        widget.controller.pause();
-      }
-    } catch (_) {}
     WidgetsBinding.instance.removeObserver(this);
     _rotationController.dispose();
+
+    final bp = _bp;
+    if (bp != null) {
+      // IMPORTANT: pause+mute before disposing to avoid any final blip
+      try {
+        bp.pause();
+      } catch (_) {}
+      try {
+        bp.setVolume(0.0);
+      } catch (_) {}
+
+      bp.removeEventsListener(_onBetterPlayerEvent);
+      context.read<PreloadBloc>().detachController(widget.index, bp);
+      bp.dispose();
+    }
     super.dispose();
   }
 
-  // ---------- playback helpers ----------
-
-  void _autoPlayOnce() {
-    if (_hasAutoPlayed) return;
-    _hasAutoPlayed = true;
-
-    // Defer play until the next frame to ensure the texture is attached
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (widget.controller.value.isInitialized) {
-        _playVideo();
-      } else {
-        // Edge case: if init completes right after this, attach a one-shot listener
-        void onInitListener() {
-          if (widget.controller.value.isInitialized) {
-            widget.controller.removeListener(onInitListener);
-            if (mounted) _playVideo();
-          }
-        }
-
-        widget.controller.addListener(onInitListener);
-      }
-    });
+  Future<void> _safeSetVolume(double v) async {
+    try {
+      await _controller.setVolume(v);
+    } catch (_) {}
   }
 
-  void _togglePlayPause() {
-    if (!widget.controller.value.isInitialized) return;
-    if (widget.controller.value.isPlaying) {
-      _pauseVideo();
+  Future<void> _togglePlayPause() async {
+    if (!_isInitialized) return;
+    if (_isPlaying) {
+      await _pauseVideo();
     } else {
-      _playVideo();
+      await _playVideo();
     }
   }
 
-  void _playVideo() {
-    if (!mounted || !widget.controller.value.isInitialized) return;
+  Future<void> _playVideo() async {
     try {
-      widget.controller.play();
+      if (context.read<PreloadBloc>().isShuttingDown) return;
+      context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+      await _controller.play();
+      if (!mounted) return;
       setState(() => _showPlayPauseIcon = true);
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) setState(() => _showPlayPauseIcon = false);
@@ -169,10 +226,10 @@ class _ReelsWidgetState extends State<ReelsWidget>
     }
   }
 
-  void _pauseVideo() {
-    if (!mounted || !widget.controller.value.isInitialized) return;
+  Future<void> _pauseVideo() async {
     try {
-      widget.controller.pause();
+      await _controller.pause();
+      if (!mounted) return;
       setState(() => _showPlayPauseIcon = true);
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) setState(() => _showPlayPauseIcon = false);
@@ -182,15 +239,31 @@ class _ReelsWidgetState extends State<ReelsWidget>
     }
   }
 
-  // ---------- UI ----------
-
   @override
   Widget build(BuildContext context) {
-    final reel = context.read<ReelsCubit>().state.globalReels[widget.index];
+    final reels = context.read<ReelsCubit>().state.globalReels;
+    final reel = (widget.index >= 0 && widget.index < reels.length)
+        ? reels[widget.index]
+        : null;
 
-    return SizedBox(
-      height: MediaProportion.of(context)
-          .screenHeight, // or MediaQuery if you prefer
+    return BlocListener<PreloadBloc, PreloadState>(
+      listenWhen: (prev, curr) => prev.focusedIndex != curr.focusedIndex,
+      listener: (context, curr) async {
+        if (_bp == null) return;
+        if (context.read<PreloadBloc>().isShuttingDown) return;
+        if (curr.focusedIndex == widget.index) {
+          if (_isInitialized) {
+            await _playVideo();
+          } else {
+            _pendingPlay = true;
+          }
+          await _safeSetVolume(1.0);
+        } else {
+          _pendingPlay = false;
+          await _pauseVideo();
+          await _safeSetVolume(0.0);
+        }
+      },
       child: GestureDetector(
         onTap: _togglePlayPause,
         child: DoubleTapHeart(
@@ -198,37 +271,30 @@ class _ReelsWidgetState extends State<ReelsWidget>
           animationDuration: const Duration(seconds: 1),
           heartIcon: Icons.favorite_outline,
           iconColor: Colors.pink,
-          onDoubleTap: () async {
-            final reelCubit = context.read<ReelsCubit>();
-            await reelCubit.likeReel(reel.id);
-          },
+          onDoubleTap: reel == null
+              ? null
+              : () async {
+                  final reelCubit = context.read<ReelsCubit>();
+                  await reelCubit.likeReel(reel.id);
+                },
           child: Stack(
             children: [
-              // Rebuild as controller value changes (init → ready)
-              Positioned.fill(
-                child: ValueListenableBuilder<VideoPlayerValue>(
-                  valueListenable: widget.controller,
-                  builder: (context, value, _) {
-                    if (value.isInitialized && !_hasAutoPlayed) {
-                      _autoPlayOnce();
-                    }
-
-                    if (!value.isInitialized) {
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.white54),
-                      );
-                    }
-
-                    // Keep exactly your visual (no extra FittedBox unless you want cover)
-                    return VideoPlayer(
-                      widget.controller,
-                      key: ValueKey('reel_video_${widget.index}'),
-                    );
-                  },
+              const Positioned.fill(child: ColoredBox(color: Colors.black)),
+              if (_bp != null)
+                const Positioned.fill(
+                  child: SizedBox.expand(), // ensure fill the screen
                 ),
-              ),
-
-              // Play/Pause toast icon
+              if (_bp != null)
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.1,
+                  bottom: MediaQuery.of(context).size.height * 0.1,
+                  left: 0,
+                  right: 0,
+                  child: BetterPlayer(
+                    key: ValueKey('bp_${widget.index}_${_bp.hashCode}'),
+                    controller: _controller,
+                  ),
+                ),
               Positioned.fill(
                 child: IgnorePointer(
                   child: AnimatedOpacity(
@@ -236,7 +302,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                     duration: const Duration(milliseconds: 220),
                     child: Center(
                       child: Icon(
-                        widget.controller.value.isPlaying
+                        (_isInitialized && _isPlaying)
                             ? Icons.pause
                             : Icons.play_arrow,
                         color: Colors.white.withOpacity(0.6),
@@ -246,79 +312,102 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   ),
                 ),
               ),
-
-              // Right-side actions (likes, comments, etc.)
-              Positioned(
-                right: 0,
-                bottom: 20,
-                child: ReelActions(
-                  reel: reel,
-                  itemType: ReelItemType.main,
-                  rotationController: _rotationController,
-                ),
-              ),
-
-              // Bottom bar: audio + progress (your original black panel)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: 60,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  color: Colors.black,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                reel.audio.audioName.isNotEmpty
-                                    ? reel.audio.audioName
-                                    : "No audio",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            const Icon(Icons.arrow_forward_ios_rounded,
-                                color: Colors.white70, size: 20),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      CustomProgressBar(
-                        videoPlayerController: widget.controller,
-                      ),
-                    ],
+              if (reel != null)
+                Positioned(
+                  right: 0,
+                  bottom: 20,
+                  child: ReelActions(
+                    reel: reel,
+                    itemType: ReelItemType.main,
+                    rotationController: _rotationController,
                   ),
                 ),
-              ),
-
-              // Your extra overlay
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * 0.5,
-                left: MediaQuery.of(context).size.width * 0.115,
-                child: const FullScreenWidget(),
-              ),
+              if (reel != null)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 56,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    color: Colors.black.withOpacity(0.9),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            reel.audio.audioName.isNotEmpty
+                                ? reel.audio.audioName
+                                : "No audio",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded,
+                            color: Colors.white70, size: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              // Positioned(
+              //   bottom: MediaQuery.of(context).size.height * 0.5,
+              //   left: MediaQuery.of(context).size.width * 0.115,
+              //   child: const FullScreenWidget(),
+              // ),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-/// If you don’t have this, replace with MediaQuery.of(context).size.height directly.
-class MediaProportion {
-  final BuildContext context;
-  MediaProportion.of(this.context);
-  double get screenHeight => MediaQuery.of(context).size.height;
+  // --------- LOWEST-RES HLS PICKER ----------
+  Future<String> _pickLowestVariantIfHls(String url) async {
+    final lower = url.toLowerCase();
+    if (!lower.endsWith('.m3u8')) return url;
+
+    if (lower.endsWith('/video.m3u8')) {
+      return url.replaceFirst(
+          RegExp(r'/video\.m3u8$', caseSensitive: false), '/240p/video.m3u8');
+    }
+
+    try {
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode != 200) return url;
+
+      final lines = const LineSplitter().convert(res.body);
+      if (!lines.any((l) => l.startsWith('#EXT-X-STREAM-INF'))) {
+        return url;
+      }
+
+      final variants = <Map<String, dynamic>>[];
+      for (int i = 0; i < lines.length; i++) {
+        final line = lines[i].trim();
+        if (line.startsWith('#EXT-X-STREAM-INF:')) {
+          final bw = _parseBandwidth(line);
+          final next = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+          if (bw != null && next.isNotEmpty && !next.startsWith('#')) {
+            final resolved = Uri.parse(url).resolve(next).toString();
+            variants.add({'bw': bw, 'uri': resolved});
+          }
+        }
+      }
+
+      if (variants.isEmpty) return url;
+      variants.sort((a, b) => (a['bw'] as int).compareTo(b['bw'] as int));
+      return variants.first['uri'] as String;
+    } catch (_) {
+      return url;
+    }
+  }
+
+  int? _parseBandwidth(String line) {
+    final reg = RegExp(r'BANDWIDTH=(\d+)');
+    final m = reg.firstMatch(line);
+    return m != null ? int.tryParse(m.group(1)!) : null;
+  }
 }
