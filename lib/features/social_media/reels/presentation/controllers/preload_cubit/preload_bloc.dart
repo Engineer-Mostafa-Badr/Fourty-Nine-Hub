@@ -138,11 +138,20 @@ class PreloadBloc extends Cubit<PreloadState> {
     _focusEpoch++;
     final epoch = _focusEpoch;
 
-    // Pause/mute previous focused
+    // 1) Pause/mute previous focused
     final oldIndex = state.focusedIndex;
     if (oldIndex != index) _pauseControllerAtIndex(oldIndex);
 
-    // Pause/mute everyone else (we will play from the widget when it’s focused)
+    // 2) Immediately play + unmute the newly focused controller (if already created)
+    final focused = state.controllers[index];
+    if (focused != null) {
+      try {
+        focused.setVolume(1.0);
+        focused.play();
+      } catch (_) {}
+    }
+
+    // 3) Pause + mute everyone else (just in case)
     for (final entry in state.controllers.entries) {
       if (entry.key == index) continue;
       try {
@@ -151,14 +160,16 @@ class PreloadBloc extends Cubit<PreloadState> {
       } catch (_) {}
     }
 
+    // 4) Fetch more if near the tail
     final reelsCubit = serviceLocator<ReelsCubit>();
     if (index + kPreloadLimit >= state.urls.length) {
       reelsCubit.fetchReels();
     }
 
+    // 5) Make sure focused controller exists/initialized
     _unawaited(prioritizedFocusInit(index, epoch: epoch));
 
-    // Dispose only controllers outside the sliding window
+    // 6) Dispose far controllers (keep a sliding window)
     final keys = List<int>.from(state.controllers.keys);
     for (var i in keys) {
       if ((i - index).abs() > keepAliveWindow) {
@@ -166,7 +177,10 @@ class PreloadBloc extends Cubit<PreloadState> {
       }
     }
 
+    // 7) Preload neighbors
     _unawaited(preloadVideosAroundIndex(index));
+
+    // 8) Update focus in state
     emit(state.copyWith(focusedIndex: index));
   }
 
