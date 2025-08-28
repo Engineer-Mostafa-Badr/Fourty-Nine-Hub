@@ -40,6 +40,7 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params);
   Future<Either<Failure, String>> arrivedToClient(ClientNotShownParams params);
   Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params);
+  Future<Either<Failure, String>> iamComing(String id);
 }
 
 class CaptainShareRemoteDataSourceImplementation
@@ -380,6 +381,24 @@ class CaptainShareRemoteDataSourceImplementation
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> iamComing(String id) async {
+    try {
+      final result = await _apiConsumer.put(
+        EndPoints.iamComing(id),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(response['waitingTime']);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   @override
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
     try {

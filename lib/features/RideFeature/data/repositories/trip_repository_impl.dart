@@ -100,6 +100,31 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToDriverArrived(Function(String message) params) {
+    remoteDataSource.listenToDriverArrived(params);
+  }
+
+  @override
+  void listenToDriverOnTheWay(Function(String waitingTime) params) {
+    remoteDataSource.listenToDriverOnTheWay(params);
+  }
+
+  @override
+  void listenToRouteCancelled(Function(String message) params) {
+    remoteDataSource.listenToRouteCancelled(params);
+  }
+
+  @override
+  void listenToDriverNoShowClient(Function(String waitingTime) params) {
+    remoteDataSource.listenToDriverNoShowClient(params);
+  }
+
+  @override
+  void listenToPassengerPickedUp(Function(String message) params) {
+    remoteDataSource.listenToPassengerPickedUp(params);
+  }
+
+  @override
   void listenToPartialPaymentDriver(Function(num amountPaidCash) params) {
     remoteDataSource.listenToPartialPaymentDriver(params);
   }

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -29,9 +30,9 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.6,
+      initialChildSize: 0.5,
       minChildSize: 0.2,
-      maxChildSize: 0.6,
+      maxChildSize: 0.5,
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -67,27 +68,66 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  Text(
-                    context.isArabic ? "السائق في طريقه إليك." : "Driver on his way to you.",
-                    style: const TextStyle(
-                      fontSize: FontSize.s16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            ImageFromInternet(
+                              image: widget.model.driverProfilePicUrl??'',
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.cover,
+                              isCircle: true,
+                              border: Border.all(color: AppColors.GRAY_LIGHT_COLOR3),
+                              firstChar: (widget.model.driverFirstName??'')[0].toUpperCase(),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Text(
+                                widget.model.driverFirstName??'',
+                                style: const TextStyle(
+                                  fontSize: FontSize.s16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        context.isArabic?widget.model.vehicleBrandAr??'':widget.model.vehicleBrandEn??'',
+                        style: const TextStyle(
+                          fontSize: FontSize.s16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ],
                   ),
+
                   SizedBox(
                     height: 20.h,
                   ),
-                  Text(
-                    context.isArabic ? "الدفع" : "Payment",
-                    style: const TextStyle(
-                      fontSize: FontSize.s25,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
-                    ),
-                  ),
+                  
                   Row(
                     children: [
+                      Expanded(
+                        child: Text(
+                          context.isArabic ? "الدفع" : "Payment",
+                          style: const TextStyle(
+                            fontSize: FontSize.s25,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
+                        ),
+                      ),
                       Text(
                         '${widget.model.youPay}',
                         style: const TextStyle(
@@ -159,7 +199,7 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                     },
                   ),
                   SizedBox(
-                    height: 20.h,
+                    height: 20,
                   ),
                   Container(
                     width: double.infinity,
@@ -179,27 +219,27 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 45,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.PRIMARY_COLOR)
-                    ),
-                    child: Text(
-                      context.isArabic ? "الغاء" : "Cancel",
-                      style: const TextStyle(
-                        fontSize: FontSize.s16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.PRIMARY_COLOR,
-                      ),
-                    ),
-                  ),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
+                  // Container(
+                  //   width: double.infinity,
+                  //   height: 45,
+                  //   alignment: Alignment.center,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey[100],
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     border: Border.all(color: AppColors.PRIMARY_COLOR)
+                  //   ),
+                  //   child: Text(
+                  //     context.isArabic ? "الغاء" : "Cancel",
+                  //     style: const TextStyle(
+                  //       fontSize: FontSize.s16,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: AppColors.PRIMARY_COLOR,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

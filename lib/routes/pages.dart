@@ -130,6 +130,7 @@ import 'package:fourtyninehub/features/married/presentation/pages/married_view.d
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/route_details_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/running_map_view_details.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
@@ -519,6 +520,24 @@ class AppPages {
                       ),
                     ],
                     child: const RideHome(),
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RunningMapDetails,
+                name: Routes.RunningMapDetails,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create:(context)=> serviceLocator<CaptainShareCubit>(),
+                      ),
+                    ],
+                    child: RunningMapViewDetails(
+                      model: state.extra as MyBookingEntity,
+                    ),
                   ),
                 ),
               ),

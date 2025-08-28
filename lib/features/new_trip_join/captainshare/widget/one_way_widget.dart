@@ -39,6 +39,7 @@ class OneWayWidget extends StatefulWidget {
   final Function? onCancelBooking;
   final Function(String phone)? onJoin;
   final Function? onAccept;
+  final Function? onTap;
 
   const OneWayWidget({
     super.key,
@@ -50,6 +51,7 @@ class OneWayWidget extends StatefulWidget {
     this.requestType,
     this.onCancelBooking,
     this.onJoin,
+    this.onTap,
   });
 
   @override
@@ -192,7 +194,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
         ((widget.model?.clients ?? [])
             .any((e) => e.id == UserCubit.to.state.data?.id));
     return GestureDetector(
-      // onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
+      // onTap: widget.onTap!=null?widget.onTap!():null,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
         decoration: BoxDecoration(
@@ -464,7 +466,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     }
 
     return GestureDetector(
-      onTap: () {
+      onTap:widget.onTap!=null?widget.onTap!(): () {
         Navigator.push(
           context,
           MaterialPageRoute(

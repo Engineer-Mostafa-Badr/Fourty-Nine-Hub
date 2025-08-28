@@ -17,6 +17,12 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_pric
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/cancel_my_booking_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/iam_coming_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_arrived_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_no_show_client_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_on_the_way_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_passenger_picked_up_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_route_cancelled_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
@@ -60,10 +66,22 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final GetSupportDetailsUseCase getSupportDetailsUseCase;
   final ListenToDriverOnWayUseCase listenToDriverOnWayUseCase;
   final ListenToAcceptRouteUseCase listenToAcceptRouteUseCase;
+  final ListenToDriverArrivedUseCase listenToDriverArrivedUseCase;
+  final ListenToDriverNoShowClientUseCase listenToDriverNoShowClientUseCase;
+  final ListenToPassengerPickedUpUseCase listenToPassengerPickedUpUseCase;
+  final ListenToDriverOnTheWayUseCase listenToDriverOnTheWayUseCase;
+  final ListenToRouteCancelledUseCase listenToRouteCancelledUseCase;
+  final IamComingUseCase iamComingUseCase;
   final GetRunningRouteUseCase getRunningRouteUseCase;
   CaptainShareCubit(
       this.createPricePerSeatUseCase,
       this.listenToDriverOnWayUseCase,
+      this.listenToDriverArrivedUseCase,
+      this.listenToDriverNoShowClientUseCase,
+      this.listenToPassengerPickedUpUseCase,
+      this.listenToDriverOnTheWayUseCase,
+      this.listenToRouteCancelledUseCase,
+      this.iamComingUseCase,
       this.getRunningRouteUseCase,
       this.listenToAcceptRouteUseCase,
       this.getRouteDetailsUseCase,
@@ -93,6 +111,51 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     listenToCancelRoute(context);
     listenToAcceptedRoute();
     listenToAcceptedRoute();
+  }
+
+  initRunningRouteData(){
+    listenToDriverArrived();
+    listenToDriverNoShowClient();
+    listenToPassengerPickedUp();
+    listenToDriverOnTheWayToClient();
+    listenToRouteCancelled();
+  }
+
+  listenToDriverArrived() {
+    CliLogger.info('listenToDriverArrived');
+    listenToDriverArrivedUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToRouteCancelled() {
+    CliLogger.info('listenToRouteCancelled');
+    listenToRouteCancelledUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToDriverOnTheWayToClient() {
+    CliLogger.info('listenToDriverOnTheWayToClient');
+    listenToDriverOnTheWayUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToDriverNoShowClient() {
+    CliLogger.info('listenToDriverNoShowClient');
+    listenToDriverNoShowClientUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToPassengerPickedUp() {
+    CliLogger.info('listenToPassengerPickedUp');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToPassengerPickedUpUseCase((data) {
+      showSuccessMessage(currentContext, currentContext.isArabic?'نتمني لك رحلة سعيدة':'We wish you a happy trip');
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
   }
 
   Future<void> fetchUserLocation() async {
@@ -400,6 +463,21 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     });
   }
 
+  Future<void> iamComing({required String id}) async {
+    final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await iamComingUseCase(id);
+    response.fold((l) {
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
+      showSuccessMessage(currentContext, errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
   Future<void> getRouteDetails(
       {required String id, required BuildContext context}) async {
     emit(state.copyWith(status: CaptainShareStates.loading));
@@ -423,6 +501,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       showErrorMessage(context, errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
+      initRunningRouteData();
       emit(state.copyWith(
           status: CaptainShareStates.success, runningRoute: data));
     });

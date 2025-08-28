@@ -1,3 +1,9 @@
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/iam_coming_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_arrived_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_no_show_client_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_on_the_way_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_passenger_picked_up_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_route_cancelled_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/complete_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 
@@ -159,9 +165,39 @@ class CaptainShareServiceLocator {
         () => ListenToClientComingUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<ListenToDriverArrivedUseCase>(
+        () => ListenToDriverArrivedUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToDriverNoShowClientUseCase>(
+        () => ListenToDriverNoShowClientUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToPassengerPickedUpUseCase>(
+        () => ListenToPassengerPickedUpUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<IamComingUseCase>(
+        () => IamComingUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToDriverOnTheWayUseCase>(
+        () => ListenToDriverOnTheWayUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToRouteCancelledUseCase>(
+        () => ListenToRouteCancelledUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

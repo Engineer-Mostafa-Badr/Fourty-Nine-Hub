@@ -91,6 +91,11 @@ abstract class TripRepository {
    void listenToDriverTheOnWay(Function(MyBookingEntity newBooking) params);
    void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
    void listenToComingClient(Function(ListenToClientComingParams params) params);
+   void listenToDriverArrived(Function(String waitingTime) params);
+   void listenToRouteCancelled(Function(String message) params);
+   void listenToDriverOnTheWay(Function(String message) params);
+   void listenToDriverNoShowClient(Function(String waitingTime) params);
+   void listenToPassengerPickedUp(Function(String message) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);
    void listenToLeaveAvailableRoutes(Function(String routeId) params);
    Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);
