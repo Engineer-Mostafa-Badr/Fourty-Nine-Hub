@@ -167,6 +167,18 @@ class PreloadBloc extends Cubit<PreloadState> {
     } catch (_) {}
   }
 
+  void pauseOthersExcept(int index) {
+    for (final entry in state.controllers.entries) {
+      final i = entry.key;
+      final c = entry.value;
+      if (i == index) continue;
+      try {
+        c.pause();
+        c.setVolume(0.0);
+      } catch (_) {}
+    }
+  }
+
   // ---------------- NO-OPs kept for compatibility ----------------
   // These existed before and might be referenced elsewhere.
   // They are intentionally no-ops now because controllers are widget-owned.

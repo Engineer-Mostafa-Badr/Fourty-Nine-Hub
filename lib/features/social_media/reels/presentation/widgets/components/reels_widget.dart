@@ -141,12 +141,16 @@ class _ReelsWidgetState extends State<ReelsWidget>
         final focus = context.read<PreloadBloc>().state.focusedIndex;
         if (_pendingPlay || focus == widget.index) {
           _pendingPlay = false;
+          // NEW: pause others before playing
+          context.read<PreloadBloc>().pauseOthersExcept(widget.index);
           _playVideo();
           _safeSetVolume(1.0);
         }
         break;
       case BetterPlayerEventType.play:
         _isPlaying = true;
+        // NEW: just in case a late play sneaks in, pause others now too
+        context.read<PreloadBloc>().pauseOthersExcept(widget.index);
         break;
       case BetterPlayerEventType.pause:
       case BetterPlayerEventType.finished:
@@ -197,6 +201,9 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   Future<void> _playVideo() async {
     try {
+      // NEW: ensure others are paused/muted before we play this one
+      context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+
       await _controller.play();
       if (!mounted) return;
       setState(() => _showPlayPauseIcon = true);
