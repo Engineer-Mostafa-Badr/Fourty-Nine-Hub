@@ -1,15 +1,17 @@
 import 'dart:developer';
+import 'dart:convert';
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
+import 'package:http/http.dart' as http;
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../controllers/preload_cubit/preload_bloc.dart';
 import '../../controllers/preload_cubit/preload_state.dart';
 import '../full_screen_widget.dart';
 import '../../pages/reel_actions.dart';
-import 'animated_heart_wiidget.dart';
 import 'unified_widget_view.dart';
 
 class ReelsWidget extends StatefulWidget {
@@ -38,9 +40,9 @@ class _ReelsWidgetState extends State<ReelsWidget>
   bool _pendingPlay = false;
 
   late final AnimationController _rotationController;
-  late final BetterPlayerController _bp;
+  BetterPlayerController? _bp;
 
-  BetterPlayerController get _controller => _bp;
+  BetterPlayerController get _controller => _bp!;
 
   @override
   void initState() {
@@ -57,23 +59,41 @@ class _ReelsWidgetState extends State<ReelsWidget>
       statusBarBrightness: Brightness.light,
     ));
 
+    _initController(); // async bootstrap
+  }
+
+  Future<void> _initController() async {
+    // 1) Resolve the lowest-variant URL if this is a master HLS.
+    final effectiveUrl = await _pickLowestVariantIfHls(widget.url);
+
+    // 2) Build data source. IMPORTANT: disable ASMS track switching so it won’t upscale.
     final dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      widget.url,
+      effectiveUrl,
+      // Keep tracks off so it sticks to the URL we gave it:
+      useAsmsTracks: false,
+      useAsmsAudioTracks: true,
+      // Optional caching/buffering as you had:
       cacheConfiguration: const BetterPlayerCacheConfiguration(useCache: true),
-      videoFormat: widget.url.toLowerCase().endsWith('.m3u8')
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: 5000,
+        maxBufferMs: 10000,
+        bufferForPlaybackMs: 500,
+        bufferForPlaybackAfterRebufferMs: 1000,
+      ),
+      videoFormat: effectiveUrl.toLowerCase().endsWith('.m3u8')
           ? BetterPlayerVideoFormat.hls
           : BetterPlayerVideoFormat.other,
     );
 
     _bp = BetterPlayerController(
-      BetterPlayerConfiguration(
+      const BetterPlayerConfiguration(
         autoPlay: false,
         looping: true,
-        fit: BoxFit.cover, // full-screen cover
+        fit: BoxFit.cover, // cover = full screen with crop (like Reels)
         handleLifecycle: false,
         showPlaceholderUntilPlay: false,
-        controlsConfiguration: const BetterPlayerControlsConfiguration(
+        controlsConfiguration: BetterPlayerControlsConfiguration(
           showControls: false,
           enableProgressBar: true,
           enableProgressBarDrag: false,
@@ -87,19 +107,20 @@ class _ReelsWidgetState extends State<ReelsWidget>
       betterPlayerDataSource: dataSource,
     );
 
-    _bp.addEventsListener(_onBetterPlayerEvent);
+    _controller.addEventsListener(_onBetterPlayerEvent);
 
-    // Attach to bloc (so pauseCurrent etc. keep working)
-    context.read<PreloadBloc>().attachController(widget.index, _bp);
+    // Keep your pauseCurrent etc. hooks working:
+    context.read<PreloadBloc>().attachController(widget.index, _controller);
+
+    if (!mounted) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
+      _controller.setLooping(true);
 
-      _bp.setLooping(true);
-
+      // Focus logic as you had:
       final focus = context.read<PreloadBloc>().state.focusedIndex;
       if (focus == widget.index) {
-        // focus → play now or queue
         if (_isInitialized) {
           await _playVideo();
         } else {
@@ -109,6 +130,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
       } else {
         await _safeSetVolume(0.0);
       }
+      setState(() {}); // to paint player after init
     });
   }
 
@@ -116,8 +138,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
     switch (e.betterPlayerEventType) {
       case BetterPlayerEventType.initialized:
         _isInitialized = true;
-        _bp.setLooping(true);
-
+        _controller.setLooping(true);
         final focus = context.read<PreloadBloc>().state.focusedIndex;
         if (_pendingPlay || focus == widget.index) {
           _pendingPlay = false;
@@ -150,19 +171,19 @@ class _ReelsWidgetState extends State<ReelsWidget>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _rotationController.dispose();
-    _bp.removeEventsListener(_onBetterPlayerEvent);
 
-    // Detach (don’t dispose in bloc)
-    context.read<PreloadBloc>().detachController(widget.index, _bp);
-
-    // Widget owns the controller → dispose here
-    _bp.dispose();
+    final bp = _bp;
+    if (bp != null) {
+      bp.removeEventsListener(_onBetterPlayerEvent);
+      context.read<PreloadBloc>().detachController(widget.index, bp);
+      bp.dispose();
+    }
     super.dispose();
   }
 
   Future<void> _safeSetVolume(double v) async {
     try {
-      await _bp.setVolume(v);
+      await _controller.setVolume(v);
     } catch (_) {}
   }
 
@@ -177,7 +198,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   Future<void> _playVideo() async {
     try {
-      await _bp.play();
+      await _controller.play();
       if (!mounted) return;
       setState(() => _showPlayPauseIcon = true);
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -190,7 +211,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
 
   Future<void> _pauseVideo() async {
     try {
-      await _bp.pause();
+      await _controller.pause();
       if (!mounted) return;
       setState(() => _showPlayPauseIcon = true);
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -202,6 +223,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final reels = context.read<ReelsCubit>().state.globalReels;
     final reel = (widget.index >= 0 && widget.index < reels.length)
@@ -211,6 +233,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
     return BlocListener<PreloadBloc, PreloadState>(
       listenWhen: (prev, curr) => prev.focusedIndex != curr.focusedIndex,
       listener: (context, curr) async {
+        if (_bp == null) return;
         if (curr.focusedIndex == widget.index) {
           if (_isInitialized) {
             await _playVideo();
@@ -241,15 +264,16 @@ class _ReelsWidgetState extends State<ReelsWidget>
             children: [
               Positioned.fill(child: Container(color: Colors.black)),
 
-              // Video (full screen cover)
-              Positioned.fill(
-                child: BetterPlayer(
-                  key: ValueKey('bp_${widget.index}_${_bp.hashCode}'),
-                  controller: _controller,
+              // Player
+              if (_bp != null)
+                Positioned.fill(
+                  child: BetterPlayer(
+                    key: ValueKey('bp_${widget.index}_${_bp.hashCode}'),
+                    controller: _controller,
+                  ),
                 ),
-              ),
 
-              // Play/Pause toast icon
+              // Play/Pause toast
               Positioned.fill(
                 child: IgnorePointer(
                   child: AnimatedOpacity(
@@ -280,7 +304,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   ),
                 ),
 
-              // Bottom bar (title only)
+              // Bottom caption
               if (reel != null)
                 Positioned(
                   bottom: 0,
@@ -313,7 +337,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   ),
                 ),
 
-              // Fullscreen button (your widget)
+              // Fullscreen button
               Positioned(
                 bottom: MediaQuery.of(context).size.height * 0.5,
                 left: MediaQuery.of(context).size.width * 0.115,
@@ -324,5 +348,55 @@ class _ReelsWidgetState extends State<ReelsWidget>
         ),
       ),
     );
+  }
+
+  // --------- LOWEST-RES HLS PICKER ----------
+
+  Future<String> _pickLowestVariantIfHls(String url) async {
+    final lower = url.toLowerCase();
+    if (!lower.endsWith('.m3u8')) return url;
+
+    // Bunny quick path: master ".../video.m3u8" -> ".../240p/video.m3u8"
+    // Comment this out if your paths differ.
+    if (lower.endsWith('/video.m3u8')) {
+      return url.replaceFirst(
+          RegExp(r'/video\.m3u8$', caseSensitive: false), '/240p/video.m3u8');
+    }
+
+    try {
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode != 200) return url;
+
+      final lines = const LineSplitter().convert(res.body);
+      if (!lines.any((l) => l.startsWith('#EXT-X-STREAM-INF'))) {
+        // Not a master manifest, just return as-is
+        return url;
+      }
+
+      final variants = <Map<String, dynamic>>[];
+      for (int i = 0; i < lines.length; i++) {
+        final line = lines[i].trim();
+        if (line.startsWith('#EXT-X-STREAM-INF:')) {
+          final bw = _parseBandwidth(line);
+          final next = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+          if (bw != null && next.isNotEmpty && !next.startsWith('#')) {
+            final resolved = Uri.parse(url).resolve(next).toString();
+            variants.add({'bw': bw, 'uri': resolved});
+          }
+        }
+      }
+
+      if (variants.isEmpty) return url;
+      variants.sort((a, b) => (a['bw'] as int).compareTo(b['bw'] as int));
+      return variants.first['uri'] as String; // lowest BANDWIDTH
+    } catch (_) {
+      return url;
+    }
+  }
+
+  int? _parseBandwidth(String line) {
+    final reg = RegExp(r'BANDWIDTH=(\d+)');
+    final m = reg.firstMatch(line);
+    return m != null ? int.tryParse(m.group(1)!) : null;
   }
 }
