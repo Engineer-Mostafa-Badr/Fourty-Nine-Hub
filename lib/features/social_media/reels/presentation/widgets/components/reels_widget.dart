@@ -16,15 +16,15 @@ class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
     super.key,
     required this.isLoading,
-    required this.controller,
     required this.index,
     required this.receiverId,
+    required this.url,
   });
 
   final bool isLoading;
-  final BetterPlayerController controller;
   final int index;
   final int receiverId;
+  final String url;
 
   @override
   State<ReelsWidget> createState() => _ReelsWidgetState();
@@ -33,13 +33,14 @@ class ReelsWidget extends StatefulWidget {
 class _ReelsWidgetState extends State<ReelsWidget>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   bool _showPlayPauseIcon = false;
-
   bool _isInitialized = false;
   bool _isPlaying = false;
-  bool _pendingPlay = false; // queue play until initialized
+  bool _pendingPlay = false;
 
   late final AnimationController _rotationController;
-  BetterPlayerController get _bp => widget.controller;
+  late final BetterPlayerController _bp;
+
+  BetterPlayerController get _controller => _bp;
 
   @override
   void initState() {
@@ -56,42 +57,59 @@ class _ReelsWidgetState extends State<ReelsWidget>
       statusBarBrightness: Brightness.light,
     ));
 
+    final dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      widget.url,
+      cacheConfiguration: const BetterPlayerCacheConfiguration(useCache: true),
+      videoFormat: widget.url.toLowerCase().endsWith('.m3u8')
+          ? BetterPlayerVideoFormat.hls
+          : BetterPlayerVideoFormat.other,
+    );
+
+    _bp = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: false,
+        looping: true,
+        fit: BoxFit.cover, // full-screen cover
+        handleLifecycle: false,
+        showPlaceholderUntilPlay: false,
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
+          showControls: false,
+          enableProgressBar: true,
+          enableProgressBarDrag: false,
+          enablePlayPause: false,
+          enableMute: false,
+          enableSkips: false,
+          enableFullscreen: false,
+          enableProgressText: false,
+        ),
+      ),
+      betterPlayerDataSource: dataSource,
+    );
+
     _bp.addEventsListener(_onBetterPlayerEvent);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    // Attach to bloc (so pauseCurrent etc. keep working)
+    context.read<PreloadBloc>().attachController(widget.index, _bp);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
+
       _bp.setLooping(true);
 
-      // If I'm already focused on first build, queue/play
-      final focused = context.read<PreloadBloc>().state.focusedIndex;
-      if (focused == widget.index) {
+      final focus = context.read<PreloadBloc>().state.focusedIndex;
+      if (focus == widget.index) {
+        // focus → play now or queue
         if (_isInitialized) {
-          _playVideo();
+          await _playVideo();
         } else {
           _pendingPlay = true;
         }
-        _safeSetVolume(1.0);
+        await _safeSetVolume(1.0);
       } else {
-        _safeSetVolume(0.0);
+        await _safeSetVolume(0.0);
       }
     });
-  }
-
-  @override
-  void didUpdateWidget(covariant ReelsWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller.removeEventsListener(_onBetterPlayerEvent);
-      try {
-        oldWidget.controller.pause();
-      } catch (_) {}
-
-      _isInitialized = false;
-      _isPlaying = false;
-      _pendingPlay = false;
-
-      _bp.addEventsListener(_onBetterPlayerEvent);
-      _bp.setLooping(true);
-    }
   }
 
   void _onBetterPlayerEvent(BetterPlayerEvent e) {
@@ -99,8 +117,9 @@ class _ReelsWidgetState extends State<ReelsWidget>
       case BetterPlayerEventType.initialized:
         _isInitialized = true;
         _bp.setLooping(true);
-        final focused = context.read<PreloadBloc>().state.focusedIndex;
-        if (_pendingPlay || focused == widget.index) {
+
+        final focus = context.read<PreloadBloc>().state.focusedIndex;
+        if (_pendingPlay || focus == widget.index) {
           _pendingPlay = false;
           _playVideo();
           _safeSetVolume(1.0);
@@ -131,7 +150,13 @@ class _ReelsWidgetState extends State<ReelsWidget>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _rotationController.dispose();
-    _bp.removeEventsListener(_onBetterPlayerEvent); // bloc owns controller
+    _bp.removeEventsListener(_onBetterPlayerEvent);
+
+    // Detach (don’t dispose in bloc)
+    context.read<PreloadBloc>().detachController(widget.index, _bp);
+
+    // Widget owns the controller → dispose here
+    _bp.dispose();
     super.dispose();
   }
 
@@ -187,7 +212,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
       listenWhen: (prev, curr) => prev.focusedIndex != curr.focusedIndex,
       listener: (context, curr) async {
         if (curr.focusedIndex == widget.index) {
-          // I’m focused → play or queue until initialized
           if (_isInitialized) {
             await _playVideo();
           } else {
@@ -195,7 +219,6 @@ class _ReelsWidgetState extends State<ReelsWidget>
           }
           await _safeSetVolume(1.0);
         } else {
-          // Not focused → cancel any pending play, pause & mute
           _pendingPlay = false;
           await _pauseVideo();
           await _safeSetVolume(0.0);
@@ -218,11 +241,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
             children: [
               Positioned.fill(child: Container(color: Colors.black)),
 
-              // Video
+              // Video (full screen cover)
               Positioned.fill(
                 child: BetterPlayer(
-                  key: ValueKey('bp_${widget.index}'),
-                  controller: _bp,
+                  key: ValueKey('bp_${widget.index}_${_bp.hashCode}'),
+                  controller: _controller,
                 ),
               ),
 
@@ -257,7 +280,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                   ),
                 ),
 
-              // Bottom bar (title only; Better Player shows progress)
+              // Bottom bar (title only)
               if (reel != null)
                 Positioned(
                   bottom: 0,

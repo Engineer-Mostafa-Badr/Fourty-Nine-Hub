@@ -99,6 +99,7 @@ class ReelsScreenState extends State<ReelsScreen>
                 controller: _pageController,
                 scrollDirection: Axis.vertical,
                 itemCount: state.urls.length,
+                allowImplicitScrolling: true,
                 onPageChanged: (index) {
                   final b = context.read<PreloadBloc>();
 
@@ -115,35 +116,16 @@ class ReelsScreenState extends State<ReelsScreen>
                   });
                 },
                 itemBuilder: (context, index) {
-                  final b = context.read<PreloadBloc>();
-                  final controller = state.controllers[index];
                   final bool isTailLoading =
                       (state.isLoading && index == state.urls.length - 1);
 
-                  if (controller == null) {
-                    if (index == state.focusedIndex) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        b.prioritizedFocusInit(index,
-                            epoch: b.state.reloadCounter);
-                      });
-                    }
-                    return _buildVideoLoadingWidget(
-                      index,
-                      isTailLoading || b.isVideoLoading(index),
-                    );
-                  }
-
-                  if (state.focusedIndex == index) {
-                    return ReelsWidget(
-                      index: index,
-                      isLoading: isTailLoading,
-                      controller: controller,
-                      receiverId: 1,
-                    );
-                  } else {
-                    // Offscreen: keep widget lightweight; controller stays alive in bloc
-                    return const SizedBox();
-                  }
+                  // Controller is created inside ReelsWidget; we just pass URL
+                  return ReelsWidget(
+                    index: index,
+                    isLoading: isTailLoading,
+                    receiverId: 1,
+                    url: state.urls[index],
+                  );
                 },
               ),
             ),
