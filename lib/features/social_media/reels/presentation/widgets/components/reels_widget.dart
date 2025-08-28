@@ -19,13 +19,11 @@ class ReelsWidget extends StatefulWidget {
     super.key,
     required this.isLoading,
     required this.index,
-    required this.receiverId,
     required this.url,
   });
 
   final bool isLoading;
   final int index;
-  final int receiverId;
   final String url;
 
   @override
@@ -76,7 +74,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
       // Optional caching/buffering as you had:
       cacheConfiguration: const BetterPlayerCacheConfiguration(useCache: true),
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
-        minBufferMs: 5000,
+        minBufferMs: 1000,
         maxBufferMs: 10000,
         bufferForPlaybackMs: 500,
         bufferForPlaybackAfterRebufferMs: 1000,
@@ -87,10 +85,11 @@ class _ReelsWidgetState extends State<ReelsWidget>
     );
 
     _bp = BetterPlayerController(
-      const BetterPlayerConfiguration(
+      BetterPlayerConfiguration(
         autoPlay: false,
         looping: true,
-        fit: BoxFit.cover, // cover = full screen with crop (like Reels)
+        expandToFill: false,
+        fit: BoxFit.fill, // cover = full screen with crop (like Reels)
         handleLifecycle: false,
         showPlaceholderUntilPlay: false,
         controlsConfiguration: BetterPlayerControlsConfiguration(

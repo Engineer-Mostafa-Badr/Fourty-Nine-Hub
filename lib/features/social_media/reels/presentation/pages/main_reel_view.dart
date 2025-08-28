@@ -123,7 +123,6 @@ class ReelsScreenState extends State<ReelsScreen>
                   return ReelsWidget(
                     index: index,
                     isLoading: isTailLoading,
-                    receiverId: 1,
                     url: state.urls[index],
                   );
                 },
