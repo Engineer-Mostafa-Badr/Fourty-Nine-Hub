@@ -382,6 +382,7 @@ class DI {
     SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
     //! Tube
     TubeServiceLocator.execute(serviceLocator: serviceLocator);
+  
   }
 
   static Future<void> reset() async {

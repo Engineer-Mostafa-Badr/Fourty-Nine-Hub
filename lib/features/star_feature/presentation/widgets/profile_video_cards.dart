@@ -334,144 +334,6 @@ class ProfileVideoCards {
   }
 
   // Playlist card for Playlists tab
-  // static Widget buildPlaylistItem(
-  //   BuildContext context,
-  //   PlaylistEntity playlist, {
-  //   VoidCallback? onTap,
-  // }) {
-  //   return GestureDetector(
-  //     onTap: onTap,
-  //     child: Container(
-  //       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-  //       color: Colors.white,
-  //       child: Row(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           // Playlist thumbnail
-  //           Container(
-  //             width: 140.w,
-  //             height: 90.h,
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(8.r),
-  //             ),
-  //             child: Stack(
-  //               children: [
-  //                 // Thumbnail image
-  //                 Container(
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(8.r),
-  //                     color: Colors.grey[300],
-  //                     image: DecorationImage(
-  //                       image: AssetImage('assets/images/testforvideo.jpg'),
-  //                       fit: BoxFit.cover,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 // Sound icon in top left
-  //                 Positioned(
-  //                   top: 8,
-  //                   left: 8,
-  //                   child: Container(
-  //                     padding: EdgeInsets.all(4),
-  //                     decoration: BoxDecoration(
-  //                       color: Colors.black.withOpacity(0.7),
-  //                       borderRadius: BorderRadius.circular(4),
-  //                     ),
-  //                     child: Icon(
-  //                       Icons.volume_up,
-  //                       color: Colors.white,
-  //                       size: 16,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 // Playlist indicator with video count
-  //                 Positioned(
-  //                   bottom: 8,
-  //                   left: 8,
-  //                   child: Container(
-  //                     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-  //                     decoration: BoxDecoration(
-  //                       color: Colors.black.withOpacity(0.8),
-  //                       borderRadius: BorderRadius.circular(4),
-  //                     ),
-  //                     child: Row(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: [
-  //                         Icon(
-  //                           Icons.playlist_play,
-  //                           color: Colors.white,
-  //                           size: 14,
-  //                         ),
-  //                         SizedBox(width: 2),
-  //                         Text(
-  //                           '${playlist.videos.length}',
-  //                           style: TextStyle(
-  //                             color: Colors.white,
-  //                             fontSize: 12.sp,
-  //                             fontWeight: FontWeight.w500,
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           SizedBox(width: 12.w),
-  //           // Playlist info
-  //           Expanded(
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   playlist.name,
-  //                   style: TextStyle(
-  //                     fontWeight: FontWeight.w600,
-  //                     fontSize: 15.sp,
-  //                     color: Colors.black87,
-  //                   ),
-  //                   maxLines: 2,
-  //                   overflow: TextOverflow.ellipsis,
-  //                 ),
-  //                 SizedBox(height: 4.h),
-  //                 Text(
-  //                   "Heart Touching • Playlist",
-  //                   style: TextStyle(
-  //                     color: Colors.grey[600],
-  //                     fontSize: 13.sp,
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                 ),
-  //                 SizedBox(height: 2.h),
-  //                 Text(
-  //                   "${playlist.videos.length} videos",
-  //                   style: TextStyle(
-  //                     color: Colors.grey[600],
-  //                     fontSize: 13.sp,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           // More options button
-  //           GestureDetector(
-  //             onTap: () => _showPlaylistOptions(context, playlist),
-  //             child: Padding(
-  //               padding: EdgeInsets.only(top: 4.h),
-  //               child: Icon(
-  //                 Icons.more_vert,
-  //                 size: 20,
-  //                 color: Colors.grey[700],
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   static Widget buildPlaylistItem(
     BuildContext context,
     PlaylistEntity playlist, {
@@ -480,147 +342,121 @@ class ProfileVideoCards {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
-        padding: EdgeInsets.symmetric(vertical: 8.h),
+        margin: EdgeInsets.only(bottom: 12),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Playlist thumbnail with optimized dimensions
-            SizedBox(
-              width: 100.w,
-              height: 75.h,
-              child: Stack(
-                children: [
-                  // Main thumbnail
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6.r),
-                    child: Container(
-                      width: 100.w,
-                      height: 75.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                      ),
-                      child: playlist.thumbnailUrl.isNotEmpty
-                          ? Image.network(
-                              playlist.thumbnailUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  _buildThumbnailPlaceholder(),
-                            )
-                          : Image.asset(
-                              'assets/images/testforvideo.jpg',
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  _buildThumbnailPlaceholder(),
-                            ),
+            // Thumbnail with playlist icon overlay
+            Stack(
+              children: [
+                // Thumbnail
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  height: MediaQuery.of(context).size.width * 0.22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/testforvideo.jpg'),
+                      fit: BoxFit.cover,
                     ),
                   ),
-
-                  // Dark overlay for better contrast
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6.r),
-                    child: Container(
-                      width: 100.w,
-                      height: 75.h,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.25),
-                      ),
+                ),
+                // Volume icon overlay
+                Positioned(
+                  top: (8),
+                  left: (8),
+                  child: Container(
+                    padding: EdgeInsets.all((6)),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      shape: BoxShape.circle,
                     ),
-                  ),
-
-                  // Sound icon - top left
-                  Positioned(
-                    top: 6.h,
-                    left: 6.w,
                     child: Icon(
                       Icons.volume_up,
                       color: Colors.white,
-                      size: 14.sp,
+                      size: (14),
                     ),
                   ),
-
-                  // Video count - bottom left with playlist icon
-                  Positioned(
-                    bottom: 6.h,
-                    left: 6.w,
+                ),
+                // Playlist count overlay
+                Positioned(
+                  bottom: (8),
+                  right: (8),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: (8),
+                      vertical: (4),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular((4)),
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          Icons.format_list_bulleted,
+                          Icons.playlist_play,
                           color: Colors.white,
-                          size: 12.sp,
+                          size: (16),
                         ),
-                        SizedBox(width: 2.w),
+                        SizedBox(width: (4)),
                         Text(
                           '${playlist.videos.length}',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 11.sp,
+                            fontSize: (12),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
                     ),
                   ),
+                ),
+              ],
+            ),
+
+            SizedBox(width: (16)),
+
+            // Playlist info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Title
+                  Text(
+                    'Heart Touching Nasheed',
+                    style: TextStyle(
+                      fontSize: (16),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: (6)),
+                  // Subtitle
+                  Text(
+                    'Heart Touching • Playlist',
+                    style: TextStyle(
+                      fontSize: (14),
+                      color: Colors.grey[600],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
               ),
             ),
 
-            SizedBox(width: 12.w),
-
-            // Playlist information
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: 2.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // Playlist title
-                    Text(
-                      playlist.name,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                        height: 1.2,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    SizedBox(height: 3.h),
-
-                    // Playlist subtitle
-                    Text(
-                      playlist.description.isNotEmpty
-                          ? playlist.description
-                          : "Heart Touching • Playlist",
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.w400,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+            // More options button
+            IconButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: Colors.grey[700],
+                size: (22),
               ),
-            ),
-
-            // More options menu
-            GestureDetector(
-              onTap: () => _showPlaylistOptions(context, playlist),
-              child: Padding(
-                padding: EdgeInsets.only(left: 8.w, top: 2.h),
-                child: Icon(
-                  Icons.more_vert,
-                  color: Colors.grey[600],
-                  size: 18.sp,
-                ),
-              ),
+              onPressed: () => _showPlaylistOptions(context, playlist),
             ),
           ],
         ),

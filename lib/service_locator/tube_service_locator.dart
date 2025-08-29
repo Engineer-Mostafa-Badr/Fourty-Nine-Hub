@@ -26,6 +26,6 @@ class TubeServiceLocator {
     serviceLocator.registerLazySingleton(() => UpdateProfileUseCase(serviceLocator()));
 
     // Cubit
-    serviceLocator.registerFactory(() => ProfileCubit(serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton(() => ProfileCubit(serviceLocator(), serviceLocator()));
   }
 }

@@ -8,7 +8,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../domain/entity/profile_entity.dart';
 
-
 class EditProfileBottomSheet extends StatefulWidget {
   final ProfileEntity? currentProfile;
 
