@@ -36,7 +36,7 @@ class BeStarHeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     log("Banner Title: ${state.banner?.titleAr} ${state.banner?.titleEn}");
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.only(left: 16.w, right: 16.w),
       child: Column(
         children: [
           // Banner Image
@@ -82,7 +82,10 @@ class BeStarHeaderSection extends StatelessWidget {
               Sizer(),
               // Hint Button
               InkWell(
-                onTap: () => _showHintDialog(context),
+                onTap: () {
+                  ManageVibration.vibrate();
+                  _showHintDialog(context);
+                },
                 child: SvgPicture.asset(
                   Assets.idea,
                   height: 24,
@@ -121,7 +124,10 @@ class BeStarHeaderSection extends StatelessWidget {
               text: LocaleKeys.subscribe.localize,
               icon: Assets.ideaIcon,
               isSelected: true,
-              onTap: () => _handleSubscribe(context),
+              onTap: () {
+                ManageVibration.vibrate();
+                _handleSubscribe(context);
+              },
               onShowHint: () => _showSubscribeHint(context),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -20,6 +20,8 @@ import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../../../../helpers/manage_vibration.dart';
 
 class ProfilePageView extends StatefulWidget {
   final UserStarEntity? user; // Make optional for current user
@@ -176,7 +178,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 color: Colors.black,
                 size: MediaQuery.of(context).size.width < 360 ? 20 : 24,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                ManageVibration.vibrate();
+                Navigator.pop(context);
+              },
             ),
             Expanded(
               child: Text(
@@ -195,8 +200,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
             if (widget.isCurrentUser) ...[
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.black, size: 24),
-                onPressed: () =>
-                    _showEditProfileBottomSheet(), // Changed this line
+                onPressed: () {
+                  ManageVibration.vibrate();
+                  _showEditProfileBottomSheet();
+                }, // Changed this line
               ),
             ] else ...[
               SizedBox(width: 48.w),
@@ -274,9 +281,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
     final displayName = widget.isCurrentUser && profileState.profile != null
         ? profileState.profile!.channelName
-        : (widget.user != null
-            ? "${widget.user!.firstName} ${widget.user!.lastName}"
-            : "Unknown User");
+        : (widget.user != null ? widget.user!.firstName : "Unknown User");
 
     final videosCount = widget.isCurrentUser && profileState.profile != null
         ? profileState.profile!.videosCount
@@ -336,11 +341,24 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     ),
                   ),
                   SizedBox(height: _getResponsiveSpacing(4)),
-                  Text(
-                    "@${displayName.toLowerCase().replaceAll(' ', '')} • $videosCount videos",
-                    style: TextStyle(
-                      fontSize: _getResponsiveFontSize(16),
-                      color: Colors.grey[600],
+                  Directionality(
+                    textDirection: context.isArabic
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    child: Text(
+                      context.isArabic
+                          ? "${displayName.toLowerCase().replaceAll(' ', '')}@ • ${_getArabicVideosText(videosCount)}"
+                          : "@${displayName.toLowerCase().replaceAll(' ', '')} • $videosCount videos",
+                      style: TextStyle(
+                        fontSize: _getResponsiveFontSize(16),
+                        color: Colors.grey[600],
+                        fontFamily: context.isArabic ? 'NotoSansArabic' : null,
+                      ),
+                      textAlign:
+                          context.isArabic ? TextAlign.right : TextAlign.left,
+                      textDirection: context.isArabic
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
                     ),
                   ),
                   if (widget.isCurrentUser &&
@@ -366,14 +384,12 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
-  
-
   Widget _buildTabBar() {
     return Container(
       color: Colors.white,
       child: TabBar(
         controller: _tabController,
-        isScrollable: true, 
+        isScrollable: true,
         tabAlignment: TabAlignment.start,
         indicatorColor: Colors.black,
         indicatorWeight: 3,
@@ -475,7 +491,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   Widget _buildVideoCard(StarEntity video, int index) {
     return GestureDetector(
-      onTap: () => _navigateToVideo(video),
+      onTap: () {
+        ManageVibration.vibrate();
+        _navigateToVideo(video);
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -583,7 +602,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
               children: [
                 // Profile Picture
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    ManageVibration.vibrate();
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -617,6 +638,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       if (!widget.isCurrentUser) {
                         Navigator.push(
                           context,
@@ -708,7 +730,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     Container(
                       padding: EdgeInsets.all(2),
                       child: IconButton(
-                        onPressed: () => showYouTubeOptions(context),
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                           showYouTubeOptions(context);},
                         icon: Icon(
                           Icons.more_vert,
                           color: context.isDarkMode
@@ -734,6 +758,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                           5,
                           (starIndex) => GestureDetector(
                             onTap: () {
+                              ManageVibration.vibrate();
                               context
                                   .read<StarCubit>()
                                   .updateRating(video.id, starIndex + 1);
@@ -780,6 +805,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
           icon: Icons.playlist_add,
           title: context.isArabic ? 'انشاء قائمة' : 'Play next in queue',
           onTap: () {
+            ManageVibration.vibrate();
             Navigator.pop(context);
             // Handle play next
           },
@@ -788,6 +814,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
           icon: Icons.block,
           title: context.isArabic ? 'غير مهتم' : 'Not interested',
           onTap: () {
+            ManageVibration.vibrate();
             Navigator.pop(context);
             // Handle not interested
           },
@@ -796,6 +823,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
           icon: Icons.visibility_off,
           title: context.isArabic ? 'اخفاء' : 'Hide',
           onTap: () {
+            ManageVibration.vibrate();
             Navigator.pop(context);
             // Handle hide
           },
@@ -808,6 +836,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   : 'Remove from favorites')
               : (context.isArabic ? 'اضافة للمفضلة' : 'Add to favorites'),
           onTap: () {
+            ManageVibration.vibrate();
             Navigator.pop(context);
             cubit.toggleFavorite("1");
           },
@@ -818,6 +847,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
           iconColor: Colors.red,
           textColor: Colors.red,
           onTap: () {
+            ManageVibration.vibrate();
             Navigator.pop(context);
             bottomSheet(
               context: context,
@@ -890,7 +920,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
         return ProfileVideoCards.buildPlaylistItem(
           context,
           playlist,
-          onTap: () => _navigateToPlaylist(playlist),
+          onTap: () {
+            ManageVibration.vibrate();
+            _navigateToPlaylist(playlist);
+          },
         );
       },
     );
@@ -901,7 +934,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
     final thumbnailHeight = thumbnailWidth * 0.56;
 
     return GestureDetector(
-      onTap: () => _navigateToVideo(video),
+      onTap: () {
+        ManageVibration.vibrate();
+        _navigateToVideo(video);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: _getResponsivePadding(20),
@@ -1005,7 +1041,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
             // More button
             GestureDetector(
-              onTap: () => _showMoreOptions(context, video),
+              onTap: () {
+                ManageVibration.vibrate();
+                _showMoreOptions(context, video);
+              },
               child: Padding(
                 padding: EdgeInsets.only(top: _getResponsiveSpacing(8)),
                 child: Icon(
@@ -1092,5 +1131,19 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   void _showMoreOptions(BuildContext context, StarEntity video) {
     TalentCard.showYouTubeOptions(context, video);
+  }
+
+  String _getArabicVideosText(int count) {
+    if (count == 0) {
+      return 'لا توجد فيديوهات';
+    } else if (count == 1) {
+      return 'فيديو واحد';
+    } else if (count == 2) {
+      return 'فيديوهان';
+    } else if (count >= 3 && count <= 10) {
+      return '$count فيديوهات';
+    } else {
+      return '$count فيديو';
+    }
   }
 }

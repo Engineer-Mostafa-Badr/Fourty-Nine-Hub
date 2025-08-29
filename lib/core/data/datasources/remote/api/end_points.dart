@@ -51,6 +51,7 @@ import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
 import '../../../../../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
 import '../../../../../features/social_media/instagram/domain/usecases/get_for_you_songs_usecase.dart';
+import '../../../../../features/star_feature/domain/entity/profile_entity.dart';
 import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
@@ -1761,7 +1762,8 @@ class EndPoints {
       '/conversations?page=$page&limit=$limit';
 
   //! Tube Endpoints
-
+  static String searchProfiles(SearchProfileParams params) =>
+      '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';
   static const String getMyProfile = '/tube-profile';
   static const String updateProfile = '/tube-profile';
 }

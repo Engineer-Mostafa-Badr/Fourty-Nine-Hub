@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:path/path.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -35,7 +36,10 @@ class ProfileVideoCards {
   // Horizontal grid card for Home tab
   static Widget buildTalentCard(StarEntity talent, {VoidCallback? onTap}) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        ManageVibration.vibrate();
+        onTap?.call();
+      },  
       child: Container(
         margin: EdgeInsets.only(bottom: 16.h),
         child: Column(
@@ -456,7 +460,10 @@ class ProfileVideoCards {
                 color: Colors.grey[700],
                 size: (22),
               ),
-              onPressed: () => _showPlaylistOptions(context, playlist),
+              onPressed: () {
+                ManageVibration.vibrate();
+                _showPlaylistOptions(context, playlist);
+              },
             ),
           ],
         ),

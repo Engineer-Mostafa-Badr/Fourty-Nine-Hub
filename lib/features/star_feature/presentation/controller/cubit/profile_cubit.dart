@@ -110,14 +110,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void _showErrorMessage(Failure failure) {
-    final currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext;
-    if (currentContext != null) {
-      showErrorMessage(
-        currentContext,
-        getFailureMessage(failure, currentContext),
-      );
-    }
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    showErrorMessage(
+        currentContext, getFailureMessage(failure, currentContext));
   }
 
   void _showSuccessMessage(String message) {

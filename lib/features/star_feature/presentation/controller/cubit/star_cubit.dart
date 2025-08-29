@@ -6,6 +6,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/abstract/use_case.dart';
+import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/star_winner_entity.dart';
 import '../../../domain/use_case/delete_my_star_use_case.dart';
@@ -13,6 +14,7 @@ import '../../../domain/use_case/fetch_all_star_use_case.dart';
 import '../../../domain/use_case/fetch_banner_use_case.dart';
 import '../../../domain/use_case/fetch_myl_star_use_case.dart';
 import '../../../domain/use_case/fetch_winner_star_use_case.dart';
+import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
 import 'star_state.dart';
 
@@ -373,6 +375,7 @@ class StarCubit extends Cubit<StarState> {
   final UploadMyStarUseCase _uploadMyStarUseCase;
   final DeleteMyStarUseCase _deleteMyTalentUseCase;
   final FetchBannerUseCase _bannerUseCase;
+  final SearchProfilesUseCase _searchProfilesUseCase;
 
   static const int pageSize = 10;
 
@@ -383,6 +386,7 @@ class StarCubit extends Cubit<StarState> {
     this._deleteMyTalentUseCase,
     this._fetchWinnerStarUseCase,
     this._bannerUseCase,
+    this._searchProfilesUseCase,
   ) : super(StarState());
 
   // Initialize all data
@@ -518,6 +522,52 @@ class StarCubit extends Cubit<StarState> {
     emit(state.copyWith(
       currentPages: pages,
       hasMoreData: hasMore,
+    ));
+  }
+
+  // Profile search functionality
+  void searchProfiles(String query) async {
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        searchProfileResults: [],
+        isSearchingProfiles: false,
+      ));
+      return;
+    }
+
+    emit(state.copyWith(isSearchingProfiles: true));
+
+    final response = await _searchProfilesUseCase(
+      SearchProfileParams(
+        query: query,
+        page: 1,
+        limit: 20,
+      ),
+    );
+
+    response.fold(
+      (failure) {
+        _showErrorMessage(failure);
+        emit(state.copyWith(
+          isSearchingProfiles: false,
+          status: StarStates.error,
+          failure: failure,
+        ));
+      },
+      (profiles) {
+        emit(state.copyWith(
+          searchProfileResults: profiles,
+          isSearchingProfiles: false,
+          status: StarStates.success,
+        ));
+      },
+    );
+  }
+
+  void clearProfileSearch() {
+    emit(state.copyWith(
+      searchProfileResults: [],
+      isSearchingProfiles: false,
     ));
   }
 

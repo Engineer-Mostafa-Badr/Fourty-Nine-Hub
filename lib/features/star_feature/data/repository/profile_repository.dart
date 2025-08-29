@@ -36,4 +36,18 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(UnknownFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ProfileEntity>>> searchProfiles(
+      SearchProfileParams params) async {
+    try {
+      final result = await remoteDataSource.searchProfiles(params);
+      return result;
+    } catch (e) {
+      if (e is Failure) {
+        return Left(e);
+      }
+      return Left(UnknownFailure(e.toString()));
+    }
+  }
 }

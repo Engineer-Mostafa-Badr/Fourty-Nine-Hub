@@ -75,3 +75,16 @@ class UpdateProfileParams {
     };
   }
 }
+
+
+class SearchProfileParams {
+  final String query;
+  final int page;
+  final int limit;
+
+  SearchProfileParams({
+    required this.query,
+    required this.page,
+    required this.limit,
+  });
+}

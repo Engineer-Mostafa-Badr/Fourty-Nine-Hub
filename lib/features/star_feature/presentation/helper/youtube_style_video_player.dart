@@ -598,6 +598,7 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
 
           return GestureDetector(
             onTap: () {
+              ManageVibration.vibrate();
               setState(() => _showControls = !_showControls);
               widget.onTap?.call();
               _openFullVideoPlayer();

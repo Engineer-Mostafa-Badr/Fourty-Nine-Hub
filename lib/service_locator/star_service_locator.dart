@@ -6,6 +6,7 @@ import '../features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_banner_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
+import '../features/star_feature/domain/use_case/search_profiles_use_case.dart';
 import '../features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import '../features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import '../features/ten_percent/data/datasources/ten_percent_remote_data_source.dart';
@@ -73,7 +74,13 @@ class StarServiceLocator {
               serviceLocator(),
             ));
 
+    // Register SearchProfilesUseCase
+    serviceLocator.registerLazySingleton<SearchProfilesUseCase>(
+      () => SearchProfilesUseCase(serviceLocator()),
+    );
+    
     serviceLocator.registerFactory<StarCubit>(() => StarCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

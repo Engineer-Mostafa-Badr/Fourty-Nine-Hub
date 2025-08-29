@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.d
 import 'package:fourtyninehub/features/star_feature/presentation/pages/video_details_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/history_tab_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/profile_page.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -72,7 +73,7 @@ class TalentCard {
               items: List.generate(
                 talentsToShow.length,
                 (index) =>
-                    _buildTalentCard(context, talentsToShow[index], cubit),
+                    buildTalentCard(context, talentsToShow[index], cubit),
               ),
               banners: bannersList,
               loadPage: (page) => isSearching
@@ -126,7 +127,7 @@ class TalentCard {
               }
 
               final talent = state.favoriteTalents[index];
-              return _buildTalentCard(context, talent, cubit);
+              return buildTalentCard(context, talent, cubit);
             },
             childCount: state.favoriteTalents.length +
                 (state.hasMore(TalentCategory.favorites) ? 1 : 0),
@@ -278,7 +279,7 @@ class TalentCard {
   }
 
   // Main talent card builder
-  static Widget _buildTalentCard(
+  static Widget buildTalentCard(
     BuildContext context,
     StarEntity talent,
     StarCubit cubit, {
@@ -297,9 +298,12 @@ class TalentCard {
         children: [
           // Video/Image Section
           GestureDetector(
-            onTap: isVideo
-                ? () => _navigateToVideoPlayer(context, mediaUrl, talent)
-                : () => _navigateToProfile(context, talent),
+            onTap: () {
+              ManageVibration.vibrate();
+              isVideo
+                  ? () => _navigateToVideoPlayer(context, mediaUrl, talent)
+                  : () => _navigateToProfile(context, talent);
+            },
             child: isVideo
                 ? YouTubeStyleVideoPlayer(
                     videoUrl: mediaUrl,
@@ -353,7 +357,10 @@ class TalentCard {
         children: [
           // Profile Picture
           GestureDetector(
-            onTap: () => _navigateToProfile(context, talent),
+            onTap: () {
+              ManageVibration.vibrate();
+              _navigateToProfile(context, talent);
+            },
             child: CircleAvatar(
               radius: 25,
               backgroundColor: Colors.grey[300],
@@ -370,7 +377,10 @@ class TalentCard {
           // Title and Info
           Expanded(
             child: GestureDetector(
-              onTap: () => _navigateToProfile(context, talent),
+              onTap: () {
+                ManageVibration.vibrate();
+                _navigateToProfile(context, talent);
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -457,7 +467,10 @@ class TalentCard {
           children: List.generate(
             5,
             (starIndex) => GestureDetector(
-              onTap: () => cubit.updateRating(talent.id, starIndex + 1),
+              onTap: () {
+                ManageVibration.vibrate();
+                cubit.updateRating(talent.id, starIndex + 1);
+              },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 1),
                 child: Icon(
@@ -516,7 +529,10 @@ class TalentCard {
     final createdAt = talent.createdAt ?? DateTime.now();
 
     return GestureDetector(
-      onTap: () => _navigateToVideoPlayer(context, mediaUrl, talent),
+      onTap: () {
+        ManageVibration.vibrate();
+        _navigateToVideoPlayer(context, mediaUrl, talent);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         color: Colors.white,
@@ -554,6 +570,7 @@ class TalentCard {
 
     return GestureDetector(
       onTap: () {
+        ManageVibration.vibrate();
         if (onVideoTap != null) {
           onVideoTap(talent, mediaUrl);
         } else {
@@ -692,7 +709,10 @@ class TalentCard {
     StarCubit cubit,
   ) {
     return GestureDetector(
-      onTap: () => _showHistoryOptions(context, talent, cubit),
+      onTap: () {
+        ManageVibration.vibrate();
+        _showHistoryOptions(context, talent, cubit);
+      },
       child: Padding(
         padding: const EdgeInsets.only(top: 4),
         child: Icon(
@@ -956,7 +976,10 @@ class OptionsBottomSheet {
                   context: context,
                   icon: option.icon,
                   title: option.title,
-                  onTap: option.onTap,
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    option.onTap.call();
+                  },
                   iconColor: option.iconColor,
                   textColor: option.textColor,
                 )),
@@ -975,7 +998,10 @@ class OptionsBottomSheet {
     Color? textColor,
   }) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        ManageVibration.vibrate();
+        onTap.call();
+      },
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.only(left: 13, top: 16, right: 13, bottom: 2),

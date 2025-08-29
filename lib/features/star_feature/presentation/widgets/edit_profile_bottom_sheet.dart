@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/profile_cubit.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -165,7 +166,10 @@ class _EditProfileBottomSheetState extends State<EditProfileBottomSheet> {
             child: Row(
               children: [
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    Navigator.pop(context);
+                  },
                   icon: Icon(Icons.close, size: 24),
                   padding: EdgeInsets.zero,
                 ),
@@ -250,7 +254,12 @@ class _EditProfileBottomSheetState extends State<EditProfileBottomSheet> {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: isLoading ? null : _saveProfile,
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  ManageVibration.vibrate();
+                                  _saveProfile();
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue[600],
                             foregroundColor: Colors.white,
@@ -333,7 +342,10 @@ class _EditProfileBottomSheetState extends State<EditProfileBottomSheet> {
 
   Widget _buildCoverImagePicker() {
     return GestureDetector(
-      onTap: () => _pickImage(ImageType.cover),
+      onTap: () {
+        ManageVibration.vibrate();
+        _pickImage(ImageType.cover);
+      },
       child: Container(
         width: double.infinity,
         height: 120,
@@ -381,7 +393,10 @@ class _EditProfileBottomSheetState extends State<EditProfileBottomSheet> {
   Widget _buildProfileImagePicker() {
     return Center(
       child: GestureDetector(
-        onTap: () => _pickImage(ImageType.profile),
+        onTap: () {
+          ManageVibration.vibrate();
+          _pickImage(ImageType.profile);
+        },
         child: Stack(
           children: [
             Container(

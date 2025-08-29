@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_style_video_player.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -226,7 +227,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                   ),
                   IconButton(
                     icon: Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
@@ -317,7 +321,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                   ),
                   IconButton(
                     icon: Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
@@ -379,6 +386,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
+                                      ManageVibration.vibrate();
                                       setState(() {
                                         comment['isLiked'] =
                                             !comment['isLiked'];
@@ -420,6 +428,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                                   SizedBox(width: 16),
                                   GestureDetector(
                                     onTap: () {
+                                      ManageVibration.vibrate();
                                       _showReplyModal(index);
                                     },
                                     child: Icon(
@@ -439,78 +448,6 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                 },
               ),
             ),
-            // // Add comment section
-            // Container(
-            //   padding: const EdgeInsets.all(16),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     border: Border.all(color: Color(0xff000000)),
-            //     borderRadius: BorderRadius.only(
-            //       topRight: Radius.circular(16),
-            //       topLeft: Radius.circular(16),
-            //     ),
-            //   ),
-            //   child: SafeArea(
-            //     child: Row(
-            //       children: [
-            //         Container(
-            //           width: 32,
-            //           height: 32,
-            //           decoration: BoxDecoration(
-            //             color: Colors.grey[300],
-            //             shape: BoxShape.circle,
-            //           ),
-            //           child: const Icon(Icons.person,
-            //               size: 18, color: Colors.grey),
-            //         ),
-            //         const SizedBox(width: 12),
-            //         Expanded(
-            //           child: TextField(
-            //             controller: _commentController,
-            //             decoration: InputDecoration(
-            //               hintText: 'Reminds me of...',
-            //               hintStyle: TextStyle(color: Colors.grey[500]),
-            //               border: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(10.0),
-            //                 borderSide: const BorderSide(
-            //                     color: AppColors.LIGHT_GRAY_COLOR),
-            //               ),
-            //               enabledBorder: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(10.0),
-            //                 borderSide: const BorderSide(
-            //                     color: AppColors.LIGHT_GRAY_COLOR),
-            //               ),
-            //               errorBorder: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(10.0),
-            //                 borderSide: const BorderSide(
-            //                     color: AppColors.LIGHT_GRAY_COLOR),
-            //               ),
-            //               focusedBorder: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(10.0),
-            //                 borderSide: const BorderSide(
-            //                     color: AppColors.LIGHT_GRAY_COLOR),
-            //               ),
-            //             ),
-            //             onSubmitted: (value) {
-            //               _addComment(value);
-            //             },
-            //           ),
-            //         ),
-            //         IconButton(
-            //           icon: Icon(
-            //             Icons.send,
-            //             color: _commentController.text.isNotEmpty
-            //                 ? Colors.blue
-            //                 : Colors.grey[400],
-            //           ),
-            //           onPressed: () {
-            //             _addComment(_commentController.text);
-            //           },
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -519,7 +456,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
 
   // Add this method to _VideoDetailsViewState class
   void _showReplyModal(int commentIndex) {
-    final TextEditingController _replyController = TextEditingController();
+    final TextEditingController replyController = TextEditingController();
     final comment = _comments[commentIndex];
 
     showModalBottomSheet(
@@ -573,7 +510,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                         ),
                         IconButton(
                           icon: Icon(Icons.close),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            Navigator.pop(context);
+                          },
                         ),
                       ],
                     ),
@@ -658,7 +598,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: TextField(
-                          controller: _replyController,
+                          controller: replyController,
                           autofocus: true, // Auto focus when modal opens
                           decoration: InputDecoration(
                             hintText: 'Write a reply...',
@@ -687,7 +627,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                           onSubmitted: (value) {
                             if (value.trim().isNotEmpty) {
                               _addReply(commentIndex, value.trim());
-                              _replyController.clear();
+                              replyController.clear();
                               Navigator.pop(context);
                             }
                           },
@@ -699,10 +639,11 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                           color: Colors.blue,
                         ),
                         onPressed: () {
-                          if (_replyController.text.trim().isNotEmpty) {
+                          ManageVibration.vibrate();
+                          if (replyController.text.trim().isNotEmpty) {
                             _addReply(
-                                commentIndex, _replyController.text.trim());
-                            _replyController.clear();
+                                commentIndex, replyController.text.trim());
+                            replyController.clear();
                             Navigator.pop(context);
                           }
                         },
@@ -745,7 +686,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
           content: Text('Are you sure about deleting the Talent'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                ManageVibration.vibrate();
+                Navigator.pop(context);
+              },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.grey[200],
                 foregroundColor: Colors.black,
@@ -758,6 +702,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
             ),
             TextButton(
               onPressed: () {
+                ManageVibration.vibrate();
                 Navigator.pop(context); // Close dialog
                 _handleBack(); // Use the back handler instead of Navigator.pop
                 // Add your delete logic here
@@ -802,7 +747,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
               children: [
                 IconButton(
                   icon: Icon(Icons.arrow_back, color: Colors.black),
-                  onPressed: _handleBack,
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    _handleBack();
+                  },
                 ),
                 Text(
                   context.isArabic ? 'الملف الشخصي' : 'My Talent',
@@ -838,6 +786,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
               // Video player
               GestureDetector(
                 onTap: () {
+                  ManageVibration.vibrate();
                   setState(() {
                     // Show/hide controls or toggle play/pause
                   });
@@ -870,7 +819,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                       // Controls overlay
                       Positioned.fill(
                         child: GestureDetector(
-                          onTap: _togglePlayPause,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _togglePlayPause();
+                          },
                           child: Container(
                             color: Colors.transparent,
                             child: Center(
@@ -893,7 +845,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                         top: 16,
                         right: 16,
                         child: GestureDetector(
-                          onTap: _toggleMute,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _toggleMute();
+                          },
                           child: Container(
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
@@ -1010,17 +965,26 @@ class _VideoDetailsViewState extends State<VideoDetailsView> {
                           icon: Icons.visibility,
                           label:
                               '${widget.talent.totalViews} ${context.isArabic ? 'مشاهدات' : 'views'}',
-                          onTap: _showViewersModal,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _showViewersModal();
+                          },
                         ),
                         _buildActionButton(
                           icon: Icons.comment,
                           label: context.isArabic ? 'تعليقات' : 'Comments',
-                          onTap: _showCommentsModal,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _showCommentsModal();
+                          },
                         ),
                         _buildActionButton(
                           icon: Icons.delete,
                           label: context.isArabic ? 'حذف' : 'Delete',
-                          onTap: _handleDelete,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _handleDelete();
+                          },
                           isDestructive: true,
                         ),
                       ],

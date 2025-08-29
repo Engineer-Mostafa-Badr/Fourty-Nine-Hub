@@ -35,7 +35,10 @@ class BeStarAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: GestureDetector(
-            onTap: () => _navigateToWinners(context),
+            onTap: () {
+              ManageVibration.vibrate();
+              _navigateToWinners(context);
+            },
             child: Row(
               children: [
                 Text(

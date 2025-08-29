@@ -1,5 +1,6 @@
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entity/banner_talent_entity.dart';
+import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/star_winner_entity.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -34,6 +35,9 @@ class StarState {
   final String searchQuery;
   final List<StarEntity> searchResults;
 
+  final List<ProfileEntity> searchProfileResults;
+  final bool isSearchingProfiles;
+
   StarState({
     this.status = StarStates.initial,
     this.failure,
@@ -47,7 +51,10 @@ class StarState {
     Set<String>? favoriteIds,
     this.searchQuery = '',
     List<StarEntity>? searchResults,
+    List<ProfileEntity>? searchProfileResults,
+    this.isSearchingProfiles = false,
   }) : 
+    searchProfileResults = searchProfileResults ?? [],
     talents = talents ?? {
       TalentCategory.available: [],
       TalentCategory.favorites: [],
@@ -99,6 +106,8 @@ class StarState {
     Set<String>? favoriteIds,
     String? searchQuery,
     List<StarEntity>? searchResults,
+    List<ProfileEntity>? searchProfileResults,
+    bool? isSearchingProfiles,
   }) {
     return StarState(
       status: status ?? this.status,
@@ -113,6 +122,9 @@ class StarState {
       favoriteIds: favoriteIds ?? this.favoriteIds,
       searchQuery: searchQuery ?? this.searchQuery,
       searchResults: searchResults ?? this.searchResults,
+      searchProfileResults: searchProfileResults ?? this.searchProfileResults,
+      isSearchingProfiles: isSearchingProfiles ?? this.isSearchingProfiles,
     );
   }
+  
 }
