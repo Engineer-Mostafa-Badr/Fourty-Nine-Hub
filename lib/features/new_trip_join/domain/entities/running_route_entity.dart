@@ -12,6 +12,7 @@ class RunningRouteEntity{
   String? driverProfilePicUrl;
   String? carPicturesUrl;
   String? plateInfo;
+  String? waitingTime;
   bool? isAccountVerified;
   String? vehicleBrandAr;
   String? vehicleBrandEn;
@@ -22,7 +23,7 @@ class RunningRouteEntity{
   num? vehicleYear;
   String? phoneNumber;
 
-  RunningRouteEntity({this.yourStatus,this.currentPolyline,this.driverLastName,phoneNumber,this.isAccountVerified,this.plateInfo,this.vehicleColorAr,this.vehicleColorEn,this.vehicleYear,this.carPicturesUrl,this.otp,this.youPay,this.pickUp,this.dropOff,this.driverFirstName,this.driverProfilePicUrl,this.vehicleBrandAr,this.vehicleBrandEn,this.vehicleModelAr,this.vehicleModelEn});
+  RunningRouteEntity({this.yourStatus,this.currentPolyline,this.waitingTime,this.driverLastName,phoneNumber,this.isAccountVerified,this.plateInfo,this.vehicleColorAr,this.vehicleColorEn,this.vehicleYear,this.carPicturesUrl,this.otp,this.youPay,this.pickUp,this.dropOff,this.driverFirstName,this.driverProfilePicUrl,this.vehicleBrandAr,this.vehicleBrandEn,this.vehicleModelAr,this.vehicleModelEn});
 
 }
 

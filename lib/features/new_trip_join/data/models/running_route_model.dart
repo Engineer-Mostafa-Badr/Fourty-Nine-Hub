@@ -12,6 +12,7 @@ class RunningRouteModel extends RunningRouteEntity{
         super.phoneNumber,
         super.driverLastName,
         super.vehicleColorAr,
+        super.waitingTime,
         super.vehicleColorEn,
         super.vehicleYear,
         super.otp,super.youPay,super.pickUp,super.dropOff,super.driverFirstName,super.driverProfilePicUrl,super.vehicleBrandAr,super.vehicleBrandEn,super.vehicleModelAr,super.vehicleModelEn});
@@ -38,6 +39,7 @@ class RunningRouteModel extends RunningRouteEntity{
     return RunningRouteModel(
       yourStatus: json['yourStatus'] ?? '',
       youPay: json['youPay'] ?? '',
+      waitingTime: json['waitingTime'] ?? '',
       otp: json['otp'] ?? '',
       pickUp: json['location']!=null?MyBookingLocationModel.fromJson(json['location']['pickUp']):null,
       dropOff: json['location']!=null?MyBookingLocationModel.fromJson(json['location']['dropOff']):null,

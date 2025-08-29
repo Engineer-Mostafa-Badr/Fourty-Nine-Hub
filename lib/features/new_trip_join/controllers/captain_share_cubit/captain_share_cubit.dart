@@ -124,7 +124,11 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   listenToDriverArrived() {
     CliLogger.info('listenToDriverArrived');
     listenToDriverArrivedUseCase((data) {
-      emit(state.copyWith(status: CaptainShareStates.success));
+      RunningRouteEntity? runningRoute = state.runningRoute;
+      if (runningRoute != null) {
+        runningRoute.waitingTime = data;
+      }
+      emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
     });
   }
 
@@ -145,6 +149,11 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   listenToDriverNoShowClient() {
     CliLogger.info('listenToDriverNoShowClient');
     listenToDriverNoShowClientUseCase((data) {
+      RunningRouteEntity? runningRoute = state.runningRoute;
+      if (runningRoute != null) {
+        runningRoute.waitingTime = data;
+      }
+      emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }

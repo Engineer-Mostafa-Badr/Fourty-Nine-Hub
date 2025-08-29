@@ -14,7 +14,7 @@ class WebSocketService : Service() {
    // private var authToken: String? = null
 
     // Socket.IO URL (update this based on your server configuration)
-   // private val socketUrl = "https://c2d1142831e7.ngrok-free.app" // Secure Socket.IO (HTTPS)
+   // private val socketUrl = "https://49backend.com" // Secure Socket.IO (HTTPS)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
       //  val newToken = intent?.getStringExtra("TOKEN")
