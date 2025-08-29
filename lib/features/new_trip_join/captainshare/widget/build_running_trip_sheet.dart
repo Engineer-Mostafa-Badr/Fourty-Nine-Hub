@@ -2,10 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/service/bottom_sheet_helper.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_home.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_count_down_timer.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -32,7 +41,7 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
     return DraggableScrollableSheet(
       initialChildSize: 0.5,
       minChildSize: 0.2,
-      maxChildSize: 0.5,
+      maxChildSize: 0.8,
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -70,46 +79,139 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                   ),
                   Row(
                     children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            ImageFromInternet(
-                              image: widget.model.driverProfilePicUrl??'',
-                              height: 40,
-                              width: 40,
-                              fit: BoxFit.cover,
-                              isCircle: true,
-                              border: Border.all(color: AppColors.GRAY_LIGHT_COLOR3),
-                              firstChar: (widget.model.driverFirstName??'')[0].toUpperCase(),
+                      Expanded(child: Text(
+                          '${context.isArabic?widget.model.vehicleBrandAr:widget.model.vehicleBrandEn} ${context.isArabic?widget.model.vehicleModelAr:widget.model.vehicleModelEn}'
+                      )),
+                      Column(
+                        children: [
+                          ImageFromInternet(image: widget.model.carPicturesUrl??'',defaultLogo: true,width: 80,height: 34,borderRadius: BorderRadius.circular(12),),
+                          SizedBox(height: 4),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode
+                                  ? AppColors.GREY_DARK_COLOR
+                                  : AppColors.GREY_NORMAL_COLOR
+                                  .withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            SizedBox(
-                              width: 10,
+                            child:  Text(
+                                '${widget.model.plateInfo}'
                             ),
-                            Expanded(
-                              child: Text(
-                                widget.model.driverFirstName??'',
-                                style: const TextStyle(
-                                  fontSize: FontSize.s16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.black,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: context.isDarkMode
+                              ? AppColors.GREY_DARK_COLOR
+                              : AppColors.GREY_NORMAL_COLOR
+                              .withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+
+                              BuildCountDownTimer(
+                              ),
+                              const SizedBox(height: 16),
+                              GestureDetector(
+                                onTap: () async {
+                                  ManageVibration.vibrate();
+
+                                },
+                                child: Container(
+                                  width:
+                                  MediaQuery.of(context).size.width *
+                                      0.6,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.PRIMARY_COLOR,
+                                    borderRadius:
+                                    BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        context.isArabic
+                                            ? "حسنا، أنا قادم"
+                                            : "Ok, I'm coming",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                        )),
+                  ),
+                  ActionButtonsWidget(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    driverImageUrl: widget.model.driverProfilePicUrl??'',
+                    driverRating: (0).toDouble(),
+                    driverName: widget.model.driverFirstName ?? '',
+                    onSafety: (){},
+                    is_show_message: true,
+                    onMessage: () async {
+                      ManageVibration.vibrate();
+                      // BottomSheetHelper.startChatAndNavigate(
+                      //   context: context,
+                      //   otherUserId: 'widget.activeTrip?.clientId??''',
+                      //   categoryId: 'widget.activeTrip?.subCategoryId??''',
+                      // );
+                    },
+                    onContactDriver: () {
+                      ManageVibration.vibrate();
+                      // BottomSheetHelper.showCallOptionsBottomSheet(
+                      //     context: context,
+                      //     senderId: widget.activeTrip?.driverId ?? '',
+                      //     senderFirstName: UserCubit.to.state.data?.firstName ?? '',
+                      //     senderLastName: UserCubit.to.state.data?.lastName ?? '',
+                      //     receiverId: widget.activeTrip?.clientId ?? '',
+                      //     receiverName: widget.activeTrip?.clientName ?? '',
+                      //     phoneNumber: '01145152315'
+                      // );
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      bottomSheet(
+                          context: context,
+                          widget: ReportView(
+                            id: 'state.requestedTrip?.id ?? ""',
+                            categoryId:
+                            'state.requestedTrip?.subCategoryId ?? ""',
+                          ));
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: context.isDarkMode
+                              ? AppColors.GREY_DARK_COLOR
+                              : AppColors.GREY_NORMAL_COLOR
+                              .withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(16),
+                          border:
+                          Border.all(color: AppColors.PRIMARY_COLOR),
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        context.isArabic?widget.model.vehicleBrandAr??'':widget.model.vehicleBrandEn??'',
-                        style: const TextStyle(
-                          fontSize: FontSize.s16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Center(
+                              child: Text(context.isArabic
+                                  ? "الابلاغ عن السائق"
+                                  : "Report Driver")),
+                        )),
                   ),
 
                   SizedBox(
@@ -148,6 +250,15 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  LocationInfoWidget(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    hasTitle: true,
+                    from: widget.model.pickUp?.address??'',
+                    to: widget.model.dropOff?.address??'',
                   ),
                   SizedBox(
                     height: 20.h,
@@ -199,26 +310,35 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                     },
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 5,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 45,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: AppColors.PRIMARY_COLOR,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColors.PRIMARY_COLOR)
-                    ),
-                    child: Text(
-                      context.isArabic ? "افتح خرائط جوجل" : "Open Google Map",
-                      style: const TextStyle(
-                        fontSize: FontSize.s16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.whiteColor,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        Assets.emergencyIcon,
+                        color: Colors.red,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.cover,
                       ),
-                    ),
-                  ),
+                      const SizedBox(width: 16),
+                      Text(
+                        context.isArabic ? "اتصل بالطوارئ" : "Call Emergency",
+                        style: TextStyle(
+                          color: Colors.red.shade600,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.red.shade600,
+                        size: 16,
+                      ),
+                    ],
+                  )
                   // const SizedBox(
                   //   height: 8,
                   // ),

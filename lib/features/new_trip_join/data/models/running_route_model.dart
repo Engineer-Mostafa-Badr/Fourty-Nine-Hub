@@ -10,7 +10,9 @@ class RunningRouteModel extends RunningRouteEntity{
         super.plateInfo,
         super.isAccountVerified,
         super.phoneNumber,
-        super.vehicleColor,
+        super.driverLastName,
+        super.vehicleColorAr,
+        super.vehicleColorEn,
         super.vehicleYear,
         super.otp,super.youPay,super.pickUp,super.dropOff,super.driverFirstName,super.driverProfilePicUrl,super.vehicleBrandAr,super.vehicleBrandEn,super.vehicleModelAr,super.vehicleModelEn});
 
@@ -41,17 +43,19 @@ class RunningRouteModel extends RunningRouteEntity{
       dropOff: json['location']!=null?MyBookingLocationModel.fromJson(json['location']['dropOff']):null,
       currentPolyline: parsedPolyline,
       driverFirstName: json['driverDetails']!=null?json['driverDetails']['firstName']??'':'',
+      driverLastName: json['driverDetails']!=null?json['driverDetails']['lastName']??'':'',
       driverProfilePicUrl: json['driverDetails']!=null?json['driverDetails']['profilePicUrl']??'':'',
       carPicturesUrl: json['driverDetails']!=null?json['driverDetails']['carPicturesUrl']??'':'',
       plateInfo: json['driverDetails']!=null?json['driverDetails']['plateInfo']??'':'',
-      isAccountVerified: json['driverDetails']!=null?json['driverDetails']['isAccountVerified']??'':'',
+      isAccountVerified: json['driverDetails']!=null?json['driverDetails']['isAccountVerified']??false:false,
       phoneNumber: json['driverDetails']!=null?json['driverDetails']['phoneNumber']??'':'',
       vehicleBrandAr: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['brandAr']??'':'':'',
       vehicleBrandEn: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['brandEn']??'':'':'',
       vehicleModelAr: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['modelAr']??'':'':'',
       vehicleModelEn: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['modelEn']??'':'':'',
-      vehicleYear: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['year']??'':'':'',
-      vehicleColor: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['color']??'':'':'',
+      vehicleYear: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['year']??0:0:0,
+      vehicleColorAr: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['color']['nameAr']??'':'':'',
+      vehicleColorEn: json['driverDetails']!=null?json['driverDetails']['vehicle']!=null?json['driverDetails']['vehicle']['color']['nameEn']??'':'':'',
     );
   }
 

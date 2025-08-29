@@ -164,6 +164,8 @@ class _OneWayWidgetState extends State<OneWayWidget> {
         return context.isArabic ? 'ممتلئ' : 'Full';
       case 'completed':
         return context.isArabic ? 'مكتمل' : 'Completed';
+      case 'running':
+        return context.isArabic ? 'جارية' : 'Running';
       case 'done':
         return LocaleKeys.done.localize;
       default:

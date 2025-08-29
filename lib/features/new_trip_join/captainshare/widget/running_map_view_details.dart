@@ -53,8 +53,8 @@ class _RunningMapViewDetailsState extends State<RunningMapViewDetails> {
                     .toList();
                 routePoints = _convertPolylineToLatLng(parsedPolyline);
 
-                LatLng? startLocation = routePoints.first;
-                LatLng? targetLocation = routePoints.last;
+                LatLng? startLocation = routePoints.isNotEmpty?routePoints.first:null;
+                LatLng? targetLocation = routePoints.isNotEmpty?routePoints.last:null;
 
                 return Stack(
                   children: [
@@ -63,7 +63,7 @@ class _RunningMapViewDetailsState extends State<RunningMapViewDetails> {
                       targetLocation: targetLocation,
                       polylinePoints: routePoints,
                     ),
-                    BuildRunningTripSheet(
+                    if(state.runningRoute!=null)BuildRunningTripSheet(
                       model: state.runningRoute!,
                     ),
                   ],

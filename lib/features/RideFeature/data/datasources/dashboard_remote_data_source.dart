@@ -1051,7 +1051,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info(" Driver Arrived :  $data");
         log(" Driver Arrived  data :  $data");
         print(" Driver Arrived  data :  $data");
-        params(data["waitingTime"]);
+        params(data['driverArrival']["time"]??'');
       });
     } catch (e) {
       CliLogger.info("can't listen to driver arrived error $e");
@@ -1099,7 +1099,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info(" Driver No Show Client :  $data");
         log(" Driver No Show Client  data :  $data");
         print(" Driver No Show Client  data :  $data");
-        params(data["waitingTime"]);
+        params(data['driverNotShowPassenger']["waitingTime"]??'');
       });
     } catch (e) {
       CliLogger.info("can't listen to driver no show client error $e");

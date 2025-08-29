@@ -8,19 +8,21 @@ class RunningRouteEntity{
   MyBookingLocationEntity? dropOff;
   List<List<double>>? currentPolyline;
   String? driverFirstName;
+  String? driverLastName;
   String? driverProfilePicUrl;
   String? carPicturesUrl;
   String? plateInfo;
-  String? isAccountVerified;
+  bool? isAccountVerified;
   String? vehicleBrandAr;
   String? vehicleBrandEn;
   String? vehicleModelAr;
   String? vehicleModelEn;
-  String? vehicleColor;
-  String? vehicleYear;
+  String? vehicleColorAr;
+  String? vehicleColorEn;
+  num? vehicleYear;
   String? phoneNumber;
 
-  RunningRouteEntity({this.yourStatus,this.currentPolyline,phoneNumber,this.isAccountVerified,this.plateInfo,this.vehicleColor,this.vehicleYear,this.carPicturesUrl,this.otp,this.youPay,this.pickUp,this.dropOff,this.driverFirstName,this.driverProfilePicUrl,this.vehicleBrandAr,this.vehicleBrandEn,this.vehicleModelAr,this.vehicleModelEn});
+  RunningRouteEntity({this.yourStatus,this.currentPolyline,this.driverLastName,phoneNumber,this.isAccountVerified,this.plateInfo,this.vehicleColorAr,this.vehicleColorEn,this.vehicleYear,this.carPicturesUrl,this.otp,this.youPay,this.pickUp,this.dropOff,this.driverFirstName,this.driverProfilePicUrl,this.vehicleBrandAr,this.vehicleBrandEn,this.vehicleModelAr,this.vehicleModelEn});
 
 }
 
