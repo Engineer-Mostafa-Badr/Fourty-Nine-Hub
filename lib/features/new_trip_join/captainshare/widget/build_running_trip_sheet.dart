@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_statu
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_count_down_timer.dart';
+import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
@@ -41,7 +43,7 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
     return DraggableScrollableSheet(
       initialChildSize: 0.5,
       minChildSize: 0.2,
-      maxChildSize: 0.8,
+      maxChildSize:widget.model.yourStatus!='pickedUp'? 0.8:0.7,
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -103,9 +105,10 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                       )
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
+                  if((widget.model.waitingTime?.isNotEmpty??false||widget.model.yourStatus=='driverNoShowPassenger')&&widget.model.yourStatus!='pickedUp')Padding(
+                    padding: const EdgeInsets.only(top: 16,),
                     child: Container(
+                      width: double.infinity,
                         decoration: BoxDecoration(
                           color: context.isDarkMode
                               ? AppColors.GREY_DARK_COLOR
@@ -117,14 +120,14 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                           padding: const EdgeInsets.all(8),
                           child: Column(
                             children: [
-
                               BuildCountDownTimer(
+                                  dateTimeString: widget.model.waitingTime??'',
                               ),
-                              const SizedBox(height: 16),
-                              GestureDetector(
+                              if((widget.model.waitingTime?.isNotEmpty??false)&&widget.model.yourStatus=='driverNoShowPassenger')const SizedBox(height: 16),
+                              if(widget.model.yourStatus=='driverNoShowPassenger')GestureDetector(
                                 onTap: () async {
                                   ManageVibration.vibrate();
-
+                                  context.read<CaptainShareCubit>().iamComing(id: widget.model.routeId??'');
                                 },
                                 child: Container(
                                   width:
@@ -263,7 +266,7 @@ class _BuildRunningTripSheetState extends State<BuildRunningTripSheet> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  PinCodeTextField(
+                  if(widget.model.yourStatus!='pickedUp')PinCodeTextField(
                     // onTap: () => _showOtpBottomSheet(context),
                     // readOnly: true,
                     appContext: context,

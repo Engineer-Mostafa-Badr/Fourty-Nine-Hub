@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 class RunningRouteEntity{
   String? yourStatus;
   String? otp;
+  String? routeId;
   num? youPay;
   MyBookingLocationEntity? pickUp;
   MyBookingLocationEntity? dropOff;
@@ -23,7 +24,7 @@ class RunningRouteEntity{
   num? vehicleYear;
   String? phoneNumber;
 
-  RunningRouteEntity({this.yourStatus,this.currentPolyline,this.waitingTime,this.driverLastName,phoneNumber,this.isAccountVerified,this.plateInfo,this.vehicleColorAr,this.vehicleColorEn,this.vehicleYear,this.carPicturesUrl,this.otp,this.youPay,this.pickUp,this.dropOff,this.driverFirstName,this.driverProfilePicUrl,this.vehicleBrandAr,this.vehicleBrandEn,this.vehicleModelAr,this.vehicleModelEn});
+  RunningRouteEntity({this.routeId,this.yourStatus,this.currentPolyline,this.waitingTime,this.driverLastName,phoneNumber,this.isAccountVerified,this.plateInfo,this.vehicleColorAr,this.vehicleColorEn,this.vehicleYear,this.carPicturesUrl,this.otp,this.youPay,this.pickUp,this.dropOff,this.driverFirstName,this.driverProfilePicUrl,this.vehicleBrandAr,this.vehicleBrandEn,this.vehicleModelAr,this.vehicleModelEn});
 
 }
 

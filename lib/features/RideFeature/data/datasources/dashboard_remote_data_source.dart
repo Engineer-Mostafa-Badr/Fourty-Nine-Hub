@@ -102,6 +102,7 @@ abstract class TripRemoteDataSource {
 
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
   void listenToDriverArrived(Function(String waitingTime) params);
+  void listenToTripAccept(Function(String waitingTime) params);
   void listenToDriverOnTheWay(Function(String message) params);
   void listenToRouteCancelled(Function(String message) params);
   void listenToDriverNoShowClient(Function(String waitingTime) params);
@@ -1052,6 +1053,22 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         log(" Driver Arrived  data :  $data");
         print(" Driver Arrived  data :  $data");
         params(data['driverArrival']["time"]??'');
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to driver arrived error $e");
+    }
+  }
+
+  @override
+  void listenToTripAccept(Function(String waitingTime) params) {
+    try {
+      CliLogger.info("Listen to Trip Accepted");
+      log("Listen to Trip Accepted ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToTripAccept, (data) {
+        CliLogger.info(" Trip Accepted :  $data");
+        log(" Trip Accepted  data :  $data");
+        print(" Trip Accepted  data :  $data");
+        params(data['driverAcceptedTTrip']["yourStatus"]??'');
       });
     } catch (e) {
       CliLogger.info("can't listen to driver arrived error $e");

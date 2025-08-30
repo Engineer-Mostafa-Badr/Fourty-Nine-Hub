@@ -94,6 +94,7 @@ abstract class TripRepository {
    void listenToDriverArrived(Function(String waitingTime) params);
    void listenToRouteCancelled(Function(String message) params);
    void listenToDriverOnTheWay(Function(String message) params);
+   void listenToTripAccept(Function(String message) params);
    void listenToDriverNoShowClient(Function(String waitingTime) params);
    void listenToPassengerPickedUp(Function(String message) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);

@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/list
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_on_the_way_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_passenger_picked_up_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_route_cancelled_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
@@ -70,6 +71,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final ListenToDriverNoShowClientUseCase listenToDriverNoShowClientUseCase;
   final ListenToPassengerPickedUpUseCase listenToPassengerPickedUpUseCase;
   final ListenToDriverOnTheWayUseCase listenToDriverOnTheWayUseCase;
+  final ListenToTripAcceptedUseCase listenToTripAcceptedUseCase;
   final ListenToRouteCancelledUseCase listenToRouteCancelledUseCase;
   final IamComingUseCase iamComingUseCase;
   final GetRunningRouteUseCase getRunningRouteUseCase;
@@ -77,6 +79,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       this.createPricePerSeatUseCase,
       this.listenToDriverOnWayUseCase,
       this.listenToDriverArrivedUseCase,
+      this.listenToTripAcceptedUseCase,
       this.listenToDriverNoShowClientUseCase,
       this.listenToPassengerPickedUpUseCase,
       this.listenToDriverOnTheWayUseCase,
@@ -127,6 +130,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       RunningRouteEntity? runningRoute = state.runningRoute;
       if (runningRoute != null) {
         runningRoute.waitingTime = data;
+        // runningRoute.yourStatus = 'driverNoShowPassenger';
       }
       emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
     });
@@ -152,6 +156,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       RunningRouteEntity? runningRoute = state.runningRoute;
       if (runningRoute != null) {
         runningRoute.waitingTime = data;
+        runningRoute.yourStatus = 'driverNoShowPassenger';
       }
       emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
       emit(state.copyWith(status: CaptainShareStates.success));
@@ -480,9 +485,11 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     response.fold((l) {
       currentContext.pop();
       String errorName = getFailureName(l, currentContext);
-      showSuccessMessage(currentContext, errorName);
+      showErrorMessage(currentContext, errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
+      RunningRouteEntity? runningRoute = state.runningRoute;
+      runningRoute?.waitingTime = data;
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }

@@ -33,6 +33,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -64,6 +65,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final UpdateSocketLocationUseCase updateSocketLocationUseCase;
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
+  final ListenToTripAcceptedUseCase listenToTripAcceptedUseCase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
 
@@ -82,6 +84,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this.getSettingsDashboardUsecase,
     this.listenToNewTripUseCase,
     this.listenToAcceptOfferUseCase,
+    this.listenToTripAcceptedUseCase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory(BuildContext context) async {
@@ -122,6 +125,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     // getWallet();
     getCurrency();
     getSettings(context);
+    listenToRouteAccepted();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -360,6 +364,20 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     }
     return false;
   }
+
+  listenToRouteAccepted() {
+    CliLogger.info('listenToRouteAccepted');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToTripAcceptedUseCase((data) {
+      final currentLocation = GoRouter.of(currentContext).state.path;
+      if ('$currentLocation' == Paths.rideModeScreen) {
+        return;
+      }
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم قبول الرحله بنجاح':'Trip Accepted Successfully');
+      currentContext.push(Routes.RunningMapDetails);
+    });
+  }
+
 
   Future<void> emitDriverLocation(
       {required double lat, required double long}) async {

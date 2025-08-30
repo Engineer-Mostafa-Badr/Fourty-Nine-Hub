@@ -82,6 +82,7 @@ abstract class SocketIOListeners {
   static const String removeLoading = 'LOADING:REMOVE_TRIP';
   static const String newLoadingTrip = 'LOADING:NEW_TRIP';
   static const String listenToDriverArrived = 'CAPTAIN_SHARE:ARRIVED_TO_PICKUP_LOCATION';
+  static const String listenToTripAccept = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
   static const String listenToDriverOnTheWay = 'CAPTAIN_SHARE:DRIVER_ON_THE_WAY';
   static const String listenToRouteCancelled = 'captain-share:canceled-trip';
   static const String listenToDriverNoShowClient = 'CAPTAIN_SHARE:NOT_SHOW_PASSENGER';

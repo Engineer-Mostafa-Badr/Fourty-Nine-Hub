@@ -391,7 +391,7 @@ class CaptainShareRemoteDataSourceImplementation
       return result.fold(
             (failure) => Left(failure),
             (response) {
-          return Right(response['waitingTime']);
+          return Right(response['data']['updatedDriverWaitingTime']);
         },
       );
     } catch (e) {
