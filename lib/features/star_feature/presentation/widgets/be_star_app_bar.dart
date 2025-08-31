@@ -18,6 +18,7 @@ class BeStarAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       scrolledUnderElevation: 0,
       titleSpacing: 0,
+      toolbarHeight: 30,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

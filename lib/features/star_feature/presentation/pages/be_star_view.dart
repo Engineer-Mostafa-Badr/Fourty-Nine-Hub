@@ -45,571 +45,6 @@ import 'all_winner_view.dart';
 import '../widgets/floating_action_button_star.dart';
 import '../widgets/sticky_tab_bar_delegate.dart';
 
-// class BeStarView extends StatefulWidget {
-//   const BeStarView({super.key});
-
-//   @override
-//   _BeStarViewState createState() => _BeStarViewState();
-// }
-
-// class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
-//   late StarCubit _cubit;
-//   late TabController _tabController;
-//   bool _showFloatingButton = true;
-//   final AdsManager _adsManager = AdsManager();
-//   int _selectedTabIndex = 0;
-//   bool _isSearching = false;
-//   final TextEditingController _searchController = TextEditingController();
-
-//   // Video details view state for My Talent tab
-//   StarEntity? _selectedVideoTalent;
-//   String? _selectedVideoUrl;
-//   bool _showVideoDetails = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _cubit = context.read<StarCubit>();
-//     _tabController = TabController(length: 4, vsync: this);
-//     _tabController.addListener(_onTabChanged);
-//     _searchController.addListener(_onSearchChanged);
-
-//     // Initialize all data
-//     _cubit.initializeAllData();
-//     _adsManager.preloadAds();
-//   }
-
-//   void _onTabChanged() {
-//     setState(() {
-//       _selectedTabIndex = _tabController.index;
-
-//       // Reset video details view when switching tabs
-//       if (_selectedTabIndex != 3) {
-//         _showVideoDetails = false;
-//         _selectedVideoTalent = null;
-//         _selectedVideoUrl = null;
-//       }
-//     });
-
-//     // Load data for the selected tab if needed
-//     final category = _getTabCategory(_selectedTabIndex);
-//     if (category != null) {
-//       _cubit.loadTalents(category);
-//     }
-//   }
-
-//   TalentCategory? _getTabCategory(int tabIndex) {
-//     switch (tabIndex) {
-//       case 0:
-//         return TalentCategory.available;
-//       case 1:
-//         return TalentCategory.favorites;
-//       case 2:
-//         return TalentCategory.history;
-//       case 3:
-//         return TalentCategory.myTalents;
-//       default:
-//         return null;
-//     }
-//   }
-
-//   void _onSearchChanged() {
-//     _cubit.searchTalents(_searchController.text);
-//   }
-
-//   void _onVideoSelected(StarEntity talent, String mediaUrl) {
-//     setState(() {
-//       _selectedVideoTalent = talent;
-//       _selectedVideoUrl = mediaUrl;
-//       _showVideoDetails = true;
-//     });
-//   }
-
-//   void _onBackFromVideoDetails() {
-//     setState(() {
-//       _showVideoDetails = false;
-//       _selectedVideoTalent = null;
-//       _selectedVideoUrl = null;
-//     });
-//   }
-
-//   void _toggleSearch() {
-//     setState(() {
-//       _isSearching = !_isSearching;
-//       if (!_isSearching) {
-//         _searchController.clear();
-//         _cubit.searchTalents(''); // Clear search results
-//       }
-//     });
-//   }
-
-//   void _onScrollNotification(ScrollNotification scrollInfo) {
-//     if (scrollInfo is UserScrollNotification) {
-//       if (scrollInfo.direction == ScrollDirection.reverse) {
-//         if (_showFloatingButton) {
-//           setState(() {
-//             _showFloatingButton = false;
-//           });
-//         }
-//       } else if (scrollInfo.direction == ScrollDirection.forward) {
-//         if (!_showFloatingButton) {
-//           setState(() {
-//             _showFloatingButton = true;
-//           });
-//         }
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: BeStarAppBar(),
-//       floatingActionButton: BeStarFloatingButton(
-//         showButton: _showFloatingButton,
-//         isLoggedIn: context.read<UserCubit>().isLoggedIn,
-//       ),
-//       body: BlocBuilder<StarCubit, StarState>(
-//         builder: (BuildContext context, state) {
-//           if (state.status == StarStates.loading &&
-//               state.availableTalents.isEmpty) {
-//             return const CustomLoadingSearchWidget();
-//           }
-
-//           return RefreshIndicator(
-//             color: AppColors.getTextColor(context),
-//             backgroundColor: AppColors.getFindFillColor(context),
-//             onRefresh: () async {
-//               final category = _getTabCategory(_selectedTabIndex);
-//               if (category != null) {
-//                 await _cubit.loadTalents(category, refresh: true);
-//               }
-//             },
-//             child: NotificationListener<ScrollNotification>(
-//               onNotification: (scrollInfo) {
-//                 _onScrollNotification(scrollInfo);
-
-//                 // Load more data when reaching end
-//                 if (scrollInfo is ScrollEndNotification &&
-//                     scrollInfo.metrics.pixels >=
-//                         scrollInfo.metrics.maxScrollExtent - 100) {
-//                   final category = _getTabCategory(_selectedTabIndex);
-//                   if (category != null && !_isSearching) {
-//                     _cubit.loadTalents(category);
-//                   }
-//                 }
-//                 return false;
-//               },
-//               child: GlowingOverscrollIndicator(
-//                 axisDirection: AxisDirection.down,
-//                 color: AppColors.SECONDARY_COLOR,
-//                 child: CustomScrollView(
-//                   slivers: [
-//                     // Collapsible Header Section
-//                     SliverAppBar(
-//                       expandedHeight: context.isArabic
-//                           ? MediaQuery.sizeOf(context).height * 0.3759
-//                           : MediaQuery.sizeOf(context).height * 0.375,
-//                       floating: false,
-//                       pinned: false,
-//                       automaticallyImplyLeading: false,
-//                       backgroundColor: Colors.transparent,
-//                       flexibleSpace: FlexibleSpaceBar(
-//                         background: BeStarHeaderSection(state: state),
-//                       ),
-//                     ),
-
-//                     // Sticky Tabs Section
-//                     SliverPersistentHeader(
-//                       pinned: true,
-//                       delegate: StickyTabBarDelegate(
-//                         tabController: _tabController,
-//                         context: context,
-//                         onSearchTap: _toggleSearch,
-//                       ),
-//                     ),
-
-//                     // Search Bar (when searching)
-//                     if (_isSearching)
-//                       BeStarSearchBar(
-//                         controller: _searchController,
-//                       ),
-
-//                     // Tab Content - Using new unified content widget
-//                     BeStarTabContent(
-//                       selectedTabIndex: _selectedTabIndex,
-//                       context: context,
-//                       cubit: _cubit,
-//                       isSearching: _isSearching,
-//                       showVideoDetails: _showVideoDetails,
-//                       selectedVideoTalent: _selectedVideoTalent,
-//                       selectedVideoUrl: _selectedVideoUrl,
-//                       onBackFromVideoDetails: _onBackFromVideoDetails,
-//                       onVideoSelected: _onVideoSelected,
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     _searchController.dispose();
-//     super.dispose();
-//   }
-// }
-//!
-// class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
-//   late StarCubit _cubit;
-//   late TabController _tabController;
-//   bool _showFloatingButton = true;
-//   final AdsManager _adsManager = AdsManager();
-//   int _selectedTabIndex = 0;
-//   bool _isSearching = false;
-//   bool _isSearchingProfiles = false; // Add this
-//   final TextEditingController _searchController = TextEditingController();
-
-//   // Video details view state for My Talent tab
-//   StarEntity? _selectedVideoTalent;
-//   String? _selectedVideoUrl;
-//   bool _showVideoDetails = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _cubit = context.read<StarCubit>();
-//     _tabController = TabController(length: 4, vsync: this);
-//     _tabController.addListener(_onTabChanged);
-//     _searchController.addListener(_onSearchChanged);
-
-//     // Initialize all data
-//     _cubit.initializeAllData();
-//     _adsManager.preloadAds();
-//   }
-
-//   void _onTabChanged() {
-//     setState(() {
-//       _selectedTabIndex = _tabController.index;
-
-//       // Reset video details view when switching tabs
-//       if (_selectedTabIndex != 3) {
-//         _showVideoDetails = false;
-//         _selectedVideoTalent = null;
-//         _selectedVideoUrl = null;
-//       }
-
-//       // Clear search when switching tabs
-//       _isSearching = false;
-//       _isSearchingProfiles = false;
-//       _searchController.clear();
-//       _cubit.searchTalents('');
-//       _cubit.clearProfileSearch();
-//     });
-
-//     // Load data for the selected tab if needed
-//     final category = _getTabCategory(_selectedTabIndex);
-//     if (category != null) {
-//       _cubit.loadTalents(category);
-//     }
-//   }
-
-//   TalentCategory? _getTabCategory(int tabIndex) {
-//     switch (tabIndex) {
-//       case 0:
-//         return TalentCategory.available;
-//       case 1:
-//         return TalentCategory.favorites;
-//       case 2:
-//         return TalentCategory.history;
-//       case 3:
-//         return TalentCategory.myTalents;
-//       default:
-//         return null;
-//     }
-//   }
-
-//   void _onSearchChanged() {
-//     if (!_isSearchingProfiles) {
-//       _cubit.searchTalents(_searchController.text);
-//     }
-//   }
-
-//   void _onTalentSearch(String query) {
-//     setState(() {
-//       _isSearchingProfiles = false;
-//     });
-//     _cubit.searchTalents(query);
-//     _cubit.clearProfileSearch();
-//   }
-
-//   void _onProfileSearch(String query) {
-//     setState(() {
-//       _isSearchingProfiles = true;
-//     });
-//     _cubit.searchProfiles(query);
-//   }
-
-//   void _onVideoSelected(StarEntity talent, String mediaUrl) {
-//     setState(() {
-//       _selectedVideoTalent = talent;
-//       _selectedVideoUrl = mediaUrl;
-//       _showVideoDetails = true;
-//     });
-//   }
-
-//   void _onBackFromVideoDetails() {
-//     setState(() {
-//       _showVideoDetails = false;
-//       _selectedVideoTalent = null;
-//       _selectedVideoUrl = null;
-//     });
-//   }
-
-//   void _toggleSearch() {
-//     setState(() {
-//       _isSearching = !_isSearching;
-//       if (!_isSearching) {
-//         _isSearchingProfiles = false;
-//         _searchController.clear();
-//         _cubit.searchTalents(''); // Clear talent search results
-//         _cubit.clearProfileSearch(); // Clear profile search results
-//       }
-//     });
-//   }
-
-//   void _onScrollNotification(ScrollNotification scrollInfo) {
-//     if (scrollInfo is UserScrollNotification) {
-//       if (scrollInfo.direction == ScrollDirection.reverse) {
-//         if (_showFloatingButton) {
-//           setState(() {
-//             _showFloatingButton = false;
-//           });
-//         }
-//       } else if (scrollInfo.direction == ScrollDirection.forward) {
-//         if (!_showFloatingButton) {
-//           setState(() {
-//             _showFloatingButton = true;
-//           });
-//         }
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: BeStarAppBar(),
-//       floatingActionButton: BeStarFloatingButton(
-//         showButton: _showFloatingButton,
-//         isLoggedIn: context.read<UserCubit>().isLoggedIn,
-//       ),
-//       body: BlocBuilder<StarCubit, StarState>(
-//         builder: (BuildContext context, state) {
-//           if (state.status == StarStates.loading &&
-//               state.availableTalents.isEmpty) {
-//             return const CustomLoadingSearchWidget();
-//           }
-
-//           return RefreshIndicator(
-//             color: AppColors.getTextColor(context),
-//             backgroundColor: AppColors.getFindFillColor(context),
-//             onRefresh: () async {
-//               if (_isSearching) {
-//                 // If searching, refresh the search results
-//                 if (_isSearchingProfiles) {
-//                   _cubit.searchProfiles(_searchController.text);
-//                 } else {
-//                   _cubit.searchTalents(_searchController.text);
-//                 }
-//               } else {
-//                 // Otherwise refresh the current tab data
-//                 final category = _getTabCategory(_selectedTabIndex);
-//                 if (category != null) {
-//                   await _cubit.loadTalents(category, refresh: true);
-//                 }
-//               }
-//             },
-//             child: NotificationListener<ScrollNotification>(
-//               onNotification: (scrollInfo) {
-//                 _onScrollNotification(scrollInfo);
-
-//                 // Load more data when reaching end
-//                 if (scrollInfo is ScrollEndNotification &&
-//                     scrollInfo.metrics.pixels >=
-//                         scrollInfo.metrics.maxScrollExtent - 100) {
-//                   final category = _getTabCategory(_selectedTabIndex);
-//                   if (category != null && !_isSearching) {
-//                     _cubit.loadTalents(category);
-//                   }
-//                 }
-//                 return false;
-//               },
-//               child: GlowingOverscrollIndicator(
-//                 axisDirection: AxisDirection.down,
-//                 color: AppColors.SECONDARY_COLOR,
-//                 child: CustomScrollView(
-//                   slivers: [
-//                     // Collapsible Header Section (hide when searching)
-//                     if (!_isSearching)
-//                       SliverAppBar(
-//                         expandedHeight: context.isArabic
-//                             ? MediaQuery.sizeOf(context).height * 0.3759
-//                             : MediaQuery.sizeOf(context).height * 0.375,
-//                         floating: false,
-//                         pinned: false,
-//                         automaticallyImplyLeading: false,
-//                         backgroundColor: Colors.transparent,
-//                         flexibleSpace: FlexibleSpaceBar(
-//                           background: BeStarHeaderSection(state: state),
-//                         ),
-//                       ),
-
-//                     // Sticky Tabs Section (hide when searching)
-//                     if (!_isSearching)
-//                       SliverPersistentHeader(
-//                         pinned: true,
-//                         delegate: StickyTabBarDelegate(
-//                           tabController: _tabController,
-//                           context: context,
-//                           onSearchTap: _toggleSearch,
-//                         ),
-//                       ),
-
-//                     // Search Bar (when searching)
-//                     if (_isSearching)
-//                       BeStarSearchBar(
-//                         controller: _searchController,
-//                         onTalentSearch: _onTalentSearch,
-//                         onProfileSearch: _onProfileSearch,
-//                         showProfileSearch: true,
-//                       ),
-
-//                     // Content based on search state
-//                     if (_isSearching && _isSearchingProfiles)
-//                       // Profile search results
-//                       ProfileSearchResults(
-//                         profiles: state.searchProfileResults,
-//                         isLoading: state.isSearchingProfiles,
-//                       )
-//                     else if (_isSearching && !_isSearchingProfiles)
-//                       // Talent search results
-//                       _buildTalentSearchResults(state)
-//                     else
-//                       // Regular tab content
-//                       BeStarTabContent(
-//                         selectedTabIndex: _selectedTabIndex,
-//                         context: context,
-//                         cubit: _cubit,
-//                         isSearching: false,
-//                         showVideoDetails: _showVideoDetails,
-//                         selectedVideoTalent: _selectedVideoTalent,
-//                         selectedVideoUrl: _selectedVideoUrl,
-//                         onBackFromVideoDetails: _onBackFromVideoDetails,
-//                         onVideoSelected: _onVideoSelected,
-                        
-//                       ),
-
-//                     // Back to tabs button when searching
-//                     if (_isSearching)
-//                       SliverToBoxAdapter(
-//                         child: Container(
-//                           padding: EdgeInsets.all(
-//                               MediaQuery.of(context).size.width * 0.04),
-//                           child: ElevatedButton(
-//                             onPressed: _toggleSearch,
-//                             style: ElevatedButton.styleFrom(
-//                               backgroundColor: AppColors.PRIMARY_COLOR,
-//                               foregroundColor: Colors.white,
-//                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(
-//                                   MediaQuery.of(context).size.width * 0.063,
-//                                 ),
-//                               ),
-//                             ),
-//                             child: Text(
-//                               context.isArabic
-//                                   ? 'العودة للتبويبات'
-//                                   : 'Back to Tabs',
-//                               style: TextStyle(
-//                                 fontSize:
-//                                     MediaQuery.of(context).size.width * 0.04,
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   Widget _buildTalentSearchResults(StarState state) {
-//     if (state.searchResults.isEmpty && _searchController.text.isNotEmpty) {
-//       return SliverToBoxAdapter(
-//         child: Center(
-//           child: Padding(
-//             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-//             child: Column(
-//               children: [
-//                 Icon(
-//                   Icons.search_off,
-//                   size: MediaQuery.of(context).size.width * 0.15,
-//                   color: Colors.grey,
-//                 ),
-//                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-//                 Text(
-//                   context.isArabic
-//                       ? 'لا توجد مواهب تطابق بحثك'
-//                       : 'No talents match your search',
-//                   style: TextStyle(
-//                     fontSize: MediaQuery.of(context).size.width * 0.04,
-//                     color: Colors.grey,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       );
-//     }
-
-//     return SliverList(
-//       delegate: SliverChildBuilderDelegate(
-//         (context, index) {
-//           final talent = state.searchResults[index];
-//           // Use TalentCard._buildTalentCard instead of TalentCardWidget
-//           return TalentCard.buildTalentCard(
-//             context,
-//             talent,
-//             _cubit,
-//           );
-//         },
-//         childCount: state.searchResults.length,
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     _searchController.dispose();
-//     super.dispose();
-//   }
-// }
-
-//!!
-
 class BeStarView extends StatefulWidget {
   const BeStarView({super.key});
 
@@ -626,7 +61,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   bool _isSearching = false;
   bool _isSearchingProfiles = false;
   final TextEditingController _searchController = TextEditingController();
-  
+
   // Video details view state for My Talent tab
   StarEntity? _selectedVideoTalent;
   String? _selectedVideoUrl;
@@ -634,13 +69,13 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
   // Main scroll controller for the outer CustomScrollView
   final ScrollController _mainScrollController = ScrollController();
-  
+
   // Individual controllers for each tab content
   final ScrollController _availableController = ScrollController();
   final ScrollController _favoriteController = ScrollController();
   final ScrollController _historyController = ScrollController();
   final ScrollController _myTalentController = ScrollController();
-  
+
   bool _isSyncing = false;
 
   @override
@@ -650,11 +85,11 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_onTabChanged);
     _searchController.addListener(_onSearchChanged);
-    
+
     // Initialize all data
     _cubit.initializeAllData();
     _adsManager.preloadAds();
-    
+
     // Setup scroll synchronization
     _setupScrollSynchronization();
   }
@@ -662,7 +97,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   void _setupScrollSynchronization() {
     // Sync main controller with active tab controller
     _mainScrollController.addListener(() => _syncFromMain());
-    
+
     // Sync tab controllers with main controller
     _availableController.addListener(() => _syncToMain(_availableController));
     _favoriteController.addListener(() => _syncToMain(_favoriteController));
@@ -670,34 +105,63 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _myTalentController.addListener(() => _syncToMain(_myTalentController));
   }
 
+  // void _syncFromMain() {
+  //   if (_isSyncing) return;
+  //   _isSyncing = true;
+
+  //   final activeController = _getActiveTabController();
+  //   if (activeController != null && activeController.hasClients) {
+  //     activeController.jumpTo(_mainScrollController.offset.clamp(
+  //       activeController.position.minScrollExtent,
+  //       activeController.position.maxScrollExtent,
+  //     ));
+  //   }
+
+  //   _isSyncing = false;
+  // }
+
+  // void _syncToMain(ScrollController tabController) {
+  //   if (_isSyncing) return;
+  //   if (tabController != _getActiveTabController()) return;
+
+  //   _isSyncing = true;
+
+  //   if (_mainScrollController.hasClients) {
+  //     _mainScrollController.jumpTo(tabController.offset.clamp(
+  //       _mainScrollController.position.minScrollExtent,
+  //       _mainScrollController.position.maxScrollExtent,
+  //     ));
+  //   }
+
+  //   _isSyncing = false;
+  // }
+
   void _syncFromMain() {
-    if (_isSyncing) return;
+    if (_isSyncing || !mounted) return; // Add mounted check
     _isSyncing = true;
-    
     final activeController = _getActiveTabController();
-    if (activeController != null && activeController.hasClients) {
+    if (activeController != null &&
+        activeController.hasClients &&
+        _mainScrollController.hasClients) {
+      // Check both controllers
       activeController.jumpTo(_mainScrollController.offset.clamp(
         activeController.position.minScrollExtent,
         activeController.position.maxScrollExtent,
       ));
     }
-    
     _isSyncing = false;
   }
 
   void _syncToMain(ScrollController tabController) {
-    if (_isSyncing) return;
+    if (_isSyncing || !mounted) return; // Add mounted check
     if (tabController != _getActiveTabController()) return;
-    
     _isSyncing = true;
-    
-    if (_mainScrollController.hasClients) {
+    if (_mainScrollController.hasClients && tabController.hasClients) {
       _mainScrollController.jumpTo(tabController.offset.clamp(
         _mainScrollController.position.minScrollExtent,
         _mainScrollController.position.maxScrollExtent,
       ));
     }
-    
     _isSyncing = false;
   }
 
@@ -719,7 +183,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   void _onTabChanged() {
     setState(() {
       _selectedTabIndex = _tabController.index;
-      
+
       // Reset video details view when switching tabs
       if (_selectedTabIndex != 3) {
         _showVideoDetails = false;
@@ -734,7 +198,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
       _cubit.searchTalents('');
       _cubit.clearProfileSearch();
     });
-    
+
     // Load data for the selected tab if needed
     final category = _getTabCategory(_selectedTabIndex);
     if (category != null) {
@@ -806,7 +270,27 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     });
   }
 
+  // void _onScrollNotification(ScrollNotification scrollInfo) {
+  //   if (scrollInfo is UserScrollNotification) {
+  //     if (scrollInfo.direction == ScrollDirection.reverse) {
+  //       if (_showFloatingButton) {
+  //         setState(() {
+  //           _showFloatingButton = false;
+  //         });
+  //       }
+  //     } else if (scrollInfo.direction == ScrollDirection.forward) {
+  //       if (!_showFloatingButton) {
+  //         setState(() {
+  //           _showFloatingButton = true;
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
+
   void _onScrollNotification(ScrollNotification scrollInfo) {
+    if (!mounted) return; // Guard against disposed state
+
     if (scrollInfo is UserScrollNotification) {
       if (scrollInfo.direction == ScrollDirection.reverse) {
         if (_showFloatingButton) {
@@ -871,10 +355,11 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                     if (!_isSearching)
                       SliverAppBar(
                         expandedHeight: context.isArabic
-                            ? MediaQuery.sizeOf(context).height * 0.3759
-                            : MediaQuery.sizeOf(context).height * 0.375,
-                        floating: false,
+                            ? MediaQuery.sizeOf(context).height * 0.32
+                            : MediaQuery.of(context).size.height * 0.36,
+                        floating: true,
                         pinned: false,
+                        snap: true,
                         automaticallyImplyLeading: false,
                         backgroundColor: Colors.transparent,
                         flexibleSpace: FlexibleSpaceBar(
@@ -934,9 +419,12 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                               ),
                             ),
                             child: Text(
-                              context.isArabic ? 'العودة للتبويبات' : 'Back to Tabs',
+                              context.isArabic
+                                  ? 'العودة للتبويبات'
+                                  : 'Back to Tabs',
                               style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width * 0.04,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04,
                               ),
                             ),
                           ),
@@ -970,7 +458,8 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   Widget _buildAvailableContentWithSync(StarState state) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
-        if (state.status == StarStates.loading && state.availableTalents.isEmpty) {
+        if (state.status == StarStates.loading &&
+            state.availableTalents.isEmpty) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -997,7 +486,8 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
             child: OlxPaginationWidget(
               items: List.generate(
                 talentsToShow.length,
-                (index) => TalentCard.buildTalentCard(context, talentsToShow[index], _cubit),
+                (index) => TalentCard.buildTalentCard(
+                    context, talentsToShow[index], _cubit),
               ),
               banners: bannersList,
               loadPage: (page) => _cubit.loadTalents(TalentCategory.available),
@@ -1027,7 +517,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
             child: SizedBox(
               height: 200,
               child: CustomEmptyWidget(
-                label: context.isArabic ? 'لا يوجد فيديوات مفضلة بعد' : 'No favorite videos yet',
+                label: context.isArabic
+                    ? 'لا يوجد فيديوات مفضلة بعد'
+                    : 'No favorite videos yet',
               ),
             ),
           );
@@ -1068,7 +560,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
               height: 200,
               child: Center(
                 child: Text(
-                  context.isArabic ? 'لا يوجد فيديوات في التاريخ' : 'No videos in history',
+                  context.isArabic
+                      ? 'لا يوجد فيديوات في التاريخ'
+                      : 'No videos in history',
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ),
@@ -1085,7 +579,8 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
               itemBuilder: (context, index) {
                 final talent = state.historyTalents[index];
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1161,7 +656,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         }
 
         // Show VideoDetailsView if video is selected
-        if (_showVideoDetails && _selectedVideoTalent != null && _selectedVideoUrl != null) {
+        if (_showVideoDetails &&
+            _selectedVideoTalent != null &&
+            _selectedVideoUrl != null) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: MediaQuery.sizeOf(context).height * 0.75,
@@ -1182,12 +679,15 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
               itemCount: state.myTalents.length,
               itemBuilder: (context, index) {
                 final talent = state.myTalents[index];
-                final mediaUrl = talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
-                
+                final mediaUrl = talent.mediaUrl.isNotEmpty
+                    ? talent.mediaUrl.first.mediaKey
+                    : '';
+
                 return GestureDetector(
                   onTap: () => _onVideoSelected(talent, mediaUrl),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1253,7 +753,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 Text(
-                  context.isArabic ? 'لا توجد مواهب تطابق بحثك' : 'No talents match your search',
+                  context.isArabic
+                      ? 'لا توجد مواهب تطابق بحثك'
+                      : 'No talents match your search',
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.width * 0.04,
                     color: Colors.grey,
@@ -1279,6 +781,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    // Remove listeners first
+    _tabController.removeListener(_onTabChanged);
+    _searchController.removeListener(_onSearchChanged);
+    _mainScrollController.removeListener(() => _syncFromMain());
+    _availableController
+        .removeListener(() => _syncToMain(_availableController));
+    _favoriteController.removeListener(() => _syncToMain(_favoriteController));
+    _historyController.removeListener(() => _syncToMain(_historyController));
+    _myTalentController.removeListener(() => _syncToMain(_myTalentController));
+
+    // Then dispose controllers
     _tabController.dispose();
     _searchController.dispose();
     _mainScrollController.dispose();
@@ -1286,6 +799,33 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _favoriteController.dispose();
     _historyController.dispose();
     _myTalentController.dispose();
+
     super.dispose();
+  }
+}
+
+class SearchBarDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+
+  SearchBarDelegate({required this.child});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: context.isDarkMode ? Colors.black : Colors.white,
+      child: child,
+    );
+  }
+
+  @override
+  double get maxExtent => 80.0; // Adjust based on your search bar height
+
+  @override
+  double get minExtent => 80.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

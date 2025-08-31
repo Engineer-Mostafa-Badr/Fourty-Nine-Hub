@@ -29,6 +29,7 @@ import '../helper/talent_video_player.dart';
 
 class TalentCard {
   // Available content (main feed)
+
   static Widget buildAvailableContentSliver({
     required BuildContext context,
     required StarCubit cubit,
@@ -343,6 +344,155 @@ class TalentCard {
     );
   }
 
+  // static Widget _buildVideoInfoSection(
+  //   BuildContext context,
+  //   StarEntity talent,
+  //   StarCubit cubit,
+  // ) {
+  //   final createdAt = talent.createdAt ?? DateTime.now();
+
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         // Profile Picture
+  //         GestureDetector(
+  //           onTap: () {
+  //             ManageVibration.vibrate();
+  //             _navigateToProfile(context, talent);
+  //           },
+  //           child: CircleAvatar(
+  //             radius: 25,
+  //             backgroundColor: Colors.grey[300],
+  //             backgroundImage: talent.user.image.isNotEmpty
+  //                 ? NetworkImage(talent.user.image)
+  //                 : null,
+  //             child: talent.user.image.isEmpty
+  //                 ? Icon(Icons.person, size: 18, color: Colors.grey[600])
+  //                 : null,
+  //           ),
+  //         ),
+  //         SizedBox(width: 12),
+
+  //         // Title and Info
+  //         Expanded(
+  //           child: GestureDetector(
+  //             onTap: () {
+  //               ManageVibration.vibrate();
+  //               _navigateToProfile(context, talent);
+  //             },
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   talent.title,
+  //                   style: TextStyle(
+  //                     fontSize: 16,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: context.isDarkMode ? Colors.white : Colors.black,
+  //                     height: 1.3,
+  //                   ),
+  //                   maxLines: 2,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //                 SizedBox(height: 4),
+  //                 Text(
+  //                   "${talent.user.firstName} ${talent.user.lastName}",
+  //                   style: TextStyle(
+  //                     fontSize: 13,
+  //                     color: context.isDarkMode
+  //                         ? Colors.grey[400]
+  //                         : Colors.grey[600],
+  //                   ),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //                 SizedBox(height: 2),
+  //                 Row(
+  //                   children: [
+  //                     Icon(
+  //                       Icons.visibility,
+  //                       size: 14,
+  //                       color: context.isDarkMode
+  //                           ? Colors.grey[400]
+  //                           : Colors.grey[600],
+  //                     ),
+  //                     SizedBox(width: 4),
+  //                     Text(
+  //                       "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+  //                       style: TextStyle(
+  //                         fontSize: 13,
+  //                         color: context.isDarkMode
+  //                             ? Colors.grey[400]
+  //                             : Colors.grey[600],
+  //                       ),
+  //                       maxLines: 1,
+  //                       overflow: TextOverflow.ellipsis,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+
+  //         // More Options and Stars
+  //         _buildOptionsAndRating(context, talent, cubit),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // static Widget _buildOptionsAndRating(
+  //   BuildContext context,
+  //   StarEntity talent,
+  //   StarCubit cubit,
+  // ) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.end,
+  //     children: [
+  //       IconButton(
+  //         onPressed: () => showYouTubeOptions(context, talent),
+  //         icon: Icon(
+  //           Icons.more_vert,
+  //           color: context.isDarkMode ? Colors.white : Colors.black,
+  //           size: 25,
+  //         ),
+  //         padding: EdgeInsets.all(4),
+  //         constraints: BoxConstraints(minWidth: 32, minHeight: 32),
+  //       ),
+  //       SizedBox(height: 4),
+  //       Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: List.generate(
+  //           5,
+  //           (starIndex) => GestureDetector(
+  //             onTap: () {
+  //               ManageVibration.vibrate();
+  //               cubit.updateRating(talent.id, starIndex + 1);
+  //             },
+  //             child: Padding(
+  //               padding: EdgeInsets.symmetric(horizontal: 1),
+  //               child: Icon(
+  //                 starIndex < talent.averageRating
+  //                     ? Icons.star
+  //                     : Icons.star_border,
+  //                 color: starIndex < talent.averageRating
+  //                     ? Colors.amber
+  //                     : Colors.grey[400],
+  //                 size: 25,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  // Replace the _buildVideoInfoSection method in your TalentCard class with this:
+
   static Widget _buildVideoInfoSection(
     BuildContext context,
     StarEntity talent,
@@ -374,8 +524,9 @@ class TalentCard {
           ),
           SizedBox(width: 12),
 
-          // Title and Info
+          // Title and Info - Use Expanded with flex
           Expanded(
+            flex: 3, // Give more space to content
             child: GestureDetector(
               onTap: () {
                 ManageVibration.vibrate();
@@ -408,40 +559,55 @@ class TalentCard {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 2),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.visibility,
-                        size: 14,
-                        color: context.isDarkMode
-                            ? Colors.grey[400]
-                            : Colors.grey[600],
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
-                        style: TextStyle(
-                          fontSize: 13,
+                  // Views and time row - constrain this properly
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width *
+                          0.5, // Limit width
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.visibility,
+                          size: 14,
                           color: context.isDarkMode
                               ? Colors.grey[400]
                               : Colors.grey[600],
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                        SizedBox(width: 4),
+                        Flexible(
+                          // Use Flexible here to prevent overflow
+                          child: Text(
+                            "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: context.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
 
-          // More Options and Stars
-          _buildOptionsAndRating(context, talent, cubit),
+          // More Options and Stars - Constrain this section
+          SizedBox(
+            width: 80, // Fixed width to prevent overflow
+            child: _buildOptionsAndRating(context, talent, cubit),
+          ),
         ],
       ),
     );
   }
+
+// Also replace the _buildOptionsAndRating method with this more compact version:
 
   static Widget _buildOptionsAndRating(
     BuildContext context,
@@ -450,20 +616,28 @@ class TalentCard {
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          onPressed: () => showYouTubeOptions(context, talent),
-          icon: Icon(
-            Icons.more_vert,
-            color: context.isDarkMode ? Colors.white : Colors.black,
-            size: 25,
+        // More options button - make it smaller and more constrained
+        SizedBox(
+          width: 28,
+          height: 28,
+          child: IconButton(
+            onPressed: () => showYouTubeOptions(context, talent),
+            icon: Icon(
+              Icons.more_vert,
+              color: context.isDarkMode ? Colors.white : Colors.black,
+              size: 20, // Reduced from 25
+            ),
+            padding: EdgeInsets.zero,
           ),
-          padding: EdgeInsets.all(4),
-          constraints: BoxConstraints(minWidth: 32, minHeight: 32),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 16),
+
+        // Stars rating - keep stars in a single row
         Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: List.generate(
             5,
             (starIndex) => GestureDetector(
@@ -471,17 +645,14 @@ class TalentCard {
                 ManageVibration.vibrate();
                 cubit.updateRating(talent.id, starIndex + 1);
               },
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 1),
-                child: Icon(
-                  starIndex < talent.averageRating
-                      ? Icons.star
-                      : Icons.star_border,
-                  color: starIndex < talent.averageRating
-                      ? Colors.amber
-                      : Colors.grey[400],
-                  size: 25,
-                ),
+              child: Icon(
+                starIndex < talent.averageRating
+                    ? Icons.star
+                    : Icons.star_border,
+                color: starIndex < talent.averageRating
+                    ? Colors.amber
+                    : Colors.grey[400],
+                size: 16, // Made even smaller to fit in one row
               ),
             ),
           ),

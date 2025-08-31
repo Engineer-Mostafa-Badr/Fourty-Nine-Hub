@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/profile_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -261,7 +262,7 @@ class _EditProfileBottomSheetState extends State<EditProfileBottomSheet> {
                                   _saveProfile();
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue[600],
+                            backgroundColor: AppColors.PRIMARY_COLOR,
                             foregroundColor: Colors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
