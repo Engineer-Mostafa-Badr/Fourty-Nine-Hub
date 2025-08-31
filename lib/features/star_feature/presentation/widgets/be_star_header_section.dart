@@ -72,13 +72,23 @@ class BeStarHeaderSection extends StatelessWidget {
               //         : AppColors.PRIMARY_COLOR,
               //   ),
               // ),
-              AutoSizeText(
-                context.isArabic
-                    ? state.banner?.titleAr ?? ''
-                    : state.banner?.titleEn ?? '',
-                // style: TextStyle(
-                //     fontSize: MediaQuery.of(context).size.width * 0.02),
+              Flexible(
+                child: Text(
+                  context.isArabic
+                      ? state.banner?.titleAr ?? ''
+                      : state.banner?.titleEn ?? '',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.w500,
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
+
               Sizer(),
               // Hint Button
               InkWell(
@@ -94,6 +104,40 @@ class BeStarHeaderSection extends StatelessWidget {
               ),
             ],
           ),
+          // Row(
+          //   children: [
+          //     // Title
+          //     Expanded(
+          //       child: Text(
+          //         context.isArabic
+          //             ? state.banner?.titleAr ?? ''
+          //             : state.banner?.titleEn ?? '',
+          //         style: TextStyle(
+          //           fontSize: MediaQuery.of(context).size.width * 0.05,
+          //           fontWeight: FontWeight.w500,
+          //           color: context.isDarkMode
+          //               ? Colors.white
+          //               : AppColors.PRIMARY_COLOR,
+          //         ),
+          //         maxLines: 2,
+          //         overflow: TextOverflow.ellipsis,
+          //       ),
+          //     ),
+          //     const SizedBox(width: 16),
+          //     // Hint Button
+          //     InkWell(
+          //       onTap: () {
+          //         ManageVibration.vibrate();
+          //         _showHintDialog(context);
+          //       },
+          //       child: SvgPicture.asset(
+          //         Assets.idea,
+          //         height: 24,
+          //         width: 24,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const Sizer(),
 
           // Subtitle

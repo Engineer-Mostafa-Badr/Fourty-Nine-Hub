@@ -105,45 +105,16 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _myTalentController.addListener(() => _syncToMain(_myTalentController));
   }
 
-  // void _syncFromMain() {
-  //   if (_isSyncing) return;
-  //   _isSyncing = true;
-
-  //   final activeController = _getActiveTabController();
-  //   if (activeController != null && activeController.hasClients) {
-  //     activeController.jumpTo(_mainScrollController.offset.clamp(
-  //       activeController.position.minScrollExtent,
-  //       activeController.position.maxScrollExtent,
-  //     ));
-  //   }
-
-  //   _isSyncing = false;
-  // }
-
-  // void _syncToMain(ScrollController tabController) {
-  //   if (_isSyncing) return;
-  //   if (tabController != _getActiveTabController()) return;
-
-  //   _isSyncing = true;
-
-  //   if (_mainScrollController.hasClients) {
-  //     _mainScrollController.jumpTo(tabController.offset.clamp(
-  //       _mainScrollController.position.minScrollExtent,
-  //       _mainScrollController.position.maxScrollExtent,
-  //     ));
-  //   }
-
-  //   _isSyncing = false;
-  // }
-
   void _syncFromMain() {
-    if (_isSyncing || !mounted) return; // Add mounted check
+    if (_isSyncing || !mounted) return;
     _isSyncing = true;
+
     final activeController = _getActiveTabController();
     if (activeController != null &&
         activeController.hasClients &&
-        _mainScrollController.hasClients) {
-      // Check both controllers
+        _mainScrollController.hasClients &&
+        mounted) {
+      // إضافة mounted check
       activeController.jumpTo(_mainScrollController.offset.clamp(
         activeController.position.minScrollExtent,
         activeController.position.maxScrollExtent,
@@ -153,10 +124,14 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   }
 
   void _syncToMain(ScrollController tabController) {
-    if (_isSyncing || !mounted) return; // Add mounted check
+    if (_isSyncing || !mounted) return;
     if (tabController != _getActiveTabController()) return;
     _isSyncing = true;
-    if (_mainScrollController.hasClients && tabController.hasClients) {
+
+    if (_mainScrollController.hasClients &&
+        tabController.hasClients &&
+        mounted) {
+      // إضافة mounted check
       _mainScrollController.jumpTo(tabController.offset.clamp(
         _mainScrollController.position.minScrollExtent,
         _mainScrollController.position.maxScrollExtent,
@@ -166,17 +141,22 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   }
 
   ScrollController? _getActiveTabController() {
-    switch (_selectedTabIndex) {
-      case 0:
-        return _availableController;
-      case 1:
-        return _favoriteController;
-      case 2:
-        return _historyController;
-      case 3:
-        return _myTalentController;
-      default:
-        return null;
+    try {
+      switch (_selectedTabIndex) {
+        case 0:
+          return _availableController.hasClients ? _availableController : null;
+        case 1:
+          return _favoriteController.hasClients ? _favoriteController : null;
+        case 2:
+          return _historyController.hasClients ? _historyController : null;
+        case 3:
+          return _myTalentController.hasClients ? _myTalentController : null;
+        default:
+          return null;
+      }
+    } catch (e) {
+      debugPrint('Error getting active tab controller: $e');
+      return null;
     }
   }
 
@@ -270,27 +250,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     });
   }
 
-  // void _onScrollNotification(ScrollNotification scrollInfo) {
-  //   if (scrollInfo is UserScrollNotification) {
-  //     if (scrollInfo.direction == ScrollDirection.reverse) {
-  //       if (_showFloatingButton) {
-  //         setState(() {
-  //           _showFloatingButton = false;
-  //         });
-  //       }
-  //     } else if (scrollInfo.direction == ScrollDirection.forward) {
-  //       if (!_showFloatingButton) {
-  //         setState(() {
-  //           _showFloatingButton = true;
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
-
   void _onScrollNotification(ScrollNotification scrollInfo) {
-    if (!mounted) return; // Guard against disposed state
-
     if (scrollInfo is UserScrollNotification) {
       if (scrollInfo.direction == ScrollDirection.reverse) {
         if (_showFloatingButton) {
@@ -308,10 +268,154 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: BeStarAppBar(),
+  //     floatingActionButton: BeStarFloatingButton(
+  //       showButton: _showFloatingButton,
+  //       isLoggedIn: context.read<UserCubit>().isLoggedIn,
+  //     ),
+  //     body: BlocBuilder<StarCubit, StarState>(
+  //       builder: (BuildContext context, state) {
+  //         if (state.status == StarStates.loading &&
+  //             state.availableTalents.isEmpty) {
+  //           return const CustomLoadingSearchWidget();
+  //         }
+
+  //         return RefreshIndicator(
+  //           color: AppColors.getTextColor(context),
+  //           backgroundColor: AppColors.getFindFillColor(context),
+  //           onRefresh: () async {
+  //             if (_isSearching) {
+  //               if (_isSearchingProfiles) {
+  //                 _cubit.searchProfiles(_searchController.text);
+  //               } else {
+  //                 _cubit.searchTalents(_searchController.text);
+  //               }
+  //             } else {
+  //               final category = _getTabCategory(_selectedTabIndex);
+  //               if (category != null) {
+  //                 await _cubit.loadTalents(category, refresh: true);
+  //               }
+  //             }
+  //           },
+  //           child: NotificationListener<ScrollNotification>(
+  //             onNotification: (scrollInfo) {
+  //               _onScrollNotification(scrollInfo);
+  //               return false;
+  //             },
+  //             child: GlowingOverscrollIndicator(
+  //               axisDirection: AxisDirection.down,
+  //               color: AppColors.SECONDARY_COLOR,
+  //               child: CustomScrollView(
+  //                 controller: _mainScrollController,
+  //                 slivers: [
+  //                   // Collapsible Header Section (hide when searching) - الحل الرئيسي هنا
+  //                   if (!_isSearching)
+  //                     SliverAppBar(
+  //                       expandedHeight: context.isArabic
+  //                           ? MediaQuery.sizeOf(context).height * 0.32
+  //                           : MediaQuery.of(context).size.height * 0.4,
+  //                       floating: false,
+  //                       pinned: false, // مهم: false يعني الهيدر هيختفي تماماً
+  //                       snap: false,
+  //                       automaticallyImplyLeading: false,
+  //                       backgroundColor: Colors.transparent,
+  //                       elevation: 0, // إزالة الظل
+  //                       surfaceTintColor: Colors.transparent, // إزالة التينت
+  //                       flexibleSpace: FlexibleSpaceBar(
+  //                         background: BeStarHeaderSection(state: state),
+  //                         collapseMode: CollapseMode.parallax,
+  //                         stretchModes: const [
+  //                           StretchMode.zoomBackground,
+  //                           StretchMode.fadeTitle,
+  //                         ],
+  //                       ),
+  //                     ),
+
+  //                   // Sticky Tabs Section (hide when searching) - تحسين الالتصاق
+  //                   if (!_isSearching)
+  //                     SliverPersistentHeader(
+  //                       pinned: true, // مهم: true يعني التابز هتفضل ملتصقة
+  //                       floating: false,
+  //                       delegate: StickyTabBarDelegate(
+  //                         tabController: _tabController,
+  //                         context: context,
+  //                         onSearchTap: _toggleSearch,
+  //                       ),
+  //                     ),
+
+  //                   // Search Bar (when searching)
+  //                   if (_isSearching)
+  //                     SliverPersistentHeader(
+  //                       pinned: true,
+  //                       delegate: SearchBarDelegate(
+  //                         child: BeStarSearchBar(
+  //                           controller: _searchController,
+  //                           onTalentSearch: _onTalentSearch,
+  //                           onProfileSearch: _onProfileSearch,
+  //                           showProfileSearch: true,
+  //                         ),
+  //                       ),
+  //                     ),
+
+  //                   // Content based on search state
+  //                   if (_isSearching && _isSearchingProfiles)
+  //                     // Profile search results
+  //                     ProfileSearchResults(
+  //                       profiles: state.searchProfileResults,
+  //                       isLoading: state.isSearchingProfiles,
+  //                     )
+  //                   else if (_isSearching && !_isSearchingProfiles)
+  //                     // Talent search results
+  //                     _buildTalentSearchResults(state)
+  //                   else
+  //                     // Regular tab content with synchronized scrolling
+  //                     _buildSynchronizedTabContent(state),
+
+  //                   // Back to tabs button when searching
+  //                   if (_isSearching)
+  //                     SliverToBoxAdapter(
+  //                       child: Container(
+  //                         padding: EdgeInsets.all(
+  //                             MediaQuery.of(context).size.width * 0.04),
+  //                         child: ElevatedButton(
+  //                           onPressed: _toggleSearch,
+  //                           style: ElevatedButton.styleFrom(
+  //                             backgroundColor: AppColors.PRIMARY_COLOR,
+  //                             foregroundColor: Colors.white,
+  //                             shape: RoundedRectangleBorder(
+  //                               borderRadius: BorderRadius.circular(
+  //                                 MediaQuery.of(context).size.width * 0.063,
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           child: Text(
+  //                             context.isArabic
+  //                                 ? 'العودة للتبويبات'
+  //                                 : 'Back to Tabs',
+  //                             style: TextStyle(
+  //                               fontSize:
+  //                                   MediaQuery.of(context).size.width * 0.04,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BeStarAppBar(),
       floatingActionButton: BeStarFloatingButton(
         showButton: _showFloatingButton,
         isLoggedIn: context.read<UserCubit>().isLoggedIn,
@@ -345,29 +449,69 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                 _onScrollNotification(scrollInfo);
                 return false;
               },
-              child: GlowingOverscrollIndicator(
-                axisDirection: AxisDirection.down,
-                color: AppColors.SECONDARY_COLOR,
-                child: CustomScrollView(
-                  controller: _mainScrollController,
-                  slivers: [
-                    // Collapsible Header Section (hide when searching)
-                    if (!_isSearching)
-                      SliverAppBar(
-                        expandedHeight: context.isArabic
-                            ? MediaQuery.sizeOf(context).height * 0.32
-                            : MediaQuery.of(context).size.height * 0.36,
-                        floating: true,
-                        pinned: false,
-                        snap: true,
-                        automaticallyImplyLeading: false,
-                        backgroundColor: Colors.transparent,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: BeStarHeaderSection(state: state),
+              child: NestedScrollView(
+                controller: _mainScrollController,
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    // AppBar
+                    SliverAppBar(
+                      pinned: true,
+                      floating: false,
+                      snap: false,
+                      elevation: 0,
+                      surfaceTintColor: Colors.transparent,
+                      backgroundColor:
+                          context.isDarkMode ? Colors.black : Colors.white,
+                      toolbarHeight: 30,
+                      titleSpacing: 16,
+                      leading: BackButton(
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            Navigator.pop(context);
+                          },
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black),
+                      title: Text(
+                        'Tube',
+                        style: TextStyle(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
                       ),
+                      actions: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Winners',
+                                style: TextStyle(
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              Icon(Icons.emoji_events, color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
 
-                    // Sticky Tabs Section (hide when searching)
+                    // Header Section - هيختفي مع الـ scroll
+                    if (!_isSearching)
+                      SliverToBoxAdapter(
+                        child: BeStarHeaderSection(state: state),
+                      ),
+
+                    // Sticky Tabs
                     if (!_isSearching)
                       SliverPersistentHeader(
                         pinned: true,
@@ -380,57 +524,39 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
                     // Search Bar (when searching)
                     if (_isSearching)
-                      BeStarSearchBar(
-                        controller: _searchController,
-                        onTalentSearch: _onTalentSearch,
-                        onProfileSearch: _onProfileSearch,
-                        showProfileSearch: true,
-                      ),
-
-                    // Content based on search state
-                    if (_isSearching && _isSearchingProfiles)
-                      // Profile search results
-                      ProfileSearchResults(
-                        profiles: state.searchProfileResults,
-                        isLoading: state.isSearchingProfiles,
-                      )
-                    else if (_isSearching && !_isSearchingProfiles)
-                      // Talent search results
-                      _buildTalentSearchResults(state)
-                    else
-                      // Regular tab content with synchronized scrolling
-                      _buildSynchronizedTabContent(state),
-
-                    // Back to tabs button when searching
-                    if (_isSearching)
-                      SliverToBoxAdapter(
-                        child: Container(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.04),
-                          child: ElevatedButton(
-                            onPressed: _toggleSearch,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.PRIMARY_COLOR,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  MediaQuery.of(context).size.width * 0.063,
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              context.isArabic
-                                  ? 'العودة للتبويبات'
-                                  : 'Back to Tabs',
-                              style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                              ),
-                            ),
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: SearchBarDelegate(
+                          child: BeStarSearchBar(
+                            controller: _searchController,
+                            onTalentSearch: _onTalentSearch,
+                            onProfileSearch: _onProfileSearch,
+                            showProfileSearch: true,
                           ),
                         ),
                       ),
-                  ],
+                  ];
+                },
+                body: Builder(
+                  builder: (context) {
+                    if (_isSearching && _isSearchingProfiles) {
+                      // Profile search results - wrap in CustomScrollView for sliver
+                      return CustomScrollView(
+                        slivers: [
+                          ProfileSearchResults(
+                            profiles: state.searchProfileResults,
+                            isLoading: state.isSearchingProfiles,
+                          ),
+                        ],
+                      );
+                    } else if (_isSearching && !_isSearchingProfiles) {
+                      // Talent search results - regular widget
+                      return _buildTalentSearchResults(state);
+                    } else {
+                      // Regular tab content - regular widgets
+                      return _buildSynchronizedTabContent(state);
+                    }
+                  },
                 ),
               ),
             ),
@@ -443,148 +569,226 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   Widget _buildSynchronizedTabContent(StarState state) {
     switch (_selectedTabIndex) {
       case 0: // Available
-        return _buildAvailableContentWithSync(state);
+        return _buildAvailableContent(state);
       case 1: // Favorites
-        return _buildFavoriteContentWithSync(state);
+        return _buildFavoriteContent(state);
       case 2: // History
-        return _buildHistoryContentWithSync(state);
+        return _buildHistoryContent(state);
       case 3: // My Talents
-        return _buildMyTalentContentWithSync(state);
+        return _buildMyTalentContent(state);
       default:
-        return _buildAvailableContentWithSync(state);
+        return _buildAvailableContent(state);
     }
   }
 
-  Widget _buildAvailableContentWithSync(StarState state) {
+  Widget _buildAvailableContent(StarState state) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         if (state.status == StarStates.loading &&
             state.availableTalents.isEmpty) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: const Center(child: CustomCircularProgressIndicator()),
-            ),
+          return SizedBox(
+            height: 200,
+            child: const Center(child: CustomCircularProgressIndicator()),
           );
         }
 
         final talentsToShow = state.availableTalents;
         if (talentsToShow.isEmpty) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: LocaleKeys.noResultsFound.localize,
-              ),
+          return SizedBox(
+            height: 200,
+            child: CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
             ),
           );
         }
 
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * .6,
-            child: OlxPaginationWidget(
-              items: List.generate(
-                talentsToShow.length,
-                (index) => TalentCard.buildTalentCard(
-                    context, talentsToShow[index], _cubit),
-              ),
-              banners: bannersList,
-              loadPage: (page) => _cubit.loadTalents(TalentCategory.available),
-              scrollController: _availableController,
-              itemsPerPage: 1,
+        return SizedBox(
+          height: MediaQuery.sizeOf(context).height * .6,
+          child: OlxPaginationWidget(
+            items: List.generate(
+              talentsToShow.length,
+              (index) => TalentCard.buildTalentCard(
+                  context, talentsToShow[index], _cubit),
             ),
+            banners: bannersList,
+            loadPage: (page) => _cubit.loadTalents(TalentCategory.available),
+            scrollController: _availableController,
+            itemsPerPage: 1,
           ),
         );
       },
     );
   }
 
-  Widget _buildFavoriteContentWithSync(StarState state) {
+  Widget _buildFavoriteContent(StarState state) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         if (state.isLoading(TalentCategory.favorites)) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: const Center(child: CustomCircularProgressIndicator()),
-            ),
+          return SizedBox(
+            height: 200,
+            child: const Center(child: CustomCircularProgressIndicator()),
           );
         }
 
         if (state.favoriteTalents.isEmpty) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: context.isArabic
-                    ? 'لا يوجد فيديوات مفضلة بعد'
-                    : 'No favorite videos yet',
-              ),
+          return SizedBox(
+            height: 200,
+            child: CustomEmptyWidget(
+              label: context.isArabic
+                  ? 'لا يوجد فيديوات مفضلة بعد'
+                  : 'No favorite videos yet',
             ),
           );
         }
 
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * .6,
-            child: ListView.builder(
-              controller: _favoriteController,
-              itemCount: state.favoriteTalents.length,
-              itemBuilder: (context, index) {
-                final talent = state.favoriteTalents[index];
-                return TalentCard.buildTalentCard(context, talent, _cubit);
-              },
-            ),
+        return SizedBox(
+          height: MediaQuery.sizeOf(context).height * .6,
+          child: ListView.builder(
+            controller: _favoriteController,
+            itemCount: state.favoriteTalents.length,
+            itemBuilder: (context, index) {
+              final talent = state.favoriteTalents[index];
+              return TalentCard.buildTalentCard(context, talent, _cubit);
+            },
           ),
         );
       },
     );
   }
 
-  Widget _buildHistoryContentWithSync(StarState state) {
+  Widget _buildHistoryContent(StarState state) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         if (state.isLoading(TalentCategory.history)) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: const Center(child: CustomCircularProgressIndicator()),
-            ),
+          return SizedBox(
+            height: 200,
+            child: const Center(child: CustomCircularProgressIndicator()),
           );
         }
 
         if (state.historyTalents.isEmpty) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: Center(
-                child: Text(
-                  context.isArabic
-                      ? 'لا يوجد فيديوات في التاريخ'
-                      : 'No videos in history',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
+          return SizedBox(
+            height: 200,
+            child: Center(
+              child: Text(
+                context.isArabic
+                    ? 'لا يوجد فيديوات في التاريخ'
+                    : 'No videos in history',
+                style: TextStyle(color: Colors.grey[600]),
               ),
             ),
           );
         }
 
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * .6,
-            child: ListView.builder(
-              controller: _historyController,
-              itemCount: state.historyTalents.length,
-              itemBuilder: (context, index) {
-                final talent = state.historyTalents[index];
-                return Container(
+        return SizedBox(
+          height: MediaQuery.sizeOf(context).height * .6,
+          child: ListView.builder(
+            controller: _historyController,
+            itemCount: state.historyTalents.length,
+            itemBuilder: (context, index) {
+              final talent = state.historyTalents[index];
+              return Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 140,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            talent.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Colors.black87,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${talent.user.firstName} ${talent.user.lastName}",
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMyTalentContent(StarState state) {
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, state) {
+        if (state.isLoading(TalentCategory.myTalents)) {
+          return SizedBox(
+            height: 200,
+            child: const Center(child: CustomCircularProgressIndicator()),
+          );
+        }
+
+        if (state.myTalents.isEmpty) {
+          return SizedBox(
+            height: 200,
+            child: CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
+            ),
+          );
+        }
+
+        // Show VideoDetailsView if video is selected
+        if (_showVideoDetails &&
+            _selectedVideoTalent != null &&
+            _selectedVideoUrl != null) {
+          return SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.75,
+            child: VideoDetailsView(
+              talent: _selectedVideoTalent!,
+              mediaUrl: _selectedVideoUrl!,
+              onBack: _onBackFromVideoDetails,
+            ),
+          );
+        }
+
+        return SizedBox(
+          height: MediaQuery.sizeOf(context).height * .6,
+          child: ListView.builder(
+            controller: _myTalentController,
+            itemCount: state.myTalents.length,
+            itemBuilder: (context, index) {
+              final talent = state.myTalents[index];
+              final mediaUrl = talent.mediaUrl.isNotEmpty
+                  ? talent.mediaUrl.first.mediaKey
+                  : '';
+              return GestureDetector(
+                onTap: () => _onVideoSelected(talent, mediaUrl),
+                child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Video thumbnail with overlays
                       Container(
                         width: 140,
                         height: 90,
@@ -594,7 +798,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      // Video info
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -623,115 +826,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildMyTalentContentWithSync(StarState state) {
-    return BlocBuilder<StarCubit, StarState>(
-      builder: (context, state) {
-        if (state.isLoading(TalentCategory.myTalents)) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: const Center(child: CustomCircularProgressIndicator()),
-            ),
-          );
-        }
-
-        if (state.myTalents.isEmpty) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: LocaleKeys.noResultsFound.localize,
-              ),
-            ),
-          );
-        }
-
-        // Show VideoDetailsView if video is selected
-        if (_showVideoDetails &&
-            _selectedVideoTalent != null &&
-            _selectedVideoUrl != null) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.75,
-              child: VideoDetailsView(
-                talent: _selectedVideoTalent!,
-                mediaUrl: _selectedVideoUrl!,
-                onBack: _onBackFromVideoDetails,
-              ),
-            ),
-          );
-        }
-
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * .6,
-            child: ListView.builder(
-              controller: _myTalentController,
-              itemCount: state.myTalents.length,
-              itemBuilder: (context, index) {
-                final talent = state.myTalents[index];
-                final mediaUrl = talent.mediaUrl.isNotEmpty
-                    ? talent.mediaUrl.first.mediaKey
-                    : '';
-
-                return GestureDetector(
-                  onTap: () => _onVideoSelected(talent, mediaUrl),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 140,
-                          height: 90,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                talent.title,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: Colors.black87,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "${talent.user.firstName} ${talent.user.lastName}",
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         );
       },
@@ -740,56 +837,441 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
   Widget _buildTalentSearchResults(StarState state) {
     if (state.searchResults.isEmpty && _searchController.text.isNotEmpty) {
-      return SliverToBoxAdapter(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: Column(
-              children: [
-                Icon(
-                  Icons.search_off,
-                  size: MediaQuery.of(context).size.width * 0.15,
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+          child: Column(
+            children: [
+              Icon(
+                Icons.search_off,
+                size: MediaQuery.of(context).size.width * 0.15,
+                color: Colors.grey,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                context.isArabic
+                    ? 'لا توجد مواهب تطابق بحثك'
+                    : 'No talents match your search',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.04,
                   color: Colors.grey,
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                Text(
-                  context.isArabic
-                      ? 'لا توجد مواهب تطابق بحثك'
-                      : 'No talents match your search',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
     }
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final talent = state.searchResults[index];
-          return TalentCard.buildTalentCard(context, talent, _cubit);
-        },
-        childCount: state.searchResults.length,
-      ),
+    return ListView.builder(
+      itemCount: state.searchResults.length,
+      itemBuilder: (context, index) {
+        final talent = state.searchResults[index];
+        return TalentCard.buildTalentCard(context, talent, _cubit);
+      },
     );
   }
 
+  // Widget _buildSynchronizedTabContent(StarState state) {
+  //   switch (_selectedTabIndex) {
+  //     case 0: // Available
+  //       return _buildAvailableContentWithSync(state);
+  //     case 1: // Favorites
+  //       return _buildFavoriteContentWithSync(state);
+  //     case 2: // History
+  //       return _buildHistoryContentWithSync(state);
+  //     case 3: // My Talents
+  //       return _buildMyTalentContentWithSync(state);
+  //     default:
+  //       return _buildAvailableContentWithSync(state);
+  //   }
+  // }
+
+  // Widget _buildAvailableContentWithSync(StarState state) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       if (state.status == StarStates.loading &&
+  //           state.availableTalents.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       final talentsToShow = state.availableTalents;
+  //       if (talentsToShow.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: CustomEmptyWidget(
+  //               label: LocaleKeys.noResultsFound.localize,
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       return SliverToBoxAdapter(
+  //         child: SizedBox(
+  //           height: MediaQuery.sizeOf(context).height * .6,
+  //           child: OlxPaginationWidget(
+  //             items: List.generate(
+  //               talentsToShow.length,
+  //               (index) => TalentCard.buildTalentCard(
+  //                   context, talentsToShow[index], _cubit),
+  //             ),
+  //             banners: bannersList,
+  //             loadPage: (page) => _cubit.loadTalents(TalentCategory.available),
+  //             scrollController: _availableController,
+  //             itemsPerPage: 1,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Widget _buildFavoriteContentWithSync(StarState state) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       if (state.isLoading(TalentCategory.favorites)) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       if (state.favoriteTalents.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: CustomEmptyWidget(
+  //               label: context.isArabic
+  //                   ? 'لا يوجد فيديوات مفضلة بعد'
+  //                   : 'No favorite videos yet',
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       return SliverToBoxAdapter(
+  //         child: SizedBox(
+  //           height: MediaQuery.sizeOf(context).height * .6,
+  //           child: ListView.builder(
+  //             controller: _favoriteController,
+  //             itemCount: state.favoriteTalents.length,
+  //             itemBuilder: (context, index) {
+  //               final talent = state.favoriteTalents[index];
+  //               return TalentCard.buildTalentCard(context, talent, _cubit);
+  //             },
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Widget _buildHistoryContentWithSync(StarState state) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       if (state.isLoading(TalentCategory.history)) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       if (state.historyTalents.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: Center(
+  //               child: Text(
+  //                 context.isArabic
+  //                     ? 'لا يوجد فيديوات في التاريخ'
+  //                     : 'No videos in history',
+  //                 style: TextStyle(color: Colors.grey[600]),
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       return SliverToBoxAdapter(
+  //         child: SizedBox(
+  //           height: MediaQuery.sizeOf(context).height * .6,
+  //           child: ListView.builder(
+  //             controller: _historyController,
+  //             itemCount: state.historyTalents.length,
+  //             itemBuilder: (context, index) {
+  //               final talent = state.historyTalents[index];
+  //               return Container(
+  //                 padding:
+  //                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //                 child: Row(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     // Video thumbnail with overlays
+  //                     Container(
+  //                       width: 140,
+  //                       height: 90,
+  //                       decoration: BoxDecoration(
+  //                         borderRadius: BorderRadius.circular(8),
+  //                         color: Colors.grey[300],
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 12),
+  //                     // Video info
+  //                     Expanded(
+  //                       child: Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           Text(
+  //                             talent.title,
+  //                             style: TextStyle(
+  //                               fontWeight: FontWeight.w600,
+  //                               fontSize: 15,
+  //                               color: Colors.black87,
+  //                             ),
+  //                             maxLines: 2,
+  //                             overflow: TextOverflow.ellipsis,
+  //                           ),
+  //                           const SizedBox(height: 4),
+  //                           Text(
+  //                             "${talent.user.firstName} ${talent.user.lastName}",
+  //                             style: TextStyle(
+  //                               color: Colors.grey[600],
+  //                               fontSize: 13,
+  //                               fontWeight: FontWeight.w400,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Widget _buildMyTalentContentWithSync(StarState state) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       if (state.isLoading(TalentCategory.myTalents)) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       if (state.myTalents.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: CustomEmptyWidget(
+  //               label: LocaleKeys.noResultsFound.localize,
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       // Show VideoDetailsView if video is selected
+  //       if (_showVideoDetails &&
+  //           _selectedVideoTalent != null &&
+  //           _selectedVideoUrl != null) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: MediaQuery.sizeOf(context).height * 0.75,
+  //             child: VideoDetailsView(
+  //               talent: _selectedVideoTalent!,
+  //               mediaUrl: _selectedVideoUrl!,
+  //               onBack: _onBackFromVideoDetails,
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       return SliverToBoxAdapter(
+  //         child: SizedBox(
+  //           height: MediaQuery.sizeOf(context).height * .6,
+  //           child: ListView.builder(
+  //             controller: _myTalentController,
+  //             itemCount: state.myTalents.length,
+  //             itemBuilder: (context, index) {
+  //               final talent = state.myTalents[index];
+  //               final mediaUrl = talent.mediaUrl.isNotEmpty
+  //                   ? talent.mediaUrl.first.mediaKey
+  //                   : '';
+
+  //               return GestureDetector(
+  //                 onTap: () => _onVideoSelected(talent, mediaUrl),
+  //                 child: Container(
+  //                   padding: const EdgeInsets.symmetric(
+  //                       horizontal: 16, vertical: 10),
+  //                   child: Row(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Container(
+  //                         width: 140,
+  //                         height: 90,
+  //                         decoration: BoxDecoration(
+  //                           borderRadius: BorderRadius.circular(8),
+  //                           color: Colors.grey[300],
+  //                         ),
+  //                       ),
+  //                       const SizedBox(width: 12),
+  //                       Expanded(
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text(
+  //                               talent.title,
+  //                               style: TextStyle(
+  //                                 fontWeight: FontWeight.w600,
+  //                                 fontSize: 15,
+  //                                 color: Colors.black87,
+  //                               ),
+  //                               maxLines: 2,
+  //                               overflow: TextOverflow.ellipsis,
+  //                             ),
+  //                             const SizedBox(height: 4),
+  //                             Text(
+  //                               "${talent.user.firstName} ${talent.user.lastName}",
+  //                               style: TextStyle(
+  //                                 color: Colors.grey[600],
+  //                                 fontSize: 13,
+  //                                 fontWeight: FontWeight.w400,
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Widget _buildTalentSearchResults(StarState state) {
+  //   if (state.searchResults.isEmpty && _searchController.text.isNotEmpty) {
+  //     return SliverToBoxAdapter(
+  //       child: Center(
+  //         child: Padding(
+  //           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+  //           child: Column(
+  //             children: [
+  //               Icon(
+  //                 Icons.search_off,
+  //                 size: MediaQuery.of(context).size.width * 0.15,
+  //                 color: Colors.grey,
+  //               ),
+  //               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+  //               Text(
+  //                 context.isArabic
+  //                     ? 'لا توجد مواهب تطابق بحثك'
+  //                     : 'No talents match your search',
+  //                 style: TextStyle(
+  //                   fontSize: MediaQuery.of(context).size.width * 0.04,
+  //                   color: Colors.grey,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }
+
+  //   return SliverList(
+  //     delegate: SliverChildBuilderDelegate(
+  //       (context, index) {
+  //         final talent = state.searchResults[index];
+  //         return TalentCard.buildTalentCard(context, talent, _cubit);
+  //       },
+  //       childCount: state.searchResults.length,
+  //     ),
+  //   );
+  // }
+
+  // @override
+  // void dispose() {
+  //   // Remove listeners first
+  //   _tabController.removeListener(_onTabChanged);
+  //   _searchController.removeListener(_onSearchChanged);
+  //   _mainScrollController.removeListener(() => _syncFromMain());
+  //   _availableController
+  //       .removeListener(() => _syncToMain(_availableController));
+  //   _favoriteController.removeListener(() => _syncToMain(_favoriteController));
+  //   _historyController.removeListener(() => _syncToMain(_historyController));
+  //   _myTalentController.removeListener(() => _syncToMain(_myTalentController));
+
+  //   // Then dispose controllers
+  //   _tabController.dispose();
+  //   _searchController.dispose();
+  //   _mainScrollController.dispose();
+  //   _availableController.dispose();
+  //   _favoriteController.dispose();
+  //   _historyController.dispose();
+  //   _myTalentController.dispose();
+
+  //   super.dispose();
+  // }
+
   @override
   void dispose() {
-    // Remove listeners first
-    _tabController.removeListener(_onTabChanged);
-    _searchController.removeListener(_onSearchChanged);
-    _mainScrollController.removeListener(() => _syncFromMain());
-    _availableController
-        .removeListener(() => _syncToMain(_availableController));
-    _favoriteController.removeListener(() => _syncToMain(_favoriteController));
-    _historyController.removeListener(() => _syncToMain(_historyController));
-    _myTalentController.removeListener(() => _syncToMain(_myTalentController));
+    try {
+      // Remove listeners first with proper checks
+      _tabController.removeListener(_onTabChanged);
+      _searchController.removeListener(_onSearchChanged);
+
+      // Remove scroll listeners with proper checks
+      if (_mainScrollController.hasClients &&
+          _mainScrollController.hasListeners) {
+        _mainScrollController.removeListener(() => _syncFromMain());
+      }
+
+      if (_availableController.hasClients &&
+          _availableController.hasListeners) {
+        _availableController
+            .removeListener(() => _syncToMain(_availableController));
+      }
+
+      if (_favoriteController.hasClients && _favoriteController.hasListeners) {
+        _favoriteController
+            .removeListener(() => _syncToMain(_favoriteController));
+      }
+
+      if (_historyController.hasClients && _historyController.hasListeners) {
+        _historyController
+            .removeListener(() => _syncToMain(_historyController));
+      }
+
+      if (_myTalentController.hasClients && _myTalentController.hasListeners) {
+        _myTalentController
+            .removeListener(() => _syncToMain(_myTalentController));
+      }
+    } catch (e) {
+      // Handle any disposal errors silently
+      print('Error during controller disposal: $e');
+    }
 
     // Then dispose controllers
     _tabController.dispose();
@@ -819,10 +1301,10 @@ class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 80.0; // Adjust based on your search bar height
+  double get maxExtent => 150.0; // Adjust based on your search bar height
 
   @override
-  double get minExtent => 80.0;
+  double get minExtent => 150.0;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

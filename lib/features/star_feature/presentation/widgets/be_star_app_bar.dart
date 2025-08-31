@@ -17,8 +17,11 @@ class BeStarAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       scrolledUnderElevation: 0,
-      titleSpacing: 0,
-      toolbarHeight: 30,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
+      titleSpacing: 16.w, // تحسين المسافات
+      toolbarHeight: kToolbarHeight, // استخدام الارتفاع الافتراضي
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -27,31 +30,36 @@ class BeStarAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
               color: context.isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: 32.sp,
+              fontSize: 20.sp, // تقليل حجم الخط قليلاً
             ),
           ),
         ],
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
               _navigateToWinners(context);
             },
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   LocaleKeys.winners.localize,
                   style: TextStyle(
                     color: context.isDarkMode ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 32.sp,
+                    fontSize: 20.sp,
                   ),
                 ),
-                const SizedBox(width: 4),
-                Image.asset(Assets.winners),
+                SizedBox(width: 4.w),
+                Image.asset(
+                  Assets.winners,
+                  height: 24.h,
+                  width: 24.w,
+                ),
               ],
             ),
           ),

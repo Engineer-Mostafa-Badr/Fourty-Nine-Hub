@@ -30,6 +30,65 @@ import '../helper/talent_video_player.dart';
 class TalentCard {
   // Available content (main feed)
 
+  // static Widget buildAvailableContentSliver({
+  //   required BuildContext context,
+  //   required StarCubit cubit,
+  //   required bool isSearching,
+  // }) {
+  //   return BlocBuilder<StarCubit, StarState>(
+  //     builder: (context, state) {
+  //       // Show loading if first load
+  //       if (state.status == StarStates.loading &&
+  //           state.availableTalents.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: const Center(child: CustomCircularProgressIndicator()),
+  //           ),
+  //         );
+  //       }
+
+  //       // Determine which data to show
+  //       final talentsToShow =
+  //           isSearching ? state.searchResults : state.availableTalents;
+
+  //       if (talentsToShow.isEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: SizedBox(
+  //             height: 200,
+  //             child: CustomEmptyWidget(
+  //               label: isSearching
+  //                   ? (context.isArabic
+  //                       ? 'لا يوجد نتائج بحث'
+  //                       : 'No search results found')
+  //                   : LocaleKeys.noResultsFound.localize,
+  //             ),
+  //           ),
+  //         );
+  //       }
+
+  //       return SliverToBoxAdapter(
+  //         child: SizedBox(
+  //           height: MediaQuery.sizeOf(context).height * .6,
+  //           child: OlxPaginationWidget(
+  //             items: List.generate(
+  //               talentsToShow.length,
+  //               (index) =>
+  //                   buildTalentCard(context, talentsToShow[index], cubit),
+  //             ),
+  //             banners: bannersList,
+  //             loadPage: (page) => isSearching
+  //                 ? Future.value()
+  //                 : cubit.loadTalents(TalentCategory.available),
+  //             scrollController: ScrollController(),
+  //             itemsPerPage: 1,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  // في buildAvailableContentSliver method
   static Widget buildAvailableContentSliver({
     required BuildContext context,
     required StarCubit cubit,
@@ -67,6 +126,9 @@ class TalentCard {
           );
         }
 
+        // إنشاء ScrollController جديد في كل مرة لتجنب مشكلة disposed
+        final controller = ScrollController();
+
         return SliverToBoxAdapter(
           child: SizedBox(
             height: MediaQuery.sizeOf(context).height * .6,
@@ -80,7 +142,7 @@ class TalentCard {
               loadPage: (page) => isSearching
                   ? Future.value()
                   : cubit.loadTalents(TalentCategory.available),
-              scrollController: ScrollController(),
+              scrollController: controller, // استخدام controller جديد
               itemsPerPage: 1,
             ),
           ),
@@ -280,6 +342,54 @@ class TalentCard {
   }
 
   // Main talent card builder
+  // static Widget buildTalentCard(
+  //   BuildContext context,
+  //   StarEntity talent,
+  //   StarCubit cubit, {
+  //   bool isMyTalent = false,
+  // }) {
+  //   final mediaUrl =
+  //       talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
+  //   final createdAt = talent.createdAt ?? DateTime.now();
+  //   final isVideo = _isVideoUrl(mediaUrl);
+
+  //   return Container(
+  //     margin: EdgeInsets.only(bottom: 16),
+  //     color: context.isDarkMode ? Colors.black : Colors.white,
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         // Video/Image Section
+  //         GestureDetector(
+  //           onTap: () {
+  //             ManageVibration.vibrate();
+  //             isVideo
+  //                 ? () => _navigateToVideoPlayer(context, mediaUrl, talent)
+  //                 : () => _navigateToProfile(context, talent);
+  //           },
+  //           child: isVideo
+  //               ? YouTubeStyleVideoPlayer(
+  //                   videoUrl: mediaUrl,
+  //                   title: talent.title,
+  //                   autoPlay: true,
+  //                   startMuted: true,
+  //                   thumbnailUrl: "assets/images/testforvideo.jpg",
+  //                   talent: talent,
+  //                   onTap: () => _navigateToProfile(context, talent),
+  //                 )
+  //               : _buildImageContainer(mediaUrl),
+  //         ),
+
+  //         // Video Info Section
+  //         _buildVideoInfoSection(context, talent, cubit),
+
+  //         // Delete Button for My Talents
+  //         if (isMyTalent) _buildDeleteButton(context, talent),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   static Widget buildTalentCard(
     BuildContext context,
     StarEntity talent,
@@ -297,25 +407,34 @@ class TalentCard {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Video/Image Section
+          // Video/Image Section with Favorite Overlay
           GestureDetector(
             onTap: () {
               ManageVibration.vibrate();
               isVideo
-                  ? () => _navigateToVideoPlayer(context, mediaUrl, talent)
-                  : () => _navigateToProfile(context, talent);
+                  ? _navigateToVideoPlayer(context, mediaUrl, talent)
+                  : _navigateToProfile(context, talent);
             },
-            child: isVideo
-                ? YouTubeStyleVideoPlayer(
-                    videoUrl: mediaUrl,
-                    title: talent.title,
-                    autoPlay: true,
-                    startMuted: true,
-                    thumbnailUrl: "assets/images/testforvideo.jpg",
-                    talent: talent,
-                    onTap: () => _navigateToProfile(context, talent),
-                  )
-                : _buildImageContainer(mediaUrl),
+            child: Stack(
+              children: [
+                // Video or Image Container
+                isVideo
+                    ? YouTubeStyleVideoPlayer(
+                        videoUrl: mediaUrl,
+                        title: talent.title,
+                        autoPlay: true,
+                        startMuted: true,
+                        thumbnailUrl: "assets/images/testforvideo.jpg",
+                        talent: talent,
+                        onTap: () => _navigateToProfile(context, talent),
+                      )
+                    : _buildImageContainer(mediaUrl),
+
+                // Favorite Overlay (only for non-video content since YouTubeStyleVideoPlayer already has it)
+                if (!isVideo)
+                  _buildFavoriteOverlay(context, talent, cubit, false),
+              ],
+            ),
           ),
 
           // Video Info Section
@@ -343,155 +462,6 @@ class TalentCard {
       ),
     );
   }
-
-  // static Widget _buildVideoInfoSection(
-  //   BuildContext context,
-  //   StarEntity talent,
-  //   StarCubit cubit,
-  // ) {
-  //   final createdAt = talent.createdAt ?? DateTime.now();
-
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  //     child: Row(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         // Profile Picture
-  //         GestureDetector(
-  //           onTap: () {
-  //             ManageVibration.vibrate();
-  //             _navigateToProfile(context, talent);
-  //           },
-  //           child: CircleAvatar(
-  //             radius: 25,
-  //             backgroundColor: Colors.grey[300],
-  //             backgroundImage: talent.user.image.isNotEmpty
-  //                 ? NetworkImage(talent.user.image)
-  //                 : null,
-  //             child: talent.user.image.isEmpty
-  //                 ? Icon(Icons.person, size: 18, color: Colors.grey[600])
-  //                 : null,
-  //           ),
-  //         ),
-  //         SizedBox(width: 12),
-
-  //         // Title and Info
-  //         Expanded(
-  //           child: GestureDetector(
-  //             onTap: () {
-  //               ManageVibration.vibrate();
-  //               _navigateToProfile(context, talent);
-  //             },
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   talent.title,
-  //                   style: TextStyle(
-  //                     fontSize: 16,
-  //                     fontWeight: FontWeight.w500,
-  //                     color: context.isDarkMode ? Colors.white : Colors.black,
-  //                     height: 1.3,
-  //                   ),
-  //                   maxLines: 2,
-  //                   overflow: TextOverflow.ellipsis,
-  //                 ),
-  //                 SizedBox(height: 4),
-  //                 Text(
-  //                   "${talent.user.firstName} ${talent.user.lastName}",
-  //                   style: TextStyle(
-  //                     fontSize: 13,
-  //                     color: context.isDarkMode
-  //                         ? Colors.grey[400]
-  //                         : Colors.grey[600],
-  //                   ),
-  //                   maxLines: 1,
-  //                   overflow: TextOverflow.ellipsis,
-  //                 ),
-  //                 SizedBox(height: 2),
-  //                 Row(
-  //                   children: [
-  //                     Icon(
-  //                       Icons.visibility,
-  //                       size: 14,
-  //                       color: context.isDarkMode
-  //                           ? Colors.grey[400]
-  //                           : Colors.grey[600],
-  //                     ),
-  //                     SizedBox(width: 4),
-  //                     Text(
-  //                       "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
-  //                       style: TextStyle(
-  //                         fontSize: 13,
-  //                         color: context.isDarkMode
-  //                             ? Colors.grey[400]
-  //                             : Colors.grey[600],
-  //                       ),
-  //                       maxLines: 1,
-  //                       overflow: TextOverflow.ellipsis,
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-
-  //         // More Options and Stars
-  //         _buildOptionsAndRating(context, talent, cubit),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // static Widget _buildOptionsAndRating(
-  //   BuildContext context,
-  //   StarEntity talent,
-  //   StarCubit cubit,
-  // ) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.end,
-  //     children: [
-  //       IconButton(
-  //         onPressed: () => showYouTubeOptions(context, talent),
-  //         icon: Icon(
-  //           Icons.more_vert,
-  //           color: context.isDarkMode ? Colors.white : Colors.black,
-  //           size: 25,
-  //         ),
-  //         padding: EdgeInsets.all(4),
-  //         constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-  //       ),
-  //       SizedBox(height: 4),
-  //       Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: List.generate(
-  //           5,
-  //           (starIndex) => GestureDetector(
-  //             onTap: () {
-  //               ManageVibration.vibrate();
-  //               cubit.updateRating(talent.id, starIndex + 1);
-  //             },
-  //             child: Padding(
-  //               padding: EdgeInsets.symmetric(horizontal: 1),
-  //               child: Icon(
-  //                 starIndex < talent.averageRating
-  //                     ? Icons.star
-  //                     : Icons.star_border,
-  //                 color: starIndex < talent.averageRating
-  //                     ? Colors.amber
-  //                     : Colors.grey[400],
-  //                 size: 25,
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Replace the _buildVideoInfoSection method in your TalentCard class with this:
 
   static Widget _buildVideoInfoSection(
     BuildContext context,
@@ -604,6 +574,51 @@ class TalentCard {
           ),
         ],
       ),
+    );
+  }
+
+  static Widget _buildFavoriteOverlay(
+    BuildContext context,
+    StarEntity talent,
+    StarCubit cubit,
+    bool isPlaying,
+  ) {
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, state) {
+        final isFavorite = cubit.isFavorite(talent.id);
+
+        return Positioned(
+          top: 8,
+          left: 8,
+          child: GestureDetector(
+            onTap: () {
+              ManageVibration.vibrate();
+              cubit.toggleFavorite(talent.id);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: isPlaying
+                    ? Colors.black12
+                    : Color(0xffD9D9D9).withValues(alpha: .5),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+                  color: Color(0xffFF0000),
+                  size: 25,
+                ),
+                onPressed: () {
+                  ManageVibration.vibrate();
+                  cubit.toggleFavorite(talent.id);
+                },
+                padding: const EdgeInsets.all(8),
+                constraints: const BoxConstraints(),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
