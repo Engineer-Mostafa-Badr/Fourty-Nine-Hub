@@ -93,19 +93,6 @@ class StarCubit extends Cubit<StarState> {
     }
   }
 
-  // Future<List<StarEntity>> _fetchAvailableTalents() async {
-  //   final response = await _allStarUseCase(
-  //     StarPaginationParams(
-  //       page: state.getCurrentPage(TalentCategory.available),
-  //       limit: pageSize,
-  //     ),
-  //   );
-
-  //   return response.fold(
-  //     (failure) => throw failure,
-  //     (data) => data,
-  //   );
-  // }
   Future<List<StarEntity>> _fetchAvailableTalents() async {
     final response = await _allStarUseCase(
       StarPaginationParams(
@@ -116,31 +103,44 @@ class StarCubit extends Cubit<StarState> {
 
     return response.fold(
       (failure) => throw failure,
-      (data) {
-        // تكرار البيانات 5 مرات لملء الشاشة للتجربة
-        List<StarEntity> duplicatedData = [];
-        for (int i = 0; i < 5; i++) {
-          duplicatedData.addAll(data.map((talent) {
-            // Create a copy with modified ID to avoid duplicates
-            return StarEntity(
-              id: '${talent.id}_copy_$i',
-              title: talent.title,
-              description: talent.description,
-              user: talent.user,
-              mediaUrl: talent.mediaUrl,
-              totalViews: talent.totalViews,
-              averageRating: talent.averageRating,
-              isApproved: talent.isApproved,
-              haveStories: talent.haveStories,
-              storyCount: talent.storyCount,
-              createdAt: talent.createdAt,
-            );
-          }));
-        }
-        return duplicatedData;
-      },
+      (data) => data,
     );
   }
+  // Future<List<StarEntity>> _fetchAvailableTalents() async {
+  //   final response = await _allStarUseCase(
+  //     StarPaginationParams(
+  //       page: state.getCurrentPage(TalentCategory.available),
+  //       limit: pageSize,
+  //     ),
+  //   );
+
+  //   return response.fold(
+  //     (failure) => throw failure,
+  //     (data) {
+  //       // تكرار البيانات 5 مرات لملء الشاشة للتجربة
+  //       List<StarEntity> duplicatedData = [];
+  //       for (int i = 0; i < 5; i++) {
+  //         duplicatedData.addAll(data.map((talent) {
+  //           // Create a copy with modified ID to avoid duplicates
+  //           return StarEntity(
+  //             id: '${talent.id}_copy_$i',
+  //             title: talent.title,
+  //             description: talent.description,
+  //             user: talent.user,
+  //             mediaUrl: talent.mediaUrl,
+  //             totalViews: talent.totalViews,
+  //             averageRating: talent.averageRating,
+  //             isApproved: talent.isApproved,
+  //             haveStories: talent.haveStories,
+  //             storyCount: talent.storyCount,
+  //             createdAt: talent.createdAt,
+  //           );
+  //         }));
+  //       }
+  //       return duplicatedData;
+  //     },
+  //   );
+  // }
 
   Future<List<StarEntity>> _fetchMyTalents() async {
     final response = await _fetchMylStarUseCase.call(const NoParams());
