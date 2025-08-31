@@ -22,6 +22,7 @@ class _RunningMapViewDetailsState extends State<RunningMapViewDetails> {
   initState(){
     super.initState();
     context.read<CaptainShareCubit>().getRunningRoute(context);
+    context.read<CaptainShareCubit>().updateDriverLocation();
   }
 
   List<LatLng> _convertPolylineToLatLng(List<List<double>> polyline) {
@@ -61,7 +62,6 @@ class _RunningMapViewDetailsState extends State<RunningMapViewDetails> {
                       startLocation: startLocation,
                       targetLocation: targetLocation,
                       polylinePoints: routePoints,
-                      fromClient: true,
                     ),
                     if(state.runningRoute!=null)BuildRunningTripSheet(
                       model: state.runningRoute!,

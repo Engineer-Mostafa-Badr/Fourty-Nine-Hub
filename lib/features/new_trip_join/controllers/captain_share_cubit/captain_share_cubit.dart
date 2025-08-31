@@ -42,9 +42,11 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_n
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'captain_share_state.dart';
@@ -848,5 +850,43 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
             status: CaptainShareStates.success));
       },
     );
+  }
+
+  updateDriverLocation(){
+    CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking:");
+    SharedWebSocket.socket!.on("RIDE:TRIP_LOCATION_UPDATED", (data) {
+      CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking: $data");
+
+      if (data is Map<String, dynamic> &&
+          data.containsKey('updateLocation')) {
+        final updateLocation = data['updateLocation'] as Map<String, dynamic>;
+
+
+          if (updateLocation.containsKey('location')) {
+            final locationData =
+            updateLocation['location'] as Map<String, dynamic>;
+            final latitude = locationData['latitude'] as double?;
+            final longitude = locationData['longitude'] as double?;
+
+            if (latitude != null && longitude != null) {
+              final newDriverLocation = LatLng(latitude, longitude);
+
+              // IMPORTANT: Store the current driverLocation as the previousDriverLocation
+              // before updating to the new location.
+              final LatLng? oldDriverLocation = state.driverLocation;
+
+              log("newDriverLocation $newDriverLocation");
+
+              emit(state.copyWith(
+                driverLocation: newDriverLocation,
+                previousDriverLocation:
+                oldDriverLocation, // <-- Pass the old location here
+                status: CaptainShareStates.success,
+              ));
+            }
+          }
+
+      }
+    });
   }
 }
