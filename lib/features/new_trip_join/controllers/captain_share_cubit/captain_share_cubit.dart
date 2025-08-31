@@ -142,6 +142,18 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
+  listenToRouteAccepted() {
+    CliLogger.info('listenToRouteAccepted');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToTripAcceptedUseCase((data) {
+      final currentLocation = GoRouter.of(currentContext).state.path;
+      if ('$currentLocation' == Paths.rideModeScreen) {
+        return;
+      }
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم قبول الرحله بنجاح':'Trip Accepted Successfully');
+      currentContext.push(Routes.RunningMapDetails);
+    });
+  }
 
   listenToDriverOnTheWayToClient() {
     CliLogger.info('listenToDriverOnTheWayToClient');

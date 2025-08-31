@@ -536,7 +536,6 @@ class AppPages {
                       ),
                     ],
                     child: RunningMapViewDetails(
-                      model: state.extra as MyBookingEntity,
                     ),
                   ),
                 ),

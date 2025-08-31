@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/presentation/services/forgot_password_timer_service.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/utils/shared_pref.dart';
@@ -31,17 +32,28 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final questionOneAnswerController = TextEditingController();
   final questionTwoAnswerController = TextEditingController();
   final questionThreeAnswerController = TextEditingController();
+  
+  // Timer service
+  final ForgotPasswordTimerService _timerService = ForgotPasswordTimerService();
+  
+  ForgotPasswordTimerService get timerService => _timerService;
 
   ForgotPasswordCubit(
     this.sendForgetPasswordOTPUseCase,
     this.sendForgetPasswordQuestionsUseCase,
     this.changePasswordUseCase,
     this.verifyQuestionsUseCase,
-  ) : super(ForgotPasswordInitial());
+  ) : super(ForgotPasswordInitial()) {
+    // Load existing timer when cubit is created
+    _timerService.loadExistingTimer();
+  }
 
   Future<void> sendForgetPasswordOTP(BuildContext context) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    // showLoadingDialog(currentContext);
     if (!emailFormKey.currentState!.validate()) return;
-    if (state is ForgotPasswordLoading) return;
+    if (_timerService.isTimerActive) return; // Prevent sending if timer is active
+    
     emit(ForgotPasswordLoading());
 
     if (_isPhoneNumber(emailController.text.trim())) {
@@ -51,14 +63,18 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
       result.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
+        (failure) async {
+          // currentContext.pop();
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
+          // Start timer even when request fails to prevent spam
+          await _timerService.startTimer();
           emit(ForgotPasswordSendOTPFailure(failure));
         },
-        (questions) {
+        (questions) async {
+          // currentContext.pop();
+          // Start timer when OTP is sent successfully
+          await _timerService.startTimer();
           context.push(Routes.VERIFICATION, extra: questions);
           emit(ForgotPasswordSendOTPSuccess());
         },
@@ -70,15 +86,19 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
       result.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
+        (failure) async {
+          // currentContext.pop();
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
+          // Start timer even when request fails to prevent spam
+          await _timerService.startTimer();
           emit(ForgotPasswordSendOTPFailure(failure));
         },
-        (_) {
+        (_) async {
+          // currentContext.pop();
           print('is email');
+          // Start timer when OTP is sent successfully
+          await _timerService.startTimer();
           context.push(
             Routes.FORGOTPASSWORDOTP,
             extra: emailController.text.trim(),
@@ -166,5 +186,9 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   bool _isPhoneNumber(String input) {
     final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
     return phoneRegex.hasMatch(input);
+  }
+
+  stopTimer() {
+    _timerService.clearTimer();
   }
 }

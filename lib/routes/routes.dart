@@ -176,7 +176,7 @@ abstract class Routes {
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
   static const FORGOTPASSWORD = '/ForgotPassword';
-  static const FORGOTPASSWORDOTP = '/ForgotPassword/OTP';
+  static const FORGOTPASSWORDOTP = '/ForgotPasswordOTP';
   static const CREATENEWFORGOTPASSWORD = '/ForgotPassword/CreateNewPassword';
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';

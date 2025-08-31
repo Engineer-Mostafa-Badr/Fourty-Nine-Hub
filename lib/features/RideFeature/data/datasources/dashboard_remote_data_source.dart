@@ -1064,6 +1064,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     try {
       CliLogger.info("Listen to Trip Accepted");
       log("Listen to Trip Accepted ");
+      log("SharedWebSocket.socket ${SharedWebSocket.socket == null} ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToTripAccept, (data) {
         CliLogger.info(" Trip Accepted :  $data");
         log(" Trip Accepted  data :  $data");

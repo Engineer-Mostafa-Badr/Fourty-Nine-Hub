@@ -121,11 +121,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     getQuestion();
     getWallet();
     emit(state.copyWith(status: StateStatus.loading));
-    // await UserCubit.to.getUser();
+    await UserCubit.to.getUser();
     // getWallet();
     getCurrency();
     getSettings(context);
-    listenToRouteAccepted();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -168,6 +167,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         },
       );
     }
+    Future.delayed(Duration(seconds: 10)).then((value) => listenToRouteAccepted());
   }
 
   Future<void> getMainCategoryCustomPage() async {
@@ -370,7 +370,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     listenToTripAcceptedUseCase((data) {
       final currentLocation = GoRouter.of(currentContext).state.path;
-      if ('$currentLocation' == Paths.rideModeScreen) {
+      if ('$currentLocation' == Paths.RunningMapDetails) {
         return;
       }
       showSuccessMessage(currentContext, currentContext.isArabic?'تم قبول الرحله بنجاح':'Trip Accepted Successfully');

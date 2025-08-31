@@ -10,8 +10,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RunningMapViewDetails extends StatefulWidget {
-  const RunningMapViewDetails({super.key, this.model});
-  final MyBookingEntity? model;
+  const RunningMapViewDetails({super.key,});
 
   @override
   State<RunningMapViewDetails> createState() => _RunningMapViewDetailsState();
@@ -62,6 +61,7 @@ class _RunningMapViewDetailsState extends State<RunningMapViewDetails> {
                       startLocation: startLocation,
                       targetLocation: targetLocation,
                       polylinePoints: routePoints,
+                      fromClient: true,
                     ),
                     if(state.runningRoute!=null)BuildRunningTripSheet(
                       model: state.runningRoute!,
