@@ -21,13 +21,18 @@ class AuthInterceptor extends Interceptor {
 
   /// إضافة التوكين للـ headers
   void attachToken(UserTokensEntity? token) {
+    print('🔐 AuthInterceptor: attachToken called with token: ${token?.accessToken?.substring(0, 20)}...');
+    print('🔐 AuthInterceptor: attachToken refresh token: ${token?.refreshToken?.substring(0, 20)}...');
+    
     _token = token;
     if (token != null) {
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
       _dio.options.headers['x-api-key'] =
       '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06';
+      print('🔐 AuthInterceptor: Token attached to Dio headers');
     } else {
       _dio.options.headers.remove('Authorization');
+      print('🔐 AuthInterceptor: Token removed from Dio headers');
     }
   }
 
@@ -165,39 +170,66 @@ class AuthInterceptor extends Interceptor {
 
   Future<UserTokensEntity?> _refreshToken() async {
     try {
-      print('🔄 AuthInterceptor: Calling refresh token API');
-      final response = await _dio.post(
-        "https://49backend.com/api/v1/auth/refresh-token",
+      print('🔄 AuthInterceptor: Calling refresh token API with clean Dio instance (no expired token)');
+      
+      // Check if refresh token exists
+      if (_token?.refreshToken == null || _token!.refreshToken.isEmpty) {
+        print('❌ AuthInterceptor: No refresh token available');
+        return null;
+      }
+      
+      print('🔄 AuthInterceptor: Using refresh token: ${_token?.refreshToken?.substring(0, 20)}...');
+      
+      // Create a completely isolated Dio instance for refresh token request
+      final refreshDio = Dio(BaseOptions(
+        baseUrl: 'https://49backend.com',
+        headers: {
+          "x-api-key": "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
+          "Content-Type": "application/json",
+        },
+        validateStatus: (status) {
+          return status != null && status < 500; // Don't throw for 4xx errors
+        },
+      ));
+      
+      // Don't add any interceptors to this Dio instance
+      
+      final response = await refreshDio.post(
+        "/api/v1/auth/refresh-token",
         data: {
           'refreshToken': _token?.refreshToken,
         },
-        options: Options(
-          headers: {
-            "x-api-key":
-            "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
-            "Content-Type": "application/json",
-          },
-        ),
       );
 
-      final accessToken = response.data['data']['accessToken'] as String;
-      final refreshToken = response.data['data']['refreshToken'] as String;
-      final newToken = _token!.copyWith(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      );
-      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+      print('🔄 AuthInterceptor: Refresh token response status: ${response.statusCode}');
+      print('🔄 AuthInterceptor: Refresh token response data: ${response.data}');
 
-      print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
-      
-      // Save both tokens to cache
-      await CacheManager.saveAccessToken(accessToken);
-      await CacheManager.saveRefreshToken(refreshToken);
-      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
-
-      return newToken;
+      // Check if the response was successful
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        final accessToken = response.data['data']['accessToken'] as String;
+        final refreshToken = response.data['data']['refreshToken'] as String;
+        final newToken = _token!.copyWith(
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        );
+        
+        print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
+        
+        // Save both tokens to cache
+        await CacheManager.saveAccessToken(accessToken);
+        await CacheManager.saveRefreshToken(refreshToken);
+        
+        return newToken;
+      } else {
+        print('❌ AuthInterceptor: Refresh token API returned invalid response: ${response.statusCode} - ${response.data}');
+        return null;
+      }
     } catch (e) {
       print('❌ AuthInterceptor: Refresh token API failed: $e');
+      if (e is DioException) {
+        print('❌ AuthInterceptor: Dio error details - Status: ${e.response?.statusCode}, Data: ${e.response?.data}');
+        print('❌ AuthInterceptor: Dio error request - Method: ${e.requestOptions.method}, Path: ${e.requestOptions.path}');
+      }
       return null;
     }
   }
