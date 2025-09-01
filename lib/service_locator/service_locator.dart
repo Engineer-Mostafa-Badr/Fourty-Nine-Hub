@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
@@ -293,6 +295,7 @@ class DI {
         serviceLocator(),
       ),
     );
+
     // serviceLocator.registerLazySingleton<ApiClientHelper>(
     //   () => ApiClientHelperImp(),
     // );
@@ -306,6 +309,8 @@ class DI {
     serviceLocator.registerLazySingleton<JsonParser>(
       () => JsonParser(),
     );
+
+
 
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);

@@ -91,6 +91,7 @@ abstract class SocketIOListeners {
   static const String rideUpdateUntrackedTrip = 'RIDE:NON_TRACKING_TRIPS_UPDATED';
   static const String rideUpdateOfferUntrackedClientTrip = 'RIDE:NON_TRACKING_OFFERS_UPDATE';
   static const String rideUpdateOfferShippingClientTrip = 'LOADING:NEW_TRIP_OFFER_UPDATED';
+  static const String listenToUpdateLocationDriver = 'CAPTAIN_SHARE:ROUTE_LOCATION_UPDATED';
 }
 
 abstract class SocketIOEvents {

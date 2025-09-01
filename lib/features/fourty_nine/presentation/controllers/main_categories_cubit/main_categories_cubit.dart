@@ -234,6 +234,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getQuestion() async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (!currentContext.isUserLoggedIn) return;
     final response = await _getQuestionUseCase(const NoParams());
     response.fold((failure) {
       emit(state.copyWith(failure: failure, status: StateStatus.error));
@@ -287,7 +289,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getWallet() async {
-    if (state.wallet != null) return;
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (state.wallet != null||!currentContext.isUserLoggedIn) return;
     print('getWallet getWallet');
     final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
@@ -313,6 +316,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> getSettings(BuildContext context,
       {bool? listenToSocket = true}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (!currentContext.isUserLoggedIn) return;
+
     final Either<Failure, SettingsDashboardEntityResponse> result =
         await getSettingsDashboardUsecase(const NoParams());
     result.fold(
