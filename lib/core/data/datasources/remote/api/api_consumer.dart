@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:tf_dio_cache/tf_dio_cache.dart';
 
 abstract class ApiConsumer {
@@ -45,24 +46,20 @@ abstract class ApiConsumer {
 
 class BaseApiConsumer extends ApiConsumer {
   final Dio _dio;
-  late AuthInterceptor _authInterceptor;
 
-  BaseApiConsumer(this._dio) {
-    _authInterceptor = AuthInterceptor(_dio, null);
-    _dio.interceptors.add(_authInterceptor);
-  }
+  BaseApiConsumer(this._dio);
 
   @override
   void attachToken(UserTokensEntity? token) {
-    _authInterceptor.attachToken(token);
+    serviceLocator<AuthInterceptor>().attachToken(token);
   }
 
   @override
-  void removeTokenFromHeader() { _authInterceptor.removeTokenFromHeader(); }
+  void removeTokenFromHeader() { serviceLocator<AuthInterceptor>().removeTokenFromHeader(); }
 
   @override
   void setTokenRefreshCallback(Function(UserTokensEntity) callback) {
-    _authInterceptor.setTokenRefreshCallback(callback);
+    serviceLocator<AuthInterceptor>().setTokenRefreshCallback(callback);
   }
 
   @override

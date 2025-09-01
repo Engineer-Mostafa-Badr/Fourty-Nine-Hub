@@ -149,7 +149,6 @@ class DI {
     // database
     serviceLocator.registerLazySingleton<Database>(
         () => SQFLiteDataSource.instance.database);
-
     // dio
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
@@ -165,6 +164,7 @@ class DI {
         ),
       )..interceptors.addAll([
           SubscriptionInterceptor(),
+        AuthInterceptor(null),
           if (kDebugMode)
             PrettyDioLogger(
               requestHeader: true,
@@ -293,6 +293,11 @@ class DI {
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
         serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<AuthInterceptor>(
+      () => AuthInterceptor(
+        null,
       ),
     );
 
