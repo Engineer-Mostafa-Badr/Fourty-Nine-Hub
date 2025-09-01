@@ -170,6 +170,8 @@ dependencies:
   zego_express_engine: ^3.16.2
   zego_uikit_prebuilt_call: ^4.16.22
   zego_uikit_signaling_plugin: ^2.8.8
+  better_player_plus: 1.0.8
+
 dependency_overrides:
   camera_android_camerax: 0.6.10+1
   record_linux: ^1.1.1

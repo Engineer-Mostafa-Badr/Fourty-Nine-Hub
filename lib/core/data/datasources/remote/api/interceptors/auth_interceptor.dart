@@ -10,25 +10,8 @@ class DataRefreshEvent {
   static final StreamController<void> _controller = StreamController<void>.broadcast();
   static Stream<void> get stream => _controller.stream;
   
-  // Add a flag to prevent multiple notifications within a short time window
-  static DateTime? _lastNotification;
-  static const Duration _debounceWindow = Duration(milliseconds: 500);
-  
   static void notifyRefresh() {
-    final now = DateTime.now();
-    
-    // Check if we're within the debounce window
-    if (_lastNotification != null && 
-        now.difference(_lastNotification!) < _debounceWindow) {
-      print('🔄 DataRefreshEvent: Skipping notification - within debounce window');
-      return;
-    }
-    
-    _lastNotification = now;
-    print('🔄 DataRefreshEvent: notifyRefresh called at: $now');
-    print('🔄 DataRefreshEvent: Stream controller state - hasListener: ${_controller.hasListener}, isBroadcast: ');
     _controller.add(null);
-    print('🔄 DataRefreshEvent: Event added to stream');
   }
   
   static void dispose() {
@@ -42,10 +25,8 @@ mixin AutoRefreshMixin {
   
   /// Initialize auto-refresh functionality
   void initializeAutoRefresh() {
-    print('🔄 AutoRefreshMixin: Initializing for ${runtimeType} - Instance: ${identityHashCode(this)}');
     _refreshSubscription = DataRefreshEvent.stream.listen((_) {
-      print('🔄 AutoRefreshMixin: Token refreshed, refreshing data for ${runtimeType} - Instance: ${identityHashCode(this)}');
-      print('🔄 AutoRefreshMixin: Stream event received at: ${DateTime.now()}');
+      print('🔄 AutoRefreshMixin: Token refreshed, refreshing data for ${runtimeType}');
       onTokenRefreshed();
     });
   }
@@ -55,7 +36,6 @@ mixin AutoRefreshMixin {
   
   /// Dispose auto-refresh subscription
   void disposeAutoRefresh() {
-    print('🔄 AutoRefreshMixin: Disposing for ${runtimeType} - Instance: ${identityHashCode(this)}');
     _refreshSubscription?.cancel();
     _refreshSubscription = null;
   }
@@ -137,7 +117,6 @@ class AuthInterceptor extends Interceptor {
         return;
       }
 
-      print('🔐 AuthInterceptor: Setting _isRefreshing to true for request: ${requestOptions.method} ${requestOptions.path}');
       _isRefreshing = true;
       try {
         final result = await _refreshToken();
@@ -167,7 +146,6 @@ class AuthInterceptor extends Interceptor {
           _isInvalidSession = true;
         }
       } finally {
-        print('🔐 AuthInterceptor: Setting _isRefreshing to false');
         _isRefreshing = false;
       }
     }
@@ -178,13 +156,12 @@ class AuthInterceptor extends Interceptor {
   /// Notify all active cubits to refresh their data
   void _notifyDataRefresh() {
     print('🔄 AuthInterceptor: Notifying all cubits to refresh data...');
-    print('🔄 AuthInterceptor: Current instance: ${identityHashCode(this)}');
     DataRefreshEvent.notifyRefresh();
   }
 
   Future<bool> _refreshToken() async {
     try {
-      print('🔄 AuthInterceptor: _refreshToken method called! - Instance: ${identityHashCode(this)}');
+      print('🔄 AuthInterceptor: _refreshToken method called!');
       
       // Get tokens from cache
       final refreshToken = await CacheManager.getRefreshToken();
@@ -247,12 +224,10 @@ class AuthInterceptor extends Interceptor {
         
         // Notify the app about the token refresh
         if (_onTokenRefreshed != null) {
-          // Comment out direct callback to prevent duplicate notifications
-          // _onTokenRefreshed!(newToken);
+          _onTokenRefreshed!(newToken);
         }
         
         // Notify all active cubits to refresh their data
-        print('🔐 AuthInterceptor: About to notify data refresh...');
         _notifyDataRefresh();
         
         print('🔐 AuthInterceptor: Token refresh completed successfully');
