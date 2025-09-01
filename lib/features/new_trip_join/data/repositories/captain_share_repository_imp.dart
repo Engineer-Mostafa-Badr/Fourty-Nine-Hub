@@ -121,5 +121,10 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
     return await shippingRemoteDataSource.joinToRoute(params);
   }
 
+  @override
+  Future<Either<Failure, String>> iamComing(String id) async{
+    return await shippingRemoteDataSource.iamComing(id);
+  }
+
 
 }

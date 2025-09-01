@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_update_location_driver_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
@@ -101,6 +102,13 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, bool>> acceptTrip(String params);
 
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
+  void listenToDriverArrived(Function(String waitingTime) params);
+  void listenToTripAccept(Function(String waitingTime) params);
+  void listenToUpdateLocationDriver(Function(UpdateLocationDriverParams params) params);
+  void listenToDriverOnTheWay(Function(String message) params);
+  void listenToRouteCancelled(Function(String message) params);
+  void listenToDriverNoShowClient(Function(String waitingTime) params);
+  void listenToPassengerPickedUp(Function(String message) params);
   void listenToPartialPaymentDriver(Function(num amountPaidCash) params);
 
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
@@ -1034,6 +1042,125 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToDriverArrived(Function(String waitingTime) params) {
+    try {
+      CliLogger.info("Listen to Driver Arrived");
+      log("Listen to Driver Arrived ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToDriverArrived, (data) {
+        CliLogger.info(" Driver Arrived :  $data");
+        log(" Driver Arrived  data :  $data");
+        print(" Driver Arrived  data :  $data");
+        params(data['driverArrival']["time"]??'');
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to driver arrived error $e");
+    }
+  }
+
+  @override
+  void listenToTripAccept(Function(String waitingTime) params) {
+    try {
+      CliLogger.info("Listen to Trip Accepted");
+      log("Listen to Trip Accepted ");
+      log("SharedWebSocket.socket ${SharedWebSocket.socket == null} ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToTripAccept, (data) {
+        CliLogger.info(" Trip Accepted :  $data");
+        log(" Trip Accepted  data :  $data");
+        print(" Trip Accepted  data :  $data");
+        params(data['driverAcceptedTTrip']["yourStatus"]??'');
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to driver arrived error $e");
+    }
+  }
+
+
+  @override
+  void listenToUpdateLocationDriver(Function(UpdateLocationDriverParams params) params) {
+    try {
+      CliLogger.info("Listen to Update Location Driver ${SocketIOListeners.listenToUpdateLocationDriver}");
+      log("Listen to Update Location Driver ");
+      log("SharedWebSocket.socket ${SharedWebSocket.socket == null} ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToUpdateLocationDriver, (data) {
+        CliLogger.info(" Update Location Driver :  $data");
+        log(" Update Location Driver  data :  $data");
+        print(" Update Location Driver  data :  $data");
+        UpdateLocationDriverParams param = UpdateLocationDriverParams(
+          latitude: data['updateLocation']?['location']?['latitude']??0,
+          longitude: data['updateLocation']?['location']?['longitude']??0,
+        );
+        params(param);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to update location driver error $e");
+    }
+  }
+
+  @override
+  void listenToDriverOnTheWay(Function(String message) params) {
+    try {
+      CliLogger.info("Listen to Driver On The Way");
+      log("Listen to Driver On The Way ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToDriverOnTheWay, (data) {
+        CliLogger.info(" Driver On The Way :  $data");
+        log(" Driver On The Way  data :  $data");
+        print(" Driver On The Way  data :  $data");
+        params(data["message"]);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to driver on the way error $e");
+    }
+  }
+
+  @override
+  void listenToRouteCancelled(Function(String message) params) {
+    try {
+      CliLogger.info("Listen to Route Cancelled");
+      log("Listen to Route Cancelled ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToRouteCancelled, (data) {
+        CliLogger.info(" Route Cancelled :  $data");
+        log(" Route Cancelled  data :  $data");
+        print(" Route Cancelled  data :  $data");
+        params(data["message"]);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to route cancelled error $e");
+    }
+  }
+
+  @override
+  void listenToDriverNoShowClient(Function(String waitingTime) params) {
+    try {
+      CliLogger.info("Listen to Driver No Show Client");
+      log("Listen to Driver No Show Client ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToDriverNoShowClient, (data) {
+        CliLogger.info(" Driver No Show Client :  $data");
+        log(" Driver No Show Client  data :  $data");
+        print(" Driver No Show Client  data :  $data");
+        params(data['driverNotShowPassenger']["waitingTime"]??'');
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to driver no show client error $e");
+    }
+  }
+
+  @override
+  void listenToPassengerPickedUp(Function(String message) params) {
+    try {
+      CliLogger.info("Listen to Passenger Picked Up");
+      log("Listen to Passenger Picked Up ");
+      SharedWebSocket.socket!.on(SocketIOListeners.listenToPassengerPickedUp, (data) {
+        CliLogger.info(" Passenger Picked Up :  $data");
+        log(" Passenger Picked Up  data :  $data");
+        print(" Passenger Picked Up  data :  $data");
+        params(data["message"]);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to driver no passenger picked up error $e");
     }
   }
 

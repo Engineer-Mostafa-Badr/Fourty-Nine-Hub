@@ -6,6 +6,7 @@ abstract class Routes {
   static const splash = '/';
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
+  static const RunningMapDetails = '/RunningMapDetails';
   static const onBoardingScreen = '/OnBoardingScreen';
   static const ChooseLangScreen = '/ChooseLangScreen';
   static const FirstLoginScreen = '/FirstLoginScreen';
@@ -61,6 +62,7 @@ abstract class Routes {
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/REELS';
+  static const TIKTOK_REELS = '/TIKTOK_REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const AllLocationScreen = '/AllLocationScreen';
   static const TiktokOptionScreen = '/TiktokOptionScreen';
@@ -174,7 +176,7 @@ abstract class Routes {
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
   static const FORGOTPASSWORD = '/ForgotPassword';
-  static const FORGOTPASSWORDOTP = '/ForgotPassword/OTP';
+  static const FORGOTPASSWORDOTP = '/ForgotPasswordOTP';
   static const CREATENEWFORGOTPASSWORD = '/ForgotPassword/CreateNewPassword';
   static const VERIFYMAIL = '/Register/verify-mail-register';
   static const REGISTERDRIVER = '/Register/register-driver';
@@ -317,6 +319,7 @@ abstract class Paths {
   static const splash = '/';
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
+  static const RunningMapDetails = 'RunningMapDetails';
   static const onBoardingScreen = 'OnBoardingScreen';
   static const ChooseLangScreen = 'ChooseLangScreen';
   static const FirstLoginScreen = 'FirstLoginScreen';
@@ -386,6 +389,7 @@ abstract class Paths {
       'TruckPersonalInformationScreen';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'REELS';
+  static const TIKTOK_REELS = 'TIKTOK_REELS';
   static const MUSICREELS = 'MUSICREELS';
   static const TiktokOptionScreen = 'TiktokOptionScreen';
   static const AllLocationScreen = 'AllLocationScreen';

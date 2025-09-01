@@ -33,6 +33,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -40,16 +41,30 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 
 import '../../../domain/entities/wallet_home_entity.dart';
 import '../../../domain/use_cases/get_wallet_home_use_case.dart';
 
 part 'main_categories_state.dart';
 
-class MainCategoriesCubit extends Cubit<MainCategoriesState> {
+class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMixin {
+  // Singleton pattern to ensure only one instance exists
+  static MainCategoriesCubit? _instance;
+  static MainCategoriesCubit get instance {
+    if (_instance == null) {
+      throw StateError('MainCategoriesCubit not initialized. Call initialize() first.');
+    }
+    return _instance!;
+  }
+  
   static MainCategoriesState to = AppPages
       .router.routerDelegate.navigatorKey.currentContext!
       .read<MainCategoriesState>();
+  
+  // Add flag to prevent duplicate token refresh calls
+  bool _isRefreshingFromToken = false;
+  
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
   final GetQuestionUseCase _getQuestionUseCase;
   final AnswerQuestionUseCase _answerQuestionUseCase;
@@ -64,10 +79,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final UpdateSocketLocationUseCase updateSocketLocationUseCase;
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
+  final ListenToTripAcceptedUseCase listenToTripAcceptedUseCase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
 
-  MainCategoriesCubit(
+  MainCategoriesCubit._internal(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
     this._getWalletHomeUseCase,
@@ -82,14 +98,96 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this.getSettingsDashboardUsecase,
     this.listenToNewTripUseCase,
     this.listenToAcceptOfferUseCase,
-  ) : super(MainCategoriesState());
+    this.listenToTripAcceptedUseCase,
+  ) : super(MainCategoriesState()) {
+    print('🔄 MainCategoriesCubit: Constructor called - Instance: ${identityHashCode(this)}');
+    // Initialize auto-refresh functionality
+    initializeAutoRefresh();
+  }
+  
+  // Factory constructor to ensure singleton pattern
+  factory MainCategoriesCubit(
+    GetMainCategoriesUseCase getMainCategoriesUseCase,
+    ToggleFavoriteCategoryUseCase toggleFavoriteCategoryUseCase,
+    GetWalletHomeUseCase getWalletHomeUseCase,
+    GetCurrencyUseCase currencyUseCase,
+    UpdateSocketLocationUseCase updateSocketLocationUseCase,
+    AnyCashBackUseCase anyCashBackUseCase,
+    GetMainCategoriesCustomPageUseCase categoriesCustomPageUseCase,
+    GetQuestionUseCase getQuestionUseCase,
+    AnswerQuestionUseCase answerQuestionUseCase,
+    GetMainCategoryDetailsUseCase getMainCategoryDetailsUseCase,
+    UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase,
+    GetSettingsDashboardUsecase getSettingsDashboardUsecase,
+    ListenToNewTripUseCase listenToNewTripUseCase,
+    ListenToAcceptOfferUseCase listenToAcceptOfferUseCase,
+    ListenToTripAcceptedUseCase listenToTripAcceptedUseCase,
+  ) {
+    _instance ??= MainCategoriesCubit._internal(
+      getMainCategoriesUseCase,
+      toggleFavoriteCategoryUseCase,
+      getWalletHomeUseCase,
+      currencyUseCase,
+      updateSocketLocationUseCase,
+      anyCashBackUseCase,
+      categoriesCustomPageUseCase,
+      getQuestionUseCase,
+      answerQuestionUseCase,
+      getMainCategoryDetailsUseCase,
+      updateSettingsDashboardUsecase,
+      getSettingsDashboardUsecase,
+      listenToNewTripUseCase,
+      listenToAcceptOfferUseCase,
+      listenToTripAcceptedUseCase,
+    );
+    return _instance!;
+  }
 
-  Future<void> loadDataCategory(BuildContext context) async {
-    print("loadDataCategory");
+  Future<void> loadDataCategory(BuildContext context, {String? from}) async {
+    print("loadDataCategory ${from??''}");
     await loadData(context);
     await getMainCategoryDetails();
     // await getQuestion();
     await getMainCategoryCustomPage();
+  }
+
+  @override
+  void onTokenRefreshed() {
+    print('🔄 MainCategoriesCubit: onTokenRefreshed called - Instance: ${identityHashCode(this)}');
+    print('🔄 MainCategoriesCubit: _isRefreshingFromToken: $_isRefreshingFromToken');
+    
+    // Global instance check - only allow the first instance to process
+    if (_instance != null && _instance != this) {
+      print('🔄 MainCategoriesCubit: Another instance is active, skipping this one');
+      return;
+    }
+    
+    // Prevent duplicate calls during the same token refresh cycle
+    if (_isRefreshingFromToken) {
+      print('🔄 MainCategoriesCubit: Token refresh already in progress, skipping...');
+      return;
+    }
+    
+    _isRefreshingFromToken = true;
+    print('🔄 MainCategoriesCubit: Token refreshed, refreshing data...');
+    
+    // Refresh all data when token is refreshed
+    final currentContext = AppPages.router.configuration.navigatorKey.currentContext;
+    if (currentContext != null) {
+      loadDataCategory(currentContext, from: 'TokenRefreshed').then((_) {
+        // Reset the flag after data refresh is complete
+        _isRefreshingFromToken = false;
+        print('🔄 MainCategoriesCubit: Data refresh completed, flag reset');
+      }).catchError((error) {
+        // Reset the flag even if there's an error
+        _isRefreshingFromToken = false;
+        print('❌ MainCategoriesCubit: Error during token refresh data load: $error');
+      });
+    } else {
+      // Reset the flag if no context is available
+      _isRefreshingFromToken = false;
+      print('🔄 MainCategoriesCubit: No context available, flag reset');
+    }
   }
 
   Future<void> getMainCategoryDetails() async {
@@ -118,7 +216,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     getQuestion();
     getWallet();
     emit(state.copyWith(status: StateStatus.loading));
-    // await UserCubit.to.getUser();
+    await UserCubit.to.getUser();
     // getWallet();
     getCurrency();
     getSettings(context);
@@ -164,6 +262,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         },
       );
     }
+    Future.delayed(Duration(seconds: 10)).then((value) => listenToRouteAccepted());
   }
 
   Future<void> getMainCategoryCustomPage() async {
@@ -230,6 +329,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getQuestion() async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (!currentContext.isUserLoggedIn) return;
     final response = await _getQuestionUseCase(const NoParams());
     response.fold((failure) {
       emit(state.copyWith(failure: failure, status: StateStatus.error));
@@ -283,7 +384,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getWallet() async {
-    if (state.wallet != null) return;
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (state.wallet != null||!currentContext.isUserLoggedIn) return;
     print('getWallet getWallet');
     final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
@@ -309,6 +411,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> getSettings(BuildContext context,
       {bool? listenToSocket = true}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (!currentContext.isUserLoggedIn) return;
+
     final Either<Failure, SettingsDashboardEntityResponse> result =
         await getSettingsDashboardUsecase(const NoParams());
     result.fold(
@@ -360,6 +465,20 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     }
     return false;
   }
+
+  listenToRouteAccepted() {
+    CliLogger.info('listenToRouteAccepted');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToTripAcceptedUseCase((data) {
+      final currentLocation = GoRouter.of(currentContext).state.path;
+      if ('$currentLocation' == Paths.RunningMapDetails) {
+        return;
+      }
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم قبول الرحله بنجاح':'Trip Accepted Successfully');
+      currentContext.push(Routes.RunningMapDetails);
+    });
+  }
+
 
   Future<void> emitDriverLocation(
       {required double lat, required double long}) async {
@@ -437,5 +556,17 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       print(
           'New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     });
+  }
+
+  @override
+  Future<void> close() {
+    print('🔄 MainCategoriesCubit: close() called - Instance: ${identityHashCode(this)}');
+    disposeAutoRefresh();
+    return super.close();
+  }
+  
+  // Static method to reset the singleton instance (useful for testing or cleanup)
+  static void reset() {
+    _instance = null;
   }
 }

@@ -249,6 +249,52 @@ class _FourtyNineViewState extends State<FourtyNineView>
               height: 5.h,
             ),
             GridBlocksWidget(),
+            // Sizer(
+            //   height: 5.h,
+            // ),
+            // TikTok Reels Button
+            // ClickableWidget(
+            //   onTap: () {
+            //     ManageVibration.vibrate();
+            //     if (!context.read<UserCubit>().isLoggedIn) {
+            //       return pleaseLoginDialog(context);
+            //     }
+            //     context.push(Routes.TIKTOK_REELS);
+            //   },
+            //   child: Container(
+            //     height: 50.h,
+            //     margin: EdgeInsets.symmetric(horizontal: 16.w),
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         colors: [Colors.purple, Colors.pink, Colors.orange],
+            //         begin: Alignment.topLeft,
+            //         end: Alignment.bottomRight,
+            //       ),
+            //       borderRadius: BorderRadius.circular(25.r),
+            //     ),
+            //     child: Center(
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Icon(
+            //             Icons.play_circle_filled,
+            //             color: Colors.white,
+            //             size: 24.sp,
+            //           ),
+            //           SizedBox(width: 8.w),
+            //           Text(
+            //             'TikTok Style Reels',
+            //             style: TextStyle(
+            //               color: Colors.white,
+            //               fontSize: 16.sp,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Sizer(
               height: 10.h,
             ),

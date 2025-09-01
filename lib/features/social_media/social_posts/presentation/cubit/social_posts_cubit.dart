@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
@@ -59,7 +60,7 @@ import '../../domain/usecases/post_react_usecase.dart';
 
 part 'social_posts_state.dart';
 
-class SocialPostsCubit extends Cubit<SocialPostsState> {
+class SocialPostsCubit extends Cubit<SocialPostsState> with AutoRefreshMixin {
   final GetFeedUseCase _getFeedUseCase;
   final GetGlobalFeedUseCase _getGlobalFeedUseCase;
   final GetUserPostsUseCase _getUserPostsUseCase;
@@ -93,6 +94,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final AcceptRejectFriendRequestUseCase _acceptRejectFriendRequestUseCase;
   final DeleteFriendUseCase _deleteFriendUseCase;
   final SearchUsersUsecase _searchUsersUsecase;
+
+  // Add flag to prevent duplicate token refresh calls
+  bool _isRefreshingFromToken = false;
 
   SocialPostsCubit(
     this._getFeedUseCase,
@@ -128,11 +132,14 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._searchUsersUsecase,
       this._getExploreReelsUseCase,
       this._getGlobalReelsUseCase,
-  ) : super(const SocialPostsState());
+  ) : super(const SocialPostsState()) {
+    // Initialize auto-refresh functionality
+    initializeAutoRefresh();
+  }
 
   final shareFormKey = GlobalKey<FormState>();
 
-  void loadData() async {
+  loadData() async {
     print("UserCubit.to.isLoggedIn ${UserCubit.to.isLoggedIn}");
     if(UserCubit.to.isLoggedIn)await loadInitialData();
     if(!UserCubit.to.isLoggedIn)await loadInitialGlobalData();
@@ -212,6 +219,28 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   void onRefresh() async {
     emit(state.copyWith(
         tweetPage: 0, suggestedFriends: [], advertisementsPage: 0));
+  }
+
+  @override
+  void onTokenRefreshed() {
+    // Prevent duplicate calls during the same token refresh cycle
+    if (_isRefreshingFromToken) {
+      print('🔄 SocialPostsCubit: Token refresh already in progress, skipping...');
+      return;
+    }
+    
+    _isRefreshingFromToken = true;
+    print('🔄 SocialPostsCubit: Token refreshed, refreshing data...');
+    
+    // Refresh all data when token is refreshed
+    loadData().then((_) {
+      // Reset the flag after data refresh is complete
+      _isRefreshingFromToken = false;
+    }).catchError((error) {
+      // Reset the flag even if there's an error
+      _isRefreshingFromToken = false;
+      print('❌ SocialPostsCubit: Error during token refresh data load: $error');
+    });
   }
 
   // void onRefreshPostDetails() async {
@@ -1418,6 +1447,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   ];
 
   void triggerBlock() {}
+
+  @override
+  Future<void> close() {
+    disposeAutoRefresh();
+    return super.close();
+  }
 }
 
 // people_tab_cubit.dart

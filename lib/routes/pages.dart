@@ -130,6 +130,7 @@ import 'package:fourtyninehub/features/married/presentation/pages/married_view.d
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/route_details_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/running_map_view_details.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
@@ -265,6 +266,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
+import 'package:fourtyninehub/features/reels_feature/presentation/pages/reels_page.dart';
+import 'package:fourtyninehub/features/reels_feature/presentation/controllers/reels_cubit.dart' as tiktok_reels;
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
@@ -517,6 +520,23 @@ class AppPages {
                       ),
                     ],
                     child: const RideHome(),
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RunningMapDetails,
+                name: Routes.RunningMapDetails,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create:(context)=> serviceLocator<CaptainShareCubit>(),
+                      ),
+                    ],
+                    child: RunningMapViewDetails(
+                    ),
                   ),
                 ),
               ),
@@ -2007,6 +2027,20 @@ class AppPages {
                     ),
                   ),
                 ],
+              ),
+              
+              GoRoute(
+                path: Paths.TIKTOK_REELS,
+                name: Routes.TIKTOK_REELS,
+                pageBuilder: (context, state) {
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider(
+                        create: (context) => serviceLocator<tiktok_reels.TiktokCubit>(),
+                        child: const ReelsPage(),
+                      ));
+                },
               ),
 
               GoRoute(
