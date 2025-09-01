@@ -1238,7 +1238,7 @@ class EndPoints {
     return '/media/confirm/$mediaId';
   }
 
-  // chat_room
+  // chat_roomz
   static String getChats = '/chat/get-chats';
 
   static String assignLabels() {
@@ -1766,4 +1766,7 @@ class EndPoints {
       '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';
   static const String getMyProfile = '/tube-profile';
   static const String updateProfile = '/tube-profile';
+  // Bunny CDN Video Endpoints
+  static const String createBunnyVideo = '/bunny/videos';
+  static const String submitTubeVideo = '/tube-video';
 }
