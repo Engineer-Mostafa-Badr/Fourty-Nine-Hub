@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_style_video_player.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_app_bar.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_floating_button.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_header_section.dart';
@@ -268,151 +269,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: BeStarAppBar(),
-  //     floatingActionButton: BeStarFloatingButton(
-  //       showButton: _showFloatingButton,
-  //       isLoggedIn: context.read<UserCubit>().isLoggedIn,
-  //     ),
-  //     body: BlocBuilder<StarCubit, StarState>(
-  //       builder: (BuildContext context, state) {
-  //         if (state.status == StarStates.loading &&
-  //             state.availableTalents.isEmpty) {
-  //           return const CustomLoadingSearchWidget();
-  //         }
-
-  //         return RefreshIndicator(
-  //           color: AppColors.getTextColor(context),
-  //           backgroundColor: AppColors.getFindFillColor(context),
-  //           onRefresh: () async {
-  //             if (_isSearching) {
-  //               if (_isSearchingProfiles) {
-  //                 _cubit.searchProfiles(_searchController.text);
-  //               } else {
-  //                 _cubit.searchTalents(_searchController.text);
-  //               }
-  //             } else {
-  //               final category = _getTabCategory(_selectedTabIndex);
-  //               if (category != null) {
-  //                 await _cubit.loadTalents(category, refresh: true);
-  //               }
-  //             }
-  //           },
-  //           child: NotificationListener<ScrollNotification>(
-  //             onNotification: (scrollInfo) {
-  //               _onScrollNotification(scrollInfo);
-  //               return false;
-  //             },
-  //             child: GlowingOverscrollIndicator(
-  //               axisDirection: AxisDirection.down,
-  //               color: AppColors.SECONDARY_COLOR,
-  //               child: CustomScrollView(
-  //                 controller: _mainScrollController,
-  //                 slivers: [
-  //                   // Collapsible Header Section (hide when searching) - الحل الرئيسي هنا
-  //                   if (!_isSearching)
-  //                     SliverAppBar(
-  //                       expandedHeight: context.isArabic
-  //                           ? MediaQuery.sizeOf(context).height * 0.32
-  //                           : MediaQuery.of(context).size.height * 0.4,
-  //                       floating: false,
-  //                       pinned: false, // مهم: false يعني الهيدر هيختفي تماماً
-  //                       snap: false,
-  //                       automaticallyImplyLeading: false,
-  //                       backgroundColor: Colors.transparent,
-  //                       elevation: 0, // إزالة الظل
-  //                       surfaceTintColor: Colors.transparent, // إزالة التينت
-  //                       flexibleSpace: FlexibleSpaceBar(
-  //                         background: BeStarHeaderSection(state: state),
-  //                         collapseMode: CollapseMode.parallax,
-  //                         stretchModes: const [
-  //                           StretchMode.zoomBackground,
-  //                           StretchMode.fadeTitle,
-  //                         ],
-  //                       ),
-  //                     ),
-
-  //                   // Sticky Tabs Section (hide when searching) - تحسين الالتصاق
-  //                   if (!_isSearching)
-  //                     SliverPersistentHeader(
-  //                       pinned: true, // مهم: true يعني التابز هتفضل ملتصقة
-  //                       floating: false,
-  //                       delegate: StickyTabBarDelegate(
-  //                         tabController: _tabController,
-  //                         context: context,
-  //                         onSearchTap: _toggleSearch,
-  //                       ),
-  //                     ),
-
-  //                   // Search Bar (when searching)
-  //                   if (_isSearching)
-  //                     SliverPersistentHeader(
-  //                       pinned: true,
-  //                       delegate: SearchBarDelegate(
-  //                         child: BeStarSearchBar(
-  //                           controller: _searchController,
-  //                           onTalentSearch: _onTalentSearch,
-  //                           onProfileSearch: _onProfileSearch,
-  //                           showProfileSearch: true,
-  //                         ),
-  //                       ),
-  //                     ),
-
-  //                   // Content based on search state
-  //                   if (_isSearching && _isSearchingProfiles)
-  //                     // Profile search results
-  //                     ProfileSearchResults(
-  //                       profiles: state.searchProfileResults,
-  //                       isLoading: state.isSearchingProfiles,
-  //                     )
-  //                   else if (_isSearching && !_isSearchingProfiles)
-  //                     // Talent search results
-  //                     _buildTalentSearchResults(state)
-  //                   else
-  //                     // Regular tab content with synchronized scrolling
-  //                     _buildSynchronizedTabContent(state),
-
-  //                   // Back to tabs button when searching
-  //                   if (_isSearching)
-  //                     SliverToBoxAdapter(
-  //                       child: Container(
-  //                         padding: EdgeInsets.all(
-  //                             MediaQuery.of(context).size.width * 0.04),
-  //                         child: ElevatedButton(
-  //                           onPressed: _toggleSearch,
-  //                           style: ElevatedButton.styleFrom(
-  //                             backgroundColor: AppColors.PRIMARY_COLOR,
-  //                             foregroundColor: Colors.white,
-  //                             shape: RoundedRectangleBorder(
-  //                               borderRadius: BorderRadius.circular(
-  //                                 MediaQuery.of(context).size.width * 0.063,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           child: Text(
-  //                             context.isArabic
-  //                                 ? 'العودة للتبويبات'
-  //                                 : 'Back to Tabs',
-  //                             style: TextStyle(
-  //                               fontSize:
-  //                                   MediaQuery.of(context).size.width * 0.04,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -644,6 +500,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * .6,
           child: ListView.builder(
+            padding: EdgeInsets.zero,
             controller: _favoriteController,
             itemCount: state.favoriteTalents.length,
             itemBuilder: (context, index) {
@@ -659,6 +516,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   Widget _buildHistoryContent(StarState state) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
+        // حالة التحميل الأولي
         if (state.isLoading(TalentCategory.history)) {
           return SizedBox(
             height: 200,
@@ -666,6 +524,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
           );
         }
 
+        // حالة عدم وجود عناصر
         if (state.historyTalents.isEmpty) {
           return SizedBox(
             height: 200,
@@ -674,67 +533,197 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                 context.isArabic
                     ? 'لا يوجد فيديوات في التاريخ'
                     : 'No videos in history',
-                style: TextStyle(color: Colors.grey[600]),
+                style: TextStyle(color: Colors.grey),
               ),
             ),
           );
         }
 
+        // العدد مع خانة إضافية إن كان هناك المزيد
+        final hasMore = state.hasMore(TalentCategory.history);
+        final itemCount = state.historyTalents.length + (hasMore ? 1 : 0);
+
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * .6,
           child: ListView.builder(
+            padding: EdgeInsets.zero,
             controller: _historyController,
-            itemCount: state.historyTalents.length,
+            itemCount: itemCount,
             itemBuilder: (context, index) {
+              if (index == state.historyTalents.length) {
+                return _buildLoadMoreWidgetIfNeeded(context, state);
+              }
+
               final talent = state.historyTalents[index];
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 140,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.grey[300],
+
+              return GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  final mediaUrl = talent.mediaUrl.isNotEmpty
+                      ? talent.mediaUrl.first.mediaKey
+                      : '';
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TalentVideoPlayer(
+                        talent: talent,
+                        videoUrl: mediaUrl,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            talent.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: Colors.black87,
+                  );
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  color: Colors.white,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Thumbnail + Overlays (مكافئ لـ _buildThumbnailWithOverlays)
+                      Container(
+                        width: 140,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.grey,
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/testforvideo.jpg'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "${talent.user.firstName} ${talent.user.lastName}",
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
+                            Positioned(
+                              top: 8,
+                              left: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(
+                                  Icons.volume_up,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              bottom: 8,
+                              left: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text(
+                                  '7:54',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 12),
+                      // معلومات الفيديو (مكافئ لـ _buildVideoInfoColumn)
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              talent.title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.black87,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "${talent.user.firstName} ${talent.user.lastName}",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            // إن رغبت بإظهار المشاهدات والزمن مثل TalentCard
+                            // يمكن استيراد timeago واستخدامه هنا.
+                          ],
+                        ),
+                      ),
+                      // زر الخيارات (مكافئ لـ _buildMoreOptionsButton)
+                      GestureDetector(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          TalentCard.showHistoryOptions(
+                              context, talent, _cubit);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Icon(
+                            Icons.more_vert,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
           ),
         );
       },
+    );
+  }
+
+// مكافئ لويدجت TalentCard._buildLoadMoreWidget ولكن كود محلي في BeStarView
+  Widget _buildLoadMoreWidgetIfNeeded(BuildContext context, StarState state) {
+    final category = TalentCategory.history;
+    if (state.isLoading(category)) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        child: const Center(child: CustomCircularProgressIndicator()),
+      );
+    }
+    if (!state.hasMore(category)) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        child: Center(
+          child: Text(
+            context.isArabic ? 'لا يوجد المزيد' : 'No more content',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () => _cubit.loadTalents(category),
+          child: Text(context.isArabic ? 'تحميل المزيد' : 'Load More'),
+        ),
+      ),
     );
   }
 
@@ -774,6 +763,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * .6,
           child: ListView.builder(
+            padding: EdgeInsets.zero,
             controller: _myTalentController,
             itemCount: state.myTalents.length,
             itemBuilder: (context, index) {
@@ -871,369 +861,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
       },
     );
   }
-
-  // Widget _buildSynchronizedTabContent(StarState state) {
-  //   switch (_selectedTabIndex) {
-  //     case 0: // Available
-  //       return _buildAvailableContentWithSync(state);
-  //     case 1: // Favorites
-  //       return _buildFavoriteContentWithSync(state);
-  //     case 2: // History
-  //       return _buildHistoryContentWithSync(state);
-  //     case 3: // My Talents
-  //       return _buildMyTalentContentWithSync(state);
-  //     default:
-  //       return _buildAvailableContentWithSync(state);
-  //   }
-  // }
-
-  // Widget _buildAvailableContentWithSync(StarState state) {
-  //   return BlocBuilder<StarCubit, StarState>(
-  //     builder: (context, state) {
-  //       if (state.status == StarStates.loading &&
-  //           state.availableTalents.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: const Center(child: CustomCircularProgressIndicator()),
-  //           ),
-  //         );
-  //       }
-
-  //       final talentsToShow = state.availableTalents;
-  //       if (talentsToShow.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: CustomEmptyWidget(
-  //               label: LocaleKeys.noResultsFound.localize,
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       return SliverToBoxAdapter(
-  //         child: SizedBox(
-  //           height: MediaQuery.sizeOf(context).height * .6,
-  //           child: OlxPaginationWidget(
-  //             items: List.generate(
-  //               talentsToShow.length,
-  //               (index) => TalentCard.buildTalentCard(
-  //                   context, talentsToShow[index], _cubit),
-  //             ),
-  //             banners: bannersList,
-  //             loadPage: (page) => _cubit.loadTalents(TalentCategory.available),
-  //             scrollController: _availableController,
-  //             itemsPerPage: 1,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget _buildFavoriteContentWithSync(StarState state) {
-  //   return BlocBuilder<StarCubit, StarState>(
-  //     builder: (context, state) {
-  //       if (state.isLoading(TalentCategory.favorites)) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: const Center(child: CustomCircularProgressIndicator()),
-  //           ),
-  //         );
-  //       }
-
-  //       if (state.favoriteTalents.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: CustomEmptyWidget(
-  //               label: context.isArabic
-  //                   ? 'لا يوجد فيديوات مفضلة بعد'
-  //                   : 'No favorite videos yet',
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       return SliverToBoxAdapter(
-  //         child: SizedBox(
-  //           height: MediaQuery.sizeOf(context).height * .6,
-  //           child: ListView.builder(
-  //             controller: _favoriteController,
-  //             itemCount: state.favoriteTalents.length,
-  //             itemBuilder: (context, index) {
-  //               final talent = state.favoriteTalents[index];
-  //               return TalentCard.buildTalentCard(context, talent, _cubit);
-  //             },
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget _buildHistoryContentWithSync(StarState state) {
-  //   return BlocBuilder<StarCubit, StarState>(
-  //     builder: (context, state) {
-  //       if (state.isLoading(TalentCategory.history)) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: const Center(child: CustomCircularProgressIndicator()),
-  //           ),
-  //         );
-  //       }
-
-  //       if (state.historyTalents.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: Center(
-  //               child: Text(
-  //                 context.isArabic
-  //                     ? 'لا يوجد فيديوات في التاريخ'
-  //                     : 'No videos in history',
-  //                 style: TextStyle(color: Colors.grey[600]),
-  //               ),
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       return SliverToBoxAdapter(
-  //         child: SizedBox(
-  //           height: MediaQuery.sizeOf(context).height * .6,
-  //           child: ListView.builder(
-  //             controller: _historyController,
-  //             itemCount: state.historyTalents.length,
-  //             itemBuilder: (context, index) {
-  //               final talent = state.historyTalents[index];
-  //               return Container(
-  //                 padding:
-  //                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-  //                 child: Row(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     // Video thumbnail with overlays
-  //                     Container(
-  //                       width: 140,
-  //                       height: 90,
-  //                       decoration: BoxDecoration(
-  //                         borderRadius: BorderRadius.circular(8),
-  //                         color: Colors.grey[300],
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 12),
-  //                     // Video info
-  //                     Expanded(
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           Text(
-  //                             talent.title,
-  //                             style: TextStyle(
-  //                               fontWeight: FontWeight.w600,
-  //                               fontSize: 15,
-  //                               color: Colors.black87,
-  //                             ),
-  //                             maxLines: 2,
-  //                             overflow: TextOverflow.ellipsis,
-  //                           ),
-  //                           const SizedBox(height: 4),
-  //                           Text(
-  //                             "${talent.user.firstName} ${talent.user.lastName}",
-  //                             style: TextStyle(
-  //                               color: Colors.grey[600],
-  //                               fontSize: 13,
-  //                               fontWeight: FontWeight.w400,
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget _buildMyTalentContentWithSync(StarState state) {
-  //   return BlocBuilder<StarCubit, StarState>(
-  //     builder: (context, state) {
-  //       if (state.isLoading(TalentCategory.myTalents)) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: const Center(child: CustomCircularProgressIndicator()),
-  //           ),
-  //         );
-  //       }
-
-  //       if (state.myTalents.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: CustomEmptyWidget(
-  //               label: LocaleKeys.noResultsFound.localize,
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       // Show VideoDetailsView if video is selected
-  //       if (_showVideoDetails &&
-  //           _selectedVideoTalent != null &&
-  //           _selectedVideoUrl != null) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: MediaQuery.sizeOf(context).height * 0.75,
-  //             child: VideoDetailsView(
-  //               talent: _selectedVideoTalent!,
-  //               mediaUrl: _selectedVideoUrl!,
-  //               onBack: _onBackFromVideoDetails,
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       return SliverToBoxAdapter(
-  //         child: SizedBox(
-  //           height: MediaQuery.sizeOf(context).height * .6,
-  //           child: ListView.builder(
-  //             controller: _myTalentController,
-  //             itemCount: state.myTalents.length,
-  //             itemBuilder: (context, index) {
-  //               final talent = state.myTalents[index];
-  //               final mediaUrl = talent.mediaUrl.isNotEmpty
-  //                   ? talent.mediaUrl.first.mediaKey
-  //                   : '';
-
-  //               return GestureDetector(
-  //                 onTap: () => _onVideoSelected(talent, mediaUrl),
-  //                 child: Container(
-  //                   padding: const EdgeInsets.symmetric(
-  //                       horizontal: 16, vertical: 10),
-  //                   child: Row(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       Container(
-  //                         width: 140,
-  //                         height: 90,
-  //                         decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(8),
-  //                           color: Colors.grey[300],
-  //                         ),
-  //                       ),
-  //                       const SizedBox(width: 12),
-  //                       Expanded(
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Text(
-  //                               talent.title,
-  //                               style: TextStyle(
-  //                                 fontWeight: FontWeight.w600,
-  //                                 fontSize: 15,
-  //                                 color: Colors.black87,
-  //                               ),
-  //                               maxLines: 2,
-  //                               overflow: TextOverflow.ellipsis,
-  //                             ),
-  //                             const SizedBox(height: 4),
-  //                             Text(
-  //                               "${talent.user.firstName} ${talent.user.lastName}",
-  //                               style: TextStyle(
-  //                                 color: Colors.grey[600],
-  //                                 fontSize: 13,
-  //                                 fontWeight: FontWeight.w400,
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget _buildTalentSearchResults(StarState state) {
-  //   if (state.searchResults.isEmpty && _searchController.text.isNotEmpty) {
-  //     return SliverToBoxAdapter(
-  //       child: Center(
-  //         child: Padding(
-  //           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-  //           child: Column(
-  //             children: [
-  //               Icon(
-  //                 Icons.search_off,
-  //                 size: MediaQuery.of(context).size.width * 0.15,
-  //                 color: Colors.grey,
-  //               ),
-  //               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-  //               Text(
-  //                 context.isArabic
-  //                     ? 'لا توجد مواهب تطابق بحثك'
-  //                     : 'No talents match your search',
-  //                 style: TextStyle(
-  //                   fontSize: MediaQuery.of(context).size.width * 0.04,
-  //                   color: Colors.grey,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
-  //   }
-
-  //   return SliverList(
-  //     delegate: SliverChildBuilderDelegate(
-  //       (context, index) {
-  //         final talent = state.searchResults[index];
-  //         return TalentCard.buildTalentCard(context, talent, _cubit);
-  //       },
-  //       childCount: state.searchResults.length,
-  //     ),
-  //   );
-  // }
-
-  // @override
-  // void dispose() {
-  //   // Remove listeners first
-  //   _tabController.removeListener(_onTabChanged);
-  //   _searchController.removeListener(_onSearchChanged);
-  //   _mainScrollController.removeListener(() => _syncFromMain());
-  //   _availableController
-  //       .removeListener(() => _syncToMain(_availableController));
-  //   _favoriteController.removeListener(() => _syncToMain(_favoriteController));
-  //   _historyController.removeListener(() => _syncToMain(_historyController));
-  //   _myTalentController.removeListener(() => _syncToMain(_myTalentController));
-
-  //   // Then dispose controllers
-  //   _tabController.dispose();
-  //   _searchController.dispose();
-  //   _mainScrollController.dispose();
-  //   _availableController.dispose();
-  //   _favoriteController.dispose();
-  //   _historyController.dispose();
-  //   _myTalentController.dispose();
-
-  //   super.dispose();
-  // }
 
   @override
   void dispose() {

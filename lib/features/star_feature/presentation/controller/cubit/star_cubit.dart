@@ -106,6 +106,7 @@ class StarCubit extends Cubit<StarState> {
       (data) => data,
     );
   }
+
   // Future<List<StarEntity>> _fetchAvailableTalents() async {
   //   final response = await _allStarUseCase(
   //     StarPaginationParams(

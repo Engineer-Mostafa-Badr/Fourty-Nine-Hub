@@ -29,70 +29,11 @@ import '../helper/talent_video_player.dart';
 
 class TalentCard {
   // Available content (main feed)
-
-  // static Widget buildAvailableContentSliver({
-  //   required BuildContext context,
-  //   required StarCubit cubit,
-  //   required bool isSearching,
-  // }) {
-  //   return BlocBuilder<StarCubit, StarState>(
-  //     builder: (context, state) {
-  //       // Show loading if first load
-  //       if (state.status == StarStates.loading &&
-  //           state.availableTalents.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: const Center(child: CustomCircularProgressIndicator()),
-  //           ),
-  //         );
-  //       }
-
-  //       // Determine which data to show
-  //       final talentsToShow =
-  //           isSearching ? state.searchResults : state.availableTalents;
-
-  //       if (talentsToShow.isEmpty) {
-  //         return SliverToBoxAdapter(
-  //           child: SizedBox(
-  //             height: 200,
-  //             child: CustomEmptyWidget(
-  //               label: isSearching
-  //                   ? (context.isArabic
-  //                       ? 'لا يوجد نتائج بحث'
-  //                       : 'No search results found')
-  //                   : LocaleKeys.noResultsFound.localize,
-  //             ),
-  //           ),
-  //         );
-  //       }
-
-  //       return SliverToBoxAdapter(
-  //         child: SizedBox(
-  //           height: MediaQuery.sizeOf(context).height * .6,
-  //           child: OlxPaginationWidget(
-  //             items: List.generate(
-  //               talentsToShow.length,
-  //               (index) =>
-  //                   buildTalentCard(context, talentsToShow[index], cubit),
-  //             ),
-  //             banners: bannersList,
-  //             loadPage: (page) => isSearching
-  //                 ? Future.value()
-  //                 : cubit.loadTalents(TalentCategory.available),
-  //             scrollController: ScrollController(),
-  //             itemsPerPage: 1,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-  // في buildAvailableContentSliver method
   static Widget buildAvailableContentSliver({
     required BuildContext context,
     required StarCubit cubit,
     required bool isSearching,
+    ScrollController? scrollController, // Make it optional parameter
   }) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
@@ -126,8 +67,8 @@ class TalentCard {
           );
         }
 
-        // إنشاء ScrollController جديد في كل مرة لتجنب مشكلة disposed
-        final controller = ScrollController();
+        // Use provided controller or create new one if not provided
+        final controller = scrollController ?? ScrollController();
 
         return SliverToBoxAdapter(
           child: SizedBox(
@@ -142,7 +83,7 @@ class TalentCard {
               loadPage: (page) => isSearching
                   ? Future.value()
                   : cubit.loadTalents(TalentCategory.available),
-              scrollController: controller, // استخدام controller جديد
+              scrollController: controller,
               itemsPerPage: 1,
             ),
           ),
@@ -897,7 +838,7 @@ class TalentCard {
     return GestureDetector(
       onTap: () {
         ManageVibration.vibrate();
-        _showHistoryOptions(context, talent, cubit);
+        showHistoryOptions(context, talent, cubit);
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 4),
@@ -978,7 +919,7 @@ class TalentCard {
   }
 
   // Options methods
-  static void _showHistoryOptions(
+  static void showHistoryOptions(
     BuildContext context,
     StarEntity talent,
     StarCubit cubit,
