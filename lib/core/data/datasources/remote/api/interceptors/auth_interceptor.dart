@@ -11,6 +11,10 @@ class AuthInterceptor extends Interceptor {
 
   bool _isRefreshing = false;
   bool _isInvalidSession = false;
+  
+  // Queue for failed requests that need to be retried
+  final List<Completer<Response>> _retryQueue = [];
+  final List<RequestOptions> _queuedRequests = [];
 
   AuthInterceptor( this._token);
 
@@ -76,8 +80,9 @@ class AuthInterceptor extends Interceptor {
       print('🔐 AuthInterceptor: ${err.response?.statusCode} error for ${requestOptions.method} ${requestOptions.path}');
 
       if (_isRefreshing) {
-        print('🔐 AuthInterceptor: Token refresh already in progress, skipping this request');
-        super.onError(err, handler);
+        print('🔐 AuthInterceptor: Token refresh already in progress, queuing request: ${requestOptions.method} ${requestOptions.path}');
+        // Queue this request for retry after token refresh
+        _queueRequestForRetry(requestOptions, handler);
         return;
       }
 
@@ -85,17 +90,9 @@ class AuthInterceptor extends Interceptor {
       try {
         final result = await _refreshToken();
         if (result) {
-          print('🔐 AuthInterceptor: Token refresh successful, retrying request');
-          final retryResult = await _retry(err, handler);
-          if (retryResult) {
-            print('🔐 AuthInterceptor: Request retry successful');
-            return;
-          } else {
-            print('🔐 AuthInterceptor: Request retry failed');
-            if (requestOptions.headers["requiresToken"] == true) {
-              _isInvalidSession = true;
-            }
-          }
+          print('🔐 AuthInterceptor: Token refresh successful, retrying all queued requests');
+          // Retry all queued requests with new token
+          await _retryAllQueuedRequests();
         } else {
           print('🔐 AuthInterceptor: Token refresh failed');
           if (requestOptions.headers["requiresToken"] == true) {
@@ -200,6 +197,101 @@ class AuthInterceptor extends Interceptor {
     }
   }
 
+  /// Queue a failed request for retry after token refresh
+  void _queueRequestForRetry(RequestOptions requestOptions, ErrorInterceptorHandler handler) {
+    print('🔄 AuthInterceptor: Queuing request for retry: ${requestOptions.method} ${requestOptions.path}');
+    
+    final completer = Completer<Response>();
+    _retryQueue.add(completer);
+    _queuedRequests.add(requestOptions);
+    
+    // Wait for the response from the retry
+    completer.future.then((response) {
+      print('✅ AuthInterceptor: Queued request completed successfully: ${requestOptions.method} ${requestOptions.path}');
+      handler.resolve(response);
+    }).catchError((error) {
+      print('❌ AuthInterceptor: Queued request failed: ${requestOptions.method} ${requestOptions.path} - $error');
+      handler.next(DioException(
+        requestOptions: requestOptions,
+        error: error,
+      ));
+    });
+  }
+
+  /// Retry all queued requests with the new token
+  Future<void> _retryAllQueuedRequests() async {
+    if (_retryQueue.isEmpty) {
+      print('🔐 AuthInterceptor: No queued requests to retry');
+      return;
+    }
+    
+    print('🔄 AuthInterceptor: Retrying ${_retryQueue.length} queued requests...');
+    
+    final accessToken = await CacheManager.getAccessToken();
+    if (accessToken == null || accessToken.isEmpty) {
+      print('❌ AuthInterceptor: No access token available for retrying queued requests');
+      _rejectAllQueuedRequests('No access token available');
+      return;
+    }
+    
+    // Create a new Dio instance for retries
+    final dio = Dio(BaseOptions(
+      baseUrl: 'https://49backend.com',
+      headers: {
+        'x-api-key': '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06',
+      },
+    ));
+    
+    // Retry each queued request
+    for (int i = 0; i < _queuedRequests.length; i++) {
+      final requestOptions = _queuedRequests[i];
+      final completer = _retryQueue[i];
+      
+      try {
+        print('🔄 AuthInterceptor: Retrying queued request ${i + 1}/${_retryQueue.length}: ${requestOptions.method} ${requestOptions.path}');
+        
+        final opts = Options(
+          method: requestOptions.method,
+          headers: {
+            ...requestOptions.headers,
+            "Authorization": "Bearer $accessToken",
+            'x-api-key': '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06',
+          },
+        );
+        
+        final response = await dio.request(
+          requestOptions.path,
+          options: opts,
+          data: requestOptions.data,
+          queryParameters: requestOptions.queryParameters,
+        );
+        
+        print('✅ AuthInterceptor: Queued request retry successful: ${requestOptions.method} ${requestOptions.path}');
+        completer.complete(response);
+      } catch (e) {
+        print('❌ AuthInterceptor: Queued request retry failed: ${requestOptions.method} ${requestOptions.path} - $e');
+        completer.completeError(e);
+      }
+    }
+    
+    // Clear the queues
+    _retryQueue.clear();
+    _queuedRequests.clear();
+    print('🔐 AuthInterceptor: All queued requests processed');
+  }
+
+  /// Reject all queued requests with an error
+  void _rejectAllQueuedRequests(String error) {
+    print('❌ AuthInterceptor: Rejecting all queued requests: $error');
+    
+    for (final completer in _retryQueue) {
+      completer.completeError(error);
+    }
+    
+    _retryQueue.clear();
+    _queuedRequests.clear();
+  }
+
   Future<bool> _retry(DioException dioException, ErrorInterceptorHandler handler) async {
     try {
       print('🔄 AuthInterceptor: _retry called for ${dioException.requestOptions.method} ${dioException.requestOptions.path}');
@@ -213,8 +305,13 @@ class AuthInterceptor extends Interceptor {
       
       print('🔄 AuthInterceptor: Using access token: ${accessToken.substring(0, 20)}...');
       
-      // Create a new Dio instance for the retry
-      final dio = Dio();
+      // Create a new Dio instance for the retry with base URL
+      final dio = Dio(BaseOptions(
+        baseUrl: 'https://49backend.com',
+        headers: {
+          'x-api-key': '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06',
+        },
+      ));
       
       // Update headers with new access token
       dioException.requestOptions.headers["Authorization"] = "Bearer $accessToken";
