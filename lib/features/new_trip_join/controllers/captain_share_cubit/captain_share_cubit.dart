@@ -24,6 +24,7 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/list
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_passenger_picked_up_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_route_cancelled_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_update_location_driver_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
@@ -77,6 +78,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final ListenToRouteCancelledUseCase listenToRouteCancelledUseCase;
   final IamComingUseCase iamComingUseCase;
   final GetRunningRouteUseCase getRunningRouteUseCase;
+  final ListenToUpdateLocationDriverUseCase listenToUpdateLocationDriverUseCase;
   CaptainShareCubit(
       this.createPricePerSeatUseCase,
       this.listenToDriverOnWayUseCase,
@@ -86,6 +88,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       this.listenToPassengerPickedUpUseCase,
       this.listenToDriverOnTheWayUseCase,
       this.listenToRouteCancelledUseCase,
+      this.listenToUpdateLocationDriverUseCase,
       this.iamComingUseCase,
       this.getRunningRouteUseCase,
       this.listenToAcceptRouteUseCase,
@@ -135,6 +138,20 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
         // runningRoute.yourStatus = 'driverNoShowPassenger';
       }
       emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
+    });
+  }
+  updateDriverLocation(){
+    CliLogger.info('updateDriverLocation');
+    listenToUpdateLocationDriverUseCase((data) {
+      final newDriverLocation = LatLng(data.latitude, data.longitude);
+      final LatLng? oldDriverLocation = state.driverLocation;
+      log("newDriverLocation $newDriverLocation");
+      emit(state.copyWith(
+        driverLocation: newDriverLocation,
+        previousDriverLocation:
+        oldDriverLocation, // <-- Pass the old location here
+        status: CaptainShareStates.success,
+      ));
     });
   }
 
@@ -852,41 +869,5 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     );
   }
 
-  updateDriverLocation(){
-    CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking:");
-    SharedWebSocket.socket!.on("RIDE:TRIP_LOCATION_UPDATED", (data) {
-      CliLogger.info("RIDE:TRIP_LOCATION_UPDATED tracking: $data");
 
-      if (data is Map<String, dynamic> &&
-          data.containsKey('updateLocation')) {
-        final updateLocation = data['updateLocation'] as Map<String, dynamic>;
-
-
-          if (updateLocation.containsKey('location')) {
-            final locationData =
-            updateLocation['location'] as Map<String, dynamic>;
-            final latitude = locationData['latitude'] as double?;
-            final longitude = locationData['longitude'] as double?;
-
-            if (latitude != null && longitude != null) {
-              final newDriverLocation = LatLng(latitude, longitude);
-
-              // IMPORTANT: Store the current driverLocation as the previousDriverLocation
-              // before updating to the new location.
-              final LatLng? oldDriverLocation = state.driverLocation;
-
-              log("newDriverLocation $newDriverLocation");
-
-              emit(state.copyWith(
-                driverLocation: newDriverLocation,
-                previousDriverLocation:
-                oldDriverLocation, // <-- Pass the old location here
-                status: CaptainShareStates.success,
-              ));
-            }
-          }
-
-      }
-    });
-  }
 }
