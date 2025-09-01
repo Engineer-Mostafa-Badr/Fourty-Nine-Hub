@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/check_guest_state_use_case.dart';
@@ -43,7 +45,7 @@ import '../../../domain/use_cases/sign_out_usecase.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
-class UserCubit extends Cubit<BasicState<UserEntity>> {
+class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
   static UserCubit to = AppPages
       .router.routerDelegate.navigatorKey.currentContext!
       .read<UserCubit>();
@@ -94,7 +96,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._signInAsGuestUseCase,
     this._checkGuestStateUseCase,
     this._convertGuestToUserUseCase,
-  ) : super(const BasicState());
+  ) : super(const BasicState()) {
+    // Initialize auto-refresh functionality
+    initializeAutoRefresh();
+  }
   bool get isAuthenticated => state.data != null && !isGuestMode;
   bool get isGuestMode => state.data?.isGuest == true;
 
@@ -127,13 +132,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       );
       _attachTokenUseCase(tokens);
       
-      // Set up token refresh callback
-      final apiConsumer = serviceLocator<ApiConsumer>();
-      apiConsumer.setTokenRefreshCallback((UserTokensEntity refreshedTokens) {
-        // Update the app's authentication state when token is refreshed
-        _attachTokenUseCase(refreshedTokens);
-        isTokenAttached = true;
-      });
+      // Token refresh is now handled by AutoRefreshMixin via stream notification
+      // No need for direct callback setup
     }
     isTokenAttached = accessToken != null && refreshToken != null;
     await getUser();
@@ -207,13 +207,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         _attachTokenUseCase(tokens);
         isTokenAttached = true;
 
-        // Set up token refresh callback
-        final apiConsumer = serviceLocator<ApiConsumer>();
-        apiConsumer.setTokenRefreshCallback((UserTokensEntity refreshedTokens) {
-          // Update the app's authentication state when token is refreshed
-          _attachTokenUseCase(refreshedTokens);
-          isTokenAttached = true;
-        });
+        // Token refresh is now handled by AutoRefreshMixin via stream notification
+        // No need for direct callback setup
 
         // جلب بيانات المستخدم
         await getUser();
@@ -621,4 +616,36 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   //     print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
   //   });
   //   }
+
+  @override
+  void onTokenRefreshed() {
+    print('🔄 UserCubit: Token refreshed, updating authentication state...');
+    // Get the latest tokens from cache and update the app state
+    _updateTokensFromCache();
+  }
+  
+  Future<void> _updateTokensFromCache() async {
+    try {
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
+      
+      if (accessToken != null && refreshToken != null) {
+        final tokens = UserTokensEntity(
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        );
+        _attachTokenUseCase(tokens);
+        isTokenAttached = true;
+        print('🔄 UserCubit: Tokens updated successfully');
+      }
+    } catch (e) {
+      print('❌ UserCubit: Error updating tokens from cache: $e');
+    }
+  }
+  
+  @override
+  Future<void> close() {
+    disposeAutoRefresh();
+    return super.close();
+  }
 }

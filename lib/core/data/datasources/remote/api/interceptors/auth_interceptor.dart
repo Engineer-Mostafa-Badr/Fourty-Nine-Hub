@@ -5,16 +5,68 @@ import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+// Global event stream for notifying data refresh
+class DataRefreshEvent {
+  static final StreamController<void> _controller = StreamController<void>.broadcast();
+  static Stream<void> get stream => _controller.stream;
+  
+  // Add a flag to prevent multiple notifications within a short time window
+  static DateTime? _lastNotification;
+  static const Duration _debounceWindow = Duration(milliseconds: 500);
+  
+  static void notifyRefresh() {
+    final now = DateTime.now();
+    
+    // Check if we're within the debounce window
+    if (_lastNotification != null && 
+        now.difference(_lastNotification!) < _debounceWindow) {
+      print('🔄 DataRefreshEvent: Skipping notification - within debounce window');
+      return;
+    }
+    
+    _lastNotification = now;
+    print('🔄 DataRefreshEvent: notifyRefresh called at: $now');
+    print('🔄 DataRefreshEvent: Stream controller state - hasListener: ${_controller.hasListener}, isBroadcast: ');
+    _controller.add(null);
+    print('🔄 DataRefreshEvent: Event added to stream');
+  }
+  
+  static void dispose() {
+    _controller.close();
+  }
+}
+
+/// Mixin for cubits to automatically refresh data when tokens are refreshed
+mixin AutoRefreshMixin {
+  StreamSubscription<void>? _refreshSubscription;
+  
+  /// Initialize auto-refresh functionality
+  void initializeAutoRefresh() {
+    print('🔄 AutoRefreshMixin: Initializing for ${runtimeType} - Instance: ${identityHashCode(this)}');
+    _refreshSubscription = DataRefreshEvent.stream.listen((_) {
+      print('🔄 AutoRefreshMixin: Token refreshed, refreshing data for ${runtimeType} - Instance: ${identityHashCode(this)}');
+      print('🔄 AutoRefreshMixin: Stream event received at: ${DateTime.now()}');
+      onTokenRefreshed();
+    });
+  }
+  
+  /// Override this method to implement data refresh logic
+  void onTokenRefreshed();
+  
+  /// Dispose auto-refresh subscription
+  void disposeAutoRefresh() {
+    print('🔄 AutoRefreshMixin: Disposing for ${runtimeType} - Instance: ${identityHashCode(this)}');
+    _refreshSubscription?.cancel();
+    _refreshSubscription = null;
+  }
+}
+
 class AuthInterceptor extends Interceptor {
   UserTokensEntity? _token;
   Function(UserTokensEntity)? _onTokenRefreshed;
 
   bool _isRefreshing = false;
   bool _isInvalidSession = false;
-  
-  // Queue for failed requests that need to be retried
-  final List<Completer<Response>> _retryQueue = [];
-  final List<RequestOptions> _queuedRequests = [];
 
   AuthInterceptor( this._token);
 
@@ -80,19 +132,29 @@ class AuthInterceptor extends Interceptor {
       print('🔐 AuthInterceptor: ${err.response?.statusCode} error for ${requestOptions.method} ${requestOptions.path}');
 
       if (_isRefreshing) {
-        print('🔐 AuthInterceptor: Token refresh already in progress, queuing request: ${requestOptions.method} ${requestOptions.path}');
-        // Queue this request for retry after token refresh
-        _queueRequestForRetry(requestOptions, handler);
+        print('🔐 AuthInterceptor: Token refresh already in progress, skipping this request');
+        super.onError(err, handler);
         return;
       }
 
+      print('🔐 AuthInterceptor: Setting _isRefreshing to true for request: ${requestOptions.method} ${requestOptions.path}');
       _isRefreshing = true;
       try {
         final result = await _refreshToken();
         if (result) {
-          print('🔐 AuthInterceptor: Token refresh successful, retrying all queued requests');
-          // Retry all queued requests with new token
-          await _retryAllQueuedRequests();
+          print('🔐 AuthInterceptor: Token refresh successful, retrying request');
+          // final retryResult = await _retry(err, handler);
+          // if (retryResult) {
+          //   print('🔐 AuthInterceptor: Request retry successful');
+          //   // Notify all active cubits to refresh their data
+          //   _notifyDataRefresh();
+          //   return;
+          // } else {
+          //   print('🔐 AuthInterceptor: Request retry failed');
+          //   if (requestOptions.headers["requiresToken"] == true) {
+          //     _isInvalidSession = true;
+          //   }
+          // }
         } else {
           print('🔐 AuthInterceptor: Token refresh failed');
           if (requestOptions.headers["requiresToken"] == true) {
@@ -105,6 +167,7 @@ class AuthInterceptor extends Interceptor {
           _isInvalidSession = true;
         }
       } finally {
+        print('🔐 AuthInterceptor: Setting _isRefreshing to false');
         _isRefreshing = false;
       }
     }
@@ -112,9 +175,16 @@ class AuthInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 
+  /// Notify all active cubits to refresh their data
+  void _notifyDataRefresh() {
+    print('🔄 AuthInterceptor: Notifying all cubits to refresh data...');
+    print('🔄 AuthInterceptor: Current instance: ${identityHashCode(this)}');
+    DataRefreshEvent.notifyRefresh();
+  }
+
   Future<bool> _refreshToken() async {
     try {
-      print('🔄 AuthInterceptor: _refreshToken method called!');
+      print('🔄 AuthInterceptor: _refreshToken method called! - Instance: ${identityHashCode(this)}');
       
       // Get tokens from cache
       final refreshToken = await CacheManager.getRefreshToken();
@@ -177,8 +247,13 @@ class AuthInterceptor extends Interceptor {
         
         // Notify the app about the token refresh
         if (_onTokenRefreshed != null) {
-          _onTokenRefreshed!(newToken);
+          // Comment out direct callback to prevent duplicate notifications
+          // _onTokenRefreshed!(newToken);
         }
+        
+        // Notify all active cubits to refresh their data
+        print('🔐 AuthInterceptor: About to notify data refresh...');
+        _notifyDataRefresh();
         
         print('🔐 AuthInterceptor: Token refresh completed successfully');
         return true;
@@ -195,101 +270,6 @@ class AuthInterceptor extends Interceptor {
       }
       return false;
     }
-  }
-
-  /// Queue a failed request for retry after token refresh
-  void _queueRequestForRetry(RequestOptions requestOptions, ErrorInterceptorHandler handler) {
-    print('🔄 AuthInterceptor: Queuing request for retry: ${requestOptions.method} ${requestOptions.path}');
-    
-    final completer = Completer<Response>();
-    _retryQueue.add(completer);
-    _queuedRequests.add(requestOptions);
-    
-    // Wait for the response from the retry
-    completer.future.then((response) {
-      print('✅ AuthInterceptor: Queued request completed successfully: ${requestOptions.method} ${requestOptions.path}');
-      handler.resolve(response);
-    }).catchError((error) {
-      print('❌ AuthInterceptor: Queued request failed: ${requestOptions.method} ${requestOptions.path} - $error');
-      handler.next(DioException(
-        requestOptions: requestOptions,
-        error: error,
-      ));
-    });
-  }
-
-  /// Retry all queued requests with the new token
-  Future<void> _retryAllQueuedRequests() async {
-    if (_retryQueue.isEmpty) {
-      print('🔐 AuthInterceptor: No queued requests to retry');
-      return;
-    }
-    
-    print('🔄 AuthInterceptor: Retrying ${_retryQueue.length} queued requests...');
-    
-    final accessToken = await CacheManager.getAccessToken();
-    if (accessToken == null || accessToken.isEmpty) {
-      print('❌ AuthInterceptor: No access token available for retrying queued requests');
-      _rejectAllQueuedRequests('No access token available');
-      return;
-    }
-    
-    // Create a new Dio instance for retries
-    final dio = Dio(BaseOptions(
-      baseUrl: 'https://49backend.com',
-      headers: {
-        'x-api-key': '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06',
-      },
-    ));
-    
-    // Retry each queued request
-    for (int i = 0; i < _queuedRequests.length; i++) {
-      final requestOptions = _queuedRequests[i];
-      final completer = _retryQueue[i];
-      
-      try {
-        print('🔄 AuthInterceptor: Retrying queued request ${i + 1}/${_retryQueue.length}: ${requestOptions.method} ${requestOptions.path}');
-        
-        final opts = Options(
-          method: requestOptions.method,
-          headers: {
-            ...requestOptions.headers,
-            "Authorization": "Bearer $accessToken",
-            'x-api-key': '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06',
-          },
-        );
-        
-        final response = await dio.request(
-          requestOptions.path,
-          options: opts,
-          data: requestOptions.data,
-          queryParameters: requestOptions.queryParameters,
-        );
-        
-        print('✅ AuthInterceptor: Queued request retry successful: ${requestOptions.method} ${requestOptions.path}');
-        completer.complete(response);
-      } catch (e) {
-        print('❌ AuthInterceptor: Queued request retry failed: ${requestOptions.method} ${requestOptions.path} - $e');
-        completer.completeError(e);
-      }
-    }
-    
-    // Clear the queues
-    _retryQueue.clear();
-    _queuedRequests.clear();
-    print('🔐 AuthInterceptor: All queued requests processed');
-  }
-
-  /// Reject all queued requests with an error
-  void _rejectAllQueuedRequests(String error) {
-    print('❌ AuthInterceptor: Rejecting all queued requests: $error');
-    
-    for (final completer in _retryQueue) {
-      completer.completeError(error);
-    }
-    
-    _retryQueue.clear();
-    _queuedRequests.clear();
   }
 
   Future<bool> _retry(DioException dioException, ErrorInterceptorHandler handler) async {
