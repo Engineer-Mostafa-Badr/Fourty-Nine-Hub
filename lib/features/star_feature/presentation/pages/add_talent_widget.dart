@@ -8,9 +8,11 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../routes/pages.dart';
 import '../../domain/use_case/upload_my_star_use_case.dart';
-import '../controller/cubit/star_cubit.dart';
+import '../controller/star_cubit/star_cubit.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -775,8 +777,55 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     _videoController!.setLooping(true);
   }
 
+  // Future<void> _handleSubmit() async {
+  //   if (!_formKey.currentState!.validate()) return;
+
+  //   if (_selectedVideo == null) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(
+  //             context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
+
+  //   if (_selectedThumbnail == null) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(context.isArabic
+  //             ? 'يرجى اختيار صورة مصغرة'
+  //             : 'Please select a thumbnail'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
+
+  //   // Check subscription first
+  //   serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+  //     onSubscribed: () => _performUpload(),
+  //     subCategoryId: Constants.tubeSubCategory,
+  //   );
+  // }
+
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
+
+    // تحقق إضافي من الوصف
+    final description = _descriptionController.text.trim();
+    if (description.length < 3 || description.length > 1000) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.isArabic
+              ? 'يجب أن يكون طول الوصف بين 3 و 1000 حرف'
+              : 'Description length must be between 3-1000 characters'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     if (_selectedVideo == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -886,38 +935,43 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         (failure) {
           print("❌ Upload failed: ${failure.toString()}");
 
-          String errorMessage;
-          if (failure is ServerFailure) {
-            if (failure.statusCode == 401) {
-              errorMessage = context.isArabic
-                  ? 'انتهت صلاحية الجلسة. يرجى إعادة المحاولة'
-                  : 'Session expired. Please try again';
-            } else {
-              errorMessage = context.isArabic
-                  ? 'خطأ في الخادم: ${failure.message}'
-                  : 'Server error: ${failure.message}';
-            }
-          } else if (failure is UnknownFailure) {
-            if (failure.error.contains('expired')) {
-              errorMessage = context.isArabic
-                  ? 'انتهت صلاحية رفع الملف. يرجى إعادة المحاولة'
-                  : 'Upload session expired. Please try again';
-            } else if (failure.error.contains('duration')) {
-              errorMessage = context.isArabic
-                  ? 'فشل في الحصول على مدة الفيديو. يرجى إعادة المحاولة'
-                  : 'Failed to get video duration. Please try again';
-            } else {
-              errorMessage = context.isArabic
-                  ? 'فشل الرفع: ${failure.error}'
-                  : 'Upload failed: ${failure.error}';
-            }
-          } else {
-            errorMessage = context.isArabic
-                ? 'حدث خطأ غير معروف'
-                : 'An unknown error occurred';
-          }
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
 
-          _showError(errorMessage);
+          // String errorMessage;
+          // if (failure is ServerFailure) {
+          //   if (failure.statusCode == 401) {
+          //     errorMessage = context.isArabic
+          //         ? 'انتهت صلاحية الجلسة. يرجى إعادة المحاولة'
+          //         : 'Session expired. Please try again';
+          //   } else {
+          //     errorMessage = context.isArabic
+          //         ? 'خطأ في الخادم: ${failure.message}'
+          //         : 'Server error: ${failure.message}';
+          //   }
+          // } else if (failure is UnknownFailure) {
+          //   if (failure.error.contains('expired')) {
+          //     errorMessage = context.isArabic
+          //         ? 'انتهت صلاحية رفع الملف. يرجى إعادة المحاولة'
+          //         : 'Upload session expired. Please try again';
+          //   } else if (failure.error.contains('duration')) {
+          //     errorMessage = context.isArabic
+          //         ? 'فشل في الحصول على مدة الفيديو. يرجى إعادة المحاولة'
+          //         : 'Failed to get video duration. Please try again';
+          //   } else {
+          //     errorMessage = context.isArabic
+          //         ? 'فشل الرفع: ${failure.error}'
+          //         : 'Upload failed: ${failure.error}';
+          //   }
+          // } else {
+          //   errorMessage = context.isArabic
+          //       ? 'حدث خطأ غير معروف'
+          //       : 'An unknown error occurred';
+          // }
+
+          // _showError(errorMessage);
         },
         (success) {
           print("✅ Upload successful!");

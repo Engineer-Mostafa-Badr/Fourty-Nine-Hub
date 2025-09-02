@@ -276,7 +276,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/us
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';

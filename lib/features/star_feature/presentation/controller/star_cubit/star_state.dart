@@ -1,40 +1,23 @@
-import '../../../../../core/error/failure.dart';
-import '../../../domain/entity/banner_talent_entity.dart';
-import '../../../domain/entity/profile_entity.dart';
-import '../../../domain/entity/star_entity.dart';
-import '../../../domain/entity/star_winner_entity.dart';
-import '../../../../../common/functions/global/upload_file.dart';
-
-enum StarStates { loading, initial, success, uploadSuccess, error }
-
-// Define data categories for better organization
-enum TalentCategory { 
-  available,    // All available talents
-  favorites,    // User's favorite talents
-  history,      // User's viewing history
-  myTalents     // User's uploaded talents
-}
-
+part of 'star_cubit.dart';
 class StarState {
   final StarStates status;
   final Failure? failure;
-  
+
   // Unified data storage
   final Map<TalentCategory, List<StarEntity>> talents;
   final Map<TalentCategory, bool> loadingStates;
   final Map<TalentCategory, bool> hasMoreData;
   final Map<TalentCategory, int> currentPages;
-  
+
   // Other data
   final List<StarWinnerEntity> winners;
   final List<UploadFileEntity>? videos;
   final BannerTalentEntity? banner;
   final Set<String> favoriteIds;
-  
+
   // Search and filter state
   final String searchQuery;
   final List<StarEntity> searchResults;
-
   final List<ProfileEntity> searchProfileResults;
   final bool isSearchingProfiles;
 
@@ -53,42 +36,47 @@ class StarState {
     List<StarEntity>? searchResults,
     List<ProfileEntity>? searchProfileResults,
     this.isSearchingProfiles = false,
-  }) : 
-    searchProfileResults = searchProfileResults ?? [],
-    talents = talents ?? {
-      TalentCategory.available: [],
-      TalentCategory.favorites: [],
-      TalentCategory.history: [],
-      TalentCategory.myTalents: [],
-    },
-    loadingStates = loadingStates ?? {
-      TalentCategory.available: false,
-      TalentCategory.favorites: false,
-      TalentCategory.history: false,
-      TalentCategory.myTalents: false,
-    },
-    hasMoreData = hasMoreData ?? {
-      TalentCategory.available: true,
-      TalentCategory.favorites: true,
-      TalentCategory.history: true,
-      TalentCategory.myTalents: true,
-    },
-    currentPages = currentPages ?? {
-      TalentCategory.available: 1,
-      TalentCategory.favorites: 1,
-      TalentCategory.history: 1,
-      TalentCategory.myTalents: 1,
-    },
-    winners = winners ?? [],
-    favoriteIds = favoriteIds ?? {},
-    searchResults = searchResults ?? [];
+  })  : searchProfileResults = searchProfileResults ?? [],
+        talents = talents ??
+            {
+              TalentCategory.available: [],
+              TalentCategory.favorites: [],
+              TalentCategory.history: [],
+              TalentCategory.myTalents: [],
+            },
+        loadingStates = loadingStates ??
+            {
+              TalentCategory.available: false,
+              TalentCategory.favorites: false,
+              TalentCategory.history: false,
+              TalentCategory.myTalents: false,
+            },
+        hasMoreData = hasMoreData ??
+            {
+              TalentCategory.available: true,
+              TalentCategory.favorites: true,
+              TalentCategory.history: true,
+              TalentCategory.myTalents: true,
+            },
+        currentPages = currentPages ??
+            {
+              TalentCategory.available: 1,
+              TalentCategory.favorites: 1,
+              TalentCategory.history: 1,
+              TalentCategory.myTalents: 1,
+            },
+        winners = winners ?? [],
+        favoriteIds = favoriteIds ?? {},
+        searchResults = searchResults ?? [];
 
   // Helper getters for easy access
-  List<StarEntity> get availableTalents => talents[TalentCategory.available] ?? [];
-  List<StarEntity> get favoriteTalents => talents[TalentCategory.favorites] ?? [];
+  List<StarEntity> get availableTalents =>
+      talents[TalentCategory.available] ?? [];
+  List<StarEntity> get favoriteTalents =>
+      talents[TalentCategory.favorites] ?? [];
   List<StarEntity> get historyTalents => talents[TalentCategory.history] ?? [];
   List<StarEntity> get myTalents => talents[TalentCategory.myTalents] ?? [];
-  
+
   bool isLoading(TalentCategory category) => loadingStates[category] ?? false;
   bool hasMore(TalentCategory category) => hasMoreData[category] ?? false;
   int getCurrentPage(TalentCategory category) => currentPages[category] ?? 1;
@@ -126,5 +114,4 @@ class StarState {
       isSearchingProfiles: isSearchingProfiles ?? this.isSearchingProfiles,
     );
   }
-  
 }

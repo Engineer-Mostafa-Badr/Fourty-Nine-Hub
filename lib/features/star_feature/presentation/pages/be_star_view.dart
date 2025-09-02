@@ -1,50 +1,23 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
-import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_style_video_player.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_app_bar.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_floating_button.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_header_section.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_search_bar.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/be_star_tab_content.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/subscribe_button_widget.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/video_details_view.dart';
-import 'package:fourtyninehub/helpers/subscription_method.dart';
-import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-import '../../../../ads/native_ad_card.dart';
-import '../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/extensions/context_extension.dart';
-import '../../../../core/extensions/string_extension.dart';
-import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/utils/custom_show_dialog.dart';
-import '../../../../core/widget/custom_circular_progress_indicator.dart';
-import '../../../../core/widget/custom_loading_search_widget.dart';
-import '../../../../core/widget/olx_pagination/banner.dart';
-import '../../../../helpers/manage_vibration.dart';
-import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
-import '../../../../service_locator/service_locator.dart';
-import '../../../account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../domain/entity/star_entity.dart';
-import '../controller/cubit/star_cubit.dart';
-import '../controller/cubit/star_state.dart';
+
+import '../controller/star_cubit/star_cubit.dart';
+import '../utils/enums.dart';
+import '../widgets/be_star_floating_button.dart';
+import '../widgets/be_star_header_section.dart';
+import '../widgets/be_star_search_bar.dart';
+import '../widgets/common/loading_indicator.dart';
 import '../widgets/profile_search_results.dart';
-import 'all_winner_view.dart';
-import '../widgets/floating_action_button_star.dart';
 import '../widgets/sticky_tab_bar_delegate.dart';
+import '../widgets/talent_card/talent_card.dart';
+import '../widgets/talent_card/talent_card_builders.dart';
+import 'video_details_view.dart';
 
 class BeStarView extends StatefulWidget {
   const BeStarView({super.key});
@@ -57,7 +30,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   late StarCubit _cubit;
   late TabController _tabController;
   bool _showFloatingButton = true;
-  final AdsManager _adsManager = AdsManager();
   int _selectedTabIndex = 0;
   bool _isSearching = false;
   bool _isSearchingProfiles = false;
@@ -89,7 +61,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
     // Initialize all data
     _cubit.initializeAllData();
-    _adsManager.preloadAds();
 
     // Setup scroll synchronization
     _setupScrollSynchronization();
@@ -115,7 +86,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         activeController.hasClients &&
         _mainScrollController.hasClients &&
         mounted) {
-      // إضافة mounted check
       activeController.jumpTo(_mainScrollController.offset.clamp(
         activeController.position.minScrollExtent,
         activeController.position.maxScrollExtent,
@@ -132,7 +102,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     if (_mainScrollController.hasClients &&
         tabController.hasClients &&
         mounted) {
-      // إضافة mounted check
       _mainScrollController.jumpTo(tabController.offset.clamp(
         _mainScrollController.position.minScrollExtent,
         _mainScrollController.position.maxScrollExtent,
@@ -273,19 +242,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: BeStarFloatingButton(
+        isLoggedIn: context.watch<UserCubit>().isLoggedIn,
         showButton: _showFloatingButton,
-        isLoggedIn: context.read<UserCubit>().isLoggedIn,
       ),
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
           if (state.status == StarStates.loading &&
               state.availableTalents.isEmpty) {
-            return const CustomLoadingSearchWidget();
+            return const StarLoadingIndicator(message: 'Loading content...');
           }
 
           return RefreshIndicator(
-            color: AppColors.getTextColor(context),
-            backgroundColor: AppColors.getFindFillColor(context),
             onRefresh: () async {
               if (_isSearching) {
                 if (_isSearchingProfiles) {
@@ -319,7 +286,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       surfaceTintColor: Colors.transparent,
                       backgroundColor:
                           context.isDarkMode ? Colors.black : Colors.white,
-                      toolbarHeight: 30,
+                      toolbarHeight: 60,
                       titleSpacing: 16,
                       leading: BackButton(
                           onPressed: () {
@@ -361,7 +328,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ],
                     ),
 
-                    // Header Section - هيختفي مع الـ scroll
+                    // Header Section - يختفي مع الـ scroll
                     if (!_isSearching)
                       SliverToBoxAdapter(
                         child: BeStarHeaderSection(state: state),
@@ -396,7 +363,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                 body: Builder(
                   builder: (context) {
                     if (_isSearching && _isSearchingProfiles) {
-                      // Profile search results - wrap in CustomScrollView for sliver
                       return CustomScrollView(
                         slivers: [
                           ProfileSearchResults(
@@ -406,10 +372,8 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                         ],
                       );
                     } else if (_isSearching && !_isSearchingProfiles) {
-                      // Talent search results - regular widget
                       return _buildTalentSearchResults(state);
                     } else {
-                      // Regular tab content - regular widgets
                       return _buildSynchronizedTabContent(state);
                     }
                   },
@@ -423,406 +387,65 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   }
 
   Widget _buildSynchronizedTabContent(StarState state) {
+    return CustomScrollView(
+      slivers: [
+        // Your existing tab content as slivers
+        _getTabContentSliver(state),
+      ],
+    );
+  }
+
+  Widget _getTabContentSliver(StarState state) {
     switch (_selectedTabIndex) {
       case 0: // Available
-        return _buildAvailableContent(state);
+        return TalentCardBuilders.buildAvailableContentSliver(
+          context: context,
+          cubit: _cubit,
+          isSearching: false,
+          scrollController: _availableController,
+        );
       case 1: // Favorites
-        return _buildFavoriteContent(state);
+        return TalentCardBuilders.buildFavoriteContentSliver(
+          context: context,
+          cubit: _cubit,
+        );
       case 2: // History
-        return _buildHistoryContent(state);
+        return TalentCardBuilders.buildHistoryContentSliver(
+          context: context,
+          cubit: _cubit,
+        );
       case 3: // My Talents
         return _buildMyTalentContent(state);
       default:
-        return _buildAvailableContent(state);
-    }
-  }
-
-  Widget _buildAvailableContent(StarState state) {
-    return BlocBuilder<StarCubit, StarState>(
-      builder: (context, state) {
-        if (state.status == StarStates.loading &&
-            state.availableTalents.isEmpty) {
-          return SizedBox(
-            height: 200,
-            child: const Center(child: CustomCircularProgressIndicator()),
-          );
-        }
-
-        final talentsToShow = state.availableTalents;
-        if (talentsToShow.isEmpty) {
-          return SizedBox(
-            height: 200,
-            child: CustomEmptyWidget(
-              label: LocaleKeys.noResultsFound.localize,
-            ),
-          );
-        }
-
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height * .6,
-          child: OlxPaginationWidget(
-            items: List.generate(
-              talentsToShow.length,
-              (index) => TalentCard.buildTalentCard(
-                  context, talentsToShow[index], _cubit),
-            ),
-            banners: bannersList,
-            loadPage: (page) => _cubit.loadTalents(TalentCategory.available),
-            scrollController: _availableController,
-            itemsPerPage: 1,
-          ),
+        return TalentCardBuilders.buildAvailableContentSliver(
+          context: context,
+          cubit: _cubit,
+          isSearching: false,
+          scrollController: _availableController,
         );
-      },
-    );
-  }
-
-  Widget _buildFavoriteContent(StarState state) {
-    return BlocBuilder<StarCubit, StarState>(
-      builder: (context, state) {
-        if (state.isLoading(TalentCategory.favorites)) {
-          return SizedBox(
-            height: 200,
-            child: const Center(child: CustomCircularProgressIndicator()),
-          );
-        }
-
-        if (state.favoriteTalents.isEmpty) {
-          return SizedBox(
-            height: 200,
-            child: CustomEmptyWidget(
-              label: context.isArabic
-                  ? 'لا يوجد فيديوات مفضلة بعد'
-                  : 'No favorite videos yet',
-            ),
-          );
-        }
-
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height * .6,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            controller: _favoriteController,
-            itemCount: state.favoriteTalents.length,
-            itemBuilder: (context, index) {
-              final talent = state.favoriteTalents[index];
-              return TalentCard.buildTalentCard(context, talent, _cubit);
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildHistoryContent(StarState state) {
-    return BlocBuilder<StarCubit, StarState>(
-      builder: (context, state) {
-        // حالة التحميل الأولي
-        if (state.isLoading(TalentCategory.history)) {
-          return SizedBox(
-            height: 200,
-            child: const Center(child: CustomCircularProgressIndicator()),
-          );
-        }
-
-        // حالة عدم وجود عناصر
-        if (state.historyTalents.isEmpty) {
-          return SizedBox(
-            height: 200,
-            child: Center(
-              child: Text(
-                context.isArabic
-                    ? 'لا يوجد فيديوات في التاريخ'
-                    : 'No videos in history',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          );
-        }
-
-        // العدد مع خانة إضافية إن كان هناك المزيد
-        final hasMore = state.hasMore(TalentCategory.history);
-        final itemCount = state.historyTalents.length + (hasMore ? 1 : 0);
-
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height * .6,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            controller: _historyController,
-            itemCount: itemCount,
-            itemBuilder: (context, index) {
-              if (index == state.historyTalents.length) {
-                return _buildLoadMoreWidgetIfNeeded(context, state);
-              }
-
-              final talent = state.historyTalents[index];
-
-              return GestureDetector(
-                onTap: () {
-                  ManageVibration.vibrate();
-                  final mediaUrl = talent.mediaUrl.isNotEmpty
-                      ? talent.mediaUrl.first.mediaKey
-                      : '';
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TalentVideoPlayer(
-                        talent: talent,
-                        videoUrl: mediaUrl,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Thumbnail + Overlays (مكافئ لـ _buildThumbnailWithOverlays)
-                      Container(
-                        width: 140,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.grey,
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/testforvideo.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 8,
-                              left: 8,
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: const Icon(
-                                  Icons.volume_up,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 8,
-                              left: 8,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.8),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: const Text(
-                                  '7:54',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // معلومات الفيديو (مكافئ لـ _buildVideoInfoColumn)
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              talent.title,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: Colors.black87,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "${talent.user.firstName} ${talent.user.lastName}",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            // إن رغبت بإظهار المشاهدات والزمن مثل TalentCard
-                            // يمكن استيراد timeago واستخدامه هنا.
-                          ],
-                        ),
-                      ),
-                      // زر الخيارات (مكافئ لـ _buildMoreOptionsButton)
-                      GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          TalentCard.showHistoryOptions(
-                              context, talent, _cubit);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Icon(
-                            Icons.more_vert,
-                            size: 20,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-// مكافئ لويدجت TalentCard._buildLoadMoreWidget ولكن كود محلي في BeStarView
-  Widget _buildLoadMoreWidgetIfNeeded(BuildContext context, StarState state) {
-    final category = TalentCategory.history;
-    if (state.isLoading(category)) {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        child: const Center(child: CustomCircularProgressIndicator()),
-      );
     }
-    if (!state.hasMore(category)) {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Text(
-            context.isArabic ? 'لا يوجد المزيد' : 'No more content',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ),
-      );
-    }
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Center(
-        child: ElevatedButton(
-          onPressed: () => _cubit.loadTalents(category),
-          child: Text(context.isArabic ? 'تحميل المزيد' : 'Load More'),
-        ),
-      ),
-    );
   }
 
   Widget _buildMyTalentContent(StarState state) {
-    return BlocBuilder<StarCubit, StarState>(
-      builder: (context, state) {
-        if (state.isLoading(TalentCategory.myTalents)) {
-          return SizedBox(
-            height: 200,
-            child: const Center(child: CustomCircularProgressIndicator()),
-          );
-        }
-
-        if (state.myTalents.isEmpty) {
-          return SizedBox(
-            height: 200,
-            child: CustomEmptyWidget(
-              label: LocaleKeys.noResultsFound.localize,
-            ),
-          );
-        }
-
-        // Show VideoDetailsView if video is selected
-        if (_showVideoDetails &&
-            _selectedVideoTalent != null &&
-            _selectedVideoUrl != null) {
-          return SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.75,
-            child: VideoDetailsView(
-              talent: _selectedVideoTalent!,
-              mediaUrl: _selectedVideoUrl!,
-              onBack: _onBackFromVideoDetails,
-            ),
-          );
-        }
-
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height * .6,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            controller: _myTalentController,
-            itemCount: state.myTalents.length,
-            itemBuilder: (context, index) {
-              final talent = state.myTalents[index];
-              final mediaUrl = talent.mediaUrl.isNotEmpty
-                  ? talent.mediaUrl.first.mediaKey
-                  : '';
-              return GestureDetector(
-                onTap: () => _onVideoSelected(talent, mediaUrl),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 140,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.grey[300],
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              talent.title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: Colors.black87,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "${talent.user.firstName} ${talent.user.lastName}",
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
+    // Show VideoDetailsView if video is selected, otherwise show list
+    if (_showVideoDetails &&
+        _selectedVideoTalent != null &&
+        _selectedVideoUrl != null) {
+      return SizedBox(
+        height: MediaQuery.sizeOf(context).height * 0.75,
+        child: VideoDetailsView(
+          talent: _selectedVideoTalent!,
+          mediaUrl: _selectedVideoUrl!,
+          onBack: _onBackFromVideoDetails,
+        ),
+      );
+    } else {
+      return TalentCardBuilders.buildMyTalentContentSliver(
+        context: context,
+        cubit: _cubit,
+        onVideoTap: _onVideoSelected,
+      );
+    }
   }
 
   Widget _buildTalentSearchResults(StarState state) {
@@ -857,7 +480,10 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
       itemCount: state.searchResults.length,
       itemBuilder: (context, index) {
         final talent = state.searchResults[index];
-        return TalentCard.buildTalentCard(context, talent, _cubit);
+        return TalentCard(
+          talent: talent,
+          cubit: _cubit,
+        );
       },
     );
   }
@@ -896,7 +522,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
             .removeListener(() => _syncToMain(_myTalentController));
       }
     } catch (e) {
-      // Handle any disposal errors silently
       print('Error during controller disposal: $e');
     }
 
@@ -913,6 +538,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   }
 }
 
+// Search Bar Delegate
 class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 
@@ -928,7 +554,7 @@ class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 150.0; // Adjust based on your search bar height
+  double get maxExtent => 150.0;
 
   @override
   double get minExtent => 150.0;

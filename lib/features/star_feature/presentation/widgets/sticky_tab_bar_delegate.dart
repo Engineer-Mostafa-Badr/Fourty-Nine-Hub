@@ -227,48 +227,6 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  // Widget _buildTabPill(String text, int index, bool isSelected) {
-  //   final size = MediaQuery.sizeOf(context);
-  //   return GestureDetector(
-  //     onTap: () {
-  //       ManageVibration.vibrate();
-
-  //       // هنا المشكلة - محتاج نضيف setState للـ parent widget
-  //       tabController.animateTo(index);
-  //       _scrollToSelectedTab(index);
-
-  //       // إضافة callback للـ parent عشان يعمل setState
-  //       // أو استخدام StatefulWidget بدل من SliverPersistentHeaderDelegate
-  //     },
-  //     child: Container(
-  //       padding: EdgeInsets.symmetric(
-  //           horizontal: size.width * 0.056, vertical: size.height * 0.01),
-  //       decoration: BoxDecoration(
-  //         color: isSelected
-  //             ? (context.isDarkMode ? Colors.white : Color(0xff0B1035))
-  //             : Color(0xffE0E0E0),
-  //         borderRadius: BorderRadius.circular(size.width * 0.025),
-  //         border: Border.all(
-  //           color: isSelected
-  //               ? Colors.transparent
-  //               : (context.isDarkMode ? Colors.grey[600]! : Colors.grey[300]!),
-  //           width: 1,
-  //         ),
-  //       ),
-  //       child: Label(
-  //         text: text,
-  //         style: TextStyle(
-  //           color: isSelected
-  //               ? (context.isDarkMode ? Colors.black : Colors.white)
-  //               : (context.isDarkMode ? Colors.white : Colors.black),
-  //           fontSize: context.isArabic ? size.width * 0.03 : size.width * 0.025,
-  //           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   // Add dispose method to clean up the scroll controller
   void dispose() {
     _scrollController.dispose();

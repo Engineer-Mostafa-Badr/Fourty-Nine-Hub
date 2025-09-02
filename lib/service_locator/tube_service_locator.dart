@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/profile_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/controller/profile_cubit/profile_cubit.dart';
 
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
 import '../features/star_feature/data/repository/profile_repository.dart';

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/abstract/use_case.dart';
+import '../../../domain/entity/banner_talent_entity.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/star_winner_entity.dart';
@@ -16,7 +17,9 @@ import '../../../domain/use_case/fetch_myl_star_use_case.dart';
 import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
-import 'star_state.dart';
+import '../../utils/constants.dart';
+import '../../utils/enums.dart';
+part 'star_state.dart';
 
 class StarCubit extends Cubit<StarState> {
   final FetchAllStarUseCase _allStarUseCase;
@@ -26,8 +29,6 @@ class StarCubit extends Cubit<StarState> {
   final DeleteMyStarUseCase _deleteMyTalentUseCase;
   final FetchBannerUseCase _bannerUseCase;
   final SearchProfilesUseCase _searchProfilesUseCase;
-
-  static const int pageSize = 10;
 
   StarCubit(
     this._allStarUseCase,
@@ -97,7 +98,7 @@ class StarCubit extends Cubit<StarState> {
     final response = await _allStarUseCase(
       StarPaginationParams(
         page: state.getCurrentPage(TalentCategory.available),
-        limit: pageSize,
+        limit: StarConstants.pageSize,
       ),
     );
 
@@ -106,42 +107,6 @@ class StarCubit extends Cubit<StarState> {
       (data) => data,
     );
   }
-
-  // Future<List<StarEntity>> _fetchAvailableTalents() async {
-  //   final response = await _allStarUseCase(
-  //     StarPaginationParams(
-  //       page: state.getCurrentPage(TalentCategory.available),
-  //       limit: pageSize,
-  //     ),
-  //   );
-
-  //   return response.fold(
-  //     (failure) => throw failure,
-  //     (data) {
-  //       // تكرار البيانات 5 مرات لملء الشاشة للتجربة
-  //       List<StarEntity> duplicatedData = [];
-  //       for (int i = 0; i < 5; i++) {
-  //         duplicatedData.addAll(data.map((talent) {
-  //           // Create a copy with modified ID to avoid duplicates
-  //           return StarEntity(
-  //             id: '${talent.id}_copy_$i',
-  //             title: talent.title,
-  //             description: talent.description,
-  //             user: talent.user,
-  //             mediaUrl: talent.mediaUrl,
-  //             totalViews: talent.totalViews,
-  //             averageRating: talent.averageRating,
-  //             isApproved: talent.isApproved,
-  //             haveStories: talent.haveStories,
-  //             storyCount: talent.storyCount,
-  //             createdAt: talent.createdAt,
-  //           );
-  //         }));
-  //       }
-  //       return duplicatedData;
-  //     },
-  //   );
-  // }
 
   Future<List<StarEntity>> _fetchMyTalents() async {
     final response = await _fetchMylStarUseCase.call(const NoParams());
@@ -154,7 +119,6 @@ class StarCubit extends Cubit<StarState> {
 
   Future<List<StarEntity>> _fetchHistoryTalents() async {
     // Mock implementation - replace with actual history API call
-    // For now, return a subset of available talents
     return state.availableTalents.take(8).toList();
   }
 
@@ -181,7 +145,7 @@ class StarCubit extends Cubit<StarState> {
     }
 
     // Update pagination
-    if (newTalents.length < pageSize) {
+    if (newTalents.length < StarConstants.pageSize) {
       hasMore[category] = false;
     } else {
       pages[category] = (pages[category] ?? 1) + 1;
@@ -227,7 +191,7 @@ class StarCubit extends Cubit<StarState> {
       SearchProfileParams(
         query: query,
         page: 1,
-        limit: 20,
+        limit: StarConstants.searchLimit,
       ),
     );
 
@@ -350,7 +314,8 @@ class StarCubit extends Cubit<StarState> {
     for (final category in TalentCategory.values) {
       talents[category] = talents[category]?.map((talent) {
             if (talent.id == id) {
-              return talent.copyWith(averageRating: rating);
+              return talent.copyWith(
+                  averageRating: rating, createdAt: DateTime.now());
             }
             return talent;
           }).toList() ??

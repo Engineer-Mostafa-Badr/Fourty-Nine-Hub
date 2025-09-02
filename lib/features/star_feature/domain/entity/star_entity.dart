@@ -45,7 +45,7 @@ class StarEntity {
     num? totalViews,
     num? averageRating,
     bool? haveStories,
-    int? storyCount,
+    int? storyCount, required DateTime createdAt,
   }) =>
       StarEntity(
         id: id ?? this.id,

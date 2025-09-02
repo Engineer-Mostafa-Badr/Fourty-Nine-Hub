@@ -8,7 +8,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/duration_helper.dart';
 import '../../../../res/assets/assets.dart';
 import '../../domain/entity/star_winner_entity.dart';
-import '../controller/cubit/star_cubit.dart';
+import '../controller/star_cubit/star_cubit.dart';
 
 class AllWinnerGridView extends StatelessWidget {
   final List<StarWinnerEntity>? winner;

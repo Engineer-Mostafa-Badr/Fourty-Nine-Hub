@@ -11,13 +11,13 @@ import '../../../../core/utils/date_time.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../domain/entity/star_winner_entity.dart';
-import '../controller/cubit/star_cubit.dart';
-import '../controller/cubit/star_state.dart';
+import '../controller/star_cubit/star_cubit.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 import '../../../../core/loading/custom_loading.dart';
 import '../../../../res/assets/assets.dart';
+import '../utils/enums.dart';
 import '../widgets/all_winner_grid_view.dart';
 import '../../../../helpers/manage_vibration.dart';
 // import '../../../../../core/widget/custom_scaffold.dart';
