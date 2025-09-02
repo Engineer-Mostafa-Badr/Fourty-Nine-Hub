@@ -1,26 +1,27 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../helpers/date_time_helper.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/build_gradient_border.dart';
 import '../../../Domain/Entities/conversation_entity.dart';
+import '../../Controllers/cubits/conversations_cubit.dart';
 
 class ChatCard extends StatefulWidget {
-
   final ConversationEntity? chat;
 
-  const ChatCard(
-      {super.key,
-        required this.chat,
-      });
+  const ChatCard({
+    super.key,
+    required this.chat,
+  });
 
   @override
   State<ChatCard> createState() => _ChatCardState();
@@ -74,12 +75,12 @@ class _ChatCardState extends State<ChatCard> {
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
             color:
-            // widget.chat!.isSelected
-            //     ? const Color(0xffFFD5CC)
-            //     :
-            context.isDarkMode
-                ? AppColors.QUANTITY_COLOR
-                : AppColors.BACKGROUND_COLOR,
+                // widget.chat!.isSelected
+                //     ? const Color(0xffFFD5CC)
+                //     :
+                context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : AppColors.BACKGROUND_COLOR,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
@@ -87,16 +88,15 @@ class _ChatCardState extends State<ChatCard> {
             children: [
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _userImage(),
-                    const Sizer(width: 32),
+                    const Sizer(width: 24),
                     _nameAndLastMessage(),
-                    _unreadMessagesCount(),
-                    _lastMessageTime(),
+                    // _lastMessageTime(),
                   ],
                 ),
               ),
@@ -134,110 +134,123 @@ class _ChatCardState extends State<ChatCard> {
     //   //   ),
     //   // );
     // } else {
-      return Center(
-        child: GestureDetector(
-          onTap: () {
-            // if (widget.chat!.hasStory) {}
-            // if (widget.chat!.isAdmin != "admin") {
-            //   if (context.isUserLoggedIn) {
-            //     context.read<UserCubit>().updateProfileView(
-            //       isProfile: false,
-            //       userId: widget.chat!.userId,
-            //     );
-            //     _onPressedImageDialog();
-            //   }
-            // }
-          },
-          child: Stack(
-            children: [
-              // if (widget.chat!.isAdmin != 'admin')
-              GradientProfileBorder(imageUrl: widget.chat?.profile?.profilePictureUrl ?? "",
-                  segments: 3,
-              firstChar: widget.chat?.profile?.userName?[0] ?? 'A'
-          ),
-              // CircleAvatar(
-              //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-              //   child: SizedBox(
-              //     height: 50,
-              //     width: 50,
-              //     child: ProfileWithStoriesBorder(
-              //       profilePictureUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
-              //       storiesCount: 4,
-              //     ),
-              //   ),
-              // )
-              // else
-              //   ClipRRect(
-              //     borderRadius: BorderRadius.circular(50),
-              //     child: CircleAvatar(
-              //       radius: 25,
-              //       child: Padding(
-              //         padding: const EdgeInsets.all(4),
-              //         child: Image.asset(
-              //           Assets.logoWithoutText,
-              //           fit: BoxFit.cover,
-              //         ),
-              //       ),
-              //       // Image.network(
-              //       //         widget.chat!.avatar,
-              //       //         fit: BoxFit.cover,
-              //       //         errorBuilder: (context, error, stackTrace) {
-              //       //           return Image.network(
-              //       //             UIConst.profilePlaceHolder,
-              //       //             fit: BoxFit.cover,
-              //       //           );
-              //       //         },
-              //       //       ),
-              //     ),
-              //   ),
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          // if (widget.chat!.hasStory) {}
+          // if (widget.chat!.isAdmin != "admin") {
+          //   if (context.isUserLoggedIn) {
+          //     context.read<UserCubit>().updateProfileView(
+          //       isProfile: false,
+          //       userId: widget.chat!.userId,
+          //     );
+          //     _onPressedImageDialog();
+          //   }
+          // }
+        },
+        child: Stack(
+          children: [
+            // if (widget.chat!.isAdmin != 'admin')
+            GradientProfileBorder(
+                imageUrl: widget.chat?.profile?.profilePictureUrl ?? "",
+                imageWidth: 46,
+                fullWidth: 54,
+                isViewed: (serviceLocator<ConversationsCubit>()
+                            .socialConversations
+                            .indexWhere((e) =>
+                                e.conversationId ==
+                                widget.chat?.conversationId)) %
+                        2 !=
+                    0,
+                segments: serviceLocator<ConversationsCubit>()
+                        .socialConversations
+                        .indexWhere((e) =>
+                            e.conversationId == widget.chat?.conversationId) +
+                    1,
+                firstChar: widget.chat?.profile?.userName?[0].toUpperCase() ?? 'A'),
+            // CircleAvatar(
+            //   backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+            //   child: SizedBox(
+            //     height: 50,
+            //     width: 50,
+            //     child: ProfileWithStoriesBorder(
+            //       profilePictureUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKu1w7TulWMUKGszjJlb7PDtn0LVSJgGnrog&s",
+            //       storiesCount: 4,
+            //     ),
+            //   ),
+            // )
+            // else
+            //   ClipRRect(
+            //     borderRadius: BorderRadius.circular(50),
+            //     child: CircleAvatar(
+            //       radius: 25,
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(4),
+            //         child: Image.asset(
+            //           Assets.logoWithoutText,
+            //           fit: BoxFit.cover,
+            //         ),
+            //       ),
+            //       // Image.network(
+            //       //         widget.chat!.avatar,
+            //       //         fit: BoxFit.cover,
+            //       //         errorBuilder: (context, error, stackTrace) {
+            //       //           return Image.network(
+            //       //             UIConst.profilePlaceHolder,
+            //       //             fit: BoxFit.cover,
+            //       //           );
+            //       //         },
+            //       //       ),
+            //     ),
+            //   ),
 
-              // if (widget.chat!.isSelected)
-              //   const Positioned(
-              //     bottom: 0,
-              //     right: 0,
-              //     child: CircleAvatar(
-              //       backgroundColor: Color(0xffFFD5CC),
-              //       radius: 10,
-              //       child: CircleAvatar(
-              //         radius: 8,
-              //         backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-              //         child: Icon(
-              //           Icons.check,
-              //           color: AppColors.BACKGROUND_COLOR,
-              //           size: 14,
-              //           weight: 20,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // // if (widget.chat!.isSelected)
-              // //    Positioned(
-              // //     bottom: 0,
-              // //     right: 0,
-              // //     child: CircleAvatar(
-              // //       radius: 10,
-              // //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              // //       child: const Icon(
-              // //         Icons.timelapse,
-              // //         color: Colors.black45,
-              // //         size: 14,
-              // //         weight: 20,
-              // //       ),
-              // //     ),
-              // //   ),
-              // if (widget.chat!.online)
-              //   const Positioned(
-              //     bottom: 0,
-              //     right: 0,
-              //     child: CircleAvatar(
-              //       radius: 5,
-              //       backgroundColor: Colors.green,
-              //     ),
-              //   ),
-            ],
-          ),
+            // if (widget.chat!.isSelected)
+            //   const Positioned(
+            //     bottom: 0,
+            //     right: 0,
+            //     child: CircleAvatar(
+            //       backgroundColor: Color(0xffFFD5CC),
+            //       radius: 10,
+            //       child: CircleAvatar(
+            //         radius: 8,
+            //         backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+            //         child: Icon(
+            //           Icons.check,
+            //           color: AppColors.BACKGROUND_COLOR,
+            //           size: 14,
+            //           weight: 20,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // // if (widget.chat!.isSelected)
+            // //    Positioned(
+            // //     bottom: 0,
+            // //     right: 0,
+            // //     child: CircleAvatar(
+            // //       radius: 10,
+            // //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            // //       child: const Icon(
+            // //         Icons.timelapse,
+            // //         color: Colors.black45,
+            // //         size: 14,
+            // //         weight: 20,
+            // //       ),
+            // //     ),
+            // //   ),
+            // if (widget.chat!.online)
+            //   const Positioned(
+            //     bottom: 0,
+            //     right: 0,
+            //     child: CircleAvatar(
+            //       radius: 5,
+            //       backgroundColor: Colors.green,
+            //     ),
+            //   ),
+          ],
         ),
-      );
+      ),
+    );
     // }
   }
 
@@ -248,85 +261,111 @@ class _ChatCardState extends State<ChatCard> {
         children: [
           Row(
             children: [
-              Label(
-                text: widget.chat?.profile?.userName ?? "Ahmed Nasr",
-                // widget.isSecret
-                //     ? 'UNKNOWN'
-                //     : widget.isService
-                //     ? '${widget.chat?.name.split(' ').first}'
-                //     : widget.chat!.isAdmin == "admin"
-                //     ? "49Hub"
-                //     : '${widget.chat?.name}',
-                style: Styles.mediumText(
-                  fontWeight: FontWeight.bold,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                ),
-                maxLines: 1,
-              ),
-              const SizedBox(width: 4),
-              // if (widget.chat!.isAdmin == "admin")
-              const Icon(
-                Icons.verified,
-                color: Colors.blue,
-                size: 18,
-              ),
-              // if (widget.chat!.lables.isNotEmpty &&
-              //     widget.chat!.lables.length == 1)
-              //   Icon(
-              //     Icons.label,
-              //     color: Colors.blue,
-              //     // LabelColorsMap.getColor(widget.chat!.lables.last.color),
-              //     size: 20,
-              //   ),
-              // if (widget.chat!.lables.isNotEmpty &&
-              //     widget.chat!.lables.length != 1)
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned(
-                    left: 4,
-                    bottom: 4,
-                    child: Icon(
-                      Icons.label,
-                      color: Colors.red,
-                      // LabelColorsMap.getColor(widget.chat!
-                      //     .lables[widget.chat!.lables.length - 2].color),
-                      size: 20,
+              Expanded(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 140),
+                            child: Label(
+                              text: ("${widget.chat?.profile?.firstName?.trim() ?? ""} ${(widget.chat?.profile?.lastName?.trim()) ?? ""}") ?? "Ahmed Nasr",
+                              // text: "Ahmed Nasr Mohamed Fahmey",
+                              overflow: TextOverflow.ellipsis,
+                              // widget.isSecret
+                              //     ? 'UNKNOWN'
+                              //     : widget.isService
+                              //     ? '${widget.chat?.name.split(' ').first}'
+                              //     : widget.chat!.isAdmin == "admin"
+                              //     ? "49Hub"
+                              //     : '${widget.chat?.name}',
+                              style: Styles.mediumText(
+                                fontWeight: FontWeight.bold,
+                                color: context.isDarkMode ? Colors.white : Colors.black,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          // if (widget.chat!.isAdmin == "admin")
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 9.0),
+                            child: Icon(
+                              Icons.verified,
+                              color: Colors.blue,
+                              size: 12,
+                            ),
+                          ),
+                          // if (widget.chat!.lables.isNotEmpty &&
+                          //     widget.chat!.lables.length == 1)
+                          //   Icon(
+                          //     Icons.label,
+                          //     color: Colors.blue,
+                          //     // LabelColorsMap.getColor(widget.chat!.lables.last.color),
+                          //     size: 20,
+                          //   ),
+                          // if (widget.chat!.lables.isNotEmpty &&
+                          //     widget.chat!.lables.length != 1)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 7.0),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  left: 4,
+                                  bottom: 4,
+                                  child: Icon(
+                                    Icons.label,
+                                    color: Colors.red,
+                                    // LabelColorsMap.getColor(widget.chat!
+                                    //     .lables[widget.chat!.lables.length - 2].color),
+                                    size: 15,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.label,
+                                  color: Colors.yellow,
+                                  // LabelColorsMap.getColor(
+                                  //     widget.chat!.lables.last.color),
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          // if (widget.chat!.isAdmin != "admin" &&
+                          //     widget.chat!.isBirthdayMonth)
+                          InkWell(
+                            onTap: () async {
+                              // await showGiftBottomSheet(
+                              //   context,
+                              //   receiverId: widget.chat!.userId,
+                              // );
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.cakeCandles,
+                              color: context.isDarkMode ? Colors.white54 : Colors.black45,
+                              size: 14,
+                            ),
+                          ),
+                          // Spacer()
+                        ],
+                      ),
                     ),
-                  ),
-                  Icon(
-                    Icons.label,
-                    color: Colors.yellow,
-                    // LabelColorsMap.getColor(
-                    //     widget.chat!.lables.last.color),
-                    size: 20,
-                  ),
-                ],
-              ),
-              SizedBox(width: 4),
-              // if (widget.chat!.isAdmin != "admin" &&
-              //     widget.chat!.isBirthdayMonth)
-              InkWell(
-                onTap: () async {
-                  // await showGiftBottomSheet(
-                  //   context,
-                  //   receiverId: widget.chat!.userId,
-                  // );
-                },
-                child: Icon(
-                  FontAwesomeIcons.cakeCandles,
-                  color: context.isDarkMode ? Colors.white54 : Colors.black45,
-                  size: 18,
+
+                  ],
                 ),
               ),
-              const Spacer(),
+              // const Spacer(),
               // if (widget.chat!.muted)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 2.0),
                 child: Icon(
                   Icons.volume_off_outlined,
                   color: context.isDarkMode ? Colors.white54 : Colors.black45,
-                  size: 18,
+                  size: 15,
                 ),
               ),
               // if (widget.chat!.isPinned)
@@ -335,13 +374,23 @@ class _ChatCardState extends State<ChatCard> {
                 child: Icon(
                   Icons.push_pin_outlined,
                   color: context.isDarkMode ? Colors.white54 : Colors.black45,
-                  size: 18,
+                  size: 15,
                 ),
               ),
-              const Sizer(
-                width: 2,
+              // Spacer(),
+              SizedBox(width: 4),
+              Label(
+                text: _getFormattedLastMessageTime(),
+                style: Styles.mediumText(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: (widget.chat?.unreadMessagesCount??0) > 0 ?AppColors.PRIMARY_COLOR_DARK : context.isDarkMode ? Colors.white : Colors.grey,
+                ),
               ),
             ],
+          ),
+          SizedBox(
+            height: 10,
           ),
           Row(
             children: [
@@ -355,10 +404,11 @@ class _ChatCardState extends State<ChatCard> {
               // if (!widget.chat!.typing || !widget.chat!.recording)
               //   if (widget.chat!.lastMessage?.byMe ?? false)
               //     if (widget.chat!.lastMessage?.delivered ?? false)
-              Image.asset(
-                Assets.doubleCheck,
-                width: 18,
-              )
+              if(widget.chat?.lastMessage?.sender?.isMe ?? false)
+                Image.asset(
+                  Assets.doubleCheck,
+                  width: 18,
+                )
               // else if (widget.chat!.lastMessage?.seen ?? false)
               //   Image.asset(
               //     Assets.doubleCheckSeen,
@@ -419,50 +469,103 @@ class _ChatCardState extends State<ChatCard> {
               //             ],
               //           ),
               ,
-                                Expanded(
-                                  child: Label(
-                                    text:widget.chat?.lastMessage?.content == null ? context.isArabic
-    ? "لا توجد رسائل حتي الان"
-        : "No messages until now" : '${widget.chat?.lastMessage?.content}',
-                                    // widget.chat?.lastMessage?.text == null
-                                    //     ? context.isArabic
-                                    //     ? "لا توجد رسائل حتي الان"
-                                    //     : "No messages until now"
-                                    //     : '${widget.chat?.lastMessage?.text}',
-                                    style: Styles.mediumText(
-                                      fontSize: 28,
-                                      color: context.isDarkMode
-                                          ? Colors.white54
-                                          : AppColors.DARK_GRAY_COLOR,
-                                    ),),
-                                ),
-                              ],
-                            ),
-              // ),
-              // if (widget.chat!.typing)
-              //   Expanded(
-              //     child: Label(
-              //         text: context.isArabic ? "يكتب..." : "Typing...",
-              //         style: Styles.mediumText(
-              //           fontSize: 28,
-              //           color: AppColors.SECONDARY_COLOR,
-              //         )),
-              //   ),
-              // if (widget.chat!.recording)
-              //   Expanded(
-              //     child: Label(
-              //         text: context.isArabic
-              //             ? "يسجل رساله صوتية..."
-              //             : "Recording...",
-              //         style: Styles.mediumText(
-              //           fontSize: 28,
-              //           color: AppColors.SECONDARY_COLOR,
-              //         )),
-              //   ),
+              Expanded(
+                child: Label(
+                  text: widget.chat?.lastMessage?.content == null
+                      ? context.isArabic
+                      ? "لا توجد رسائل حتي الان"
+                      : "No messages until now"
+                      : '${widget.chat?.lastMessage?.content}',
+                  // widget.chat?.lastMessage?.text == null
+                  //     ? context.isArabic
+                  //     ? "لا توجد رسائل حتي الان"
+                  //     : "No messages until now"
+                  //     : '${widget.chat?.lastMessage?.text}',
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    color: context.isDarkMode
+                        ? Colors.white54
+                        : AppColors.DARK_GRAY_COLOR,
+                  ),
+                  // style: Styles.mediumText(
+                  //   fontSize: 28,
+                  //   color: context.isDarkMode
+                  //       ? Colors.white54
+                  //       : AppColors.DARK_GRAY_COLOR,
+                  // ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    _unreadMessagesCount(),
+                    Label(
+                      text: context.isArabic? '١٠ ' : '10 ',
+                      style: Styles.mediumText(
+                        color: context.isDarkMode ? Colors.white54 : Colors.black45,
+                        fontSize: 24,
+                      ),
+                    ),
+                    // const SizedBox(width: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: InkWell(
+                        onTap: () async {
+                          // Call the getLastSeen function
+                          // print('widget.chat!.isAdmin ${widget.chat!.isAdmin}');
+                          // if (widget.chat!.isAdmin != "admin") {
+                          //   await context
+                          //       .read<ChatsCubit>()
+                          //       .getChatLastSeen(chatId: widget.chat!.id);
+                          // }
+                          // // Open a scrollable bottom sheet
+                          // _bottomSheet(context,
+                          //     chatsCubit: widget.chatsCubit,
+                          //     widgetChat: widget.chat);
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.eye,
+                          color: context.isDarkMode ? Colors.white54 : Colors.black45,
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // _unreadMessagesCount(),
             ],
           ),
-      );
+          // ),
+          // if (widget.chat!.typing)
+          //   Expanded(
+          //     child: Label(
+          //         text: context.isArabic ? "يكتب..." : "Typing...",
+          //         style: Styles.mediumText(
+          //           fontSize: 28,
+          //           color: AppColors.SECONDARY_COLOR,
+          //         )),
+          //   ),
+          // if (widget.chat!.recording)
+          //   Expanded(
+          //     child: Label(
+          //         text: context.isArabic
+          //             ? "يسجل رساله صوتية..."
+          //             : "Recording...",
+          //         style: Styles.mediumText(
+          //           fontSize: 28,
+          //           color: AppColors.SECONDARY_COLOR,
+          //         )),
+          //   ),
+        ],
+      ),
+    );
   }
+
+
 
   _unreadMessagesCount() {
     if (widget.chat?.unreadMessagesCount == 0) return const SizedBox();
@@ -473,13 +576,15 @@ class _ChatCardState extends State<ChatCard> {
         color: AppColors.SECONDARY_COLOR,
         shape: BoxShape.circle,
       ),
-      height: 20,
-      width: 20,
+      height: 16,
+      width: 16,
       child: Center(
         child: Label(
-          text: widget.chat?.unreadMessagesCount.toString() ?? '0',
+          text: FormatNumbers().convertNumberToLocalizedString(
+              (widget.chat?.unreadMessagesCount.toString() ?? '0'),
+              isArabic: context.isArabic) ,
           style: Styles.smallText(
-            color: Colors.white ,
+            color: Colors.white,
           ),
         ),
       ),
@@ -488,12 +593,11 @@ class _ChatCardState extends State<ChatCard> {
 
   String _getFormattedLastMessageTime() {
     // Replace widget.chat?.lastMessageTime with your actual DateTime property
-    final DateTime? lastMessageTime = widget.chat?.lastMessage?.createdAt; // أو أي property تاني
+    final DateTime? lastMessageTime =
+        widget.chat?.lastMessage?.createdAt; // أو أي property تاني
 
     return DateTimeHelper.formatLastMessageTime(
-        lastMessageTime,
-        context.isArabic
-    );
+        lastMessageTime, context.isArabic);
   }
 
   _lastMessageTime() {
@@ -501,24 +605,24 @@ class _ChatCardState extends State<ChatCard> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Label(
-          text:  _getFormattedLastMessageTime(),
+          text: _getFormattedLastMessageTime(),
           style: Styles.mediumText(
             fontSize: 24,
-            color: context.isDarkMode ? Colors.white : Colors.black,
+            color: (widget.chat?.unreadMessagesCount??0) > 0 ?AppColors.PRIMARY_COLOR_DARK : context.isDarkMode ? Colors.white : Colors.black,
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 12),
         // if (widget.chat?.lastSeenCount != null)
         //   if (widget.chat!.isAdmin != "admin")
         GestureDetector(
           onTap: () {},
           child: Row(
             children: [
+              _unreadMessagesCount(),
               Label(
                 text: '10 ',
                 style: Styles.mediumText(
-                  color:
-                  context.isDarkMode ? Colors.white54 : Colors.black45,
+                  color: context.isDarkMode ? Colors.white54 : Colors.black45,
                   fontSize: 24,
                 ),
               ),
@@ -541,10 +645,8 @@ class _ChatCardState extends State<ChatCard> {
                   },
                   child: Icon(
                     FontAwesomeIcons.eye,
-                    color: context.isDarkMode
-                        ? Colors.white54
-                        : Colors.black45,
-                    size: 16,
+                    color: context.isDarkMode ? Colors.white54 : Colors.black45,
+                    size: 15,
                   ),
                 ),
               ),

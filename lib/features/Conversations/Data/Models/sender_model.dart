@@ -8,6 +8,7 @@ class SenderModel extends SenderEntity{
     required super.lastName,
     required super.gender,
     required super.profilePicUrl,
+    required super.isMe,
   });
 
   factory SenderModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class SenderModel extends SenderEntity{
       lastName: json['lastName'] ?? '',
       gender: json['gender'] ?? 'male',
       profilePicUrl: json['profilePicUrl'],
+      isMe: json['isMe'] ?? false,
     );
   }
 }

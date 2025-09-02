@@ -78,7 +78,7 @@ class EndPoints {
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
-  static const refreshToken = '/auth/refresh/token';
+  static const refreshToken = '/auth/refresh-token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
   static const addRateRestaurant = '/restaurant/rating-restaurant/';
   static const whatsAppAgoraToken =
