@@ -25,7 +25,6 @@ import '../controller/cubit/profile_cubit.dart';
 import '../controller/cubit/star_cubit.dart';
 import '../controller/cubit/star_state.dart';
 import '../helper/youtube_style_video_player.dart';
-import '../helper/talent_video_player.dart';
 
 class TalentCard {
   // Available content (main feed)

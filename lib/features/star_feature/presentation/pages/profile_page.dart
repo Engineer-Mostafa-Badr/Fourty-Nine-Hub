@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/star_feature/presentation/helper/youtube_
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/edit_profile_bottom_sheet.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/profile_video_cards.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/helper/talent_video_player.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
