@@ -75,7 +75,6 @@ class _LogoutWidgetState extends State<LogoutWidget> {
 
                   // await DI.reset();
                   // await DI.execute();
-                  setLogOut();
                   // context.pop();
                   // context.go(Routes.HOME);
 
@@ -94,14 +93,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
 
   // final Socket _socket = serviceLocator<Socket>();
 
-  Future<void> setLogOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("ISLOGIN", false);
-    if (!mounted) return;
-    context.pop();
-    context.pop();
-    context.pushReplacement(Routes.HOME);
-  }
+
 }
 
 /*{

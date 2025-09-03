@@ -33,6 +33,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -64,6 +65,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final UpdateSocketLocationUseCase updateSocketLocationUseCase;
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
+  final ListenToTripAcceptedUseCase listenToTripAcceptedUseCase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
 
@@ -82,6 +84,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this.getSettingsDashboardUsecase,
     this.listenToNewTripUseCase,
     this.listenToAcceptOfferUseCase,
+    this.listenToTripAcceptedUseCase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory(BuildContext context) async {
@@ -115,9 +118,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   Future<void> loadData(BuildContext context) async {
     print("loadData");
     initNotification();
-
+    getQuestion();
+    getWallet();
     emit(state.copyWith(status: StateStatus.loading));
-    // await UserCubit.to.getUser();
+    await UserCubit.to.getUser();
     // getWallet();
     getCurrency();
     getSettings(context);
@@ -163,6 +167,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         },
       );
     }
+    Future.delayed(Duration(seconds: 10)).then((value) => listenToRouteAccepted());
   }
 
   Future<void> getMainCategoryCustomPage() async {
@@ -229,6 +234,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getQuestion() async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (!currentContext.isUserLoggedIn) return;
     final response = await _getQuestionUseCase(const NoParams());
     response.fold((failure) {
       emit(state.copyWith(failure: failure, status: StateStatus.error));
@@ -282,7 +289,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getWallet() async {
-    if (state.wallet != null) return;
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (state.wallet != null||!currentContext.isUserLoggedIn) return;
     print('getWallet getWallet');
     final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
@@ -308,6 +316,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> getSettings(BuildContext context,
       {bool? listenToSocket = true}) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    if (!currentContext.isUserLoggedIn) return;
+
     final Either<Failure, SettingsDashboardEntityResponse> result =
         await getSettingsDashboardUsecase(const NoParams());
     result.fold(
@@ -359,6 +370,20 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     }
     return false;
   }
+
+  listenToRouteAccepted() {
+    CliLogger.info('listenToRouteAccepted');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToTripAcceptedUseCase((data) {
+      final currentLocation = GoRouter.of(currentContext).state.path;
+      if ('$currentLocation' == Paths.RunningMapDetails) {
+        return;
+      }
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم قبول الرحله بنجاح':'Trip Accepted Successfully');
+      currentContext.push(Routes.RunningMapDetails);
+    });
+  }
+
 
   Future<void> emitDriverLocation(
       {required double lat, required double long}) async {

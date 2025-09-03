@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget_screen.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -43,132 +44,18 @@ class _WalletWidgetState extends State<WalletWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-          serviceLocator<PaymentCacheOutCubit>()..getWallet(),
-      child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
-        builder: (BuildContext context, state) {
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
-            padding: const EdgeInsets.only(
-              bottom: 10,
-              left: 5,
-              right: 5,
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: context.isDarkMode
-                      ? Colors.grey.shade600
-                      : AppColors.GRAY_LIGHT_COLOR3,
-                  blurRadius: 5,
-                  spreadRadius: 5,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                ClickableWidget(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    setState(() {
-                      isOpen = !isOpen;
-                    });
-                  },
-                  child: Icon(
-                    isOpen
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                  ),
-                  // color: AppColors.PRIMARY_COLOR,
-                ),
-                if (isOpen)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 6.w,
-                        backgroundColor: AppColors.SECONDARY_COLOR,
-                      ),
-                      const Sizer(),
-                      buildItem(() {
-                        ManageVibration.vibrate();
-                        AdInterstitialTop.loadIntersitialAd();
-                        AdInterstitialTop.showInterstitialAd();
-                        // context.push(Routes.BALANCE);
-                        context.push(Routes.CASHBACK);
-                      },
-                          LocaleKeys.balance.tr(),
-                          '${FormatNumbers().formatNumber(
-                            state.wallet?.balance ?? 0,
-                            useArabicNumerals: context.isArabic,
-                            roundDown: true,
-                          )} ',
-                          context.isArabic
-                              ? state.wallet?.currencyAr ?? ''
-                              : state.wallet?.currencyEn ?? ''),
-                      Container(
-                        width: 2.w,
-                        margin: EdgeInsets.symmetric(horizontal: 5.w),
-                        color: Colors.grey,
-                        height: kToolbarHeight * 1.3.h,
-                      ),
-                      CircleAvatar(
-                        radius: 6.w,
-                        backgroundColor: AppColors.SECONDARY_COLOR,
-                      ),
-                      const Sizer(),
-                      buildItem(() {
-                        ManageVibration.vibrate();
-                        AdInterstitialTop.loadIntersitialAd();
-                        AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.GIFT);
-                      },
-                          LocaleKeys.gift.tr(),
-                          '${FormatNumbers().formatNumber(
-                            state.wallet?.giftWallet ?? 0,
-                            useArabicNumerals: context.isArabic,
-                            roundDown: true,
-                          )} ',
-                          context.isArabic
-                              ? state.wallet?.currencyAr ?? ''
-                              : state.wallet?.currencyEn ?? ''),
-                      Container(
-                        width: 2.w,
-                        margin: EdgeInsets.symmetric(horizontal: 5.w),
-                        color: Colors.grey,
-                        height: kToolbarHeight * 1.3.h,
-                      ),
-                      CircleAvatar(
-                        radius: 6.w,
-                        backgroundColor: AppColors.SECONDARY_COLOR,
-                      ),
-                      const Sizer(),
-                      buildItem(() {
-                        ManageVibration.vibrate();
-                        AdInterstitialTop.loadIntersitialAd();
-                        AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.WALLET);
-                        //showing
-                      },
-                          LocaleKeys.wallet.tr(),
-                          '${FormatNumbers().formatNumber(
-                            state.wallet?.realAmount ?? 0,
-                            useArabicNumerals: context.isArabic,
-                            roundDown: true,
-                          )} ',
-                          context.isArabic
-                              ? state.wallet?.currencyAr ?? ''
-                              : state.wallet?.currencyEn ?? ''),
-                    ],
-                  ),
-              ],
-            ),
-          );
-        },
-      ),
+    return WalletWidgetScreen(
+      margin: widget.margin,
+      details: widget.details,
+      onBalanceClicked:(data) {
+        if(widget.onBalanceClicked != null)widget.onBalanceClicked!(data);
+      },
+      onGiftClicked: (data){
+    if(widget.onGiftClicked != null)widget.onGiftClicked!(data);
+    },
+      onWalletClicked: (data){
+    if(widget.onWalletClicked != null)widget.onWalletClicked!(data);
+    },
     );
 
     /*return BlocProvider<MainCategoriesCubit>(

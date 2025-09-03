@@ -223,7 +223,7 @@ class AuthServiceLocator {
         serviceLocator<CheckGuestStateUseCase>(),
         serviceLocator<ConvertGuestToUserUseCase>(),
         // serviceLocator()
-      )..attachToken(),
+      ),
     );
     // serviceLocator.registerSingleton(
     //   GetWalletCubit(

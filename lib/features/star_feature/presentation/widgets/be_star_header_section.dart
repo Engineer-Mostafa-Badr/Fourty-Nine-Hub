@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,6 +34,7 @@ class BeStarHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Banner Title: ${state.banner?.titleAr} ${state.banner?.titleEn}");
     return Container(
       padding: EdgeInsets.all(16.w),
       child: Column(
@@ -53,17 +57,27 @@ class BeStarHeaderSection extends StatelessWidget {
           Row(
             children: [
               // Title
-              Text(
-                (state.banner?.titleAr ?? state.banner?.titleEn ?? '')
-                    .toArabicNumbers(context),
-                textAlign: TextAlign.center,
-                style: Styles.mediumText(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.PRIMARY_COLOR,
-                ),
+              // Text(
+              //   // (state.banner?.titleAr ?? state.banner?.titleEn ?? '')
+              //   //     .toArabicNumbers(context),
+              //   context.isArabic
+              //       ? state.banner?.titleAr ?? ''
+              //       : state.banner?.titleEn ?? '',
+              //   textAlign: TextAlign.center,
+              //   style: Styles.mediumText(
+              //     fontSize: MediaQuery.of(context).size.width * 0.05,
+              //     fontWeight: FontWeight.w500,
+              //     color: context.isDarkMode
+              //         ? Colors.white
+              //         : AppColors.PRIMARY_COLOR,
+              //   ),
+              // ),
+              AutoSizeText(
+                context.isArabic
+                    ? state.banner?.titleAr ?? ''
+                    : state.banner?.titleEn ?? '',
+                // style: TextStyle(
+                //     fontSize: MediaQuery.of(context).size.width * 0.02),
               ),
               Sizer(),
               // Hint Button
@@ -75,29 +89,40 @@ class BeStarHeaderSection extends StatelessWidget {
                   width: 24,
                 ),
               ),
-              Spacer(),
-              // Subscribe Button
-              SubscribeButton(
-                text: LocaleKeys.subscribe.localize,
-                icon: Assets.ideaIcon,
-                isSelected: true,
-                onTap: () => _handleSubscribe(context),
-                onShowHint: () => _showSubscribeHint(context),
-              ),
             ],
           ),
           const Sizer(),
 
           // Subtitle
-          Label(
-            text: (state.banner?.subTitleAr ?? state.banner?.subTitleEn ?? '')
-                .toArabicNumbers(context),
-            textAlign: TextAlign.center,
-            style: Styles.mediumText(
-              fontSize: 25,
-              fontWeight: FontWeight.w500,
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          Align(
+            alignment:
+                context.isArabic ? Alignment.centerRight : Alignment.centerLeft,
+            child: Text(
+              // text: (state.banner?.subTitleAr ?? state.banner?.subTitleEn ?? '')
+              //     .toArabicNumbers(context),
+              context.isArabic
+                  ? state.banner?.subTitleAr ?? ''
+                  : state.banner?.subTitleEn ?? '',
+              // textAlign: TextAlign.center,
+              style: Styles.mediumText(
+                fontSize: 25,
+                fontWeight: FontWeight.w500,
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              ),
+            ),
+          ),
+
+          // Subscribe Button
+          Align(
+            alignment:
+                context.isArabic ? Alignment.centerLeft : Alignment.centerRight,
+            child: SubscribeButton(
+              text: LocaleKeys.subscribe.localize,
+              icon: Assets.ideaIcon,
+              isSelected: true,
+              onTap: () => _handleSubscribe(context),
+              onShowHint: () => _showSubscribeHint(context),
             ),
           ),
         ],

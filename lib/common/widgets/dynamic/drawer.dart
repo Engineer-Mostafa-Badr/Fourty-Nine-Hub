@@ -1185,13 +1185,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   children: [
                     Row(
                       children: [
-                        Label(
-                          text: _getFirstTwoWords(user?.fullName ?? ''),
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.bold,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                        Expanded(
+                          child: Label(
+                            text: _getFirstTwoWords(user?.fullName ?? ''),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                         const SizedBox(
