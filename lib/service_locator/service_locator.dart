@@ -371,7 +371,7 @@ class DI {
     EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
-    StarServiceLocator.execute(serviceLocator: serviceLocator);
+    // StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);

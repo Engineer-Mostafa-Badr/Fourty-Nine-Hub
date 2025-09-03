@@ -17,11 +17,20 @@ import '../../../domain/use_case/fetch_myl_star_use_case.dart';
 import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
+// New imports for Tube Video functionality
+import '../../../domain/use_case/fetch_all_tube_videos_use_case.dart';
+import '../../../domain/use_case/fetch_my_tube_videos_use_case.dart';
+import '../../../domain/use_case/fetch_tube_video_details_use_case.dart';
+import '../../../domain/use_case/like_tube_video_use_case.dart';
+import '../../../domain/use_case/dislike_tube_video_use_case.dart';
+import '../../../domain/use_case/increment_tube_video_view_use_case.dart';
+import '../../../data/model/tube_video_models.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
 part 'star_state.dart';
 
 class StarCubit extends Cubit<StarState> {
+  // Existing use cases
   final FetchAllStarUseCase _allStarUseCase;
   final FetchMylStarUseCase _fetchMylStarUseCase;
   final FetchWinnerStarUseCase _fetchWinnerStarUseCase;
@@ -29,6 +38,14 @@ class StarCubit extends Cubit<StarState> {
   final DeleteMyStarUseCase _deleteMyTalentUseCase;
   final FetchBannerUseCase _bannerUseCase;
   final SearchProfilesUseCase _searchProfilesUseCase;
+
+  // New Tube Video use cases
+  final FetchAllTubeVideosUseCase _fetchAllTubeVideosUseCase;
+  final FetchMyTubeVideosUseCase _fetchMyTubeVideosUseCase;
+  final FetchTubeVideoDetailsUseCase _fetchTubeVideoDetailsUseCase;
+  final LikeTubeVideoUseCase _likeTubeVideoUseCase;
+  final DislikeTubeVideoUseCase _dislikeTubeVideoUseCase;
+  final IncrementTubeVideoViewUseCase _incrementTubeVideoViewUseCase;
 
   StarCubit(
     this._allStarUseCase,
@@ -38,9 +55,19 @@ class StarCubit extends Cubit<StarState> {
     this._fetchWinnerStarUseCase,
     this._bannerUseCase,
     this._searchProfilesUseCase,
+    // New Tube Video use cases
+    this._fetchAllTubeVideosUseCase,
+    this._fetchMyTubeVideosUseCase,
+    this._fetchTubeVideoDetailsUseCase,
+    this._likeTubeVideoUseCase,
+    this._dislikeTubeVideoUseCase,
+    this._incrementTubeVideoViewUseCase,
   ) : super(StarState());
 
-  // Initialize all data
+  // Configuration flag to choose between old Star API and new Tube Video API
+  bool get _useTubeVideoAPI => true; // Set to false to use old API
+
+  // Initialize all data with API selection
   Future<void> initializeAllData() async {
     emit(state.copyWith(status: StarStates.loading));
 
@@ -53,7 +80,7 @@ class StarCubit extends Cubit<StarState> {
     emit(state.copyWith(status: StarStates.success));
   }
 
-  // Unified method to load talents by category
+  // Unified method to load talents by category with API selection
   Future<void> loadTalents(
     TalentCategory category, {
     bool refresh = false,
@@ -95,26 +122,66 @@ class StarCubit extends Cubit<StarState> {
   }
 
   Future<List<StarEntity>> _fetchAvailableTalents() async {
-    final response = await _allStarUseCase(
-      StarPaginationParams(
-        page: state.getCurrentPage(TalentCategory.available),
-        limit: StarConstants.pageSize,
-      ),
-    );
+    if (_useTubeVideoAPI) {
+      // Use new Tube Video API
+      final response = await _fetchAllTubeVideosUseCase(
+        StarPaginationParams(
+          page: state.getCurrentPage(TalentCategory.available),
+          limit: StarConstants.pageSize,
+        ),
+      );
 
-    return response.fold(
-      (failure) => throw failure,
-      (data) => data,
-    );
+      return response.fold(
+        (failure) => throw failure,
+        (tubeResponse) {
+          // Update pagination info from API response
+          _updatePaginationFromTubeResponse(TalentCategory.available, tubeResponse);
+          return tubeResponse.videos.cast<StarEntity>();
+        },
+      );
+    } else {
+      // Use old Star API
+      final response = await _allStarUseCase(
+        StarPaginationParams(
+          page: state.getCurrentPage(TalentCategory.available),
+          limit: StarConstants.pageSize,
+        ),
+      );
+
+      return response.fold(
+        (failure) => throw failure,
+        (data) => data,
+      );
+    }
   }
 
   Future<List<StarEntity>> _fetchMyTalents() async {
-    final response = await _fetchMylStarUseCase.call(const NoParams());
+    if (_useTubeVideoAPI) {
+      // Use new Tube Video API
+      final response = await _fetchMyTubeVideosUseCase(
+        StarPaginationParams(
+          page: state.getCurrentPage(TalentCategory.myTalents),
+          limit: StarConstants.pageSize,
+        ),
+      );
 
-    return response.fold(
-      (failure) => throw failure,
-      (data) => data,
-    );
+      return response.fold(
+        (failure) => throw failure,
+        (tubeResponse) {
+          // Update pagination info from API response
+          _updatePaginationFromTubeResponse(TalentCategory.myTalents, tubeResponse);
+          return tubeResponse.videos.cast<StarEntity>();
+        },
+      );
+    } else {
+      // Use old Star API
+      final response = await _fetchMylStarUseCase.call(const NoParams());
+
+      return response.fold(
+        (failure) => throw failure,
+        (data) => data,
+      );
+    }
   }
 
   Future<List<StarEntity>> _fetchHistoryTalents() async {
@@ -126,6 +193,26 @@ class StarCubit extends Cubit<StarState> {
     return state.availableTalents
         .where((talent) => state.favoriteIds.contains(talent.id))
         .toList();
+  }
+
+  // Helper method to update pagination from Tube API response
+  void _updatePaginationFromTubeResponse(
+    TalentCategory category,
+    TubeVideoListResponse tubeResponse,
+  ) {
+    final hasMore = Map<TalentCategory, bool>.from(state.hasMoreData);
+    final pages = Map<TalentCategory, int>.from(state.currentPages);
+
+    // Update based on API pagination info
+    hasMore[category] = tubeResponse.pagination.page < tubeResponse.pagination.pages;
+    if (hasMore[category] == true) {
+      pages[category] = tubeResponse.pagination.page + 1;
+    }
+
+    emit(state.copyWith(
+      hasMoreData: hasMore,
+      currentPages: pages,
+    ));
   }
 
   void _updateTalentsData(
@@ -144,11 +231,13 @@ class StarCubit extends Cubit<StarState> {
       talents[category] = [...(talents[category] ?? []), ...newTalents];
     }
 
-    // Update pagination
-    if (newTalents.length < StarConstants.pageSize) {
-      hasMore[category] = false;
-    } else {
-      pages[category] = (pages[category] ?? 1) + 1;
+    // Update pagination only if not using Tube API (handled separately)
+    if (!_useTubeVideoAPI) {
+      if (newTalents.length < StarConstants.pageSize) {
+        hasMore[category] = false;
+      } else {
+        pages[category] = (pages[category] ?? 1) + 1;
+      }
     }
 
     loadingStates[category] = false;
@@ -160,6 +249,122 @@ class StarCubit extends Cubit<StarState> {
       loadingStates: loadingStates,
       status: StarStates.success,
     ));
+  }
+
+  // New Tube Video specific methods
+  Future<void> likeTubeVideo(String videoId) async {
+    final response = await _likeTubeVideoUseCase(videoId);
+    
+    response.fold(
+      (failure) => _showErrorMessage(failure),
+      (success) {
+        if (success) {
+          // Update video in local state if needed
+          _updateVideoInteraction(videoId, 'like');
+        }
+      },
+    );
+  }
+
+  Future<void> dislikeTubeVideo(String videoId) async {
+    final response = await _dislikeTubeVideoUseCase(videoId);
+    
+    response.fold(
+      (failure) => _showErrorMessage(failure),
+      (success) {
+        if (success) {
+          // Update video in local state if needed
+          _updateVideoInteraction(videoId, 'dislike');
+        }
+      },
+    );
+  }
+
+  Future<void> incrementVideoView(String videoId) async {
+    final response = await _incrementTubeVideoViewUseCase(videoId);
+    
+    response.fold(
+      (failure) => _showErrorMessage(failure),
+      (success) {
+        if (success) {
+          // Update video views in local state
+          _updateVideoViews(videoId);
+        }
+      },
+    );
+  }
+
+  Future<void> fetchVideoDetails(String videoId) async {
+    emit(state.copyWith(status: StarStates.loading));
+    
+    final response = await _fetchTubeVideoDetailsUseCase(videoId);
+    
+    response.fold(
+      (failure) {
+        _showErrorMessage(failure);
+        emit(state.copyWith(status: StarStates.error, failure: failure));
+      },
+      (videoDetails) {
+        // Handle video details as needed
+        emit(state.copyWith(status: StarStates.success));
+      },
+    );
+  }
+
+  // Helper methods for updating local state
+  void _updateVideoInteraction(String videoId, String action) {
+    // Find and update the video in all relevant categories
+    final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+    
+    for (final category in TalentCategory.values) {
+      final categoryTalents = talents[category];
+      if (categoryTalents != null) {
+        final updatedTalents = categoryTalents.map((talent) {
+          if (talent.id == videoId && talent is TubeVideoModel) {
+            // Update like/dislike count
+            if (action == 'like') {
+              return talent.copyWith(
+                createdAt: DateTime.now(), // Required parameter
+                // In a real implementation, you'd update likes count
+              );
+            } else if (action == 'dislike') {
+              return talent.copyWith(
+                createdAt: DateTime.now(), // Required parameter
+                // In a real implementation, you'd update dislikes count
+              );
+            }
+          }
+          return talent;
+        }).toList();
+        
+        talents[category] = updatedTalents;
+      }
+    }
+    
+    emit(state.copyWith(talents: talents));
+  }
+
+  void _updateVideoViews(String videoId) {
+    final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+    
+    for (final category in TalentCategory.values) {
+      final categoryTalents = talents[category];
+      if (categoryTalents != null) {
+        final updatedTalents = categoryTalents.map((talent) {
+          if (talent.id == videoId) {
+            return talent.copyWith(
+              createdAt: DateTime.now(), // Required parameter
+              totalViews: talent.totalViews + 1,
+            );
+          }
+          return talent;
+        }).toList();
+        
+        talents[category] = updatedTalents;
+      }
+    }
+    
+    emit(state.copyWith(talents: talents));
   }
 
   void _resetPagination(TalentCategory category) {
@@ -315,7 +520,7 @@ class StarCubit extends Cubit<StarState> {
       talents[category] = talents[category]?.map((talent) {
             if (talent.id == id) {
               return talent.copyWith(
-                  averageRating: rating, createdAt: DateTime.now());
+                  averageRating: rating.toDouble(), createdAt: DateTime.now());
             }
             return talent;
           }).toList() ??

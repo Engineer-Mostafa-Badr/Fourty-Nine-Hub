@@ -233,13 +233,13 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 70.0; // تقليل الارتفاع لضمان وصول التابز للأعلى
+  double get maxExtent => 70.0; 
 
   @override
-  double get minExtent => 70.0; // نفس القيمة لضمان الثبات
+  double get minExtent => 70.0;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true; // غير من false لـ true عشان يعيد البناء
+    return true;
   }
 }

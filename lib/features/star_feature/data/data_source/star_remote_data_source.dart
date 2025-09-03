@@ -5,6 +5,7 @@ import '../../../../core/error/failure.dart';
 import '../model/banner_talent_model.dart';
 import '../model/star_model.dart';
 import '../model/star_winner_model.dart';
+import '../model/tube_video_models.dart'; // New import
 import '../../domain/entity/banner_talent_entity.dart';
 import '../../domain/entity/star_entity.dart';
 import '../../domain/entity/star_winner_entity.dart';
@@ -12,16 +13,25 @@ import '../../domain/use_case/fetch_all_star_use_case.dart';
 import '../../domain/use_case/upload_my_star_use_case.dart';
 
 abstract class StarRemoteDataSource {
+  // Existing methods
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(
       StarPaginationParams params);
   Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
       StarPaginationParams params);
-
   Future<Either<Failure, List<StarEntity>>> fetchMyStar();
-
   Future<Either<Failure, bool>> uploadMyStar(StarParams params);
   Future<Either<Failure, bool>> deleteMyStar({required String id});
   Future<Either<Failure, BannerTalentEntity>> fetchBanner();
+
+  // New Tube Video methods
+  Future<Either<Failure, TubeVideoListResponse>> fetchAllTubeVideos(
+      StarPaginationParams params);
+  Future<Either<Failure, TubeVideoListResponse>> fetchMyTubeVideos(
+      StarPaginationParams params);
+  Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(String videoId);
+  Future<Either<Failure, bool>> likeTubeVideo(String videoId);
+  Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
+  Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -29,6 +39,7 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
 
   StarRemoteDataSourceImpl(this._apiConsumer);
 
+  // Existing implementations remain the same...
   @override
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(
       StarPaginationParams params) async {
@@ -126,6 +137,151 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       (failure) => Left(failure),
       (response) {
         return Right((BannerTalentModel.fromJson(response['data'])));
+      },
+    );
+  }
+
+  // NEW TUBE VIDEO IMPLEMENTATIONS
+  @override
+  Future<Either<Failure, TubeVideoListResponse>> fetchAllTubeVideos(
+      StarPaginationParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getAllTubeVideosWithPagination(
+        page: params.page,
+        limit: params.limit,
+      ),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Fetch All Tube Videos Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get All Tube Videos Success: ${response['data']['videos']}");
+        try {
+          final tubeResponse = TubeVideoListResponse.fromJson(response);
+          return Right(tubeResponse);
+        } catch (e) {
+          print("Parse Tube Videos Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse video data',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, TubeVideoListResponse>> fetchMyTubeVideos(
+      StarPaginationParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getMyTubeVideosWithPagination(
+        page: params.page,
+        limit: params.limit,
+      ),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Fetch My Tube Videos Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get My Tube Videos Success: ${response['data']['videos']}");
+        try {
+          final tubeResponse = TubeVideoListResponse.fromJson(response);
+          return Right(tubeResponse);
+        } catch (e) {
+          print("Parse My Tube Videos Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse video data',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(
+      String videoId) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getTubeVideoDetails(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Fetch Tube Video Details Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get Tube Video Details Success: ${response['data']}");
+        try {
+          final video = TubeVideoModel.fromJson(response['data']);
+          return Right(video);
+        } catch (e) {
+          print("Parse Tube Video Details Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse video details',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> likeTubeVideo(String videoId) async {
+    final response = await _apiConsumer.post(
+      EndPoints.likeTubeVideo(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Like Tube Video Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Like Tube Video Success: ${response['message']}");
+        return Right(response['status'] == true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> dislikeTubeVideo(String videoId) async {
+    final response = await _apiConsumer.post(
+      EndPoints.dislikeTubeVideo(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Dislike Tube Video Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Dislike Tube Video Success: ${response['message']}");
+        return Right(response['status'] == true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> incrementTubeVideoView(String videoId) async {
+    final response = await _apiConsumer.post(
+      EndPoints.incrementTubeVideoView(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Increment Tube Video View Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Increment Tube Video View Success: ${response['message']}");
+        return Right(response['status'] == true);
       },
     );
   }

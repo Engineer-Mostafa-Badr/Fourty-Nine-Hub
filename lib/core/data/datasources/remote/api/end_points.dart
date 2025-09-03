@@ -1766,6 +1766,24 @@ class EndPoints {
       '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';
   static const String getMyProfile = '/tube-profile';
   static const String updateProfile = '/tube-profile';
+  static const String getAllTubeVideos = '/tube-video';
+  static const String getMyTubeVideos = '/tube-video/me';
+
+  static String getTubeVideoDetails(String videoId) =>
+      '/tube-video/details/$videoId';
+  static String likeTubeVideo(String videoId) => '/tube-video/$videoId/like';
+  static String dislikeTubeVideo(String videoId) =>
+      '/tube-video/$videoId/dislike';
+  static String incrementTubeVideoView(String videoId) =>
+      '/tube-video/$videoId/view';
+
+  // Tube Video with pagination
+  static String getAllTubeVideosWithPagination(
+          {int page = 1, int limit = 10}) =>
+      '/tube-video?page=$page&limit=$limit';
+
+  static String getMyTubeVideosWithPagination({int page = 1, int limit = 10}) =>
+      '/tube-video/me?page=$page&limit=$limit';
   // Bunny CDN Video Endpoints
   static const String createBunnyVideo = '/bunny/videos';
   static const String submitTubeVideo = '/tube-video';

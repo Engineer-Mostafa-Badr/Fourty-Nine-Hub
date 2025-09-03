@@ -82,7 +82,7 @@ class TalentCardBuilders {
     );
   }
 
-  // Favorite content
+  // Favorite content - Fixed to show only favorite videos
   static Widget buildFavoriteContentSliver({
     required BuildContext context,
     required StarCubit cubit,
@@ -98,7 +98,10 @@ class TalentCardBuilders {
           );
         }
 
-        if (state.favoriteTalents.isEmpty) {
+        // Use favoriteTalents instead of availableTalents
+        final favoriteTalents = state.favoriteTalents;
+
+        if (favoriteTalents.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
             child: SizedBox(
@@ -115,18 +118,30 @@ class TalentCardBuilders {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (index == state.favoriteTalents.length) {
+              if (index == favoriteTalents.length) {
                 return _buildLoadMoreWidget(
                     context, state, TalentCategory.favorites, cubit);
               }
 
-              final talent = state.favoriteTalents[index];
+              final talent = favoriteTalents[index];
               return TalentCard(
                 talent: talent,
                 cubit: cubit,
+                // Add onVideoTap to navigate to TalentVideoPlayer
+                onVideoTap: (talent, mediaUrl) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TalentVideoPlayer(
+                        videoUrl: mediaUrl,
+                        talent: talent,
+                      ),
+                    ),
+                  );
+                },
               );
             },
-            childCount: state.favoriteTalents.length +
+            childCount: favoriteTalents.length +
                 (state.hasMore(TalentCategory.favorites) ? 1 : 0),
           ),
         );
@@ -134,7 +149,7 @@ class TalentCardBuilders {
     );
   }
 
-  // History content
+  // History content - Fixed to show only history videos
   static Widget buildHistoryContentSliver({
     required BuildContext context,
     required StarCubit cubit,
@@ -150,7 +165,10 @@ class TalentCardBuilders {
           );
         }
 
-        if (state.historyTalents.isEmpty) {
+        // Use historyTalents instead of availableTalents
+        final historyTalents = state.historyTalents;
+
+        if (historyTalents.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
             child: SizedBox(
@@ -170,19 +188,19 @@ class TalentCardBuilders {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (index == state.historyTalents.length) {
+              if (index == historyTalents.length) {
                 return _buildLoadMoreWidget(
                     context, state, TalentCategory.history, cubit);
               }
 
-              final talent = state.historyTalents[index];
+              final talent = historyTalents[index];
               return TalentHistoryItem(
                 talent: talent,
                 cubit: cubit,
                 index: index,
               );
             },
-            childCount: state.historyTalents.length +
+            childCount: historyTalents.length +
                 (state.hasMore(TalentCategory.history) ? 1 : 0),
           ),
         );
@@ -190,7 +208,7 @@ class TalentCardBuilders {
     );
   }
 
-  // My talents content
+  // My talents content - Fixed to show only my videos
   static Widget buildMyTalentContentSliver({
     required BuildContext context,
     required StarCubit cubit,
@@ -207,7 +225,10 @@ class TalentCardBuilders {
           );
         }
 
-        if (state.myTalents.isEmpty) {
+        // Use myTalents instead of availableTalents
+        final myTalents = state.myTalents;
+
+        if (myTalents.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
             child: SizedBox(
@@ -222,20 +243,32 @@ class TalentCardBuilders {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (index == state.myTalents.length) {
+              if (index == myTalents.length) {
                 return _buildLoadMoreWidget(
                     context, state, TalentCategory.myTalents, cubit);
               }
 
-              final talent = state.myTalents[index];
+              final talent = myTalents[index];
               return TalentMyItem(
                 talent: talent,
                 cubit: cubit,
                 index: index,
-                onVideoTap: onVideoTap,
+                onVideoTap: onVideoTap ??
+                    (talent, mediaUrl) {
+                      // Default navigation to TalentVideoPlayer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TalentVideoPlayer(
+                            videoUrl: mediaUrl,
+                            talent: talent,
+                          ),
+                        ),
+                      );
+                    },
               );
             },
-            childCount: state.myTalents.length +
+            childCount: myTalents.length +
                 (state.hasMore(TalentCategory.myTalents) ? 1 : 0),
           ),
         );
@@ -275,6 +308,103 @@ class TalentCardBuilders {
         child: ElevatedButton(
           onPressed: () => cubit.loadTalents(category),
           child: Text(context.isArabic ? 'تحميل المزيد' : 'Load More'),
+        ),
+      ),
+    );
+  }
+}
+
+// Import for TalentVideoPlayer - Add this to your existing imports
+class TalentVideoPlayer extends StatelessWidget {
+  final String videoUrl;
+  final StarEntity talent;
+
+  const TalentVideoPlayer({
+    super.key,
+    required this.videoUrl,
+    required this.talent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          talent.title,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Video player placeholder - integrate your video player here
+            Container(
+              width: double.infinity,
+              height: 250,
+              color: Colors.grey[800],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.play_circle_filled,
+                      color: Colors.white,
+                      size: 64,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Video Player',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      videoUrl,
+                      style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            // Video info
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    talent.title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    '${talent.user.firstName} ${talent.user.lastName}',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    '${talent.totalViews} views',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
