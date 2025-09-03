@@ -2,6 +2,10 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio _dio;
@@ -167,7 +171,7 @@ class AuthInterceptor extends Interceptor {
     try {
       print('🔄 AuthInterceptor: Calling refresh token API');
       final response = await _dio.post(
-        "https://49backend.com/api/v1/auth/refresh-token",
+        "https://31b3c19d4d0a.ngrok-free.app/api/v1/auth/refresh-token",
         data: {
           'refreshToken': _token?.refreshToken,
         },
@@ -179,6 +183,13 @@ class AuthInterceptor extends Interceptor {
           },
         ),
       );
+
+      if(response.statusCode != 200) {
+        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.push(Routes.LOGIN);
+        print('❌ AuthInterceptor: Refresh token API failed: ${response.data}');
+        return null;
+      }
 
       final accessToken = response.data['data']['accessToken'] as String;
       final refreshToken = response.data['data']['refreshToken'] as String;
@@ -197,6 +208,8 @@ class AuthInterceptor extends Interceptor {
 
       return newToken;
     } catch (e) {
+      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      currentContext.push(Routes.LOGIN);
       print('❌ AuthInterceptor: Refresh token API failed: $e');
       return null;
     }

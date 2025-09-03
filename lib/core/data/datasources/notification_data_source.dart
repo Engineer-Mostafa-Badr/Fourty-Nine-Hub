@@ -29,6 +29,6 @@ class NotificationDataSourceImpl implements NotificationDataSource {
   @override
   Future<Either<Failure, Map<String, dynamic>>> getAllNotification() {
     return api
-        .get("https://49backend.com/api/v1/notifications?type=app&limit=10&page=1");
+        .get("https://31b3c19d4d0a.ngrok-free.app/api/v1/notifications?type=app&limit=10&page=1");
   }
 }
