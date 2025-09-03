@@ -105,7 +105,7 @@ dependencies:
   intl: null
   json_annotation: ^4.8.1
   just_audio: ^0.9.46
-  jwt_decoder: null
+  jwt_decoder:
   latlong2: null
   liquid_progress_indicator_v2: ^0.5.0
   local_auth: ^2.3.0

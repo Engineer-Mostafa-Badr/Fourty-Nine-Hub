@@ -36,8 +36,52 @@ class _CarMarkerOnClientSideCaptainShareState extends State<CarMarkerOnClientSid
   void initState() {
     super.initState();
     _loadCarIcon();
-    _subscribeToRideCubit();
+
+    // اسمع على التغييرات من الكيوبت
+    _rideSub = context.read<CaptainShareCubit>().stream.listen((state) {
+      _updateCarMarkerFromCubit(state);
+    });
+
+    // مبدئياً حدث مرة واحدة
+    _updateCarMarkerFromCubit(context.read<CaptainShareCubit>().state);
   }
+
+  void _updateCarMarkerFromCubit(CaptainShareState state) async {
+    final currentLocation = context.read<CaptainShareCubit>().driverLocation;
+    final previousLocation = context.read<CaptainShareCubit>().lastDriverLocation;
+
+    if (currentLocation != null) {
+      final double currentZoom = await widget.mapController.getZoomLevel();
+      double newAngle = _lastAngle;
+
+      if (previousLocation != null) {
+        newAngle = _calculateBearing(previousLocation, currentLocation);
+      }
+
+      final marker = Marker(
+        markerId: const MarkerId('car'),
+        position: currentLocation,
+        rotation: newAngle,
+        icon: _carIcon ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+        flat: true,
+        anchor: const Offset(0.5, 0.5),
+        onTap: () {
+          ManageVibration.vibrate();
+        },
+      );
+
+      _lastAngle = newAngle;
+
+      widget.mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: currentLocation, zoom: currentZoom, bearing: newAngle),
+        ),
+      );
+
+      widget.onCarMarkerUpdated(marker);
+    }
+  }
+
 
   @override
   void dispose() {
@@ -66,7 +110,7 @@ class _CarMarkerOnClientSideCaptainShareState extends State<CarMarkerOnClientSid
   }
 
   Future<void> _subscribeToRideCubit() async {
-      final currentLocation = context.read<CaptainShareCubit>().state.driverLocation;
+      final currentLocation = context.read<CaptainShareCubit>().driverLocation;
       final previousLocation = context.read<CaptainShareCubit>().state.previousDriverLocation;
       final double currentZoom = await widget.mapController.getZoomLevel();
 
@@ -130,5 +174,10 @@ class _CarMarkerOnClientSideCaptainShareState extends State<CarMarkerOnClientSid
   }
 
   @override
-  Widget build(BuildContext context) => const SizedBox.shrink();
+  Widget build(BuildContext context) {
+    print("currentLocation ${context.read<CaptainShareCubit>().driverLocation}");
+    print("lastDriverLocation ${context.read<CaptainShareCubit>().lastDriverLocation}");
+
+    return const SizedBox.shrink();
+  }
 }

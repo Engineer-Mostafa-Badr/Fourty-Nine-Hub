@@ -27,18 +27,18 @@ class AuthInterceptor extends Interceptor {
   void attachToken(UserTokensEntity? token) {
     _token = token;
     if (token != null) {
-      _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
-      _dio.options.headers['x-api-key'] =
+      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      serviceLocator<Dio>().options.headers['x-api-key'] =
       '2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06';
     } else {
-      _dio.options.headers.remove('Authorization');
+      serviceLocator<Dio>().options.headers.remove('Authorization');
     }
   }
 
   /// إزالة التوكين من الـ headers
   void removeTokenFromHeader() {
     _token = null;
-    _dio.options.headers.remove('Authorization');
+    serviceLocator<Dio>().options.headers.remove('Authorization');
   }
 
   @override
@@ -106,7 +106,7 @@ class AuthInterceptor extends Interceptor {
             originalRequestOptions.headers['Authorization'] = 'Bearer ${newToken.accessToken}';
             
             print('🔄 AuthInterceptor: Retrying original request: ${requestOptions.method} ${requestOptions.path}');
-            final response = await _dio.fetch(originalRequestOptions);
+            final response = await serviceLocator<Dio>().fetch(originalRequestOptions);
             print('✅ AuthInterceptor: Original request retried successfully');
 
             // retry للـ requests اللي كانوا في الـ queue
@@ -132,7 +132,7 @@ class AuthInterceptor extends Interceptor {
                 // Update headers with new token
                 retryRequestOptions.headers['Authorization'] = 'Bearer ${newToken.accessToken}';
                 
-                final retryResponse = await _dio.fetch(retryRequestOptions);
+                final retryResponse = await serviceLocator<Dio>().fetch(retryRequestOptions);
                 completer.complete(retryResponse);
                 print('✅ AuthInterceptor: Queued request ${i + 1} retried successfully');
               } catch (e) {
@@ -170,7 +170,7 @@ class AuthInterceptor extends Interceptor {
   Future<UserTokensEntity?> _refreshToken() async {
     try {
       print('🔄 AuthInterceptor: Calling refresh token API');
-      final response = await _dio.post(
+      final response = await serviceLocator<Dio>().post(
         "https://49backend.com/api/v1/auth/refresh-token",
         data: {
           'refreshToken': _token?.refreshToken,
@@ -197,14 +197,14 @@ class AuthInterceptor extends Interceptor {
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
-      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
       
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
-      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       return newToken;
     } catch (e) {

@@ -531,8 +531,8 @@ class AppPages {
                   state,
                   MultiBlocProvider(
                     providers: [
-                      BlocProvider(
-                        create:(context)=> serviceLocator<CaptainShareCubit>(),
+                      BlocProvider.value(
+                        value:serviceLocator<CaptainShareCubit>(),
                       ),
                     ],
                     child: RunningMapViewDetails(

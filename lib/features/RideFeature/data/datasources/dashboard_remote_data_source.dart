@@ -1089,9 +1089,10 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info(" Update Location Driver :  $data");
         log(" Update Location Driver  data :  $data");
         print(" Update Location Driver  data :  $data");
+        print(" data['location']?['latitude'] :  ${data['location']?['latitude']}");
         UpdateLocationDriverParams param = UpdateLocationDriverParams(
-          latitude: data['updateLocation']?['location']?['latitude']??0,
-          longitude: data['updateLocation']?['location']?['longitude']??0,
+          latitude: data['location']?['latitude']??0,
+          longitude: data['location']?['longitude']??0,
         );
         params(param);
       });
