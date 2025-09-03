@@ -25,8 +25,6 @@ class ConversationsServiceLocator {
     // ---------------------------------- use cases ----------------------------------
     serviceLocator.registerLazySingleton<GetSocialConversations>(
       () => GetSocialConversations(conversationsRepo: serviceLocator()));
-    serviceLocator.registerLazySingleton<GetSocialConversations>(
-            () => GetSocialConversations(conversationsRepo: serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToUpdateSocialListUseCase>(
             () =>  ListenToUpdateSocialListUseCase(conversationsRepository: serviceLocator()));
     serviceLocator.registerLazySingleton<StartTypingUseCase>(

@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
@@ -94,40 +96,63 @@ class DI {
   static Future<void> execute({String? token}) async {
     print('executed');
 
-    // Clear any existing registrations to avoid duplicates
-    await reset();
-
     // Initialize SharedPreferences before registering it
     final sharedPreferences = await SharedPreferences.getInstance();
+
+    // Register SharedPreferences as a singleton
     serviceLocator.registerSingleton<SharedPreferences>(sharedPreferences);
 
-    // Initialize Firebase first
-    await _initializeFirebase();
-
-    // Register call feature dependencies
     _callFeatureInjector();
-
-    // Register OnBoarding cubit
+    // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
 
-    // Register secure storage
+    // Initialize Firebase only if not already initialized
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      // Firebase might already be initialized, continue
+      print('Firebase already initialized or error: $e');
+    }
+
+    try {
+      await FirebaseMessaging.instance.requestPermission(
+        announcement: true,
+        carPlay: true,
+        criticalAlert: true,
+      );
+      FirebaseMessaging.instance.subscribeToTopic('all');
+    } catch (e) {
+      print('Firebase messaging error: $e');
+    }
     serviceLocator.registerSingleton<LocalStorageConsumer>(
       const BaseLocalStorageConsumer(
         storage: FlutterSecureStorage(),
       ),
     );
 
-    // Initialize localization and database
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
+    // final cred = await CacheManager.getAccessToken();
+    // CliLogger.info('token from getit $cred');
+    // CliLogger.info('token outside getit $token');
+    // socket
+    // serviceLocator.registerLazySingleton<Socket>(() => io(
+    //     'https://49backend.com',
+    //     OptionBuilder()
+    //         .setTransports(['websocket'])
+    //         .disableAutoConnect()
+    //         .setExtraHeaders({'Authorization': token??cred}) // optional
+    //         .build()));
 
-    // Register database
+    // database
     serviceLocator.registerLazySingleton<Database>(
-            () => SQFLiteDataSource.instance.database);
+        () => SQFLiteDataSource.instance.database);
 
-    // Register Dio with interceptors
+    // dio
     serviceLocator.registerLazySingleton<Dio>(
-          () => Dio(
+      () => Dio(
         BaseOptions(
           baseUrl: kReleaseMode
               ? EndPoints.productionBaseUrl
@@ -139,155 +164,261 @@ class DI {
           },
         ),
       )..interceptors.addAll([
-        SubscriptionInterceptor(),
-        if (kDebugMode)
-          PrettyDioLogger(
-            requestHeader: true,
-            requestBody: true,
-            responseBody: true,
-            responseHeader: false,
-            error: true,
-            compact: true,
-            maxWidth: 90,
-          )
-      ]),
+          SubscriptionInterceptor(),
+          if (kDebugMode)
+            PrettyDioLogger(
+              requestHeader: true,
+              requestBody: true,
+              responseBody: true,
+              responseHeader: false,
+              error: true,
+              compact: true,
+              maxWidth: 90,
+            )
+        ]),
     );
 
-    // Register API consumer
-    serviceLocator.registerLazySingleton<ApiConsumer>(
-          () => BaseApiConsumer(serviceLocator()),
-    );
+    
 
-    // Register cache service
-    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
-
-    // Register base repository
-    serviceLocator.registerLazySingleton(() => BaseRepository());
-
-    // Register JSON parser
-    serviceLocator.registerLazySingleton<JsonParser>(() => JsonParser());
-
-    // Register gifts cubit
+    //for gifts
     serviceLocator.registerLazySingleton(() => GiftsCubit(serviceLocator()));
 
-    // Register repositories
-    serviceLocator.registerLazySingleton<StoryRepository>(() => StoryRepository());
-    serviceLocator.registerLazySingleton<GetGiftsUseCase>(() => GetGiftsUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepositoryImpl(serviceLocator()));
+    // Register the StoryRepository
+    serviceLocator.registerLazySingleton<StoryRepository>(
+      () => StoryRepository(),
+    );
+    serviceLocator.registerLazySingleton<GetGiftsUseCase>(
+      () => GetGiftsUseCase(serviceLocator()),
+    );
+    // serviceLocator.registerLazySingleton<UpdateSocketLocationUseCase>(
+    //   () => UpdateSocketLocationUseCase(serviceLocator()),
+    // );
 
-    // Register trip-related cubits
-    serviceLocator.registerLazySingleton<GetTripInfoCubit>(() => GetTripInfoCubit(repository: serviceLocator()));
-    serviceLocator.registerLazySingleton<ShowOffersCubit>(() => ShowOffersCubit(repository: serviceLocator()));
-    serviceLocator.registerLazySingleton<RequestRiderTripCubit>(() => RequestRiderTripCubit(repository: serviceLocator()));
+    // // Register the TinderRepository
+    serviceLocator.registerLazySingleton<TinderRepository>(
+      () => TinderRepositoryImpl(serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetTripInfoCubit>(
+      () => GetTripInfoCubit(repository: serviceLocator()),
+    );
 
-    // Register all service locators with error handling
-    try {
-      await AuthServiceLocator.execute(serviceLocator: serviceLocator);
-      await RideServiceLocator.execute(serviceLocator: serviceLocator);
-      CaptainShareServiceLocator.execute(serviceLocator: serviceLocator);
-      SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
-      FourtyNineServiceLocator.execute(serviceLocator);
-      WheelServiceLocator.execute(serviceLocator);
-      FoodServiceLocator.execute(serviceLocator: serviceLocator);
-      AuctionServiceLocator.execute(serviceLocator: serviceLocator);
-      InstallmentServiceLocator.execute(serviceLocator: serviceLocator);
-      HealthServiceLocator.execute(serviceLocator: serviceLocator);
-      AccountServiceLocator.execute(serviceLocator: serviceLocator);
-      SocialServiceLocator.execute(serviceLocator: serviceLocator);
-      RideServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
+    serviceLocator.registerLazySingleton<ShowOffersCubit>(
+      () => ShowOffersCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<RequestRiderTripCubit>(
+      () => RequestRiderTripCubit(repository: serviceLocator()),
+    );
 
-      // Use try-catch for potentially duplicate registrations
-      try {
-        ConversationsServiceLocator.execute(serviceLocator: serviceLocator);
-      } catch (e) {
-        log('ConversationsServiceLocator already registered: $e');
-      }
+    //
+    // // Register the TinderCubit
+    // serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit(
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //       serviceLocator(),
+    //     ));
+    //
+    // serviceLocator.registerLazySingleton<TinderRemoteDataSource>(
+    //     () => TinderRemoteDataSourceImpl(
+    //           serviceLocator(),
+    //         ));
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //     () => TinderRepositoryImpl(serviceLocator()));
+    //
+    // serviceLocator
+    //     .registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<GetTinderFavouritesCategoryUseCase>(
+    //     () => GetTinderFavouritesCategoryUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
+    //     () => GetTinderProfileUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<GetTinderFavouritesUseCase>(
+    //     () => GetTinderFavouritesUseCase(
+    //           serviceLocator(),
+    //         ));
+    // serviceLocator
+    //     .registerLazySingleton<FetchLastSeenUseCase>(() => FetchLastSeenUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<SendGiftUseCase>(() => SendGiftUseCase(
+    //       serviceLocator(),
+    //     ));
+    //
+    // serviceLocator
+    //     .registerLazySingleton<FetchGiftsUseCase>(() => FetchGiftsUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<CheckUserNearbyUseCase>(
+    //     () => CheckUserNearbyUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<FetchSubCategoryDataUseCase>(
+    //     () => FetchSubCategoryDataUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<UploadTinderPictureUseCase>(
+    //     () => UploadTinderPictureUseCase(
+    //           serviceLocator(),
+    //         ));
+    //
+    // serviceLocator.registerLazySingleton<AddTinderFavouriteCategoryUseCase>(
+    //     () => AddTinderFavouriteCategoryUseCase(
+    //           serviceLocator(),
+    //         ));
 
-      RideDashboardServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
-      ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
-      StreamServiceLocator.execute(serviceLocator: serviceLocator);
-      SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
-      ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
-      TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
-      LiveServiceLocator.execute(serviceLocator: serviceLocator);
-      SecretsServiceLocator.execute(serviceLocator: serviceLocator);
-      await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
-      InstagramServiceLocator.execute(serviceLocator: serviceLocator);
-      FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
-      TwitterServiceLocator.execute(serviceLocator: serviceLocator);
-      BalanceServiceLocator.execute(serviceLocator: serviceLocator);
-      ChatServiceLocator.execute(serviceLocator: serviceLocator);
-      CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
-      PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
-      SettingServiceLocator.execute(serviceLocator: serviceLocator);
-      PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
-      TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
-      CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
-      CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
-      ChanceServiceLocator.execute(serviceLocator: serviceLocator);
-      SearchServiceLocator.execute(serviceLocator: serviceLocator);
-      EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
-      JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
-      ReelsServiceLocator.execute(serviceLocator: serviceLocator);
-      StarServiceLocator.execute(serviceLocator: serviceLocator);
-      QuranServiceLocator.execute(serviceLocator: serviceLocator);
-      StoriesServiceLocator.execute(serviceLocator: serviceLocator);
-      ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
-      FollowServiceLocator.execute(serviceLocator: serviceLocator);
-      TinderServiceLocator.execute(serviceLocator: serviceLocator);
-      CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
-      NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
-      SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
-    } catch (e) {
-      log('Error registering service locators: $e');
-      rethrow;
-    }
-  }
+    // Register other dependencies...
+    // serviceLocator
+    //     .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
 
-  static Future<void> _initializeFirebase() async {
-    try {
-      await Firebase.initializeApp(
-        name: "49-App",
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+    serviceLocator.registerLazySingleton<ApiConsumer>(
+      () => BaseApiConsumer(
+        serviceLocator(),
+      ),
+    );
 
-      // Request permissions with context available
-      await FirebaseMessaging.instance.requestPermission(
-        announcement: true,
-        carPlay: true,
-        criticalAlert: true,
-      );
+    // serviceLocator.registerLazySingleton<ApiClientHelper>(
+    //   () => ApiClientHelperImp(),
+    // );
+    //cacheService
+    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
+    // base repo
+    serviceLocator.registerLazySingleton(
+      () => BaseRepository(),
+    );
+    // json parser
+    serviceLocator.registerLazySingleton<JsonParser>(
+      () => JsonParser(),
+    );
 
-      // Subscribe to topic
-      FirebaseMessaging.instance.subscribeToTopic('all');
 
-      log('Firebase initialized successfully');
-    } catch (e) {
-      log('Firebase initialization error: $e');
-      // Don't rethrow - allow app to continue without Firebase
-    }
+
+    // auth service locator
+    await AuthServiceLocator.execute(serviceLocator: serviceLocator);
+    // Ride Customer
+    await RideServiceLocator.execute(serviceLocator: serviceLocator);
+    //captain share service locator
+    CaptainShareServiceLocator.execute(serviceLocator: serviceLocator);
+    // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
+    // Subcategories
+    SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
+    // Fourty-Nine
+    FourtyNineServiceLocator.execute(serviceLocator);
+
+    // Wheel
+    WheelServiceLocator.execute(serviceLocator);
+    // Food
+    FoodServiceLocator.execute(serviceLocator: serviceLocator);
+    // Auction
+    AuctionServiceLocator.execute(serviceLocator: serviceLocator);
+    // Installments
+    InstallmentServiceLocator.execute(serviceLocator: serviceLocator);
+    // Health
+    HealthServiceLocator.execute(serviceLocator: serviceLocator);
+    // Account
+    AccountServiceLocator.execute(serviceLocator: serviceLocator);
+    // Social
+    SocialServiceLocator.execute(serviceLocator: serviceLocator);
+    // Ride Updated
+    RideServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
+    // Conversations
+    ConversationsServiceLocator.execute(serviceLocator: serviceLocator);
+    // Ride Updated
+    RideDashboardServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
+    // Club Voice
+    ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
+    // Stream
+    StreamServiceLocator.execute(serviceLocator: serviceLocator);
+    // Subscriptions
+    SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
+    // Shipping
+    ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
+    // trip join
+    TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    //live
+    LiveServiceLocator.execute(serviceLocator: serviceLocator);
+    //secrets
+    SecretsServiceLocator.execute(serviceLocator: serviceLocator);
+    // notifications
+    await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
+    InstagramServiceLocator.execute(serviceLocator: serviceLocator);
+    FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
+    TwitterServiceLocator.execute(serviceLocator: serviceLocator);
+    BalanceServiceLocator.execute(serviceLocator: serviceLocator);
+    ChatServiceLocator.execute(serviceLocator: serviceLocator);
+    CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
+    PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
+    SettingServiceLocator.execute(serviceLocator: serviceLocator);
+    PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
+    TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
+    CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
+    CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
+    ChanceServiceLocator.execute(serviceLocator: serviceLocator);
+    SearchServiceLocator.execute(serviceLocator: serviceLocator);
+    EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
+    JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
+    ReelsServiceLocator.execute(serviceLocator: serviceLocator);
+    StarServiceLocator.execute(serviceLocator: serviceLocator);
+    QuranServiceLocator.execute(serviceLocator: serviceLocator);
+    StoriesServiceLocator.execute(serviceLocator: serviceLocator);
+    ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
+    FollowServiceLocator.execute(serviceLocator: serviceLocator);
+    TinderServiceLocator.execute(serviceLocator: serviceLocator);
+    CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
+    NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
+    SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {
-    if (serviceLocator.isRegistered<SharedPreferences>()) {
-      log("Resetting service locator...");
-      await serviceLocator.reset();
-    }
+    log("Resetting service locator...");
+    await serviceLocator.reset();
   }
 
+  // static Future<void> registerSocket({required String? token}) async {
+  //   final cred = await CacheManager.getAccessToken();
+  //   CliLogger.info('token from getit $cred');
+  //   CliLogger.info('token outside getit $token');
+  //   // socket
+  //   serviceLocator.registerFactory<Socket>(() => io(
+  //       'https://49backend.com',
+  //       OptionBuilder()
+  //           .setTransports(['websocket'])
+  //           .disableAutoConnect()
+  //           .setExtraHeaders({'Authorization': token??cred}) // optional
+  //           .build()));
+  // }
+
   static void _callFeatureInjector() {
-    // Register call-related dependencies
     serviceLocator.registerLazySingleton(() => SendCallCubit());
     serviceLocator.registerLazySingleton(() => CallCubit());
     serviceLocator.registerLazySingleton<FcmNotificationHelper>(
-            () => FcmNotificationHelperImpl(serviceLocator()));
+        () => FcmNotificationHelperImpl(serviceLocator()));
     serviceLocator.registerLazySingleton(() => FirebaseMessaging.instance);
     serviceLocator
         .registerLazySingleton(() => GetAgoraTokenUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<CallRepository>(
-            () => CallRepositoryImpl(serviceLocator()));
+        () => CallRepositoryImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CallRemoteDatasource>(
-            () => CallRemoteDatasourceImpl());
+        () => CallRemoteDatasourceImpl());
 
     serviceLocator
         .registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());
