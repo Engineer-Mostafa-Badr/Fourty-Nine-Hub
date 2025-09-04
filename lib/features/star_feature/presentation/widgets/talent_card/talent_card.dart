@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -9,6 +12,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
@@ -41,9 +45,8 @@ class _TalentCardState extends State<TalentCard> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaUrl = widget.talent.mediaUrl.isNotEmpty
-        ? widget.talent.mediaUrl.first.mediaKey
-        : '';
+    final mediaUrl = _getVideoUrl();
+    final thumbnailUrl = _getThumbnailUrl();
     final isVideo = _isVideoUrl(mediaUrl);
 
     return Container(
@@ -57,7 +60,6 @@ class _TalentCardState extends State<TalentCard> {
             onTap: () {
               ManageVibration.vibrate();
               if (isVideo) {
-                // تسجيل المشاهدة عند النقر على الفيديو
                 _incrementViewIfNeeded();
                 _navigateToVideoPlayer(context, mediaUrl, widget.talent);
               } else {
@@ -73,9 +75,11 @@ class _TalentCardState extends State<TalentCard> {
                         title: widget.talent.title,
                         autoPlay: true,
                         startMuted: true,
-                        thumbnailUrl: "assets/images/testforvideo.jpg",
+                        thumbnailUrl: thumbnailUrl,
                         talent: widget.talent,
-                        onTap: () => _navigateToProfile(context, widget.talent),
+                        cubit: widget.cubit, // إضافة الـ cubit
+                        onTap: () => _navigateToVideoPlayer(
+                            context, mediaUrl, widget.talent),
                         onVideoStarted: () => _incrementViewIfNeeded(),
                       )
                     : _buildImageContainer(mediaUrl),
@@ -91,13 +95,8 @@ class _TalentCardState extends State<TalentCard> {
             ),
           ),
 
-          // Video Info Section
-          TalentCardInfoSection(
-            talent: widget.talent,
-            cubit: widget.cubit,
-            onProfileTap: () => _navigateToProfile(context, widget.talent),
-            onMoreOptionsTap: () => _showYouTubeOptions(context, widget.talent),
-          ),
+          // Video Info Section with enhanced tube video info
+          _buildVideoInfoSection(),
 
           // Delete Button for My Talents
           if (widget.isMyTalent) _buildDeleteButton(context, widget.talent),
@@ -105,6 +104,85 @@ class _TalentCardState extends State<TalentCard> {
       ),
     );
   }
+
+  Widget _buildVideoInfoSection() {
+    return Column(
+      children: [
+        TalentCardInfoSection(
+          talent: widget.talent,
+          cubit: widget.cubit,
+          onProfileTap: () => _navigateToProfile(context, widget.talent),
+          onMoreOptionsTap: () => _showTubeVideoOptions(context, widget.talent),
+        ),
+
+        // Additional Tube Video info
+        // if (_isTubeVideo()) _buildTubeVideoExtraInfo(),
+      ],
+    );
+  }
+
+  // Widget _buildTubeVideoExtraInfo() {
+  //   final tubeVideo = widget.talent as TubeVideoModel;
+
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //     child: Row(
+  //       children: [
+  //         // Duration
+  //         if (tubeVideo.duration > 0) ...[
+  //           Icon(Icons.schedule, size: 14, color: Colors.grey[600]),
+  //           SizedBox(width: 4),
+  //           Text(
+  //             _formatDuration(tubeVideo.duration),
+  //             style: TextStyle(
+  //               fontSize: 12,
+  //               color: Colors.grey[600],
+  //             ),
+  //           ),
+  //           SizedBox(width: 16),
+  //         ],
+
+  //         // Likes and Dislikes count
+  //         if (tubeVideo.likes > 0 || tubeVideo.dislikes > 0) ...[
+  //           Row(
+  //             children: [
+  //               Icon(Icons.thumb_up_outlined,
+  //                   size: 14, color: Colors.grey[600]),
+  //               SizedBox(width: 2),
+  //               Text(
+  //                 '${tubeVideo.likes}',
+  //                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+  //               ),
+  //               SizedBox(width: 8),
+  //               Icon(Icons.thumb_down_outlined,
+  //                   size: 14, color: Colors.grey[600]),
+  //               SizedBox(width: 2),
+  //               Text(
+  //                 '${tubeVideo.dislikes}',
+  //                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+  //               ),
+  //             ],
+  //           ),
+  //           SizedBox(width: 16),
+  //         ],
+
+  //         // HD Quality indicator if video URL exists
+  //         // if (tubeVideo.videoUrl == null) ...[
+  //         //   Icon(Icons.hd, size: 14, color: Colors.grey[600]),
+  //         //   SizedBox(width: 4),
+  //         //   Text(
+  //         //     'HD',
+  //         //     style: TextStyle(
+  //         //       fontSize: 12,
+  //         //       color: Colors.grey[600],
+  //         //       fontWeight: FontWeight.bold,
+  //         //     ),
+  //         //   ),
+  //         // ],
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildImageContainer(String mediaUrl) {
     return Container(
@@ -137,7 +215,7 @@ class _TalentCardState extends State<TalentCard> {
             ),
           ),
           child: Text(
-            'Delete Talent',
+            'Delete Video',
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -149,11 +227,44 @@ class _TalentCardState extends State<TalentCard> {
     );
   }
 
+  // Helper methods
+  String _getVideoUrl() {
+    if (_isTubeVideo()) {
+      final tubeVideo = widget.talent as TubeVideoModel;
+      return tubeVideo.videoUrl ?? '';
+    }
+    return widget.talent.mediaUrl.isNotEmpty
+        ? widget.talent.mediaUrl.first.mediaKey
+        : '';
+  }
+
+  String? _getThumbnailUrl() {
+    if (_isTubeVideo()) {
+      final tubeVideo = widget.talent as TubeVideoModel;
+      return tubeVideo.thumbnail; // استخدام thumbnail الفعلي من الـ API
+    }
+    return "assets/images/testforvideo.jpg"; // fallback للـ old API
+  }
+
+  bool _isTubeVideo() {
+    return widget.talent is TubeVideoModel;
+  }
+
+  String _formatDuration(int seconds) {
+    final duration = Duration(seconds: seconds);
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    if (duration.inHours > 0) {
+      return "${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}";
+    } else {
+      return "${duration.inMinutes}:${twoDigits(duration.inSeconds.remainder(60))}";
+    }
+  }
+
   // تسجيل المشاهدة مرة واحدة فقط
   void _incrementViewIfNeeded() {
     if (!_hasIncrementedView) {
       _hasIncrementedView = true;
-      // استدعاء API تسجيل المشاهدة
       widget.cubit.incrementVideoView(widget.talent.id);
     }
   }
@@ -212,20 +323,21 @@ class _TalentCardState extends State<TalentCard> {
       title: LocaleKeys.alert.localize,
       subTitle: LocaleKeys.remove.localize,
       action: () {
-        context.read<StarCubit>().deleteMyTalent(id: talent.id);
+        context.read<StarCubit>().deleteMyTubeVideo(talent.id);
         Navigator.pop(context);
       },
     );
   }
 
-  void _showYouTubeOptions(BuildContext context, StarEntity talent) {
+  void _showTubeVideoOptions(BuildContext context, StarEntity talent) {
     final cubit = context.read<StarCubit>();
+
     OptionsBottomSheet.showOptions(
       context: context,
       options: [
         OptionItem(
           icon: Icons.playlist_add,
-          title: context.isArabic ? 'إنشاء قائمة' : 'Play next in queue',
+          title: context.isArabic ? 'إنشاء قائمة' : 'Add to playlist',
           onTap: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
@@ -246,6 +358,17 @@ class _TalentCardState extends State<TalentCard> {
             cubit.toggleFavorite(talent.id);
           },
         ),
+        if (_isTubeVideo()) ...[
+          OptionItem(
+            icon: Icons.share,
+            title: context.isArabic ? 'مشاركة' : 'Share',
+            onTap: () {
+              ManageVibration.vibrate();
+              Navigator.pop(context);
+              // سيتم إضافة وظيفة المشاركة لاحقاً
+            },
+          ),
+        ],
         OptionItem(
           icon: Icons.flag,
           title: context.isArabic ? 'ابلاغ' : 'Report',
@@ -268,8 +391,9 @@ class _TalentCardState extends State<TalentCard> {
   }
 }
 
-// Wrapper للـ YouTubeStyleVideoPlayer مع تتبع المشاهدات
+// تحديث YouTubeStyleVideoPlayerWithTracking ليستخدم CachedNetworkImage للـ thumbnail
 class YouTubeStyleVideoPlayerWithTracking extends YouTubeStyleVideoPlayer {
+  final StarCubit cubit;
   final VoidCallback? onVideoStarted;
 
   const YouTubeStyleVideoPlayerWithTracking({
@@ -282,6 +406,7 @@ class YouTubeStyleVideoPlayerWithTracking extends YouTubeStyleVideoPlayer {
     super.showLiveIndicator = false,
     super.thumbnailUrl,
     super.talent,
+    required this.cubit,
     this.onVideoStarted,
   });
 
@@ -297,9 +422,13 @@ class _YouTubeStyleVideoPlayerWithTrackingState
   bool _isPlaying = false;
   bool _isMuted = false;
   bool _showControls = true;
-  bool _isDragging = false;
+  final bool _isDragging = false;
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
+
+  // إضافة Timer للتأخير
+  Timer? _playDelayTimer;
+  Timer? _pauseDelayTimer;
 
   @override
   void initState() {
@@ -316,12 +445,6 @@ class _YouTubeStyleVideoPlayerWithTrackingState
             _isMuted = widget.startMuted;
             _controller.setVolume(_isMuted ? 0 : 1);
           });
-
-          if (widget.autoPlay && _visibilityFraction > 0.5) {
-            _controller.play();
-            setState(() => _isPlaying = true);
-            _trackVideoStart();
-          }
         }
       });
 
@@ -334,7 +457,6 @@ class _YouTubeStyleVideoPlayerWithTrackingState
         _isPlaying = _controller.value.isPlaying;
       });
 
-      // تتبع بداية تشغيل الفيديو
       if (_controller.value.isPlaying && !_hasTrackedView) {
         _trackVideoStart();
       }
@@ -371,7 +493,8 @@ class _YouTubeStyleVideoPlayerWithTrackingState
 
   void _toggleFavorite() {
     if (widget.talent != null) {
-      context.read<StarCubit>().toggleFavorite(widget.talent!.id);
+      widget.cubit.toggleFavorite(
+          widget.talent!.id); // استخدام widget.cubit بدلاً من context.read
     }
   }
 
@@ -380,325 +503,199 @@ class _YouTubeStyleVideoPlayerWithTrackingState
 
     if (!_isInitialized) return;
 
+    // إلغاء أي timers موجودة
+    _playDelayTimer?.cancel();
+    _pauseDelayTimer?.cancel();
+
     if (info.visibleFraction > 0.5) {
+      // إذا كان الفيديو مرئي أكثر من 50%
       if (!_controller.value.isPlaying && widget.autoPlay) {
-        _controller.play();
-        setState(() => _isPlaying = true);
-        _trackVideoStart();
+        // تأخير 600ms قبل التشغيل
+        _playDelayTimer = Timer(Duration(milliseconds: 600), () {
+          if (mounted &&
+              !_controller.value.isPlaying &&
+              _visibilityFraction > 0.5 &&
+              widget.autoPlay) {
+            _controller.play();
+            setState(() => _isPlaying = true);
+            _trackVideoStart();
+          }
+        });
       }
     } else {
+      // إذا كان الفيديو غير مرئي أو أقل من 50%
       if (_controller.value.isPlaying) {
+        // إيقاف فوري عند عدم الرؤية
         _controller.pause();
         setState(() => _isPlaying = false);
       }
     }
   }
 
-  String _formatDuration(Duration duration) {
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-
-    if (hours > 0) {
-      return '$hours:$minutes:$seconds';
-    } else {
-      return '$minutes:$seconds';
-    }
-  }
-
-  void _seekToPosition(double localX) {
-    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
-    if (renderBox != null && _controller.value.duration.inMilliseconds > 0) {
-      final position = (localX / renderBox.size.width).clamp(0.0, 1.0);
-      final duration = _controller.value.duration;
-      final newPosition = Duration(
-        milliseconds: (position * duration.inMilliseconds).round(),
-      );
-      _controller.seekTo(newPosition);
-    }
-  }
-
-  void _openFullVideoPlayer() {
-    if (widget.talent != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TalentVideoPlayer(
-            videoUrl: widget.videoUrl,
-            talent: widget.talent!,
+  Widget _buildThumbnail() {
+    // إذا كان thumbnail من الـ API (URL)، استخدم CachedNetworkImage
+    if (widget.thumbnailUrl != null &&
+        widget.thumbnailUrl!.startsWith('http')) {
+      return CachedNetworkImage(
+        imageUrl: widget.thumbnailUrl!,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        placeholder: (context, url) => Container(
+          color: Colors.grey[300],
+          child: Icon(
+            Icons.video_library,
+            size: 48,
+            color: Colors.grey[600],
           ),
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+          'assets/images/testforvideo.jpg',
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
         ),
       );
     }
-  }
 
-  @override
-  void dispose() {
-    _controller.removeListener(_videoListener);
-    _controller.dispose();
-    super.dispose();
+    // إذا كان thumbnail محلي (asset)
+    return Image.asset(
+      widget.thumbnailUrl ?? 'assets/images/testforvideo.jpg',
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // قراءة الـ favorite state مباشرة من الـ cubit المُمرر
+    final isFavorite = widget.talent != null
+        ? widget.cubit.isFavorite(widget.talent!.id)
+        : false;
+
     return VisibilityDetector(
       key: Key('video-${widget.videoUrl}'),
       onVisibilityChanged: _handleVisibilityChanged,
-      child: BlocBuilder<StarCubit, StarState>(
-        builder: (context, state) {
-          final cubit = context.read<StarCubit>();
-          final isFavorite = widget.talent != null
-              ? cubit.isFavorite(widget.talent!.id)
-              : false;
+      child: GestureDetector(
+        onTap: () {
+          ManageVibration.vibrate();
+          setState(() => _showControls = !_showControls);
+          widget.onTap?.call();
+        },
+        child: Container(
+          height: MediaQuery.sizeOf(context).height * 0.3,
+          width: double.infinity,
+          color: Colors.black,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Background Thumbnail
+              if (widget.thumbnailUrl != null && !_isPlaying)
+                Positioned.fill(
+                  child: _buildThumbnail(),
+                ),
 
-          return GestureDetector(
-            onTap: () {
-              ManageVibration.vibrate();
-              setState(() => _showControls = !_showControls);
-              widget.onTap?.call();
-              _openFullVideoPlayer();
-            },
-            child: Container(
-              height: MediaQuery.sizeOf(context).height * 0.3,
-              width: double.infinity,
-              color: Colors.black,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Background Thumbnail
-                  if (widget.thumbnailUrl != null && !_isPlaying)
-                    Positioned.fill(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(widget.thumbnailUrl!),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+              // Video Player
+              if (_isInitialized)
+                AnimatedOpacity(
+                  opacity: _isPlaying ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  ),
+                ),
+
+              // Loading Indicator
+              if (!_isInitialized)
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+
+              // Play button overlay when paused
+              if (_isInitialized && !_isPlaying)
+                Center(
+                  child: GestureDetector(
+                    onTap: _togglePlayPause,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        shape: BoxShape.circle,
                       ),
-                    ),
-
-                  // Video Player
-                  if (_isInitialized)
-                    AnimatedOpacity(
-                      opacity: _isPlaying ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 300),
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      ),
-                    ),
-
-                  // Loading Indicator
-                  if (!_isInitialized)
-                    const Center(
-                      child: CircularProgressIndicator(
+                      child: Icon(
+                        Icons.play_arrow,
                         color: Colors.white,
-                      ),
-                    ),
-
-                  // Top Left Controls (Favorite)
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: GestureDetector(
-                      onTap: _toggleFavorite,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _isPlaying
-                              ? Colors.black12
-                              : Color(0xffD9D9D9).withValues(alpha: .5),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                          icon: Icon(
-                            isFavorite
-                                ? Icons.favorite
-                                : Icons.favorite_border_rounded,
-                            color: Color(0xffFF0000),
-                            size: 25,
-                          ),
-                          onPressed: _toggleFavorite,
-                          padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(),
-                        ),
+                        size: 32,
                       ),
                     ),
                   ),
+                ),
 
-                  // Top Right Controls (Mute)
-                  if (_isInitialized)
-                    Positioned(
-                      top: 10,
-                      right: 8,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _isPlaying
-                              ? Colors.black12
-                              : Color(0xffD9D9D9).withValues(alpha: .5),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                          icon: Icon(
-                            _isMuted ? Icons.volume_off : Icons.volume_up,
-                            color: _isPlaying ? Colors.white : Colors.black,
-                            size: 25,
-                          ),
-                          onPressed: _toggleMute,
-                          padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(),
-                        ),
-                      ),
+              // Top Left Controls (Favorite)
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border_rounded,
+                      color: Color(0xffFF0000),
+                      size: 20,
                     ),
-
-                  // Bottom Right Controls (Remaining Time)
-                  if (_isInitialized)
-                    Positioned(
-                      bottom: _isPlaying || _isDragging ? 18 : 10,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: ValueListenableBuilder<VideoPlayerValue>(
-                          valueListenable: _controller,
-                          builder: (context, value, child) {
-                            if (!_isPlaying && !_isDragging) {
-                              return Text(
-                                _formatDuration(value.duration),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            } else {
-                              final remainingTime =
-                                  value.duration - value.position;
-                              return Text(
-                                _formatDuration(remainingTime),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-
-                  // Progress Bar
-                  if (_isInitialized && (_isPlaying || _isDragging))
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTapDown: (details) {
-                          _seekToPosition(details.localPosition.dx);
-                        },
-                        onPanUpdate: (details) {
-                          _seekToPosition(details.localPosition.dx);
-                        },
-                        onPanStart: (details) {
-                          setState(() {
-                            _isDragging = true;
-                          });
-                          if (_controller.value.isPlaying) {
-                            _controller.pause();
-                          }
-                        },
-                        onPanEnd: (details) {
-                          setState(() {
-                            _isDragging = false;
-                          });
-                          if (_isPlaying) {
-                            _controller.play();
-                          }
-                        },
-                        child: Container(
-                          height: 30,
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            alignment: Alignment.center,
-                            children: [
-                              // Progress Bar Background
-                              Container(
-                                height: 4,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                              ),
-                              // Progress Bar Fill
-                              ValueListenableBuilder<VideoPlayerValue>(
-                                valueListenable: _controller,
-                                builder: (context, value, child) {
-                                  final progress =
-                                      value.duration.inMilliseconds > 0
-                                          ? value.position.inMilliseconds /
-                                              value.duration.inMilliseconds
-                                          : 0.0;
-                                  return Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      height: 4,
-                                      width: MediaQuery.of(context).size.width *
-                                          progress.clamp(0.0, 1.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              // Progress Indicator Circle
-                              ValueListenableBuilder<VideoPlayerValue>(
-                                valueListenable: _controller,
-                                builder: (context, value, child) {
-                                  final progress =
-                                      value.duration.inMilliseconds > 0
-                                          ? value.position.inMilliseconds /
-                                              value.duration.inMilliseconds
-                                          : 0.0;
-                                  final clampedProgress =
-                                      progress.clamp(0.0, 1.0);
-                                  return Positioned(
-                                    left: (MediaQuery.of(context).size.width *
-                                            clampedProgress) -
-                                        5,
-                                    child: Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
+                    onPressed: _toggleFavorite,
+                    padding: const EdgeInsets.all(8),
+                    constraints: const BoxConstraints(),
+                  ),
+                ),
               ),
-            ),
-          );
-        },
+
+              // Top Right Controls (Mute) - only when playing
+              if (_isInitialized && _isPlaying)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        _isMuted ? Icons.volume_off : Icons.volume_up,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onPressed: _toggleMute,
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // إلغاء الـ timers عند التخلص من الـ widget
+    _playDelayTimer?.cancel();
+    _pauseDelayTimer?.cancel();
+
+    _controller.removeListener(_videoListener);
+    _controller.dispose();
+    super.dispose();
   }
 }

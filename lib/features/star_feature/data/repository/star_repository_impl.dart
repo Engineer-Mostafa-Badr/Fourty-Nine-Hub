@@ -79,4 +79,9 @@ class StarRepositoryImpl extends StarRepository {
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId) {
     return _remoteDataSource.incrementTubeVideoView(videoId);
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteTubeVideo(String videoId) {
+    return _remoteDataSource.deleteTubeVideo(videoId);
+  }
 }

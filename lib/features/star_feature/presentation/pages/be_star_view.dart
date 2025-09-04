@@ -64,6 +64,16 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
     // Setup scroll synchronization
     _setupScrollSynchronization();
+
+    // Add debugging
+    _debugInitialization();
+  }
+
+  void _debugInitialization() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("🎯 BeStarView initialized");
+      context.read<StarCubit>().debugMyTalentsFlow();
+    });
   }
 
   void _setupScrollSynchronization() {
@@ -130,7 +140,73 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
+  // Add refresh method for each category
+  // Future<void> _onRefresh() async {
+  //   final category = _getTabCategory(_selectedTabIndex);
+  //   if (category != null) {
+  //     print("🔄 Refreshing category: $category");
+
+  //     // Show loading state
+  //     setState(() {});
+
+  //     // Call appropriate refresh method based on category
+  //     switch (category) {
+  //       case TalentCategory.available:
+  //         await _cubit.loadTalents(TalentCategory.available, refresh: true);
+  //         break;
+  //       case TalentCategory.favorites:
+  //         await _cubit.loadTalents(TalentCategory.favorites, refresh: true);
+  //         break;
+  //       case TalentCategory.history:
+  //         await _cubit.loadTalents(TalentCategory.history, refresh: true);
+  //         break;
+  //       case TalentCategory.myTalents:
+  //         // await _cubit.forceRefreshMyTalents();
+  //         await _cubit.loadTalents(TalentCategory.myTalents, refresh: true);
+  //         break;
+  //     }
+
+  //     // Small delay for better UX
+  //     await Future.delayed(Duration(milliseconds: 500));
+  //   }
+  // }
+
+  // Future<void> _onRefresh() async {
+  //   final category = _getTabCategory(_selectedTabIndex);
+  //   if (category != null) {
+  //     await _cubit.loadTalents(category, refresh: true);
+  //   }
+  // }
+
+  // void _onTabChanged() {
+  //   setState(() {
+  //     _selectedTabIndex = _tabController.index;
+
+  //     // Reset video details view when switching tabs
+  //     if (_selectedTabIndex != 3) {
+  //       _showVideoDetails = false;
+  //       _selectedVideoTalent = null;
+  //       _selectedVideoUrl = null;
+  //     }
+
+  //     // Clear search when switching tabs
+  //     _isSearching = false;
+  //     _isSearchingProfiles = false;
+  //     _searchController.clear();
+  //     _cubit.searchTalents('');
+  //     _cubit.clearProfileSearch();
+  //   });
+
+  //   // Load data for the selected tab if needed
+  //   final category = _getTabCategory(_selectedTabIndex);
+  //   if (category != null) {
+  //     _cubit.loadTalents(category);
+  //   }
+  // }
+
   void _onTabChanged() {
+    print("📱 Tab changed to index: ${_tabController.index}");
+
     setState(() {
       _selectedTabIndex = _tabController.index;
 
@@ -152,6 +228,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     // Load data for the selected tab if needed
     final category = _getTabCategory(_selectedTabIndex);
     if (category != null) {
+      print("📊 Loading data for category: $category");
       _cubit.loadTalents(category);
     }
   }
@@ -431,12 +508,16 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     if (_showVideoDetails &&
         _selectedVideoTalent != null &&
         _selectedVideoUrl != null) {
-      return SizedBox(
-        height: MediaQuery.sizeOf(context).height * 0.75,
-        child: VideoDetailsView(
-          talent: _selectedVideoTalent!,
-          mediaUrl: _selectedVideoUrl!,
-          onBack: _onBackFromVideoDetails,
+      // لازم نحط الـ VideoDetailsView جوا SliverToBoxAdapter
+      return SliverToBoxAdapter(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.75,
+          child: VideoDetailsView(
+            talent: _selectedVideoTalent!,
+            mediaUrl: _selectedVideoUrl!,
+            cubit: _cubit,
+            onBack: _onBackFromVideoDetails,
+          ),
         ),
       );
     } else {

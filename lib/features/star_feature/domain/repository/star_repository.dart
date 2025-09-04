@@ -23,8 +23,10 @@ abstract class StarRepository {
       StarPaginationParams params);
   Future<Either<Failure, TubeVideoListResponse>> fetchMyTubeVideos(
       StarPaginationParams params);
-  Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(String videoId);
+  Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(String videoId); // Todo: Get video by ID
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
+  //Todo: Delete End points
+  Future<Either<Failure, bool>> deleteTubeVideo(String videoId);
 }

@@ -39,17 +39,45 @@ class TalentCardBuilders {
         final talentsToShow =
             isSearching ? state.searchResults : state.availableTalents;
 
-        if (talentsToShow.isEmpty) {
+        if (talentsToShow.isEmpty &&
+            !state.isLoading(TalentCategory.available)) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: isSearching
-                    ? (context.isArabic
-                        ? 'لا يوجد نتائج بحث'
-                        : 'No search results found')
-                    : LocaleKeys.noResultsFound.localize,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.video_library_outlined,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    isSearching
+                        ? (context.isArabic
+                            ? 'لا يوجد نتائج بحث'
+                            : 'No search results found')
+                        : LocaleKeys.noResultsFound.localize,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (!isSearching) ...[
+                    SizedBox(height: 8),
+                    Text(
+                      context.isArabic
+                          ? 'اسحب للأسفل للتحديث'
+                          : 'Pull down to refresh',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
           );
@@ -82,14 +110,15 @@ class TalentCardBuilders {
     );
   }
 
-  // Favorite content - Fixed to show only favorite videos
+  // Favorite content with refresh support
   static Widget buildFavoriteContentSliver({
     required BuildContext context,
     required StarCubit cubit,
   }) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
-        if (state.isLoading(TalentCategory.favorites)) {
+        if (state.isLoading(TalentCategory.favorites) &&
+            state.favoriteTalents.isEmpty) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -98,18 +127,43 @@ class TalentCardBuilders {
           );
         }
 
-        // Use favoriteTalents instead of availableTalents
         final favoriteTalents = state.favoriteTalents;
 
         if (favoriteTalents.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: context.isArabic
-                    ? 'لا يوجد فيديوات مفضلة بعد'
-                    : 'No favorite videos yet',
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    context.isArabic
+                        ? 'لا يوجد فيديوات مفضلة بعد'
+                        : 'No favorite videos yet',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    context.isArabic
+                        ? 'اضغط على القلب لإضافة فيديوات للمفضلة'
+                        : 'Tap the heart icon to add videos to favorites',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           );
@@ -127,7 +181,6 @@ class TalentCardBuilders {
               return TalentCard(
                 talent: talent,
                 cubit: cubit,
-                // Add onVideoTap to navigate to TalentVideoPlayer
                 onVideoTap: (talent, mediaUrl) {
                   Navigator.push(
                     context,
@@ -149,14 +202,15 @@ class TalentCardBuilders {
     );
   }
 
-  // History content - Fixed to show only history videos
+  // History content with refresh support
   static Widget buildHistoryContentSliver({
     required BuildContext context,
     required StarCubit cubit,
   }) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
-        if (state.isLoading(TalentCategory.history)) {
+        if (state.isLoading(TalentCategory.history) &&
+            state.historyTalents.isEmpty) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -165,21 +219,43 @@ class TalentCardBuilders {
           );
         }
 
-        // Use historyTalents instead of availableTalents
         final historyTalents = state.historyTalents;
 
         if (historyTalents.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: SizedBox(
-              height: 200,
-              child: Center(
-                child: Text(
-                  context.isArabic
-                      ? 'لا يوجد فيديوات في التاريخ'
-                      : 'No videos in history',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.history,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    context.isArabic
+                        ? 'لا يوجد فيديوات في التاريخ'
+                        : 'No videos in history',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    context.isArabic
+                        ? 'الفيديوات التي شاهدتها ستظهر هنا'
+                        : 'Videos you watch will appear here',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           );
@@ -208,7 +284,7 @@ class TalentCardBuilders {
     );
   }
 
-  // My talents content - Fixed to show only my videos
+  // My talents content with refresh support
   static Widget buildMyTalentContentSliver({
     required BuildContext context,
     required StarCubit cubit,
@@ -216,7 +292,11 @@ class TalentCardBuilders {
   }) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
-        if (state.isLoading(TalentCategory.myTalents)) {
+        print(
+            "🎬 Building MyTalent UI - count: ${state.myTalents.length}, loading: ${state.isLoading(TalentCategory.myTalents)}");
+
+        if (state.isLoading(TalentCategory.myTalents) &&
+            state.myTalents.isEmpty) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -225,47 +305,79 @@ class TalentCardBuilders {
           );
         }
 
-        // Use myTalents instead of availableTalents
         final myTalents = state.myTalents;
+        print("🎬 MyTalents to display: ${myTalents.length}");
 
         if (myTalents.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: SizedBox(
-              height: 200,
-              child: CustomEmptyWidget(
-                label: LocaleKeys.noResultsFound.localize,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.video_library_outlined,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    context.isArabic
+                        ? 'لا توجد مقاطع فيديو بعد'
+                        : 'No videos yet',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    context.isArabic
+                        ? 'اضغط على "إضافة موهبة" لرفع أول فيديو'
+                        : 'Tap "Add Talent" to upload your first video',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           );
         }
 
+        // استخدم SliverList بدل المشاكل اللي فوق
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (index == myTalents.length) {
+              if (index >= myTalents.length) {
+                // Load more widget
                 return _buildLoadMoreWidget(
                     context, state, TalentCategory.myTalents, cubit);
               }
 
               final talent = myTalents[index];
-              return TalentMyItem(
-                talent: talent,
-                cubit: cubit,
-                index: index,
-                onVideoTap: onVideoTap ??
-                    (talent, mediaUrl) {
-                      // Default navigation to TalentVideoPlayer
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TalentVideoPlayer(
-                            videoUrl: mediaUrl,
-                            talent: talent,
+              return Container(
+                margin: EdgeInsets.only(bottom: 8),
+                child: TalentMyItem(
+                  talent: talent,
+                  cubit: cubit,
+                  index: index,
+                  onVideoTap: onVideoTap ??
+                      (talent, mediaUrl) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TalentVideoPlayer(
+                              videoUrl: mediaUrl,
+                              talent: talent,
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                ),
               );
             },
             childCount: myTalents.length +
@@ -286,7 +398,21 @@ class TalentCardBuilders {
     if (state.isLoading(category)) {
       return Container(
         padding: EdgeInsets.all(16),
-        child: Center(child: CustomCircularProgressIndicator()),
+        child: Center(
+          child: Column(
+            children: [
+              CustomCircularProgressIndicator(),
+              SizedBox(height: 8),
+              Text(
+                context.isArabic ? 'جاري التحميل...' : 'Loading...',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
@@ -294,9 +420,34 @@ class TalentCardBuilders {
       return Container(
         padding: EdgeInsets.all(16),
         child: Center(
-          child: Text(
-            context.isArabic ? 'لا يوجد المزيد' : 'No more content',
-            style: TextStyle(color: Colors.grey[600]),
+          child: Column(
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.green,
+                size: 24,
+              ),
+              SizedBox(height: 8),
+              Text(
+                context.isArabic
+                    ? 'لا يوجد المزيد من المحتوى'
+                    : 'No more content',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                context.isArabic
+                    ? 'اسحب للأسفل للتحديث'
+                    : 'Pull down to refresh',
+                style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -305,9 +456,16 @@ class TalentCardBuilders {
     return Container(
       padding: EdgeInsets.all(16),
       child: Center(
-        child: ElevatedButton(
+        child: ElevatedButton.icon(
           onPressed: () => cubit.loadTalents(category),
-          child: Text(context.isArabic ? 'تحميل المزيد' : 'Load More'),
+          icon: Icon(Icons.refresh, size: 18),
+          label: Text(
+            context.isArabic ? 'تحميل المزيد' : 'Load More',
+            style: TextStyle(fontSize: 14),
+          ),
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          ),
         ),
       ),
     );

@@ -5,11 +5,11 @@ import '../../../../core/error/failure.dart';
 import '../entity/star_entity.dart';
 import '../repository/star_repository.dart';
 
-class FetchTubeVideoDetailsUseCase
+class FetchTubeVideoDetailsByIdUseCase
     extends UseCase<StarEntity, String> {
   final StarRepository _starRepository;
 
-  FetchTubeVideoDetailsUseCase(this._starRepository);
+  FetchTubeVideoDetailsByIdUseCase(this._starRepository);
 
   @override
   Future<Either<Failure, StarEntity>> call(String videoId) async {

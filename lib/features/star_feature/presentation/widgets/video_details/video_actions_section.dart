@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart'; // إضافة import للـ cubit
 
 class VideoActionsSection extends StatelessWidget {
   final StarEntity talent;
+  final StarCubit cubit; // إضافة الـ cubit كـ parameter
   final VoidCallback onViewersPressed;
   final VoidCallback onCommentsPressed;
-  final VoidCallback onDeletePressed;
+  final VoidCallback? onDeletePressed; // جعلها اختيارية
 
   const VideoActionsSection({
     super.key,
     required this.talent,
+    required this.cubit, // إضافة الـ cubit
     required this.onViewersPressed,
     required this.onCommentsPressed,
-    required this.onDeletePressed,
+    this.onDeletePressed, // جعلها اختيارية
   });
 
   @override
@@ -44,8 +47,75 @@ class VideoActionsSection extends StatelessWidget {
             context: context,
             icon: Icons.delete,
             label: context.isArabic ? 'حذف' : 'Delete',
-            onTap: onDeletePressed,
+            onTap: onDeletePressed ??
+                () => _handleDelete(
+                    context), // استخدام الدالة الداخلية إذا لم تُمرر callback
             isDestructive: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // دالة للتعامل مع الحذف
+  void _handleDelete(BuildContext context) {
+    // عرض تأكيد الحذف
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          context.isArabic ? 'تأكيد الحذف' : 'Confirm Delete',
+          style: TextStyle(
+            fontSize: _getResponsiveFontSize(context, 18),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          context.isArabic
+              ? 'هل أنت متأكد من حذف هذا الفيديو؟ لا يمكن التراجع عن هذا الإجراء.'
+              : 'Are you sure you want to delete this video? This action cannot be undone.',
+          style: TextStyle(
+            fontSize: _getResponsiveFontSize(context, 14),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              context.isArabic ? 'إلغاء' : 'Cancel',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: _getResponsiveFontSize(context, 14),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // تنفيذ عملية الحذف
+              cubit.deleteMyTubeVideo(talent.id);
+
+              // عرض رسالة تأكيد
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    context.isArabic
+                        ? 'تم حذف الفيديو بنجاح'
+                        : 'Video deleted successfully',
+                  ),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            child: Text(
+              context.isArabic ? 'حذف' : 'Delete',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: _getResponsiveFontSize(context, 14),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),

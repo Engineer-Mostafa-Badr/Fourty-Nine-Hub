@@ -18,6 +18,7 @@ import '../widgets/video_details/video_player_widget.dart';
 class VideoDetailsView extends StatefulWidget {
   final StarEntity talent;
   final String mediaUrl;
+  final StarCubit? cubit;
   final VoidCallback? onBack;
   final Function(String)? onAddComment;
 
@@ -25,6 +26,7 @@ class VideoDetailsView extends StatefulWidget {
     super.key,
     required this.talent,
     required this.mediaUrl,
+    this.cubit,
     this.onBack,
     this.onAddComment,
   });
@@ -176,12 +178,15 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
           ),
 
           // Action Buttons Section
-          VideoActionsSection(
-            talent: state.talent,
-            onViewersPressed: () => _showViewersModal(state.viewers),
-            onCommentsPressed: () => _showCommentsModal(state.comments),
-            onDeletePressed: _handleDelete,
-          ),
+          // التحقق من وجود الـ cubit قبل استخدامه
+          if (widget.cubit != null)
+            VideoActionsSection(
+              talent: state.talent,
+              cubit: widget.cubit!, // استخدام الـ cubit المُمرر
+              onViewersPressed: () => _showViewersModal(state.viewers),
+              onCommentsPressed: () => _showCommentsModal(state.comments),
+              onDeletePressed: _handleDelete,
+            ),
         ],
       );
     }
@@ -200,7 +205,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
 
   void _handleRatingChange(int rating) {
     ManageVibration.vibrate();
-    context.read<StarCubit>().updateRating(widget.talent.id, rating);
+    // التحقق من وجود الـ cubit قبل استخدامه
+    if (widget.cubit != null) {
+      widget.cubit!.updateRating(widget.talent.id, rating);
+    }
   }
 
   void _showViewersModal(List<ViewerEntity> viewers) {
@@ -267,7 +275,10 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
                 ManageVibration.vibrate();
                 Navigator.pop(context);
                 _handleBack();
-                context.read<StarCubit>().deleteMyTalent(id: widget.talent.id);
+                // التحقق من وجود الـ cubit قبل استخدامه
+                if (widget.cubit != null) {
+                  widget.cubit!.deleteMyTubeVideo(widget.talent.id);
+                }
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.red,

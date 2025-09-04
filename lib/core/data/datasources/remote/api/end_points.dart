@@ -1787,4 +1787,6 @@ class EndPoints {
   // Bunny CDN Video Endpoints
   static const String createBunnyVideo = '/bunny/videos';
   static const String submitTubeVideo = '/tube-video';
+
+  static String deleteTubeVideo(String videoId) => '/tube-video/$videoId';
 }

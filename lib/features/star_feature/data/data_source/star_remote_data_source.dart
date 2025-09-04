@@ -32,6 +32,7 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
+  Future<Either<Failure, bool>> deleteTubeVideo(String videoId);
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -176,27 +177,36 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   @override
   Future<Either<Failure, TubeVideoListResponse>> fetchMyTubeVideos(
       StarPaginationParams params) async {
-    final response = await _apiConsumer.get(
-      EndPoints.getMyTubeVideosWithPagination(
-        page: params.page,
-        limit: params.limit,
-      ),
+    // Debug: Print the endpoint being called
+    final endpoint = EndPoints.getMyTubeVideosWithPagination(
+      page: params.page,
+      limit: params.limit,
     );
+    print("🔍 My Tube Videos Endpoint: $endpoint");
+
+    final response = await _apiConsumer.get(endpoint);
 
     return response.fold(
       (failure) {
-        print("Fetch My Tube Videos Error: $failure");
+        print("❌ Fetch My Tube Videos Error: $failure");
         return Left(failure);
       },
       (response) {
-        print("Get My Tube Videos Success: ${response['data']['videos']}");
+        print("✅ Get My Tube Videos Success: ${response['data']}");
         try {
+          // Debug: Print the raw response structure
+          print("🔍 Raw Response Keys: ${response.keys.toList()}");
+          print("🔍 Data Keys: ${response['data']?.keys?.toList()}");
+          print("🔍 Videos Count: ${response['data']?['videos']?.length}");
+
           final tubeResponse = TubeVideoListResponse.fromJson(response);
+          print("🔍 Parsed Videos Count: ${tubeResponse.videos.length}");
           return Right(tubeResponse);
-        } catch (e) {
-          print("Parse My Tube Videos Error: $e");
+        } catch (e, stackTrace) {
+          print("❌ Parse My Tube Videos Error: $e");
+          print("❌ Stack Trace: $stackTrace");
           return Left(ServerFailure(
-            message: 'Failed to parse video data',
+            message: 'Failed to parse video data: $e',
             name: 'Parse Error',
           ));
         }
@@ -281,6 +291,24 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       },
       (response) {
         print("Increment Tube Video View Success: ${response['message']}");
+        return Right(response['status'] == true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteTubeVideo(String videoId) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteTubeVideo(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Delete Tube Video Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Delete Tube Video Success: ${response['message']}");
         return Right(response['status'] == true);
       },
     );

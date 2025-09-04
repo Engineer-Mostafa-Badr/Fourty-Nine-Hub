@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/prof
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
 import '../features/star_feature/data/repository/profile_repository.dart';
 import '../features/star_feature/domain/repository/profile_repository.dart';
+import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
 
@@ -21,7 +22,7 @@ import '../features/star_feature/domain/use_case/search_profiles_use_case.dart';
 // New Tube Video use cases
 import '../features/star_feature/domain/use_case/fetch_all_tube_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_my_tube_videos_use_case.dart';
-import '../features/star_feature/domain/use_case/fetch_tube_video_details_use_case.dart';
+import '../features/star_feature/domain/use_case/fetch_tube_video_details_by_iduse_case.dart';
 import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
@@ -101,9 +102,9 @@ class TubeServiceLocator {
       );
     }
 
-    if (!serviceLocator.isRegistered<FetchTubeVideoDetailsUseCase>()) {
-      serviceLocator.registerLazySingleton<FetchTubeVideoDetailsUseCase>(
-        () => FetchTubeVideoDetailsUseCase(serviceLocator()),
+    if (!serviceLocator.isRegistered<FetchTubeVideoDetailsByIdUseCase>()) {
+      serviceLocator.registerLazySingleton<FetchTubeVideoDetailsByIdUseCase>(
+        () => FetchTubeVideoDetailsByIdUseCase(serviceLocator()),
       );
     }
 
@@ -125,6 +126,12 @@ class TubeServiceLocator {
       );
     }
 
+    if (!serviceLocator.isRegistered<DeleteTubeVideoUseCase>()) {
+      serviceLocator.registerLazySingleton<DeleteTubeVideoUseCase>(
+        () => DeleteTubeVideoUseCase(serviceLocator()),
+      );
+    }
+
     //! Star Cubit with all dependencies
     // استخدم registerFactory بدلاً من registerLazySingleton للـ Cubit
     serviceLocator.registerFactory<StarCubit>(
@@ -140,10 +147,11 @@ class TubeServiceLocator {
         // New Tube Video dependencies
         serviceLocator<FetchAllTubeVideosUseCase>(),
         serviceLocator<FetchMyTubeVideosUseCase>(),
-        serviceLocator<FetchTubeVideoDetailsUseCase>(),
+        serviceLocator<FetchTubeVideoDetailsByIdUseCase>(),
         serviceLocator<LikeTubeVideoUseCase>(),
         serviceLocator<DislikeTubeVideoUseCase>(),
         serviceLocator<IncrementTubeVideoViewUseCase>(),
+        serviceLocator<DeleteTubeVideoUseCase>(),
       ),
     );
 
