@@ -479,34 +479,42 @@ class AppPages {
         initialLocation: initialRoute,
         routes: <RouteBase>[
           GoRoute(
-            path: Routes.HOME,
+            path: Paths.splash,
+            name: Routes.splash,
             pageBuilder: (context, state) => customTransition(
               context,
               state,
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) => serviceLocator<SliderCubit>()..loadData(),
-                  ),
-                  BlocProvider(
-                    create: (context) =>
-                    serviceLocator<StarCubit>()..getAllTalent(),
-                  ),
-                  BlocProvider(
-                    create: (context) => serviceLocator<MainCategoriesCubit>()
-                      ..loadData(context),
-                  ),
-                  // BlocProvider(
-                  //   create: (context) => serviceLocator<ThumbnailsCubit>(),
-                  // ),
-                ],
-                child: const FourtyNineView(),
-                // child: const BeStarView(),
-                // child: const GetAllTalents(),
-              ),
+              const SplashScreen(),
             ),
             routes: [
-
+              GoRoute(
+                path: Routes.HOME,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => serviceLocator<SliderCubit>()..loadData(),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                        serviceLocator<StarCubit>()..getAllTalent(),
+                      ),
+                      BlocProvider(
+                        create: (context) => serviceLocator<MainCategoriesCubit>()
+                          ..loadData(context),
+                      ),
+                      // BlocProvider(
+                      //   create: (context) => serviceLocator<ThumbnailsCubit>(),
+                      // ),
+                    ],
+                    child: const FourtyNineView(),
+                    // child: const BeStarView(),
+                    // child: const GetAllTalents(),
+                  ),
+                ),
+              ),
               GoRoute(
                 path: Paths.RIDEHOME,
                 name: Routes.RIDE_HOME,
@@ -2029,7 +2037,7 @@ class AppPages {
                   ),
                 ],
               ),
-              
+
               GoRoute(
                 path: Paths.TIKTOK_REELS,
                 name: Routes.TIKTOK_REELS,
@@ -4798,8 +4806,8 @@ class AppPages {
                     customTransition(context, state, ChanceView()),
               ),
             ],
-
           ),
+
 
           // GoRoute(
           //   path: Routes.splash,

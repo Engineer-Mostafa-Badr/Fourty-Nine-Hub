@@ -211,13 +211,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             create: (context) =>
                 serviceLocator<MainCategoriesCubit>()),
         BlocProvider(
-          create: (context) => serviceLocator<UserCubit>()..attachToken(), //..getUser(),
+          create: (context) => serviceLocator<UserCubit>(), //..getUser(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<CreatePostCubit>()..loadData(),
+          create: (context) => serviceLocator<CreatePostCubit>(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
+          create: (context) => serviceLocator<SecretsCubit>(),
         ),
         BlocProvider(
           create: (context) =>
@@ -244,7 +244,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (context) => ThemeCubit()..getMode(),
         ),
         BlocProvider<CustomPageCubit>(
-          create: (context) => serviceLocator()..fetchActivate(),
+          create: (context) => serviceLocator(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
@@ -255,7 +255,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider<GetUnreadNotificationsCountCubit>(
           create: (context) => GetUnreadNotificationsCountCubit(
             getUnreadNotificationsCountUseCase: serviceLocator(),
-          )..getUnreadNotificationsCount(),
+          ),
         ),
         BlocProvider<GetAppNotificationsCubit>(
           create: (context) => GetAppNotificationsCubit(
@@ -298,14 +298,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //         )),
         // BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
-          create: (context) => FloatingNavigatorCubit()
-            ..getFloatingNavigatorStatus()
-            ..getEnableFloatingNavigatorStatus(),
-        ),
+          create: (context) => FloatingNavigatorCubit()),
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
-            ..getChoiceRulerStatus()
-            ..getChoiceRulerEnabledStatus(),
         ),
       ],
       child: ScreenUtilInit(
