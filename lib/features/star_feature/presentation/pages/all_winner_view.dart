@@ -76,7 +76,7 @@ class _AllWinnerViewState extends State<AllWinnerView> {
           return Padding(
             padding: EdgeInsets.all(6.w),
             child: AllWinnerGridView(
-              winner: state.winners,
+              // winner: state.winners,
               starCubit: _cubit,
             ),
 

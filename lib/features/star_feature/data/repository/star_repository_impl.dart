@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failure.dart';
+import '../../domain/use_case/comment_use_cases.dart';
 import '../data_source/star_remote_data_source.dart';
 import '../../domain/entity/banner_talent_entity.dart';
 import '../../domain/entity/star_entity.dart';
@@ -7,6 +8,7 @@ import '../../domain/entity/star_winner_entity.dart';
 import '../../domain/repository/star_repository.dart';
 import '../../domain/use_case/fetch_all_star_use_case.dart';
 import '../../domain/use_case/upload_my_star_use_case.dart';
+import '../model/comment_model.dart';
 import '../model/tube_video_models.dart';
 
 class StarRepositoryImpl extends StarRepository {
@@ -83,5 +85,36 @@ class StarRepositoryImpl extends StarRepository {
   @override
   Future<Either<Failure, bool>> deleteTubeVideo(String videoId) {
     return _remoteDataSource.deleteTubeVideo(videoId);
+  }
+
+  // NEW COMMENT IMPLEMENTATIONS
+  @override
+  Future<Either<Failure, String>> createComment(CreateCommentParams params) {
+    return _remoteDataSource.createComment(params);
+  }
+
+  @override
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params) {
+    return _remoteDataSource.getVideoComments(params);
+  }
+
+  @override
+  Future<Either<Failure, String>> updateComment(UpdateCommentParams params) {
+    return _remoteDataSource.updateComment(params);
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteComment(String commentId) {
+    return _remoteDataSource.deleteComment(commentId);
+  }
+
+  @override
+  Future<Either<Failure, String>> likeComment(String commentId) {
+    return _remoteDataSource.likeComment(commentId);
+  }
+
+  @override
+  Future<Either<Failure, String>> dislikeComment(String commentId) {
+    return _remoteDataSource.dislikeComment(commentId);
   }
 }

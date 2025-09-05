@@ -12,7 +12,10 @@ class CommentsModal {
     required List<CommentEntity> comments,
     required Function(String) onAddComment,
     required Function(String) onLikeComment,
+    Function(String)? onDislikeComment, // New parameter
     required Function(String, String) onReplyToComment,
+    Function(String, String)? onUpdateComment, // New parameter
+    Function(String)? onDeleteComment, // New parameter
   }) {
     showModalBottomSheet(
       context: context,
@@ -22,7 +25,10 @@ class CommentsModal {
         comments: comments,
         onAddComment: onAddComment,
         onLikeComment: onLikeComment,
+        onDislikeComment: onDislikeComment,
         onReplyToComment: onReplyToComment,
+        onUpdateComment: onUpdateComment,
+        onDeleteComment: onDeleteComment,
       ),
     );
   }
@@ -32,13 +38,19 @@ class _CommentsModalContent extends StatefulWidget {
   final List<CommentEntity> comments;
   final Function(String) onAddComment;
   final Function(String) onLikeComment;
+  final Function(String)? onDislikeComment;
   final Function(String, String) onReplyToComment;
+  final Function(String, String)? onUpdateComment;
+  final Function(String)? onDeleteComment;
 
   const _CommentsModalContent({
     required this.comments,
     required this.onAddComment,
     required this.onLikeComment,
+    this.onDislikeComment,
     required this.onReplyToComment,
+    this.onUpdateComment,
+    this.onDeleteComment,
   });
 
   @override
@@ -47,10 +59,13 @@ class _CommentsModalContent extends StatefulWidget {
 
 class _CommentsModalContentState extends State<_CommentsModalContent> {
   final TextEditingController _commentController = TextEditingController();
+  String? _editingCommentId;
+  final TextEditingController _editController = TextEditingController();
 
   @override
   void dispose() {
     _commentController.dispose();
+    _editController.dispose();
     super.dispose();
   }
 
@@ -165,6 +180,8 @@ class _CommentsModalContentState extends State<_CommentsModalContent> {
   }
 
   Widget _buildCommentItem(CommentEntity comment) {
+    final isEditing = _editingCommentId == comment.id;
+
     return Container(
       margin: EdgeInsets.only(
         bottom: 20,
@@ -214,24 +231,103 @@ class _CommentsModalContentState extends State<_CommentsModalContent> {
                         color: Colors.grey[500],
                       ),
                     ),
+                    Spacer(),
+                    // More options menu
+                    if (comment.username ==
+                        '@Me') // Only show for user's own comments
+                      _buildMoreOptionsMenu(comment),
                   ],
                 ),
                 SizedBox(height: 4),
 
-                // Comment text
-                Text(
-                  comment.content,
-                  style: TextStyle(fontSize: 14),
-                ),
+                // Comment text or edit field
+                if (isEditing)
+                  _buildEditField(comment)
+                else
+                  Text(
+                    comment.content,
+                    style: TextStyle(fontSize: 14),
+                  ),
                 SizedBox(height: 8),
 
                 // Action buttons
-                _buildCommentActions(comment),
+                if (!isEditing) _buildCommentActions(comment),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMoreOptionsMenu(CommentEntity comment) {
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.more_vert, size: 16, color: Colors.grey[600]),
+      onSelected: (value) {
+        switch (value) {
+          case 'edit':
+            _startEditing(comment);
+            break;
+          case 'delete':
+            _showDeleteConfirmation(comment);
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 'edit',
+          child: Row(
+            children: [
+              Icon(Icons.edit, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('Edit'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'delete',
+          child: Row(
+            children: [
+              Icon(Icons.delete, size: 16, color: Colors.red),
+              SizedBox(width: 8),
+              Text('Delete', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEditField(CommentEntity comment) {
+    return Column(
+      children: [
+        TextField(
+          controller: _editController,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          ),
+          maxLines: null,
+          autofocus: true,
+        ),
+        SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: _cancelEditing,
+              child: Text('Cancel'),
+            ),
+            SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: () => _saveEdit(comment),
+              child: Text('Save'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -265,11 +361,40 @@ class _CommentsModalContentState extends State<_CommentsModalContent> {
         SizedBox(width: 16),
 
         // Dislike button
-        Icon(
-          Icons.thumb_down_outlined,
-          size: 16,
-          color: Colors.grey[600],
-        ),
+        if (widget.onDislikeComment != null)
+          GestureDetector(
+            onTap: () {
+              ManageVibration.vibrate();
+              widget.onDislikeComment!(comment.id);
+            },
+            child: Row(
+              children: [
+                Icon(
+                  comment.isDisliked
+                      ? Icons.thumb_down
+                      : Icons.thumb_down_outlined,
+                  size: 16,
+                  color: comment.isDisliked ? Colors.red : Colors.grey[600],
+                ),
+                if (comment.dislikes > 0) ...[
+                  SizedBox(width: 4),
+                  Text(
+                    '${comment.dislikes}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          )
+        else
+          Icon(
+            Icons.thumb_down_outlined,
+            size: 16,
+            color: Colors.grey[600],
+          ),
         SizedBox(width: 16),
 
         // Reply button (only for main comments)
@@ -377,6 +502,54 @@ class _CommentsModalContentState extends State<_CommentsModalContent> {
       onReply: (replyText) {
         widget.onReplyToComment(comment.id, replyText);
       },
+    );
+  }
+
+  void _startEditing(CommentEntity comment) {
+    setState(() {
+      _editingCommentId = comment.id;
+      _editController.text = comment.content;
+    });
+  }
+
+  void _cancelEditing() {
+    setState(() {
+      _editingCommentId = null;
+      _editController.clear();
+    });
+  }
+
+  void _saveEdit(CommentEntity comment) {
+    final newContent = _editController.text.trim();
+    if (newContent.isNotEmpty && widget.onUpdateComment != null) {
+      widget.onUpdateComment!(comment.id, newContent);
+      _cancelEditing();
+    }
+  }
+
+  void _showDeleteConfirmation(CommentEntity comment) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete Comment'),
+        content: Text('Are you sure you want to delete this comment?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              if (widget.onDeleteComment != null) {
+                widget.onDeleteComment!(comment.id);
+              }
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text('Delete'),
+          ),
+        ],
+      ),
     );
   }
 }

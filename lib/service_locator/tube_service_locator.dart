@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/prof
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
 import '../features/star_feature/data/repository/profile_repository.dart';
 import '../features/star_feature/domain/repository/profile_repository.dart';
+import '../features/star_feature/domain/use_case/comment_use_cases.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
@@ -26,6 +27,7 @@ import '../features/star_feature/domain/use_case/fetch_tube_video_details_by_idu
 import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
+// NEW: Comment use cases imports
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 
 class TubeServiceLocator {
@@ -129,6 +131,43 @@ class TubeServiceLocator {
     if (!serviceLocator.isRegistered<DeleteTubeVideoUseCase>()) {
       serviceLocator.registerLazySingleton<DeleteTubeVideoUseCase>(
         () => DeleteTubeVideoUseCase(serviceLocator()),
+      );
+    }
+
+    //! NEW: Comment Use Cases Registration
+    if (!serviceLocator.isRegistered<CreateCommentUseCase>()) {
+      serviceLocator.registerLazySingleton<CreateCommentUseCase>(
+        () => CreateCommentUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetCommentsUseCase>()) {
+      serviceLocator.registerLazySingleton<GetCommentsUseCase>(
+        () => GetCommentsUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<UpdateCommentUseCase>()) {
+      serviceLocator.registerLazySingleton<UpdateCommentUseCase>(
+        () => UpdateCommentUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<DeleteCommentUseCase>()) {
+      serviceLocator.registerLazySingleton<DeleteCommentUseCase>(
+        () => DeleteCommentUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<LikeCommentUseCase>()) {
+      serviceLocator.registerLazySingleton<LikeCommentUseCase>(
+        () => LikeCommentUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<DislikeCommentUseCase>()) {
+      serviceLocator.registerLazySingleton<DislikeCommentUseCase>(
+        () => DislikeCommentUseCase(serviceLocator()),
       );
     }
 

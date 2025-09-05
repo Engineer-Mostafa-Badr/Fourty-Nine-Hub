@@ -26,6 +26,8 @@ class VideoDetailsLoaded extends VideoDetailsState {
   final List<ViewerEntity> viewers;
   final List<CommentEntity> comments;
   final StarEntity talent;
+  final bool isLoadingComments; // New property for comment loading state
+  final String? commentsError; // New property for comment errors
 
   VideoDetailsLoaded({
     required this.videoController,
@@ -35,6 +37,8 @@ class VideoDetailsLoaded extends VideoDetailsState {
     required this.viewers,
     required this.comments,
     required this.talent,
+    this.isLoadingComments = false,
+    this.commentsError,
   });
 
   VideoDetailsLoaded copyWith({
@@ -45,6 +49,8 @@ class VideoDetailsLoaded extends VideoDetailsState {
     List<ViewerEntity>? viewers,
     List<CommentEntity>? comments,
     StarEntity? talent,
+    bool? isLoadingComments,
+    String? commentsError,
   }) {
     return VideoDetailsLoaded(
       videoController: videoController ?? this.videoController,
@@ -54,6 +60,8 @@ class VideoDetailsLoaded extends VideoDetailsState {
       viewers: viewers ?? this.viewers,
       comments: comments ?? this.comments,
       talent: talent ?? this.talent,
+      isLoadingComments: isLoadingComments ?? this.isLoadingComments,
+      commentsError: commentsError,
     );
   }
 
@@ -66,5 +74,7 @@ class VideoDetailsLoaded extends VideoDetailsState {
         viewers,
         comments,
         talent,
+        isLoadingComments,
+        commentsError,
       ];
 }

@@ -70,14 +70,14 @@ class _TalentCardState extends State<TalentCard> {
               children: [
                 // Video or Image Container
                 isVideo
-                    ? YouTubeStyleVideoPlayerWithTracking(
+                    ? TalentVideoPlayerWidget(
                         videoUrl: mediaUrl,
                         title: widget.talent.title,
                         autoPlay: true,
                         startMuted: true,
                         thumbnailUrl: thumbnailUrl,
                         talent: widget.talent,
-                        cubit: widget.cubit, // إضافة الـ cubit
+                        cubit: widget.cubit,
                         onTap: () => _navigateToVideoPlayer(
                             context, mediaUrl, widget.talent),
                         onVideoStarted: () => _incrementViewIfNeeded(),
@@ -114,75 +114,9 @@ class _TalentCardState extends State<TalentCard> {
           onProfileTap: () => _navigateToProfile(context, widget.talent),
           onMoreOptionsTap: () => _showTubeVideoOptions(context, widget.talent),
         ),
-
-        // Additional Tube Video info
-        // if (_isTubeVideo()) _buildTubeVideoExtraInfo(),
       ],
     );
   }
-
-  // Widget _buildTubeVideoExtraInfo() {
-  //   final tubeVideo = widget.talent as TubeVideoModel;
-
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-  //     child: Row(
-  //       children: [
-  //         // Duration
-  //         if (tubeVideo.duration > 0) ...[
-  //           Icon(Icons.schedule, size: 14, color: Colors.grey[600]),
-  //           SizedBox(width: 4),
-  //           Text(
-  //             _formatDuration(tubeVideo.duration),
-  //             style: TextStyle(
-  //               fontSize: 12,
-  //               color: Colors.grey[600],
-  //             ),
-  //           ),
-  //           SizedBox(width: 16),
-  //         ],
-
-  //         // Likes and Dislikes count
-  //         if (tubeVideo.likes > 0 || tubeVideo.dislikes > 0) ...[
-  //           Row(
-  //             children: [
-  //               Icon(Icons.thumb_up_outlined,
-  //                   size: 14, color: Colors.grey[600]),
-  //               SizedBox(width: 2),
-  //               Text(
-  //                 '${tubeVideo.likes}',
-  //                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-  //               ),
-  //               SizedBox(width: 8),
-  //               Icon(Icons.thumb_down_outlined,
-  //                   size: 14, color: Colors.grey[600]),
-  //               SizedBox(width: 2),
-  //               Text(
-  //                 '${tubeVideo.dislikes}',
-  //                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-  //               ),
-  //             ],
-  //           ),
-  //           SizedBox(width: 16),
-  //         ],
-
-  //         // HD Quality indicator if video URL exists
-  //         // if (tubeVideo.videoUrl == null) ...[
-  //         //   Icon(Icons.hd, size: 14, color: Colors.grey[600]),
-  //         //   SizedBox(width: 4),
-  //         //   Text(
-  //         //     'HD',
-  //         //     style: TextStyle(
-  //         //       fontSize: 12,
-  //         //       color: Colors.grey[600],
-  //         //       fontWeight: FontWeight.bold,
-  //         //     ),
-  //         //   ),
-  //         // ],
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildImageContainer(String mediaUrl) {
     return Container(
@@ -241,9 +175,9 @@ class _TalentCardState extends State<TalentCard> {
   String? _getThumbnailUrl() {
     if (_isTubeVideo()) {
       final tubeVideo = widget.talent as TubeVideoModel;
-      return tubeVideo.thumbnail; // استخدام thumbnail الفعلي من الـ API
+      return tubeVideo.thumbnail;
     }
-    return "assets/images/testforvideo.jpg"; // fallback للـ old API
+    return "assets/images/testforvideo.jpg";
   }
 
   bool _isTubeVideo() {
@@ -261,7 +195,6 @@ class _TalentCardState extends State<TalentCard> {
     }
   }
 
-  // تسجيل المشاهدة مرة واحدة فقط
   void _incrementViewIfNeeded() {
     if (!_hasIncrementedView) {
       _hasIncrementedView = true;
@@ -275,12 +208,14 @@ class _TalentCardState extends State<TalentCard> {
     String mediaUrl,
     StarEntity talent,
   ) {
+    final starCubit = context.read<StarCubit>();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TalentVideoPlayer(
           videoUrl: mediaUrl,
           talent: talent,
+          // cubit: starCubit, // تأكد من تمرير الـ cubit
         ),
       ),
     );
@@ -365,7 +300,6 @@ class _TalentCardState extends State<TalentCard> {
             onTap: () {
               ManageVibration.vibrate();
               Navigator.pop(context);
-              // سيتم إضافة وظيفة المشاركة لاحقاً
             },
           ),
         ],
@@ -391,42 +325,45 @@ class _TalentCardState extends State<TalentCard> {
   }
 }
 
-// تحديث YouTubeStyleVideoPlayerWithTracking ليستخدم CachedNetworkImage للـ thumbnail
-class YouTubeStyleVideoPlayerWithTracking extends YouTubeStyleVideoPlayer {
+// Custom Video Player Widget for TalentCard
+class TalentVideoPlayerWidget extends StatefulWidget {
+  final String videoUrl;
+  final String title;
+  final bool autoPlay;
+  final bool startMuted;
+  final VoidCallback? onTap;
+  final String? thumbnailUrl;
+  final StarEntity? talent;
   final StarCubit cubit;
   final VoidCallback? onVideoStarted;
 
-  const YouTubeStyleVideoPlayerWithTracking({
+  const TalentVideoPlayerWidget({
     super.key,
-    required super.videoUrl,
-    required super.title,
-    super.autoPlay = false,
-    super.startMuted = true,
-    super.onTap,
-    super.showLiveIndicator = false,
-    super.thumbnailUrl,
-    super.talent,
+    required this.videoUrl,
+    required this.title,
+    this.autoPlay = false,
+    this.startMuted = true,
+    this.onTap,
+    this.thumbnailUrl,
+    this.talent,
     required this.cubit,
     this.onVideoStarted,
   });
 
   @override
-  State<YouTubeStyleVideoPlayer> createState() =>
-      _YouTubeStyleVideoPlayerWithTrackingState();
+  State<TalentVideoPlayerWidget> createState() =>
+      _TalentVideoPlayerWidgetState();
 }
 
-class _YouTubeStyleVideoPlayerWithTrackingState
-    extends State<YouTubeStyleVideoPlayerWithTracking> {
+class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
   bool _isPlaying = false;
   bool _isMuted = false;
   bool _showControls = true;
-  final bool _isDragging = false;
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
 
-  // إضافة Timer للتأخير
   Timer? _playDelayTimer;
   Timer? _pauseDelayTimer;
 
@@ -493,8 +430,7 @@ class _YouTubeStyleVideoPlayerWithTrackingState
 
   void _toggleFavorite() {
     if (widget.talent != null) {
-      widget.cubit.toggleFavorite(
-          widget.talent!.id); // استخدام widget.cubit بدلاً من context.read
+      widget.cubit.toggleFavorite(widget.talent!.id);
     }
   }
 
@@ -503,14 +439,11 @@ class _YouTubeStyleVideoPlayerWithTrackingState
 
     if (!_isInitialized) return;
 
-    // إلغاء أي timers موجودة
     _playDelayTimer?.cancel();
     _pauseDelayTimer?.cancel();
 
     if (info.visibleFraction > 0.5) {
-      // إذا كان الفيديو مرئي أكثر من 50%
       if (!_controller.value.isPlaying && widget.autoPlay) {
-        // تأخير 600ms قبل التشغيل
         _playDelayTimer = Timer(Duration(milliseconds: 600), () {
           if (mounted &&
               !_controller.value.isPlaying &&
@@ -523,9 +456,7 @@ class _YouTubeStyleVideoPlayerWithTrackingState
         });
       }
     } else {
-      // إذا كان الفيديو غير مرئي أو أقل من 50%
       if (_controller.value.isPlaying) {
-        // إيقاف فوري عند عدم الرؤية
         _controller.pause();
         setState(() => _isPlaying = false);
       }
@@ -533,7 +464,6 @@ class _YouTubeStyleVideoPlayerWithTrackingState
   }
 
   Widget _buildThumbnail() {
-    // إذا كان thumbnail من الـ API (URL)، استخدم CachedNetworkImage
     if (widget.thumbnailUrl != null &&
         widget.thumbnailUrl!.startsWith('http')) {
       return CachedNetworkImage(
@@ -558,7 +488,6 @@ class _YouTubeStyleVideoPlayerWithTrackingState
       );
     }
 
-    // إذا كان thumbnail محلي (asset)
     return Image.asset(
       widget.thumbnailUrl ?? 'assets/images/testforvideo.jpg',
       fit: BoxFit.cover,
@@ -569,7 +498,6 @@ class _YouTubeStyleVideoPlayerWithTrackingState
 
   @override
   Widget build(BuildContext context) {
-    // قراءة الـ favorite state مباشرة من الـ cubit المُمرر
     final isFavorite = widget.talent != null
         ? widget.cubit.isFavorite(widget.talent!.id)
         : false;
@@ -690,10 +618,8 @@ class _YouTubeStyleVideoPlayerWithTrackingState
 
   @override
   void dispose() {
-    // إلغاء الـ timers عند التخلص من الـ widget
     _playDelayTimer?.cancel();
     _pauseDelayTimer?.cancel();
-
     _controller.removeListener(_videoListener);
     _controller.dispose();
     super.dispose();

@@ -40,6 +40,7 @@ class TalentHistoryItem extends StatelessWidget {
             builder: (context) => TalentVideoPlayer(
               talent: talent,
               videoUrl: mediaUrl,
+              // cubit: cubit,
             ),
           ),
         );

@@ -5,7 +5,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../controller/star_cubit/star_cubit.dart';
-import '../../pages/video_details_view.dart';
+import '../../pages/my_video_details_view.dart';
 
 class TalentMyItem extends StatelessWidget {
   final StarEntity talent;

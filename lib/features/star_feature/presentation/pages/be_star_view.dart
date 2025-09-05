@@ -17,7 +17,7 @@ import '../widgets/profile_search_results.dart';
 import '../widgets/sticky_tab_bar_delegate.dart';
 import '../widgets/talent_card/talent_card.dart';
 import '../widgets/talent_card/talent_card_builders.dart';
-import 'video_details_view.dart';
+import 'my_video_details_view.dart';
 
 class BeStarView extends StatefulWidget {
   const BeStarView({super.key});
@@ -503,15 +503,40 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
+  // Widget _buildMyTalentContent(StarState state) {
+  //   // Show VideoDetailsView if video is selected, otherwise show list
+  //   if (_showVideoDetails &&
+  //       _selectedVideoTalent != null &&
+  //       _selectedVideoUrl != null) {
+  //     // لازم نحط الـ VideoDetailsView جوا SliverToBoxAdapter
+  //     return SliverToBoxAdapter(
+  //       child: SizedBox(
+  //         height: MediaQuery.sizeOf(context).height * 0.75,
+  //         child: VideoDetailsView(
+  //           talent: _selectedVideoTalent!,
+  //           mediaUrl: _selectedVideoUrl!,
+  //           cubit: _cubit,
+  //           onBack: _onBackFromVideoDetails,
+  //         ),
+  //       ),
+  //     );
+  //   } else {
+  //     return TalentCardBuilders.buildMyTalentContentSliver(
+  //       context: context,
+  //       cubit: _cubit,
+  //       onVideoTap: _onVideoSelected,
+  //     );
+  //   }
+  // }
+
   Widget _buildMyTalentContent(StarState state) {
-    // Show VideoDetailsView if video is selected, otherwise show list
-    if (_showVideoDetails &&
-        _selectedVideoTalent != null &&
-        _selectedVideoUrl != null) {
-      // لازم نحط الـ VideoDetailsView جوا SliverToBoxAdapter
-      return SliverToBoxAdapter(
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.75,
+  // Show VideoDetailsView if video is selected, otherwise show list
+  if (_showVideoDetails && _selectedVideoTalent != null && _selectedVideoUrl != null) {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: MediaQuery.sizeOf(context).height * 0.75,
+        child: BlocProvider<StarCubit>.value(
+          value: _cubit, // Provide the cubit explicitly
           child: VideoDetailsView(
             talent: _selectedVideoTalent!,
             mediaUrl: _selectedVideoUrl!,
@@ -519,15 +544,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
             onBack: _onBackFromVideoDetails,
           ),
         ),
-      );
-    } else {
-      return TalentCardBuilders.buildMyTalentContentSliver(
-        context: context,
-        cubit: _cubit,
-        onVideoTap: _onVideoSelected,
-      );
-    }
+      ),
+    );
+  } else {
+    return TalentCardBuilders.buildMyTalentContentSliver(
+      context: context,
+      cubit: _cubit,
+      onVideoTap: _onVideoSelected,
+    );
   }
+}
+
 
   Widget _buildTalentSearchResults(StarState state) {
     if (state.searchResults.isEmpty && _searchController.text.isNotEmpty) {

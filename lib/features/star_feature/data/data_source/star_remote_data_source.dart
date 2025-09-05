@@ -2,7 +2,9 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
+import '../../domain/use_case/comment_use_cases.dart';
 import '../model/banner_talent_model.dart';
+import '../model/comment_model.dart';
 import '../model/star_model.dart';
 import '../model/star_winner_model.dart';
 import '../model/tube_video_models.dart'; // New import
@@ -33,6 +35,14 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
   Future<Either<Failure, bool>> deleteTubeVideo(String videoId);
+
+  // New Comment methods
+  Future<Either<Failure, String>> createComment(CreateCommentParams params);
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params);
+  Future<Either<Failure, String>> updateComment(UpdateCommentParams params);
+  Future<Either<Failure, String>> deleteComment(String commentId);
+  Future<Either<Failure, String>> likeComment(String commentId);
+  Future<Either<Failure, String>> dislikeComment(String commentId);
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -40,7 +50,6 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
 
   StarRemoteDataSourceImpl(this._apiConsumer);
 
-  // Existing implementations remain the same...
   @override
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(
       StarPaginationParams params) async {
@@ -310,6 +319,129 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       (response) {
         print("Delete Tube Video Success: ${response['message']}");
         return Right(response['status'] == true);
+      },
+    );
+  }
+  // NEW COMMENT IMPLEMENTATIONS
+  @override
+  Future<Either<Failure, String>> createComment(CreateCommentParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.createTubeComment,
+      data: params.toJson(),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Create Comment Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Create Comment Success: ${response['data']}");
+        return Right(response['data'] ?? 'Comment created successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getTubeVideoComments(
+        params.videoId,
+        page: params.page,
+        limit: params.limit,
+      ),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Get Video Comments Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get Video Comments Success: ${response['data']}");
+        try {
+          final commentsResponse = CommentsListResponse.fromJson(response);
+          return Right(commentsResponse);
+        } catch (e) {
+          print("Parse Comments Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse comments data',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> updateComment(UpdateCommentParams params) async {
+    final response = await _apiConsumer.put(
+      EndPoints.updateTubeComment(params.commentId),
+      data: params.toJson(),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Update Comment Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Update Comment Success: ${response['message']}");
+        return Right(response['message'] ?? 'Comment updated successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteComment(String commentId) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteTubeComment(commentId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Delete Comment Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Delete Comment Success: ${response['message']}");
+        return Right(response['message'] ?? 'Comment deleted successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> likeComment(String commentId) async {
+    final response = await _apiConsumer.post(
+      EndPoints.likeTubeComment(commentId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Like Comment Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Like Comment Success: ${response['message']}");
+        return Right(response['message'] ?? 'Comment liked successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> dislikeComment(String commentId) async {
+    final response = await _apiConsumer.post(
+      EndPoints.dislikeTubeComment(commentId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Dislike Comment Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Dislike Comment Success: ${response['message']}");
+        return Right(response['message'] ?? 'Comment disliked successfully');
       },
     );
   }

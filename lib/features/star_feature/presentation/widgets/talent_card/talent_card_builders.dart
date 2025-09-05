@@ -476,15 +476,27 @@ class TalentCardBuilders {
 class TalentVideoPlayer extends StatelessWidget {
   final String videoUrl;
   final StarEntity talent;
+  final StarCubit? cubit;
 
   const TalentVideoPlayer({
     super.key,
     required this.videoUrl,
     required this.talent,
+    this.cubit,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Try to get cubit from context if not provided
+    StarCubit? effectiveCubit = cubit;
+    if (effectiveCubit == null) {
+      try {
+        effectiveCubit = context.read<StarCubit>();
+      } catch (e) {
+        // StarCubit not available in this context
+        print('StarCubit not available: $e');
+      }
+    }
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(

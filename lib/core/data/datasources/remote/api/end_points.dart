@@ -1789,4 +1789,23 @@ class EndPoints {
   static const String submitTubeVideo = '/tube-video';
 
   static String deleteTubeVideo(String videoId) => '/tube-video/$videoId';
+
+  // Tube Video Comments Endpoints
+  static const String createTubeComment = '/tube-comment';
+
+  static String getTubeVideoComments(String videoId,
+          {int page = 1, int limit = 20}) =>
+      '/tube-comment/video/$videoId?page=$page&limit=$limit';
+
+  static String updateTubeComment(String commentId) =>
+      '/tube-comment/edit/$commentId';
+
+  static String deleteTubeComment(String commentId) =>
+      '/tube-comment/$commentId';
+
+  static String likeTubeComment(String commentId) =>
+      '/tube-comment/$commentId/like';
+
+  static String dislikeTubeComment(String commentId) =>
+      '/tube-comment/$commentId/dislike';
 }
