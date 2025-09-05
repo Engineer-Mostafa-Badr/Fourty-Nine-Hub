@@ -24,6 +24,20 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<Either<Failure, ProfileEntity>> getProfileById(
+      String profileId) async {
+    try {
+      final result = await remoteDataSource.getProfileById(profileId);
+      return Right(result);
+    } catch (e) {
+      if (e is Failure) {
+        return Left(e);
+      }
+      return Left(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, String>> updateProfile(
       UpdateProfileParams params) async {
     try {

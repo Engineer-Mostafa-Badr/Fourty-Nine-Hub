@@ -197,17 +197,17 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
                   // Channel Cover Section
                   _buildSectionTitle(
                       context.isArabic ? 'غلاف القناة' : 'Channel Cover'),
-                  SizedBox(height: 12),
-                  _buildCoverImagePicker(),
+                  // SizedBox(height: 12),
+                  // _buildCoverImagePicker(),
 
-                  SizedBox(height: 24),
+                  // SizedBox(height: 24),
 
-                  // Profile Picture Section
-                  _buildSectionTitle(context.isArabic
-                      ? 'صورة الملف الشخصي'
-                      : 'Profile Picture'),
-                  SizedBox(height: 12),
-                  _buildProfileImagePicker(),
+                  // // Profile Picture Section
+                  // _buildSectionTitle(context.isArabic
+                  //     ? 'صورة الملف الشخصي'
+                  //     : 'Profile Picture'),
+                  // SizedBox(height: 12),
+                  // _buildProfileImagePicker(),
 
                   SizedBox(height: 24),
 

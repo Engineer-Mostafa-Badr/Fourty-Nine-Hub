@@ -9,12 +9,18 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;
   final BuildContext context;
   final VoidCallback onSearchTap;
+  final bool showSearchField; // إضافة جديدة
+  final TextEditingController? searchController; // إضافة جديدة
+  final Function(String)? onSearchChanged; // إضافة جديدة
   late final ScrollController _scrollController;
 
   StickyTabBarDelegate({
     required this.tabController,
     required this.context,
     required this.onSearchTap,
+    this.showSearchField = false, // إضافة جديدة
+    this.searchController, // إضافة جديدة
+    this.onSearchChanged, // إضافة جديدة
   }) {
     _scrollController = ScrollController();
   }
@@ -116,7 +122,6 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     var size = MediaQuery.sizeOf(context);
 
-    // استخدم AnimatedBuilder عشان يعيد البناء لما التاب يتغير
     return AnimatedBuilder(
       animation: tabController,
       builder: (context, child) {
@@ -133,54 +138,73 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
               top: 0,
               bottom: size.height * 0.01,
             ),
-            child: Row(
-              textDirection: context.textDirection,
+            child: Column(
               children: [
-                // Search Icon
-                GestureDetector(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    onSearchTap.call();
-                  },
-                  child: Container(
-                    width: size.width * 0.1,
-                    height: size.width * 0.1,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(size.width * 0.05),
+                // Tab Bar Row
+                Row(
+                  textDirection: context.textDirection,
+                  children: [
+                    // Search Icon
+                    GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        onSearchTap.call();
+                      },
+                      child: Container(
+                        width: size.width * 0.1,
+                        height: size.width * 0.1,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius:
+                              BorderRadius.circular(size.width * 0.05),
+                        ),
+                        child: Icon(
+                          showSearchField ? Icons.close : Icons.search,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                          size: size.width * 0.06,
+                        ),
+                      ),
                     ),
-                    child: Icon(
-                      Icons.search,
-                      color: context.isDarkMode ? Colors.white : Colors.black,
-                      size: size.width * 0.06,
-                    ),
-                  ),
-                ),
-                SizedBox(width: size.width * 0.02),
+                    SizedBox(width: size.width * 0.02),
 
-                // Tab Pills
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      textDirection: context.textDirection,
-                      children: [
-                        _buildTabPill(context.isArabic ? 'متاح' : 'Available',
-                            0, tabController.index == 0),
-                        SizedBox(width: size.width * 0.02),
-                        _buildTabPill(context.isArabic ? 'مفضلة' : 'Favorite',
-                            1, tabController.index == 1),
-                        SizedBox(width: size.width * 0.02),
-                        _buildTabPill(context.isArabic ? 'سجل' : 'History', 2,
-                            tabController.index == 2),
-                        SizedBox(width: size.width * 0.02),
-                        _buildTabPill(context.isArabic ? 'موهبتي' : 'My Talent',
-                            3, tabController.index == 3),
-                      ],
+                    // Tab Pills
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          textDirection: context.textDirection,
+                          children: [
+                            _buildTabPill(
+                                context.isArabic ? 'متاح' : 'Available',
+                                0,
+                                tabController.index == 0),
+                            SizedBox(width: size.width * 0.02),
+                            _buildTabPill(
+                                context.isArabic ? 'مفضلة' : 'Favorite',
+                                1,
+                                tabController.index == 1),
+                            SizedBox(width: size.width * 0.02),
+                            _buildTabPill(context.isArabic ? 'سجل' : 'History',
+                                2, tabController.index == 2),
+                            SizedBox(width: size.width * 0.02),
+                            _buildTabPill(
+                                context.isArabic ? 'موهبتي' : 'My Talent',
+                                3,
+                                tabController.index == 3),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+
+                // Search Field (يظهر لما showSearchField = true)
+                if (showSearchField) ...[
+                  SizedBox(height: size.height * 0.01),
+                  _buildSearchField(size),
+                ],
               ],
             ),
           ),
@@ -227,16 +251,57 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
+  Widget _buildSearchField(Size size) {
+    return Container(
+      height: size.height * 0.05,
+      decoration: BoxDecoration(
+        color: context.isDarkMode ? Colors.grey[800] : Colors.grey[100],
+        borderRadius: BorderRadius.circular(size.width * 0.025),
+        border: Border.all(
+          color: context.isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
+          width: 1,
+        ),
+      ),
+      child: TextField(
+        controller: searchController,
+        onChanged: onSearchChanged,
+        style: TextStyle(
+          color: context.isDarkMode ? Colors.white : Colors.black,
+          fontSize: size.width * 0.035,
+        ),
+        decoration: InputDecoration(
+          hintText:
+              context.isArabic ? 'ابحث عن الفيديوهات...' : 'Search videos...',
+          hintStyle: TextStyle(
+            color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+            fontSize: size.width * 0.035,
+          ),
+          prefixIcon: Icon(
+            Icons.search,
+            color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+            size: size.width * 0.05,
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.03,
+            vertical: size.height * 0.01,
+          ),
+        ),
+      ),
+    );
+  }
+
   // Add dispose method to clean up the scroll controller
   void dispose() {
     _scrollController.dispose();
   }
 
   @override
-  double get maxExtent => 70.0; 
+  double get maxExtent =>
+      showSearchField ? 120.0 : 70.0; // زيادة الارتفاع لما search field موجود
 
   @override
-  double get minExtent => 70.0;
+  double get minExtent => showSearchField ? 120.0 : 70.0;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

@@ -10,6 +10,8 @@ class ProfileModel extends ProfileEntity {
     required super.videosCount,
     required super.isWinner,
     required super.channelDescription,
+    super.subscribers,
+    super.isSubscribed,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,10 @@ class ProfileModel extends ProfileEntity {
       videosCount: json['videosCount'] ?? 0,
       isWinner: json['isWinner'] ?? false,
       channelDescription: json['channelDescription'] ?? '',
+      subscribers: json['subscribers'] != null
+          ? List<String>.from(json['subscribers'])
+          : [],
+      isSubscribed: json['isSubscribed'] ?? false,
     );
   }
 
@@ -37,35 +43,14 @@ class ProfileModel extends ProfileEntity {
           ? (channelPicture as MediaModel).toJson()
           : null,
       'channelName': channelName,
-      'channelCover': channelCover != null
-          ? (channelCover as MediaModel).toJson()
-          : null,
+      'channelCover':
+          channelCover != null ? (channelCover as MediaModel).toJson() : null,
       'videosCount': videosCount,
       'isWinner': isWinner,
       'channelDescription': channelDescription,
+      'subscribers': subscribers,
+      'isSubscribed': isSubscribed,
     };
-  }
-
-  ProfileModel copyWith({
-    String? id,
-    String? userId,
-    MediaEntity? channelPicture,
-    String? channelName,
-    MediaEntity? channelCover,
-    int? videosCount,
-    bool? isWinner,
-    String? channelDescription,
-  }) {
-    return ProfileModel(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      channelPicture: channelPicture ?? this.channelPicture,
-      channelName: channelName ?? this.channelName,
-      channelCover: channelCover ?? this.channelCover,
-      videosCount: videosCount ?? this.videosCount,
-      isWinner: isWinner ?? this.isWinner,
-      channelDescription: channelDescription ?? this.channelDescription,
-    );
   }
 }
 

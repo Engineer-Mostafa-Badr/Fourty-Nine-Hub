@@ -12,8 +12,10 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/star_entity.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../helper/youtube_style_video_player.dart';
@@ -209,13 +211,23 @@ class _TalentCardState extends State<TalentCard> {
     StarEntity talent,
   ) {
     final starCubit = context.read<StarCubit>();
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TalentVideoPlayer(
-          videoUrl: mediaUrl,
-          talent: talent,
-          // cubit: starCubit, // تأكد من تمرير الـ cubit
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StarCubit>.value(
+              value: starCubit,
+            ),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: TalentVideoPlayer(
+            videoUrl: mediaUrl,
+            talent: talent,
+          ),
         ),
       ),
     );
@@ -238,14 +250,36 @@ class _TalentCardState extends State<TalentCard> {
         createdAt: DateTime.now().subtract(Duration(days: index * 30)),
       ),
     );
+
+    // تحديد إذا كان ده الملف الشخصي للمستخدم الحالي أم لا
+    final currentUserId = UserCubit
+        .to.state.data?.id; // أو أي طريقة تحصل بيها على الـ current user ID
+    final isCurrentUser = currentUserId == talent.user.id;
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider<ProfileCubit>(
-          create: (context) => serviceLocator<ProfileCubit>()..getMyProfile(),
+          create: (context) {
+            final profileCubit = serviceLocator<ProfileCubit>();
+            if (isCurrentUser) {
+              // لو المستخدم الحالي، اجلب الملف الشخصي للمستخدم
+              profileCubit.getMyProfile();
+            } else {
+              // لو مستخدم آخر، اجلب الملف الشخصي بالـ ID
+              // هنا محتاجين نحصل على الـ profile ID من الـ talent.user.id أو أي مكان تاني
+              profileCubit.getProfileById(talent.user.id);
+            }
+            return profileCubit;
+          },
           child: ProfilePageView(
             user: talent.user,
             userVideos: mockVideos,
+            isCurrentUser:
+                isCurrentUser, // تمرير المعلومة دي للـ ProfilePageView
+            profileId: isCurrentUser
+                ? null
+                : talent.user.id, // تمرير الـ profile ID لو مش current user
           ),
         ),
       ),
@@ -544,24 +578,24 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
                 ),
 
               // Play button overlay when paused
-              if (_isInitialized && !_isPlaying)
-                Center(
-                  child: GestureDetector(
-                    onTap: _togglePlayPause,
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.play_arrow,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                    ),
-                  ),
-                ),
+              // if (_isInitialized && !_isPlaying)
+              //   Center(
+              //     child: GestureDetector(
+              //       onTap: _togglePlayPause,
+              //       child: Container(
+              //         padding: EdgeInsets.all(16),
+              //         decoration: BoxDecoration(
+              //           color: Colors.black.withOpacity(0.7),
+              //           shape: BoxShape.circle,
+              //         ),
+              //         child: Icon(
+              //           Icons.play_arrow,
+              //           color: Colors.white,
+              //           size: 32,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
 
               // Top Left Controls (Favorite)
               Positioned(

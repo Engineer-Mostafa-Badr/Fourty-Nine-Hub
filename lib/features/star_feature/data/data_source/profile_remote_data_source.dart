@@ -8,6 +8,7 @@ import '../model/profile_model.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getMyProfile();
+  Future<ProfileModel> getProfileById(String profileId);
   Future<String> updateProfile(UpdateProfileParams params);
   Future<Either<Failure, List<ProfileEntity>>> searchProfiles(
       SearchProfileParams params);
@@ -21,6 +22,16 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<ProfileModel> getMyProfile() async {
     final response = await apiConsumer.get(EndPoints.getMyProfile);
+
+    return response.fold(
+      (failure) => throw failure,
+      (data) => ProfileModel.fromJson(data['data']),
+    );
+  }
+
+  @override
+  Future<ProfileModel> getProfileById(String profileId) async {
+    final response = await apiConsumer.get(EndPoints.getTubeProfileById(profileId));
 
     return response.fold(
       (failure) => throw failure,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +36,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   bool _isSearching = false;
   bool _isSearchingProfiles = false;
   final TextEditingController _searchController = TextEditingController();
+  Timer? _searchDebounce;
 
   // Video details view state for My Talent tab
   StarEntity? _selectedVideoTalent;
@@ -58,7 +61,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_onTabChanged);
     _searchController.addListener(_onSearchChanged);
-
     // Initialize all data
     _cubit.initializeAllData();
 
@@ -140,70 +142,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
-  // Add refresh method for each category
-  // Future<void> _onRefresh() async {
-  //   final category = _getTabCategory(_selectedTabIndex);
-  //   if (category != null) {
-  //     print("🔄 Refreshing category: $category");
-
-  //     // Show loading state
-  //     setState(() {});
-
-  //     // Call appropriate refresh method based on category
-  //     switch (category) {
-  //       case TalentCategory.available:
-  //         await _cubit.loadTalents(TalentCategory.available, refresh: true);
-  //         break;
-  //       case TalentCategory.favorites:
-  //         await _cubit.loadTalents(TalentCategory.favorites, refresh: true);
-  //         break;
-  //       case TalentCategory.history:
-  //         await _cubit.loadTalents(TalentCategory.history, refresh: true);
-  //         break;
-  //       case TalentCategory.myTalents:
-  //         // await _cubit.forceRefreshMyTalents();
-  //         await _cubit.loadTalents(TalentCategory.myTalents, refresh: true);
-  //         break;
-  //     }
-
-  //     // Small delay for better UX
-  //     await Future.delayed(Duration(milliseconds: 500));
-  //   }
-  // }
-
-  // Future<void> _onRefresh() async {
-  //   final category = _getTabCategory(_selectedTabIndex);
-  //   if (category != null) {
-  //     await _cubit.loadTalents(category, refresh: true);
-  //   }
-  // }
-
-  // void _onTabChanged() {
-  //   setState(() {
-  //     _selectedTabIndex = _tabController.index;
-
-  //     // Reset video details view when switching tabs
-  //     if (_selectedTabIndex != 3) {
-  //       _showVideoDetails = false;
-  //       _selectedVideoTalent = null;
-  //       _selectedVideoUrl = null;
-  //     }
-
-  //     // Clear search when switching tabs
-  //     _isSearching = false;
-  //     _isSearchingProfiles = false;
-  //     _searchController.clear();
-  //     _cubit.searchTalents('');
-  //     _cubit.clearProfileSearch();
-  //   });
-
-  //   // Load data for the selected tab if needed
-  //   final category = _getTabCategory(_selectedTabIndex);
-  //   if (category != null) {
-  //     _cubit.loadTalents(category);
-  //   }
-  // }
-
   void _onTabChanged() {
     print("📱 Tab changed to index: ${_tabController.index}");
 
@@ -249,9 +187,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   }
 
   void _onSearchChanged() {
-    if (!_isSearchingProfiles) {
-      _cubit.searchTalents(_searchController.text);
-    }
+    // إلغاء الـ timer السابق
+    _searchDebounce?.cancel();
+
+    // إنشاء timer جديد للتأخير
+    _searchDebounce = Timer(Duration(milliseconds: 500), () {
+      if (_searchController.text.isNotEmpty) {
+        _cubit.searchTubeVideos(_searchController.text);
+      } else {
+        _cubit.searchTubeVideos(''); // مسح النتائج
+      }
+    });
   }
 
   void _onTalentSearch(String query) {
@@ -363,7 +309,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       surfaceTintColor: Colors.transparent,
                       backgroundColor:
                           context.isDarkMode ? Colors.black : Colors.white,
-                      toolbarHeight: 60,
+                      toolbarHeight: 30,
                       titleSpacing: 16,
                       leading: BackButton(
                           onPressed: () {
@@ -387,6 +333,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              Text(
+                                '(15/3700)',
+                                style: TextStyle(
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(width: 4),
                               Text(
                                 'Winners',
                                 style: TextStyle(
@@ -412,6 +369,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ),
 
                     // Sticky Tabs
+                    // Sticky Tabs with Search
                     if (!_isSearching)
                       SliverPersistentHeader(
                         pinned: true,
@@ -419,6 +377,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                           tabController: _tabController,
                           context: context,
                           onSearchTap: _toggleSearch,
+                          showSearchField: false, // مش هنظهره هنا
                         ),
                       ),
 
@@ -426,13 +385,16 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                     if (_isSearching)
                       SliverPersistentHeader(
                         pinned: true,
-                        delegate: SearchBarDelegate(
-                          child: BeStarSearchBar(
-                            controller: _searchController,
-                            onTalentSearch: _onTalentSearch,
-                            onProfileSearch: _onProfileSearch,
-                            showProfileSearch: true,
-                          ),
+                        delegate: StickyTabBarDelegate(
+                          tabController: _tabController,
+                          context: context,
+                          onSearchTap: _toggleSearch,
+                          showSearchField: true, // هنظهره هنا
+                          searchController: _searchController,
+                          onSearchChanged: (value) {
+                            // Real-time search كل ما المستخدم يكتب
+                            _onSearchChanged();
+                          },
                         ),
                       ),
                   ];
@@ -503,58 +465,33 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
-  // Widget _buildMyTalentContent(StarState state) {
-  //   // Show VideoDetailsView if video is selected, otherwise show list
-  //   if (_showVideoDetails &&
-  //       _selectedVideoTalent != null &&
-  //       _selectedVideoUrl != null) {
-  //     // لازم نحط الـ VideoDetailsView جوا SliverToBoxAdapter
-  //     return SliverToBoxAdapter(
-  //       child: SizedBox(
-  //         height: MediaQuery.sizeOf(context).height * 0.75,
-  //         child: VideoDetailsView(
-  //           talent: _selectedVideoTalent!,
-  //           mediaUrl: _selectedVideoUrl!,
-  //           cubit: _cubit,
-  //           onBack: _onBackFromVideoDetails,
-  //         ),
-  //       ),
-  //     );
-  //   } else {
-  //     return TalentCardBuilders.buildMyTalentContentSliver(
-  //       context: context,
-  //       cubit: _cubit,
-  //       onVideoTap: _onVideoSelected,
-  //     );
-  //   }
-  // }
-
   Widget _buildMyTalentContent(StarState state) {
-  // Show VideoDetailsView if video is selected, otherwise show list
-  if (_showVideoDetails && _selectedVideoTalent != null && _selectedVideoUrl != null) {
-    return SliverToBoxAdapter(
-      child: SizedBox(
-        height: MediaQuery.sizeOf(context).height * 0.75,
-        child: BlocProvider<StarCubit>.value(
-          value: _cubit, // Provide the cubit explicitly
-          child: VideoDetailsView(
-            talent: _selectedVideoTalent!,
-            mediaUrl: _selectedVideoUrl!,
-            cubit: _cubit,
-            onBack: _onBackFromVideoDetails,
+    // Show VideoDetailsView if video is selected, otherwise show list
+    if (_showVideoDetails &&
+        _selectedVideoTalent != null &&
+        _selectedVideoUrl != null) {
+      return SliverToBoxAdapter(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.75,
+          child: BlocProvider<StarCubit>.value(
+            value: _cubit, // Provide the cubit explicitly
+            child: VideoDetailsView(
+              talent: _selectedVideoTalent!,
+              mediaUrl: _selectedVideoUrl!,
+              cubit: _cubit,
+              onBack: _onBackFromVideoDetails,
+            ),
           ),
         ),
-      ),
-    );
-  } else {
-    return TalentCardBuilders.buildMyTalentContentSliver(
-      context: context,
-      cubit: _cubit,
-      onVideoTap: _onVideoSelected,
-    );
+      );
+    } else {
+      return TalentCardBuilders.buildMyTalentContentSliver(
+        context: context,
+        cubit: _cubit,
+        onVideoTap: _onVideoSelected,
+      );
+    }
   }
-}
-
 
   Widget _buildTalentSearchResults(StarState state) {
     if (state.searchResults.isEmpty && _searchController.text.isNotEmpty) {
@@ -634,6 +571,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
 
     // Then dispose controllers
+    _searchDebounce?.cancel();
     _tabController.dispose();
     _searchController.dispose();
     _mainScrollController.dispose();

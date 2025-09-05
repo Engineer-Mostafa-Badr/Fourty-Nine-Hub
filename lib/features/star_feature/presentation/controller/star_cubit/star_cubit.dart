@@ -17,6 +17,8 @@ import '../../../domain/use_case/fetch_banner_use_case.dart';
 import '../../../domain/use_case/fetch_myl_star_use_case.dart';
 import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
+import '../../../domain/use_case/search_tube_videos_use_case.dart';
+import '../../../domain/use_case/tube_favorite_use_cases.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
 // New imports for Tube Video functionality
 import '../../../domain/use_case/fetch_all_tube_videos_use_case.dart';
@@ -33,12 +35,16 @@ part 'star_state.dart';
 class StarCubit extends Cubit<StarState> {
   // Existing use cases
   final FetchAllStarUseCase _allStarUseCase;
+  final SearchTubeVideosUseCase _searchTubeVideosUseCase;
   final FetchMylStarUseCase _fetchMylStarUseCase;
   final FetchWinnerStarUseCase _fetchWinnerStarUseCase;
   final UploadMyStarUseCase _uploadMyStarUseCase;
   final DeleteMyStarUseCase _deleteMyTalentUseCase;
   final FetchBannerUseCase _bannerUseCase;
   final SearchProfilesUseCase _searchProfilesUseCase;
+  final AddVideoToFavoriteUseCase _addVideoToFavoriteUseCase;
+  final RemoveVideoFromFavoriteUseCase _removeVideoFromFavoriteUseCase;
+  final GetFavoriteVideosUseCase _getFavoriteVideosUseCase;
 
   // New Tube Video use cases
   final FetchAllTubeVideosUseCase _fetchAllTubeVideosUseCase;
@@ -57,6 +63,10 @@ class StarCubit extends Cubit<StarState> {
     this._fetchWinnerStarUseCase,
     this._bannerUseCase,
     this._searchProfilesUseCase,
+    this._searchTubeVideosUseCase,
+    this._addVideoToFavoriteUseCase,
+    this._removeVideoFromFavoriteUseCase,
+    this._getFavoriteVideosUseCase,
     // New Tube Video use cases
     this._fetchAllTubeVideosUseCase,
     this._fetchMyTubeVideosUseCase,
@@ -109,46 +119,127 @@ class StarCubit extends Cubit<StarState> {
     print("=== END DEBUG ===");
   }
 
-  // Unified method to load talents by category with API selection
-  // Future<void> loadTalents(
-  //   TalentCategory category, {
-  //   bool refresh = false,
-  // }) async {
-  //   if (refresh) {
-  //     _resetPagination(category);
-  //   }
+  // البحث في الفيديوهات
+  Future<void> searchTubeVideos(String query) async {
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        searchResults: [],
+        searchQuery: '',
+      ));
+      return;
+    }
 
-  //   if (state.isLoading(category) || !state.hasMore(category)) return;
+    emit(state.copyWith(
+      searchQuery: query,
+      status: StarStates.loading,
+    ));
 
-  //   // Update loading state
-  //   final newLoadingStates =
-  //       Map<TalentCategory, bool>.from(state.loadingStates);
-  //   newLoadingStates[category] = true;
-  //   emit(state.copyWith(loadingStates: newLoadingStates));
+    final response = await _searchTubeVideosUseCase(
+      SearchTubeVideosParams(query: query),
+    );
 
-  //   try {
-  //     List<StarEntity> newTalents = [];
+    response.fold(
+      (failure) {
+        emit(state.copyWith(
+          status: StarStates.error,
+          failure: failure,
+        ));
+        _showErrorMessage(failure);
+      },
+      (videos) {
+        emit(state.copyWith(
+          searchResults: videos.cast<StarEntity>(),
+          status: StarStates.success,
+        ));
+      },
+    );
+  }
 
-  //     switch (category) {
-  //       case TalentCategory.available:
-  //         newTalents = await _fetchAvailableTalents();
-  //         break;
-  //       case TalentCategory.myTalents:
-  //         newTalents = await _fetchMyTalents();
-  //         break;
-  //       case TalentCategory.history:
-  //         newTalents = await _fetchHistoryTalents();
-  //         break;
-  //       case TalentCategory.favorites:
-  //         newTalents = _updateFavoritesList();
-  //         break;
-  //     }
+  // Toggle favorite for tube videos
+  Future<void> toggleTubeFavorite(String videoId) async {
+    final isFavorite = state.favoriteIds.contains(videoId);
 
-  //     _updateTalentsData(category, newTalents, refresh);
-  //   } catch (e) {
-  //     _handleError(category, e);
-  //   }
-  // }
+    // Optimistic update
+    final updatedFavorites = Set<String>.from(state.favoriteIds);
+    if (isFavorite) {
+      updatedFavorites.remove(videoId);
+    } else {
+      updatedFavorites.add(videoId);
+    }
+
+    emit(state.copyWith(favoriteIds: updatedFavorites));
+
+    // API call
+    final response = isFavorite
+        ? await _removeVideoFromFavoriteUseCase(videoId)
+        : await _addVideoToFavoriteUseCase(videoId);
+
+    response.fold(
+      (failure) {
+        // Revert optimistic update on failure
+        emit(state.copyWith(favoriteIds: state.favoriteIds));
+        _showErrorMessage(failure);
+      },
+      (message) {
+        // Success - refresh favorites list
+        loadFavoriteVideos();
+
+        // Show success message
+        final currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext;
+        if (currentContext != null) {
+          ScaffoldMessenger.of(currentContext).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  // Load favorite videos from API
+  Future<void> loadFavoriteVideos({bool refresh = false}) async {
+    if (refresh) {
+      _resetPagination(TalentCategory.favorites);
+    }
+
+    if (state.isLoading(TalentCategory.favorites)) return;
+
+    final loadingStates = Map<TalentCategory, bool>.from(state.loadingStates);
+    loadingStates[TalentCategory.favorites] = true;
+    emit(state.copyWith(loadingStates: loadingStates));
+
+    final response = await _getFavoriteVideosUseCase(const NoParams());
+
+    response.fold(
+      (failure) {
+        _handleError(TalentCategory.favorites, failure);
+      },
+      (favoriteVideos) {
+        // Update favorite IDs based on API response
+        final favoriteIds = favoriteVideos.map((video) => video.id).toSet();
+
+        // Update talents data
+        final talents =
+            Map<TalentCategory, List<StarEntity>>.from(state.talents);
+        talents[TalentCategory.favorites] = favoriteVideos.cast<StarEntity>();
+
+        final loadingStates =
+            Map<TalentCategory, bool>.from(state.loadingStates);
+        loadingStates[TalentCategory.favorites] = false;
+
+        emit(state.copyWith(
+          talents: talents,
+          favoriteIds: favoriteIds,
+          loadingStates: loadingStates,
+          status: StarStates.success,
+        ));
+      },
+    );
+  }
 
   Future<void> loadTalents(
     TalentCategory category, {
@@ -162,6 +253,11 @@ class StarCubit extends Cubit<StarState> {
 
     if (state.isLoading(category)) {
       print("⏳ Already loading $category, skipping...");
+      return;
+    }
+    if (category == TalentCategory.favorites) {
+      // Use the new API for favorites
+      await loadFavoriteVideos(refresh: refresh);
       return;
     }
 
@@ -185,6 +281,10 @@ class StarCubit extends Cubit<StarState> {
           print("📺 Fetching available talents...");
           newTalents = await _fetchAvailableTalents();
           break;
+        case TalentCategory.favorites:
+          print("❤️ Updating favorites list...");
+          newTalents = _updateFavoritesList();
+          break;
         case TalentCategory.myTalents:
           print("👤 Fetching my talents...");
           newTalents = await _fetchMyTalents();
@@ -192,10 +292,6 @@ class StarCubit extends Cubit<StarState> {
         case TalentCategory.history:
           print("📜 Fetching history talents...");
           newTalents = await _fetchHistoryTalents();
-          break;
-        case TalentCategory.favorites:
-          print("❤️ Updating favorites list...");
-          newTalents = _updateFavoritesList();
           break;
       }
 
@@ -724,19 +820,8 @@ class StarCubit extends Cubit<StarState> {
   }
 
   // Favorites management
-  void toggleFavorite(String talentId) {
-    final favoriteIds = Set<String>.from(state.favoriteIds);
-
-    if (favoriteIds.contains(talentId)) {
-      favoriteIds.remove(talentId);
-    } else {
-      favoriteIds.add(talentId);
-    }
-
-    emit(state.copyWith(favoriteIds: favoriteIds));
-
-    // Update favorites list
-    loadTalents(TalentCategory.favorites, refresh: true);
+  Future<void> toggleFavorite(String talentId) async {
+    await toggleTubeFavorite(talentId);
   }
 
   bool isFavorite(String talentId) {

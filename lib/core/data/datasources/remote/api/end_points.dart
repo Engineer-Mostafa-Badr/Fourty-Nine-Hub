@@ -1764,10 +1764,19 @@ class EndPoints {
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>
       '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';
+  static String searchTubeVideos(String query) =>
+      '/tube-video/search?query=$query';
+  static String getTubeProfileById(String profileId) =>
+      '/tube-profile/channel/$profileId';
   static const String getMyProfile = '/tube-profile';
   static const String updateProfile = '/tube-profile';
   static const String getAllTubeVideos = '/tube-video';
   static const String getMyTubeVideos = '/tube-video/me';
+  static String addVideoToFavorite(String videoId) =>
+      '/tube-favorite/video/$videoId';
+  static String removeVideoFromFavorite(String videoId) =>
+      '/tube-favorite/video/$videoId';
+  static const getFavoriteVideos = '/tube-favorite';
 
   static String getTubeVideoDetails(String videoId) =>
       '/tube-video/details/$videoId';

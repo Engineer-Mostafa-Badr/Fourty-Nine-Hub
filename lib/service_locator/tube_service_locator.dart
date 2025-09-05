@@ -7,6 +7,9 @@ import '../features/star_feature/domain/repository/profile_repository.dart';
 import '../features/star_feature/domain/use_case/comment_use_cases.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
+import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
+import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
+import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
 
 // New imports for Tube Video functionality
@@ -28,6 +31,7 @@ import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
 // NEW: Comment use cases imports
+import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 
 class TubeServiceLocator {
@@ -52,6 +56,30 @@ class TubeServiceLocator {
     if (!serviceLocator.isRegistered<FetchAllStarUseCase>()) {
       serviceLocator.registerLazySingleton<FetchAllStarUseCase>(
         () => FetchAllStarUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<SearchTubeVideosUseCase>()) {
+      serviceLocator.registerLazySingleton<SearchTubeVideosUseCase>(
+        () => SearchTubeVideosUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<AddVideoToFavoriteUseCase>()) {
+      serviceLocator.registerLazySingleton<AddVideoToFavoriteUseCase>(
+        () => AddVideoToFavoriteUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<RemoveVideoFromFavoriteUseCase>()) {
+      serviceLocator.registerLazySingleton<RemoveVideoFromFavoriteUseCase>(
+        () => RemoveVideoFromFavoriteUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetFavoriteVideosUseCase>()) {
+      serviceLocator.registerLazySingleton<GetFavoriteVideosUseCase>(
+        () => GetFavoriteVideosUseCase(serviceLocator()),
       );
     }
 
@@ -183,6 +211,10 @@ class TubeServiceLocator {
         serviceLocator<FetchWinnerStarUseCase>(),
         serviceLocator<FetchBannerUseCase>(),
         serviceLocator<SearchProfilesUseCase>(),
+        serviceLocator<SearchTubeVideosUseCase>(),
+        serviceLocator<AddVideoToFavoriteUseCase>(),
+        serviceLocator<RemoveVideoFromFavoriteUseCase>(),
+        serviceLocator<GetFavoriteVideosUseCase>(),
         // New Tube Video dependencies
         serviceLocator<FetchAllTubeVideosUseCase>(),
         serviceLocator<FetchMyTubeVideosUseCase>(),
@@ -191,6 +223,18 @@ class TubeServiceLocator {
         serviceLocator<DislikeTubeVideoUseCase>(),
         serviceLocator<IncrementTubeVideoViewUseCase>(),
         serviceLocator<DeleteTubeVideoUseCase>(),
+      ),
+    );
+
+    //! NEW: Comment Cubit Registration
+    serviceLocator.registerFactory<CommentCubit>(
+      () => CommentCubit(
+        serviceLocator<CreateCommentUseCase>(),
+        serviceLocator<GetCommentsUseCase>(),
+        serviceLocator<UpdateCommentUseCase>(),
+        serviceLocator<DeleteCommentUseCase>(),
+        serviceLocator<LikeCommentUseCase>(),
+        serviceLocator<DislikeCommentUseCase>(),
       ),
     );
 
@@ -216,6 +260,12 @@ class TubeServiceLocator {
       );
     }
 
+    if (!serviceLocator.isRegistered<GetProfileByIdUseCase>()) {
+      serviceLocator.registerLazySingleton<GetProfileByIdUseCase>(
+        () => GetProfileByIdUseCase(serviceLocator()),
+      );
+    }
+
     if (!serviceLocator.isRegistered<UpdateProfileUseCase>()) {
       serviceLocator.registerLazySingleton<UpdateProfileUseCase>(
         () => UpdateProfileUseCase(serviceLocator()),
@@ -226,6 +276,7 @@ class TubeServiceLocator {
     serviceLocator.registerFactory<ProfileCubit>(
       () => ProfileCubit(
         serviceLocator<GetMyProfileUseCase>(),
+        serviceLocator<GetProfileByIdUseCase>(),
         serviceLocator<UpdateProfileUseCase>(),
       ),
     );

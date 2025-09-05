@@ -18,12 +18,14 @@ class ProfilePageView extends StatefulWidget {
   final UserStarEntity? user;
   final List<StarEntity> userVideos;
   final bool isCurrentUser;
+  final String? profileId;
 
   const ProfilePageView({
     super.key,
     this.user,
     required this.userVideos,
     this.isCurrentUser = true,
+    this.profileId,
   });
 
   @override
@@ -72,6 +74,13 @@ class _ProfilePageViewState extends State<ProfilePageView>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && !_profileCubit.isClosed) {
           _profileCubit.getMyProfile();
+        }
+      });
+    } else if (widget.profileId != null && mounted) {
+      // Load profile by ID for other users
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_profileCubit.isClosed) {
+          _profileCubit.getProfileById(widget.profileId!);
         }
       });
     }
@@ -191,6 +200,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
             ManageVibration.vibrate();
             Navigator.pop(context);
           },
+          user: widget.user,
         ),
         Expanded(
           child: SafeArea(

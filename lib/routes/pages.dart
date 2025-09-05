@@ -454,6 +454,7 @@ import '../features/social_media/social_posts/presentation/pages/Social_home.dar
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
+import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -3580,8 +3581,16 @@ class AppPages {
                   return customTransition(
                     context,
                     state,
-                    BlocProvider<StarCubit>(
-                      create: (_) => serviceLocator(),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<StarCubit>(
+                          create: (_) => serviceLocator(),
+                        ),
+                        // أضف هذا السطر
+                        BlocProvider<CommentCubit>(
+                          create: (_) => serviceLocator(),
+                        ),
+                      ],
                       child: const BeStarView(),
                     ),
                   );

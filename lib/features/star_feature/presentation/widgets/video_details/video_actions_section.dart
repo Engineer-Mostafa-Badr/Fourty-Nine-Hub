@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart'; // إضافة import للـ cubit
@@ -39,17 +40,17 @@ class VideoActionsSection extends StatelessWidget {
           ),
           _buildActionButton(
             context: context,
-            icon: Icons.comment,
+            // icon: Icons.comment,
+            hasIcon: false,
             label: context.isArabic ? 'تعليقات' : 'Comments',
             onTap: onCommentsPressed,
           ),
           _buildActionButton(
             context: context,
-            icon: Icons.delete,
+            // icon: Icons.delete,
+            hasIcon: false,
             label: context.isArabic ? 'حذف' : 'Delete',
-            onTap: onDeletePressed ??
-                () => _handleDelete(
-                    context), // استخدام الدالة الداخلية إذا لم تُمرر callback
+            onTap: onDeletePressed ?? () => _handleDelete(context),
             isDestructive: true,
           ),
         ],
@@ -59,72 +60,117 @@ class VideoActionsSection extends StatelessWidget {
 
   // دالة للتعامل مع الحذف
   void _handleDelete(BuildContext context) {
-    // عرض تأكيد الحذف
     showDialog(
       context: context,
+      barrierDismissible: false, // منع الإغلاق بالضغط خارج الـ dialog
       builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'تأكيد الحذف' : 'Confirm Delete',
-          style: TextStyle(
-            fontSize: _getResponsiveFontSize(context, 18),
-            fontWeight: FontWeight.bold,
-          ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // زوايا دائرية
         ),
-        content: Text(
-          context.isArabic
-              ? 'هل أنت متأكد من حذف هذا الفيديو؟ لا يمكن التراجع عن هذا الإجراء.'
-              : 'Are you sure you want to delete this video? This action cannot be undone.',
-          style: TextStyle(
-            fontSize: _getResponsiveFontSize(context, 14),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
+        contentPadding: EdgeInsets.all(24),
+        content: Column(
+          // mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Title
+            Text(
+              'Alert!',
               style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: _getResponsiveFontSize(context, 14),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // تنفيذ عملية الحذف
-              cubit.deleteMyTubeVideo(talent.id);
-
-              // عرض رسالة تأكيد
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic
-                        ? 'تم حذف الفيديو بنجاح'
-                        : 'Video deleted successfully',
-                  ),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-            child: Text(
-              context.isArabic ? 'حذف' : 'Delete',
-              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 color: Colors.red,
-                fontSize: _getResponsiveFontSize(context, 14),
-                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 16),
+
+            // Message
+            Text(
+              'Are you sure about deleting the Talent',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 24),
+
+            // Buttons
+            Row(
+              children: [
+                // Delete Button
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // تنفيذ عملية الحذف
+                      cubit.deleteMyTubeVideo(talent.id);
+
+                      // عرض رسالة تأكيد
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.isArabic
+                                ? 'تم حذف الفيديو بنجاح'
+                                : 'Video deleted successfully',
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12),
+
+                // Close Button
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Color(0xFF1B365C), // نفس لون الأزرار الأخرى
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Close',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildActionButton({
     required BuildContext context,
-    required IconData icon,
+    IconData? icon,
+    bool hasIcon = true,
     required String label,
     required VoidCallback onTap,
     bool isDestructive = false,
@@ -133,12 +179,12 @@ class VideoActionsSection extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: _getResponsivePadding(context, 20),
-          vertical: _getResponsivePadding(context, 12),
+          horizontal: _getResponsivePadding(context, 24.w),
+          vertical: _getResponsivePadding(context, 10.h),
         ),
         decoration: BoxDecoration(
           color: isDestructive ? Colors.red : Color(0xFF1B365C),
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: (isDestructive ? Colors.red : Color(0xFF1B365C))
@@ -148,25 +194,50 @@ class VideoActionsSection extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: _getResponsiveIconSize(context, 18),
-            ),
-            SizedBox(width: _getResponsiveSpacing(context, 8)),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: _getResponsiveFontSize(context, 14),
-                fontWeight: FontWeight.w500,
+        child: hasIcon
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    color: Colors.white,
+                    size:
+                        _getResponsiveIconSize(context, 24), // قلل من 18 إلى 16
+                  ),
+                  SizedBox(
+                      width:
+                          _getResponsiveSpacing(context, 2)), // قلل من 8 إلى 6
+                  Flexible(
+                    // أضف Flexible للنص
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: _getResponsiveFontSize(
+                            context, 12), // قلل من 14 إلى 12
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis, // أضف overflow handling
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
+              )
+            : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _getResponsivePadding(context, 12.w),
+                  vertical: _getResponsivePadding(context, 5.h),
+                ),
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize:
+                        _getResponsiveFontSize(context, 12), // قلل من 14 إلى 12
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

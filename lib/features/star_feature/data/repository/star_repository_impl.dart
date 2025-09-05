@@ -24,6 +24,26 @@ class StarRepositoryImpl extends StarRepository {
   }
 
   @override
+  Future<Either<Failure, List<TubeVideoModel>>> searchTubeVideos(String query) {
+    return _remoteDataSource.searchTubeVideos(query);
+  }
+
+  @override
+  Future<Either<Failure, String>> addVideoToFavorite(String videoId) {
+    return _remoteDataSource.addVideoToFavorite(videoId);
+  }
+
+  @override
+  Future<Either<Failure, String>> removeVideoFromFavorite(String videoId) {
+    return _remoteDataSource.removeVideoFromFavorite(videoId);
+  }
+
+  @override
+  Future<Either<Failure, List<TubeVideoModel>>> getFavoriteVideos() {
+    return _remoteDataSource.getFavoriteVideos();
+  }
+
+  @override
   Future<Either<Failure, List<StarEntity>>> fetchMyStar() {
     return _remoteDataSource.fetchMyStar();
   }
@@ -94,7 +114,8 @@ class StarRepositoryImpl extends StarRepository {
   }
 
   @override
-  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params) {
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(
+      GetCommentsParams params) {
     return _remoteDataSource.getVideoComments(params);
   }
 

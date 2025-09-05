@@ -18,12 +18,17 @@ abstract class StarRemoteDataSource {
   // Existing methods
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(
       StarPaginationParams params);
+  Future<Either<Failure, List<TubeVideoModel>>> searchTubeVideos(String query);
   Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
       StarPaginationParams params);
   Future<Either<Failure, List<StarEntity>>> fetchMyStar();
   Future<Either<Failure, bool>> uploadMyStar(StarParams params);
   Future<Either<Failure, bool>> deleteMyStar({required String id});
   Future<Either<Failure, BannerTalentEntity>> fetchBanner();
+
+  Future<Either<Failure, String>> addVideoToFavorite(String videoId);
+  Future<Either<Failure, String>> removeVideoFromFavorite(String videoId);
+  Future<Either<Failure, List<TubeVideoModel>>> getFavoriteVideos();
 
   // New Tube Video methods
   Future<Either<Failure, TubeVideoListResponse>> fetchAllTubeVideos(
@@ -38,7 +43,8 @@ abstract class StarRemoteDataSource {
 
   // New Comment methods
   Future<Either<Failure, String>> createComment(CreateCommentParams params);
-  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params);
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(
+      GetCommentsParams params);
   Future<Either<Failure, String>> updateComment(UpdateCommentParams params);
   Future<Either<Failure, String>> deleteComment(String commentId);
   Future<Either<Failure, String>> likeComment(String commentId);
@@ -66,6 +72,102 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
         return Right((response['data']['talents'] as List)
             .map((e) => StarModel.fromJson(e))
             .toList());
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<TubeVideoModel>>> searchTubeVideos(
+      String query) async {
+    final response = await _apiConsumer.get(
+      EndPoints.searchTubeVideos(query),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Search Tube Videos Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Search Tube Videos Success: ${response['data']}");
+        try {
+          final videosData = response['data'] as List;
+          final videos = videosData
+              .map((videoData) => TubeVideoModel.fromJson(videoData))
+              .toList();
+          return Right(videos);
+        } catch (e) {
+          print("Parse Search Videos Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse search results',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> addVideoToFavorite(String videoId) async {
+    final response = await _apiConsumer.post(
+      EndPoints.addVideoToFavorite(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Add Video to Favorite Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Add Video to Favorite Success: ${response['data']}");
+        return Right(response['data'] as String);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> removeVideoFromFavorite(
+      String videoId) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.removeVideoFromFavorite(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Remove Video from Favorite Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Remove Video from Favorite Success: ${response['data']}");
+        return Right(response['data'] as String);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<TubeVideoModel>>> getFavoriteVideos() async {
+    final response = await _apiConsumer.get(EndPoints.getFavoriteVideos);
+
+    return response.fold(
+      (failure) {
+        print("Get Favorite Videos Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get Favorite Videos Success: ${response['data']}");
+        try {
+          final videosData = response['data'] as List;
+          final videos = videosData
+              .map((videoData) => TubeVideoModel.fromJson(videoData))
+              .toList();
+          return Right(videos);
+        } catch (e) {
+          print("Parse Favorite Videos Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse favorite videos',
+            name: 'Parse Error',
+          ));
+        }
       },
     );
   }
@@ -322,9 +424,11 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       },
     );
   }
+
   // NEW COMMENT IMPLEMENTATIONS
   @override
-  Future<Either<Failure, String>> createComment(CreateCommentParams params) async {
+  Future<Either<Failure, String>> createComment(
+      CreateCommentParams params) async {
     final response = await _apiConsumer.post(
       EndPoints.createTubeComment,
       data: params.toJson(),
@@ -343,7 +447,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params) async {
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(
+      GetCommentsParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getTubeVideoComments(
         params.videoId,
@@ -374,7 +479,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, String>> updateComment(UpdateCommentParams params) async {
+  Future<Either<Failure, String>> updateComment(
+      UpdateCommentParams params) async {
     final response = await _apiConsumer.put(
       EndPoints.updateTubeComment(params.commentId),
       data: params.toJson(),

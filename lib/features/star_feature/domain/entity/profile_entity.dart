@@ -7,6 +7,8 @@ class ProfileEntity {
   final int videosCount;
   final bool isWinner;
   final String channelDescription;
+  final List<String> subscribers; // إضافة جديدة
+  final bool isSubscribed; // إضافة جديدة
 
   const ProfileEntity({
     required this.id,
@@ -17,6 +19,8 @@ class ProfileEntity {
     required this.videosCount,
     required this.isWinner,
     required this.channelDescription,
+    this.subscribers = const [], // إضافة جديدة
+    this.isSubscribed = false, // إضافة جديدة
   });
 
   ProfileEntity copyWith({
@@ -28,6 +32,8 @@ class ProfileEntity {
     int? videosCount,
     bool? isWinner,
     String? channelDescription,
+    List<String>? subscribers, // إضافة جديدة
+    bool? isSubscribed, // إضافة جديدة
   }) {
     return ProfileEntity(
       id: id ?? this.id,
@@ -38,6 +44,8 @@ class ProfileEntity {
       videosCount: videosCount ?? this.videosCount,
       isWinner: isWinner ?? this.isWinner,
       channelDescription: channelDescription ?? this.channelDescription,
+      subscribers: subscribers ?? this.subscribers, // إضافة جديدة
+      isSubscribed: isSubscribed ?? this.isSubscribed, // إضافة جديدة
     );
   }
 }
@@ -75,7 +83,6 @@ class UpdateProfileParams {
     };
   }
 }
-
 
 class SearchProfileParams {
   final String query;

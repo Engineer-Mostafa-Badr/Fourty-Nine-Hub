@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
+import '../../../domain/entity/user_star_entity.dart';
+
 class ProfileAppBar extends StatelessWidget {
   final bool isCurrentUser;
   final VoidCallback? onEditPressed;
   final VoidCallback? onBackPressed;
+  final UserStarEntity? user;
 
   const ProfileAppBar({
     super.key,
     required this.isCurrentUser,
     this.onEditPressed,
     this.onBackPressed,
+    this.user,
   });
 
   @override
@@ -32,18 +36,18 @@ class ProfileAppBar extends StatelessWidget {
               onPressed: onBackPressed,
             ),
 
-            // Title
-            Expanded(
-              child: Text(
-                _getTitle(context),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: _getResponsiveFontSize(context, 20),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+            // // Title
+            // Expanded(
+            //   child: Text(
+            //     _getTitle(context),
+            //     textAlign: TextAlign.center,
+            //     style: TextStyle(
+            //       color: Colors.black,
+            //       fontSize: _getResponsiveFontSize(context, 20),
+            //       fontWeight: FontWeight.w600,
+            //     ),
+            //   ),
+            // ),
 
             // Action Button
             _buildActionButton(context),
@@ -61,7 +65,7 @@ class ProfileAppBar extends StatelessWidget {
   }
 
   Widget _buildActionButton(BuildContext context) {
-    if (isCurrentUser) {
+    if (isCurrentUser && onEditPressed != null) {
       return IconButton(
         icon: Icon(
           Icons.edit,

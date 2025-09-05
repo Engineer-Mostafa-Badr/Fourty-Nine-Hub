@@ -9,6 +9,7 @@ import '../../../../../core/messages/messages.dart';
 import '../../../../../routes/pages.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/use_case/get_my_profile_use_case.dart';
+import '../../../domain/use_case/get_profile_by_id_use_case.dart';
 import '../../../domain/use_case/update_profile_use_case.dart';
 import '../../utils/enums.dart';
 import 'package:equatable/equatable.dart';
@@ -21,10 +22,12 @@ part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final GetMyProfileUseCase _getMyProfileUseCase;
+  final GetProfileByIdUseCase _getProfileByIdUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
 
   ProfileCubit(
     this._getMyProfileUseCase,
+    this._getProfileByIdUseCase,
     this._updateProfileUseCase,
   ) : super(const ProfileState());
 
@@ -60,6 +63,47 @@ class ProfileCubit extends Cubit<ProfileState> {
         }
       },
     );
+  }
+
+  // Get profile by ID (new method)
+  Future<void> getProfileById(String profileId,
+      {bool showLoading = true}) async {
+    if (isClosed) return;
+
+    if (showLoading) {
+      emit(state.copyWith(status: ProfileStatus.loading));
+    }
+
+    final result = await _getProfileByIdUseCase(profileId);
+
+    if (isClosed) return;
+
+    result.fold(
+      (failure) {
+        if (!isClosed) {
+          emit(state.copyWith(
+            status: ProfileStatus.error,
+            failure: failure,
+          ));
+          _showErrorMessage(failure);
+        }
+      },
+      (profile) {
+        if (!isClosed) {
+          emit(state.copyWith(
+            status: ProfileStatus.success,
+            profile: profile,
+            failure: null,
+          ));
+        }
+      },
+    );
+  }
+
+  // Subscribe/Unsubscribe methods (إضافة جديدة)
+  Future<void> toggleSubscription(String profileId) async {
+    // إضافة الـ API call للاشتراك/إلغاء الاشتراك
+    // يمكن إضافة endpoint منفصل لده لاحقاً
   }
 
   // Update profile with validation

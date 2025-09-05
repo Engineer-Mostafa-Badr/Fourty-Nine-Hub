@@ -17,8 +17,12 @@ abstract class StarRepository {
       StarPaginationParams params);
   Future<Either<Failure, List<StarEntity>>> fetchMyStar();
   Future<Either<Failure, BannerTalentEntity>> fetchBanner();
+  Future<Either<Failure, List<TubeVideoModel>>> searchTubeVideos(String query);
   Future<Either<Failure, bool>> uploadMyStar(StarParams params);
   Future<Either<Failure, bool>> deleteMyStar({required String id});
+  Future<Either<Failure, String>> addVideoToFavorite(String videoId);
+  Future<Either<Failure, String>> removeVideoFromFavorite(String videoId);
+  Future<Either<Failure, List<TubeVideoModel>>> getFavoriteVideos();
 
   // New Tube Video methods
 
