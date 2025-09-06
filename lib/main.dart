@@ -59,8 +59,16 @@ import 'routes/pages.dart';
 final GlobalKey _toastificationKey = GlobalKey();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await CacheManager.init();
+
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    await LocalizationService.init(); // Initialize Easy Localization
+
+    await CacheManager.init();
+  } catch (e, stackTrace) {
+    return; // Exit if initialization fails
+  }
   timeago.setLocaleMessages('en', timeago.EnMessages());
   timeago.setLocaleMessages('ar', timeago.ArMessages());
 //  await  initPickMeFeature();
@@ -82,38 +90,39 @@ void main() async {
   //       textColor: Colors.white,
   //       fontSize: 16.0
   //   );
-  //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
   // Do something with the new location
   // });
 
-  await CacheServiceImpl.init();
-  await DI.execute();
-  serviceLocator<FcmNotificationHelper>().getFcmToken();
-  await Geolocator.checkPermission().then(
-    (value) {
-      if (value == LocationPermission.denied) {
-        // Geolocator.requestPermission();
-      }
-    },
-  );
-  // ZegoGiftManager().cache.cache(giftItemList);
-  isActivate = await CacheManager.getActivation() ?? false;
-  isShowOnboarding = await CacheManager.getShowOnboarding();
-  // isShowOnboarding = false;
-  await CacheManager.getFloatingNavigator();
-  //Admob.initialize();
-
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  final customPageCubit = serviceLocator<CustomPageCubit>();
-  await customPageCubit.fetchActivate();
+  try {
+    await CacheServiceImpl.init();
+    await DI.execute();
+    serviceLocator<FcmNotificationHelper>().getFcmToken();
+  } catch (e, stackTrace) {
+    return; // Exit if service initialization fails
+  }
+  try {
+    await Geolocator.checkPermission().then(
+      (value) {
+        if (value == LocationPermission.denied) {
+          // Geolocator.requestPermission();
+        }
+      },
+    );
+    isActivate = await CacheManager.getActivation() ?? false;
+    isShowOnboarding = await CacheManager.getShowOnboarding();
+    await CacheManager.getFloatingNavigator();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final customPageCubit = serviceLocator<CustomPageCubit>();
+    await customPageCubit.fetchActivate();
+  } catch (e, stackTrace) {
+    return; // Exit if post-service initialization fails
+  }
 
   // final isActivated =  false;
   // Routes.onBoardingScreen
-  print('will go onBoardingScreen ${!isShowOnboarding}');
   // final initialRoute = Routes.ChooseLangScreen;
   isActivate = await CacheManager.getActivation() ?? false;
   isShowOnboarding = await CacheManager.getShowOnboarding();
@@ -123,20 +132,24 @@ void main() async {
   //     : isActivate
   //         ? Routes.PAGEPREVIEW
   //         : Routes.HOME;
-  await requestTrackingPermission();
-  AppPages.initializeRouter(initialRoute);
-  await LocationServiceWatcher().start();
-  runApp(
+  try {
+    await requestTrackingPermission();
+    AppPages.initializeRouter(initialRoute);
+    await LocationServiceWatcher().start();
+    runApp(
     LocalizationService.rootWidget(
-      child: Phoenix(
-        child: DevicePreview(
-          enabled: false,
-          builder: (context) => const MyApp(),
-        ),
-      ),
-      // child: const MyApp(),
+      child: const MyApp(), // Test without Phoenix and DevicePreview
+      // child: Phoenix(
+      //   child: DevicePreview(
+      //     enabled: false,
+      //     builder: (context) => const MyApp(),
+      //   ),
+      // ),
     ),
   );
+  } catch (e, stackTrace) {
+    return; // Exit if final initialization fails
+  }
 }
 Future<void> requestTrackingPermission() async {
   final status = await AppTrackingTransparency.trackingAuthorizationStatus;
@@ -169,7 +182,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     var calls = await FlutterCallkitIncoming.activeCalls();
     if (calls is List) {
       if (calls.isNotEmpty) {
-        print('DATA: $calls');
         return calls[0];
       } else {
         return null;
@@ -180,7 +192,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> getDevicePushTokenVoIP() async {
     var devicePushTokenVoIP =
     await FlutterCallkitIncoming.getDevicePushTokenVoIP();
-    print(devicePushTokenVoIP);
   }
 
   Future getToken() async {

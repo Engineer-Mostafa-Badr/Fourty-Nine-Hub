@@ -231,141 +231,148 @@ class _LoginViewState extends State<LoginView> {
             _handleSocialAuthState(state);
           }
         },
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: const BackAppBar(),
-          body: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            controller: scrollController,
-            child: Padding(
-              padding: EdgeInsets.all(16.0.w),
-              child: Form(
-                  key: formKeyLogin,
-                  // autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        Assets.logo,
-                        width: 200.h,
-                        height: 200.h,
-                      ),
-                      SizedBox(
-                        height: 60.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          chooseAuthWidget(
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              setState(() {
-                                widget.authType = AuthType.LOGIN;
-                              });
-                            },
-                            active: widget.authType == AuthType.LOGIN,
-                            text: LocaleKeys.login.localize,
-                            borderRadius: context.locale == Locales.english
-                                ? BorderRadius.only(
-                                    topLeft: Radius.circular(100.r),
-                                    bottomLeft: Radius.circular(100.r),
-                                  )
-                                : BorderRadius.only(
-                                    topRight: Radius.circular(100.r),
-                                    bottomRight: Radius.circular(100.r),
-                                  ),
-                          ),
-                          chooseAuthWidget(
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              setState(() {
-                                widget.authType = AuthType.REGISTER;
-                              });
-                            },
-                            active: widget.authType == AuthType.REGISTER,
-                            text: LocaleKeys.register.localize,
-                            borderRadius: context.locale == Locales.english
-                                ? const BorderRadius.only(
-                                    topRight: Radius.circular(50),
-                                    bottomRight: Radius.circular(50),
-                                  )
-                                : const BorderRadius.only(
-                                    topLeft: Radius.circular(50),
-                                    bottomLeft: Radius.circular(50),
-                                  ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 60.h,
-                      ),
-                      widget.authType == AuthType.LOGIN
-                          ? LoginWidget(
-                              loginCubit: loginCubit,
-                            )
-                          : RegisterWidget(
-                              formKeyRegister: formKeyRegister,
-                            ),
-                      // SizedBox(
-                      //   height: widget.authType == AuthType.LOGIN
-                      //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
-                      //           ? 20
-                      //           : 100.h
-                      //       : 0,
-                      // ),
-                      const Sizer(
-                        height: 50,
-                      ),
-                      widget.authType == AuthType.REGISTER
-                          ? DefaultButton(
-                              labelStyle: TextStyle(
-                                  fontSize: 35.sp,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
-                              label: LocaleKeys.confirm.localize,
-                              width: double.infinity,
-                              onPressed: () {
+        child: PopScope(
+          onPopInvoked: (bool value) {
+            // Handle the pop event
+            // For example, you can show a confirmation dialog
+            context.go(Routes.HOME);
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: const BackAppBar(),
+            body: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              controller: scrollController,
+              child: Padding(
+                padding: EdgeInsets.all(16.0.w),
+                child: Form(
+                    key: formKeyLogin,
+                    // autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          Assets.logo,
+                          width: 200.h,
+                          height: 200.h,
+                        ),
+                        SizedBox(
+                          height: 60.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            chooseAuthWidget(
+                              onTap: () {
                                 ManageVibration.vibrate();
-                                if (registerCubit.accept) {
-                                  if (formKeyRegister.currentState!
-                                      .validate()) {
-                                    if (registerCubit.isLessThan14YearsOld(
-                                        registerCubit
-                                            .birthDateTextController.text
-                                            .trim())) {
-                                      showErrorMessage(
-                                          context,
-                                          context.isArabic
-                                              ? 'يجب ان يكون المستخدم اكبر من 14 سنة'
-                                              : 'The user must be older than 14 years');
-                                      return;
-                                    }
+                                setState(() {
+                                  widget.authType = AuthType.LOGIN;
+                                });
+                              },
+                              active: widget.authType == AuthType.LOGIN,
+                              text: LocaleKeys.login.localize,
+                              borderRadius: context.locale == Locales.english
+                                  ? BorderRadius.only(
+                                      topLeft: Radius.circular(100.r),
+                                      bottomLeft: Radius.circular(100.r),
+                                    )
+                                  : BorderRadius.only(
+                                      topRight: Radius.circular(100.r),
+                                      bottomRight: Radius.circular(100.r),
+                                    ),
+                            ),
+                            chooseAuthWidget(
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                setState(() {
+                                  widget.authType = AuthType.REGISTER;
+                                });
+                              },
+                              active: widget.authType == AuthType.REGISTER,
+                              text: LocaleKeys.register.localize,
+                              borderRadius: context.locale == Locales.english
+                                  ? const BorderRadius.only(
+                                      topRight: Radius.circular(50),
+                                      bottomRight: Radius.circular(50),
+                                    )
+                                  : const BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      bottomLeft: Radius.circular(50),
+                                    ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 60.h,
+                        ),
+                        widget.authType == AuthType.LOGIN
+                            ? LoginWidget(
+                                loginCubit: loginCubit,
+                              )
+                            : RegisterWidget(
+                                formKeyRegister: formKeyRegister,
+                              ),
+                        // SizedBox(
+                        //   height: widget.authType == AuthType.LOGIN
+                        //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
+                        //           ? 20
+                        //           : 100.h
+                        //       : 0,
+                        // ),
+                        const Sizer(
+                          height: 50,
+                        ),
+                        widget.authType == AuthType.REGISTER
+                            ? DefaultButton(
+                                labelStyle: TextStyle(
+                                    fontSize: 35.sp,
+                                    color: AppColors.AUTH_CONTAINER_COLOR),
+                                label: LocaleKeys.confirm.localize,
+                                width: double.infinity,
+                                onPressed: () {
+                                  ManageVibration.vibrate();
+                                  if (registerCubit.accept) {
+                                    if (formKeyRegister.currentState!
+                                        .validate()) {
+                                      if (registerCubit.isLessThan14YearsOld(
+                                          registerCubit
+                                              .birthDateTextController.text
+                                              .trim())) {
+                                        showErrorMessage(
+                                            context,
+                                            context.isArabic
+                                                ? 'يجب ان يكون المستخدم اكبر من 14 سنة'
+                                                : 'The user must be older than 14 years');
+                                        return;
+                                      }
 
-                                    registerCubit.register();
+                                      registerCubit.register();
+                                    }
+                                  } else {
+                                    showErrorMessage(
+                                        context,
+                                        getFailureMessage(
+                                            ServerFailure(
+                                                message:
+                                                    LocaleKeys.terms.localize),
+                                            context));
                                   }
-                                } else {
-                                  showErrorMessage(
-                                      context,
-                                      getFailureMessage(
-                                          ServerFailure(
-                                              message:
-                                                  LocaleKeys.terms.localize),
-                                          context));
-                                }
-                              },
-                            )
-                          : DefaultButton(
-                              width: double.infinity,
-                              label: LocaleKeys.confirm.localize,
-                              labelStyle: TextStyle(
-                                  fontSize: 35.sp,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: () {
-                                ManageVibration.vibrate();
-                                log("message");
-                                loginCubit.login(formKeyLogin);
-                              },
-                            ),
-                    ],
-                  )),
+                                },
+                              )
+                            : DefaultButton(
+                                width: double.infinity,
+                                label: LocaleKeys.confirm.localize,
+                                labelStyle: TextStyle(
+                                    fontSize: 35.sp,
+                                    color: AppColors.AUTH_CONTAINER_COLOR),
+                                onPressed: () {
+                                  ManageVibration.vibrate();
+                                  log("message");
+                                  loginCubit.login(formKeyLogin);
+                                },
+                              ),
+                      ],
+                    )),
+              ),
             ),
           ),
         ),

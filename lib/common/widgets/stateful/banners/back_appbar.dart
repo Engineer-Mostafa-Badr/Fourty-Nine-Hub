@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -48,7 +50,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             onPressed: () {
       ManageVibration.vibrate();
-              Navigator.of(context).pop();
+              context.go(Routes.HOME);
             },
             visualDensity: VisualDensity(horizontal: -4),
             icon: Icon(

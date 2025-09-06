@@ -4,6 +4,7 @@ abstract class Routes {
   Routes._();
 
   static const splash = '/';
+  static const splashScreen = '/splashScreen';
   static const HOME = '/Home';
   static const RIDE_HOME = '/RideHome';
   static const RunningMapDetails = '/RunningMapDetails';
@@ -317,6 +318,7 @@ abstract class Routes {
 abstract class Paths {
   Paths._();
   static const splash = '/';
+  static const splashScreen = 'splashScreen';
   static const HOME = 'Home';
   static const RIDEHOME = 'RideHome';
   static const RunningMapDetails = 'RunningMapDetails';

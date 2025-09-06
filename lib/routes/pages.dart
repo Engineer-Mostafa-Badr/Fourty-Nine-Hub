@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/widget/before_splash.dart';
 import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
@@ -484,9 +485,18 @@ class AppPages {
             pageBuilder: (context, state) => customTransition(
               context,
               state,
-              const SplashScreen(),
+              const BeforeSplash(),
             ),
             routes: [
+              GoRoute(
+                path: Paths.splashScreen,
+                name: Routes.splashScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  const SplashScreen(),
+                ),
+              ),
               GoRoute(
                 path: Routes.HOME,
                 pageBuilder: (context, state) => customTransition(

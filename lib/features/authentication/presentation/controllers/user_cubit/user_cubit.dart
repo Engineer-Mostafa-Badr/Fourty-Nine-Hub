@@ -322,8 +322,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
   Future<Either<Failure, UserEntity>?> getUser() async {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-    if (!isTokenAttached || isGuestMode||!currentContext.isUserLoggedIn) return null;
-
+    if (!isTokenAttached || isGuestMode) return null;
+    print("🚀 getUser() called");
     final result = await _getUserUseCase(const NoParams());
     SharedWebSocket.connect(token: (await CacheManager.getAccessToken())??'');
 
