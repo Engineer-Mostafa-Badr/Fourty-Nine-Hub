@@ -122,5 +122,23 @@ class ReelsServiceLocator {
     serviceLocator.registerLazySingleton<tiktok_reels.TiktokCubit>(
       () => tiktok_reels.TiktokCubit(),
     );
+    serviceLocator.registerLazySingleton<ReelsCubit>(
+      () => ReelsCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ),
+    );
   }
 }

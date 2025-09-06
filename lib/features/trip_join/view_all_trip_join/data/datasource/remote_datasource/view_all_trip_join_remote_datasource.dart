@@ -174,6 +174,7 @@ class ViewAllTripJoinRemoteDataSourceImp
     final url = EndPoints.getTripExpectedPrice;
 
     final body = params.toJson();  // Clean and clear
+    print("body ==================== $body \n");
 
     final response = await apiConsumer.get(url, data: body);  // Use POST
 
