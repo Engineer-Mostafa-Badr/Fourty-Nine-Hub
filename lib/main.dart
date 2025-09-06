@@ -53,6 +53,7 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import 'features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'routes/pages.dart';
 
 // Global key for ToastificationWrapper to prevent recreation during network changes
@@ -222,6 +223,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (context) =>
               serviceLocator<OnBoardingCubit>()..changeOnboardingData(0),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CommentCubit>(),
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
