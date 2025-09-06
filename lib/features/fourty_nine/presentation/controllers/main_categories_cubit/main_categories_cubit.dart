@@ -41,30 +41,16 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 
 import '../../../domain/entities/wallet_home_entity.dart';
 import '../../../domain/use_cases/get_wallet_home_use_case.dart';
 
 part 'main_categories_state.dart';
 
-class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMixin {
-  // Singleton pattern to ensure only one instance exists
-  static MainCategoriesCubit? _instance;
-  static MainCategoriesCubit get instance {
-    if (_instance == null) {
-      throw StateError('MainCategoriesCubit not initialized. Call initialize() first.');
-    }
-    return _instance!;
-  }
-  
+class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   static MainCategoriesState to = AppPages
       .router.routerDelegate.navigatorKey.currentContext!
       .read<MainCategoriesState>();
-  
-  // Add flag to prevent duplicate token refresh calls
-  bool _isRefreshingFromToken = false;
-  
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
   final GetQuestionUseCase _getQuestionUseCase;
   final AnswerQuestionUseCase _answerQuestionUseCase;
@@ -83,130 +69,49 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
 
-  MainCategoriesCubit._internal(
-    this._getMainCategoriesUseCase,
-    this._toggleFavoriteCategoryUseCase,
-    this._getWalletHomeUseCase,
-    this._currencyUseCase,
-    this.updateSocketLocationUseCase,
-    this._anyCashBackUseCase,
-    this._categoriesCustomPageUseCase,
-    this._getQuestionUseCase,
-    this._answerQuestionUseCase,
-    this._getMainCategoryDetailsUseCase,
-    this.updateSettingsDashboardUsecase,
-    this.getSettingsDashboardUsecase,
-    this.listenToNewTripUseCase,
-    this.listenToAcceptOfferUseCase,
-    this.listenToTripAcceptedUseCase,
-  ) : super(MainCategoriesState()) {
-    print('🔄 MainCategoriesCubit: Constructor called - Instance: ${identityHashCode(this)}');
-    // Initialize auto-refresh functionality
-    initializeAutoRefresh();
-  }
-  
-  // Factory constructor to ensure singleton pattern
-  factory MainCategoriesCubit(
-    GetMainCategoriesUseCase getMainCategoriesUseCase,
-    ToggleFavoriteCategoryUseCase toggleFavoriteCategoryUseCase,
-    GetWalletHomeUseCase getWalletHomeUseCase,
-    GetCurrencyUseCase currencyUseCase,
-    UpdateSocketLocationUseCase updateSocketLocationUseCase,
-    AnyCashBackUseCase anyCashBackUseCase,
-    GetMainCategoriesCustomPageUseCase categoriesCustomPageUseCase,
-    GetQuestionUseCase getQuestionUseCase,
-    AnswerQuestionUseCase answerQuestionUseCase,
-    GetMainCategoryDetailsUseCase getMainCategoryDetailsUseCase,
-    UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase,
-    GetSettingsDashboardUsecase getSettingsDashboardUsecase,
-    ListenToNewTripUseCase listenToNewTripUseCase,
-    ListenToAcceptOfferUseCase listenToAcceptOfferUseCase,
-    ListenToTripAcceptedUseCase listenToTripAcceptedUseCase,
-  ) {
-    _instance ??= MainCategoriesCubit._internal(
-      getMainCategoriesUseCase,
-      toggleFavoriteCategoryUseCase,
-      getWalletHomeUseCase,
-      currencyUseCase,
-      updateSocketLocationUseCase,
-      anyCashBackUseCase,
-      categoriesCustomPageUseCase,
-      getQuestionUseCase,
-      answerQuestionUseCase,
-      getMainCategoryDetailsUseCase,
-      updateSettingsDashboardUsecase,
-      getSettingsDashboardUsecase,
-      listenToNewTripUseCase,
-      listenToAcceptOfferUseCase,
-      listenToTripAcceptedUseCase,
-    );
-    return _instance!;
-  }
+  MainCategoriesCubit(
+      this._getMainCategoriesUseCase,
+      this._toggleFavoriteCategoryUseCase,
+      this._getWalletHomeUseCase,
+      this._currencyUseCase,
+      this.updateSocketLocationUseCase,
+      this._anyCashBackUseCase,
+      this._categoriesCustomPageUseCase,
+      this._getQuestionUseCase,
+      this._answerQuestionUseCase,
+      this._getMainCategoryDetailsUseCase,
+      this.updateSettingsDashboardUsecase,
+      this.getSettingsDashboardUsecase,
+      this.listenToNewTripUseCase,
+      this.listenToAcceptOfferUseCase,
+      this.listenToTripAcceptedUseCase,
+      ) : super(MainCategoriesState());
 
-  Future<void> loadDataCategory(BuildContext context, {String? from}) async {
-    print("loadDataCategory ${from??''}");
+  Future<void> loadDataCategory(BuildContext context) async {
+    print("loadDataCategory");
     await loadData(context);
     await getMainCategoryDetails();
     // await getQuestion();
     await getMainCategoryCustomPage();
   }
 
-  @override
-  void onTokenRefreshed() {
-    print('🔄 MainCategoriesCubit: onTokenRefreshed called - Instance: ${identityHashCode(this)}');
-    print('🔄 MainCategoriesCubit: _isRefreshingFromToken: $_isRefreshingFromToken');
-    
-    // Global instance check - only allow the first instance to process
-    if (_instance != null && _instance != this) {
-      print('🔄 MainCategoriesCubit: Another instance is active, skipping this one');
-      return;
-    }
-    
-    // Prevent duplicate calls during the same token refresh cycle
-    if (_isRefreshingFromToken) {
-      print('🔄 MainCategoriesCubit: Token refresh already in progress, skipping...');
-      return;
-    }
-    
-    _isRefreshingFromToken = true;
-    print('🔄 MainCategoriesCubit: Token refreshed, refreshing data...');
-    
-    // Refresh all data when token is refreshed
-    final currentContext = AppPages.router.configuration.navigatorKey.currentContext;
-    if (currentContext != null) {
-      loadDataCategory(currentContext, from: 'TokenRefreshed').then((_) {
-        // Reset the flag after data refresh is complete
-        _isRefreshingFromToken = false;
-        print('🔄 MainCategoriesCubit: Data refresh completed, flag reset');
-      }).catchError((error) {
-        // Reset the flag even if there's an error
-        _isRefreshingFromToken = false;
-        print('❌ MainCategoriesCubit: Error during token refresh data load: $error');
-      });
-    } else {
-      // Reset the flag if no context is available
-      _isRefreshingFromToken = false;
-      print('🔄 MainCategoriesCubit: No context available, flag reset');
-    }
-  }
-
   Future<void> getMainCategoryDetails() async {
     // if (user != null) {
     final response =
-        await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
+    await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
     response.fold((failure) => emit(state.copyWith(status: StateStatus.error)),
-        (data) {
-      emit(state.copyWith(
-        marriageMainCategory: data,
-      ));
-    });
+            (data) {
+          emit(state.copyWith(
+            marriageMainCategory: data,
+          ));
+        });
     // }
   }
 
   initNotification() {
     log("contextinitNotification");
     final currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
+    AppPages.router.configuration.navigatorKey.currentContext!;
     serviceLocator<FcmNotificationHelper>().setup(currentContext);
   }
 
@@ -227,7 +132,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
       final result = await _getMainCategoriesUseCase(
           MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
       result.fold(
-        (failure) {
+            (failure) {
           emit(state.copyWith(
             failure: failure,
             status: StateStatus.error,
@@ -235,7 +140,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
           CliLogger.error(
               'can\'t load main categories there is an error ${failure.toString()}');
         },
-        (r) async {
+            (r) async {
           _fourtyNineSharedData.mainCategories = r;
           CliLogger.info('main categories loaded in loadData : ${r.length}');
           // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
@@ -251,11 +156,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
           MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
 
       result.fold(
-        (failure) => emit(state.copyWith(
+            (failure) => emit(state.copyWith(
           failure: failure,
           status: StateStatus.error,
         )),
-        (r) {
+            (r) {
           // _fourtyNineSharedData.mainCategories = r;
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, data: r));
@@ -278,7 +183,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
           MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
 
       result.fold(
-        (failure) {
+            (failure) {
           emit(state.copyWith(
             failure: failure,
             status: StateStatus.error,
@@ -286,7 +191,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
           CliLogger.error(
               'can\'t load main categories there is an error ${failure.toString()}');
         },
-        (r) {
+            (r) {
           _fourtyNineSharedData.mainCategories = r;
           CliLogger.info('custom page categories loaded : ${r.length}');
           // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
@@ -302,11 +207,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
           MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
 
       result.fold(
-        (failure) => emit(state.copyWith(
+            (failure) => emit(state.copyWith(
           failure: failure,
           status: StateStatus.error,
         )),
-        (r) {
+            (r) {
           _fourtyNineSharedData.mainCategories = r;
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, customPage: r));
@@ -319,12 +224,12 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (data) {
+          result = data;
+          emit(state.copyWith(status: StateStatus.success));
+        });
     return result;
   }
 
@@ -341,8 +246,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
 
   Future<void> answerQuestion(
       {required String id,
-      required String answer,
-      required BuildContext context}) async {
+        required String answer,
+        required BuildContext context}) async {
     final response = await _answerQuestionUseCase(
         AnswerQuestionParams(id: id, answer: answer));
     response.fold((failure) {
@@ -361,12 +266,12 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
     final response = await _anyCashBackUseCase(const NoParams());
     bool result = false;
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (data) {
+          result = data;
+          emit(state.copyWith(status: StateStatus.success));
+        });
     return result;
   }
 
@@ -374,12 +279,12 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (data) {
+          result = data;
+          emit(state.copyWith(status: StateStatus.success));
+        });
     return result;
   }
 
@@ -415,16 +320,16 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
     if (!currentContext.isUserLoggedIn) return;
 
     final Either<Failure, SettingsDashboardEntityResponse> result =
-        await getSettingsDashboardUsecase(const NoParams());
+    await getSettingsDashboardUsecase(const NoParams());
     result.fold(
-      (failure) {
+          (failure) {
         emit(state.copyWith(status: StateStatus.error, failure: failure));
       },
-      (settings) {
+          (settings) {
         String lady = '62ea012a69ea29c91dfc3917';
         bool isReady = isServiceAvailable(settings);
         bool isDriverLady =
-            settings.data.categoryIds.any((element) => element.id == lady);
+        settings.data.categoryIds.any((element) => element.id == lady);
         print("isDriverLady $isDriverLady");
         if (isReady) {
           updateDriverLocation();
@@ -446,10 +351,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
 
     if (isClosed) return;
     result.fold(
-      (failure) {},
-      (settings) {
+          (failure) {},
+          (settings) {
         var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
 
         getSettings(currentContext, listenToSocket: false);
       },
@@ -485,8 +390,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
     final result = await updateSocketLocationUseCase(
         UpdateSocketLocationParams(latitude: lat, longitude: long));
     result.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (r) async {});
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) async {});
   }
 
   void listenToNewTrip(BuildContext context, bool enableSound) {
@@ -503,7 +408,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
       if (enableSound) {
         await Future.delayed(
           const Duration(seconds: 1),
-          () {
+              () {
             if (context.isArabic) {
               player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
             } else {
@@ -556,17 +461,5 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> with AutoRefreshMix
       print(
           'New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     });
-  }
-
-  @override
-  Future<void> close() {
-    print('🔄 MainCategoriesCubit: close() called - Instance: ${identityHashCode(this)}');
-    disposeAutoRefresh();
-    return super.close();
-  }
-  
-  // Static method to reset the singleton instance (useful for testing or cleanup)
-  static void reset() {
-    _instance = null;
   }
 }

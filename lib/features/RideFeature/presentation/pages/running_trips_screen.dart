@@ -107,43 +107,52 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
                   if(state.runningTrips?.isEmpty??true) {
                     return Center(child: Text(context.isArabic ? "لا يوجد رحلات حالية" : "No running trips"));
                   }
-                  return OlxPaginationWidget(
-                    itemsPerPage: 2,
-                    loadPage: (page) {
-                      print('==> page $page');
-                      return _fetchMoreTrips();
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      page = 1;
+                      isFetching = false;
+                      await widget.params.rideCubit.fetchAllRunningTrips(limit: limit, page: page);
                     },
-                    banners: bannersList,
-                    items: List.generate(
-                      state.runningTrips?.length ?? 0,
-                          (index){
-                            if (index == state.runningTrips?.length) {
-                              return const Center(child: CustomCircularProgressIndicator());
-                            }
-                            final trip = state.runningTrips?[index];
-                            if (trip == null) return const SizedBox.shrink();
-                            // return Padding(
-                            //   padding: const EdgeInsets.all(16),
-                            //   child: Row(
-                            //     crossAxisAlignment: CrossAxisAlignment.start,
-                            //     children: [
-                            //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
-                            //       const SizedBox(width: 16),
-                            //       PriceColumn(
-                            //         startAddressTitle: trip.startLocationAddressTitle,
-                            //         targetAddressTitle: trip.targetLocationAddressTitle,
-                            //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
-                            //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
-                            //       ),
-                            //
-                            //       const Spacer(),
-                            //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
-                            //     ],
-                            //   ),
-                            // );
-                            return TripCard(trip: trip);
-                }
-                    ), scrollController: newScrollController,
+                    backgroundColor: AppColors.whiteColor,
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                    child: OlxPaginationWidget(
+                      itemsPerPage: 2,
+                      loadPage: (page) {
+                        print('==> page $page');
+                        return _fetchMoreTrips();
+                      },
+                      banners: bannersList,
+                      items: List.generate(
+                        state.runningTrips?.length ?? 0,
+                            (index){
+                              if (index == state.runningTrips?.length) {
+                                return const Center(child: CustomCircularProgressIndicator());
+                              }
+                              final trip = state.runningTrips?[index];
+                              if (trip == null) return const SizedBox.shrink();
+                              // return Padding(
+                              //   padding: const EdgeInsets.all(16),
+                              //   child: Row(
+                              //     crossAxisAlignment: CrossAxisAlignment.start,
+                              //     children: [
+                              //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
+                              //       const SizedBox(width: 16),
+                              //       PriceColumn(
+                              //         startAddressTitle: trip.startLocationAddressTitle,
+                              //         targetAddressTitle: trip.targetLocationAddressTitle,
+                              //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
+                              //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
+                              //       ),
+                              //
+                              //       const Spacer(),
+                              //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
+                              //     ],
+                              //   ),
+                              // );
+                              return TripCard(trip: trip);
+                                    }
+                      ), scrollController: newScrollController,
+                    ),
                   );
                   // return ListView.builder(
                   //   controller: _scrollController,

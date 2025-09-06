@@ -105,45 +105,54 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
                   if(state.completedTrips?.isEmpty??true) {
                     return Center(child: Text(context.isArabic ? "لا يوجد رحلات مكتملة" : "No completed trips"));
                   }
-                  return OlxPaginationWidget(
-                    itemsPerPage: 2,
-                    loadPage: (page) {
-                      print('==> page $page');
-                      return _fetchMoreTrips();
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      page = 1;
+                      isFetching = false;
+                      await widget.params.rideCubit.fetchAllCompletedTrips(limit: limit, page: page);
                     },
-                    banners: bannersList,
-                    items: List.generate(
-                      state.completedTrips?.length ?? 0,
-                          (index){
+                    backgroundColor: AppColors.whiteColor,
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                    child: OlxPaginationWidget(
+                      itemsPerPage: 2,
+                      loadPage: (page) {
+                        print('==> page $page');
+                        return _fetchMoreTrips();
+                      },
+                      banners: bannersList,
+                      items: List.generate(
+                        state.completedTrips?.length ?? 0,
+                            (index){
 
-                            if (index == state.completedTrips?.length) {
-                              return const Center(child: CustomCircularProgressIndicator());
-                            }
-                            final trip = state.completedTrips?[index];
-                            if (trip == null) return const SizedBox.shrink();
-                            // return Padding(
-                            //   padding: const EdgeInsets.all(16),
-                            //   child: Row(
-                            //     crossAxisAlignment: CrossAxisAlignment.start,
-                            //     children: [
-                            //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
-                            //       const SizedBox(width: 16),
-                            //       PriceColumn(
-                            //         startAddressTitle: trip.address,
-                            //         date: context.isArabic
-                            //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
-                            //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
-                            //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
-                            //       ),
-                            //       const Spacer(),
-                            //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
-                            //     ],
-                            //   ),
-                            // );
-                            return TripCard(trip: trip);
-                          },
-                    ), scrollController: newScrollController,
+                              if (index == state.completedTrips?.length) {
+                                return const Center(child: CustomCircularProgressIndicator());
+                              }
+                              final trip = state.completedTrips?[index];
+                              if (trip == null) return const SizedBox.shrink();
+                              // return Padding(
+                              //   padding: const EdgeInsets.all(16),
+                              //   child: Row(
+                              //     crossAxisAlignment: CrossAxisAlignment.start,
+                              //     children: [
+                              //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
+                              //       const SizedBox(width: 16),
+                              //       PriceColumn(
+                              //         startAddressTitle: trip.address,
+                              //         date: context.isArabic
+                              //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
+                              //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
+                              //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
+                              //       ),
+                              //       const Spacer(),
+                              //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
+                              //     ],
+                              //   ),
+                              // );
+                              return TripCard(trip: trip);
+                            },
+                      ), scrollController: newScrollController,
 
+                    ),
                   );
 
                   // return ListView.builder(

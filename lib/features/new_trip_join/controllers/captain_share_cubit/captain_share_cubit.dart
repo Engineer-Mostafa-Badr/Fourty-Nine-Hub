@@ -140,18 +140,26 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
     });
   }
+  LatLng? driverLocation;
+  LatLng? lastDriverLocation;
   updateDriverLocation(){
     CliLogger.info('updateDriverLocation');
     listenToUpdateLocationDriverUseCase((data) {
       final newDriverLocation = LatLng(data.latitude, data.longitude);
       final LatLng? oldDriverLocation = state.driverLocation;
       log("newDriverLocation $newDriverLocation");
+      lastDriverLocation = driverLocation;
+      driverLocation = newDriverLocation;
       emit(state.copyWith(
         driverLocation: newDriverLocation,
         previousDriverLocation:
         oldDriverLocation, // <-- Pass the old location here
         status: CaptainShareStates.success,
       ));
+      log("driverLocation ${state.driverLocation}");
+      log("driverLocation $driverLocation");
+      log("previousDriverLocation ${state.previousDriverLocation}");
+
     });
   }
 

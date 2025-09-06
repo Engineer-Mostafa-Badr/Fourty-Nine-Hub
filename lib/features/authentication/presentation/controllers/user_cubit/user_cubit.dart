@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/check_guest_state_use_case.dart';
@@ -45,7 +43,7 @@ import '../../../domain/use_cases/sign_out_usecase.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
-class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
+class UserCubit extends Cubit<BasicState<UserEntity>> {
   static UserCubit to = AppPages
       .router.routerDelegate.navigatorKey.currentContext!
       .read<UserCubit>();
@@ -78,28 +76,25 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
   String? token;
 
   UserCubit(
-    this._getUserUseCase,
-    this._getTokensUseCase,
-    this._attachTokenUseCase,
-    this._saveTokensUseCase,
-    this._signOutUseCase,
-    this.cacheService,
-    this._updateUserBioUseCase,
-    this._updateUserNameUseCase,
-    this._createNormalChatUseCase,
-    this._createAnonymousChatUseCase,
-    this._updateProfileViewUseCase,
-    this._getProfileViewsUseCase,
-    this._getProfileViewsByUserIdUseCase,
-    // this.updateSocketLocationUseCase,
-    // this._getUnreadedChatsCounterUsecase,
-    this._signInAsGuestUseCase,
-    this._checkGuestStateUseCase,
-    this._convertGuestToUserUseCase,
-  ) : super(const BasicState()) {
-    // Initialize auto-refresh functionality
-    initializeAutoRefresh();
-  }
+      this._getUserUseCase,
+      this._getTokensUseCase,
+      this._attachTokenUseCase,
+      this._saveTokensUseCase,
+      this._signOutUseCase,
+      this.cacheService,
+      this._updateUserBioUseCase,
+      this._updateUserNameUseCase,
+      this._createNormalChatUseCase,
+      this._createAnonymousChatUseCase,
+      this._updateProfileViewUseCase,
+      this._getProfileViewsUseCase,
+      this._getProfileViewsByUserIdUseCase,
+      // this.updateSocketLocationUseCase,
+      // this._getUnreadedChatsCounterUsecase,
+      this._signInAsGuestUseCase,
+      this._checkGuestStateUseCase,
+      this._convertGuestToUserUseCase,
+      ) : super(const BasicState());
   bool get isAuthenticated => state.data != null && !isGuestMode;
   bool get isGuestMode => state.data?.isGuest == true;
 
@@ -131,9 +126,14 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
         refreshToken: refreshToken,
       );
       _attachTokenUseCase(tokens);
-      
-      // Token refresh is now handled by AutoRefreshMixin via stream notification
-      // No need for direct callback setup
+
+      // Set up token refresh callback
+      final apiConsumer = serviceLocator<ApiConsumer>();
+      apiConsumer.setTokenRefreshCallback((UserTokensEntity refreshedTokens) {
+        // Update the app's authentication state when token is refreshed
+        _attachTokenUseCase(refreshedTokens);
+        isTokenAttached = true;
+      });
     }
     isTokenAttached = accessToken != null && refreshToken != null;
     await getUser();
@@ -147,15 +147,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     final guestResult = await _checkGuestStateUseCase(const NoParams());
 
     guestResult.fold(
-      (failure) {
+          (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         // فحص التوكن العادي
         attachToken();
       },
-      (isGuest) {
+          (isGuest) {
         if (isGuest) {
           emit(state.copyWith(
             status: StateStatus.success,
@@ -189,16 +189,16 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     ));
 
     result.fold(
-      (failure) {
+          (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
-        status: StateStatus.error,
-        failure: failure,
-      ));},
-      (tokens) async {
+          status: StateStatus.error,
+          failure: failure,
+        ));},
+          (tokens) async {
         // حفظ التوكنز
         await CacheManager.saveAccessToken(tokens.accessToken);
         await CacheManager.saveRefreshToken(tokens.refreshToken);
@@ -207,8 +207,13 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
         _attachTokenUseCase(tokens);
         isTokenAttached = true;
 
-        // Token refresh is now handled by AutoRefreshMixin via stream notification
-        // No need for direct callback setup
+        // Set up token refresh callback
+        final apiConsumer = serviceLocator<ApiConsumer>();
+        apiConsumer.setTokenRefreshCallback((UserTokensEntity refreshedTokens) {
+          // Update the app's authentication state when token is refreshed
+          _attachTokenUseCase(refreshedTokens);
+          isTokenAttached = true;
+        });
 
         // جلب بيانات المستخدم
         await getUser();
@@ -226,11 +231,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
         CreateAnonymousChatParams(otherUserId: otherId));
     ChatEntity? chat;
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) async {
-      chat = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async {
+          chat = data;
+          emit(state.copyWith(status: StateStatus.success));
+        });
     return chat;
   }
 
@@ -242,11 +247,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
         CreateNormalChatParams(otherUserId: otherId, categoryId: categoryId));
     ChatEntity? chat;
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) async {
-      chat = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) async {
+          chat = data;
+          emit(state.copyWith(status: StateStatus.success));
+        });
     return chat;
   }
 
@@ -258,14 +263,14 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     final result = await repository.getGuestData();
 
     return result.fold(
-      (failure) {
+          (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         return null;
       },
-      (data) => data?[key] as T?,
+          (data) => data?[key] as T?,
     );
   }
 
@@ -274,11 +279,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     final response = await _getProfileViewsUseCase(
         GetProfileViewsParams(isProfile: isProfile));
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (r) {
-      profileViews = r.reversed.toList();
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) {
+          profileViews = r.reversed.toList();
+          emit(state.copyWith(status: StateStatus.success));
+        });
   }
 
   Future<void> getProfileViewByUserId(
@@ -287,11 +292,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     final response = await _getProfileViewsByUserIdUseCase(
         GetProfileViewsParams(isProfile: isProfile, userId: userId));
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (r) {
-      profileViewsByUserId = r.reversed.toList();
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) {
+          profileViewsByUserId = r.reversed.toList();
+          emit(state.copyWith(status: StateStatus.success));
+        });
   }
 
   // Future<Either<Failure, UserEntity>?> getUser() async {
@@ -317,16 +322,16 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
 
   Future<Either<Failure, UserEntity>?> getUser() async {
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-    if (!isTokenAttached || isGuestMode||!currentContext.isUserLoggedIn) return null;
-
+    if (!isTokenAttached || isGuestMode) return null;
+    print("🚀 getUser() called");
     final result = await _getUserUseCase(const NoParams());
     SharedWebSocket.connect(token: (await CacheManager.getAccessToken())??'');
 
     emit(
       result.fold(
-        (failure) {
+            (failure) {
           var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
+          AppPages.router.configuration.navigatorKey.currentContext!;
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
           return state.copyWith(
@@ -334,7 +339,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
             failure: failure,
           );
         },
-        (user) {
+            (user) {
           log("user is :${user.id}");
           return state.copyWith(status: StateStatus.success, data: user);
         },
@@ -348,8 +353,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
 
     // UserTokensEntity? token;
     result.fold(
-      (_) {},
-      (tokens) {
+          (_) {},
+          (tokens) {
         _attachTokenUseCase(tokens);
         isTokenAttached = true;
         // token = tokens!;
@@ -416,8 +421,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
       // مسح Guest state
       final result = await _checkGuestStateUseCase(const NoParams());
       result.fold(
-        (failure) => emit(state.copyWith(status: StateStatus.error)),
-        (_) async {
+            (failure) => emit(state.copyWith(status: StateStatus.error)),
+            (_) async {
           await CacheManager.deleteAllTokens();
           emit(state.copyWith(
             status: StateStatus.success,
@@ -430,14 +435,14 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
       // تسجيل خروج عادي
       final result = await _signOutUseCase(const NoParams());
       result.fold(
-        (l) {
+            (l) {
           var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
           currentContext.pop();
           currentContext.pop();
           showErrorMessage(currentContext, currentContext.isArabic?'حدث خطأ':'Something went wrong');
           emit(state.copyWith(status: StateStatus.error));
         },
-        (r) async {
+            (r) async {
           setLogOut();
           emit(state.copyWith(
             status: StateStatus.success,
@@ -481,8 +486,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     final currentDataResult = await repository.getGuestData();
 
     currentDataResult.fold(
-      (failure) => null,
-      (currentData) async {
+          (failure) => null,
+          (currentData) async {
         final updatedData = currentData ?? <String, dynamic>{};
         updatedData[key] = value;
         await repository.saveGuestData(updatedData);
@@ -500,11 +505,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
     final result = await _signInAsGuestUseCase(const NoParams());
 
     result.fold(
-      (failure) => emit(state.copyWith(
+          (failure) => emit(state.copyWith(
         status: StateStatus.error,
         failure: failure,
       )),
-      (guestUser) => emit(state.copyWith(
+          (guestUser) => emit(state.copyWith(
         status: StateStatus.success,
         data: guestUser,
       )),
@@ -518,11 +523,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
       userId: userId,
     ));
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (r) {
-      log("status = $r");
-      emit(state.copyWith(status: StateStatus.success));
-    });
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) {
+          log("status = $r");
+          emit(state.copyWith(status: StateStatus.success));
+        });
   }
 
   Future<void> updateUserBio({required String bio}) async {
@@ -567,11 +572,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
             data: {'profilePictureId': data.mediaId},
           );
           return response.fold(
-            (failure) {
+                (failure) {
               emit(state.copyWith(status: StateStatus.error, failure: failure));
               return Left(failure);
             },
-            (data) {
+                (data) {
               getUser();
               emit(state.copyWith(
                 status: StateStatus.success,
@@ -584,68 +589,36 @@ class UserCubit extends Cubit<BasicState<UserEntity>> with AutoRefreshMixin {
         context: context);
   }
 
-  // Future<void> emitDriverLocation() async {
-  //   final result = await updateSocketLocationUseCase(
-  //       UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558)
-  //   );
-  //   result.fold(
-  //           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-  //           (r) async {
-  //         if(r==true)log("Location Updated Successfully");
-  //       });
-  // }
+// Future<void> emitDriverLocation() async {
+//   final result = await updateSocketLocationUseCase(
+//       UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558)
+//   );
+//   result.fold(
+//           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+//           (r) async {
+//         if(r==true)log("Location Updated Successfully");
+//       });
+// }
 
-  // updateDriverLocation(){
-  //   print("state.data?.email${state.data?.email}");
-  // final locationService = LocationService();
-  //
-  //   locationService.startLocationTracking();
-  //
-  //   // Listen for new locations (only when moved at least 300m)
-  //   locationService.locationUpdates.listen((position) {
-  //     // emitDriverLocation();
-  //     Fluttertoast.showToast(
-  //         msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.green,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0
-  //     );
-  //     print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
-  //   });
-  //   }
-
-  @override
-  void onTokenRefreshed() {
-    print('🔄 UserCubit: Token refreshed, updating authentication state...');
-    // Get the latest tokens from cache and update the app state
-    _updateTokensFromCache();
-  }
-  
-  Future<void> _updateTokensFromCache() async {
-    try {
-      String? accessToken = await CacheManager.getAccessToken();
-      String? refreshToken = await CacheManager.getRefreshToken();
-      
-      if (accessToken != null && refreshToken != null) {
-        final tokens = UserTokensEntity(
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        );
-        _attachTokenUseCase(tokens);
-        isTokenAttached = true;
-        print('🔄 UserCubit: Tokens updated successfully');
-      }
-    } catch (e) {
-      print('❌ UserCubit: Error updating tokens from cache: $e');
-    }
-  }
-  
-  @override
-  Future<void> close() {
-    disposeAutoRefresh();
-    return super.close();
-  }
+// updateDriverLocation(){
+//   print("state.data?.email${state.data?.email}");
+// final locationService = LocationService();
+//
+//   locationService.startLocationTracking();
+//
+//   // Listen for new locations (only when moved at least 300m)
+//   locationService.locationUpdates.listen((position) {
+//     // emitDriverLocation();
+//     Fluttertoast.showToast(
+//         msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
+//         toastLength: Toast.LENGTH_SHORT,
+//         gravity: ToastGravity.BOTTOM,
+//         timeInSecForIosWeb: 1,
+//         backgroundColor: Colors.green,
+//         textColor: Colors.white,
+//         fontSize: 16.0
+//     );
+//     print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+//   });
+//   }
 }

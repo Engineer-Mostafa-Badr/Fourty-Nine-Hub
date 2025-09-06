@@ -7,6 +7,7 @@ class ConversationEntity {
   bool isOnline;
   final ProfileEntity? profile;
   final LastMessageEntity? lastMessage;
+  bool isTyping = false;
 
   ConversationEntity({
     required this.conversationId,

@@ -447,7 +447,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                       textEditingController: _searchController,
                       itemBuilder: (context, index, prediction) {
                         return Container(
-                          color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey[200],
+                          color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                           padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
@@ -485,6 +485,14 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                           TextPosition(offset: prediction.description!.length),
                         );
                       },
+                      boxDecoration: BoxDecoration(
+                        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1.0,
+                        ),
+                      ),
                       countries: widget.params.allowedCountryCode != null
                           ? [widget.params.allowedCountryCode!.toLowerCase()]
                           : const ["eg"],
@@ -492,7 +500,8 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                   ),
                 ),
 
-                if (_isLoading) const Center(child: CustomLoading(searchLoading: true)),
+                if (_isLoading) const Center(child: SizedBox(
+                    height: 70, width: 70, child: CustomLoading(searchLoading: true))),
 
                 // Set Location Button
                 Positioned(
