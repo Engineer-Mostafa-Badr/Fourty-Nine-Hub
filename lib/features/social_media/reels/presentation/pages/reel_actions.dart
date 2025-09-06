@@ -179,7 +179,7 @@ class _UserAvatarState extends State<_UserAvatar> {
         onTap: () {
           ManageVibration.vibrate();
           if (!serviceLocator<UserCubit>().isLoggedIn) {
-            context.read<PreloadBloc>().pauseTheVideo();
+            context.read<PreloadBloc>().pauseCurrent();
             context.push(Routes.LOGIN);
           } else {
             context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
@@ -286,7 +286,7 @@ class _UserInfoState extends State<_UserInfo> {
             onTap: () {
               ManageVibration.vibrate();
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.read<PreloadBloc>().pauseTheVideo();
+                context.read<PreloadBloc>().pauseCurrent();
                 context.push(Routes.LOGIN);
               } else {
                 context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
