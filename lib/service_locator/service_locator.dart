@@ -103,6 +103,7 @@ class DI {
     serviceLocator.registerSingleton<SharedPreferences>(sharedPreferences);
 
     _callFeatureInjector();
+
     // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
 
@@ -113,7 +114,6 @@ class DI {
       );
     } catch (e) {
       // Firebase might already be initialized, continue
-      print('Firebase already initialized or error: $e');
     }
 
     try {
@@ -122,6 +122,7 @@ class DI {
         carPlay: true,
         criticalAlert: true,
       );
+
       FirebaseMessaging.instance.subscribeToTopic('all');
     } catch (e) {
       print('Firebase messaging error: $e');
@@ -133,6 +134,7 @@ class DI {
     );
 
     await LocalizationService.init();
+
     await SQFLiteDataSource.instance.initDatabase();
     // final cred = await CacheManager.getAccessToken();
     // CliLogger.info('token from getit $cred');
@@ -314,10 +316,13 @@ class DI {
 
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
+
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
+
     //captain share service locator
     CaptainShareServiceLocator.execute(serviceLocator: serviceLocator);
+
     // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
