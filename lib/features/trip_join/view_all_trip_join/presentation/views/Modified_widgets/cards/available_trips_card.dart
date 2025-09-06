@@ -310,7 +310,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                           GestureDetector(
                             onTap: () {
                               ManageVibration.vibrate();
-                              context.pop();
+                              context.push(Routes.tripJoinInfoScreen);
                             },
                             child: Container(
                               height: 48.h,
