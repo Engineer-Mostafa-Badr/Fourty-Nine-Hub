@@ -336,7 +336,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                   : "Advertise your car",
                               onTap: () {
                                 ManageVibration.vibrate();
-                                context.push(Routes.TRIP_JOIN);
+                                context.push(Routes.TRIP_JOIN,extra: false);
                               },
                             ),
                           ),
