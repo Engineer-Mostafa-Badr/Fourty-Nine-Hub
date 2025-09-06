@@ -396,100 +396,34 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
   Widget _chatCategoryWidgetMapper(String chatType) {
     switch (chatType) {
       case "social":
-        return Column(
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  expandedOptions = !expandedOptions;
-                });
-              },
-              child: SizedBox(
-                width: double.infinity,
-                child: Icon(
-                  expandedOptions
-                      ? FontAwesomeIcons.anglesUp
-                      : FontAwesomeIcons.anglesDown,
-                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
-                  size: 18,
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    expandedOptions = !expandedOptions;
+                  });
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Icon(
+                    expandedOptions
+                        ? FontAwesomeIcons.anglesUp
+                        : FontAwesomeIcons.anglesDown,
+                    color: context.isDarkMode ? Colors.white38 : Colors.black38,
+                    size: 18,
+                  ),
                 ),
               ),
-            ),
-            ChatOptions(
-              icon: Icons.archive_outlined,
-              text: context.isArabic ? "المؤرشفة" : "Archived",
-              onTap: () async {
-                // final result = await context.push(Routes.ARCHIVEDCHATS,
-                //     extra: OptionsChatsViewParams(
-                //       category: 'Archive',
-                //       chatsCubit: chatsCubit,
-                //       isSecret: false,
-                //     ));
-                //
-                // // Check if the result is true, refresh the home page
-                // if (result == true) {
-                //   log("pop");
-                //   await chatsCubit.getChatsByCategory(ChatCategories.social);
-                //   setState(() {});
-                // }
-              },
-            ),
-            // const Divider(),
-            AnimatedSwitcher(
-              duration:
-              const Duration(milliseconds: 500), // Duration of animation
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                key: const ValueKey(1),
-                icon: Icons.mail_lock_outlined,
-                text: context.isArabic
-                    ? "الدردشات المغلقة"
-                    : "Locked chats",
-                // onTap: () async {
-                //   final result = await context.push(Routes.ARCHIVEDCHATS,
-                //       extra: OptionsChatsViewParams(
-                //         category: 'LockedChats',
-                //         chatsCubit: chatsCubit,
-                //         isSecret: true,
-                //       ));
-
-                //   // Check if the result is true, refresh the home page
-                //   if (result == true) {
-                //     log("pop");
-                //     await chatsCubit
-                //         .getChatsByCategory(ChatCategories.social);
-                //     setState(() {});
-                //   }
-                // },
-                onTap: () async {
-                  // await lockedChatsOnTap();
-                },
-              )
-                  : const SizedBox.shrink(),
-            ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                key: const ValueKey(2),
-                icon: Icons.person_off_outlined,
-                text: LocaleKeys.anonymous.localize,
+              ChatOptions(
+                icon: Icons.archive_outlined,
+                text: context.isArabic ? "مؤرشفة" : "Archived",
                 onTap: () async {
                   // final result = await context.push(Routes.ARCHIVEDCHATS,
                   //     extra: OptionsChatsViewParams(
-                  //       category: ChatCategoriesIds.anonymous,
+                  //       category: 'Archive',
                   //       chatsCubit: chatsCubit,
                   //       isSecret: false,
                   //     ));
@@ -497,51 +431,120 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   // // Check if the result is true, refresh the home page
                   // if (result == true) {
                   //   log("pop");
-                  //   await chatsCubit
-                  //       .getChatsByCategory(ChatCategories.social);
+                  //   await chatsCubit.getChatsByCategory(ChatCategories.social);
                   //   setState(() {});
                   // }
                 },
-              )
-                  : const SizedBox.shrink(),
-            ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: expandedOptions
-                  ? ChatOptions(
-                key: const ValueKey(3),
-                icon: Icons.emoji_people,
-                text: LocaleKeys.greet.localize,
-                onTap: () async {
-                  // final result = await context.push(Routes.ARCHIVEDCHATS,
-                  //     extra: OptionsChatsViewParams(
-                  //       category: ChatCategoriesIds.greet,
-                  //       chatsCubit: chatsCubit,
-                  //       isSecret: false,
-                  //     ));
-                  //
-                  // // Check if the result is true, refresh the home page
-                  // if (result == true) {
-                  //   log("pop");
-                  //   await chatsCubit
-                  //       .getChatsByCategory(ChatCategories.social);
-                  //   setState(() {});
-                  // }
+              ),
+              // const Divider(),
+              AnimatedSwitcher(
+                duration:
+                const Duration(milliseconds: 500), // Duration of animation
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
                 },
-              )
-                  : const SizedBox.shrink(),
-            ),
-            // const Divider(),
-            _buildSocialConversations(),
+                child: expandedOptions
+                    ? ChatOptions(
+                  key: const ValueKey(1),
+                  icon: Icons.mail_lock_outlined,
+                  text: context.isArabic
+                      ? "دردشه مغلقة"
+                      : "Locked chats",
+                  // onTap: () async {
+                  //   final result = await context.push(Routes.ARCHIVEDCHATS,
+                  //       extra: OptionsChatsViewParams(
+                  //         category: 'LockedChats',
+                  //         chatsCubit: chatsCubit,
+                  //         isSecret: true,
+                  //       ));
 
-            const MessagesAreEndToEndEncrypted(),
-          ],
+                  //   // Check if the result is true, refresh the home page
+                  //   if (result == true) {
+                  //     log("pop");
+                  //     await chatsCubit
+                  //         .getChatsByCategory(ChatCategories.social);
+                  //     setState(() {});
+                  //   }
+                  // },
+                  onTap: () async {
+                    // await lockedChatsOnTap();
+                  },
+                )
+                    : const SizedBox.shrink(),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: expandedOptions
+                    ? ChatOptions(
+                  key: const ValueKey(2),
+                  icon: Icons.person_off_outlined,
+                  text: LocaleKeys.anonymous.localize,
+                  onTap: () async {
+                    // final result = await context.push(Routes.ARCHIVEDCHATS,
+                    //     extra: OptionsChatsViewParams(
+                    //       category: ChatCategoriesIds.anonymous,
+                    //       chatsCubit: chatsCubit,
+                    //       isSecret: false,
+                    //     ));
+                    //
+                    // // Check if the result is true, refresh the home page
+                    // if (result == true) {
+                    //   log("pop");
+                    //   await chatsCubit
+                    //       .getChatsByCategory(ChatCategories.social);
+                    //   setState(() {});
+                    // }
+                  },
+                )
+                    : const SizedBox.shrink(),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: expandedOptions
+                    ? ChatOptions(
+                  key: const ValueKey(3),
+                  icon: Icons.emoji_people,
+                  text: LocaleKeys.greet.localize,
+                  onTap: () async {
+                    // final result = await context.push(Routes.ARCHIVEDCHATS,
+                    //     extra: OptionsChatsViewParams(
+                    //       category: ChatCategoriesIds.greet,
+                    //       chatsCubit: chatsCubit,
+                    //       isSecret: false,
+                    //     ));
+                    //
+                    // // Check if the result is true, refresh the home page
+                    // if (result == true) {
+                    //   log("pop");
+                    //   await chatsCubit
+                    //       .getChatsByCategory(ChatCategories.social);
+                    //   setState(() {});
+                    // }
+                  },
+                )
+                    : const SizedBox.shrink(),
+              ),
+              // const Divider(),
+              _buildSocialConversations(),
+
+              // const MessagesAreEndToEndEncrypted(),
+            ],
+          ),
         );
       case "services":
         return Column(
@@ -565,7 +568,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
             ),
             ChatOptions(
               icon: Icons.archive_outlined,
-              text: context.isArabic ? "المؤرشفة" : "Archived",
+              text: context.isArabic ? "مؤرشفة" : "Archived",
               onTap: () async {
                 // final result = await context.push(Routes.ARCHIVEDCHATS,
                 //     extra: OptionsChatsViewParams(
@@ -596,7 +599,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                 key: const ValueKey(4),
                 icon: Icons.mail_lock_outlined,
                 text: context.isArabic
-                    ? "الدردشات المغلقة"
+                    ? "دردشه مغلقة"
                     : "Locked chats",
                 // onTap: () async {
                 //   final result = await context.push(Routes.ARCHIVEDCHATS,
@@ -746,48 +749,67 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
             return GlowingOverscrollIndicator(
               axisDirection: AxisDirection.down,
               color: AppColors.SECONDARY_COLOR,
-              child: ListView.separated(
-                shrinkWrap: false,
-                physics: const AlwaysScrollableScrollPhysics(),
-                // Enable scrolling
-                itemBuilder: (context, index) {
-                  if(index >= context.read<ConversationsCubit>().socialConversations.length){
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Shimmer.fromColors(
-                              baseColor: context.isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
-                              highlightColor: context.isDarkMode ? Colors.grey[700]! : Colors.grey[100]!,
-                              child: ChatCard(
-                                chat: null,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.separated(
+                      shrinkWrap: false,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      // Enable scrolling
+                      itemBuilder: (context, index) {
+                        if(index == context.read<ConversationsCubit>().socialConversations.length){
+                          return Column(
+                            children: [
+                              SizedBox(height: 16.h,),
+                               Divider(
+                                thickness: 1,
+                                color: Colors.grey.withValues(alpha: 0.2),
+                              ),
+                              const MessagesAreEndToEndEncrypted(),
+                            ],
+                          );
+                        }
+                        if(index >= context.read<ConversationsCubit>().socialConversations.length + 1){
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 16.h, left: 16.w, right: 16.w),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Shimmer.fromColors(
+                                    baseColor: context.isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
+                                    highlightColor: context.isDarkMode ? Colors.grey[700]! : Colors.grey[100]!,
+                                    child: ChatCard(
+                                      chat: null,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                  return Slidable(
-                    key: ValueKey(index),
-                    closeOnScroll: false,
+                          );
+                        }
+                        return Slidable(
+                          key: ValueKey(index),
+                          closeOnScroll: false,
 
-                    child: ChatCard(
-                      chat: context.read<ConversationsCubit>().socialConversations[index],
+                          child: ChatCard(
+                            chat: context.read<ConversationsCubit>().socialConversations[index],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox();
+                      },
+                      itemCount: (context.read<ConversationsCubit>().socialConversations.length + 1) +
+                          ((context.read<ConversationsCubit>().isLoadingMoreSocialConversation &&
+                              context.read<ConversationsCubit>().socialConversations.isNotEmpty)
+                              ? 10
+                              : 0),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox();
-                },
-                itemCount: context.read<ConversationsCubit>().socialConversations.length +
-                    ((context.read<ConversationsCubit>().isLoadingMoreSocialConversation &&
-                        context.read<ConversationsCubit>().socialConversations.isNotEmpty)
-                        ? 10
-                        : 0),
+                  ),
+                  // const MessagesAreEndToEndEncrypted(),
+                ],
               ),
             );
           }
@@ -1351,22 +1373,22 @@ class ChatOptions extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
         child: Row(
           children: [
             Icon(
               icon,
               color:
-              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              context.isDarkMode ? Colors.white : AppColors.grey,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 26),
             Label(
               text: text,
               style: Styles.mediumText(
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w800,
                 fontSize: 32,
                 color:
-                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                context.isDarkMode ? Colors.white : AppColors.grey,
               ),
             ),
           ],

@@ -125,62 +125,66 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
           ),
         );
       },
-      child: Column(
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-          //   child: Divider(
-          //     thickness: 1,
-          //     color:context.isDarkMode?Colors.white12: Colors.black12,
-          //     height: 5,
-          //   ),
-          //
-          // ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 24,),
-                const Icon(
-                  Icons.lock_outline,
-                  size: 24,
-                ),
-                Spacer(),
-                Column(
-                  children: [
-                    Label(
-                      text: "${LocaleKeys.yourPersonalMessages.localize} ",
-                      style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        color:context.isDarkMode?Colors.white: Colors.black,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(
+          children: [
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+            //   child: Divider(
+            //     thickness: 1,
+            //     color:context.isDarkMode?Colors.white12: Colors.black12,
+            //     height: 5,
+            //   ),
+            //
+            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 16,),
+                  const Icon(
+                    Icons.lock_outline,
+                    size: 18,
+                    color: AppColors.GREY_DARK_COLOR,
+                  ),
+                  Spacer(),
+                  Column(
+                    children: [
+                      Label(
+                        text: "${LocaleKeys.yourPersonalMessages.localize} ",
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color:context.isDarkMode?Colors.white: Colors.grey,
+                        ),
                       ),
-                    ),
-                    Label(
-                      text: LocaleKeys.endToEndEncryption.localize,
-                      style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        color: AppColors.PRIMARY_COLOR_DARK,
+                      Label(
+                        text: LocaleKeys.endToEndEncryption.localize,
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: AppColors.PRIMARY_COLOR_DARK,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                const Icon(
-                  Icons.lock_outline,
-                  size: 24,
-                  color: Colors.transparent,
-                ),
-                SizedBox(
-                  width: 24,),
-              ],
+                    ],
+                  ),
+                  Spacer(),
+                  // const Icon(
+                  //   Icons.lock_outline,
+                  //   size: 8,
+                  //   color: Colors.transparent,
+                  // ),
+                  // SizedBox(
+                  //   width: 16,),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

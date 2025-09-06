@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
@@ -102,6 +104,7 @@ class DI {
     serviceLocator.registerSingleton<SharedPreferences>(sharedPreferences);
 
     _callFeatureInjector();
+
     // //preloading
     serviceLocator.registerLazySingleton(() => OnBoardingCubit());
 
@@ -112,7 +115,6 @@ class DI {
       );
     } catch (e) {
       // Firebase might already be initialized, continue
-      print('Firebase already initialized or error: $e');
     }
 
     try {
@@ -121,6 +123,7 @@ class DI {
         carPlay: true,
         criticalAlert: true,
       );
+
       FirebaseMessaging.instance.subscribeToTopic('all');
     } catch (e) {
       print('Firebase messaging error: $e');
@@ -132,6 +135,7 @@ class DI {
     );
 
     await LocalizationService.init();
+
     await SQFLiteDataSource.instance.initDatabase();
     // final cred = await CacheManager.getAccessToken();
     // CliLogger.info('token from getit $cred');
@@ -292,6 +296,7 @@ class DI {
         serviceLocator(),
       ),
     );
+
     // serviceLocator.registerLazySingleton<ApiClientHelper>(
     //   () => ApiClientHelperImp(),
     // );
@@ -306,12 +311,17 @@ class DI {
       () => JsonParser(),
     );
 
+
+
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
+
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
+
     //captain share service locator
     CaptainShareServiceLocator.execute(serviceLocator: serviceLocator);
+
     // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);

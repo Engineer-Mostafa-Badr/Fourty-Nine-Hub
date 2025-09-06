@@ -23,6 +23,7 @@ class CacheManager {
   static const isChoiceRuler = 'isChoiceRuler';
   static const isChoiceRulerEnabled = 'isChoiceRulerEnabled';
   static const showOnboarding = 'showOnboarding';
+  static const forgotPasswordTimerKey = 'forgotPasswordTimer';
 
   // static const themeLightKey = 'lightTheme';
 
@@ -188,6 +189,40 @@ class CacheManager {
       final prefs = await SharedPreferences.getInstance();
       print('isShowOnboarding ${prefs.getBool(showOnboarding)}');
       return prefs.getBool(showOnboarding) ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Save forgot password timer
+  static Future<bool> saveForgotPasswordTimer(DateTime timerEnd) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return await prefs.setString(forgotPasswordTimerKey, timerEnd.toIso8601String());
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Get forgot password timer
+  static Future<DateTime?> getForgotPasswordTimer() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final timerString = prefs.getString(forgotPasswordTimerKey);
+      if (timerString != null) {
+        return DateTime.parse(timerString);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Clear forgot password timer
+  static Future<bool> clearForgotPasswordTimer() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return await prefs.remove(forgotPasswordTimerKey);
     } catch (e) {
       return false;
     }

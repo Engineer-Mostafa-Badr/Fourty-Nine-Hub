@@ -5,6 +5,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import '../../../../../core/utils/shared_pref.dart';
 
 part 'create_new_forgot_password_state.dart';
 
@@ -37,7 +38,9 @@ class CreateNewForgotPasswordCubit extends Cubit<CreateNewForgotPasswordState> {
               currentContext, getFailureMessage(failure, currentContext));
           emit(CreateNewForgotPasswordFailure(failure));
         },
-        (success) {
+        (success) async {
+          // Clear the forgot password timer when password is successfully changed
+          await CacheManager.clearForgotPasswordTimer();
           emit(CreateNewForgotPasswordSuccess());
         },
       );

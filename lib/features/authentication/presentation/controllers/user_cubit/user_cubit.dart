@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -27,7 +28,10 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/update_us
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_name_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';
@@ -117,10 +121,19 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     String? accessToken = await CacheManager.getAccessToken();
     String? refreshToken = await CacheManager.getRefreshToken();
     if (accessToken != null && refreshToken != null) {
-      _attachTokenUseCase(UserTokensEntity(
+      final tokens = UserTokensEntity(
         accessToken: accessToken,
         refreshToken: refreshToken,
-      ));
+      );
+      _attachTokenUseCase(tokens);
+      
+      // Set up token refresh callback
+      final apiConsumer = serviceLocator<ApiConsumer>();
+      apiConsumer.setTokenRefreshCallback((UserTokensEntity refreshedTokens) {
+        // Update the app's authentication state when token is refreshed
+        _attachTokenUseCase(refreshedTokens);
+        isTokenAttached = true;
+      });
     }
     isTokenAttached = accessToken != null && refreshToken != null;
     await getUser();
@@ -193,6 +206,14 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         // تحديث التوكن في الـ API
         _attachTokenUseCase(tokens);
         isTokenAttached = true;
+
+        // Set up token refresh callback
+        final apiConsumer = serviceLocator<ApiConsumer>();
+        apiConsumer.setTokenRefreshCallback((UserTokensEntity refreshedTokens) {
+          // Update the app's authentication state when token is refreshed
+          _attachTokenUseCase(refreshedTokens);
+          isTokenAttached = true;
+        });
 
         // جلب بيانات المستخدم
         await getUser();
@@ -300,10 +321,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   // }
 
   Future<Either<Failure, UserEntity>?> getUser() async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     if (!isTokenAttached || isGuestMode) return null;
-
+    print("🚀 getUser() called");
     final result = await _getUserUseCase(const NoParams());
-    SharedWebSocket.connect(token: (await CacheManager.getAccessToken())!);
+    SharedWebSocket.connect(token: (await CacheManager.getAccessToken())??'');
 
     emit(
       result.fold(
@@ -394,7 +416,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
   Future<void> logout(BuildContext context) async {
     emit(state.copyWith(status: StateStatus.loading));
-
+    print("isGuestMode $isGuestMode");
     if (isGuestMode) {
       // مسح Guest state
       final result = await _checkGuestStateUseCase(const NoParams());
@@ -413,8 +435,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       // تسجيل خروج عادي
       final result = await _signOutUseCase(const NoParams());
       result.fold(
-        (l) => emit(state.copyWith(status: StateStatus.error)),
+        (l) {
+          var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+          currentContext.pop();
+          currentContext.pop();
+          showErrorMessage(currentContext, currentContext.isArabic?'حدث خطأ':'Something went wrong');
+          emit(state.copyWith(status: StateStatus.error));
+        },
         (r) async {
+          setLogOut();
           emit(state.copyWith(
             status: StateStatus.success,
             token: null,
@@ -424,6 +453,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         },
       );
     }
+  }
+
+  Future<void> setLogOut() async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("ISLOGIN", false);
+    currentContext.pop();
+    currentContext.pop();
+    currentContext.pushReplacement(Routes.HOME);
   }
 
   // Future<void> getUnreadedChatsCounter() async {

@@ -18,6 +18,7 @@ import '../features/social_media/reels/domain/use_case/upload_video_reel_use_cas
 import '../features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:get_it/get_it.dart';
+import '../features/reels_feature/presentation/controllers/reels_cubit.dart' as tiktok_reels;
 
 class ReelsServiceLocator {
   static void execute({required GetIt serviceLocator}) {
@@ -118,22 +119,8 @@ class ReelsServiceLocator {
     );
 
     serviceLocator.registerLazySingleton(() => PreloadBloc());
-    serviceLocator.registerLazySingleton<ReelsCubit>(
-      () => ReelsCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator()),
+    serviceLocator.registerLazySingleton<tiktok_reels.TiktokCubit>(
+      () => tiktok_reels.TiktokCubit(),
     );
   }
 }

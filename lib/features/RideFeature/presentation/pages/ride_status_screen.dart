@@ -144,6 +144,7 @@ class ActionButtonsWidget extends StatelessWidget {
   final VoidCallback onSafety;
   final VoidCallback? onMessage;
   final bool? is_show_message;
+  final EdgeInsetsGeometry? padding;
   const ActionButtonsWidget({
     super.key,
     required this.driverImageUrl,
@@ -153,12 +154,13 @@ class ActionButtonsWidget extends StatelessWidget {
     this.is_show_message = false,
     required this.onSafety,
     this.onMessage,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding:padding?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

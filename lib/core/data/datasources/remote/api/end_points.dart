@@ -520,6 +520,9 @@ class EndPoints {
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
 
+  static String iamComing(String id) =>
+      "$developmentBaseUrl/captain-share/routes/$id/iam-coming";
+
   static String routeDetails(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
   static String runningRoute =
