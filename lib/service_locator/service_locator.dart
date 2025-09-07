@@ -37,6 +37,7 @@ import 'carpool_service_locator.dart';
 import 'club_voice_service_locator.dart';
 import 'competition_service_locator.dart';
 import 'conversations_service_locator.dart';
+import 'currency_service_locator.dart';
 import 'edit_food_service_locator.dart';
 import 'face_book_service_locator.dart';
 import 'follow_service_locator.dart';
@@ -60,6 +61,7 @@ import 'subcategories_service_locator.dart';
 import 'tinder_service_locator.dart';
 import 'transfer_money_service_locator.dart';
 import 'trip_join_service_locator.dart';
+import 'tube_service_locator.dart';
 import 'twitter_service_locator.dart';
 import 'wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
@@ -382,7 +384,7 @@ class DI {
     EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
-    StarServiceLocator.execute(serviceLocator: serviceLocator);
+    // StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
@@ -391,6 +393,11 @@ class DI {
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
     NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
     SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
+    //! Tube
+    TubeServiceLocator.execute(serviceLocator: serviceLocator);
+
+    //! Exchange Currency
+    CurrencyServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

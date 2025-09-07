@@ -15,7 +15,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/subscribe_button_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -23,6 +22,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+
+import '../controller/star_cubit/star_cubit.dart';
 
 class BeStarHeaderSection extends StatelessWidget {
   final StarState state;
@@ -36,7 +37,7 @@ class BeStarHeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     log("Banner Title: ${state.banner?.titleAr} ${state.banner?.titleEn}");
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.only(left: 16.w, right: 16.w),
       child: Column(
         children: [
           // Banner Image
@@ -57,32 +58,31 @@ class BeStarHeaderSection extends StatelessWidget {
           Row(
             children: [
               // Title
-              // Text(
-              //   // (state.banner?.titleAr ?? state.banner?.titleEn ?? '')
-              //   //     .toArabicNumbers(context),
-              //   context.isArabic
-              //       ? state.banner?.titleAr ?? ''
-              //       : state.banner?.titleEn ?? '',
-              //   textAlign: TextAlign.center,
-              //   style: Styles.mediumText(
-              //     fontSize: MediaQuery.of(context).size.width * 0.05,
-              //     fontWeight: FontWeight.w500,
-              //     color: context.isDarkMode
-              //         ? Colors.white
-              //         : AppColors.PRIMARY_COLOR,
-              //   ),
-              // ),
-              AutoSizeText(
-                context.isArabic
-                    ? state.banner?.titleAr ?? ''
-                    : state.banner?.titleEn ?? '',
-                // style: TextStyle(
-                //     fontSize: MediaQuery.of(context).size.width * 0.02),
+              Flexible(
+                child: Text(
+                  context.isArabic
+                      ? state.banner?.titleAr ?? ''
+                      : state.banner?.titleEn ?? '',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.w500,
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
+
               Sizer(),
               // Hint Button
+
               InkWell(
-                onTap: () => _showHintDialog(context),
+                onTap: () {
+                  ManageVibration.vibrate();
+                  _showHintDialog(context);
+                },
                 child: SvgPicture.asset(
                   Assets.idea,
                   height: 24,
@@ -91,12 +91,15 @@ class BeStarHeaderSection extends StatelessWidget {
               ),
             ],
           ),
+          // Row(
+
           const Sizer(),
 
           // Subtitle
           Align(
-            alignment:
-                context.isArabic ? Alignment.centerRight : Alignment.centerLeft,
+            alignment: context.isArabic
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
             child: Text(
               // text: (state.banner?.subTitleAr ?? state.banner?.subTitleEn ?? '')
               //     .toArabicNumbers(context),
@@ -115,13 +118,17 @@ class BeStarHeaderSection extends StatelessWidget {
 
           // Subscribe Button
           Align(
-            alignment:
-                context.isArabic ? Alignment.centerLeft : Alignment.centerRight,
+            alignment: context.isArabic
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
             child: SubscribeButton(
               text: LocaleKeys.subscribe.localize,
               icon: Assets.ideaIcon,
               isSelected: true,
-              onTap: () => _handleSubscribe(context),
+              onTap: () {
+                ManageVibration.vibrate();
+                _handleSubscribe(context);
+              },
               onShowHint: () => _showSubscribeHint(context),
             ),
           ),
@@ -189,18 +196,23 @@ class BeStarHeaderSection extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Label(
-              text: context.isArabic
-                  ? 'اشترك لإبقاء الصوت في الخلفية'
-                  : 'Subscribe to remain voice in background',
-              style: TextStyle(
-                color: const Color(0xffFF0808),
-                fontSize: 25.sp,
-                fontWeight: FontWeight.bold,
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Label(
+                text: context.isArabic
+                    ? 'اشترك لإبقاء الصوت في الخلفية'
+                    : 'Subscribe to remain voice in background',
+                style: TextStyle(
+                  color: const Color(0xffFF0808),
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
         );

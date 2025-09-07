@@ -8,7 +8,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/duration_helper.dart';
 import '../../../../res/assets/assets.dart';
 import '../../domain/entity/star_winner_entity.dart';
-import '../controller/cubit/star_cubit.dart';
+import '../controller/star_cubit/star_cubit.dart';
 
 class AllWinnerGridView extends StatelessWidget {
   final List<StarWinnerEntity>? winner;
@@ -26,9 +26,9 @@ class AllWinnerGridView extends StatelessWidget {
         childAspectRatio: 0.65,
       ),
       itemBuilder: (context, index) {
-        if (index == starCubit.winner.length) {
-          return const Center(child: CustomCircularProgressIndicator());
-        }
+        // if (index == starCubit.winners.length) {
+        //   return const Center(child: CustomCircularProgressIndicator());
+        // }
         return _buildWinnerCard(winner![index]);
       },
       itemCount: winner?.length ?? 0,

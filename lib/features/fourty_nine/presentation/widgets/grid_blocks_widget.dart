@@ -280,17 +280,15 @@ class GridBlocksWidget extends StatelessWidget {
         image: Assets.chanceImage,
         title: LocaleKeys.chance.localize,
       ),
-
       _buildStarWidget(
         context,
         onTap: () {
           ManageVibration.vibrate();
-          soonDialog(context);
-          // AdInterstitialTop.loadIntersitialAd();
-          // AdInterstitialTop.showInterstitialAd();
-          // context.push(Routes.MARRIAGESUBCATEGORIES);
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          context.push(Routes.EXCHANGECURRENCY);
         },
-        shadowColor: Colors.pinkAccent.withValues(alpha: 0.9),
+        shadowColor: Colors.green.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
         title: context.isArabic ? 'عملات' : 'Exchange',
       ),
