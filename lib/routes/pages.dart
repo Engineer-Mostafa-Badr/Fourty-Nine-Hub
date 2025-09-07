@@ -3764,7 +3764,7 @@ class AppPages {
                         create: (_) => serviceLocator<ViewAllTripJoinCubit>(),
                       ),
                     ],
-                    child: const TripJoinCreateAdView(),
+                    child: TripJoinCreateAdView(isFromPickMe: state.extra as bool,),
                     //const TripJoinView(),
                   ),
                 ),

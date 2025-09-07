@@ -48,9 +48,9 @@ class ConversationsRemoteDataSourceImpl
       SharedWebSocket.socket!.on('conversation:update-list', (data) {
         log("decoded data : \n$data");
         try {
-          final decodedData = jsonDecode(data);
-          CliLogger.info("Listen to Update Social List :  $decodedData");
-          params(ConversationModel.fromJson(decodedData));
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("Listen to Update Social List :  $data");
+          params(ConversationModel.fromJson(data));
         } catch (e) {
           CliLogger.error("Listen to Update Social List Error :  $e");
         }
@@ -82,12 +82,13 @@ class ConversationsRemoteDataSourceImpl
   void listenToStartTyping(Function(String) params) {
     try {
       // serviceLocator<Socket>().connect();
-      SharedWebSocket.socket!.on('conversation:typing-started', (data) {
+      SharedWebSocket.socket!.on('conversation:user-typing', (data) {
         log("decoded data : \n$data");
         try {
-          final decodedData = jsonDecode(data);
-          CliLogger.info("Listen to Start Typing :  $decodedData");
-          params(decodedData['conversationId']);
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("Listen to Start Typing :  $data");
+          // Listen to Start Typing :  {conversationId: 6891db829fd423658d5c72ff}
+          params(data['conversationId']);
         } catch (e) {
           CliLogger.error("Listen to Start Typing Error :  $e");
         }
@@ -122,9 +123,10 @@ class ConversationsRemoteDataSourceImpl
       SharedWebSocket.socket!.on('conversation:user-stopped-typing', (data) {
         log("decoded data : \n$data");
         try {
-          final decodedData = jsonDecode(data);
-          CliLogger.info("Listen to Stop Typing :  $decodedData");
-          params(decodedData['conversationId']);
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("Listen to Stop Typing :  $data");
+          // Listen to Stop Typing :  {conversationId: 6891db829fd423658d5c72ff}
+          params(data['conversationId']);
         } catch (e) {
           CliLogger.error("Listen to Stop Typing Error :  $e");
         }

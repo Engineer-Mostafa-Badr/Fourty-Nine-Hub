@@ -55,14 +55,14 @@ class AuthInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 && _token != null) {
       final requestOptions = err.requestOptions;
-      
+
       // Skip if this is the refresh token request itself
       if (requestOptions.path.contains('/auth/refresh-token')) {
         print('🔐 AuthInterceptor: Refresh token request failed, not retrying');
         super.onError(err, handler);
         return;
       }
-      
+
       print('🔐 AuthInterceptor: 401 error for ${requestOptions.method} ${requestOptions.path}');
 
       if (_isRefreshing) {
@@ -71,7 +71,7 @@ class AuthInterceptor extends Interceptor {
         final completer = Completer<Response>();
         _retryQueue.add(completer);
         _queuedRequests.add(requestOptions);
-        
+
         return completer.future.then((r) => handler.resolve(r)).catchError((e) {
           handler.reject(e);
         });
@@ -101,10 +101,10 @@ class AuthInterceptor extends Interceptor {
               queryParameters: requestOptions.queryParameters,
               extra: requestOptions.extra,
             );
-            
+
             // Update headers with new token
             originalRequestOptions.headers['Authorization'] = 'Bearer ${newToken.accessToken}';
-            
+
             print('🔄 AuthInterceptor: Retrying original request: ${requestOptions.method} ${requestOptions.path}');
             final response = await serviceLocator<Dio>().fetch(originalRequestOptions);
             print('✅ AuthInterceptor: Original request retried successfully');
@@ -115,9 +115,9 @@ class AuthInterceptor extends Interceptor {
               try {
                 final queuedRequestOptions = _queuedRequests[i];
                 final completer = _retryQueue[i];
-                
+
                 print('🔄 AuthInterceptor: Retrying queued request ${i + 1}: ${queuedRequestOptions.method} ${queuedRequestOptions.path}');
-                
+
                 // Create a new request options for each queued request
                 final retryRequestOptions = RequestOptions(
                   method: queuedRequestOptions.method,
@@ -128,10 +128,10 @@ class AuthInterceptor extends Interceptor {
                   queryParameters: queuedRequestOptions.queryParameters,
                   extra: queuedRequestOptions.extra,
                 );
-                
+
                 // Update headers with new token
                 retryRequestOptions.headers['Authorization'] = 'Bearer ${newToken.accessToken}';
-                
+
                 final retryResponse = await serviceLocator<Dio>().fetch(retryRequestOptions);
                 completer.complete(retryResponse);
                 print('✅ AuthInterceptor: Queued request ${i + 1} retried successfully');
@@ -200,7 +200,7 @@ class AuthInterceptor extends Interceptor {
       serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
-      
+
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
