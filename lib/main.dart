@@ -53,14 +53,23 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import 'features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'routes/pages.dart';
 
 // Global key for ToastificationWrapper to prevent recreation during network changes
 final GlobalKey _toastificationKey = GlobalKey();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await CacheManager.init();
+
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    await LocalizationService.init(); // Initialize Easy Localization
+
+    await CacheManager.init();
+  } catch (e, stackTrace) {
+    return; // Exit if initialization fails
+  }
   timeago.setLocaleMessages('en', timeago.EnMessages());
   timeago.setLocaleMessages('ar', timeago.ArMessages());
 //  await  initPickMeFeature();
@@ -82,38 +91,39 @@ void main() async {
   //       textColor: Colors.white,
   //       fontSize: 16.0
   //   );
-  //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
   // Do something with the new location
   // });
 
-  await CacheServiceImpl.init();
-  await DI.execute();
-  serviceLocator<FcmNotificationHelper>().getFcmToken();
-  await Geolocator.checkPermission().then(
-    (value) {
-      if (value == LocationPermission.denied) {
-        // Geolocator.requestPermission();
-      }
-    },
-  );
-  // ZegoGiftManager().cache.cache(giftItemList);
-  isActivate = await CacheManager.getActivation() ?? false;
-  isShowOnboarding = await CacheManager.getShowOnboarding();
-  // isShowOnboarding = false;
-  await CacheManager.getFloatingNavigator();
-  //Admob.initialize();
-
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  final customPageCubit = serviceLocator<CustomPageCubit>();
-  await customPageCubit.fetchActivate();
+  try {
+    await CacheServiceImpl.init();
+    await DI.execute();
+    serviceLocator<FcmNotificationHelper>().getFcmToken();
+  } catch (e, stackTrace) {
+    return; // Exit if service initialization fails
+  }
+  try {
+    await Geolocator.checkPermission().then(
+      (value) {
+        if (value == LocationPermission.denied) {
+          // Geolocator.requestPermission();
+        }
+      },
+    );
+    isActivate = await CacheManager.getActivation() ?? false;
+    isShowOnboarding = await CacheManager.getShowOnboarding();
+    await CacheManager.getFloatingNavigator();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final customPageCubit = serviceLocator<CustomPageCubit>();
+    await customPageCubit.fetchActivate();
+  } catch (e, stackTrace) {
+    return; // Exit if post-service initialization fails
+  }
 
   // final isActivated =  false;
   // Routes.onBoardingScreen
-  print('will go onBoardingScreen ${!isShowOnboarding}');
   // final initialRoute = Routes.ChooseLangScreen;
   isActivate = await CacheManager.getActivation() ?? false;
   isShowOnboarding = await CacheManager.getShowOnboarding();
@@ -123,20 +133,24 @@ void main() async {
   //     : isActivate
   //         ? Routes.PAGEPREVIEW
   //         : Routes.HOME;
-  await requestTrackingPermission();
-  AppPages.initializeRouter(initialRoute);
-  await LocationServiceWatcher().start();
-  runApp(
+  try {
+    await requestTrackingPermission();
+    AppPages.initializeRouter(initialRoute);
+    await LocationServiceWatcher().start();
+    runApp(
     LocalizationService.rootWidget(
-      child: Phoenix(
-        child: DevicePreview(
-          enabled: false,
-          builder: (context) => const MyApp(),
-        ),
-      ),
-      // child: const MyApp(),
+      child: const MyApp(), // Test without Phoenix and DevicePreview
+      // child: Phoenix(
+      //   child: DevicePreview(
+      //     enabled: false,
+      //     builder: (context) => const MyApp(),
+      //   ),
+      // ),
     ),
   );
+  } catch (e, stackTrace) {
+    return; // Exit if final initialization fails
+  }
 }
 Future<void> requestTrackingPermission() async {
   final status = await AppTrackingTransparency.trackingAuthorizationStatus;
@@ -169,7 +183,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     var calls = await FlutterCallkitIncoming.activeCalls();
     if (calls is List) {
       if (calls.isNotEmpty) {
-        print('DATA: $calls');
         return calls[0];
       } else {
         return null;
@@ -180,7 +193,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> getDevicePushTokenVoIP() async {
     var devicePushTokenVoIP =
     await FlutterCallkitIncoming.getDevicePushTokenVoIP();
-    print(devicePushTokenVoIP);
   }
 
   Future getToken() async {
@@ -211,17 +223,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             create: (context) =>
                 serviceLocator<MainCategoriesCubit>()),
         BlocProvider(
-          create: (context) => serviceLocator<UserCubit>()..attachToken(), //..getUser(),
+          create: (context) => serviceLocator<UserCubit>(), //..getUser(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<CreatePostCubit>()..loadData(),
+          create: (context) => serviceLocator<CreatePostCubit>(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
+          create: (context) => serviceLocator<SecretsCubit>(),
         ),
         BlocProvider(
           create: (context) =>
               serviceLocator<OnBoardingCubit>()..changeOnboardingData(0),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CommentCubit>(),
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
@@ -244,7 +259,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (context) => ThemeCubit()..getMode(),
         ),
         BlocProvider<CustomPageCubit>(
-          create: (context) => serviceLocator()..fetchActivate(),
+          create: (context) => serviceLocator(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
@@ -255,7 +270,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider<GetUnreadNotificationsCountCubit>(
           create: (context) => GetUnreadNotificationsCountCubit(
             getUnreadNotificationsCountUseCase: serviceLocator(),
-          )..getUnreadNotificationsCount(),
+          ),
         ),
         BlocProvider<GetAppNotificationsCubit>(
           create: (context) => GetAppNotificationsCubit(
@@ -298,14 +313,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //         )),
         // BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
-          create: (context) => FloatingNavigatorCubit()
-            ..getFloatingNavigatorStatus()
-            ..getEnableFloatingNavigatorStatus(),
-        ),
+          create: (context) => FloatingNavigatorCubit()),
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
-            ..getChoiceRulerStatus()
-            ..getChoiceRulerEnabledStatus(),
         ),
       ],
       child: ScreenUtilInit(

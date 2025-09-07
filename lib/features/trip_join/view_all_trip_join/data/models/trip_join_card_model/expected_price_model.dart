@@ -31,8 +31,8 @@ class ExpectedPriceTripModel extends ExpectedPriceTripEntity {
     }
 
     return ExpectedPriceTripModel(
-      pricePerSeat: (json['pricePerSeat'] ?? 0).toDouble(),
-      distance: (json['distance'] ?? 0).toDouble(),
+      pricePerSeat: (json['finalPricePerSeat'] ?? 0).toDouble(),
+      distance: (json['totalDistance'] ?? 0).toDouble(),
       duration: (json['duration'] ?? 0).toDouble(),
       destinationAddress: json['destinationAddress'] ?? '',
       originAddress: json['originAddress'] ?? '',

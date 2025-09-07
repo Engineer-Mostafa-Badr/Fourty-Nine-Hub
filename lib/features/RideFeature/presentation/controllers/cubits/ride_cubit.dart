@@ -772,6 +772,9 @@ class RideCubit extends Cubit<RideState> {
   bool loadingHomeData = false;
   Future<void> initHome(BuildContext context) async {
     loadingHomeData = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showLoadingDialog(context, canPop: false);
+    });
     emit(state.copyWith(status: RideStates.loading));
     await Future.wait([
       // _fetchUserLocation(),
@@ -793,7 +796,7 @@ class RideCubit extends Cubit<RideState> {
     ]);
     state.rideExpectedPrice = null;
     phoneNumberController.clear();
-    state.requestedTrip = null;
+    // state.requestedTrip = null;
     state.currentLocation = null;
     state.toLocation = null;
     state.wayPointOne = null;
@@ -847,6 +850,7 @@ class RideCubit extends Cubit<RideState> {
       }
     }
     loadingHomeData = false;
+    context.pop();
     emit(state.copyWith(status: RideStates.success));
   }
 
@@ -1551,6 +1555,7 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<void> updateTripPriceStatus({required double newOfferPrice}) async {
+    showLoadingDialog(AppPages.router.configuration.navigatorKey.currentContext!);
     final Either<Failure, bool> result = await updateTripPriceUseCase(
       UpdateTripPriceUseCaseParams(
         newOfferPrice: newOfferPrice,
@@ -1561,11 +1566,16 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
+
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (status) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
         if (state.requestedTrip != null && state.requestedTrip!.price != null) {
           final newPrice = state.requestedTrip!.price! + newOfferPrice;
           final updatedTrip = state.requestedTrip!.copyWith(price: newPrice);

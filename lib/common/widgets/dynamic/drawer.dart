@@ -103,7 +103,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         // )
                         //     : _buildLoginWidget(context: context),
                         context.read<UserCubit>().isLoggedIn
-                            ? accountWidget(context: context, user: state.data)
+                            ? accountWidget(context: context, user: UserCubit.to.state.data)
                             : _buildLoginWidget(context: context),
                         Divider(
                           color: context.isDarkMode
@@ -971,6 +971,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     required BuildContext context,
     required UserEntity? user,
   }) {
+    print("Test User ${user?.firstName}");
     // context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
@@ -1185,13 +1186,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   children: [
                     Row(
                       children: [
-                        Label(
-                          text: _getFirstTwoWords(user?.fullName ?? ''),
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.bold,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                        Expanded(
+                          child: Label(
+                            text: _getFirstTwoWords(user?.fullName ?? ''),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -1292,8 +1297,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       value: context
                           .read<CustomPageCubit>()
                           .state
-                          .activate!
-                          .customPage,
+                          .activate?.customPage??false,
                       onChanged: (value) async {
                         showAnimatedDialog(
                           context,

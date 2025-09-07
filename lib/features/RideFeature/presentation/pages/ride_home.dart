@@ -931,6 +931,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         builder: (context, state) {
           dev.log("state.requestedTrip?.status ${state.requestedTrip?.status}");
           var cubit = serviceLocator<RideCubit>();
+
           return PopScope(
             canPop: false,
             onPopInvokedWithResult: (c, v) async {
@@ -943,7 +944,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: cubit.loadingHomeData == true
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const SizedBox()
                   : Form(
                       key: _formKey,
                       child: SafeArea(

@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
@@ -309,7 +310,13 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<Either<Failure, void>> logout() async {
-    var result = await _apiConsumer.post(EndPoints.logout);
+    String? refreshToken = await CacheManager.getRefreshToken();
+    String? deviceId = await getDeviceId();
+    var params = {
+      "refreshToken": refreshToken,
+      "deviceId": deviceId
+    };
+    var result = await _apiConsumer.post(EndPoints.logout, data: params);
     return result.fold((l) => Left(l), (r) async {
       await CacheManager.deleteAllTokens();
       _apiConsumer.removeTokenFromHeader();

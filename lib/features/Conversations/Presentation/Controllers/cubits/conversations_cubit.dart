@@ -1,15 +1,138 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Entities/conversation_entity.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Entities/conversations_pagination.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Usecases/get_socail_conversations.dart';
+import 'package:fourtyninehub/features/Conversations/Domain/Usecases/listen_to_stop_typing_usecase.dart';
 import 'package:fourtyninehub/features/Conversations/Presentation/Controllers/cubits/conversation_states.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+
+import '../../../../../shared_web_socket.dart';
+import '../../../Domain/Usecases/listen_to_start_typing.dart';
+import '../../../Domain/Usecases/listen_to_update_social_list_usecase.dart';
+import '../../../Domain/Usecases/start_typing_usecase.dart';
+import '../../../Domain/Usecases/stop_typing_usecase.dart';
 
 class ConversationsCubit extends Cubit<ConversationsState> {
   final GetSocialConversations getSocialConversationsUseCase;
+  final ListenToUpdateSocialListUseCase listenToUpdateSocialListUseCase;
+  final StartTypingUseCase startTypingUseCase;
+  final ListenToStartTypingUseCase listenToStartTypingUseCase;
+  final StopTypingUseCase stopTypingUseCase;
+  final ListenToStopTypingUseCase listenToStopTypingUseCase;
+
 
   ConversationsCubit(
     this.getSocialConversationsUseCase,
-  ) : super(ConversationsState());
+    this.listenToUpdateSocialListUseCase,
+    this.startTypingUseCase,
+    this.listenToStartTypingUseCase,
+    this.stopTypingUseCase,
+    this.listenToStopTypingUseCase,
+  ) : super(ConversationsState()){
+    try {
+
+      SharedWebSocket.socket!.on('conversation:participant-joined', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-joined :  $data");
+
+          // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-joined Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-joined Error :  $e");
+    }
+
+
+    try {
+
+      SharedWebSocket.socket!.on('conversation:participant-left', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-left :  $data");
+
+          // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-left Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-left Error :  $e");
+    }
+
+
+    try {
+      SharedWebSocket.socket!.on('friend:status', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("friend:status :  $data");
+
+          // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
+
+        } catch (e) {
+          CliLogger.error("friend:status Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("friend:status Error :  $e");
+    }
+
+
+    _listenToUpdateSocialList();
+    _listenToStartTyping();
+    _listenToStopTyping();
+  }
+
+  _listenToUpdateSocialList() {
+    listenToUpdateSocialListUseCase((conversation) {
+      if(socialConversations.any((element) => element.conversationId == conversation.conversationId)){
+        // update conversation
+        socialConversations[socialConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
+      }
+      else{
+        socialConversations.add(conversation);
+      }
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  Future<void> startTyping(String conversationId) async {
+    final result = await startTypingUseCase(conversationId: conversationId);
+    result.fold((l) => null, (r) => null);
+  }
+
+  _listenToStartTyping() {
+    listenToStartTypingUseCase((conversationId) {
+      socialConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = true;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  Future<void> stopTyping(String conversationId) async {
+    final result = await stopTypingUseCase(conversationId: conversationId);
+    result.fold((l) => null, (r) => null);
+  }
+
+  _listenToStopTyping(){
+    listenToStopTypingUseCase((conversationId) {
+      socialConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = false;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+
 
   final int pageSize = 15;
   List<ConversationEntity> socialConversations = [];

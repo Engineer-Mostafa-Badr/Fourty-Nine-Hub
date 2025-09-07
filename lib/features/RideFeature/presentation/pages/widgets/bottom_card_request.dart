@@ -41,6 +41,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
     const Color switchInactiveTrack = Colors.white;
     const Color switchThumbColor = Color(0xFF0D0D26); // Dark navy color
 
+
     return BlocProvider.value(
       value: widget.rideCubit,
       child: Builder(
@@ -283,14 +284,21 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
   }
 }
 
-class OfferRow extends StatelessWidget {
+class OfferRow extends StatefulWidget {
   const OfferRow({super.key, required this.rideCubit});
   final RideCubit rideCubit;
 
   @override
+  State<OfferRow> createState() => _OfferRowState();
+}
+
+class _OfferRowState extends State<OfferRow> {
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: rideCubit,
+      value: widget.rideCubit,
       child: Builder(
         builder: (context) {
           return BlocBuilder<RideCubit, RideState>(
@@ -303,9 +311,17 @@ class OfferRow extends StatelessWidget {
                     // Decrease Button
                     GestureDetector(
                       onTap: () async {
+
       ManageVibration.vibrate();
+      if(isLoading) return;
                         if ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) return;
-                        await rideCubit.updateTripPriceStatus(newOfferPrice: -3);
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await widget.rideCubit.updateTripPriceStatus(newOfferPrice: -3);
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -329,9 +345,16 @@ class OfferRow extends StatelessWidget {
                     // Increase Button
                     GestureDetector(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
+                        if(isLoading) return;
                         if ((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) return;
-                        await rideCubit.updateTripPriceStatus(newOfferPrice: 3);
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await widget.rideCubit.updateTripPriceStatus(newOfferPrice: 3);
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
