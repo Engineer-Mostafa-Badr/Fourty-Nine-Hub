@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
+import '../../../../../res/assets/assets.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/user_star_entity.dart';
 
@@ -50,6 +53,8 @@ class ProfileHeader extends StatelessWidget {
     final bannerUrl =
         profile?.channelCover != null ? profile!.channelCover!.mediaKey : null;
 
+    log('bannerUrl: $bannerUrl');
+
     return Container(
       width: double.infinity,
       height: bannerHeight,
@@ -67,8 +72,8 @@ class ProfileHeader extends StatelessWidget {
                 fit: BoxFit.cover,
                 errorWidget: (context, error, stackTrace) {
                   return Image.asset(
-                    'assets/images/testforvideo.jpg',
-                    fit: BoxFit.cover,
+                    Assets.logo,
+                    fit: BoxFit.contain,
                   );
                 },
               ),

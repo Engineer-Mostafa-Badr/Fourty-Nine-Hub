@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -80,7 +81,9 @@ class VideoInfoSection extends StatelessWidget {
 
         // Views and Date
         Text(
-          '${_formatViews(talent.totalViews.toInt())} views • ${_formatDate(talent.createdAt)}',
+          !context.isArabic
+              ? '${_formatDate(talent.createdAt)} • ${_formatViews(talent.totalViews.toInt())} views'
+              : '${_formatViews(talent.totalViews.toInt())} views • ${_formatDate(talent.createdAt)}',
           style: TextStyle(
             fontSize: _getResponsiveFontSize(context, 12),
             color: Colors.grey[600],

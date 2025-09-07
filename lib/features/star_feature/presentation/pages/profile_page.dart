@@ -229,8 +229,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 return [
                   SliverToBoxAdapter(
                     child: ProfileHeader(
-                      profile:
-                          widget.isCurrentUser ? profileState.profile : null,
+                      profile: profileState.profile,
                       user: widget.user,
                       isCurrentUser: widget.isCurrentUser,
                       videosCount: _getVideosCount(profileState),

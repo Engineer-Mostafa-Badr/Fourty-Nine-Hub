@@ -228,6 +228,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                 Center(
                                   child: GestureDetector(
                                     onTap: () {
+                                      ManageVibration.vibrate();
                                       cubit.swapCurrencies();
                                       setState(() {});
                                     },

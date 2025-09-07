@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import 'talent_card_overlay_controls.dart';
@@ -49,7 +50,7 @@ class TalentCardInfoSection extends StatelessWidget {
                   ? NetworkImage(talent.user.image)
                   : null,
               child: talent.user.image.isEmpty
-                  ? Icon(Icons.person, size: 18, color: Colors.grey[600])
+                  ? Image(image: AssetImage(Assets.profile))
                   : null,
             ),
           ),

@@ -55,7 +55,7 @@ class TalentCardBuilders {
                   SizedBox(height: 16),
                   Text(
                     isSearching
-                        ? (context.isArabic
+                        ? (!context.isArabic
                             ? 'لا يوجد نتائج بحث'
                             : 'No search results found')
                         : LocaleKeys.noResultsFound.localize,
@@ -68,7 +68,7 @@ class TalentCardBuilders {
                   if (!isSearching) ...[
                     SizedBox(height: 8),
                     Text(
-                      context.isArabic
+                      !context.isArabic
                           ? 'اسحب للأسفل للتحديث'
                           : 'Pull down to refresh',
                       style: TextStyle(
@@ -143,7 +143,7 @@ class TalentCardBuilders {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    context.isArabic
+                    !context.isArabic
                         ? 'لا يوجد فيديوات مفضلة بعد'
                         : 'No favorite videos yet',
                     style: TextStyle(
@@ -154,7 +154,7 @@ class TalentCardBuilders {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    context.isArabic
+                    !context.isArabic
                         ? 'اضغط على القلب لإضافة فيديوات للمفضلة'
                         : 'Tap the heart icon to add videos to favorites',
                     style: TextStyle(
@@ -235,7 +235,7 @@ class TalentCardBuilders {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    context.isArabic
+                    !context.isArabic
                         ? 'لا يوجد فيديوات في التاريخ'
                         : 'No videos in history',
                     style: TextStyle(
@@ -246,7 +246,7 @@ class TalentCardBuilders {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    context.isArabic
+                    !context.isArabic
                         ? 'الفيديوات التي شاهدتها ستظهر هنا'
                         : 'Videos you watch will appear here',
                     style: TextStyle(
@@ -322,7 +322,7 @@ class TalentCardBuilders {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    context.isArabic
+                    !context.isArabic
                         ? 'لا توجد مقاطع فيديو بعد'
                         : 'No videos yet',
                     style: TextStyle(
@@ -333,7 +333,7 @@ class TalentCardBuilders {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    context.isArabic
+                    !context.isArabic
                         ? 'اضغط على "إضافة موهبة" لرفع أول فيديو'
                         : 'Tap "Add Talent" to upload your first video',
                     style: TextStyle(
@@ -404,7 +404,7 @@ class TalentCardBuilders {
               CustomCircularProgressIndicator(),
               SizedBox(height: 8),
               Text(
-                context.isArabic ? 'جاري التحميل...' : 'Loading...',
+                !context.isArabic ? 'جاري التحميل...' : 'Loading...',
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 14,
@@ -429,7 +429,7 @@ class TalentCardBuilders {
               ),
               SizedBox(height: 8),
               Text(
-                context.isArabic
+                !context.isArabic
                     ? 'لا يوجد المزيد من المحتوى'
                     : 'No more content',
                 style: TextStyle(
@@ -439,7 +439,7 @@ class TalentCardBuilders {
               ),
               SizedBox(height: 4),
               Text(
-                context.isArabic
+                !context.isArabic
                     ? 'اسحب للأسفل للتحديث'
                     : 'Pull down to refresh',
                 style: TextStyle(
@@ -460,7 +460,7 @@ class TalentCardBuilders {
           onPressed: () => cubit.loadTalents(category),
           icon: Icon(Icons.refresh, size: 18),
           label: Text(
-            context.isArabic ? 'تحميل المزيد' : 'Load More',
+            !context.isArabic ? 'تحميل المزيد' : 'Load More',
             style: TextStyle(fontSize: 14),
           ),
           style: ElevatedButton.styleFrom(

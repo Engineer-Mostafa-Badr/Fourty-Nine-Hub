@@ -312,12 +312,13 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       toolbarHeight: 30,
                       titleSpacing: 16,
                       leading: BackButton(
-                          onPressed: () {
-                            ManageVibration.vibrate();
-                            Navigator.pop(context);
-                          },
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black),
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                          Navigator.pop(context);
+                        },
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                      centerTitle: false,
                       title: Text(
                         'Tube',
                         style: TextStyle(

@@ -58,24 +58,9 @@ class BeStarHeaderSection extends StatelessWidget {
           Row(
             children: [
               // Title
-              // Text(
-              //   // (state.banner?.titleAr ?? state.banner?.titleEn ?? '')
-              //   //     .toArabicNumbers(context),
-              //   context.isArabic
-              //       ? state.banner?.titleAr ?? ''
-              //       : state.banner?.titleEn ?? '',
-              //   textAlign: TextAlign.center,
-              //   style: Styles.mediumText(
-              //     fontSize: MediaQuery.of(context).size.width * 0.05,
-              //     fontWeight: FontWeight.w500,
-              //     color: context.isDarkMode
-              //         ? Colors.white
-              //         : AppColors.PRIMARY_COLOR,
-              //   ),
-              // ),
               Flexible(
                 child: Text(
-                  context.isArabic
+                  !context.isArabic
                       ? state.banner?.titleAr ?? ''
                       : state.banner?.titleEn ?? '',
                   style: TextStyle(
@@ -92,6 +77,7 @@ class BeStarHeaderSection extends StatelessWidget {
 
               Sizer(),
               // Hint Button
+
               InkWell(
                 onTap: () {
                   ManageVibration.vibrate();
@@ -106,49 +92,18 @@ class BeStarHeaderSection extends StatelessWidget {
             ],
           ),
           // Row(
-          //   children: [
-          //     // Title
-          //     Expanded(
-          //       child: Text(
-          //         context.isArabic
-          //             ? state.banner?.titleAr ?? ''
-          //             : state.banner?.titleEn ?? '',
-          //         style: TextStyle(
-          //           fontSize: MediaQuery.of(context).size.width * 0.05,
-          //           fontWeight: FontWeight.w500,
-          //           color: context.isDarkMode
-          //               ? Colors.white
-          //               : AppColors.PRIMARY_COLOR,
-          //         ),
-          //         maxLines: 2,
-          //         overflow: TextOverflow.ellipsis,
-          //       ),
-          //     ),
-          //     const SizedBox(width: 16),
-          //     // Hint Button
-          //     InkWell(
-          //       onTap: () {
-          //         ManageVibration.vibrate();
-          //         _showHintDialog(context);
-          //       },
-          //       child: SvgPicture.asset(
-          //         Assets.idea,
-          //         height: 24,
-          //         width: 24,
-          //       ),
-          //     ),
-          //   ],
-          // ),
+
           const Sizer(),
 
           // Subtitle
           Align(
-            alignment:
-                context.isArabic ? Alignment.centerRight : Alignment.centerLeft,
+            alignment: !context.isArabic
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
             child: Text(
               // text: (state.banner?.subTitleAr ?? state.banner?.subTitleEn ?? '')
               //     .toArabicNumbers(context),
-              context.isArabic
+              !context.isArabic
                   ? state.banner?.subTitleAr ?? ''
                   : state.banner?.subTitleEn ?? '',
               // textAlign: TextAlign.center,
@@ -163,8 +118,9 @@ class BeStarHeaderSection extends StatelessWidget {
 
           // Subscribe Button
           Align(
-            alignment:
-                context.isArabic ? Alignment.centerLeft : Alignment.centerRight,
+            alignment: !context.isArabic
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
             child: SubscribeButton(
               text: LocaleKeys.subscribe.localize,
               icon: Assets.ideaIcon,
@@ -240,18 +196,23 @@ class BeStarHeaderSection extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Label(
-              text: context.isArabic
-                  ? 'اشترك لإبقاء الصوت في الخلفية'
-                  : 'Subscribe to remain voice in background',
-              style: TextStyle(
-                color: const Color(0xffFF0808),
-                fontSize: 25.sp,
-                fontWeight: FontWeight.bold,
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Label(
+                text: !context.isArabic
+                    ? 'اشترك لإبقاء الصوت في الخلفية'
+                    : 'Subscribe to remain voice in background',
+                style: TextStyle(
+                  color: const Color(0xffFF0808),
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
         );

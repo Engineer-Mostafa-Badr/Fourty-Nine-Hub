@@ -93,9 +93,9 @@ class ProfileAppBar extends StatelessWidget {
         onPressed: onEditPressed,
       );
     }
-    
+
     // إذا لم يكن المستخدم الحالي، ممكن تضيف أزرار أخرى زي Follow/Subscribe
-    if (!isCurrentUser) {
+    if (isCurrentUser) {
       return IconButton(
         icon: Icon(
           Icons.person_add,
@@ -107,7 +107,7 @@ class ProfileAppBar extends StatelessWidget {
         },
       );
     }
-    
+
     return SizedBox(width: 48.w);
   }
 
