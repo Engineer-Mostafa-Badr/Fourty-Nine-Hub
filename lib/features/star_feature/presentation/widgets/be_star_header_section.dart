@@ -60,7 +60,7 @@ class BeStarHeaderSection extends StatelessWidget {
               // Title
               Flexible(
                 child: Text(
-                  !context.isArabic
+                  context.isArabic
                       ? state.banner?.titleAr ?? ''
                       : state.banner?.titleEn ?? '',
                   style: TextStyle(
@@ -97,13 +97,13 @@ class BeStarHeaderSection extends StatelessWidget {
 
           // Subtitle
           Align(
-            alignment: !context.isArabic
+            alignment: context.isArabic
                 ? Alignment.centerRight
                 : Alignment.centerLeft,
             child: Text(
               // text: (state.banner?.subTitleAr ?? state.banner?.subTitleEn ?? '')
               //     .toArabicNumbers(context),
-              !context.isArabic
+              context.isArabic
                   ? state.banner?.subTitleAr ?? ''
                   : state.banner?.subTitleEn ?? '',
               // textAlign: TextAlign.center,
@@ -118,7 +118,7 @@ class BeStarHeaderSection extends StatelessWidget {
 
           // Subscribe Button
           Align(
-            alignment: !context.isArabic
+            alignment: context.isArabic
                 ? Alignment.centerLeft
                 : Alignment.centerRight,
             child: SubscribeButton(
@@ -201,7 +201,7 @@ class BeStarHeaderSection extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Label(
-                text: !context.isArabic
+                text: context.isArabic
                     ? 'اشترك لإبقاء الصوت في الخلفية'
                     : 'Subscribe to remain voice in background',
                 style: TextStyle(

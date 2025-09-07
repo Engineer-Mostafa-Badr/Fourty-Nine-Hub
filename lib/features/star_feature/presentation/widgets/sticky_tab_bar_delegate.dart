@@ -94,16 +94,16 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   //                   child: Row(
   //                     textDirection: context.textDirection,
   //                     children: [
-  //                       _buildTabPill(!context.isArabic ? 'متاح' : 'Available',
+  //                       _buildTabPill(context.isArabic ? 'متاح' : 'Available',
   //                           0, tabController.index == 0),
   //                       SizedBox(width: size.width * 0.02),
-  //                       _buildTabPill(!context.isArabic ? 'مفضلة' : 'Favorite',
+  //                       _buildTabPill(context.isArabic ? 'مفضلة' : 'Favorite',
   //                           1, tabController.index == 1),
   //                       SizedBox(width: size.width * 0.02),
-  //                       _buildTabPill(!context.isArabic ? 'سجل' : 'History', 2,
+  //                       _buildTabPill(context.isArabic ? 'سجل' : 'History', 2,
   //                           tabController.index == 2),
   //                       SizedBox(width: size.width * 0.02),
-  //                       _buildTabPill(!context.isArabic ? 'موهبتي' : 'My Talent',
+  //                       _buildTabPill(context.isArabic ? 'موهبتي' : 'My Talent',
   //                           3, tabController.index == 3),
   //                     ],
   //                   ),
@@ -177,20 +177,20 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
                           textDirection: context.textDirection,
                           children: [
                             _buildTabPill(
-                                !context.isArabic ? 'متاح' : 'Available',
+                                context.isArabic ? 'متاح' : 'Available',
                                 0,
                                 tabController.index == 0),
                             SizedBox(width: size.width * 0.02),
                             _buildTabPill(
-                                !context.isArabic ? 'مفضلة' : 'Favorite',
+                                context.isArabic ? 'مفضلة' : 'Favorite',
                                 1,
                                 tabController.index == 1),
                             SizedBox(width: size.width * 0.02),
-                            _buildTabPill(!context.isArabic ? 'سجل' : 'History',
+                            _buildTabPill(context.isArabic ? 'سجل' : 'History',
                                 2, tabController.index == 2),
                             SizedBox(width: size.width * 0.02),
                             _buildTabPill(
-                                !context.isArabic ? 'موهبتي' : 'My Talent',
+                                context.isArabic ? 'موهبتي' : 'My Talent',
                                 3,
                                 tabController.index == 3),
                           ],
@@ -244,7 +244,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
                 ? (context.isDarkMode ? Colors.black : Colors.white)
                 : (context.isDarkMode ? Colors.white : Colors.black),
             fontSize:
-                !context.isArabic ? size.width * 0.03 : size.width * 0.025,
+                context.isArabic ? size.width * 0.03 : size.width * 0.025,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -272,7 +272,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
         ),
         decoration: InputDecoration(
           hintText:
-              !context.isArabic ? 'ابحث عن الفيديوهات...' : 'Search videos...',
+              context.isArabic ? 'ابحث عن الفيديوهات...' : 'Search videos...',
           hintStyle: TextStyle(
             color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
             fontSize: size.width * 0.035,

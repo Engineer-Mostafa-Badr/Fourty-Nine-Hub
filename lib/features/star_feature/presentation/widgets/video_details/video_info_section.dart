@@ -81,7 +81,7 @@ class VideoInfoSection extends StatelessWidget {
 
         // Views and Date
         Text(
-          !context.isArabic
+          context.isArabic
               ? '${_formatDate(talent.createdAt)} • ${_formatViews(talent.totalViews.toInt())} views'
               : '${_formatViews(talent.totalViews.toInt())} views • ${_formatDate(talent.createdAt)}',
           style: TextStyle(

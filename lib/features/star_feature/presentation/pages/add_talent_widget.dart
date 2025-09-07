@@ -85,7 +85,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   color: AppColors.getTextColor(context),
                 ),
                 decoration: InputDecoration(
-                  hintText: !!context.isArabic
+                  hintText: context.isArabic
                       ? 'أدخل عنوان الفيديو'
                       : 'Enter video title',
                   hintStyle: TextStyle(
@@ -135,7 +135,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   color: AppColors.getTextColor(context),
                 ),
                 decoration: InputDecoration(
-                  hintText: !context.isArabic
+                  hintText: context.isArabic
                       ? 'أدخل وصف الفيديو'
                       : 'Enter video description',
                   hintStyle: TextStyle(
@@ -170,7 +170,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 20.h),
 
               // Video Section
-              _buildSectionTitle(!context.isArabic ? 'الفيديو' : 'Video'),
+              _buildSectionTitle(context.isArabic ? 'الفيديو' : 'Video'),
               SizedBox(height: 8.h),
               _buildVideoSection(),
 
@@ -178,7 +178,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
               // Thumbnail Section
               _buildSectionTitle(
-                  !context.isArabic ? 'الصورة المصغرة' : 'Thumbnail'),
+                  context.isArabic ? 'الصورة المصغرة' : 'Thumbnail'),
               SizedBox(height: 8.h),
               _buildThumbnailSection(),
 
@@ -265,7 +265,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                           ),
                           SizedBox(width: 10.w),
                           Text(
-                            !context.isArabic
+                            context.isArabic
                                 ? 'جاري النشر...'
                                 : 'Publishing...',
                             style: TextStyle(
@@ -603,7 +603,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           ),
           SizedBox(height: 16.h),
           Text(
-            !context.isArabic ? 'اضغط لاختيار فيديو' : 'Tap to select video',
+            context.isArabic ? 'اضغط لاختيار فيديو' : 'Tap to select video',
             style: TextStyle(
               color: AppColors.getTextColor(context).withOpacity(0.6),
               fontSize: 14,
@@ -612,7 +612,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           ),
           SizedBox(height: 4.h),
           Text(
-            !context.isArabic
+            context.isArabic
                 ? 'MP4, MOV, AVI • حتى 500 ميجا'
                 : 'MP4, MOV, AVI • Up to 500MB',
             style: TextStyle(
@@ -726,7 +726,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   ),
                   SizedBox(height: 12.h),
                   Text(
-                    !context.isArabic
+                    context.isArabic
                         ? 'اضغط لاختيار صورة'
                         : 'Tap to select thumbnail',
                     style: TextStyle(
@@ -785,7 +785,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   //     ScaffoldMessenger.of(context).showSnackBar(
   //       SnackBar(
   //         content: Text(
-  //             !context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
+  //             context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
   //         backgroundColor: Colors.red,
   //       ),
   //     );
@@ -795,7 +795,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   //   if (_selectedThumbnail == null) {
   //     ScaffoldMessenger.of(context).showSnackBar(
   //       SnackBar(
-  //         content: Text(!context.isArabic
+  //         content: Text(context.isArabic
   //             ? 'يرجى اختيار صورة مصغرة'
   //             : 'Please select a thumbnail'),
   //         backgroundColor: Colors.red,
@@ -819,7 +819,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     if (description.length < 3 || description.length > 1000) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(!context.isArabic
+          content: Text(context.isArabic
               ? 'يجب أن يكون طول الوصف بين 3 و 1000 حرف'
               : 'Description length must be between 3-1000 characters'),
           backgroundColor: Colors.red,
@@ -831,7 +831,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     if (_selectedVideo == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(!context.isArabic
+          content: Text(context.isArabic
               ? 'يرجى اختيار فيديو'
               : 'Please select a video'),
           backgroundColor: Colors.red,
@@ -843,7 +843,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     if (_selectedThumbnail == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(!context.isArabic
+          content: Text(context.isArabic
               ? 'يرجى اختيار صورة مصغرة'
               : 'Please select a thumbnail'),
           backgroundColor: Colors.red,
@@ -865,7 +865,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     setState(() {
       _isUploading = true;
       _uploadProgress = 0.0;
-      _uploadStatus = !context.isArabic ? 'بدء الرفع...' : 'Starting upload...';
+      _uploadStatus = context.isArabic ? 'بدء الرفع...' : 'Starting upload...';
     });
 
     try {
@@ -874,7 +874,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
       // Get video duration first
       setState(() {
-        _uploadStatus = !context.isArabic
+        _uploadStatus = context.isArabic
             ? 'جاري الحصول على معلومات الفيديو...'
             : 'Getting video information...';
       });
@@ -882,7 +882,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       final duration =
           await videoPickerHelper.getVideoDuration(_selectedVideo!);
       if (duration == null) {
-        _showError(!context.isArabic
+        _showError(context.isArabic
             ? 'فشل في الحصول على مدة الفيديو'
             : 'Failed to get video duration');
         return;
@@ -904,7 +904,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
       // Show validation passed
       setState(() {
-        _uploadStatus = !context.isArabic
+        _uploadStatus = context.isArabic
             ? 'الفيديو صالح للرفع...'
             : 'Video validated successfully...';
       });
@@ -947,30 +947,30 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           // String errorMessage;
           // if (failure is ServerFailure) {
           //   if (failure.statusCode == 401) {
-          //     errorMessage = !context.isArabic
+          //     errorMessage = context.isArabic
           //         ? 'انتهت صلاحية الجلسة. يرجى إعادة المحاولة'
           //         : 'Session expired. Please try again';
           //   } else {
-          //     errorMessage = !context.isArabic
+          //     errorMessage = context.isArabic
           //         ? 'خطأ في الخادم: ${failure.message}'
           //         : 'Server error: ${failure.message}';
           //   }
           // } else if (failure is UnknownFailure) {
           //   if (failure.error.contains('expired')) {
-          //     errorMessage = !context.isArabic
+          //     errorMessage = context.isArabic
           //         ? 'انتهت صلاحية رفع الملف. يرجى إعادة المحاولة'
           //         : 'Upload session expired. Please try again';
           //   } else if (failure.error.contains('duration')) {
-          //     errorMessage = !context.isArabic
+          //     errorMessage = context.isArabic
           //         ? 'فشل في الحصول على مدة الفيديو. يرجى إعادة المحاولة'
           //         : 'Failed to get video duration. Please try again';
           //   } else {
-          //     errorMessage = !context.isArabic
+          //     errorMessage = context.isArabic
           //         ? 'فشل الرفع: ${failure.error}'
           //         : 'Upload failed: ${failure.error}';
           //   }
           // } else {
-          //   errorMessage = !context.isArabic
+          //   errorMessage = context.isArabic
           //       ? 'حدث خطأ غير معروف'
           //       : 'An unknown error occurred';
           // }
@@ -979,7 +979,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         },
         (success) {
           print("✅ Upload successful!");
-          _showSuccess(!context.isArabic
+          _showSuccess(context.isArabic
               ? 'تم رفع الفيديو بنجاح!'
               : 'Video uploaded successfully!');
 
@@ -994,7 +994,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       );
     } catch (e) {
       print("❌ Exception in _performUpload: $e");
-      _showError(!context.isArabic
+      _showError(context.isArabic
           ? 'حدث خطأ غير متوقع: $e'
           : 'An unexpected error occurred: $e');
     } finally {
@@ -1017,7 +1017,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         backgroundColor: Colors.red,
         duration: Duration(seconds: 8),
         action: SnackBarAction(
-          label: !context.isArabic ? 'إغلاق' : 'Close',
+          label: context.isArabic ? 'إغلاق' : 'Close',
           textColor: Colors.white,
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();

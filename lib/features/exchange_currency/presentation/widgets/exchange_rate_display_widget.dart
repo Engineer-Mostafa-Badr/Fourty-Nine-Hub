@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'dart:math';
 
+import '../../../../res/style/app_colors.dart';
 import '../../domain/entities/currency_rates_entity.dart';
 
 class ExchangeRateDisplayWidget extends StatelessWidget {
@@ -110,8 +111,8 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.isArabic
-                      ? 'You can check the current exchange rate\nin all countries of the world'
-                      : 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم',
+                      ? 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم'
+                      : 'You can check the current exchange rate\nin all countries of the world',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -128,103 +129,107 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
           const SizedBox(height: 16),
           SizedBox(
             height: 400,
-            child: ListView.builder(
-              itemCount: _getDisplayRates().length,
-              itemBuilder: (context, index) {
-                final entry = _getDisplayRates()[index];
-                final chartPoints = _generateDataPointsForCurrency(entry.key);
-                final chartRange = _getChartRange(chartPoints);
-                final chartColor = _getChartColor(chartPoints);
+            child: GlowingOverscrollIndicator(
+              color: AppColors.SECONDARY_COLOR,
+              axisDirection: AxisDirection.down,
+              child: ListView.builder(
+                itemCount: _getDisplayRates().length,
+                itemBuilder: (context, index) {
+                  final entry = _getDisplayRates()[index];
+                  final chartPoints = _generateDataPointsForCurrency(entry.key);
+                  final chartRange = _getChartRange(chartPoints);
+                  final chartColor = _getChartColor(chartPoints);
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        _getCurrencyFlag(entry.key),
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        entry.key,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          _getCurrencyFlag(entry.key),
+                          style: const TextStyle(fontSize: 24),
                         ),
-                      ),
-                      const Spacer(),
-                      // الرسم البياني المعتمد على البيانات الحقيقية
-                      SizedBox(
-                        width: 80,
-                        height: 25,
-                        child: LineChart(
-                          LineChartData(
-                            gridData: const FlGridData(show: false),
-                            titlesData: const FlTitlesData(show: false),
-                            borderData: FlBorderData(show: false),
-                            lineBarsData: [
-                              LineChartBarData(
-                                spots: chartPoints,
-                                isCurved: true,
-                                color: chartColor,
-                                barWidth: 1.5,
-                                dotData: const FlDotData(show: false),
-                                belowBarData: BarAreaData(
-                                  show: true,
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      chartColor.withOpacity(0.3),
-                                      chartColor.withOpacity(0.1),
-                                      Colors.transparent,
-                                    ],
+                        const SizedBox(width: 8),
+                        Text(
+                          entry.key,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const Spacer(),
+                        // الرسم البياني المعتمد على البيانات الحقيقية
+                        SizedBox(
+                          width: 80,
+                          height: 25,
+                          child: LineChart(
+                            LineChartData(
+                              gridData: const FlGridData(show: false),
+                              titlesData: const FlTitlesData(show: false),
+                              borderData: FlBorderData(show: false),
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: chartPoints,
+                                  isCurved: true,
+                                  color: chartColor,
+                                  barWidth: 1.5,
+                                  dotData: const FlDotData(show: false),
+                                  belowBarData: BarAreaData(
+                                    show: true,
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        chartColor.withOpacity(0.3),
+                                        chartColor.withOpacity(0.1),
+                                        Colors.transparent,
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                            minX: 0,
-                            maxX: 9,
-                            minY: chartRange['min']!,
-                            maxY: chartRange['max']!,
+                              ],
+                              minX: 0,
+                              maxX: 9,
+                              minY: chartRange['min']!,
+                              maxY: chartRange['max']!,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            entry.value.toStringAsFixed(4),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                          // عرض النسبة المئوية للتغيير
-                          if (chartPoints.length >= 2)
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
                             Text(
-                              _getPercentageChange(chartPoints),
-                              style: TextStyle(
-                                color: chartColor,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
+                              entry.value.toStringAsFixed(4),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
                               ),
                             ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
+                            // عرض النسبة المئوية للتغيير
+                            if (chartPoints.length >= 2)
+                              Text(
+                                _getPercentageChange(chartPoints),
+                                style: TextStyle(
+                                  color: chartColor,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

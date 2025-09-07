@@ -290,7 +290,7 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.green.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
-        title: !context.isArabic ? 'عملات' : 'Exchange',
+        title: context.isArabic ? 'عملات' : 'Exchange',
       ),
       _buildStarWidget(
         context,
