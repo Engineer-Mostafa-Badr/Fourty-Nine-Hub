@@ -47,9 +47,8 @@ class ProfileHeader extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final bannerHeight = screenWidth * 0.3;
 
-    final bannerUrl = isCurrentUser && profile?.channelCover != null
-        ? profile!.channelCover!.mediaKey
-        : null;
+    final bannerUrl =
+        profile?.channelCover != null ? profile!.channelCover!.mediaKey : null;
 
     return Container(
       width: double.infinity,

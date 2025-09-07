@@ -7,6 +7,7 @@ abstract class Routes {
   static const splashScreen = '/splashScreen';
   static const HOME = '/Home';
   static const RIDE_HOME = '/RideHome';
+  static const EXCHANGECURRENCY = '/ExchangeCurrency';
   static const RunningMapDetails = '/RunningMapDetails';
   static const onBoardingScreen = '/OnBoardingScreen';
   static const ChooseLangScreen = '/ChooseLangScreen';
@@ -323,6 +324,7 @@ abstract class Paths {
   static const HOME = 'Home';
   static const RIDEHOME = 'RideHome';
   static const RunningMapDetails = 'RunningMapDetails';
+  static const EXCHANGECURRENCY = 'ExchangeCurrency';
   static const onBoardingScreen = 'OnBoardingScreen';
   static const ChooseLangScreen = 'ChooseLangScreen';
   static const FirstLoginScreen = 'FirstLoginScreen';

@@ -268,7 +268,8 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/reels_feature/presentation/pages/reels_page.dart';
-import 'package:fourtyninehub/features/reels_feature/presentation/controllers/reels_cubit.dart' as tiktok_reels;
+import 'package:fourtyninehub/features/reels_feature/presentation/controllers/reels_cubit.dart'
+    as tiktok_reels;
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
@@ -396,6 +397,8 @@ import '../features/authentication/presentation/pages/register/register_verify_o
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
+import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
+import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -506,15 +509,17 @@ class AppPages {
                   MultiBlocProvider(
                     providers: [
                       BlocProvider(
-                        create: (context) => serviceLocator<SliderCubit>()..loadData(),
+                        create: (context) =>
+                            serviceLocator<SliderCubit>()..loadData(),
                       ),
                       BlocProvider(
                         create: (context) =>
-                        serviceLocator<StarCubit>()..allTalents,
+                            serviceLocator<StarCubit>()..allTalents,
                       ),
                       BlocProvider(
-                        create: (context) => serviceLocator<MainCategoriesCubit>()
-                          ..loadData(context),
+                        create: (context) =>
+                            serviceLocator<MainCategoriesCubit>()
+                              ..loadData(context),
                       ),
                       // BlocProvider(
                       //   create: (context) => serviceLocator<ThumbnailsCubit>(),
@@ -543,6 +548,18 @@ class AppPages {
                 ),
               ),
               GoRoute(
+                path: Paths.EXCHANGECURRENCY,
+                name: Routes.EXCHANGECURRENCY,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider(
+                    create: (context) => serviceLocator<CurrencyCubit>(),
+                    child: const CurrencyExchangePage(),
+                  ),
+                ),
+              ),
+              GoRoute(
                 path: Paths.RunningMapDetails,
                 name: Routes.RunningMapDetails,
                 pageBuilder: (context, state) => customTransition(
@@ -551,11 +568,10 @@ class AppPages {
                   MultiBlocProvider(
                     providers: [
                       BlocProvider.value(
-                        value:serviceLocator<CaptainShareCubit>(),
+                        value: serviceLocator<CaptainShareCubit>(),
                       ),
                     ],
-                    child: RunningMapViewDetails(
-                    ),
+                    child: RunningMapViewDetails(),
                   ),
                 ),
               ),
@@ -2056,7 +2072,8 @@ class AppPages {
                       context,
                       state,
                       BlocProvider(
-                        create: (context) => serviceLocator<tiktok_reels.TiktokCubit>(),
+                        create: (context) =>
+                            serviceLocator<tiktok_reels.TiktokCubit>(),
                         child: const ReelsPage(),
                       ));
                 },
@@ -4828,7 +4845,6 @@ class AppPages {
               ),
             ],
           ),
-
 
           // GoRoute(
           //   path: Routes.splash,

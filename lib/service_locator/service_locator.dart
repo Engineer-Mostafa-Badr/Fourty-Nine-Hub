@@ -37,6 +37,7 @@ import 'carpool_service_locator.dart';
 import 'club_voice_service_locator.dart';
 import 'competition_service_locator.dart';
 import 'conversations_service_locator.dart';
+import 'currency_service_locator.dart';
 import 'edit_food_service_locator.dart';
 import 'face_book_service_locator.dart';
 import 'follow_service_locator.dart';
@@ -392,7 +393,9 @@ class DI {
     SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
     //! Tube
     TubeServiceLocator.execute(serviceLocator: serviceLocator);
-  
+
+    //! Exchange Currency
+    CurrencyServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

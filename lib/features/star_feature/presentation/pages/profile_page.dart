@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/loading_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
 import '../widgets/profile_components/edit_profile_sheet.dart';
 import '../widgets/profile_components/profile_app_bar.dart';
@@ -172,6 +173,17 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
+  // دالة للحصول على ID المستخدم الحالي
+  String? _getCurrentUserId() {
+    // هنا تحط الـ logic بتاع جلب ID المستخدم الحالي
+    // ممكن من SharedPreferences أو من UserCubit أو أي مكان تاني
+    try {
+      return UserCubit.to.state.data?.id; // مثال
+    } catch (e) {
+      return null;
+    }
+  }
+
   Widget _buildContent(ProfileState profileState) {
     debugPrint('Profile State: ${profileState.status}');
     debugPrint('Has Profile: ${profileState.hasProfile}');
@@ -194,13 +206,18 @@ class _ProfilePageViewState extends State<ProfilePageView>
     return Column(
       children: [
         ProfileAppBar(
-          isCurrentUser: widget.isCurrentUser,
-          onEditPressed: _showEditProfileSheet,
+          // isCurrentUser: widget.isCurrentUser,
+          profileUser: widget.user,
+          currentUserId: _getCurrentUserId(),
+          onEditPressed: () {
+            ManageVibration.vibrate();
+            _showEditProfileSheet();
+          },
           onBackPressed: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
           },
-          user: widget.user,
+          // user: widget.user,
         ),
         Expanded(
           child: SafeArea(

@@ -1820,4 +1820,14 @@ class EndPoints {
 
   static String dislikeTubeComment(String commentId) =>
       '/tube-comment/$commentId/dislike';
+
+      //! Exchange Currency Endpoints
+      static String convertCurrency({
+  required String from,
+  required String to,
+  required double amount,
+}) => '/exchange-currency/pair/$from/$to/$amount';
+
+static String getExchangeRates(String code) => '/exchange-currency/$code';
+
 }
