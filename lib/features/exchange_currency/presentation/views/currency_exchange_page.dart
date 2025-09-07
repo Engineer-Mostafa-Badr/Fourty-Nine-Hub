@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../helpers/manage_vibration.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../logic/currency_cubit.dart';
 import '../widgets/exchange_rate_display_widget.dart';
@@ -37,6 +39,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: AppBar(
+          scrolledUnderElevation: 0,
           backgroundColor: Colors.grey.shade50,
           elevation: 0,
           automaticallyImplyLeading: false,
@@ -93,8 +96,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Change Currency',
+                      Text(
+                        !context.isArabic ? 'تبديل العملات' : 'Change Currency',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -102,8 +105,10 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Changing its currency instantaneously and\nknowing the currency rate moment by moment',
+                      Text(
+                        !context.isArabic
+                            ? 'تبديل العملات بشكل سريع وعرض السعر للعملة في الوقت الحالي'
+                            : 'Changing its currency instantaneously and\nknowing the currency rate moment by moment',
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -122,36 +127,43 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Amount',
+                            Text(
+                              !context.isArabic ? 'المبلغ' : 'Amount',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 14,
                               ),
                             ),
                             const SizedBox(height: 12),
+
+                            // إصلاح الـ Row الأول - Amount Section
                             Row(
                               children: [
-                                // Currency selector
+                                // Currency selector - مع تحديد عرض ثابت
                                 GestureDetector(
                                   onTap: () =>
                                       _showFromCurrencySelector(context, cubit),
                                   child: Container(
+                                    width: 120, // عرض ثابت
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
+                                        horizontal: 8, vertical: 8),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
                                           _getCurrencyFlag(cubit.fromCurrency),
-                                          style: const TextStyle(fontSize: 30),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          cubit.fromCurrency,
                                           style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
+                                              fontSize: 24), // قللت الحجم
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Flexible(
+                                          child: Text(
+                                            cubit.fromCurrency,
+                                            style: const TextStyle(
+                                              fontSize: 20, // قللت الحجم
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                         const SizedBox(width: 4),
@@ -161,55 +173,54 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                     ),
                                   ),
                                 ),
-                                const Spacer(),
-                                // Amount input
-                                SizedBox(
-                                  width: 150,
-                                  height: 45,
-                                  child: TextField(
-                                    controller: _amountController,
-                                    keyboardType:
-                                        const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    decoration: const InputDecoration(
-                                      // border: InputBorder.none,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xffEFEFEF),
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(7),
-                                        ),
+
+                                const SizedBox(
+                                    width: 8), // مسافة ثابتة بدلاً من Spacer
+
+                                // Amount input - استخدام Expanded
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 45,
+                                    child: TextField(
+                                      controller: _amountController,
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                        decimal: true,
                                       ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xffEFEFEF),
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(7),
-                                        ),
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(
+                                        fontSize: 16, // قللت الحجم
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xffEFEFEF),
+                                      decoration: const InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xffEFEFEF)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(7)),
                                         ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(7),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xffEFEFEF)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(7)),
                                         ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xffEFEFEF)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(7)),
+                                        ),
+                                        hintText: '0.00',
                                       ),
-                                      hintText: '0.00',
+                                      onChanged: (value) {
+                                        final amount =
+                                            double.tryParse(value) ?? 0.0;
+                                        cubit.setAmount(amount);
+                                      },
                                     ),
-                                    onChanged: (value) {
-                                      final amount =
-                                          double.tryParse(value) ?? 0.0;
-                                      cubit.setAmount(amount);
-                                    },
                                   ),
                                 ),
                               ],
@@ -236,12 +247,18 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
                                         color: const Color(0xFF1B2951),
-                                        borderRadius: BorderRadius.circular(25),
+                                        shape: BoxShape.circle,
+                                        // borderRadius: BorderRadius.circular(25),
                                       ),
-                                      child: const Icon(
-                                        Icons.swap_vert,
-                                        color: Colors.white,
-                                        size: 24,
+                                      // child: const Icon(
+                                      //   Icons.swap_vert,
+                                      //   color: Colors.white,
+                                      //   size: 24,
+                                      // ),
+                                      child: SvgPicture.asset(
+                                        Assets.swapIcon,
+                                        height: 24,
+                                        width: 24,
                                       ),
                                     ),
                                   ),
@@ -256,37 +273,46 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                             ),
 
                             const SizedBox(height: 16),
-                            const Text(
-                              'Converted Amount',
+                            Text(
+                              !context.isArabic
+                                  ? 'المبلغ المحول'
+                                  : 'Converted Amount',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 14,
                               ),
                             ),
                             const SizedBox(height: 12),
+
+                            // إصلاح الـ Row الثاني - Converted Amount Section
                             Row(
                               children: [
-                                // To Currency selector
+                                // To Currency selector - مع تحديد عرض ثابت
                                 GestureDetector(
                                   onTap: () =>
                                       _showToCurrencySelector(context, cubit),
                                   child: Container(
+                                    width: 120, // نفس العرض
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
+                                        horizontal: 8, vertical: 8),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
                                           _getCurrencyFlag(cubit.toCurrency),
-                                          style: const TextStyle(fontSize: 30),
+                                          style: const TextStyle(fontSize: 24),
                                         ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          cubit.toCurrency,
-                                          style: const TextStyle(
-                                              fontSize: 24,
+                                        const SizedBox(width: 6),
+                                        Flexible(
+                                          child: Text(
+                                            cubit.toCurrency,
+                                            style: const TextStyle(
+                                              fontSize: 20,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.red),
+                                              color: Colors.red,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                         const SizedBox(width: 4),
                                         const Icon(Icons.keyboard_arrow_down,
@@ -295,64 +321,34 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                     ),
                                   ),
                                 ),
-                                const Spacer(),
-                                // Converted amount display
-                                // Converted amount input
+
+                                const SizedBox(width: 8),
+
+                                // Converted amount display - استخدام Expanded
                                 Expanded(
-                                  flex: 3,
                                   child: Container(
+                                    height: 45,
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 4),
+                                        horizontal: 12, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade100,
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(7),
+                                      border: Border.all(
+                                          color: const Color(0xffEFEFEF)),
                                     ),
-                                    child: TextField(
-                                      readOnly: true,
-                                      textAlign: TextAlign.right,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      ),
-                                      decoration: InputDecoration(
-                                        // border: InputBorder.none,
-                                        border: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xffEFEFEF),
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(7),
-                                          ),
-                                        ),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xffEFEFEF),
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(7),
-                                          ),
-                                        ),
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xffEFEFEF),
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(7),
-                                          ),
-                                        ),
-                                        hintText: state is CurrencyConverted
+                                    child: Center(
+                                      child: Text(
+                                        state is CurrencyConverted
                                             ? state
                                                 .exchangeRate.conversionResult
                                                 .toStringAsFixed(2)
                                             : '00.00',
-                                      ),
-                                      controller: TextEditingController(
-                                        text: state is CurrencyConverted
-                                            ? state
-                                                .exchangeRate.conversionResult
-                                                .toStringAsFixed(2)
-                                            : '00.00',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                        textAlign: TextAlign.right,
                                       ),
                                     ),
                                   ),
@@ -413,7 +409,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                               ),
                             )
                           : Text(
-                              context.isArabic ? 'حساب' : 'Calculate',
+                              !context.isArabic ? 'حساب' : 'Calculate',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -430,7 +426,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'Indicative Exchange Rate',
+                      !context.isArabic
+                          ? 'سعر الصرف الإرشادي'
+                          : 'Indicative Exchange Rate',
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 14,
@@ -472,13 +470,16 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                     ),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'You can check the current exchange rate\nin all countries of the world',
+                            !context.isArabic
+                                ? 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم'
+                                : 'You can check the current exchange rate\nin all countries of the world',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         Icon(
@@ -609,11 +610,11 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16),
+            Padding(
+              padding: const EdgeInsets.all(16),
               child: Text(
-                'Choose Currency',
-                style: TextStyle(
+                !context.isArabic ? 'اختر العملة' : 'Choose Currency',
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),

@@ -693,6 +693,8 @@ abstract class Assets {
   // simple loadings
   static String circleLoader = 'assets/lottie/loader.json';
 
+  static String swapIcon = 'assets/icons/swapIcon.svg';
+
   // special loading in ads
   static String searchLoading = 'assets/lottie/special_loading.json';
   static String customLoading = 'assets/lottie/loading.json';

@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'dart:math';
 
 import '../../domain/entities/currency_rates_entity.dart';
@@ -106,9 +107,11 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'You can check the current exchange rate\nin all countries of the world',
+                  context.isArabic
+                      ? 'You can check the current exchange rate\nin all countries of the world'
+                      : 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
