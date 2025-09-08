@@ -19,6 +19,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
+import '../logic/spot_light_cubit.dart';
 import '../widgets/friends_stories.dart';
 import 'other_profile_view.dart';
 import 'profile_view.dart';
@@ -307,12 +308,20 @@ class FriendsList extends StatelessWidget {
               ),
             ),
           ),
-          BlocProvider<StoryCubit>(
-            create: (_) => serviceLocator()
-              ..fetchStories()
-              ..getMutedStories(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<SpotlightCubit>(
+                create: (context) => serviceLocator<SpotlightCubit>(),
+              ),
+              BlocProvider<StoryCubit>(
+                create: (_) => serviceLocator()
+                  ..fetchStories()
+                  ..getMutedStories(),
+              ),
+
+            ],
             child: const FriendsStories(),
-          ),
+          )
         ],
       ),
     );

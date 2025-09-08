@@ -98,7 +98,7 @@ class _Twitter11State extends State<Twitter11> {
 
   Widget _buildTwitterWidget() {
     return BlocProvider<TwitterCubit>(
-      create: (_) => serviceLocator()..loadData(),
+      create: (_) => serviceLocator()..loadGlobalData(),
       child:
           BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
         if (state.status == StateStatus.error) {
