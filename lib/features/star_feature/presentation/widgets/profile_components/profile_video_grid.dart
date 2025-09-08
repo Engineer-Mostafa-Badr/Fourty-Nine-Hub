@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/star_entity.dart';
+import '../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../common/options_bottom_sheet.dart';
 import '../common/thumbnail_widget.dart';
+import 'playlist_bottom_sheet.dart';
 
 class ProfileVideoGrid extends StatelessWidget {
   final List<StarEntity> videos;
@@ -269,6 +273,89 @@ class ProfileVideoGrid extends StatelessWidget {
     );
   }
 
+  // void _showVideoOptions(BuildContext context, StarEntity video) {
+  //   List<OptionItem> options = [];
+
+  //   // Common options for all users
+  //   options.addAll([
+  //     OptionItem(
+  //       icon: Icons.playlist_add,
+  //       title: context.isArabic ? 'إضافة لقائمة التشغيل' : 'Add to playlist',
+  //       onTap: () {
+  //         ManageVibration.vibrate();
+  //         Navigator.pop(context);
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text('Added to playlist')),
+  //         );
+  //       },
+  //     ),
+  //     OptionItem(
+  //       icon: starCubit.isFavorite(video.id)
+  //           ? Icons.favorite
+  //           : Icons.favorite_border,
+  //       title: starCubit.isFavorite(video.id)
+  //           ? (context.isArabic ? 'إزالة من المفضلة' : 'Remove from favorites')
+  //           : (context.isArabic ? 'إضافة للمفضلة' : 'Add to favorites'),
+  //       onTap: () {
+  //         ManageVibration.vibrate();
+  //         Navigator.pop(context);
+  //         starCubit.toggleFavorite(video.id);
+  //       },
+  //       iconColor: starCubit.isFavorite(video.id) ? Colors.red : null,
+  //     ),
+  //     OptionItem(
+  //       icon: Icons.share,
+  //       title: context.isArabic ? 'مشاركة' : 'Share',
+  //       onTap: () {
+  //         ManageVibration.vibrate();
+  //         Navigator.pop(context);
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text('Video shared')),
+  //         );
+  //       },
+  //     ),
+  //   ]);
+
+  //   // Delete option only for current user's videos
+  //   if (isCurrentUser) {
+  //     options.add(
+  //       OptionItem(
+  //         icon: Icons.delete,
+  //         title: context.isArabic ? 'حذف الفيديو' : 'Delete video',
+  //         onTap: () {
+  //           ManageVibration.vibrate();
+  //           Navigator.pop(context);
+  //           _showDeleteConfirmation(context, video);
+  //         },
+  //         iconColor: Colors.red,
+  //         textColor: Colors.red,
+  //       ),
+  //     );
+  //   } else {
+  //     // Report option for other users' videos
+  //     options.add(
+  //       OptionItem(
+  //         icon: Icons.flag,
+  //         title: context.isArabic ? 'بلاغ' : 'Report',
+  //         onTap: () {
+  //           ManageVibration.vibrate();
+  //           Navigator.pop(context);
+  //           ScaffoldMessenger.of(context).showSnackBar(
+  //             SnackBar(content: Text('Video reported')),
+  //           );
+  //         },
+  //         iconColor: Colors.red,
+  //         textColor: Colors.red,
+  //       ),
+  //     );
+  //   }
+
+  //   OptionsBottomSheet.showOptions(
+  //     context: context,
+  //     options: options,
+  //   );
+  // }
+
   void _showVideoOptions(BuildContext context, StarEntity video) {
     List<OptionItem> options = [];
 
@@ -280,9 +367,7 @@ class ProfileVideoGrid extends StatelessWidget {
         onTap: () {
           ManageVibration.vibrate();
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Added to playlist')),
-          );
+          _showPlaylistBottomSheet(context, video);
         },
       ),
       OptionItem(
@@ -349,6 +434,19 @@ class ProfileVideoGrid extends StatelessWidget {
     OptionsBottomSheet.showOptions(
       context: context,
       options: options,
+    );
+  }
+
+// Add this helper method to profile_video_grid.dart:
+  void _showPlaylistBottomSheet(BuildContext context, StarEntity video) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: PlaylistBottomSheet(video: video),
+      ),
     );
   }
 

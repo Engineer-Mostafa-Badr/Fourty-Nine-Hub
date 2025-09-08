@@ -13,6 +13,7 @@ class ProfileTabsContent extends StatelessWidget {
   final List<StarEntity> extendedVideos;
   final bool isCurrentUser;
   final String? userId;
+  final bool isLoadingUserVideos;
 
   const ProfileTabsContent({
     super.key,
@@ -20,6 +21,7 @@ class ProfileTabsContent extends StatelessWidget {
     required this.extendedVideos,
     required this.isCurrentUser,
     this.userId,
+    this.isLoadingUserVideos = false,
   });
 
   @override
@@ -27,15 +29,16 @@ class ProfileTabsContent extends StatelessWidget {
     return TabBarView(
       controller: tabController,
       children: [
-        // Home Tab - عرض All Videos (For You + New Songs)
+        // Home Tab - عرض For You + User's content
         ProfileHomeTab(
           videos: extendedVideos,
           isCurrentUser: isCurrentUser,
+          userId: userId,
         ),
 
-        // Videos Tab - عرض فيديوهات الشخص المحدد
+        // Videos Tab - عرض فيديوهات المستخدم الحقيقية
         ProfileVideosTab(
-          videos: extendedVideos,
+          videos: extendedVideos, // Pass real user videos
           isCurrentUser: isCurrentUser,
           userId: userId,
         ),

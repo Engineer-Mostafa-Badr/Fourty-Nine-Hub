@@ -1092,12 +1092,12 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
   Widget _buildVideoInfo() {
     return BlocProvider.value(
-      value: _commentCubit, // تأكد إن الـ cubit متوفر
+      value: _commentCubit,
       child: BlocBuilder<CommentCubit, CommentState>(
         builder: (context, commentState) {
           return BlocBuilder<StarCubit, StarState>(
             builder: (context, starState) {
-              final starCubit = _starCubit; // استخدم الـ instance المحلي
+              final starCubit = _starCubit;
               final isFavorite = starCubit.isFavorite(widget.talent.id);
 
               return Container(

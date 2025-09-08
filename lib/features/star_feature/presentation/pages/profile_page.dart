@@ -10,6 +10,7 @@ import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
 import '../controller/star_cubit/star_cubit.dart';
+import '../utils/enums.dart';
 import '../widgets/profile_components/edit_profile_sheet.dart';
 import '../widgets/profile_components/profile_app_bar.dart';
 import '../widgets/profile_components/profile_header.dart';
@@ -38,10 +39,11 @@ class _ProfilePageViewState extends State<ProfilePageView>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   late ProfileCubit _profileCubit;
+  late StarCubit _starCubit;
   late ScrollController _scrollController;
 
-  // Extended data for better UX
-  late List<StarEntity> _extendedVideos;
+  List<StarEntity> _userRealVideos = [];
+  bool _isLoadingUserVideos = false;
 
   bool _isAppBarExpanded = true;
 
@@ -52,24 +54,21 @@ class _ProfilePageViewState extends State<ProfilePageView>
   void initState() {
     super.initState();
     _initializeControllers();
-    _initializeData();
-    _loadProfileIfNeeded();
+    _loadProfileAndVideos();
   }
 
   void _initializeControllers() {
     _tabController = TabController(length: 3, vsync: this);
     _profileCubit = context.read<ProfileCubit>();
+    _starCubit = context.read<StarCubit>();
     _scrollController = ScrollController();
 
     // Listen to scroll to handle app bar animation
     _scrollController.addListener(_handleScroll);
   }
 
-  void _initializeData() {
-    _extendedVideos = _createExtendedVideoList();
-  }
-
-  void _loadProfileIfNeeded() {
+  void _loadProfileAndVideos() async {
+    // Load profile data
     if (widget.isCurrentUser && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && !_profileCubit.isClosed) {
@@ -77,13 +76,78 @@ class _ProfilePageViewState extends State<ProfilePageView>
         }
       });
     } else if (widget.profileId != null && mounted) {
-      // Load profile by ID for other users
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && !_profileCubit.isClosed) {
           _profileCubit.getProfileById(widget.profileId!);
         }
       });
     }
+
+    // Load user's actual videos
+    await _loadUserActualVideos();
+  }
+
+  Future<void> _loadUserActualVideos() async {
+    print("🎥 Starting to load user actual videos");
+    print("👤 Is current user: ${widget.isCurrentUser}");
+    print("📦 Widget fallback videos: ${widget.userVideos.length}");
+
+    setState(() {
+      _isLoadingUserVideos = true;
+    });
+
+    try {
+      if (widget.isCurrentUser) {
+        // For current user, load their videos from myTalents
+        print("🎬 Loading current user's myTalents");
+        await _starCubit.loadTalents(TalentCategory.myTalents, refresh: true);
+
+        final myTalents = _starCubit.state.myTalents;
+        print("✅ Loaded myTalents: ${myTalents.length}");
+
+        setState(() {
+          _userRealVideos = myTalents;
+        });
+      } else {
+        print("👥 Loading other user's videos");
+
+        // First, ensure available videos are loaded
+        if (_starCubit.state.availableTalents.isEmpty) {
+          print("🔄 Loading available videos first...");
+          await _starCubit.loadTalents(TalentCategory.available, refresh: true);
+        }
+
+        // Filter videos that belong to this specific user from available videos
+        final availableVideos = _starCubit.state.availableTalents;
+        print("📺 Available videos in cubit: ${availableVideos.length}");
+
+        final filteredVideos = availableVideos
+            .where((video) => video.user.id == widget.user?.id)
+            .toList();
+        print(
+            "🔍 Filtered videos for user ${widget.user?.id}: ${filteredVideos.length}");
+
+        // Use filtered videos or fallback to widget videos
+        if (filteredVideos.isNotEmpty) {
+          _userRealVideos = filteredVideos;
+          print("✅ Using filtered videos: ${_userRealVideos.length}");
+        } else {
+          _userRealVideos = widget.userVideos;
+          print("📦 Using fallback widget videos: ${_userRealVideos.length}");
+        }
+      }
+    } catch (e) {
+      print('❌ Error loading user videos: $e');
+      // Fallback to provided videos
+      _userRealVideos = widget.userVideos;
+      print("🆘 Using emergency fallback: ${_userRealVideos.length}");
+    }
+
+    setState(() {
+      _isLoadingUserVideos = false;
+    });
+
+    print("🏁 Finished loading user videos: ${_userRealVideos.length}");
   }
 
   void _handleScroll() {
@@ -94,26 +158,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
     if (_isAppBarExpanded != isExpanded) {
       setState(() => _isAppBarExpanded = isExpanded);
     }
-  }
-
-  List<StarEntity> _createExtendedVideoList() {
-    if (widget.userVideos.isEmpty) return [];
-
-    final List<StarEntity> extendedVideos = [];
-
-    // Extend videos for better scrolling experience
-    for (int i = 0; i < 20; i++) {
-      for (int j = 0; j < widget.userVideos.length; j++) {
-        final originalVideo = widget.userVideos[j];
-        extendedVideos.add(originalVideo.copyWith(
-          id: '${originalVideo.id}_$i$j',
-          totalViews: originalVideo.totalViews + (i * 1000),
-          createdAt: DateTime.now().subtract(Duration(days: i + j)),
-        ));
-      }
-    }
-
-    return extendedVideos;
   }
 
   void _showEditProfileSheet() {
@@ -151,13 +195,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
     );
   }
 
-  // دالة للحصول على ID المستخدم الحالي
+  // Function to get current user ID
   String? _getCurrentUserId() {
-    if (widget.isCurrentUser) {
-      return UserCubit.to.state.data?.id; // مثال
-    }
     try {
-      return UserCubit.to.state.data?.id; // مثال
+      return UserCubit.to.state.data?.id;
     } catch (e) {
       return null;
     }
@@ -166,6 +207,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget _buildContent(ProfileState profileState) {
     debugPrint('Profile State: ${profileState.status}');
     debugPrint('Has Profile: ${profileState.hasProfile}');
+    debugPrint('User Videos Count: ${_userRealVideos.length}');
+    debugPrint('Is Loading User Videos: $_isLoadingUserVideos');
 
     if (profileState.isLoading && !profileState.hasProfile) {
       return const Center(
@@ -177,7 +220,13 @@ class _ProfilePageViewState extends State<ProfilePageView>
       return Center(
         child: StarErrorWidget(
           message: profileState.failure?.toString() ?? 'Failed to load profile',
-          onRetry: () => _profileCubit.getMyProfile(),
+          onRetry: () {
+            if (widget.isCurrentUser) {
+              _profileCubit.getMyProfile();
+            } else if (widget.profileId != null) {
+              _profileCubit.getProfileById(widget.profileId!);
+            }
+          },
         ),
       );
     }
@@ -189,7 +238,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
           currentUserId: _getCurrentUserId(),
           onEditPressed: () {
             ManageVibration.vibrate();
-            if (!widget.isCurrentUser) {
+            if (widget.isCurrentUser) {
               _showEditProfileSheet();
             }
           },
@@ -226,13 +275,14 @@ class _ProfilePageViewState extends State<ProfilePageView>
               body: MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                child: BlocProvider(
-                  create: (context) => serviceLocator<StarCubit>(),
+                child: BlocProvider.value(
+                  value: _starCubit,
                   child: ProfileTabsContent(
                     tabController: _tabController,
-                    extendedVideos: _extendedVideos,
+                    extendedVideos: _userRealVideos,
                     isCurrentUser: widget.isCurrentUser,
                     userId: widget.isCurrentUser ? null : widget.user?.id,
+                    isLoadingUserVideos: _isLoadingUserVideos,
                   ),
                 ),
               ),
@@ -244,9 +294,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   int _getVideosCount(ProfileState profileState) {
+    // Return actual user videos count
+    if (_userRealVideos.isNotEmpty) {
+      return _userRealVideos.length;
+    }
+
+    // Fallback to profile data or widget data
     if (widget.isCurrentUser && profileState.profile != null) {
       return profileState.profile!.videosCount;
     }
+
     return widget.userVideos.length;
   }
 }

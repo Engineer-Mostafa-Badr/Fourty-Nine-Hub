@@ -8,7 +8,9 @@ import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
+import '../../../domain/entity/playlist_entity.dart';
 import '../../../domain/entity/star_entity.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../utils/enums.dart';
 import 'talent_card.dart';
@@ -461,7 +463,7 @@ class TalentCardBuilders {
           icon: Icon(Icons.refresh, size: 18),
           label: Text(
             context.isArabic ? 'تحميل المزيد' : 'Load More',
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 14, color: Colors.white),
           ),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -473,22 +475,80 @@ class TalentCardBuilders {
 }
 
 // Import for TalentVideoPlayer - Add this to your existing imports
-class TalentVideoPlayer extends StatelessWidget {
+class TalentVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final StarEntity talent;
-  final StarCubit? cubit;
+  final Function(Duration)? onDurationLoaded;
+  final StarCubit? starCubit;
+  final CommentCubit? commentCubit;
+  // New playlist parameters
+  final PlaylistEntity? playlist;
+  final int? currentIndex;
+  final bool? isShuffleEnabled;
+  final bool? isRepeatEnabled;
 
   const TalentVideoPlayer({
     super.key,
     required this.videoUrl,
+    this.onDurationLoaded,
     required this.talent,
-    this.cubit,
+    this.starCubit,
+    this.commentCubit,
+    this.playlist,
+    this.currentIndex,
+    this.isShuffleEnabled,
+    this.isRepeatEnabled,
   });
+
+  @override
+  State<TalentVideoPlayer> createState() => _TalentVideoPlayerState();
+}
+
+class _TalentVideoPlayerState extends State<TalentVideoPlayer> {
+  void _playNextVideo() {
+    if (widget.playlist != null && widget.currentIndex != null) {
+      // Logic to play next video in playlist
+      final nextIndex = widget.currentIndex! + 1;
+      if (nextIndex < widget.playlist!.videosCount) {
+        // Navigate to next video
+        Navigator.pushReplacementNamed(
+          context,
+          '/video-player',
+          arguments: {
+            'playlist': widget.playlist,
+            'currentIndex': nextIndex,
+            'isShuffleEnabled': widget.isShuffleEnabled,
+            'isRepeatEnabled': widget.isRepeatEnabled,
+          },
+        );
+      }
+    }
+  }
+
+  void _playPreviousVideo() {
+    if (widget.playlist != null && widget.currentIndex != null) {
+      // Logic to play previous video in playlist
+      final prevIndex = widget.currentIndex! - 1;
+      if (prevIndex >= 0) {
+        // Navigate to previous video
+        Navigator.pushReplacementNamed(
+          context,
+          '/video-player',
+          arguments: {
+            'playlist': widget.playlist,
+            'currentIndex': prevIndex,
+            'isShuffleEnabled': widget.isShuffleEnabled,
+            'isRepeatEnabled': widget.isRepeatEnabled,
+          },
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // Try to get cubit from context if not provided
-    StarCubit? effectiveCubit = cubit;
+    StarCubit? effectiveCubit = widget.starCubit;
     if (effectiveCubit == null) {
       try {
         effectiveCubit = context.read<StarCubit>();
@@ -503,7 +563,7 @@ class TalentVideoPlayer extends StatelessWidget {
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          talent.title,
+          widget.talent.title,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -532,7 +592,7 @@ class TalentVideoPlayer extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      videoUrl,
+                      widget.videoUrl,
                       style: TextStyle(color: Colors.grey[400], fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
@@ -548,7 +608,7 @@ class TalentVideoPlayer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    talent.title,
+                    widget.talent.title,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -557,7 +617,7 @@ class TalentVideoPlayer extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '${talent.user.firstName} ${talent.user.lastName}',
+                    '${widget.talent.user.firstName} ${widget.talent.user.lastName}',
                     style: TextStyle(
                       color: Colors.grey[400],
                       fontSize: 14,
@@ -565,7 +625,7 @@ class TalentVideoPlayer extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '${talent.totalViews} views',
+                    '${widget.talent.totalViews} views',
                     style: TextStyle(
                       color: Colors.grey[400],
                       fontSize: 14,

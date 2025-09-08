@@ -13,10 +13,14 @@ import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../../../service_locator/service_locator.dart';
+import '../../../../data/model/tube_video_models.dart';
+import '../../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../../controller/star_cubit/star_cubit.dart';
+import '../playlist_bottom_sheet.dart';
 
 class VideoCardWidget extends StatelessWidget {
-  final StarEntity video;
+  final TubeVideoModel video;
   final int index;
   final bool isHorizontal;
   final VoidCallback? onTap;
@@ -75,12 +79,11 @@ class VideoCardWidget extends StatelessWidget {
           children: [
             // Main thumbnail
             ThumbnailWidget(
-              imageUrl: video.mediaUrl.isNotEmpty
-                  ? video.mediaUrl.first.mediaKey
-                  : null,
+              imageUrl:
+                  video.thumbnail?.isNotEmpty == true ? video.thumbnail : null,
               width: double.infinity,
               height: double.infinity,
-              duration: '7:54',
+              duration: video.duration.toString(),
               showVolumeIcon: true,
               onTap: () {
                 ManageVibration.vibrate();
@@ -316,6 +319,47 @@ class VideoCardWidget extends StatelessWidget {
     );
   }
 
+  // void _showVideoOptions(BuildContext context) {
+  //   final cubit = context.read<StarCubit>();
+
+  //   OptionsBottomSheet.showOptions(
+  //     context: context,
+  //     options: [
+  //       OptionItem(
+  //         icon: Icons.playlist_add,
+  //         title: context.isArabic ? 'إنشاء قائمة' : 'Play next in queue',
+  //         onTap: () => Navigator.pop(context),
+  //       ),
+  //       OptionItem(
+  //         icon: Icons.block,
+  //         title: context.isArabic ? 'غير مهتم' : 'Not interested',
+  //         onTap: () => Navigator.pop(context),
+  //       ),
+  //       OptionItem(
+  //         icon: cubit.isFavorite(video.id)
+  //             ? Icons.favorite
+  //             : Icons.favorite_border,
+  //         title: cubit.isFavorite(video.id)
+  //             ? (context.isArabic
+  //                 ? 'إزالة من المفضلة'
+  //                 : 'Remove from favorites')
+  //             : (context.isArabic ? 'إضافة للمفضلة' : 'Add to favorites'),
+  //         onTap: () {
+  //           Navigator.pop(context);
+  //           cubit.toggleFavorite(video.id);
+  //         },
+  //       ),
+  //       OptionItem(
+  //         icon: Icons.flag,
+  //         title: context.isArabic ? 'إبلاغ' : 'Report',
+  //         iconColor: Colors.red,
+  //         textColor: Colors.red,
+  //         onTap: () => Navigator.pop(context),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   void _showVideoOptions(BuildContext context) {
     final cubit = context.read<StarCubit>();
 
@@ -324,7 +368,15 @@ class VideoCardWidget extends StatelessWidget {
       options: [
         OptionItem(
           icon: Icons.playlist_add,
-          title: context.isArabic ? 'إنشاء قائمة' : 'Play next in queue',
+          title: context.isArabic ? 'إضافة إلى قائمة تشغيل' : 'Add to playlist',
+          onTap: () {
+            Navigator.pop(context);
+            _showPlaylistBottomSheet(context, video);
+          },
+        ),
+        OptionItem(
+          icon: Icons.play_arrow,
+          title: context.isArabic ? 'تشغيل التالي' : 'Play next in queue',
           onTap: () => Navigator.pop(context),
         ),
         OptionItem(
@@ -354,6 +406,19 @@ class VideoCardWidget extends StatelessWidget {
           onTap: () => Navigator.pop(context),
         ),
       ],
+    );
+  }
+
+// Add this helper method to video_card_widget.dart:
+  void _showPlaylistBottomSheet(BuildContext context, StarEntity video) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: PlaylistBottomSheet(video: video),
+      ),
     );
   }
 
