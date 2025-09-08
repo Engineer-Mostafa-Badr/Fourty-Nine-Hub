@@ -1081,7 +1081,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
             ..getProfileById(widget.talent.user.id),
           child: ProfilePageView(
             user: widget.talent.user,
-            userVideos: [], // يمكن تحميلها لاحقاً
+            userVideos: [], 
             isCurrentUser: false,
             profileId: widget.talent.user.id,
           ),

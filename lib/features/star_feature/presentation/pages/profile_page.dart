@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/error_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/loading_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
+import '../controller/star_cubit/star_cubit.dart';
 import '../widgets/profile_components/edit_profile_sheet.dart';
 import '../widgets/profile_components/profile_app_bar.dart';
 import '../widgets/profile_components/profile_header.dart';
@@ -41,7 +42,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   // Extended data for better UX
   late List<StarEntity> _extendedVideos;
-  late List<PlaylistEntity> _mockPlaylists;
 
   bool _isAppBarExpanded = true;
 
@@ -67,7 +67,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   void _initializeData() {
     _extendedVideos = _createExtendedVideoList();
-    _mockPlaylists = _createMockPlaylists();
   }
 
   void _loadProfileIfNeeded() {
@@ -117,27 +116,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
     return extendedVideos;
   }
 
-  List<PlaylistEntity> _createMockPlaylists() {
-    return [
-      PlaylistEntity(
-        id: '1',
-        name: 'Heart Touching - Playlist',
-        description: 'Beautiful collection of heart touching nasheeds',
-        videos: _extendedVideos.take(25).toList(),
-        thumbnailUrl: 'assets/images/testforvideo.jpg',
-        createdAt: DateTime.now().subtract(Duration(days: 30)),
-      ),
-      PlaylistEntity(
-        id: '2',
-        name: 'Spiritual Journey - Playlist',
-        description: 'Another beautiful collection for spiritual growth',
-        videos: _extendedVideos.skip(10).take(30).toList(),
-        thumbnailUrl: 'assets/images/testforvideo.jpg',
-        createdAt: DateTime.now().subtract(Duration(days: 60)),
-      ),
-    ];
-  }
-
   void _showEditProfileSheet() {
     showModalBottomSheet(
       context: context,
@@ -175,8 +153,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
   // دالة للحصول على ID المستخدم الحالي
   String? _getCurrentUserId() {
-    // هنا تحط الـ logic بتاع جلب ID المستخدم الحالي
-    // ممكن من SharedPreferences أو من UserCubit أو أي مكان تاني
+    if (widget.isCurrentUser) {
+      return UserCubit.to.state.data?.id; // مثال
+    }
     try {
       return UserCubit.to.state.data?.id; // مثال
     } catch (e) {
@@ -206,25 +185,25 @@ class _ProfilePageViewState extends State<ProfilePageView>
     return Column(
       children: [
         ProfileAppBar(
-          // isCurrentUser: widget.isCurrentUser,
           profileUser: widget.user,
           currentUserId: _getCurrentUserId(),
           onEditPressed: () {
             ManageVibration.vibrate();
-            _showEditProfileSheet();
+            if (!widget.isCurrentUser) {
+              _showEditProfileSheet();
+            }
           },
           onBackPressed: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
           },
-          // user: widget.user,
         ),
         Expanded(
           child: SafeArea(
             top: false,
             child: NestedScrollView(
               controller: _scrollController,
-              physics: const ClampingScrollPhysics(), // إضافة physics
+              physics: const ClampingScrollPhysics(),
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverToBoxAdapter(
@@ -237,7 +216,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   ),
                   SliverPersistentHeader(
                     pinned: true,
-                    floating: false, // إضافة floating
+                    floating: false,
                     delegate: _SliverTabBarDelegate(
                       ProfileTabBar(tabController: _tabController),
                     ),
@@ -247,10 +226,14 @@ class _ProfilePageViewState extends State<ProfilePageView>
               body: MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                child: ProfileTabsContent(
-                  tabController: _tabController,
-                  extendedVideos: _extendedVideos,
-                  playlists: _mockPlaylists,
+                child: BlocProvider(
+                  create: (context) => serviceLocator<StarCubit>(),
+                  child: ProfileTabsContent(
+                    tabController: _tabController,
+                    extendedVideos: _extendedVideos,
+                    isCurrentUser: widget.isCurrentUser,
+                    userId: widget.isCurrentUser ? null : widget.user?.id,
+                  ),
                 ),
               ),
             ),
@@ -275,10 +258,10 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverTabBarDelegate(this._tabBar);
 
   @override
-  double get minExtent => 56.0; // تغيير من 50 إلى 56
+  double get minExtent => 56.0;
 
   @override
-  double get maxExtent => 56.0; // تغيير من 50 إلى 56
+  double get maxExtent => 56.0;
 
   @override
   Widget build(
@@ -287,7 +270,7 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-      height: 56.0, // إضافة height صريح
+      height: 56.0,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: overlapsContent

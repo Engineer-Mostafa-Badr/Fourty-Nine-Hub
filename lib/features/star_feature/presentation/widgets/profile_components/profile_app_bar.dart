@@ -40,19 +40,18 @@ class ProfileAppBar extends StatelessWidget {
             ),
 
             // Title
-            Expanded(
-              child: Text(
-                _getTitle(context, isCurrentUser),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: _getResponsiveFontSize(context, 20),
-                  fontWeight: FontWeight.w600,
-                ),
+            Text(
+              _getTitle(context, isCurrentUser),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: _getResponsiveFontSize(context, 20),
+                fontWeight: FontWeight.w600,
               ),
             ),
+            Spacer(),
 
-            // Action Button
+            // Action Button - إظهار زرار التعديل فقط للمستخدم الحالي
             _buildActionButton(context, isCurrentUser),
           ],
         ),
@@ -61,7 +60,6 @@ class ProfileAppBar extends StatelessWidget {
   }
 
   // دالة للتحقق من إذا كان المستخدم الحالي هو صاحب الحساب
-
   bool _isCurrentUserProfile() {
     if (currentUserId == null || profileUser?.id == null) {
       return false;
@@ -71,9 +69,10 @@ class ProfileAppBar extends StatelessWidget {
 
   String _getTitle(BuildContext context, bool isCurrentUser) {
     if (isCurrentUser) {
-      return context.isArabic ? 'ملفي الشخصي' : 'My Profile';
+      // إظهار "ملف شخصي" للمستخدم الحالي
+      return context.isArabic ? 'ملف شخصي' : 'My Profile';
     } else {
-      // عرض اسم المستخدم أو عنوان عام
+      // عرض اسم المستخدم الآخر
       if (profileUser != null) {
         return '${profileUser!.firstName} ${profileUser!.lastName}';
       }
@@ -82,8 +81,8 @@ class ProfileAppBar extends StatelessWidget {
   }
 
   Widget _buildActionButton(BuildContext context, bool isCurrentUser) {
-    // إظهار زر التعديل فقط للمستخدم الحالي
-    if (isCurrentUser && onEditPressed != null) {
+    if (!isCurrentUser && onEditPressed != null) {
+      // إظهار زرار التعديل فقط للمستخدم الحالي
       return IconButton(
         icon: Icon(
           Icons.edit,
@@ -94,20 +93,7 @@ class ProfileAppBar extends StatelessWidget {
       );
     }
 
-    // إذا لم يكن المستخدم الحالي، ممكن تضيف أزرار أخرى زي Follow/Subscribe
-    if (isCurrentUser) {
-      return IconButton(
-        icon: Icon(
-          Icons.person_add,
-          color: Colors.blue,
-          size: _getResponsiveIconSize(context, 24),
-        ),
-        onPressed: () {
-          // Logic للـ follow/subscribe
-        },
-      );
-    }
-
+    // لو مش المستخدم الحالي، نخفي الزرار
     return SizedBox(width: 48.w);
   }
 

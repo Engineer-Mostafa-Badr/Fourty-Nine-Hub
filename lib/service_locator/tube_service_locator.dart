@@ -1,13 +1,17 @@
 import 'package:get_it/get_it.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/profile_cubit/profile_cubit.dart';
 
+import '../features/star_feature/data/data_source/playlist_remote_data_source.dart';
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
+import '../features/star_feature/data/repository/playlist_repository_impl.dart';
 import '../features/star_feature/data/repository/profile_repository.dart';
+import '../features/star_feature/domain/repository/playlist_repository.dart';
 import '../features/star_feature/domain/repository/profile_repository.dart';
 import '../features/star_feature/domain/use_case/comment_use_cases.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
+import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
@@ -32,6 +36,7 @@ import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dar
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
 // NEW: Comment use cases imports
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
+import '../features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 
 class TubeServiceLocator {
@@ -199,6 +204,64 @@ class TubeServiceLocator {
       );
     }
 
+    //! NEW: Playlist Dependencies
+    // Data Sources
+    if (!serviceLocator.isRegistered<PlaylistRemoteDataSource>()) {
+      serviceLocator.registerLazySingleton<PlaylistRemoteDataSource>(
+        () => PlaylistRemoteDataSourceImpl(serviceLocator()),
+      );
+    }
+
+    // Repositories
+    if (!serviceLocator.isRegistered<PlaylistRepository>()) {
+      serviceLocator.registerLazySingleton<PlaylistRepository>(
+        () => PlaylistRepositoryImpl(serviceLocator()),
+      );
+    }
+
+    // Use Cases
+    if (!serviceLocator.isRegistered<GetPlaylistsUseCase>()) {
+      serviceLocator.registerLazySingleton<GetPlaylistsUseCase>(
+        () => GetPlaylistsUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<CreatePlaylistUseCase>()) {
+      serviceLocator.registerLazySingleton<CreatePlaylistUseCase>(
+        () => CreatePlaylistUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetPlaylistByIdUseCase>()) {
+      serviceLocator.registerLazySingleton<GetPlaylistByIdUseCase>(
+        () => GetPlaylistByIdUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<AddVideoToPlaylistUseCase>()) {
+      serviceLocator.registerLazySingleton<AddVideoToPlaylistUseCase>(
+        () => AddVideoToPlaylistUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<RemoveVideoFromPlaylistUseCase>()) {
+      serviceLocator.registerLazySingleton<RemoveVideoFromPlaylistUseCase>(
+        () => RemoveVideoFromPlaylistUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<DeletePlaylistUseCase>()) {
+      serviceLocator.registerLazySingleton<DeletePlaylistUseCase>(
+        () => DeletePlaylistUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<UpdatePlaylistUseCase>()) {
+      serviceLocator.registerLazySingleton<UpdatePlaylistUseCase>(
+        () => UpdatePlaylistUseCase(serviceLocator()),
+      );
+    }
+
     //! Star Cubit with all dependencies
     // استخدم registerFactory بدلاً من registerLazySingleton للـ Cubit
     serviceLocator.registerFactory<StarCubit>(
@@ -235,6 +298,19 @@ class TubeServiceLocator {
         serviceLocator<DeleteCommentUseCase>(),
         serviceLocator<LikeCommentUseCase>(),
         serviceLocator<DislikeCommentUseCase>(),
+      ),
+    );
+
+    //! NEW: Playlist Cubit Registration
+    serviceLocator.registerFactory<PlaylistCubit>(
+      () => PlaylistCubit(
+        serviceLocator<GetPlaylistsUseCase>(),
+        serviceLocator<CreatePlaylistUseCase>(),
+        serviceLocator<GetPlaylistByIdUseCase>(),
+        serviceLocator<AddVideoToPlaylistUseCase>(),
+        serviceLocator<RemoveVideoFromPlaylistUseCase>(),
+        serviceLocator<DeletePlaylistUseCase>(),
+        serviceLocator<UpdatePlaylistUseCase>(),
       ),
     );
 

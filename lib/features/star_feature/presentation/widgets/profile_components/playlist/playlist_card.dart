@@ -3,16 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/thumbnail_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PlaylistCard extends StatelessWidget {
   final PlaylistEntity playlist;
   final VoidCallback? onTap;
+  final bool showMenu;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   const PlaylistCard({
     super.key,
     required this.playlist,
     this.onTap,
+    this.showMenu = false,
+    this.onEdit,
+    this.onDelete,
   });
 
   @override
@@ -48,8 +55,11 @@ class PlaylistCard extends StatelessWidget {
               child: _buildPlaylistInfo(context),
             ),
 
-            // Play Button
-            _buildPlayButton(context),
+            // Menu or Play Button
+            if (showMenu && (onEdit != null || onDelete != null))
+              _buildMenuButton(context)
+            else
+              _buildPlayButton(context),
           ],
         ),
       ),
@@ -67,7 +77,7 @@ class PlaylistCard extends StatelessWidget {
         children: [
           // Main thumbnail
           ThumbnailWidget(
-            imageUrl: playlist.thumbnailUrl,
+            imageUrl: playlist.thumbnail,
             width: thumbnailSize,
             height: thumbnailSize,
             showPlayIcon: true,
@@ -145,6 +155,66 @@ class PlaylistCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMenuButton(BuildContext context) {
+    return PopupMenuButton<String>(
+      onSelected: (value) {
+        ManageVibration.vibrate();
+        switch (value) {
+          case 'edit':
+            onEdit?.call();
+            break;
+          case 'delete':
+            onDelete?.call();
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        if (onEdit != null)
+          PopupMenuItem<String>(
+            value: 'edit',
+            child: Row(
+              children: [
+                Icon(Icons.edit, size: 20, color: Colors.grey[700]),
+                SizedBox(width: 12),
+                Text(
+                  context.isArabic ? 'تعديل' : 'Edit',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (onDelete != null)
+          PopupMenuItem<String>(
+            value: 'delete',
+            child: Row(
+              children: [
+                Icon(Icons.delete, size: 20, color: Colors.red),
+                SizedBox(width: 12),
+                Text(
+                  context.isArabic ? 'حذف' : 'Delete',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+      child: Padding(
+        padding: EdgeInsets.all(_getResponsiveSpacing(context, 16)),
+        child: Icon(
+          Icons.more_vert,
+          size: _getResponsiveIconSize(context, 24),
+          color: Colors.grey[600],
+        ),
       ),
     );
   }

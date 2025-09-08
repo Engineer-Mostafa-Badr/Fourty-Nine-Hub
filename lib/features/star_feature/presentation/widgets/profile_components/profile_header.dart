@@ -8,7 +8,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/user_star_entity.dart';
 
-class ProfileHeader extends StatelessWidget {
+class ProfileHeader extends StatefulWidget {
   final ProfileEntity? profile;
   final UserStarEntity? user;
   final bool isCurrentUser;
@@ -23,11 +23,17 @@ class ProfileHeader extends StatelessWidget {
   });
 
   @override
+  State<ProfileHeader> createState() => _ProfileHeaderState();
+}
+
+class _ProfileHeaderState extends State<ProfileHeader> {
+  bool _isSubscribed = false;
+
+  @override
   Widget build(BuildContext context) {
-    // إضافة debug للتحقق من البيانات
-    debugPrint('ProfileHeader - isCurrentUser: $isCurrentUser');
-    debugPrint('ProfileHeader - profile: ${profile?.channelName}');
-    debugPrint('ProfileHeader - user: ${user?.firstName}');
+    debugPrint('ProfileHeader - isCurrentUser: ${widget.isCurrentUser}');
+    debugPrint('ProfileHeader - profile: ${widget.profile?.channelName}');
+    debugPrint('ProfileHeader - user: ${widget.user?.firstName}');
 
     return Container(
       color: Colors.white,
@@ -41,6 +47,11 @@ class ProfileHeader extends StatelessWidget {
           SizedBox(height: _getResponsiveSpacing(context, 20)),
           // Profile Info Section
           _buildProfileInfoSection(context),
+          // Subscribe Button Section - إخفاؤه للمستخدم الحالي
+          if (!widget.isCurrentUser) ...[
+            SizedBox(height: _getResponsiveSpacing(context, 16)),
+            _buildSubscribeSection(context),
+          ],
         ],
       ),
     );
@@ -50,8 +61,9 @@ class ProfileHeader extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final bannerHeight = screenWidth * 0.3;
 
-    final bannerUrl =
-        profile?.channelCover != null ? profile!.channelCover!.mediaKey : null;
+    final bannerUrl = widget.profile?.channelCover != null
+        ? widget.profile!.channelCover!.mediaKey
+        : null;
 
     log('bannerUrl: $bannerUrl');
 
@@ -93,16 +105,18 @@ class ProfileHeader extends StatelessWidget {
     final profileSize = screenWidth < 360 ? 60.0 : 80.0;
 
     // تحسين null safety
-    final profileImageUrl = isCurrentUser && profile?.channelPicture != null
-        ? profile!.channelPicture!.mediaKey
-        : user?.image ?? '';
+    final profileImageUrl =
+        widget.isCurrentUser && widget.profile?.channelPicture != null
+            ? widget.profile!.channelPicture!.mediaKey
+            : widget.user?.image ?? '';
 
-    final displayName =
-        isCurrentUser && profile != null && profile!.channelName.isNotEmpty
-            ? profile!.channelName
-            : (user != null
-                ? "${user!.firstName} ${user!.lastName}".trim()
-                : "Unknown User");
+    final displayName = widget.isCurrentUser &&
+            widget.profile != null &&
+            widget.profile!.channelName.isNotEmpty
+        ? widget.profile!.channelName
+        : (widget.user != null
+            ? "${widget.user!.firstName} ${widget.user!.lastName}".trim()
+            : "Unknown User");
 
     return Column(
       children: [
@@ -166,19 +180,19 @@ class ProfileHeader extends StatelessWidget {
                   SizedBox(height: _getResponsiveSpacing(context, 4)),
                   Text(
                     context.isArabic
-                        ? "${displayName.toLowerCase().replaceAll(' ', '')}@ • ${_getArabicVideosText(videosCount)}"
-                        : "@${displayName.toLowerCase().replaceAll(' ', '')} • $videosCount videos",
+                        ? "${displayName.toLowerCase().replaceAll(' ', '')}@ • ${_getArabicVideosText(widget.videosCount)}"
+                        : "@${displayName.toLowerCase().replaceAll(' ', '')} • ${widget.videosCount} videos",
                     style: TextStyle(
                       fontSize: _getResponsiveFontSize(context, 16),
                       color: Colors.grey[600],
                     ),
                   ),
-                  if (isCurrentUser &&
-                      profile?.channelDescription != null &&
-                      profile!.channelDescription.isNotEmpty) ...[
+                  if (widget.isCurrentUser &&
+                      widget.profile?.channelDescription != null &&
+                      widget.profile!.channelDescription.isNotEmpty) ...[
                     SizedBox(height: _getResponsiveSpacing(context, 8)),
                     Text(
-                      profile!.channelDescription,
+                      widget.profile!.channelDescription,
                       style: TextStyle(
                         fontSize: _getResponsiveFontSize(context, 14),
                         color: Colors.grey[700],
@@ -193,6 +207,103 @@ class ProfileHeader extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildSubscribeSection(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: _isSubscribed ? Colors.grey[300] : Colors.red,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(25),
+                  onTap: () {
+                    setState(() {
+                      _isSubscribed = !_isSubscribed;
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          _isSubscribed
+                              ? (context.isArabic
+                                  ? 'تم الاشتراك'
+                                  : 'Subscribed')
+                              : (context.isArabic
+                                  ? 'تم إلغاء الاشتراك'
+                                  : 'Unsubscribed'),
+                        ),
+                        backgroundColor:
+                            _isSubscribed ? Colors.green : Colors.orange,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _isSubscribed ? Icons.check : Icons.add,
+                          color: _isSubscribed ? Colors.black : Colors.white,
+                          size: 20,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          _isSubscribed
+                              ? (context.isArabic ? 'مشترك' : 'Subscribed')
+                              : (context.isArabic ? 'اشتراك' : 'Subscribe'),
+                          style: TextStyle(
+                            color: _isSubscribed ? Colors.black : Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (!_isSubscribed) ...[
+            SizedBox(width: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.notifications_none,
+                  color: Colors.grey[700],
+                  size: 24,
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'اشترك أولاً لتفعيل الإشعارات'
+                            : 'Subscribe first to enable notifications',
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
