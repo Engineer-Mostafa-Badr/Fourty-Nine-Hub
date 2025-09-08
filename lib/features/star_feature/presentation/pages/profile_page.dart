@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/error_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/loading_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
+import '../controller/star_cubit/star_cubit.dart';
+import '../utils/enums.dart';
 import '../widgets/profile_components/edit_profile_sheet.dart';
 import '../widgets/profile_components/profile_app_bar.dart';
 import '../widgets/profile_components/profile_header.dart';
@@ -37,11 +39,11 @@ class _ProfilePageViewState extends State<ProfilePageView>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   late ProfileCubit _profileCubit;
+  late StarCubit _starCubit;
   late ScrollController _scrollController;
 
-  // Extended data for better UX
-  late List<StarEntity> _extendedVideos;
-  late List<PlaylistEntity> _mockPlaylists;
+  List<StarEntity> _userRealVideos = [];
+  bool _isLoadingUserVideos = false;
 
   bool _isAppBarExpanded = true;
 
@@ -52,25 +54,21 @@ class _ProfilePageViewState extends State<ProfilePageView>
   void initState() {
     super.initState();
     _initializeControllers();
-    _initializeData();
-    _loadProfileIfNeeded();
+    _loadProfileAndVideos();
   }
 
   void _initializeControllers() {
     _tabController = TabController(length: 3, vsync: this);
     _profileCubit = context.read<ProfileCubit>();
+    _starCubit = context.read<StarCubit>();
     _scrollController = ScrollController();
 
     // Listen to scroll to handle app bar animation
     _scrollController.addListener(_handleScroll);
   }
 
-  void _initializeData() {
-    _extendedVideos = _createExtendedVideoList();
-    _mockPlaylists = _createMockPlaylists();
-  }
-
-  void _loadProfileIfNeeded() {
+  void _loadProfileAndVideos() async {
+    // Load profile data
     if (widget.isCurrentUser && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && !_profileCubit.isClosed) {
@@ -78,13 +76,78 @@ class _ProfilePageViewState extends State<ProfilePageView>
         }
       });
     } else if (widget.profileId != null && mounted) {
-      // Load profile by ID for other users
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && !_profileCubit.isClosed) {
           _profileCubit.getProfileById(widget.profileId!);
         }
       });
     }
+
+    // Load user's actual videos
+    await _loadUserActualVideos();
+  }
+
+  Future<void> _loadUserActualVideos() async {
+    print("🎥 Starting to load user actual videos");
+    print("👤 Is current user: ${widget.isCurrentUser}");
+    print("📦 Widget fallback videos: ${widget.userVideos.length}");
+
+    setState(() {
+      _isLoadingUserVideos = true;
+    });
+
+    try {
+      if (widget.isCurrentUser) {
+        // For current user, load their videos from myTalents
+        print("🎬 Loading current user's myTalents");
+        await _starCubit.loadTalents(TalentCategory.myTalents, refresh: true);
+
+        final myTalents = _starCubit.state.myTalents;
+        print("✅ Loaded myTalents: ${myTalents.length}");
+
+        setState(() {
+          _userRealVideos = myTalents;
+        });
+      } else {
+        print("👥 Loading other user's videos");
+
+        // First, ensure available videos are loaded
+        if (_starCubit.state.availableTalents.isEmpty) {
+          print("🔄 Loading available videos first...");
+          await _starCubit.loadTalents(TalentCategory.available, refresh: true);
+        }
+
+        // Filter videos that belong to this specific user from available videos
+        final availableVideos = _starCubit.state.availableTalents;
+        print("📺 Available videos in cubit: ${availableVideos.length}");
+
+        final filteredVideos = availableVideos
+            .where((video) => video.user.id == widget.user?.id)
+            .toList();
+        print(
+            "🔍 Filtered videos for user ${widget.user?.id}: ${filteredVideos.length}");
+
+        // Use filtered videos or fallback to widget videos
+        if (filteredVideos.isNotEmpty) {
+          _userRealVideos = filteredVideos;
+          print("✅ Using filtered videos: ${_userRealVideos.length}");
+        } else {
+          _userRealVideos = widget.userVideos;
+          print("📦 Using fallback widget videos: ${_userRealVideos.length}");
+        }
+      }
+    } catch (e) {
+      print('❌ Error loading user videos: $e');
+      // Fallback to provided videos
+      _userRealVideos = widget.userVideos;
+      print("🆘 Using emergency fallback: ${_userRealVideos.length}");
+    }
+
+    setState(() {
+      _isLoadingUserVideos = false;
+    });
+
+    print("🏁 Finished loading user videos: ${_userRealVideos.length}");
   }
 
   void _handleScroll() {
@@ -95,47 +158,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
     if (_isAppBarExpanded != isExpanded) {
       setState(() => _isAppBarExpanded = isExpanded);
     }
-  }
-
-  List<StarEntity> _createExtendedVideoList() {
-    if (widget.userVideos.isEmpty) return [];
-
-    final List<StarEntity> extendedVideos = [];
-
-    // Extend videos for better scrolling experience
-    for (int i = 0; i < 20; i++) {
-      for (int j = 0; j < widget.userVideos.length; j++) {
-        final originalVideo = widget.userVideos[j];
-        extendedVideos.add(originalVideo.copyWith(
-          id: '${originalVideo.id}_$i$j',
-          totalViews: originalVideo.totalViews + (i * 1000),
-          createdAt: DateTime.now().subtract(Duration(days: i + j)),
-        ));
-      }
-    }
-
-    return extendedVideos;
-  }
-
-  List<PlaylistEntity> _createMockPlaylists() {
-    return [
-      PlaylistEntity(
-        id: '1',
-        name: 'Heart Touching - Playlist',
-        description: 'Beautiful collection of heart touching nasheeds',
-        videos: _extendedVideos.take(25).toList(),
-        thumbnailUrl: 'assets/images/testforvideo.jpg',
-        createdAt: DateTime.now().subtract(Duration(days: 30)),
-      ),
-      PlaylistEntity(
-        id: '2',
-        name: 'Spiritual Journey - Playlist',
-        description: 'Another beautiful collection for spiritual growth',
-        videos: _extendedVideos.skip(10).take(30).toList(),
-        thumbnailUrl: 'assets/images/testforvideo.jpg',
-        createdAt: DateTime.now().subtract(Duration(days: 60)),
-      ),
-    ];
   }
 
   void _showEditProfileSheet() {
@@ -167,26 +189,28 @@ class _ProfilePageViewState extends State<ProfilePageView>
       backgroundColor: Colors.white,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
-          return _buildContent(profileState);
+          return _buildContent(profileState, widget.isCurrentUser);
         },
       ),
     );
   }
 
-  // دالة للحصول على ID المستخدم الحالي
+  // Function to get current user ID
   String? _getCurrentUserId() {
-    // هنا تحط الـ logic بتاع جلب ID المستخدم الحالي
-    // ممكن من SharedPreferences أو من UserCubit أو أي مكان تاني
     try {
-      return UserCubit.to.state.data?.id; // مثال
+      return UserCubit.to.state.data?.id;
     } catch (e) {
       return null;
     }
   }
 
-  Widget _buildContent(ProfileState profileState) {
+  Widget _buildContent(
+      ProfileState profileState, bool isCurrentUserFromProfile) {
     debugPrint('Profile State: ${profileState.status}');
     debugPrint('Has Profile: ${profileState.hasProfile}');
+    debugPrint('User Videos Count: ${_userRealVideos.length}');
+    debugPrint('Is Loading User Videos: $_isLoadingUserVideos');
+    debugPrint('Is Current User (ProfileEntity): $isCurrentUserFromProfile');
 
     if (profileState.isLoading && !profileState.hasProfile) {
       return const Center(
@@ -198,7 +222,13 @@ class _ProfilePageViewState extends State<ProfilePageView>
       return Center(
         child: StarErrorWidget(
           message: profileState.failure?.toString() ?? 'Failed to load profile',
-          onRetry: () => _profileCubit.getMyProfile(),
+          onRetry: () {
+            if (isCurrentUserFromProfile) {
+              _profileCubit.getMyProfile();
+            } else if (widget.profileId != null) {
+              _profileCubit.getProfileById(widget.profileId!);
+            }
+          },
         ),
       );
     }
@@ -206,38 +236,38 @@ class _ProfilePageViewState extends State<ProfilePageView>
     return Column(
       children: [
         ProfileAppBar(
-          // isCurrentUser: widget.isCurrentUser,
           profileUser: widget.user,
           currentUserId: _getCurrentUserId(),
           onEditPressed: () {
             ManageVibration.vibrate();
-            _showEditProfileSheet();
+            if (isCurrentUserFromProfile) {
+              _showEditProfileSheet();
+            }
           },
           onBackPressed: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
           },
-          // user: widget.user,
         ),
         Expanded(
           child: SafeArea(
             top: false,
             child: NestedScrollView(
               controller: _scrollController,
-              physics: const ClampingScrollPhysics(), // إضافة physics
+              physics: const ClampingScrollPhysics(),
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverToBoxAdapter(
                     child: ProfileHeader(
                       profile: profileState.profile,
                       user: widget.user,
-                      isCurrentUser: widget.isCurrentUser,
+                      isCurrentUser: isCurrentUserFromProfile,
                       videosCount: _getVideosCount(profileState),
                     ),
                   ),
                   SliverPersistentHeader(
                     pinned: true,
-                    floating: false, // إضافة floating
+                    floating: false,
                     delegate: _SliverTabBarDelegate(
                       ProfileTabBar(tabController: _tabController),
                     ),
@@ -247,10 +277,15 @@ class _ProfilePageViewState extends State<ProfilePageView>
               body: MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                child: ProfileTabsContent(
-                  tabController: _tabController,
-                  extendedVideos: _extendedVideos,
-                  playlists: _mockPlaylists,
+                child: BlocProvider.value(
+                  value: _starCubit,
+                  child: ProfileTabsContent(
+                    tabController: _tabController,
+                    extendedVideos: _userRealVideos,
+                    isCurrentUser: isCurrentUserFromProfile,
+                    userId: isCurrentUserFromProfile ? null : widget.user?.id,
+                    isLoadingUserVideos: _isLoadingUserVideos,
+                  ),
                 ),
               ),
             ),
@@ -261,9 +296,16 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   int _getVideosCount(ProfileState profileState) {
+    // Return actual user videos count
+    if (_userRealVideos.isNotEmpty) {
+      return _userRealVideos.length;
+    }
+
+    // Fallback to profile data or widget data
     if (widget.isCurrentUser && profileState.profile != null) {
       return profileState.profile!.videosCount;
     }
+
     return widget.userVideos.length;
   }
 }
@@ -275,10 +317,10 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverTabBarDelegate(this._tabBar);
 
   @override
-  double get minExtent => 56.0; // تغيير من 50 إلى 56
+  double get minExtent => 56.0;
 
   @override
-  double get maxExtent => 56.0; // تغيير من 50 إلى 56
+  double get maxExtent => 56.0;
 
   @override
   Widget build(
@@ -287,7 +329,7 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-      height: 56.0, // إضافة height صريح
+      height: 56.0,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: overlapsContent

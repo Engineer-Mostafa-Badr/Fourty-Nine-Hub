@@ -106,21 +106,24 @@ class ProfileCubit extends Cubit<ProfileState> {
     // يمكن إضافة endpoint منفصل لده لاحقاً
   }
 
-  // Update profile with validation
+  // Update profile with validation - Enhanced version
   Future<bool> updateProfile({
     required String channelName,
     required String channelDescription,
     String? channelCover,
     String? channelPicture,
   }) async {
+    if (isClosed) return false;
+
     // Basic validation
     if (channelName.trim().isEmpty) {
-      _showErrorMessage(ValidationFailure());
+      _showErrorMessage(ValidationFailure('Channel name cannot be empty'));
       return false;
     }
 
     if (channelDescription.trim().isEmpty) {
-      _showErrorMessage(ValidationFailure());
+      _showErrorMessage(
+          ValidationFailure('Channel description cannot be empty'));
       return false;
     }
 
@@ -133,10 +136,19 @@ class ProfileCubit extends Cubit<ProfileState> {
       channelPicture: channelPicture,
     );
 
+    print('🔄 Updating profile...');
+    print('📝 Channel Name: ${channelName.trim()}');
+    print('📝 Description: ${channelDescription.trim()}');
+    print('🖼️ Cover ID: ${channelCover ?? 'no change'}');
+    print('👤 Picture ID: ${channelPicture ?? 'no change'}');
+
     final result = await _updateProfileUseCase(params);
+
+    if (isClosed) return false;
 
     return result.fold(
       (failure) {
+        print('❌ Profile update failed: $failure');
         emit(state.copyWith(
           status: ProfileStatus.error,
           failure: failure,
@@ -145,6 +157,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         return false;
       },
       (message) {
+        print('✅ Profile updated successfully');
+
         // Update local profile with new data
         ProfileEntity? updatedProfile;
         if (state.profile != null) {
@@ -164,8 +178,92 @@ class ProfileCubit extends Cubit<ProfileState> {
         ));
 
         _showSuccessMessage(message);
+
+        // Refresh profile to get updated images from server
+        refreshProfile();
+
         return true;
       },
+    );
+  }
+
+  // Update only cover photo
+  Future<bool> updateCoverPhoto(String mediaId) async {
+    if (isClosed) return false;
+
+    final currentProfile = state.profile;
+    if (currentProfile == null) {
+      _showErrorMessage(ValidationFailure('Profile not loaded'));
+      return false;
+    }
+
+    print('📸 Updating cover photo with media ID: $mediaId');
+
+    return await updateProfile(
+      channelName: currentProfile.channelName,
+      channelDescription: currentProfile.channelDescription,
+      channelCover: mediaId,
+      channelPicture: null, // Don't change profile picture
+    );
+  }
+
+  // Update only profile picture
+  Future<bool> updateProfilePicture(String mediaId) async {
+    if (isClosed) return false;
+
+    final currentProfile = state.profile;
+    if (currentProfile == null) {
+      _showErrorMessage(ValidationFailure('Profile not loaded'));
+      return false;
+    }
+
+    print('👤 Updating profile picture with media ID: $mediaId');
+
+    return await updateProfile(
+      channelName: currentProfile.channelName,
+      channelDescription: currentProfile.channelDescription,
+      channelCover: null, // Don't change cover
+      channelPicture: mediaId,
+    );
+  }
+
+  // Remove cover photo
+  Future<bool> removeCoverPhoto() async {
+    if (isClosed) return false;
+
+    final currentProfile = state.profile;
+    if (currentProfile == null) {
+      _showErrorMessage(ValidationFailure('Profile not loaded'));
+      return false;
+    }
+
+    print('🗑️ Removing cover photo');
+
+    return await updateProfile(
+      channelName: currentProfile.channelName,
+      channelDescription: currentProfile.channelDescription,
+      channelCover: "", // Empty string to remove
+      channelPicture: null, // Don't change profile picture
+    );
+  }
+
+  // Remove profile picture
+  Future<bool> removeProfilePicture() async {
+    if (isClosed) return false;
+
+    final currentProfile = state.profile;
+    if (currentProfile == null) {
+      _showErrorMessage(ValidationFailure('Profile not loaded'));
+      return false;
+    }
+
+    print('🗑️ Removing profile picture');
+
+    return await updateProfile(
+      channelName: currentProfile.channelName,
+      channelDescription: currentProfile.channelDescription,
+      channelCover: null, // Don't change cover
+      channelPicture: "", // Empty string to remove
     );
   }
 
@@ -176,6 +274,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   // Clear any messages or errors
   void clearMessage() {
+    if (isClosed) return;
     emit(state.copyWith(
       message: null,
       failure: null,
@@ -184,6 +283,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   // Clear error state
   void clearError() {
+    if (isClosed) return;
     emit(state.copyWith(
       failure: null,
       status:
@@ -193,6 +293,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   // Reset to initial state
   void reset() {
+    if (isClosed) return;
     emit(const ProfileState());
   }
 
@@ -215,11 +316,38 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     if (profile.channelName.isNotEmpty) completion += fieldWeight;
     if (profile.channelDescription.isNotEmpty) completion += fieldWeight;
-    // Add more fields as needed
-    // if (profile.channelCover != null) completion += fieldWeight;
-    // if (profile.channelPicture != null) completion += fieldWeight;
+    if (profile.channelCover != null &&
+        profile.channelCover!.mediaKey.isNotEmpty) {
+      completion += fieldWeight;
+    }
+    if (profile.channelPicture != null &&
+        profile.channelPicture!.mediaKey.isNotEmpty) {
+      completion += fieldWeight;
+    }
 
     return completion.clamp(0.0, 1.0);
+  }
+
+  // Get cover photo URL
+  String? get coverPhotoUrl {
+    return state.profile?.channelCover?.mediaKey;
+  }
+
+  // Get profile picture URL
+  String? get profilePictureUrl {
+    return state.profile?.channelPicture?.mediaKey;
+  }
+
+  // Check if has cover photo
+  bool get hasCoverPhoto {
+    final coverUrl = coverPhotoUrl;
+    return coverUrl != null && coverUrl.isNotEmpty;
+  }
+
+  // Check if has profile picture
+  bool get hasProfilePicture {
+    final pictureUrl = profilePictureUrl;
+    return pictureUrl != null && pictureUrl.isNotEmpty;
   }
 
   void _showErrorMessage(Failure failure) {
@@ -242,5 +370,9 @@ class ProfileCubit extends Cubit<ProfileState> {
 
 // Custom failure for validation
 class ValidationFailure extends Failure {
-  const ValidationFailure() : super();
+  final String message;
+  const ValidationFailure(this.message) : super();
+
+  @override
+  String toString() => message;
 }

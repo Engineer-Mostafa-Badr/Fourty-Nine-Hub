@@ -1821,13 +1821,42 @@ class EndPoints {
   static String dislikeTubeComment(String commentId) =>
       '/tube-comment/$commentId/dislike';
 
-      //! Exchange Currency Endpoints
-      static String convertCurrency({
-  required String from,
-  required String to,
-  required double amount,
-}) => '/exchange-currency/pair/$from/$to/$amount';
+  //! Playlist Endpoints
 
-static String getExchangeRates(String code) => '/exchange-currency/$code';
+  // Create new playlist
+  static const String createPlaylist = '/tube-playlist';
 
+  // Get all playlists for owner
+  static String getPlaylists(String ownerId) =>
+      '/tube-playlist?ownerId=$ownerId';
+
+  // Get playlist by ID
+  static String getPlaylistById(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  // Add video to playlist
+  static String addVideoToPlaylist(String playlistId) =>
+      '/tube-playlist/add-video/$playlistId';
+
+  // Remove video from playlist
+  static String removeVideoFromPlaylist(String playlistId) =>
+      '/tube-playlist/remove-video/$playlistId';
+
+  // Delete playlist
+  static String deletePlaylist(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  // Update playlist
+  static String updatePlaylist(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  //! Exchange Currency Endpoints
+  static String convertCurrency({
+    required String from,
+    required String to,
+    required double amount,
+  }) =>
+      '/exchange-currency/pair/$from/$to/$amount';
+
+  static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

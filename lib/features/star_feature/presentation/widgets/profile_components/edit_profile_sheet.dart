@@ -195,8 +195,8 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Channel Cover Section
-                  _buildSectionTitle(
-                      context.isArabic ? 'غلاف القناة' : 'Channel Cover'),
+                  // _buildSectionTitle(
+                  //     context.isArabic ? 'غلاف القناة' : 'Channel Cover'),
                   // SizedBox(height: 12),
                   // _buildCoverImagePicker(),
 

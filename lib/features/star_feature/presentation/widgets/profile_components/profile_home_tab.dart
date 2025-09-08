@@ -1,52 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 
-import '../common/thumbnail_widget.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../data/model/tube_video_models.dart';
+import '../../controller/playlist_cubit/playlist_cubit.dart';
+import '../../controller/star_cubit/star_cubit.dart';
+import '../../utils/enums.dart';
+import '../common/loading_indicator.dart';
+import '../talent_card/talent_card.dart';
+import 'playlist_bottom_sheet.dart';
 import 'video/video_card_widget.dart';
-import 'video/video_list_item.dart';
 
-class ProfileHomeTab extends StatelessWidget {
-  final List<StarEntity> videos;
+class ProfileHomeTab extends StatefulWidget {
+  final List<StarEntity> videos; // fallback data
+  final bool isCurrentUser;
+  final String? userId;
 
   const ProfileHomeTab({
     super.key,
     required this.videos,
+    required this.isCurrentUser,
+    this.userId,
   });
 
   @override
+  State<ProfileHomeTab> createState() => _ProfileHomeTabState();
+}
+
+class _ProfileHomeTabState extends State<ProfileHomeTab> {
+  late StarCubit _starCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _starCubit = context.read<StarCubit>();
+
+    // Load appropriate videos based on user type
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.isCurrentUser) {
+        // For current user, load all available content for "For You" section
+        _starCubit.loadTalents(TalentCategory.available, refresh: true);
+        // And load user's own videos for "New Songs" section
+        _starCubit.loadTalents(TalentCategory.myTalents, refresh: true);
+      } else {
+        // For other users, load all available content
+        _starCubit.loadTalents(TalentCategory.available, refresh: true);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (videos.isEmpty) {
-      return _buildEmptyState(context);
-    }
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, state) {
+        print(
+            "📺 ProfileHomeTab Build - Available: ${state.availableTalents.length}, MyTalents: ${state.myTalents.length}");
+        print("📺 Widget videos fallback: ${widget.videos.length}");
+        print("📺 Is current user: ${widget.isCurrentUser}");
+        if (state.status == StarStates.loading &&
+            state.availableTalents.isEmpty &&
+            (widget.isCurrentUser ? state.myTalents.isEmpty : true)) {
+          return Center(
+            child: StarLoadingIndicator(message: 'Loading videos...'),
+          );
+        }
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // For You Section - Horizontal Scroll
-          _buildSectionHeader(
-            context,
-            context.isArabic ? 'لك' : 'For You',
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // For You Section - Show available content
+              _buildSectionHeader(
+                context,
+                context.isArabic ? 'لك' : 'For You',
+              ),
+              _buildForYouSection(context, state),
+
+              SizedBox(height: _getResponsiveSpacing(context, 24)),
+
+              // User-specific content section
+              if (widget.isCurrentUser) ...[
+                // Current user's own videos
+                _buildSectionHeader(
+                  context,
+                  context.isArabic ? 'فيديوهاتي' : 'My Videos',
+                ),
+                _buildMyVideosSection(context, state),
+              ] else ...[
+                // Other user's videos from profile
+                _buildSectionHeader(
+                  context,
+                  context.isArabic ? 'فيديوهات المستخدم' : 'User Videos',
+                ),
+                _buildUserVideosSection(context),
+              ],
+            ],
           ),
-
-          _buildHorizontalVideoSection(context),
-
-          SizedBox(height: _getResponsiveSpacing(context, 24)),
-
-          // New Content Section - Vertical Scroll
-          _buildSectionHeader(
-            context,
-            context.isArabic ? 'أغنية جديدة 2020' : 'New Song 2020',
-          ),
-
-          _buildVerticalVideoSection(context),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(
+      BuildContext context, String message, String? subtitle) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -58,12 +116,23 @@ class ProfileHomeTab extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            context.isArabic ? 'لا توجد فيديوهات' : 'No videos yet',
+            message,
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[600],
             ),
           ),
+          if (subtitle != null) ...[
+            SizedBox(height: 8),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ],
       ),
     );
@@ -88,91 +157,116 @@ class ProfileHomeTab extends StatelessWidget {
     );
   }
 
-  Widget _buildHorizontalVideoSection(BuildContext context) {
+  Widget _buildForYouSection(BuildContext context, StarState state) {
+    final forYouVideos = state.availableTalents.take(10).toList();
+
+    if (forYouVideos.isEmpty) {
+      return SizedBox(
+        height: 200,
+        child: _buildEmptyState(
+          context,
+          context.isArabic ? 'لا توجد فيديوهات متاحة' : 'No videos available',
+          null,
+        ),
+      );
+    }
+
     return SizedBox(
       height: _getVideoCardHeight(context),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(left: _getResponsivePadding(context, 20)),
-        itemCount: videos.length,
+        itemCount: forYouVideos.length,
         itemBuilder: (context, index) {
-          final video = videos[index];
+          final video = forYouVideos[index] as TubeVideoModel;
           return Container(
             width: MediaQuery.of(context).size.width * 0.85,
             margin: EdgeInsets.only(right: _getResponsiveSpacing(context, 12)),
-            child: _buildSimpleVideoCard(context, video, index),
+            child: VideoCardWidget(
+              video: video,
+              index: index,
+              isHorizontal: true,
+              onTap: () => _navigateToVideo(context, video),
+            ),
           );
         },
       ),
     );
   }
 
-// إضافة هذه الدالة
-  Widget _buildSimpleVideoCard(
-      BuildContext context, StarEntity video, int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Video Thumbnail بدون الـ favorite button المحتاج للـ StarCubit
-        AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: ThumbnailWidget(
-              imageUrl: video.mediaUrl.isNotEmpty
-                  ? video.mediaUrl.first.mediaKey
-                  : null,
-              width: double.infinity,
-              height: double.infinity,
-              duration: '7:54',
-              showVolumeIcon: true,
-              onTap: () => _navigateToVideo(context, video),
-            ),
-          ),
+  Widget _buildMyVideosSection(BuildContext context, StarState state) {
+    final myVideos = state.myTalents.take(8).toList();
+
+    if (state.isLoading(TalentCategory.myTalents) && myVideos.isEmpty) {
+      return SizedBox(
+        height: 200,
+        child: Center(
+            child: StarLoadingIndicator(message: 'Loading your videos...')),
+      );
+    }
+
+    if (myVideos.isEmpty && !state.isLoading(TalentCategory.myTalents)) {
+      return SizedBox(
+        height: 200,
+        child: _buildEmptyState(
+          context,
+          context.isArabic ? 'لا توجد فيديوهات بعد' : 'No videos yet',
+          context.isArabic
+              ? 'ابدأ في رفع أول فيديو لك'
+              : 'Start uploading your first video',
         ),
-        SizedBox(height: 12),
-        // Video Info بدون الـ options والـ rating
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                video.title,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                  height: 1.3,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 6),
-              Text(
-                "${video.user.firstName} ${video.user.lastName}",
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemCount: myVideos.length,
+      itemBuilder: (context, index) {
+        final video = myVideos[index];
+        return Padding(
+          padding: EdgeInsets.only(bottom: _getResponsiveSpacing(context, 16)),
+          child: TalentCard(
+            talent: video,
+            cubit: _starCubit,
+            isMyTalent: true,
           ),
+        );
+      },
+    );
+  }
+
+  Widget _buildUserVideosSection(BuildContext context) {
+    // Use actual user videos from fallback data
+    final userVideos = widget.videos;
+
+    if (userVideos.isEmpty) {
+      return SizedBox(
+        height: 200,
+        child: _buildEmptyState(
+          context,
+          context.isArabic ? 'لا توجد فيديوهات' : 'No videos',
+          null,
         ),
-      ],
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemCount: userVideos.length,
+      itemBuilder: (context, index) {
+        final video = userVideos[index];
+        return Padding(
+          padding: EdgeInsets.only(bottom: _getResponsiveSpacing(context, 16)),
+          child: TalentCard(
+            talent: video,
+            cubit: _starCubit,
+          ),
+        );
+      },
     );
   }
 
@@ -189,22 +283,15 @@ class ProfileHomeTab extends StatelessWidget {
     );
   }
 
-  Widget _buildVerticalVideoSection(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.zero,
-      itemCount: 8, // Show limited items in home tab
-      itemBuilder: (context, index) {
-        final video = videos[index % videos.length];
-        return Padding(
-          padding: EdgeInsets.only(bottom: _getResponsiveSpacing(context, 16)),
-          child: VideoListItem(
-            video: video,
-            index: index,
-          ),
-        );
-      },
+  void _showPlaylistBottomSheet(BuildContext context, StarEntity video) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: PlaylistBottomSheet(video: video),
+      ),
     );
   }
 
@@ -239,6 +326,6 @@ class ProfileHomeTab extends StatelessWidget {
 
   double _getVideoCardHeight(BuildContext context) {
     final cardWidth = MediaQuery.of(context).size.width * 0.85;
-    return cardWidth * 0.75; // Adjust ratio as needed
+    return cardWidth * 0.75;
   }
 }

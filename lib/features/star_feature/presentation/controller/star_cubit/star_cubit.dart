@@ -900,6 +900,50 @@ class StarCubit extends Cubit<StarState> {
     emit(state.copyWith(talents: talents));
   }
 
+  // New method to fetch videos for a specific user
+  Future<List<StarEntity>> fetchUserVideos(String userId) async {
+    print("🎯 Fetching videos for user: $userId");
+
+    if (_useTubeVideoAPI) {
+      // يمكن إضافة API endpoint مخصص لفيديوهات المستخدم
+      // مثلاً: /api/v1/tube-video/user/{userId}
+
+      // للوقت الحالي، نفلتر من الفيديوهات المتاحة
+      final allVideos = state.availableTalents;
+      final userVideos =
+          allVideos.where((video) => video.user.id == userId).toList();
+
+      print("✅ Found ${userVideos.length} videos for user $userId");
+      return userVideos;
+    } else {
+      // استخدام old Star API إذا لزم الأمر
+      return [];
+    }
+  }
+
+  // Method to get user videos and update state
+  Future<void> loadUserVideos(String userId, {bool refresh = false}) async {
+    print("📱 Loading videos for user: $userId");
+
+    // You can create a new category for user videos if needed
+    // or store them temporarily
+
+    try {
+      final userVideos = await fetchUserVideos(userId);
+
+      // For now, we can return the videos without storing in state
+      // In the future, you might want to add a new category like:
+      // final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+      // talents[TalentCategory.userVideos] = userVideos;
+
+      print(
+          "✅ Successfully loaded ${userVideos.length} videos for user $userId");
+    } catch (e) {
+      print("❌ Error loading user videos: $e");
+      rethrow;
+    }
+  }
+
   // Banner management
   Future<void> _fetchBanner() async {
     final response = await _bannerUseCase(const NoParams());
