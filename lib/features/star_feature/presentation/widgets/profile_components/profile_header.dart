@@ -1,12 +1,20 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/helper/bunny_video_uploader.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../../../core/constants/constants.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/user_star_entity.dart';
+import '../../controller/profile_cubit/profile_cubit.dart';
 
 class ProfileHeader extends StatefulWidget {
   final ProfileEntity? profile;
@@ -28,6 +36,9 @@ class ProfileHeader extends StatefulWidget {
 
 class _ProfileHeaderState extends State<ProfileHeader> {
   bool _isSubscribed = false;
+  final ImagePicker _imagePicker = ImagePicker();
+  bool _isUploadingCover = false;
+  bool _isUploadingProfilePicture = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,36 +78,78 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
     log('bannerUrl: $bannerUrl');
 
-    return Container(
-      width: double.infinity,
-      height: bannerHeight,
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(_getResponsiveBorderRadius(context, 16)),
-        color: Colors.grey[200],
-      ),
-      child: bannerUrl != null
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(
-                  _getResponsiveBorderRadius(context, 16)),
-              child: CachedNetworkImage(
-                imageUrl: bannerUrl,
-                fit: BoxFit.cover,
-                errorWidget: (context, error, stackTrace) {
-                  return Image.asset(
-                    Assets.logo,
-                    fit: BoxFit.contain,
-                  );
-                },
-              ),
-            )
-          : Center(
-              child: Icon(
-                Icons.image,
-                size: 48,
-                color: Colors.grey[400],
-              ),
-            ),
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: bannerHeight,
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(_getResponsiveBorderRadius(context, 16)),
+            color: Colors.grey[200],
+          ),
+          child: bannerUrl != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                      _getResponsiveBorderRadius(context, 16)),
+                  child: CachedNetworkImage(
+                    imageUrl: bannerUrl,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, error, stackTrace) {
+                      return Image.asset(
+                        Assets.logo,
+                        fit: BoxFit.contain,
+                      );
+                    },
+                  ),
+                )
+              : Center(
+                  child: Icon(
+                    Icons.image,
+                    size: 48,
+                    color: Colors.grey[400],
+                  ),
+                ),
+        ),
+        
+        // Cover photo edit button (only for current user)
+        if (widget.isCurrentUser)
+          Positioned(
+            top: 8,
+            right: 8,
+            child: _isUploadingCover
+                ? Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.6),
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () => _showImagePickerDialog(context, ImageType.cover),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+          ),
+      ],
     );
   }
 
@@ -122,47 +175,92 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       children: [
         Row(
           children: [
-            Container(
-              width: profileSize,
-              height: profileSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.grey[300]!,
-                  width: 2,
+            Stack(
+              children: [
+                Container(
+                  width: profileSize,
+                  height: profileSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.grey[300]!,
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: profileImageUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: profileImageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[300],
+                              child: Icon(
+                                Icons.person,
+                                size: profileSize * 0.5,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey[300],
+                              child: Icon(
+                                Icons.person,
+                                size: profileSize * 0.5,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          )
+                        : Container(
+                            color: Colors.grey[300],
+                            child: Icon(
+                              Icons.person,
+                              size: profileSize * 0.5,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                  ),
                 ),
-              ),
-              child: ClipOval(
-                child: profileImageUrl.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: profileImageUrl,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey[300],
-                          child: Icon(
-                            Icons.person,
-                            size: profileSize * 0.5,
-                            color: Colors.grey[600],
+                
+                // Profile picture edit button (only for current user)
+                if (widget.isCurrentUser)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: _isUploadingProfilePicture
+                        ? Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(4),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () => _showImagePickerDialog(context, ImageType.profile),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white, width: 2),
+                              ),
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 12,
+                              ),
+                            ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey[300],
-                          child: Icon(
-                            Icons.person,
-                            size: profileSize * 0.5,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      )
-                    : Container(
-                        color: Colors.grey[300],
-                        child: Icon(
-                          Icons.person,
-                          size: profileSize * 0.5,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-              ),
+                  ),
+              ],
             ),
             SizedBox(width: _getResponsiveSpacing(context, 16)),
             Expanded(
@@ -307,6 +405,285 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     );
   }
 
+  void _showImagePickerDialog(BuildContext context, ImageType imageType) {
+    ManageVibration.vibrate();
+    
+    final title = imageType == ImageType.cover
+        ? (context.isArabic ? 'تغيير صورة الغلاف' : 'Change Cover Photo')
+        : (context.isArabic ? 'تغيير الصورة الشخصية' : 'Change Profile Picture');
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      enableDrag: true,
+      builder: (bottomSheetContext) => Container(
+        key: ValueKey('image_picker_${imageType.name}_${widget.hashCode}'),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                SizedBox(height: 20),
+                
+                // Title
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                
+                // Options
+                Column(
+                  children: [
+                    _buildImagePickerOption(
+                      context: bottomSheetContext,
+                      icon: Icons.photo_library,
+                      title: context.isArabic ? 'من المعرض' : 'From Gallery',
+                      onTap: () {
+                        Navigator.pop(bottomSheetContext);
+                        _pickImage(ImageSource.gallery, imageType);
+                      },
+                    ),
+                    SizedBox(height: 12),
+                    _buildImagePickerOption(
+                      context: bottomSheetContext,
+                      icon: Icons.camera_alt,
+                      title: context.isArabic ? 'من الكاميرا' : 'From Camera',
+                      onTap: () {
+                        Navigator.pop(bottomSheetContext);
+                        _pickImage(ImageSource.camera, imageType);
+                      },
+                    ),
+                    if ((imageType == ImageType.cover && widget.profile?.channelCover != null) ||
+                        (imageType == ImageType.profile && widget.profile?.channelPicture != null)) ...[
+                      SizedBox(height: 12),
+                      _buildImagePickerOption(
+                        context: bottomSheetContext,
+                        icon: Icons.delete,
+                        title: context.isArabic ? 'حذف الصورة' : 'Remove Photo',
+                        isDestructive: true,
+                        onTap: () {
+                          Navigator.pop(bottomSheetContext);
+                          _removeImage(imageType);
+                        },
+                      ),
+                    ],
+                  ],
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImagePickerOption({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: isDestructive ? Colors.red.withOpacity(0.3) : Colors.grey[300]!,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isDestructive ? Colors.red : Colors.grey[700],
+              size: 24,
+            ),
+            SizedBox(width: 16),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: isDestructive ? Colors.red : Colors.black87,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source, ImageType imageType) async {
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: source,
+        maxWidth: imageType == ImageType.cover ? 1200 : 800,
+        maxHeight: imageType == ImageType.cover ? 600 : 800,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          if (imageType == ImageType.cover) {
+            _isUploadingCover = true;
+          } else {
+            _isUploadingProfilePicture = true;
+          }
+        });
+
+        await _uploadImage(File(pickedFile.path), imageType);
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'خطأ في اختيار الصورة'
+                : 'Error picking image',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploadingCover = false;
+          _isUploadingProfilePicture = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _uploadImage(File imageFile, ImageType imageType) async {
+    try {
+      final uploadFile = UploadFile();
+      bool uploadSuccess = false;
+      String? mediaId;
+
+      await uploadFile.uploadImageSilent(
+        subCategoryId: Constants.tubeSubCategory, // You might need to adjust this
+        context: context,
+        file: imageFile,
+        onUploaded: (uploadEntity) {
+          uploadSuccess = true;
+          mediaId = uploadEntity.mediaId;
+        },
+      );
+
+      if (uploadSuccess && mediaId != null) {
+        // Update profile with new image
+        await _updateProfileImage(mediaId!, imageType);
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.isArabic
+                  ? 'تم تحديث الصورة بنجاح'
+                  : 'Image updated successfully',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        throw Exception('Upload failed');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'خطأ في رفع الصورة'
+                : 'Error uploading image',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _updateProfileImage(String mediaId, ImageType imageType) async {
+    final profileCubit = context.read<ProfileCubit>();
+    final currentProfile = profileCubit.state.profile;
+    
+    if (currentProfile != null) {
+      await profileCubit.updateProfile(
+        channelName: currentProfile.channelName,
+        channelDescription: currentProfile.channelDescription,
+        channelCover: imageType == ImageType.cover ? mediaId : null,
+        channelPicture: imageType == ImageType.profile ? mediaId : null,
+      );
+    }
+  }
+
+  Future<void> _removeImage(ImageType imageType) async {
+    try {
+      final profileCubit = context.read<ProfileCubit>();
+      final currentProfile = profileCubit.state.profile;
+      
+      if (currentProfile != null) {
+        await profileCubit.updateProfile(
+          channelName: currentProfile.channelName,
+          channelDescription: currentProfile.channelDescription,
+          channelCover: imageType == ImageType.cover ? "" : null,
+          channelPicture: imageType == ImageType.profile ? "" : null,
+        );
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.isArabic
+                  ? 'تم حذف الصورة'
+                  : 'Image removed',
+            ),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error removing image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'خطأ في حذف الصورة'
+                : 'Error removing image',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   // Helper methods for responsive design
   double _getResponsiveFontSize(BuildContext context, double baseFontSize) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -358,3 +735,5 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     }
   }
 }
+
+enum ImageType { cover, profile }

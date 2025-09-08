@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 import '../../../domain/entity/playlist_entity.dart';
 import '../../../domain/repository/playlist_repository.dart';
@@ -28,10 +29,29 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     this._updatePlaylistUseCase,
   ) : super(const PlaylistState());
 
+  // Get current user ID from UserCubit
+  String? get _currentUserId {
+    try {
+      return UserCubit.to.state.data?.id;
+    } catch (e) {
+      print('Error getting current user ID: $e');
+      return null;
+    }
+  }
+
   // Get playlists for a specific user
   Future<void> getPlaylists(String ownerId, {bool refresh = false}) async {
     if (refresh || state.playlists.isEmpty) {
       emit(state.copyWith(status: PlaylistStatus.loading));
+    }
+
+    // Validate ownerId format
+    if (ownerId.isEmpty || ownerId.length != 24) {
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('Invalid user ID format'),
+      ));
+      return;
     }
 
     final params = GetPlaylistsParams(
@@ -40,16 +60,20 @@ class PlaylistCubit extends Cubit<PlaylistState> {
       limit: 10,
     );
 
+    print('🎵 Loading playlists for user: $ownerId');
+
     final result = await _getPlaylistsUseCase(params);
 
     result.fold(
       (failure) {
+        print('❌ Failed to load playlists: $failure');
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
         ));
       },
       (response) {
+        print('✅ Loaded ${response.playlists.length} playlists');
         final List<PlaylistEntity> newPlaylists = refresh
             ? response.playlists
             : [...state.playlists, ...response.playlists];
@@ -67,9 +91,18 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
   // Get current user's playlists
   Future<void> getMyPlaylists({bool refresh = false}) async {
-    // TODO: Get current user ID from UserCubit or AuthService
-    const String currentUserId =
-        "current_user_id"; // Replace with actual user ID
+    final currentUserId = _currentUserId;
+    
+    if (currentUserId == null || currentUserId.isEmpty) {
+      print('❌ Cannot load playlists: No current user ID available');
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('User not authenticated'),
+      ));
+      return;
+    }
+
+    print('🎵 Loading my playlists for user: $currentUserId');
     await getPlaylists(currentUserId, refresh: refresh);
   }
 
@@ -79,6 +112,17 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     required String description,
     String? thumbnailMediaId,
   }) async {
+    final currentUserId = _currentUserId;
+    
+    if (currentUserId == null || currentUserId.isEmpty) {
+      print('❌ Cannot create playlist: No current user ID available');
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('User not authenticated'),
+      ));
+      return false;
+    }
+
     emit(state.copyWith(status: PlaylistStatus.creating));
 
     final params = CreatePlaylistParams(
@@ -87,10 +131,14 @@ class PlaylistCubit extends Cubit<PlaylistState> {
       thumbnailMediaId: thumbnailMediaId ?? '',
     );
 
+    print('🎵 Creating playlist: $name');
+    print('📸 Thumbnail ID: ${thumbnailMediaId ?? 'none'}');
+
     final result = await _createPlaylistUseCase(params);
 
     return result.fold(
       (failure) {
+        print('❌ Failed to create playlist: $failure');
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -98,6 +146,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         return false;
       },
       (message) {
+        print('✅ Playlist created successfully');
         emit(state.copyWith(status: PlaylistStatus.success));
         // Refresh playlists after creating
         getMyPlaylists(refresh: true);
@@ -108,6 +157,14 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
   // Get playlist details by ID
   Future<void> getPlaylistDetails(String playlistId) async {
+    if (playlistId.isEmpty || playlistId.length != 24) {
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('Invalid playlist ID format'),
+      ));
+      return;
+    }
+
     emit(state.copyWith(status: PlaylistStatus.loading));
 
     final result = await _getPlaylistByIdUseCase(playlistId);
@@ -131,19 +188,38 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
   // Add video to playlist
   Future<bool> addVideoToPlaylist(String playlistId, String videoId) async {
+    // Validate IDs
+    if (playlistId.isEmpty || playlistId.length != 24) {
+      emit(state.copyWith(
+        failure: UnknownFailure('Invalid playlist ID format'),
+      ));
+      return false;
+    }
+
+    if (videoId.isEmpty || videoId.length != 24) {
+      emit(state.copyWith(
+        failure: UnknownFailure('Invalid video ID format'),
+      ));
+      return false;
+    }
+
     final params = PlaylistVideoParams(
       playlistId: playlistId,
       videoId: videoId,
     );
 
+    print('🎵 Adding video $videoId to playlist $playlistId');
+
     final result = await _addVideoToPlaylistUseCase(params);
 
     return result.fold(
       (failure) {
+        print('❌ Failed to add video to playlist: $failure');
         emit(state.copyWith(failure: failure));
         return false;
       },
       (message) {
+        print('✅ Video added to playlist successfully');
         // Update local state
         _updatePlaylistAfterVideoAction(playlistId, videoId, true);
         return true;
@@ -154,6 +230,21 @@ class PlaylistCubit extends Cubit<PlaylistState> {
   // Remove video from playlist
   Future<bool> removeVideoFromPlaylist(
       String playlistId, String videoId) async {
+    // Validate IDs
+    if (playlistId.isEmpty || playlistId.length != 24) {
+      emit(state.copyWith(
+        failure: UnknownFailure('Invalid playlist ID format'),
+      ));
+      return false;
+    }
+
+    if (videoId.isEmpty || videoId.length != 24) {
+      emit(state.copyWith(
+        failure: UnknownFailure('Invalid video ID format'),
+      ));
+      return false;
+    }
+
     final params = PlaylistVideoParams(
       playlistId: playlistId,
       videoId: videoId,
@@ -176,6 +267,14 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
   // Delete playlist
   Future<bool> deletePlaylist(String playlistId) async {
+    if (playlistId.isEmpty || playlistId.length != 24) {
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('Invalid playlist ID format'),
+      ));
+      return false;
+    }
+
     emit(state.copyWith(status: PlaylistStatus.deleting));
 
     final result = await _deletePlaylistUseCase(playlistId);
@@ -211,6 +310,14 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     String? description,
     String? thumbnailMediaId,
   }) async {
+    if (playlistId.isEmpty || playlistId.length != 24) {
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('Invalid playlist ID format'),
+      ));
+      return false;
+    }
+
     emit(state.copyWith(status: PlaylistStatus.updating));
 
     final params = UpdatePlaylistParams(
@@ -269,5 +376,19 @@ class PlaylistCubit extends Cubit<PlaylistState> {
   // Reset state
   void reset() {
     emit(const PlaylistState());
+  }
+
+  // Check if current user is authenticated
+  bool get isAuthenticated {
+    final userId = _currentUserId;
+    return userId != null && userId.isNotEmpty && userId.length == 24;
+  }
+
+  // Get current user info
+  String get currentUserInfo {
+    final userId = _currentUserId;
+    if (userId == null) return 'Not authenticated';
+    if (userId.length != 24) return 'Invalid user ID format';
+    return 'User ID: ${userId.substring(0, 8)}...';
   }
 }

@@ -531,6 +531,7 @@ class _TalentCardState extends State<TalentCard> {
     );
   }
 
+
   static bool _isVideoUrl(String url) {
     return url.toLowerCase().contains('.mp4') ||
         url.toLowerCase().contains('.mov') ||

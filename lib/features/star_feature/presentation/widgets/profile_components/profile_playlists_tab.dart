@@ -4,10 +4,15 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/profile_components/playlist/playlist_card.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../controller/playlist_cubit/playlist_cubit.dart';
 import '../common/loading_indicator.dart';
 import '../common/error_widget.dart';
+import 'playlist_details_page.dart';
 
 class ProfilePlaylistsTab extends StatefulWidget {
   final bool isCurrentUser;
@@ -39,11 +44,26 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
 
   void _loadPlaylists() {
     if (widget.isCurrentUser) {
-      // Load current user's playlists
+      // Check if user is authenticated before loading
+      if (!_playlistCubit.isAuthenticated) {
+        print('❌ User not authenticated: ${_playlistCubit.currentUserInfo}');
+        return;
+      }
+
+      print(
+          '🎵 Loading current user playlists: ${_playlistCubit.currentUserInfo}');
       _playlistCubit.getMyPlaylists(refresh: true);
-    } else if (widget.userId != null) {
-      // Load specific user's playlists
+    } else if (widget.userId != null && widget.userId!.isNotEmpty) {
+      // Validate user ID format before making API call
+      if (widget.userId!.length != 24) {
+        print('❌ Invalid user ID format: ${widget.userId}');
+        return;
+      }
+
+      print('🎵 Loading playlists for user: ${widget.userId}');
       _playlistCubit.getPlaylists(widget.userId!, refresh: true);
+    } else {
+      print('❌ No user ID provided for other user playlists');
     }
   }
 
@@ -53,6 +73,19 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
 
     return BlocBuilder<PlaylistCubit, PlaylistState>(
       builder: (context, state) {
+        // Handle authentication issues
+        if (widget.isCurrentUser && !_playlistCubit.isAuthenticated) {
+          return _buildAuthenticationError(context);
+        }
+
+        // Handle invalid user ID
+        if (!widget.isCurrentUser &&
+            (widget.userId == null ||
+                widget.userId!.isEmpty ||
+                widget.userId!.length != 24)) {
+          return _buildInvalidUserError(context);
+        }
+
         if (state.isLoading && !state.hasPlaylists) {
           return Center(
             child: StarLoadingIndicator(
@@ -66,10 +99,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
         if (state.isError && !state.hasPlaylists) {
           return Center(
             child: StarErrorWidget(
-              message: state.failure?.toString() ??
-                  (context.isArabic
-                      ? 'خطأ في تحميل قوائم التشغيل'
-                      : 'Failed to load playlists'),
+              message: _getErrorMessage(context, state),
               onRetry: _loadPlaylists,
             ),
           );
@@ -117,6 +147,124 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
     );
   }
 
+  Widget _buildAuthenticationError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.login,
+            size: 64,
+            color: Colors.grey[400],
+          ),
+          SizedBox(height: 16),
+          Text(
+            context.isArabic
+                ? 'يرجى تسجيل الدخول أولاً'
+                : 'Please log in first',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            context.isArabic
+                ? 'تحتاج إلى تسجيل الدخول لعرض قوائم التشغيل الخاصة بك'
+                : 'You need to log in to view your playlists',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[500],
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () {
+              // Navigate to login screen
+              context.push(Routes.FirstLoginScreen);
+            },
+            icon: Icon(Icons.login),
+            label: Text(
+              context.isArabic ? 'تسجيل الدخول' : 'Log In',
+            ),
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInvalidUserError(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Colors.grey[400],
+          ),
+          SizedBox(height: 16),
+          Text(
+            context.isArabic ? 'معرف مستخدم غير صالح' : 'Invalid User ID',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            context.isArabic
+                ? 'لا يمكن تحميل قوائم التشغيل لهذا المستخدم'
+                : 'Cannot load playlists for this user',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[500],
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getErrorMessage(BuildContext context, PlaylistState state) {
+    final errorMessage = state.failure?.toString() ?? '';
+
+    // Check for specific error types
+    if (errorMessage.contains('BSON') || errorMessage.contains('ObjectId')) {
+      return context.isArabic
+          ? 'خطأ في معرف المستخدم - يرجى المحاولة مرة أخرى'
+          : 'User ID error - please try again';
+    }
+
+    if (errorMessage.contains('authentication') ||
+        errorMessage.contains('auth')) {
+      return context.isArabic
+          ? 'خطأ في التحقق من الهوية - يرجى تسجيل الدخول مرة أخرى'
+          : 'Authentication error - please log in again';
+    }
+
+    if (errorMessage.contains('network') ||
+        errorMessage.contains('connection')) {
+      return context.isArabic
+          ? 'خطأ في الاتصال - تحقق من الإنترنت'
+          : 'Connection error - check internet';
+    }
+
+    // Default error message
+    return state.failure?.toString() ??
+        (context.isArabic
+            ? 'خطأ في تحميل قوائم التشغيل'
+            : 'Failed to load playlists');
+  }
+
   Widget _buildHeader(BuildContext context, PlaylistState state) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -134,7 +282,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
             ),
           ),
           ElevatedButton.icon(
-            onPressed: state.isCreating
+            onPressed: (state.isCreating || !_playlistCubit.isAuthenticated)
                 ? null
                 : () => _showCreatePlaylistDialog(context),
             icon: state.isCreating
@@ -182,7 +330,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
               color: Colors.grey[600],
             ),
           ),
-          if (widget.isCurrentUser) ...[
+          if (widget.isCurrentUser && _playlistCubit.isAuthenticated) ...[
             SizedBox(height: 8),
             Text(
               context.isArabic
@@ -218,14 +366,35 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
     ManageVibration.vibrate();
 
     // Navigate to playlist details page
-    Navigator.pushNamed(
-      context,
-      '/playlist-details',
-      arguments: playlist,
-    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => serviceLocator<PlaylistCubit>(),
+            child: PlaylistDetailsPage(playlist: playlist),
+          ),
+        ));
   }
 
   void _showCreatePlaylistDialog(BuildContext context) {
+    if (!_playlistCubit.isAuthenticated) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'يرجى تسجيل الدخول أولاً'
+                : 'Please log in first',
+          ),
+          backgroundColor: Colors.orange,
+          action: SnackBarAction(
+            label: context.isArabic ? 'تسجيل الدخول' : 'Log In',
+            onPressed: () => context.push(Routes.FirstLoginScreen),
+          ),
+        ),
+      );
+      return;
+    }
+
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
 
@@ -295,10 +464,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      state.failure?.toString() ??
-                          (context.isArabic
-                              ? 'خطأ في إنشاء القائمة'
-                              : 'Failed to create playlist'),
+                      _getErrorMessage(context, state),
                     ),
                     backgroundColor: Colors.red,
                   ),
