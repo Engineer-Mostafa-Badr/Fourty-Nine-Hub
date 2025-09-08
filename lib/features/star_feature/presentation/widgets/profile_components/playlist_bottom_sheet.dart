@@ -189,7 +189,7 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
               ),
               child: Icon(
                 Icons.add,
-                color: AppColors.PRIMARY_COLOR,
+                color: Colors.white,
                 size: 24,
               ),
             ),
@@ -215,7 +215,7 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
   Widget _buildCreatePlaylistForm() {
     return Container(
       padding: EdgeInsets.all(16),
-      color: AppColors.PRIMARY_COLOR,
+      color: Colors.grey[50],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -59,6 +59,29 @@ class VideoCardWidget extends StatelessWidget {
     );
   }
 
+  String _formatDuration(StarEntity video) {
+    Duration duration;
+
+    if (video is TubeVideoModel) {
+      duration = Duration(seconds: video.duration);
+    } else if (video.mediaUrl.isNotEmpty) {
+      duration = video.mediaUrl.first.duration ?? Duration.zero;
+    } else {
+      duration = Duration.zero;
+    }
+
+    if (duration == Duration.zero) return '0:00';
+
+    final minutes = duration.inMinutes.remainder(60).toString();
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+    if (duration.inHours > 0) {
+      final hours = duration.inHours.toString();
+      return '$hours:${minutes.padLeft(2, '0')}:$seconds';
+    }
+    return '$minutes:$seconds';
+  }
+
   Widget _buildThumbnail(context) {
     return AspectRatio(
       aspectRatio: 16 / 9,
@@ -83,7 +106,7 @@ class VideoCardWidget extends StatelessWidget {
                   video.thumbnail?.isNotEmpty == true ? video.thumbnail : null,
               width: double.infinity,
               height: double.infinity,
-              duration: video.duration.toString(),
+              duration: _formatDuration(video),
               showVolumeIcon: true,
               onTap: () {
                 ManageVibration.vibrate();

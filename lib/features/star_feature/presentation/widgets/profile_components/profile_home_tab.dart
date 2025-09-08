@@ -197,6 +197,14 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
   Widget _buildMyVideosSection(BuildContext context, StarState state) {
     final myVideos = state.myTalents.take(8).toList();
 
+    if (state.isLoading(TalentCategory.myTalents) && myVideos.isEmpty) {
+      return SizedBox(
+        height: 200,
+        child: Center(
+            child: StarLoadingIndicator(message: 'Loading your videos...')),
+      );
+    }
+
     if (myVideos.isEmpty && !state.isLoading(TalentCategory.myTalents)) {
       return SizedBox(
         height: 200,
@@ -207,14 +215,6 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
               ? 'ابدأ في رفع أول فيديو لك'
               : 'Start uploading your first video',
         ),
-      );
-    }
-
-    if (state.isLoading(TalentCategory.myTalents) && myVideos.isEmpty) {
-      return SizedBox(
-        height: 200,
-        child: Center(
-            child: StarLoadingIndicator(message: 'Loading your videos...')),
       );
     }
 

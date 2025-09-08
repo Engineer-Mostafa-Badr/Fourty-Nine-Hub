@@ -189,7 +189,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
       backgroundColor: Colors.white,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
-          return _buildContent(profileState);
+          return _buildContent(profileState, widget.isCurrentUser);
         },
       ),
     );
@@ -204,11 +204,13 @@ class _ProfilePageViewState extends State<ProfilePageView>
     }
   }
 
-  Widget _buildContent(ProfileState profileState) {
+  Widget _buildContent(
+      ProfileState profileState, bool isCurrentUserFromProfile) {
     debugPrint('Profile State: ${profileState.status}');
     debugPrint('Has Profile: ${profileState.hasProfile}');
     debugPrint('User Videos Count: ${_userRealVideos.length}');
     debugPrint('Is Loading User Videos: $_isLoadingUserVideos');
+    debugPrint('Is Current User (ProfileEntity): $isCurrentUserFromProfile');
 
     if (profileState.isLoading && !profileState.hasProfile) {
       return const Center(
@@ -221,7 +223,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
         child: StarErrorWidget(
           message: profileState.failure?.toString() ?? 'Failed to load profile',
           onRetry: () {
-            if (widget.isCurrentUser) {
+            if (isCurrentUserFromProfile) {
               _profileCubit.getMyProfile();
             } else if (widget.profileId != null) {
               _profileCubit.getProfileById(widget.profileId!);
@@ -238,7 +240,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
           currentUserId: _getCurrentUserId(),
           onEditPressed: () {
             ManageVibration.vibrate();
-            if (widget.isCurrentUser) {
+            if (isCurrentUserFromProfile) {
               _showEditProfileSheet();
             }
           },
@@ -259,7 +261,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                     child: ProfileHeader(
                       profile: profileState.profile,
                       user: widget.user,
-                      isCurrentUser: widget.isCurrentUser,
+                      isCurrentUser: isCurrentUserFromProfile,
                       videosCount: _getVideosCount(profileState),
                     ),
                   ),
@@ -280,8 +282,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   child: ProfileTabsContent(
                     tabController: _tabController,
                     extendedVideos: _userRealVideos,
-                    isCurrentUser: widget.isCurrentUser,
-                    userId: widget.isCurrentUser ? null : widget.user?.id,
+                    isCurrentUser: isCurrentUserFromProfile,
+                    userId: isCurrentUserFromProfile ? null : widget.user?.id,
                     isLoadingUserVideos: _isLoadingUserVideos,
                   ),
                 ),

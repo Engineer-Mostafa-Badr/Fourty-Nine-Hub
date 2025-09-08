@@ -1076,14 +1076,17 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BlocProvider<ProfileCubit>(
-          create: (context) => serviceLocator<ProfileCubit>()
-            ..getProfileById(widget.talent.user.id),
-          child: ProfilePageView(
-            user: widget.talent.user,
-            userVideos: [], 
-            isCurrentUser: false,
-            profileId: widget.talent.user.id,
+        builder: (context) => BlocProvider(
+          create: (context) => serviceLocator<StarCubit>(),
+          child: BlocProvider<ProfileCubit>(
+            create: (context) => serviceLocator<ProfileCubit>()
+              ..getProfileById(widget.talent.user.id),
+            child: ProfilePageView(
+              user: widget.talent.user,
+              userVideos: [],
+              isCurrentUser: false,
+              profileId: widget.talent.user.id,
+            ),
           ),
         ),
       ),

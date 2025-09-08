@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../utils/enums.dart';
@@ -530,5 +531,34 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
         'userId': widget.userId,
       },
     );
+  }
+
+  String _formatTimeAgo(DateTime dateTime) {
+    final difference = DateTime.now().difference(dateTime);
+
+    if (difference.inDays > 365) {
+      final years = (difference.inDays / 365).floor();
+      return context.isArabic
+          ? '$years ${years == 1 ? 'سنة' : 'سنوات'} مضت'
+          : '$years year${years == 1 ? '' : 's'} ago';
+    } else if (difference.inDays > 30) {
+      final months = (difference.inDays / 30).floor();
+      return context.isArabic
+          ? '$months ${months == 1 ? 'شهر' : 'أشهر'} مضت'
+          : '$months month${months == 1 ? '' : 's'} ago';
+    } else if (difference.inDays > 0) {
+      return context.isArabic
+          ? '${difference.inDays} ${difference.inDays == 1 ? 'يوم' : 'أيام'} مضت'
+          : '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
+    } else if (difference.inHours > 0) {
+      return context.isArabic
+          ? '${difference.inHours} ${difference.inHours == 1 ? 'ساعة' : 'ساعات'} مضت'
+          : '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago';
+    } else if (difference.inMinutes > 0) {
+      return context.isArabic
+          ? '${difference.inMinutes} ${difference.inMinutes == 1 ? 'دقيقة' : 'دقائق'} مضت'
+          : '${difference.inMinutes} minute${difference.inMinutes == 1 ? '' : 's'} ago';
+    }
+    return context.isArabic ? 'منذ قليل' : 'Just now';
   }
 }

@@ -16,7 +16,7 @@ class ThumbnailWidget extends StatelessWidget {
     required this.width,
     required this.height,
     this.duration,
-    this.showVolumeIcon = false,
+    this.showVolumeIcon = true,
     this.showPlayIcon = false,
     this.onTap,
   });

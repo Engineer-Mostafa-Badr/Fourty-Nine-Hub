@@ -238,7 +238,9 @@ class _TalentCardState extends State<TalentCard> {
   static void _navigateToProfile(BuildContext context, StarEntity talent) {
     // Get current user ID to determine if this is current user or another user
     final currentUserId = UserCubit.to.state.data?.id;
-    final isCurrentUser = currentUserId == talent.user.id;
+
+    // تحديد إذا كان المستخدم الحالي بناءً على ProfileEntity userId
+    // سنحتاج لجلب ProfileEntity أولاً لمعرفة userId الصحيح
 
     Navigator.push(
       context,
@@ -248,20 +250,43 @@ class _TalentCardState extends State<TalentCard> {
           child: BlocProvider<ProfileCubit>(
             create: (context) {
               final profileCubit = serviceLocator<ProfileCubit>();
-              if (isCurrentUser) {
-                // For current user, load their profile
-                profileCubit.getMyProfile();
-              } else {
-                // For other users, load profile by ID
-                profileCubit.getProfileById(talent.user.id);
-              }
+
+              // نبدأ بجلب البروفايل بناءً على الـ channel/profile ID
+              // سنحتاج لمعرفة الـ profile ID من StarEntity أو talent.user.id
+              profileCubit.getProfileById(talent.user.id);
+
               return profileCubit;
             },
-            child: ProfilePageView(
-              user: talent.user,
-              userVideos: [], // Start with empty, will be loaded dynamically
-              isCurrentUser: isCurrentUser,
-              profileId: isCurrentUser ? null : talent.user.id,
+            child: BlocConsumer<ProfileCubit, ProfileState>(
+              listener: (context, profileState) {
+                // لما يتحمل البروفايل، نتحقق من userId
+                if (profileState.isSuccess && profileState.profile != null) {
+                  final profileUserId = profileState.profile!.userId;
+                  final isCurrentUser = currentUserId == profileUserId;
+
+                  print("🔍 Profile Navigation Debug:");
+                  print("   Current User ID: $currentUserId");
+                  print("   Profile User ID: $profileUserId");
+                  print("   Is Current User: $isCurrentUser");
+                }
+              },
+              builder: (context, profileState) {
+                // تحديد إذا كان المستخدم الحالي بناءً على ProfileEntity
+                bool isCurrentUser = false;
+                if (profileState.profile != null) {
+                  isCurrentUser = currentUserId == profileState.profile!.userId;
+                } else {
+                  // fallback للطريقة القديمة لحين تحميل البروفايل
+                  isCurrentUser = currentUserId == talent.user.id;
+                }
+
+                return ProfilePageView(
+                  user: talent.user,
+                  userVideos: [], // Start with empty, will be loaded dynamically
+                  isCurrentUser: isCurrentUser,
+                  profileId: talent.user.id, // channel/profile ID
+                );
+              },
             ),
           ),
         ),

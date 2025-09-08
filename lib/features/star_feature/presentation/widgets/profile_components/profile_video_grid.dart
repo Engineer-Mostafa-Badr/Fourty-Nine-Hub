@@ -5,6 +5,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/star_entity.dart';
+import '../../../data/model/tube_video_models.dart';
 import '../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../common/options_bottom_sheet.dart';
@@ -118,11 +119,12 @@ class ProfileVideoGrid extends StatelessWidget {
             child: Stack(
               children: [
                 ThumbnailWidget(
+                  imageUrl: _getVideoThumbnail(video),
                   width: double.infinity,
                   height: double.infinity,
-                  duration: '7:54',
+                  duration: _formatDuration(video),
                   showVolumeIcon: true,
-                  showPlayIcon: true,
+                  showPlayIcon: false,
                   onTap: () {
                     ManageVibration.vibrate();
                     onVideoTap?.call(video);
@@ -153,16 +155,29 @@ class ProfileVideoGrid extends StatelessWidget {
           ),
           SizedBox(height: 8),
 
-          // Title
-          Text(
-            video.title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          // Title and info
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                video.title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 4),
+              Text(
+                "${_formatViewCount(video.totalViews)} ${context.isArabic ? 'مشاهدة' : 'views'}",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -188,36 +203,38 @@ class ProfileVideoGrid extends StatelessWidget {
             Stack(
               children: [
                 ThumbnailWidget(
+                  imageUrl: _getVideoThumbnail(video),
                   width: thumbnailWidth,
                   height: thumbnailHeight,
-                  duration: '7:54',
+                  duration: _formatDuration(video),
                   showVolumeIcon: true,
+                  showPlayIcon: false,
                 ),
                 // Options overlay
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: GestureDetector(
-                    onTap: () => _showVideoOptions(context, video),
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 4,
+                //   right: 4,
+                //   child: GestureDetector(
+                //     onTap: () => _showVideoOptions(context, video),
+                //     child: Container(
+                //       padding: EdgeInsets.all(4),
+                //       decoration: BoxDecoration(
+                //         color: Colors.black.withOpacity(0.6),
+                //         shape: BoxShape.circle,
+                //       ),
+                //       child: Icon(
+                //         Icons.more_vert,
+                //         color: Colors.white,
+                //         size: 16,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             SizedBox(width: 16),
 
-            // Video info
+            // Video info - استخدام البيانات الحقيقية
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,12 +259,47 @@ class ProfileVideoGrid extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    "${video.totalViews} views • 7 days ago",
+                    "${_formatViewCount(video.totalViews)} ${context.isArabic ? 'مشاهدة' : 'views'} • ${_formatTimeAgo(video.createdAt ?? DateTime.now())}",
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey[600],
                     ),
                   ),
+                  SizedBox(height: 4),
+                  // إضافة تفاصيل إضافية للفيديوهات الجديدة
+                  if (video is TubeVideoModel) ...[
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.thumb_up_outlined,
+                          size: 12,
+                          color: Colors.grey[500],
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          '${video.likes}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Icon(
+                          Icons.star_outline,
+                          size: 12,
+                          color: Colors.grey[500],
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          video.averageRating.toStringAsFixed(1),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -273,88 +325,74 @@ class ProfileVideoGrid extends StatelessWidget {
     );
   }
 
-  // void _showVideoOptions(BuildContext context, StarEntity video) {
-  //   List<OptionItem> options = [];
+  // Helper methods للحصول على البيانات الحقيقية
+  String? _getVideoThumbnail(StarEntity video) {
+    if (video is TubeVideoModel) {
+      return video.thumbnail;
+    }
+    // للفيديوهات القديمة، استخدم أول صورة من mediaUrl
+    if (video.mediaUrl.isNotEmpty) {
+      final mediaUrl = video.mediaUrl.first.mediaKey;
+      // إذا كان URL للصورة، استخدمه كـ thumbnail
+      if (mediaUrl.toLowerCase().contains('.jpg') ||
+          mediaUrl.toLowerCase().contains('.png') ||
+          mediaUrl.toLowerCase().contains('.webp')) {
+        return mediaUrl;
+      }
+    }
+    return null; // استخدم default thumbnail
+  }
 
-  //   // Common options for all users
-  //   options.addAll([
-  //     OptionItem(
-  //       icon: Icons.playlist_add,
-  //       title: context.isArabic ? 'إضافة لقائمة التشغيل' : 'Add to playlist',
-  //       onTap: () {
-  //         ManageVibration.vibrate();
-  //         Navigator.pop(context);
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text('Added to playlist')),
-  //         );
-  //       },
-  //     ),
-  //     OptionItem(
-  //       icon: starCubit.isFavorite(video.id)
-  //           ? Icons.favorite
-  //           : Icons.favorite_border,
-  //       title: starCubit.isFavorite(video.id)
-  //           ? (context.isArabic ? 'إزالة من المفضلة' : 'Remove from favorites')
-  //           : (context.isArabic ? 'إضافة للمفضلة' : 'Add to favorites'),
-  //       onTap: () {
-  //         ManageVibration.vibrate();
-  //         Navigator.pop(context);
-  //         starCubit.toggleFavorite(video.id);
-  //       },
-  //       iconColor: starCubit.isFavorite(video.id) ? Colors.red : null,
-  //     ),
-  //     OptionItem(
-  //       icon: Icons.share,
-  //       title: context.isArabic ? 'مشاركة' : 'Share',
-  //       onTap: () {
-  //         ManageVibration.vibrate();
-  //         Navigator.pop(context);
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text('Video shared')),
-  //         );
-  //       },
-  //     ),
-  //   ]);
+  String _formatDuration(StarEntity video) {
+    Duration duration;
 
-  //   // Delete option only for current user's videos
-  //   if (isCurrentUser) {
-  //     options.add(
-  //       OptionItem(
-  //         icon: Icons.delete,
-  //         title: context.isArabic ? 'حذف الفيديو' : 'Delete video',
-  //         onTap: () {
-  //           ManageVibration.vibrate();
-  //           Navigator.pop(context);
-  //           _showDeleteConfirmation(context, video);
-  //         },
-  //         iconColor: Colors.red,
-  //         textColor: Colors.red,
-  //       ),
-  //     );
-  //   } else {
-  //     // Report option for other users' videos
-  //     options.add(
-  //       OptionItem(
-  //         icon: Icons.flag,
-  //         title: context.isArabic ? 'بلاغ' : 'Report',
-  //         onTap: () {
-  //           ManageVibration.vibrate();
-  //           Navigator.pop(context);
-  //           ScaffoldMessenger.of(context).showSnackBar(
-  //             SnackBar(content: Text('Video reported')),
-  //           );
-  //         },
-  //         iconColor: Colors.red,
-  //         textColor: Colors.red,
-  //       ),
-  //     );
-  //   }
+    if (video is TubeVideoModel) {
+      duration = Duration(seconds: video.duration);
+    } else if (video.mediaUrl.isNotEmpty) {
+      duration = video.mediaUrl.first.duration ?? Duration.zero;
+    } else {
+      duration = Duration.zero;
+    }
 
-  //   OptionsBottomSheet.showOptions(
-  //     context: context,
-  //     options: options,
-  //   );
-  // }
+    if (duration == Duration.zero) return '0:00';
+
+    final minutes = duration.inMinutes.remainder(60).toString();
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+    if (duration.inHours > 0) {
+      final hours = duration.inHours.toString();
+      return '$hours:${minutes.padLeft(2, '0')}:$seconds';
+    }
+    return '$minutes:$seconds';
+  }
+
+  String _formatViewCount(num views) {
+    if (views >= 1000000) {
+      return '${(views / 1000000).toStringAsFixed(1)}M';
+    } else if (views >= 1000) {
+      return '${(views / 1000).toStringAsFixed(1)}K';
+    }
+    return views.toString();
+  }
+
+  String _formatTimeAgo(DateTime dateTime) {
+    final difference = DateTime.now().difference(dateTime);
+
+    if (difference.inDays > 365) {
+      final years = (difference.inDays / 365).floor();
+      return '${years}y ago';
+    } else if (difference.inDays > 30) {
+      final months = (difference.inDays / 30).floor();
+      return '${months}mo ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    }
+    return 'Just now';
+  }
 
   void _showVideoOptions(BuildContext context, StarEntity video) {
     List<OptionItem> options = [];
@@ -437,7 +475,6 @@ class ProfileVideoGrid extends StatelessWidget {
     );
   }
 
-// Add this helper method to profile_video_grid.dart:
   void _showPlaylistBottomSheet(BuildContext context, StarEntity video) {
     showModalBottomSheet(
       context: context,
