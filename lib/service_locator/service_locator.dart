@@ -91,6 +91,7 @@ import 'new_trip_join_service_location.dart';
 import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
+import 'ten_percent_service_locator.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -398,6 +399,9 @@ class DI {
 
     //! Exchange Currency
     CurrencyServiceLocator.execute(serviceLocator: serviceLocator);
+    
+    //! Ten Percent
+    TenPercentServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {
