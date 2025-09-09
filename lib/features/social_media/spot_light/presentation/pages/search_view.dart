@@ -52,13 +52,7 @@ class _SpotLightSearchViewState extends State<SpotLightSearchView> {
                 ]),
                 const Sizer(),
                 sectionTitle(context.isArabic ? 'مؤخراً' : "Recents",
-                    trailing: context.isArabic ? 'مسح الكل' : "Clear All",
-                    onTap: () => showDialogSpotLight(
-                        context,
-                        SpotLightDialogContent(
-                          bottomButtonTitle: LocaleKeys.cancel.localize,
-                          topButtonTitle: context.isArabic ? 'مسح' : 'Clear',
-                        ))),
+                    trailing: context.isArabic ? 'مسح الكل' : "Clear All",onTap:()=> showDialogSpotLight(context,SpotLightDialogContent(bottomButtonTitle:LocaleKeys.cancel.localize ,topButtonTitle: context.isArabic ? 'مسح' : 'Clear' ,))),
                 const Sizer(),
                 SizedBox(
                   height: 0.22.sh,
@@ -73,8 +67,11 @@ class _SpotLightSearchViewState extends State<SpotLightSearchView> {
                 ),
                 const Sizer(),
                 sectionTitle(
-                  context.isArabic ? 'تابع' : "Follow",
+                  context.isArabic
+                      ? 'تابع'
+                      : "Follow",
                 ),
+
                 const Sizer(),
                 SizedBox(
                   height: 0.22.sh,
@@ -116,8 +113,7 @@ class _SpotLightSearchViewState extends State<SpotLightSearchView> {
     );
   }
 
-  Widget sectionTitle(String title,
-      {String? trailing, void Function()? onTap}) {
+  Widget sectionTitle(String title, {String? trailing,void Function()? onTap}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -187,7 +183,7 @@ class _SpotLightSearchViewState extends State<SpotLightSearchView> {
         ),
         trailing: TextButton(
           onPressed: () {
-            ManageVibration.vibrate();
+      ManageVibration.vibrate();
             setState(() {
               blockedIndexes.remove(index);
             });

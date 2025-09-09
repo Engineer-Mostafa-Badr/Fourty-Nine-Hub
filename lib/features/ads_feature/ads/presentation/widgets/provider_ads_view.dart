@@ -73,7 +73,7 @@ class ProviderAdsView extends StatelessWidget {
                               //     model: data,
                               //     filter: userType);
                               controller.loadFilterAdsData(
-                                  model: data, filter: userType,isFromCity:false);
+                                  model: data, filter: userType);
                             }
                           }),
                     ),
@@ -110,7 +110,7 @@ class ProviderAdsView extends StatelessWidget {
                               //     model: data,
                               //     filter: userType);
                               controller.loadFilterAdsData(
-                                  model: data, filter: userType,isFromCity:true);
+                                  model: data, filter: userType);
                             }
                           }),
                     ),

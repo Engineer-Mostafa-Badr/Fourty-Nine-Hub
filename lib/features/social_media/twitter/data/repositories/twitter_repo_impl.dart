@@ -14,7 +14,6 @@ import '../../domain/usecases/request_document_usecase.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 
 import '../../domain/repositories/twitter_repo.dart';
-import '../../presentation/bloc/twitter_bloc.dart';
 import '../datasources/twitter_remote_datasource.dart';
 
 class TwitterRepoImpl implements TwitterRepo {
@@ -112,60 +111,9 @@ class TwitterRepoImpl implements TwitterRepo {
     return _remoteDataSource.editComment(params: params);
   }
 
-   @override
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getGlobalFeed({
-    required TwitterFeedParams params,
-  }) {
+  @override
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getGlobalFeed(params: params);
   }
-
-  @override
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getThreadPostsPage({
-    required String threadId,
-    required int page,
-    required int limit,
-  }) => _remoteDataSource.getThreadPostsPage(threadId: threadId, page: page, limit: limit);
-
-  @override
-  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>> getThreadRepliesPage({
-    required String threadId,
-    required int page,
-    required int limit,
-  }) => _remoteDataSource.getThreadRepliesPage(threadId: threadId, page: page, limit: limit);
-  @override
-  Future<Either<Failure, int>> getFollowersCount({required String subCategoryId}) {
-    return _remoteDataSource.getFollowersCount(subCategoryId: subCategoryId);
-  }
-
-  @override
-  Future<Either<Failure, int>> getFollowingCount({required String subCategoryId}) {
-    return _remoteDataSource.getFollowingCount(subCategoryId: subCategoryId);
-  }
-  @override
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getMyPostsPage({
-    required int page,
-    required int limit,
-  }) {
-    return _remoteDataSource.getMyPostsPage(page: page, limit: limit);
-  }
-
-  @override
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getUserPostsPage({
-    required String userId,
-    required int page,
-    required int limit,
-  }) {
-    return _remoteDataSource.getUserPostsPage(
-      userId: userId,
-      page: page,
-      limit: limit,
-    );
-  }
-
-  @override
-  Future<Either<Failure, String>> repostPost(String postId) {
-    return _remoteDataSource.repostPost(postId);
-  }
-
-
 }

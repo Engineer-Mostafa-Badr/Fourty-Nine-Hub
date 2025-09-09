@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 import '../../../social_posts/domain/usecases/get_post_comments_usecase.dart';
-import '../../data/models/profile_model.dart';
-import '../../presentation/bloc/twitter_bloc.dart';
 import '../entities/twitter_comment_reply_entity.dart';
 import '../entities/twitter_post_comment_entity.dart';
 import '../usecases/comment_react_usecase.dart';
@@ -19,7 +17,7 @@ import '../usecases/post_react_usecase.dart';
 abstract class TwitterRepo {
   Future<Either<Failure, List<TwitterPostEntity>>> getFeed(
       {required TwitterFeedParams params});
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getGlobalFeed(
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params});
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
       {required String postId});
@@ -47,36 +45,4 @@ abstract class TwitterRepo {
       {required TwitterReportParams params});
   Future<Either<Failure, bool>> requestDocument(
       {required TwitterDocumentationParams params});
-
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getThreadPostsPage({
-    required String threadId,
-    required int page,
-    required int limit,
-  });
-
-  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>> getThreadRepliesPage({
-    required String threadId,
-    required int page,
-    required int limit,
-  });
-
-  Future<Either<Failure, int>> getFollowersCount({required String subCategoryId});
-  Future<Either<Failure, int>> getFollowingCount({required String subCategoryId});
-
-  // twitter_repo.dart
-
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getMyPostsPage({
-    required int page,
-    required int limit,
-  });
-
-  Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getUserPostsPage({
-    required String userId,
-    required int page,
-    required int limit,
-  });
-
-  Future<Either<Failure, String>> repostPost(String postId);
-
-
 }

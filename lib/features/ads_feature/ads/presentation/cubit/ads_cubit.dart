@@ -209,28 +209,22 @@ class AdvertisementCubit extends Cubit<AdsState> {
   Future<void> filterAds({
     required FilterModel model,
     required String filter,
-    required bool isFromCity,
   }) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print(hasMoreAdsData);
     print(isLoadingAdsMore);
     if (!hasMoreAdsData || isLoadingAdsMore) return;
     isLoadingAdsMore = true;
-    if(model.price?.nameAr !=''&&model.price?.nameAr!=null){
-      print("model.price?.nameAr ${model.price?.nameAr}");
-      emit(state.copyWith(city:'', governorate: ''));
-    }
     emit(state.copyWith(status: AdsStates.loading));
     FilterModel filterModel = FilterModel(
         price: model.price,
         props: model.props,
-        cityId: isFromCity?state.city:'',
-        governorateId: isFromCity?state.governorate:'',
+        cityId: state.city,
+        governorateId: state.governorate,
         limit: pageSize,
         page: adsPage,
         subCategoryId: model.subCategoryId,
-        filter: filter,
-        isFrom:isFromCity?'city':'filter',);
+        filter: filter);
     final response = await _filterAdUseCase(filterModel);
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
@@ -379,14 +373,13 @@ class AdvertisementCubit extends Cubit<AdsState> {
   Future loadFilterAdsData({
     required FilterModel model,
     required String filter,
-    required bool isFromCity,
   }) async {
     loadAds = true;
     ads.clear();
     adsPage = 1;
     hasMoreAdsData = true;
     emit(state.copyWith(status: AdsStates.loading));
-    await filterAds(model: model, filter: filter,isFromCity:isFromCity);
+    await filterAds(model: model, filter: filter);
     loadAds = false;
     emit(state.copyWith(status: AdsStates.success));
   }
