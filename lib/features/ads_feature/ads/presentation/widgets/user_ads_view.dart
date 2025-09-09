@@ -65,7 +65,7 @@ class UserAdsView extends StatelessWidget {
                                 ));
                             if (data != null) {
                               controller.loadFilterAdsData(
-                                  model: data, filter: userType);
+                                  model: data, filter: userType,isFromCity:false);
                             }
                           }),
                     ),
@@ -96,7 +96,7 @@ class UserAdsView extends StatelessWidget {
                               controller.state.city = data.cityId;
                               controller.state.governorate = data.governorateId;
                               controller.loadFilterAdsData(
-                                  model: data, filter: userType);
+                                  model: data, filter: userType,isFromCity:true);
                             }
                           }),
                     ),

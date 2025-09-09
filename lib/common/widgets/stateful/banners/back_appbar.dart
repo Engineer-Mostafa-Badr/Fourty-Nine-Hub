@@ -50,7 +50,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             onPressed: () {
       ManageVibration.vibrate();
-              context.go(Routes.HOME);
+              context.pop();
             },
             visualDensity: VisualDensity(horizontal: -4),
             icon: Icon(

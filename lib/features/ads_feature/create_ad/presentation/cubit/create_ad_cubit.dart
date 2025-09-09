@@ -339,8 +339,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     required CategorizationEntity categorize,
     required BuildContext context,
     required String userType,
+    required bool isFromCity,
   }) async {
     print("ss");
+    emit(state.copyWith(governorate: '', city: '', status: CreateAdStates.loading));
     List<CreateAdEntity> details = [];
     for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
       details.add(CreateAdEntity(
@@ -376,12 +378,15 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     FilterModel model = FilterModel(
         price: price,
         props: selectedDetails,
-        cityId: state.city ?? '',
-        governorateId: state.governorate ?? '',
+        cityId:  '',
+        governorateId: '',
         limit: 10,
         page: 1,
         filter: userType,
+        isFrom: isFromCity?'city':'filter',
         subCategoryId: categorize.subCategory.id);
+    print("FilterModel n${model.governorateId}");
+
     if (categorize.fromMarriage == true) {
       // final response = await _filterAdUseCase(model);
       // response.fold(
@@ -424,6 +429,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           governorateId: state.governorate ?? '',
           limit: 10,
           page: 1,
+          isFrom: 'city',
           subCategoryId: categorize.subCategory.id);
       if (categorize.fromMarriage == true) {
         context.pop(model);
@@ -453,8 +459,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     response.fold((failure) {
       var currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;
-      showErrorMessage(
-          currentContext, getFailureMessage(failure, currentContext));
+      // showErrorMessage(
+      //     currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: CreateAdStates.error));
     }, (data) {
       bool selectedPrice = data.any((element) => element.nameAr == 'السعر');

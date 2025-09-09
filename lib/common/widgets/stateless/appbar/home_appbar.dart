@@ -115,7 +115,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   }
                 } else {
                   if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.go(
+                    context.pop(
                       Routes.HOME,
                     );
                   }

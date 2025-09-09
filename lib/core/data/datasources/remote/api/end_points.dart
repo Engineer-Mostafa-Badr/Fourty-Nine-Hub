@@ -59,11 +59,11 @@ class EndPoints {
   static const logout = '/auth/logout';
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  static const developmentWebSocketBaseUrl = 'https://d0531cde0723.ngrok-free.app';
 
-  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
-  static const developmentBaseUrl = 'https://49backend.com/api/v1';
-  static const productionBaseUrl = 'https://49backend.com/api/v1';
+  // static const developmentWebSocketBaseUrl = 'https://d0531cde0723.ngrok-free.app';
+  static const developmentBaseUrl = 'https://d0531cde0723.ngrok-free.app/api/v1';
+  static const productionBaseUrl = 'https://d0531cde0723.ngrok-free.app/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const loginWithPhone = '/auth/login/phone-number';
@@ -1127,7 +1127,7 @@ class EndPoints {
   static const createAd = '/ads/create-ads';
 
   static filterAd(FilterModel filter) =>
-      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty ?? false) ? "government=${filter.governorateId}&" : ''}${filter.cityId?.isNotEmpty ?? false ? "city=${filter.cityId}&" : ""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty ?? false) ? "government=${filter.governorateId}&" : ''}${filter.cityId?.isNotEmpty ?? false ? "city=${filter.cityId}&" : ""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}&isFrom=${filter.isFrom}';
 
   static deleteFood(String id) => '/food/delete-food-item/$id';
   static const addFood = '/food/add-food';

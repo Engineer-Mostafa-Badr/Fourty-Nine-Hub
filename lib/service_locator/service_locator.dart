@@ -7,6 +7,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/features/ten_percent/data/datasources/ten_percent_remote_data_source.dart';
+import 'package:fourtyninehub/features/ten_percent/data/repositories/ten_percent_repo_impl.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/repositories/ten_percent_repo.dart';
+import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_request_use_case.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
@@ -144,7 +149,7 @@ class DI {
     // CliLogger.info('token outside getit $token');
     // socket
     // serviceLocator.registerLazySingleton<Socket>(() => io(
-    //     'https://49backend.com',
+    //     'https://d0531cde0723.ngrok-free.app',
     //     OptionBuilder()
     //         .setTransports(['websocket'])
     //         .disableAutoConnect()
@@ -191,6 +196,26 @@ class DI {
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
           () => StoryRepository(),
+    );
+    serviceLocator.registerLazySingleton<TenPercentCubit>(
+          () => TenPercentCubit(
+            serviceLocator()
+          ),
+    );
+    serviceLocator.registerLazySingleton<SentBillRequestUseCase>(
+          () => SentBillRequestUseCase(
+            serviceLocator()
+          ),
+    );
+    serviceLocator.registerLazySingleton<TenPercentRepo>(
+          () => TenPercentRepoImpl(
+            serviceLocator()
+          ),
+    );
+    serviceLocator.registerLazySingleton<TenPercentRemoteDataSource>(
+          () => TenPercentRemoteDataSourceImpl(
+            serviceLocator()
+          ),
     );
     serviceLocator.registerLazySingleton<GetGiftsUseCase>(
           () => GetGiftsUseCase(serviceLocator()),
@@ -412,7 +437,7 @@ class DI {
   //   CliLogger.info('token outside getit $token');
   //   // socket
   //   serviceLocator.registerFactory<Socket>(() => io(
-  //       'https://49backend.com',
+  //       'https://d0531cde0723.ngrok-free.app',
   //       OptionBuilder()
   //           .setTransports(['websocket'])
   //           .disableAutoConnect()

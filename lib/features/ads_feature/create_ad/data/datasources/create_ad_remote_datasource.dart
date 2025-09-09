@@ -54,7 +54,7 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
     try {
       return response.fold(
           (failure) => Left(failure),
-          (response) => Right((response['data']['allAds']['ads'] as List)
+          (response) => Right((response['data']['ads'] as List)
               .map((e) => AdModel.fromJson(e))
               .toList()));
     } catch (e) {
