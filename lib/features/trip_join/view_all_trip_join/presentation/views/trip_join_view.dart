@@ -312,7 +312,7 @@ class _TripJoinViewState extends State<TripJoinView>
             title: context.isArabic ? "انشر رحلتك" : "Post your ride",
             onTap: () {
               ManageVibration.vibrate();
-              context.push(Routes.TRIP_JOIN,extra: false);
+              context.push(Routes.TRIP_JOIN,extra: true);
             },
           ),
         );
