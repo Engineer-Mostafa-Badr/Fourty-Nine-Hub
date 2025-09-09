@@ -1049,7 +1049,7 @@ class CodegenLoader extends AssetLoader{
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
-  "yourPersonalMessages": "رسالاتك الشخصيه",
+  "yourPersonalMessages": "رسائلك الشخصيه",
   "endToEndEncryption": "مشفره من البدايه للنهايه",
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
@@ -1651,7 +1651,9 @@ class CodegenLoader extends AssetLoader{
   "selectCarBrand": "اختر ماركة السيارة",
   "selectCarModel": "اختر طراز السيارة",
   "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
-  "retry": "إعادة المحاولة"
+  "retry": "إعادة المحاولة",
+  "favorite": "المفضلة",
+  "myAuction": "مزادتي"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3310,7 +3312,9 @@ static const Map<String,dynamic> _en = {
   "reportClient": "Report Client",
   "uploadingImage": "Uploading Image...",
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
-  "watch": "Watch"
+  "watch": "Watch",
+  "favorite": "Favorite",
+  "myAuction": "My Auction"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

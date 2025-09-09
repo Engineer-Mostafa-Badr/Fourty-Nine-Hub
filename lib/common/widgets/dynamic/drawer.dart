@@ -450,7 +450,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.MAZADAT);
+                            context.push(Routes.availableAuctionScreen);
                           },
                         ),
                         drawerRollWidget(

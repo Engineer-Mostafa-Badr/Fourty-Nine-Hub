@@ -1656,7 +1656,9 @@
   "reportClient": "Report Client",
   "uploadingImage": "Uploading Image...",
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
-  "watch": "Watch"
+  "watch": "Watch",
+  "favorite": "Favorite",
+  "myAuction": "My Auction"
 
 
 

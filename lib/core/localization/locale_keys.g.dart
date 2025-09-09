@@ -1628,5 +1628,7 @@ abstract class  LocaleKeys {
   static const selectCarModel = 'selectCarModel';
   static const checkInternetConnection = 'checkInternetConnection';
   static const retry = 'retry';
+  static const favorite = 'favorite';
+  static const myAuction = 'myAuction';
 
 }

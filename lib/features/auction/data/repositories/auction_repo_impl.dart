@@ -1,0 +1,58 @@
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/get_all_auction_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/usecases/fetch_available_auction_use_case.dart';
+
+import '../../domain/repositories/auction_repo.dart';
+import '../../domain/usecases/fetch_participants_auction_use_case.dart';
+import '../../domain/usecases/fetch_single_auction_use_case.dart';
+import '../datasource/auction_remote_datasource.dart';
+
+class AuctionRepoImpl implements AuctionRepository {
+  final AuctionRemoteDataSource _remoteDataSource;
+  AuctionRepoImpl(this._remoteDataSource);
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getAvailableAuction({required GetAuctionParams params}) {
+    return _remoteDataSource.getAvailableAuction(params: params);
+  }
+
+  @override
+  void listenToNewAuction(Function(GetAvailableAuctionEntity trip) params) {
+    _remoteDataSource.listenToNewAuction(params);
+
+  }
+
+  @override
+  void joinAuction(String auctionId) {
+    _remoteDataSource.joinAuction(auctionId);
+  }
+
+  @override
+  Future<Either<Failure, GetAvailableAuctionEntity>> getSingleAuction({required SingleAuctionParams params}) {
+    return _remoteDataSource.getSingleAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionParticipantsEntity>>> getParticipantsAuction({required PriceAuctionParams params}) {
+    return _remoteDataSource.getParticipantsAuction(params: params);
+  }
+
+  @override
+  Future<void> sendBid(String auctionId, int newPrice) async {
+    return _remoteDataSource.sendBid(auctionId, newPrice);
+  }
+
+  @override
+  void listenToNewBidAuction(Function(AuctionParticipantsEntity trip) params) {
+    return _remoteDataSource.listenToNewBidAuction(params);
+  }
+
+
+
+
+
+
+
+}

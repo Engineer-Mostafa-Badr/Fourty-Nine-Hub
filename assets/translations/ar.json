@@ -1640,6 +1640,9 @@
   "reportClient": "تقرير العميل",
   "uploadingImage": "جاري تحميل الصورة...",
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
-  "watch": "مشاهدة"
+  "watch": "مشاهدة",
+  "favorite": "المفضلة",
+  "myAuction": "مزادتي"
+
 
 }

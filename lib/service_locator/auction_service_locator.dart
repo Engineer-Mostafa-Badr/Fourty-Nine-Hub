@@ -1,77 +1,65 @@
-import '../features/mazadat_feature/auction_details/data/datasources/auction_details_remote_datasource.dart';
-import '../features/mazadat_feature/auction_details/data/repositories/auction_details_repo_impl.dart';
-import '../features/mazadat_feature/auction_details/domain/usecases/follow_users_auction_usecase.dart';
-import '../features/mazadat_feature/auction_details/domain/usecases/get_auction_details_usecase.dart';
-import '../features/mazadat_feature/auction_details/domain/usecases/get_auction_requests_usecase.dart';
-import '../features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
-import '../features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
-import '../features/mazadat_feature/auction_list/data/datasources/auction_list_remote_date_source.dart';
-import '../features/mazadat_feature/auction_list/data/repositories/auction_list_repo_impl.dart';
-import '../features/mazadat_feature/auction_list/domain/usecases/get_auction_list_usecase.dart';
-import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
-import '../features/mazadat_feature/create_auction/data/repositories/create_auction_repo_impl.dart';
-import '../features/mazadat_feature/create_auction/domain/usecases/create_auction_usecase.dart';
-import '../features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
+
 import 'package:get_it/get_it.dart';
 
-import '../features/mazadat_feature/auction_details/domain/repositories/auction_details_repo.dart';
-import '../features/mazadat_feature/auction_details/domain/usecases/end_auction_usecase.dart';
-import '../features/mazadat_feature/auction_list/domain/repositories/auction_list_repo.dart';
-import '../features/mazadat_feature/create_auction/data/datasources/create_auction_remotedata_source.dart';
-import '../features/mazadat_feature/create_auction/domain/repositories/create_auction_repo.dart';
+import '../features/auction/data/datasource/auction_remote_datasource.dart';
+import '../features/auction/data/repositories/auction_repo_impl.dart';
+import '../features/auction/domain/repositories/auction_repo.dart';
+import '../features/auction/domain/usecases/bid_auction_use_case.dart';
+import '../features/auction/domain/usecases/fetch_available_auction_use_case.dart';
+import '../features/auction/domain/usecases/fetch_participants_auction_use_case.dart';
+import '../features/auction/domain/usecases/fetch_single_auction_use_case.dart';
+import '../features/auction/domain/usecases/join_auction_use_case.dart';
+import '../features/auction/domain/usecases/listen_to_new_auction_use_case.dart';
+import '../features/auction/domain/usecases/listen_to_new_bid_auction_use_case.dart';
+import '../features/auction/presentation/cubit/auction_cubit.dart';
 
 class AuctionServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
-    serviceLocator.registerLazySingleton<AuctionListRemoteDataSource>(
-        () => AuctionListRemoteDataSourceImpl(
+
+    serviceLocator.registerLazySingleton<AuctionRemoteDataSource>(() =>
+        AuctionRemoteDataSourceImpl(serviceLocator(),));
+
+    serviceLocator.registerLazySingleton<GetAvailableAuctionUseCase>(
+        () => GetAvailableAuctionUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<AuctionDetailsRemoteDataSource>(
-        () => AuctionDetailsRemoteDataSourceImpl(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<CreateAuctionRemoteDataSource>(
-        () => CreateAuctionRemoteDataSourceImpl(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<AuctionListRepo>(
-        () => AuctionListRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<AuctionDetailsRepo>(
-        () => AuctionDetailsRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<CreateAuctionRepo>(
-        () => CreateAuctionRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<AuctionRepository>(
+        () => AuctionRepoImpl(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<GetAuctionListUseCase>(
-        () => GetAuctionListUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetAuctionDetailsUseCase>(
-        () => GetAuctionDetailsUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<CreateAuctionUseCase>(
-        () => CreateAuctionUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToNewAuctionUseCase>(
+        () => ListenToNewAuctionUseCase(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<EndAuctionUsecase>(
-        () => EndAuctionUsecase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetAuctionRequestsUseCase>(
-        () => GetAuctionRequestsUseCase(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<SendBiddingUseCase>(
-        () => SendBiddingUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<FollowUsersAuctionUseCase>(
-        () => FollowUsersAuctionUseCase(serviceLocator()));
-    // SendBiddingUseCase
-    serviceLocator.registerFactory<AuctionListCubit>(() => AuctionListCubit(
-          serviceLocator(),
-          serviceLocator(),
-        ));
-    serviceLocator.registerFactory<CreateAuctionCubit>(() => CreateAuctionCubit(
-          serviceLocator(),
-        ));
+    serviceLocator.registerLazySingleton<JoinToAuctionUseCase>(
+        () => JoinToAuctionUseCase(serviceLocator()));
+
+
+    serviceLocator.registerLazySingleton<GetSingleAuctionUseCase>(
+        () => GetSingleAuctionUseCase(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<GetParticipantsAuctionUseCase>(
+        () => GetParticipantsAuctionUseCase(serviceLocator()));
+
+
+    serviceLocator.registerLazySingleton<BidAuctionUseCase>(
+        () => BidAuctionUseCase(serviceLocator()));
+
+
+    serviceLocator.registerLazySingleton<ListenToNewBidAuctionUseCase>(
+        () => ListenToNewBidAuctionUseCase(serviceLocator()));
+
+
+
     serviceLocator
-        .registerFactory<AuctionDetailsCubit>(() => AuctionDetailsCubit(
+        .registerFactory<AuctionCubit>(() => AuctionCubit(
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+
             ));
   }
 }

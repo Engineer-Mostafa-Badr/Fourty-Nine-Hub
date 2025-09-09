@@ -92,6 +92,10 @@ abstract class SocketIOListeners {
   static const String rideUpdateOfferUntrackedClientTrip = 'RIDE:NON_TRACKING_OFFERS_UPDATE';
   static const String rideUpdateOfferShippingClientTrip = 'LOADING:NEW_TRIP_OFFER_UPDATED';
   static const String listenToUpdateLocationDriver = 'CAPTAIN_SHARE:ROUTE_LOCATION_UPDATED';
+  static const String newAvailableAuction = 'auction:updated-list';
+  static const String joinAuction = 'join:auction';
+  static const String bidAuction = 'auction:add:bid:amount';
+
 }
 
 abstract class SocketIOEvents {
