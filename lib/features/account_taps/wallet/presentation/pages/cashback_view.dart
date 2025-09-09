@@ -26,7 +26,7 @@ class CashbackView extends StatelessWidget {
           actions: [
             CustomWinnerAppbar(
               onPressed: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 context.push(Routes.WINNERSCASHBACK);
               },
             ),
@@ -35,7 +35,7 @@ class CashbackView extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) =>
-            serviceLocator<CashbackCubit>()..getCashback(context),
+            serviceLocator<CashbackCubit>(),
         child: const CashbackViewBody(),
       ),
     );

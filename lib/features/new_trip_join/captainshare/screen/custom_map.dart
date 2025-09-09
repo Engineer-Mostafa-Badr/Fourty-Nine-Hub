@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_google_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_car_marker_widget.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/car_marker_on_client_side_captain_share.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,6 +19,7 @@ class CustomGoogleMap extends StatefulWidget {
   final List<LatLng> polylinePoints;
   final bool enableScrolling;
   final bool? fromClient;
+  final bool? fromCaptainShare;
   final String? startAddress;
   final String? status;
   final String? targetAddress;
@@ -31,6 +33,7 @@ class CustomGoogleMap extends StatefulWidget {
     this.clientLocations = const [],
     this.polylinePoints = const [],
     this.enableScrolling = true,
+    this.fromCaptainShare,
     this.fromClient,
     this.startAddress,
     this.targetAddress,
@@ -699,6 +702,13 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
             size: _currentZoom,
             time: widget.estimatedTime,
           ),
+        if (widget.fromCaptainShare == true && _mapController != null && !_isDisposed)
+          CarMarkerOnClientSideCaptainShare(
+            onCarMarkerUpdated: _updateCarMarker,
+            mapController: _mapController!,
+            size: _currentZoom,
+            // time: widget.estimatedTime,
+          )
       ],
     );
   }

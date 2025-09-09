@@ -128,7 +128,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                       title:
                           "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (AuthHelper().isLoggedIn()) {
                           context.push(
                             Routes.CREATEAD,

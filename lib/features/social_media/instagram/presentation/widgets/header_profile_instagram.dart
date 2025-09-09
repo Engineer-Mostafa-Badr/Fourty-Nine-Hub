@@ -39,7 +39,7 @@ class HeaderProfileInstagram extends StatelessWidget {
                 end: 5,
                 child: InkWell(
                   onTap: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context.read<UserCubit>().isLoggedIn
                         ? await Navigator.push(
                             context,
@@ -94,7 +94,6 @@ class HeaderProfileInstagram extends StatelessWidget {
             title: LocaleKeys.friend.localize,
             dataProfile: dataProfile,
             index: 0,
-
           ),
           const Spacer(),
           ValueAndTitleHeaderProfileInstagram(

@@ -85,7 +85,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!widget.buttons && !widget.yourRequest) {
               // context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
@@ -243,7 +243,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                         color: Colors.white,
                         backColor: AppColors.PRIMARY_COLOR,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           log(widget.model.id.toString(),
                               name: "lksdjfklsdjfkf");
                           context
@@ -268,7 +268,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             fontSize: 28, color: Colors.white),
                                         label: LocaleKeys.sendOffer.tr(),
                                         onPressed: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           tripCubit.newOffer(
                                               id: widget.model.id ?? "",
                                               price:
@@ -330,8 +330,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 ? AppColors.PRIMARY_COLOR
                                                 : AppColors.DARK_GRAY_COLOR,
                                             onPressed: () {
-
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                             },
                                             style: Styles.mediumText(
                                                 fontSize: 18,
@@ -352,8 +351,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 fontSize: 15,
                                                 color: Colors.white),
                                             onPressed: () {
-
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                             },
                                           ),
                                         ),
@@ -367,7 +365,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 fontSize: 18,
                                                 color: Colors.white),
                                             onPressed: () {
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                               // tripCubit.report(
                                               //     loadingTripId: widget.model.id ?? "");
                                               showBottomSheet(
@@ -401,7 +399,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             backColor:
                                                 AppColors.DARK_GRAY_COLOR,
                                             onPressed: () {
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                               launchUrlString(
                                                   "tel://21213123123");
                                             },
@@ -421,8 +419,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 fontSize: 18,
                                                 color: Colors.white),
                                             onPressed: () {
-
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                             },
                                           ),
                                         ),
@@ -436,7 +433,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                                 fontSize: 15,
                                                 color: Colors.white),
                                             onPressed: () {
-      ManageVibration.vibrate();
+                                              ManageVibration.vibrate();
                                               showBottomSheet(
                                                 context: context,
                                                 builder: (context) =>

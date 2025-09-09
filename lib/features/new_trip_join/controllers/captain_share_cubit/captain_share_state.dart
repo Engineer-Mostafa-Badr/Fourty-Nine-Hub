@@ -28,6 +28,8 @@ class CaptainShareState {
   final RunningRouteEntity? runningRoute;
   final GetLocationFromAddressEntity? currentLocation;
   final GetLocationFromAddressEntity? toLocation;
+  final LatLng? driverLocation;
+  final LatLng? previousDriverLocation;
 
   const CaptainShareState({
     this.failure,
@@ -41,6 +43,8 @@ class CaptainShareState {
     this.runningRoute,
     this.currentLocation,
     this.toLocation,
+    this.driverLocation,
+    this.previousDriverLocation
   });
   CaptainShareState copyWith({
     CaptainShareStates? status,
@@ -54,6 +58,9 @@ class CaptainShareState {
     RunningRouteEntity? runningRoute,
     GetLocationFromAddressEntity? currentLocation,
     GetLocationFromAddressEntity? toLocation,
+    LatLng? driverLocation,
+    LatLng? previousDriverLocation
+
   }) {
     return CaptainShareState(
       status: status ?? this.status,

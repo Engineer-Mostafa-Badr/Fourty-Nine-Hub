@@ -129,7 +129,7 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToPartialPaymentDriverUseCase>(() => ListenToPartialPaymentDriverUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateDriverRateLoadingNonSocketUseCase>(() => UpdateDriverRateLoadingNonSocketUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AddRateWithDriverLoadingUseCase>(() => AddRateWithDriverLoadingUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<ListenToClientComingUseCase>(() => ListenToClientComingUseCase(serviceLocator()));
+    // serviceLocator.registerLazySingleton<ListenToClientComingUseCase>(() => ListenToClientComingUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 

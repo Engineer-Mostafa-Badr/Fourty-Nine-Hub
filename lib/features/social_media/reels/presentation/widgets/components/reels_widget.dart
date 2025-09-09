@@ -1,71 +1,176 @@
 import 'dart:developer';
-
+import 'dart:convert';
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../core/extensions/context_extension.dart';
-import '../../../data/models/new_reels_model.dart';
-import 'animated_heart_wiidget.dart';
-import 'custom_progress_bar.dart';
-import 'unified_widget_view.dart';
-import '../full_screen_widget.dart';
-import '../../../../tinder/data/shared/shared.dart';
-import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
-import '../../pages/profile_buttom_sheet.dart';
+import '../../controllers/preload_cubit/preload_bloc.dart';
+import '../../controllers/preload_cubit/preload_state.dart';
+import '../full_screen_widget.dart';
 import '../../pages/reel_actions.dart';
-import '../../../../../../helpers/manage_vibration.dart';
+import 'animated_heart_wiidget.dart';
+import 'unified_widget_view.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
     super.key,
     required this.isLoading,
-    required this.controller,
     required this.index,
-    required this.receiverId,
+    required this.url,
   });
 
   final bool isLoading;
-  final VideoPlayerController controller;
   final int index;
-  final int receiverId;
+  final String url;
+
   @override
   State<ReelsWidget> createState() => _ReelsWidgetState();
 }
 
 class _ReelsWidgetState extends State<ReelsWidget>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  final bool _isVisible = false; // Track visibility state
-  bool _isPlaying = false;
   bool _showPlayPauseIcon = false;
+  bool _isInitialized = false;
+  bool _isPlaying = false;
+  bool _pendingPlay = false;
+
   late final AnimationController _rotationController;
+  BetterPlayerController? _bp;
+
+  BetterPlayerController get _controller => _bp!;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addObserver(this); // Start observing lifecycle changes
-    widget.controller.setLooping(true);
-    _playVideo();
+    WidgetsBinding.instance.addObserver(this);
 
-    _initializeRotationController();
+    _rotationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5))
+          ..repeat();
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+    ));
+
+    _initController();
   }
 
-  void _initializeRotationController() {
-    _rotationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..repeat();
+  Future<void> _initController() async {
+    final effectiveUrl = await _pickLowestVariantIfHls(widget.url);
+
+    final dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      effectiveUrl,
+      useAsmsTracks: false,
+      useAsmsAudioTracks: true,
+      cacheConfiguration: const BetterPlayerCacheConfiguration(useCache: true),
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: 1000,
+        maxBufferMs: 10000,
+        bufferForPlaybackMs: 500,
+        bufferForPlaybackAfterRebufferMs: 1000,
+      ),
+      videoFormat: effectiveUrl.toLowerCase().endsWith('.m3u8')
+          ? BetterPlayerVideoFormat.hls
+          : BetterPlayerVideoFormat.other,
+    );
+
+    _bp = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: false,
+        looping: true,
+        expandToFill: false,
+        fit: BoxFit.cover, // full screen cover
+        handleLifecycle: false,
+        showPlaceholderUntilPlay: false,
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
+          showControls: false,
+          enableProgressBar: true,
+          enableProgressBarDrag: true,
+          enablePlayPause: false,
+          enableMute: false,
+          enableSkips: false,
+          enableFullscreen: false,
+          enableProgressText: true,
+        ),
+      ),
+      betterPlayerDataSource: dataSource,
+    );
+
+    _controller.addEventsListener(_onBetterPlayerEvent);
+
+    // attach to bloc so pauseCurrent/pauseAll keep working
+    context.read<PreloadBloc>().attachController(widget.index, _controller);
+
+    if (!mounted) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      _controller.setLooping(true);
+
+      // If exiting, don’t start playback.
+      if (context.read<PreloadBloc>().isShuttingDown) return;
+
+      final focus = context.read<PreloadBloc>().state.focusedIndex;
+      if (focus == widget.index) {
+        if (_isInitialized) {
+          await _playVideo();
+        } else {
+          _pendingPlay = true;
+        }
+        await _safeSetVolume(1.0);
+      } else {
+        await _safeSetVolume(0.0);
+      }
+      setState(() {});
+    });
   }
 
-  // Implement didChangeAppLifecycleState for handling lifecycle events
+  void _onBetterPlayerEvent(BetterPlayerEvent e) {
+    switch (e.betterPlayerEventType) {
+      case BetterPlayerEventType.initialized:
+        _isInitialized = true;
+        _controller.setLooping(true);
+        // Don’t play if app is exiting
+        if (context.read<PreloadBloc>().isShuttingDown) break;
+
+        final focus = context.read<PreloadBloc>().state.focusedIndex;
+        if (_pendingPlay || focus == widget.index) {
+          _pendingPlay = false;
+          context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+          _playVideo();
+          _safeSetVolume(1.0);
+        }
+        break;
+      case BetterPlayerEventType.play:
+        _isPlaying = true;
+        // Also guard during exit
+        if (context.read<PreloadBloc>().isShuttingDown) {
+          _pauseVideo();
+        } else {
+          context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+        }
+        break;
+      case BetterPlayerEventType.pause:
+      case BetterPlayerEventType.finished:
+        _isPlaying = false;
+        break;
+      default:
+        break;
+    }
+    if (mounted) setState(() {});
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       _pauseVideo();
-      // } else if (state == AppLifecycleState.resumed && widget.isVisible) {
-      //   _playVideo();
-      // }
     }
   }
 
@@ -73,212 +178,186 @@ class _ReelsWidgetState extends State<ReelsWidget>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _rotationController.dispose();
+
+    final bp = _bp;
+    if (bp != null) {
+      // IMPORTANT: pause+mute before disposing to avoid any final blip
+      try {
+        bp.pause();
+      } catch (_) {}
+      try {
+        bp.setVolume(0.0);
+      } catch (_) {}
+
+      bp.removeEventsListener(_onBetterPlayerEvent);
+      context.read<PreloadBloc>().detachController(widget.index, bp);
+      bp.dispose();
+    }
     super.dispose();
   }
 
-  void _pauseVideo() {
+  Future<void> _safeSetVolume(double v) async {
+    try {
+      await _controller.setVolume(v);
+    } catch (_) {}
+  }
+
+  Future<void> _togglePlayPause() async {
+    if (!_isInitialized) return;
     if (_isPlaying) {
-      widget.controller.pause();
+      await _pauseVideo();
+    } else {
+      await _playVideo();
+    }
+  }
 
-      // _chewieController?.pause();
-      setState(() {
-        _isPlaying = false;
-        _showPlayPauseIcon = true;
+  Future<void> _playVideo() async {
+    try {
+      if (context.read<PreloadBloc>().isShuttingDown) return;
+      context.read<PreloadBloc>().pauseOthersExcept(widget.index);
+      await _controller.play();
+      if (!mounted) return;
+      setState(() => _showPlayPauseIcon = true);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) setState(() => _showPlayPauseIcon = false);
       });
-      _hidePlayPauseIconAfterDelay();
+    } catch (e) {
+      log('⚠️ play() error: $e');
     }
   }
 
-  /// Toggles between play and pause states.
-  void _togglePlayPause() {
-    _isPlaying ? _pauseVideo() : _playVideo();
-  }
-
-  void _playVideo() {
-    if (!_isPlaying) {
-      widget.controller.play();
-      // _chewieController?.play();
-      setState(() {
-        _isPlaying = true;
-        _showPlayPauseIcon = true;
+  Future<void> _pauseVideo() async {
+    try {
+      await _controller.pause();
+      if (!mounted) return;
+      setState(() => _showPlayPauseIcon = true);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) setState(() => _showPlayPauseIcon = false);
       });
-      _hidePlayPauseIconAfterDelay();
+    } catch (e) {
+      log('⚠️ pause() error: $e');
     }
   }
-
-  /// Hides the play/pause icon after a short delay.
-  void _hidePlayPauseIconAfterDelay() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _showPlayPauseIcon = false;
-        });
-      }
-    });
-  }
-
-  // /// Handles vertical drag events for the spotlight item type.
-  void _handleVerticalDrag(DragEndDetails details, Reel reel) async {
-    if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
-      _pauseVideo();
-      await ProfileBottomSheet.show(context, reel);
-      _playVideo();
-    }
-  }
-
-  // @override
-  // bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
-    final reel = context.read<ReelsCubit>().state.globalReels[widget.index];
-    final reelCubit = context.read<ReelsCubit>();
-    return SizedBox(
-      height: context.screenHeight,
+    final reels = context.read<ReelsCubit>().state.globalReels;
+    final reel = (widget.index >= 0 && widget.index < reels.length)
+        ? reels[widget.index]
+        : null;
+
+    return BlocListener<PreloadBloc, PreloadState>(
+      listenWhen: (prev, curr) => prev.focusedIndex != curr.focusedIndex,
+      listener: (context, curr) async {
+        if (_bp == null) return;
+        if (context.read<PreloadBloc>().isShuttingDown) return;
+        if (curr.focusedIndex == widget.index) {
+          if (_isInitialized) {
+            await _playVideo();
+          } else {
+            _pendingPlay = true;
+          }
+          await _safeSetVolume(1.0);
+        } else {
+          _pendingPlay = false;
+          await _pauseVideo();
+          await _safeSetVolume(0.0);
+        }
+      },
       child: GestureDetector(
         onTap: _togglePlayPause,
-        // onVerticalDragEnd: (details) => _handleVerticalDrag(details, reel),
         child: DoubleTapHeart(
           iconSize: 40,
           animationDuration: const Duration(seconds: 1),
           heartIcon: Icons.favorite_outline,
           iconColor: Colors.pink,
-          onDoubleTap: () async {
-            log("LSdkjflskdjflskdjflsdf o");
-            await reelCubit.likeReel(reel.id).then((val) async {
-              if (val == "Reel liked successfully") {
-                setState(() {
-                  reel.likeCount++;
-                });
-              } else if (val == "Reel unlike successfully") {
-                if (reel.likeCount > 0) {
-                  setState(() {
-                    reel.likeCount--;
-                  });
-                }
-              }
-              if (val == "Reel unlike successfully") {
-                await reelCubit.likeReel(reel.id).then((value) {
-                  if (value == "Reel liked successfully") {
-                    setState(() {
-                      reel.likeCount++;
-                    });
-                  } else if (value == "Reel unlike successfully") {
-                    if (reel.likeCount > 0) {
-                      setState(() {
-                        reel.likeCount--;
-                      });
-                    }
-                  }
-                });
-              }
-            });
-          },
+          onDoubleTap: reel == null
+              ? null
+              : () async {
+                  final reelCubit = context.read<ReelsCubit>();
+                  await reelCubit.likeReel(reel.id);
+                },
           child: Stack(
             children: [
-              VideoPlayer(widget.controller),
-              buildPlayPauseIcon(),
+              const Positioned.fill(child: ColoredBox(color: Colors.black)),
+              if (_bp != null)
+                const Positioned.fill(
+                  child: SizedBox.expand(), // ensure fill the screen
+                ),
+              if (_bp != null)
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.1,
+                  bottom: MediaQuery.of(context).size.height * 0.1,
+                  left: 0,
+                  right: 0,
+                  child: BetterPlayer(
+                    key: ValueKey('bp_${widget.index}_${_bp.hashCode}'),
+                    controller: _controller,
+                  ),
+                ),
               Positioned.fill(
-                bottom: MediaQuery.of(context).size.height * 0.0,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20, left: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Icon(
-                          //   Icons.keyboard_double_arrow_left_sharp,
-                          //   color: Colors.white,
-                          // ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                child: IgnorePointer(
+                  child: AnimatedOpacity(
+                    opacity: _showPlayPauseIcon ? 1 : 0,
+                    duration: const Duration(milliseconds: 220),
+                    child: Center(
+                      child: Icon(
+                        (_isInitialized && _isPlaying)
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white.withOpacity(0.6),
+                        size: 84,
                       ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     if (!serviceLocator<UserCubit>().isLoggedIn) {
-                      //       context.read<PreloadBloc>().pauseTheVideo();
-                      //       context.push(Routes.LOGIN);
-                      //     } else {
-                      //       _showGiftBottomSheet(context);
-                      //     }
-                      //   },
-                      //   child: Container(
-                      //     decoration: BoxDecoration(boxShadow: [
-                      //       BoxShadow(
-                      //           color: Colors.black.withOpacity(0.9),
-                      //           blurRadius: 30)
-                      //     ]),
-                      //     child: SvgPicture.asset(Assets.giftReelsIcon),
-                      //   ),
-                      // ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-              Positioned(
-                right: 0,
-                bottom: 20,
-                child: ReelActions(
-                  reel: reel,
-                  itemType: ReelItemType.main,
-                  rotationController: _rotationController,
+              if (reel != null)
+                Positioned(
+                  right: 0,
+                  bottom: 20,
+                  child: ReelActions(
+                    reel: reel,
+                    itemType: ReelItemType.main,
+                    rotationController: _rotationController,
+                  ),
                 ),
-              ),
-            Positioned(
+              if (reel != null)
+                Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 60,
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.black,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    height: 56,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    color: Colors.black.withOpacity(0.9),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // if (reel.audio.audioName.isNotEmpty)
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 30,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  reel.audio.audioName.isNotEmpty
-                                      ? reel.audio.audioName
-                                      : "No audio",
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Colors.white70,
-                                  size: 20,
-                                ),
-                              ],
+                        Flexible(
+                          child: Text(
+                            reel.audio.audioName.isNotEmpty
+                                ? reel.audio.audioName
+                                : "No audio",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
                             ),
                           ),
-                        SizedBox(height: 5),
-                        CustomProgressBar(
-                          videoPlayerController: widget.controller,
                         ),
+                        const Icon(Icons.arrow_forward_ios_rounded,
+                            color: Colors.white70, size: 20),
                       ],
                     ),
-                  )),
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * 0.5,
-                left: MediaQuery.of(context).size.width * 0.115,
-                child: FullScreenWidget(),
-              ),
+                  ),
+                ),
+              // Positioned(
+              //   bottom: MediaQuery.of(context).size.height * 0.5,
+              //   left: MediaQuery.of(context).size.width * 0.115,
+              //   child: const FullScreenWidget(),
+              // ),
             ],
           ),
         ),
@@ -286,21 +365,49 @@ class _ReelsWidgetState extends State<ReelsWidget>
     );
   }
 
-  Widget buildPlayPauseIcon() {
-    return AnimatedOpacity(
-      opacity: _showPlayPauseIcon ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 1000),
-      child: Center(
-        child: Icon(
-          widget.controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-          color: Colors.white.withOpacity(0.5),
-          size: 85,
-        ),
-      ),
-    );
+  // --------- LOWEST-RES HLS PICKER ----------
+  Future<String> _pickLowestVariantIfHls(String url) async {
+    final lower = url.toLowerCase();
+    if (!lower.endsWith('.m3u8')) return url;
+
+    if (lower.endsWith('/video.m3u8')) {
+      return url.replaceFirst(
+          RegExp(r'/video\.m3u8$', caseSensitive: false), '/240p/video.m3u8');
+    }
+
+    try {
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode != 200) return url;
+
+      final lines = const LineSplitter().convert(res.body);
+      if (!lines.any((l) => l.startsWith('#EXT-X-STREAM-INF'))) {
+        return url;
+      }
+
+      final variants = <Map<String, dynamic>>[];
+      for (int i = 0; i < lines.length; i++) {
+        final line = lines[i].trim();
+        if (line.startsWith('#EXT-X-STREAM-INF:')) {
+          final bw = _parseBandwidth(line);
+          final next = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+          if (bw != null && next.isNotEmpty && !next.startsWith('#')) {
+            final resolved = Uri.parse(url).resolve(next).toString();
+            variants.add({'bw': bw, 'uri': resolved});
+          }
+        }
+      }
+
+      if (variants.isEmpty) return url;
+      variants.sort((a, b) => (a['bw'] as int).compareTo(b['bw'] as int));
+      return variants.first['uri'] as String;
+    } catch (_) {
+      return url;
+    }
   }
 
-  Future<void> _showGiftBottomSheet(BuildContext context) async {
-    await showGiftBottomSheet(context, receiverId: "widget.receiverId");
+  int? _parseBandwidth(String line) {
+    final reg = RegExp(r'BANDWIDTH=(\d+)');
+    final m = reg.firstMatch(line);
+    return m != null ? int.tryParse(m.group(1)!) : null;
   }
 }

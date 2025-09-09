@@ -30,7 +30,7 @@ class HealthBookingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
             appointment.bookingType;
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
@@ -69,7 +69,7 @@ class HealthBookingCard extends StatelessWidget {
                   radius: 10,
                   height: kToolbarHeight,
                   width: kToolbarHeight,
-                  url: appointment.doctor?.image??UIConst.profilePlaceHolder,
+                  url: appointment.doctor?.image ?? UIConst.profilePlaceHolder,
                 ),
                 const Sizer(),
                 Expanded(
@@ -77,13 +77,14 @@ class HealthBookingCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        //TODO:delete
-                          text: appointment.doctor?.fullName??'Ahmed Mohemd',
+                          //TODO:delete
+                          text: appointment.doctor?.fullName ?? 'Ahmed Mohemd',
                           style: Styles.mediumText(
                               color: Theme.of(context).primaryColor)),
                       Label(
-                        //TODO:delete
-                          text: appointment.doctor?.description??'sfsdaf fsdafsfa fdsaf asfasdfsaf sdaff dsaf ',
+                          //TODO:delete
+                          text: appointment.doctor?.description ??
+                              'sfsdaf fsdafsfa fdsaf asfasdfsaf sdaff dsaf ',
                           style: Styles.mediumText(
                               color: AppColors.DARK_GRAY_COLOR)),
                     ],
@@ -93,7 +94,7 @@ class HealthBookingCard extends StatelessWidget {
                   label: LocaleKeys.cancel.localize,
                   padding: 15.w,
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     context
                         .read<HealthCubit>()
                         .cancelAppointment(appointment.id);

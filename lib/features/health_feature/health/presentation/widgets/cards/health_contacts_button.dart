@@ -68,16 +68,17 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                 IconButton(
                   visualDensity:
                       const VisualDensity(horizontal: -4, vertical: -4),
-                  color:
-                      (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                          ? AppColors.getRedColor(context)
-                          : AppColors.GREY_DARK_COLOR,
+                  color: (snap.data == true &&
+                          context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.getRedColor(context)
+                      : AppColors.GREY_DARK_COLOR,
                   icon: SvgPicture.asset(
                     Assets.phoneIcon,
                     width: 36.h,
                     height: 36.h,
                     fit: BoxFit.cover,
-                    color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                    color: (snap.data == true &&
+                            context.read<UserCubit>().isLoggedIn)
                         ? AppColors.getRedColor(context)
                         : AppColors.GREY_DARK_COLOR,
                   ),
@@ -86,7 +87,9 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                     context,
                     topButtonColor: AppColors.getButtonPrimaryColor(context),
                     topButtonTitle: LocaleKeys.freeCall.localize,
-                    bottomButtonColor: context.isDarkMode?AppColors.fill_Color_DARK:const Color(0xFFD9D9D9),
+                    bottomButtonColor: context.isDarkMode
+                        ? AppColors.fill_Color_DARK
+                        : const Color(0xFFD9D9D9),
                     bottomButtonTitle: LocaleKeys.regularCall.localize,
                     onTap: () => showDialogTripJoin(
                         context,
@@ -99,8 +102,7 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                         )),
                     topTextColor:
                         context.isDarkMode ? Colors.black : Colors.white,
-                    bottomTextColor:
-                    AppColors.getTextColor(context),
+                    bottomTextColor: AppColors.getTextColor(context),
                   ),
                   // !context.read<UserCubit>().isLoggedIn
                   //     ? () => context.push(Routes.LOGIN)
@@ -250,21 +252,22 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                 IconButton(
                   visualDensity:
                       const VisualDensity(horizontal: -4, vertical: -4),
-                  color:
-                      (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                          ? AppColors.getRedColor(context)
-                          : AppColors.GREY_DARK_COLOR,
+                  color: (snap.data == true &&
+                          context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.getRedColor(context)
+                      : AppColors.GREY_DARK_COLOR,
                   icon: SvgPicture.asset(
                     Assets.mailIcon,
-                    color: (snap.data == true && context.read<UserCubit>().isLoggedIn)
+                    color: (snap.data == true &&
+                            context.read<UserCubit>().isLoggedIn)
                         ? AppColors.getRedColor(context)
                         : AppColors.GREY_DARK_COLOR,
                   ),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
-                    pleaseLoginDialog(context);
-                    // context.push(Routes.LOGIN);
-                  }
+                          pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : snap.data == true
                           ? () async {
                               ChatEntity? chat = await context
@@ -298,9 +301,9 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                   ),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () {
-                    pleaseLoginDialog(context);
-                    // context.push(Routes.LOGIN);
-                  }
+                          pleaseLoginDialog(context);
+                          // context.push(Routes.LOGIN);
+                        }
                       : () {
                           bottomSheet(
                               context: context,

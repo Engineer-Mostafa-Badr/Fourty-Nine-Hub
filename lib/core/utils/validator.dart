@@ -132,21 +132,32 @@ String? validateEgyptianPhone(String? value) {
     return 'رقم الهاتف غير صالح';
   }
 
-  return null; // valid
-}
-
-String? validatorEmailOrPhone(String? emailOrPhone) {
-  final phoneRegex = RegExp(r'^\+?\d{11}$');
-  final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-  if (emailOrPhone == null || emailOrPhone.isEmpty) {
-    return LocaleKeys.required.localize;
-  } else if (!phoneRegex.hasMatch(emailOrPhone) &&
-      !emailRegex.hasMatch(emailOrPhone) &&
-      emailOrPhone.length != 11) {
-    return LocaleKeys.invalidPhoneNumber.localize;
-  }
   return null;
 }
+
+String? validatorEmailOrPhone(String? value) {
+  final egyptPhoneRegex = RegExp(r'^(010|011|012|015)\d{8}$');
+  final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
+
+  if (value == null || value.isEmpty) {
+    return LocaleKeys.required.localize;
+  }
+
+  if (RegExp(r'^\d+$').hasMatch(value)) {
+    if (!egyptPhoneRegex.hasMatch(value)) {
+      return LocaleKeys.invalidPhoneNumber.localize;
+    }
+    return null;
+  }
+
+  if (!emailRegex.hasMatch(value)) {
+    return LocaleKeys.invalidEmailAddress.localize;
+  }
+
+  return null;
+}
+
+
 
 String? validatorEgyptPhone(String? phoneNumber) {
   // Regex for Egyptian mobile numbers

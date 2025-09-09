@@ -145,9 +145,9 @@ class CommentInputFieldState extends State<CommentInputField> {
                             SizedBox(width: 25.w),
                             GestureDetector(
                               onTap: () {
-     manageVibration. ManageVibration.vibrate();
+                                manageVibration.ManageVibration.vibrate();
                                 if (!serviceLocator<UserCubit>().isLoggedIn) {
-                                  context.read<PreloadBloc>().pauseTheVideo();
+                                  context.read<PreloadBloc>().pauseCurrent();
                                   context.push(Routes.LOGIN);
                                 } else {
                                   _showGiftBottomSheet(context);
@@ -328,7 +328,7 @@ class _TikTokCommentBoxState extends State<TikTokCommentBox> {
                     const SizedBox(width: 20),
                     GestureDetector(
                       onTap: () {
-      manageVibration.ManageVibration.vibrate();
+                        manageVibration.ManageVibration.vibrate();
                         FocusScope.of(context).unfocus();
                         setState(() {
                           _showEmojiPicker = !_showEmojiPicker;

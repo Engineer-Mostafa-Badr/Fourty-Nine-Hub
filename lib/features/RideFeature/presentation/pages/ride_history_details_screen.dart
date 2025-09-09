@@ -115,8 +115,8 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                             .params.historyTripEntity.driverAverageRating
                             ?.toString(),
                         isVerified: widget
-                            .params.historyTripEntity.verifiedBadge && widget
-                            .params.historyTripEntity.isDriverVerified,
+                                .params.historyTripEntity.verifiedBadge &&
+                            widget.params.historyTripEntity.isDriverVerified,
                       ),
                     ],
                   ),
@@ -145,16 +145,21 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                           },
                           child: Container(
                             width: 250.w,
-                            padding: const EdgeInsets.symmetric( vertical: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
-                              color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.cF5F5F5,
+                              color: context.isDarkMode
+                                  ? AppColors.GREY_DARK_COLOR
+                                  : AppColors.cF5F5F5,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.receipt_long, color: context.isDarkMode ? AppColors.whiteColor : AppColors.black),
+                                  Icon(Icons.receipt_long,
+                                      color: context.isDarkMode
+                                          ? AppColors.whiteColor
+                                          : AppColors.black),
                                   const SizedBox(width: 8),
                                   Text(
                                     context.isArabic ? "الفاتورة" : "Receipt",
@@ -175,29 +180,54 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                         child: GestureDetector(
                           onTap: () async {
                             showLoadingDialog(context);
-                            serviceLocator<RideCubit>().updateFromLocation(lat: widget.params.historyTripEntity.startLocationLng??0, lng: widget.params.historyTripEntity.startLocationLat??0, address: widget.params.historyTripEntity.startLocationAddressTitle??'');
-                            serviceLocator<RideCubit>().updateToLocation(lat: widget.params.historyTripEntity.targetLocationLng??0, lng: widget.params.historyTripEntity.targetLocationLat??0, address: widget.params.historyTripEntity.targetLocationAddressTitle??'');
-                            await serviceLocator<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                            serviceLocator<RideCubit>().updateFromLocation(
+                                lat: widget.params.historyTripEntity
+                                        .startLocationLng ??
+                                    0,
+                                lng: widget.params.historyTripEntity
+                                        .startLocationLat ??
+                                    0,
+                                address: widget.params.historyTripEntity
+                                        .startLocationAddressTitle ??
+                                    '');
+                            serviceLocator<RideCubit>().updateToLocation(
+                                lat: widget.params.historyTripEntity
+                                        .targetLocationLng ??
+                                    0,
+                                lng: widget.params.historyTripEntity
+                                        .targetLocationLat ??
+                                    0,
+                                address: widget.params.historyTripEntity
+                                        .targetLocationAddressTitle ??
+                                    '');
+                            await serviceLocator<RideCubit>()
+                                .fetchRideExpectedPrice(id: 'id');
                             context.pop();
                             context.pop();
                             context.pop();
                           },
                           child: Container(
                             width: 250.w,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
-                              color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.cF5F5F5,
+                              color: context.isDarkMode
+                                  ? AppColors.GREY_DARK_COLOR
+                                  : AppColors.cF5F5F5,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.keyboard_return, color: context.isDarkMode ? AppColors.whiteColor : AppColors.black),
+                                  Icon(Icons.keyboard_return,
+                                      color: context.isDarkMode
+                                          ? AppColors.whiteColor
+                                          : AppColors.black),
                                   const SizedBox(width: 8),
                                   Text(
-                                    context.isArabic ? "إعادة الحجز" : "Rebook",
+                                    context.isArabic
+                                        ? "إعادة الحجز"
+                                        : "Rebook",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14,
@@ -236,7 +266,9 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.cF5F5F5,
+                            color: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.cF5F5F5,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(

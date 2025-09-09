@@ -17,6 +17,7 @@ import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/client_status_bar_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/map_view_details.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -28,6 +29,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
@@ -37,6 +39,7 @@ class OneWayWidget extends StatefulWidget {
   final Function? onCancelBooking;
   final Function(String phone)? onJoin;
   final Function? onAccept;
+  final Function? onTap;
 
   const OneWayWidget({
     super.key,
@@ -48,6 +51,7 @@ class OneWayWidget extends StatefulWidget {
     this.requestType,
     this.onCancelBooking,
     this.onJoin,
+    this.onTap,
   });
 
   @override
@@ -74,6 +78,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
     return input;
   }
+
   // Timer related variables
   Timer? _timer;
   Duration _remainingTime = Duration.zero;
@@ -83,7 +88,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   void initState() {
     super.initState();
     _expandableController = ExpandableController(initialExpanded: false);
-    if(widget.model?.status=='pending')_setupTimer();
+    if (widget.model?.status == 'pending') _setupTimer();
   }
 
   @override
@@ -148,13 +153,19 @@ class _OneWayWidgetState extends State<OneWayWidget> {
   String getBookingStatus(String status) {
     switch (status) {
       case 'pending':
-        return context.isArabic?'انتظار':'Pending';
+        return context.isArabic ? 'انتظار' : 'Pending';
       case 'accepted':
         return LocaleKeys.accepted.localize;
       case 'expired':
         return LocaleKeys.expired.localize;
       case 'cancelled':
         return context.isArabic ? 'تم الغاء' : 'Canceled';
+      case 'full':
+        return context.isArabic ? 'ممتلئ' : 'Full';
+      case 'completed':
+        return context.isArabic ? 'مكتمل' : 'Completed';
+      case 'running':
+        return context.isArabic ? 'جارية' : 'Running';
       case 'done':
         return LocaleKeys.done.localize;
       default:
@@ -181,16 +192,17 @@ class _OneWayWidgetState extends State<OneWayWidget> {
 
   @override
   Widget build(BuildContext context) {
-    bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id)||((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id));
+    bool myRoute = (widget.model?.creatorId == UserCubit.to.state.data?.id) ||
+        ((widget.model?.clients ?? [])
+            .any((e) => e.id == UserCubit.to.state.data?.id));
     return GestureDetector(
-      // onTap: ()=>context.push(Routes.routeDetailsScreen,extra: widget.model),
+      // onTap: widget.onTap!=null?widget.onTap!():null,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color:
-            context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
           ),
         ),
         child: Padding(
@@ -232,7 +244,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                         ),
                       ),
                       Text(
-                        context.isArabic?'لكل مقعد':'Per Seat',
+                        context.isArabic ? 'لكل مقعد' : 'Per Seat',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppColors.getRedColor(context),
@@ -243,450 +255,15 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                 ],
               ),
               SizedBox(height: 16.h),
-              Padding(
-                padding: EdgeInsets.only(top: 12.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          LocaleKeys.booked.localize,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        if (!(myRoute))
-                          CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                    UIConst.profilePlaceHolder),
-                          ),
-                        if (myRoute)
-                          CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                UserCubit.to.state.data?.profilePicture ??
-                                    UIConst.profilePlaceHolder),
-                          ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          ((widget.model?.availableSeats ?? 0) >= 2)
-                              ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
-                              : LocaleKeys.booked.localize,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        if (((widget.model?.availableSeats ?? 0) >= 2))
-                          ClickableWidget(
-                            onTap: () {
-                              if((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)){
-                                return;
-                              }
-                              if (widget.onJoin != null) {
-                                showModalBottomSheet(
-                                  backgroundColor:
-                                  Colors
-                                      .white,
-                                  context:
-                                  context,
-                                  shape:
-                                  const RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.only(
-                                      topLeft:
-                                      Radius.circular(32.0),
-                                      topRight:
-                                      Radius.circular(32.0),
-                                    ),
-                                  ),
-                                  isDismissible:
-                                  true,
-                                  isScrollControlled:
-                                  true,
-                                  builder:
-                                      (BuildContext
-                                  context) {
-                                    return AnimatedPadding(
-                                      padding:
-                                      MediaQuery.of(context).viewInsets,
-                                      duration:
-                                      const Duration(milliseconds: 50),
-                                      child:
-                                      Container(
-                                        height:
-                                        400.h,
-                                        padding:
-                                        EdgeInsets.symmetric(
-                                          vertical: 10.h,
-                                          horizontal: 10,
-                                        ),
-                                        child:
-                                        Form(
-                                          key: formKey,
-                                          child: Column(
-                                            children: [
-                                              Label(
-                                                text: context.isArabic?"ادخل رقم هاتفك":"Enter your phone number",
-                                                style: Styles.headerText(),
-                                              ),
-                                              Sizer(
-                                                height: 30.h,
-                                              ),
-                                              CustomPhoneTextFormField(
-                                                currentFocusNode: FocusNode(),
-                                                nextFocusNode: FocusNode(),
-                                                currentController: phoneController,
-                                                onInputChanged: (value) =>formKey.currentState!.validate(),
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.digitsOnly,
-                                                  LengthLimitingTextInputFormatter(11),
-                                                ],
-                                                validator: (value) {
-                                                  final input = value?.trim() ?? '';
-
-                                                  if (input.isEmpty) return LocaleKeys.required.localize;
-
-                                                  final numericValue = convertDigits(input, toArabic: false)
-                                                      .replaceAll(RegExp(r'[^0-9]'), '');
-
-                                                  if (numericValue.length != 11) {
-                                                    return context.isArabic
-                                                        ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                        : 'Phone number must be exactly 11 digits.';
-                                                  }
-
-                                                  if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
-                                                    return context.isArabic
-                                                        ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                        : 'Phone number must start with 010, 011, 012, or 015.';
-                                                  }
-
-                                                  return null;
-                                                },
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: InkWell(
-                                                        onTap: () async {
-                                                          if(formKey.currentState!.validate()){
-                                                            Navigator.of(context).pop();
-                                                            widget.onJoin!(phoneController.text);
-                                                          }
-                                                          // if (messageController.text.isNotEmpty) {
-                                                          //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
-                                                          //   if (result == true) {
-                                                          //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                          //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
-                                                          //     Navigator.of(context).pop();
-                                                          //     setState(() {});
-                                                          //   } else {
-                                                          //     print(state.failure);
-                                                          //     Navigator.of(context).pop();
-                                                          //   }
-                                                          // }
-                                                        },
-                                                        child: Container(
-                                                          width: 100,
-                                                          height: 80.h,
-                                                          padding: const EdgeInsets.all(5),
-                                                          decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
-                                                          alignment: Alignment.center,
-                                                          child: Label(
-                                                            text: LocaleKeys.join.localize,
-                                                            style: Styles.headerText(color: Colors.white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop(); // Close the dialog
-                                                        },
-                                                        child: Label(
-                                                          text: LocaleKeys.cancel.localize,
-                                                          style: Styles.headerText(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              Assets.freeIcon,
-                              color: AppColors.getTextColor(context),
-                            ),
-                          ),
-                        if (((widget.model?.availableSeats ?? 0) < 2))
-                          CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                UIConst.profilePlaceHolder),
-                          ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 13),
-                          child: Text(
-                            ((widget.model?.availableSeats ?? 0) >= 1)
-                                ? ("${widget.model?.status=='expired'?context.isArabic?'كان ':'Was ':'${widget.model?.availableSeats}'}${LocaleKeys.free.localize}")
-                                : LocaleKeys.booked.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        if (((widget.model?.availableSeats ?? 0) >= 1))
-                          ClickableWidget(
-                            onTap: () {
-                              if((widget.model?.clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)){
-                                return;
-                              }
-                              if (widget.onJoin != null) {
-                                showModalBottomSheet(
-                                  backgroundColor:
-                                  Colors
-                                      .white,
-                                  context:
-                                  context,
-                                  shape:
-                                  const RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.only(
-                                      topLeft:
-                                      Radius.circular(32.0),
-                                      topRight:
-                                      Radius.circular(32.0),
-                                    ),
-                                  ),
-                                  isDismissible:
-                                  true,
-                                  isScrollControlled:
-                                  true,
-                                  builder:
-                                      (BuildContext
-                                  context) {
-                                    return AnimatedPadding(
-                                      padding:
-                                      MediaQuery.of(context).viewInsets,
-                                      duration:
-                                      const Duration(milliseconds: 50),
-                                      child:
-                                      Container(
-                                        height:
-                                        400.h,
-                                        padding:
-                                        EdgeInsets.symmetric(
-                                          vertical: 10.h,
-                                          horizontal: 10,
-                                        ),
-                                        child:
-                                        Form(
-                                          key: formKey,
-                                          child: Column(
-                                            children: [
-                                              Label(
-                                                text: context.isArabic?'ادخل رقم هاتفك': 'Enter your phone number',
-                                                style: Styles.headerText(),
-                                              ),
-                                              Sizer(
-                                                height: 30.h,
-                                              ),
-                                              CustomPhoneTextFormField(
-                                                currentFocusNode: FocusNode(),
-                                                nextFocusNode: FocusNode(),
-                                                currentController: phoneController,
-                                                onInputChanged: (value) =>formKey.currentState!.validate(),
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.digitsOnly,
-                                                  LengthLimitingTextInputFormatter(11),
-                                                ],
-                                                validator: (value) {
-                                                  final input = value?.trim() ?? '';
-
-                                                  if (input.isEmpty) return LocaleKeys.required.localize;
-
-                                                  final numericValue = convertDigits(input, toArabic: false)
-                                                      .replaceAll(RegExp(r'[^0-9]'), '');
-
-                                                  if (numericValue.length != 11) {
-                                                    return context.isArabic
-                                                        ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                        : 'Phone number must be exactly 11 digits.';
-                                                  }
-
-                                                  if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
-                                                    return context.isArabic
-                                                        ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                        : 'Phone number must start with 010, 011, 012, or 015.';
-                                                  }
-
-                                                  return null;
-                                                },
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: InkWell(
-                                                        onTap: () async {
-                                                          if (formKey.currentState!.validate()) {
-                                                            Navigator.of(context).pop();
-                                                            widget.onJoin!(phoneController.text);
-                                                          }
-                                                          // if (messageController.text.isNotEmpty) {
-                                                          //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
-                                                          //   if (result == true) {
-                                                          //     controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                          //     showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
-                                                          //     Navigator.of(context).pop();
-                                                          //     setState(() {});
-                                                          //   } else {
-                                                          //     print(state.failure);
-                                                          //     Navigator.of(context).pop();
-                                                          //   }
-                                                          // }
-                                                        },
-                                                        child: Container(
-                                                          width: 100,
-                                                          height: 80.h,
-                                                          padding: const EdgeInsets.all(5),
-                                                          decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
-                                                          alignment: Alignment.center,
-                                                          child: Label(
-                                                            text: LocaleKeys.join.localize,
-                                                            style: Styles.headerText(color: Colors.white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop(); // Close the dialog
-                                                        },
-                                                        child: Label(
-                                                          text: LocaleKeys.cancel.localize,
-                                                          style: Styles.headerText(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              Assets.freeIcon,
-                              color: AppColors.getTextColor(context),
-                            ),
-                          ),
-                        if (((widget.model?.availableSeats ?? 0) < 1))
-                          CircleAvatar(
-                            radius: 30.w,
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(
-                                UIConst.profilePlaceHolder),
-                          ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 0.h, left: 8.h),
-                          child: SizedBox(
-                            // width: 60.w,
-                            child: Text(
-                              getBookingStatus(widget.statusDriver ?? ""),
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors.PRIMARY_COLOR,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 60.h,
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Icon(Icons.circle,
-                        color: AppColors.getRedColor(context), size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        thickness: 2,
-                      ),
-                    ),
-                    Icon(Icons.circle, color:((widget.model?.availableSeats ?? 0) <= 1)?Colors.red: Colors.green, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        thickness: 2,
-                      ),
-                    ),
-                    Icon(Icons.circle, color: ((widget.model?.availableSeats ?? 0) < 1)?Colors.red:Colors.green, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        thickness: 2,
-                      ),
-                    ),
-                    const Icon(Icons.circle, color: Colors.blue, size: 12),
-                  ],
-                ),
+              ClientStatusBarWidget(
+                formKey: formKey,
+                statusDriver:widget.statusDriver,
+                myRoute: myRoute,
+                phoneController: phoneController,
+                model: widget.model,
+                onJoin: (phone) {
+                  if(widget.onJoin != null) widget.onJoin!(phone);
+                },
               ),
               const SizedBox(height: 8),
               SizedBox(
@@ -760,44 +337,46 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   // Show timer if conditions are met, otherwise show time ago
                   _showTimer
                       ? Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.orange),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.timer,
-                          size: 16,
-                          color: Colors.orange,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatRemainingTime(_remainingTime),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.timer,
+                                size: 16,
+                                color: Colors.orange,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _formatRemainingTime(_remainingTime),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Text(
+                          TimeUtils.formatTimeAgo(
+                              widget.model?.createdAt ??
+                                  DateTime.now().toString(),
+                              context.isArabic),
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.orange,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
-                  )
-                      : Text(
-                    TimeUtils.formatTimeAgo(
-                        widget.model?.createdAt ?? DateTime.now().toString(),
-                        context.isArabic),
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   const Spacer(),
                   TextButton(
                     onPressed: () {},
@@ -817,44 +396,45 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   const SizedBox(width: 5),
                   widget.cancelButton == true
                       ? GestureDetector(
-                    onTap: () {
-                      if (widget.onCancelBooking != null) {
-                        widget.onCancelBooking!();
-                      }
-                    },
-                    child: Container(
-                      width: 120.w,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        color: AppColors.SECONDARY_COLOR_DARK,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          LocaleKeys.cancel.localize,
-                          style: TextStyle(
-                            fontSize: 22.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          onTap: () {
+                            if (widget.onCancelBooking != null) {
+                              widget.onCancelBooking!();
+                            }
+                          },
+                          child: Container(
+                            width: 120.w,
+                            height: 50.h,
+                            decoration: BoxDecoration(
+                              color: AppColors.SECONDARY_COLOR_DARK,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                LocaleKeys.cancel.localize,
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  )
+                        )
                       : const SizedBox(),
                 ],
               ),
               SizedBox(height: 8),
-              if(widget.hasAcceptButton==true)AppButton(
-                  width: context.screenWidth ,
-                  label: context.isArabic ? 'قبول' : 'Accept',
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {
-                    if(widget.onAccept!=null){
-                      widget.onAccept!();
-                    }
-                    // cubit
-                  }),
+              if (widget.hasAcceptButton == true)
+                AppButton(
+                    width: context.screenWidth,
+                    label: context.isArabic ? 'قبول' : 'Accept',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      if (widget.onAccept != null) {
+                        widget.onAccept!();
+                      }
+                      // cubit
+                    }),
             ],
           ),
         ),
@@ -869,40 +449,39 @@ class _OneWayWidgetState extends State<OneWayWidget> {
     List<dynamic> polyLine = model?.polyLine ?? [];
 
     List<List<double>> parsedPolyline = polyLine
-        .map<List<double>>((item) =>
-        (item as List).map((e) => (e as num).toDouble()).toList())
+        .map<List<double>>(
+            (item) => (item as List).map((e) => (e as num).toDouble()).toList())
         .toList();
-    routePoints =
-        _convertPolylineToLatLng(parsedPolyline);
-
-
+    routePoints = _convertPolylineToLatLng(parsedPolyline);
 
     List<BookingClientEntity> clients = List.from(model?.clients ?? []);
     if (clients.isNotEmpty) {
       clients.removeWhere((e) => e.id == model?.creatorId);
     }
 
-    List<gmap.LatLng> convertClientsToLatLng(List<BookingClientEntity> clients) {
+    List<gmap.LatLng> convertClientsToLatLng(
+        List<BookingClientEntity> clients) {
       return clients.map((client) {
         final coords = client.location.location;
         return gmap.LatLng(coords[1], coords[0]); // [latitude, longitude]
       }).toList();
     }
 
-
     return GestureDetector(
-      onTap: (){
+      onTap:widget.onTap!=null?widget.onTap!(): () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              appBar: AppBar(title: Text(context.isArabic?'تفاصيل الرحلة':'Route Details')),
+              appBar: AppBar(
+                  title: Text(
+                      context.isArabic ? 'تفاصيل الرحلة' : 'Route Details')),
               body: MapViewDetails(
                 startLocation: gmap.LatLng(model?.startLocation?.location[1],
                     model?.startLocation?.location[0]),
                 targetLocation: gmap.LatLng(model?.targetLocation?.location[1],
                     model?.targetLocation?.location[0]),
-                polylinePoints:routePoints,
+                polylinePoints: routePoints,
                 clientLocations: convertClientsToLatLng(clients),
               ),
             ),
@@ -912,11 +491,15 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       child: AbsorbPointer(
         absorbing: true,
         child: CustomGoogleMap(
-          startLocation:model?.startLocation==null?null: gmap.LatLng(model?.startLocation?.location[1],
-              model?.startLocation?.location[0]),
-          targetLocation: model?.targetLocation==null?null:gmap.LatLng(model?.targetLocation?.location[1],
-              model?.targetLocation?.location[0]),
-            polylinePoints:routePoints,
+          startLocation: model?.startLocation == null
+              ? null
+              : gmap.LatLng(model?.startLocation?.location[1],
+                  model?.startLocation?.location[0]),
+          targetLocation: model?.targetLocation == null
+              ? null
+              : gmap.LatLng(model?.targetLocation?.location[1],
+                  model?.targetLocation?.location[0]),
+          polylinePoints: routePoints,
           clientLocations: convertClientsToLatLng(clients),
         ),
       ),

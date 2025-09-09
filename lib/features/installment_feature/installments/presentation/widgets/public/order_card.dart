@@ -66,10 +66,11 @@ class InstallmentOrderCard extends StatelessWidget {
                 text: 'Comming installment: 13 Jun. 2024',
                 style: Styles.mediumText(color: Colors.grey)),
             const Sizer(),
-            AppButton(label: 'Pay now', onPressed: () {
-
-      ManageVibration.vibrate();
-            }),
+            AppButton(
+                label: 'Pay now',
+                onPressed: () {
+                  ManageVibration.vibrate();
+                }),
           ],
         ),
       ),

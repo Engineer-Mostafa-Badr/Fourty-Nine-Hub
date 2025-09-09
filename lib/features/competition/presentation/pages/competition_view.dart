@@ -41,7 +41,7 @@ class CompetitionView extends StatelessWidget {
   Widget winnersBanner({required BuildContext context}) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         context.push(Routes.WINNERS);
       },
       child: Container(
@@ -163,7 +163,7 @@ class CompetitionView extends StatelessWidget {
   }) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (onCompetitionClicked != null) {
           onCompetitionClicked!(context);
         }

@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/pickup_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
@@ -91,7 +92,12 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   }
 
   @override
-  Future<Either<Failure, String>> pickClient(PickClientParams params) async {
+  Future<Either<Failure, bool>> completeRoute(String id) async {
+    return await shippingRemoteDataSource.completeRoute(id);
+  }
+
+  @override
+  Future<Either<Failure, PickupEntity>> pickClient(PickClientParams params) async {
     return await shippingRemoteDataSource.pickClient(params);
   }
 
@@ -113,6 +119,11 @@ class CaptainShareRepositoryImplementation extends CaptainShareRepository {
   @override
   Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params) async{
     return await shippingRemoteDataSource.joinToRoute(params);
+  }
+
+  @override
+  Future<Either<Failure, String>> iamComing(String id) async{
+    return await shippingRemoteDataSource.iamComing(id);
   }
 
 

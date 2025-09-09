@@ -39,7 +39,7 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (UserCubit.to.isLoggedIn) {
           context.push(Routes.VISITADOCTORDETAILS,
               extra: DoctorDetailsParams(
@@ -59,8 +59,9 @@ class DoctorCard extends StatelessWidget {
         child: Column(
           children: [
             /// premium views banner
-PremuimViewsCard(),
+            PremuimViewsCard(),
             const Divider(),
+
             /// doctor image
             Row(
               children: [
@@ -144,22 +145,24 @@ PremuimViewsCard(),
             ),
             const Sizer(),
             const Sizer(),
+
             /// address
             DoctorDetailsInfoCard(
                 icon: Icons.location_on, label: ' ${doctor.address.address}  '),
             const Sizer(),
+
             /// fees
             _buildFeesRow(
                 icon: context.isArabic ? "الرسوم" : "Fees",
                 label: LocaleKeys.cash.localize,
                 fees: "100 EGP"),
             const Sizer(),
+
             /// waiting time
             DoctorDetailsInfoCard(
                 icon: Icons.access_time,
                 label:
                     '${LocaleKeys.waitingTime.localize}: ${doctor.waitingTime ?? ''} ${LocaleKeys.minuteLoc.localize}'),
-
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),

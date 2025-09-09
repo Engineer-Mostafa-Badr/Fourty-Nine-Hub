@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/widget/before_splash.dart';
+import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -129,6 +131,7 @@ import 'package:fourtyninehub/features/married/presentation/pages/married_view.d
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/route_details_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/running_map_view_details.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
@@ -231,6 +234,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/pages/chat_home_page.dart';
+import 'package:fourtyninehub/features/chat_feature/presentation/controllers/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
@@ -262,6 +267,9 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
+import 'package:fourtyninehub/features/reels_feature/presentation/pages/reels_page.dart';
+import 'package:fourtyninehub/features/reels_feature/presentation/controllers/reels_cubit.dart'
+    as tiktok_reels;
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
@@ -273,7 +281,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/us
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -315,6 +323,8 @@ import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
+import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
+import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
@@ -387,6 +397,8 @@ import '../features/authentication/presentation/pages/register/register_verify_o
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
+import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
+import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -440,6 +452,7 @@ import '../features/social_media/create_post/presentation/pages/create_life_even
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
 import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
+import '../features/social_media/instagram/presentation/widgets/create_post_second_page_instagram_view_body.dart';
 import '../features/social_media/instagram/presentation/widgets/tag_user_view.dart';
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
@@ -448,6 +461,7 @@ import '../features/social_media/social_posts/presentation/pages/Social_home.dar
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
+import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -470,33 +484,53 @@ class AppPages {
         initialLocation: initialRoute,
         routes: <RouteBase>[
           GoRoute(
-            path: Routes.HOME,
+            path: Paths.splash,
+            name: Routes.splash,
             pageBuilder: (context, state) => customTransition(
               context,
               state,
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) => serviceLocator<SliderCubit>(),
-                  ),
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<StarCubit>()..getAllTalent(),
-                  ),
-                  BlocProvider(
-                    create: (context) => serviceLocator<MainCategoriesCubit>()
-                      ..loadData(context),
-                  ),
-                  // BlocProvider(
-                  //   create: (context) => serviceLocator<ThumbnailsCubit>(),
-                  // ),
-                ],
-                child: const FourtyNineView(),
-                // child: const BeStarView(),
-                // child: const GetAllTalents(),
-              ),
+              const BeforeSplash(),
             ),
             routes: [
+              GoRoute(
+                path: Paths.splashScreen,
+                name: Routes.splashScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  const SplashScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Routes.HOME,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<SliderCubit>()..loadData(),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<StarCubit>()..allTalents,
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<MainCategoriesCubit>()
+                              ..loadData(context),
+                      ),
+                      // BlocProvider(
+                      //   create: (context) => serviceLocator<ThumbnailsCubit>(),
+                      // ),
+                    ],
+                    child: const FourtyNineView(),
+                    // child: const BeStarView(),
+                    // child: const GetAllTalents(),
+                  ),
+                ),
+              ),
               GoRoute(
                 path: Paths.RIDEHOME,
                 name: Routes.RIDE_HOME,
@@ -510,6 +544,34 @@ class AppPages {
                       ),
                     ],
                     child: const RideHome(),
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: Paths.EXCHANGECURRENCY,
+                name: Routes.EXCHANGECURRENCY,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider(
+                    create: (context) => serviceLocator<CurrencyCubit>(),
+                    child: const CurrencyExchangePage(),
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RunningMapDetails,
+                name: Routes.RunningMapDetails,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: serviceLocator<CaptainShareCubit>(),
+                      ),
+                    ],
+                    child: RunningMapViewDetails(),
                   ),
                 ),
               ),
@@ -532,7 +594,7 @@ class AppPages {
                           providers: [
                             BlocProvider(
                               create: (context) =>
-                                  serviceLocator<SliderCubit>(),
+                                  serviceLocator<SliderCubit>()..loadData(),
                             ),
                             // BlocProvider(
                             //   create: (context) =>
@@ -598,18 +660,18 @@ class AppPages {
                   ),
                 ),
               ),
-              GoRoute(
-                path: Paths.MY_TALENT,
-                name: Routes.MY_TALENT,
-                pageBuilder: (context, state) => customTransition(
-                  context,
-                  state,
-                  BlocProvider(
-                    create: (context) => serviceLocator<StarCubit>(),
-                    child: const MyTalentView(),
-                  ),
-                ),
-              ),
+              // GoRoute(
+              //   path: Paths.MY_TALENT,
+              //   name: Routes.MY_TALENT,
+              //   pageBuilder: (context, state) => customTransition(
+              //     context,
+              //     state,
+              //     BlocProvider(
+              //       create: (context) => serviceLocator<StarCubit>(),
+              //       child: const MyTalentView(),
+              //     ),
+              //   ),
+              // ),
               // GoRoute(
               //   path: Paths.RESTAURANTORDERS,
               //   name: Routes.RESTAURANTORDERS,
@@ -1736,19 +1798,24 @@ class AppPages {
                 path: Paths.INSTAGRAMADDMUSIC,
                 name: Routes.INSTAGRAMADDMUSIC,
                 pageBuilder: (context, state) {
-                  final cubit = state.extra as CreatePostInstagramCubit;
+                  final cubit = state.extra as MusicScreenParams;
                   return customTransition(
                     context,
                     state,
-                    MultiBlocProvider(providers: [
-                      BlocProvider(
-                        create: (context) =>
-                            serviceLocator<InstagramAddMusicCubit>(),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<InstagramAddMusicCubit>(),
+                        ),
+                        BlocProvider.value(
+                          value: cubit.cubit,
+                        ),
+                      ],
+                      child: InstagramAddMusicView(
+                        refreshUI: cubit.refreshUI,
                       ),
-                      BlocProvider.value(
-                        value: cubit,
-                      ),
-                    ], child: const InstagramAddMusicView()),
+                    ),
                   );
                 },
               ),
@@ -1972,6 +2039,47 @@ class AppPages {
                 },
               ),
               GoRoute(
+                path: Paths.REELS,
+                name: Routes.REELS,
+                pageBuilder: (context, state) {
+                  // context.read<ReelsCubit>().fetchReels();
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider(
+                        create: (context) => serviceLocator<SocialPostsCubit>(),
+                        child: const ReelView(),
+                      ));
+                },
+                routes: [
+                  GoRoute(
+                    path: Paths.MUSICREELS,
+                    name: Routes.MUSICREELS,
+                    pageBuilder: (context, state) => customTransition(
+                      context,
+                      state,
+                      const MusicReels(),
+                    ),
+                  ),
+                ],
+              ),
+
+              GoRoute(
+                path: Paths.TIKTOK_REELS,
+                name: Routes.TIKTOK_REELS,
+                pageBuilder: (context, state) {
+                  return customTransition(
+                      context,
+                      state,
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<tiktok_reels.TiktokCubit>(),
+                        child: const ReelsPage(),
+                      ));
+                },
+              ),
+
+              GoRoute(
                   path: Paths.SOCIAL,
                   name: Routes.SOCIAL,
                   pageBuilder: (context, state) {
@@ -2063,7 +2171,8 @@ class AppPages {
                           state,
                           BlocProvider<TwitterCubit>(
                             create: (_) => serviceLocator<TwitterCubit>(),
-                            child: TwitterPostDetailsNotify.fromPayload(payload: payload),
+                            child: TwitterPostDetailsNotify.fromPayload(
+                                payload: payload),
                           ),
                         );
                       },
@@ -2096,32 +2205,6 @@ class AppPages {
                             ),
                           ),
                         ]),
-                    GoRoute(
-                      path: Paths.REELS,
-                      name: Routes.REELS,
-                      pageBuilder: (context, state) {
-                        // context.read<ReelsCubit>().fetchReels();
-                        return customTransition(
-                            context,
-                            state,
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<SocialPostsCubit>(),
-                              child: const ReelView(),
-                            ));
-                      },
-                      routes: [
-                        GoRoute(
-                          path: Paths.MUSICREELS,
-                          name: Routes.MUSICREELS,
-                          pageBuilder: (context, state) => customTransition(
-                            context,
-                            state,
-                            const MusicReels(),
-                          ),
-                        ),
-                      ],
-                    ),
                     GoRoute(
                       path: Paths.TINDER,
                       name: Routes.Tinder,
@@ -2264,6 +2347,33 @@ class AppPages {
                     ],
                     child: ChatView(
                         chatsViewParams: state.extra as ChatsViewParams),
+                  ),
+                ),
+              ),
+
+              // Chat Home
+              GoRoute(
+                path: Paths.CHAT_HOME,
+                name: Routes.CHAT_HOME,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider<ChatCubit>(
+                    create: (_) => serviceLocator(),
+                    child: const ChatHomePage(),
+                  ),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.conversationsScreen,
+                name: Routes.conversationsScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider.value(
+                    value: serviceLocator<ConversationsCubit>(),
+                    child: const ConversationsScreen(),
                   ),
                 ),
               ),
@@ -3537,11 +3647,21 @@ class AppPages {
                 ],
                 pageBuilder: (context, state) {
                   return customTransition(
-                      context,
-                      state,
-                      BlocProvider<StarCubit>(
+                    context,
+                    state,
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<StarCubit>(
                           create: (_) => serviceLocator(),
-                          child: const BeStarView()));
+                        ),
+                        // أضف هذا السطر
+                        BlocProvider<CommentCubit>(
+                          create: (_) => serviceLocator(),
+                        ),
+                      ],
+                      child: const BeStarView(),
+                    ),
+                  );
                 },
               ),
               GoRoute(
@@ -3644,7 +3764,7 @@ class AppPages {
                         create: (_) => serviceLocator<ViewAllTripJoinCubit>(),
                       ),
                     ],
-                    child: const TripJoinCreateAdView(),
+                    child: TripJoinCreateAdView(isFromPickMe: state.extra as bool,),
                     //const TripJoinView(),
                   ),
                 ),
@@ -4718,13 +4838,24 @@ class AppPages {
                     )),
               ),
               GoRoute(
-                  path: Paths.CHANCE,
-                  name: Routes.CHANCE,
-                pageBuilder: (context, state) => customTransition(
-                    context,
-                    state,ChanceView()),),
+                path: Paths.CHANCE,
+                name: Routes.CHANCE,
+                pageBuilder: (context, state) =>
+                    customTransition(context, state, ChanceView()),
+              ),
             ],
           ),
+
+          // GoRoute(
+          //   path: Routes.splash,
+          //   name: Routes.splash,
+          //   pageBuilder: (context, state) => customTransition(
+          //     context,
+          //     state,
+          //     const SplashScreen(),
+          //   ),
+          //
+          // ),
         ]);
   }
 }

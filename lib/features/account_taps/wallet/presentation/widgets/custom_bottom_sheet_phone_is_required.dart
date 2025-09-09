@@ -49,7 +49,7 @@ class CustomBottomSheetPhoneIsRequired extends StatelessWidget {
                 ),
                 backColor: AppColors.c0B1035,
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   Navigator.pop(context);
                   context.push(Routes.EDITPROFILE);
                 },
@@ -67,7 +67,7 @@ class CustomBottomSheetPhoneIsRequired extends StatelessWidget {
                 ),
                 backColor: const Color(0xffD9D9D9),
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   Navigator.pop(context);
                 },
               ),

@@ -242,7 +242,8 @@ https://example.com/download
     return InkWell(
       onTap: () {
         ManageVibration.vibrate();
-         context.push(Routes.WALLET);},
+        context.push(Routes.WALLET);
+      },
       child: Row(
         children: [
           Expanded(

@@ -76,14 +76,22 @@ abstract class SocketIOListeners {
   static const String listenToAcceptRoute = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
   static const String listenToDriverTheOnWay = 'CAPTAIN_SHARE:DRIVER_ON_THE_WAY';
   static const String listenToNewRoute = 'captain-share:new-route-available';
+  static const String listenToComingClient = 'CAPTAIN_SHARE:PASSENGER_IAM_COMING';
   static const String listenToNewRouteDriver = 'captain-share:new-available-trip';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
   static const String removeLoading = 'LOADING:REMOVE_TRIP';
   static const String newLoadingTrip = 'LOADING:NEW_TRIP';
+  static const String listenToDriverArrived = 'CAPTAIN_SHARE:ARRIVED_TO_PICKUP_LOCATION';
+  static const String listenToTripAccept = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
+  static const String listenToDriverOnTheWay = 'CAPTAIN_SHARE:DRIVER_ON_THE_WAY';
+  static const String listenToRouteCancelled = 'captain-share:canceled-trip';
+  static const String listenToDriverNoShowClient = 'CAPTAIN_SHARE:NOT_SHOW_PASSENGER';
+  static const String listenToPassengerPickedUp = 'CAPTAIN_SHARE:PASSENGER_PICKED_UP';
   static const String acceptUntrackedTripOffer = 'RIDE:ACCEPT_UNTRACKED_TRIP_OFFER_BY_CLIENT';
   static const String rideUpdateUntrackedTrip = 'RIDE:NON_TRACKING_TRIPS_UPDATED';
   static const String rideUpdateOfferUntrackedClientTrip = 'RIDE:NON_TRACKING_OFFERS_UPDATE';
   static const String rideUpdateOfferShippingClientTrip = 'LOADING:NEW_TRIP_OFFER_UPDATED';
+  static const String listenToUpdateLocationDriver = 'CAPTAIN_SHARE:ROUTE_LOCATION_UPDATED';
 }
 
 abstract class SocketIOEvents {

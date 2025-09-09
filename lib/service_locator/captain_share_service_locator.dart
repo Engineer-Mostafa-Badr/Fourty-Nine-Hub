@@ -1,3 +1,14 @@
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/iam_coming_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_arrived_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_no_show_client_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_on_the_way_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_passenger_picked_up_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_route_cancelled_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_update_location_driver_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/complete_route_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
+
 import '../features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import '../features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import '../features/new_trip_join/data/datasources/captain_share_remote_data_source.dart';
@@ -148,9 +159,57 @@ class CaptainShareServiceLocator {
         () => ClientNotShownUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<CompleteRouteUseCase>(
+        () => CompleteRouteUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToClientComingUseCase>(
+        () => ListenToClientComingUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToDriverArrivedUseCase>(
+        () => ListenToDriverArrivedUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToDriverNoShowClientUseCase>(
+        () => ListenToDriverNoShowClientUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToPassengerPickedUpUseCase>(
+        () => ListenToPassengerPickedUpUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<IamComingUseCase>(
+        () => IamComingUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToDriverOnTheWayUseCase>(
+        () => ListenToDriverOnTheWayUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToRouteCancelledUseCase>(
+        () => ListenToRouteCancelledUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToTripAcceptedUseCase>(
+        () => ListenToTripAcceptedUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToUpdateLocationDriverUseCase>(
+        () => ListenToUpdateLocationDriverUseCase(
+              serviceLocator(),
+            ));
     // ================================== cubits =============================
     serviceLocator.registerFactory<CaptainShareCubit>(
         () => CaptainShareCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
@@ -173,6 +232,8 @@ class CaptainShareServiceLocator {
 
     serviceLocator.registerFactory<CaptainShareDashboardCubit>(
         () => CaptainShareDashboardCubit(
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

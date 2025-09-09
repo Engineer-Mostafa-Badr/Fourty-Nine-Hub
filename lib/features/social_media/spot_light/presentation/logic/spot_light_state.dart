@@ -1,5 +1,6 @@
 part of 'spot_light_cubit.dart';
 
+
 sealed class SpotLightState extends Equatable {
   const SpotLightState();
 

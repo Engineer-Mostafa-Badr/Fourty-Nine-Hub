@@ -16,8 +16,22 @@ import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-class EnterEmailForgotPasswordView extends StatelessWidget {
+class EnterEmailForgotPasswordView extends StatefulWidget {
   const EnterEmailForgotPasswordView({super.key});
+
+  @override
+  State<EnterEmailForgotPasswordView> createState() => _EnterEmailForgotPasswordViewState();
+}
+
+class _EnterEmailForgotPasswordViewState extends State<EnterEmailForgotPasswordView> {
+  @override
+  void initState() {
+    super.initState();
+    // Load existing timer when view is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ForgotPasswordCubit>().timerService.loadExistingTimer();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +48,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordSendOTPSuccess) {
-            // context.pushNamed(
+            // context.push(
             //   Routes.FORGOTPASSWORDOTP,
             //   extra: cubit.emailController.text,
             // );
@@ -51,6 +65,9 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          return ListenableBuilder(
+            listenable: cubit.timerService,
+            builder: (context, child) {
           return Padding(
             padding: EdgeInsets.all(20.w),
             child: ListView(
@@ -71,18 +88,52 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                   ),
                 ),
                 const Sizer(),
+                // Timer display
+                if (cubit.timerService.isTimerActive) ...[
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          color: AppColors.GREY_DARK_COLOR,
+                          size: 20.w,
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          'Resend OTP in ${cubit.timerService.formattedRemainingTime}',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: AppColors.GREY_DARK_COLOR,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Sizer(),
+                ],
                 DefaultButton(
-                  label: LocaleKeys.sendOTP.localize,
-                  onPressed: (){
-      ManageVibration.vibrate();
-                    cubit.sendForgetPasswordOTP(context);
-                  },
+                  label: cubit.timerService.isTimerActive 
+                      ? '${LocaleKeys.sendOTP.localize} (${cubit.timerService.formattedRemainingTime})'
+                      : LocaleKeys.sendOTP.localize,
+                  onPressed: cubit.timerService.isTimerActive 
+                      ? null 
+                      : () {
+                          ManageVibration.vibrate();
+                          cubit.sendForgetPasswordOTP(context);
+                        },
                   labelStyle: TextStyle(
-                      fontSize: 60.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
+                      fontSize: 60.sp.w, 
+                      color: cubit.timerService.isTimerActive 
+                          ? AppColors.GREY_DARK_COLOR.withOpacity(0.5)
+                          : AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
-            ),
-          );
+            ));
+          },
+        );
         },
       ),
     );

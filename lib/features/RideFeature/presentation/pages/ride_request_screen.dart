@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'widgets/map_section.dart';
 
-
-
 class RideRequestScreen extends StatelessWidget {
   const RideRequestScreen({super.key});
 
@@ -49,7 +47,6 @@ class RideRequestScreen extends StatelessWidget {
           //     },
           //   ),
           // ),
-
         ],
       ),
     );

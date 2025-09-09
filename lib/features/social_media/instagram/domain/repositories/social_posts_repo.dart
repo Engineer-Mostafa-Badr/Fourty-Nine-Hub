@@ -27,7 +27,9 @@ import '../../../social_posts/domain/entities/post_entity.dart';
 import '../../../twitter/domain/usecases/get_feed_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../entities/song_entity.dart';
 import '../usecases/get_all_followers_use_case.dart';
+import '../usecases/get_for_you_songs_usecase.dart';
 
 abstract class InstagramRepo {
   Future<Either<Failure, List<PostEntity>>> getFeed(
@@ -87,4 +89,10 @@ abstract class InstagramRepo {
   Future<Either<Failure, bool>> removeSavePostInstagram(SavePostInstagramParams params);
 
   Future<Either<Failure, void>> postConfirmWebhook(PostConfirmWebhookParams params);
+
+  Future<Either<Failure, List<SongEntity>>> getForYouSongs({required SongsPaginationParams params});
+  Future<Either<Failure, List<SongEntity>>> getTrendingSongs({required SongsPaginationParams params});
+  Future<Either<Failure, List<SongEntity>>> getSavedSongs({required SongsPaginationParams params});
+  Future<Either<Failure, bool>> addRemoveSongsFromFavs({required String songId});
+  Future<Either<Failure, List<SongEntity>>> searchSongs({required String query});
 }

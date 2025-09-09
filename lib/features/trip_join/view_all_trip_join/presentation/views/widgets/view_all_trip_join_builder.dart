@@ -49,7 +49,6 @@ class _ViewAllTripJoinCardBuilderState
         if (viewAllTripJoinCubit.tripJoinCards.isEmpty &&
             (state.status == ViewAllTripJoinStatus.success ||
                 state.status == ViewAllTripJoinStatus.failure)) {
-
           return Container(
             height: MediaQuery.of(context).size.height * 0.8,
             width: double.infinity,
@@ -72,9 +71,9 @@ class _ViewAllTripJoinCardBuilderState
               return AvailableTripCard(
                 tripJoinCardEntity: tripJoinCardEntity,
                 reportOnTap: () {
-                  if(context.read<UserCubit>().isLoggedIn)
-                       {_reportOnTap(context, index);}
-                      else {
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    _reportOnTap(context, index);
+                  } else {
                     return pleaseLoginDialog(context);
 
                     // context.push(Routes.LOGIN);
@@ -180,11 +179,9 @@ class _ViewAllTripJoinCardBuilderState
               );
             }
             return state.status == ViewAllTripJoinStatus.loading &&
-                !viewAllTripJoinCubit.noMoreDataInDatabase
+                    !viewAllTripJoinCubit.noMoreDataInDatabase
                 ? const AvailableTripCardLoadingList()
                 : const SizedBox();
-
-
           },
         );
       },
@@ -198,7 +195,8 @@ class _ViewAllTripJoinCardBuilderState
       print("=========0=========");
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
+          tripJoinCardEntity.paymentMethod?.toWalletType ??
+              WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,
@@ -215,7 +213,8 @@ class _ViewAllTripJoinCardBuilderState
         tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
+          tripJoinCardEntity.paymentMethod?.toWalletType ??
+              WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,

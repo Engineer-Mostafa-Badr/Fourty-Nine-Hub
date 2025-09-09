@@ -54,7 +54,7 @@ class ListItemCard extends StatelessWidget {
             if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     acceptRequest(AcceptRejectFriendRequestParams(
                         userId: user.id, status: true));
                   },
@@ -65,7 +65,7 @@ class ListItemCard extends StatelessWidget {
             if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     removeRequest(AcceptRejectFriendRequestParams(
                         userId: user.id, status: false));
                   },
@@ -75,7 +75,7 @@ class ListItemCard extends StatelessWidget {
                   )),
             IconButton(
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   bottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -95,7 +95,8 @@ class ListItemCard extends StatelessWidget {
         ListTile(
           onTap: () {
             ManageVibration.vibrate();
-             context.push(Routes.OTHERSACCOUNT, extra: user.id);},
+            context.push(Routes.OTHERSACCOUNT, extra: user.id);
+          },
           leading: const Icon(Icons.person),
           title: Label(
               text:
@@ -116,7 +117,7 @@ class ListItemCard extends StatelessWidget {
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               unfollowUser(user.id);
               context.pop();
             },
@@ -132,7 +133,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.green,
             ),
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               unblockUser(user.id);
               context.pop();
             },
@@ -153,7 +154,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.green,
             ),
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               acceptRequest(AcceptRejectFriendRequestParams(
                   userId: user.id, status: true));
               context.pop();
@@ -172,7 +173,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.red,
             ),
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               removeRequest(AcceptRejectFriendRequestParams(
                   userId: user.id, status: false));
               context.pop();
@@ -191,7 +192,7 @@ class ListItemCard extends StatelessWidget {
               color: Colors.red,
             ),
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               deleteFriend(user.id);
               context.pop();
             },

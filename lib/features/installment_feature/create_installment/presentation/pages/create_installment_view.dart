@@ -125,7 +125,7 @@ class CreateInstallmentView extends StatelessWidget {
                         ? AppColors.SECONDARY_COLOR.withOpacity(.5)
                         : null,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (state.plans?.isNotEmpty ?? false) {
                         controller.saveInstallment();
                       }

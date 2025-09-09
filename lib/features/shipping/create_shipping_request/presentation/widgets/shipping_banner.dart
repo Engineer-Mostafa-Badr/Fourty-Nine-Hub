@@ -128,7 +128,7 @@ class _ShippingBannerState extends State<ShippingBanner> {
     //       ),
     //       InkWell(
     //         onTap: () {
-      ManageVibration.vibrate();
+    ManageVibration.vibrate();
     // if (context.read<UserCubit>().isLoggedIn) {
     //   context.push(Routes.SHIPPING_REGISTER);
     // } else {

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_mo
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/trip_join_card_model.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import '../../../../../RideFeature/domain/entities/ride_brand_entity.dart';
 import '../../../../../RideFeature/domain/entities/ride_model_entity.dart';
 import '../../../../../ride/RideRequest/data/models/params/expected_price_params.dart';
@@ -56,6 +57,7 @@ abstract class ViewAllTripJoinRemoteDataSource {
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyViewTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyReadRequestTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params);
   Future<Either<Failure, GetRequestCountEntity >> getRequestCountTripJoin();
 
 
@@ -174,6 +176,7 @@ class ViewAllTripJoinRemoteDataSourceImp
     final url = EndPoints.getTripExpectedPrice;
 
     final body = params.toJson();  // Clean and clear
+    print("body ==================== $body \n");
 
     final response = await apiConsumer.get(url, data: body);  // Use POST
 
@@ -317,7 +320,24 @@ class ViewAllTripJoinRemoteDataSourceImp
     final url = EndPoints.createTripJoinOffer;
 
     final body = params.toJson();  // Clean and clear
+    log("bodyCreateTripJoinOffer $body");
+    final response = await apiConsumer.post(url, data: body);  // Use POST
 
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripData = DeleteMyTripJoinModel.fromJson(data);
+        return Right(tripData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params) async{
+    final url = EndPoints.createPickMeOffer;
+
+    final body = params.toJson();  // Clean and clear
+    log("bodyCreatePickMeOffer $body");
     final response = await apiConsumer.post(url, data: body);  // Use POST
 
     return response.fold(

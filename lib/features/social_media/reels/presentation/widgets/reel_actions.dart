@@ -23,9 +23,8 @@ class ReelActions extends StatelessWidget {
         IconAppButton(
           icon: Icons.favorite_border,
           onPressed: () {
-
-      ManageVibration.vibrate();
-          }, 
+            ManageVibration.vibrate();
+          },
           size: 24,
           color: Colors.white,
         ),
@@ -37,8 +36,7 @@ class ReelActions extends StatelessWidget {
         IconAppButton(
           icon: Icons.comment,
           onPressed: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           size: 24,
           color: Colors.white,
@@ -50,8 +48,7 @@ class ReelActions extends StatelessWidget {
         IconAppButton(
           icon: Icons.bookmark_outline,
           onPressed: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           size: 24,
           color: Colors.white,
@@ -63,8 +60,7 @@ class ReelActions extends StatelessWidget {
         IconAppButton(
           icon: FontAwesomeIcons.share,
           onPressed: () {
-
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
           },
           size: 24,
           color: Colors.white,
@@ -75,7 +71,7 @@ class ReelActions extends StatelessWidget {
         const Sizer(),
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             context.push(Routes.MUSICREELS);
           },
           child: CircleAvatar(

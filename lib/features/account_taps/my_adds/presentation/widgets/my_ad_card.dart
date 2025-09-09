@@ -14,8 +14,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import 
-'../../../../../routes/routes.dart';
+import '../../../../../routes/routes.dart';
 
 class MyAdCard extends StatelessWidget {
   final AdEntity item;
@@ -175,7 +174,7 @@ class MyAdCard extends StatelessWidget {
             )),
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             bottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -186,7 +185,7 @@ class MyAdCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.markSsSold.localize,
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           context.pop();
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
@@ -200,7 +199,7 @@ class MyAdCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deactivate.localize,
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
                               subTitle: LocaleKeys.adSoldout.localize,
@@ -213,7 +212,7 @@ class MyAdCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deleteAd.localize,
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           showAreYouSure(
                               title: LocaleKeys.deleteAd.localize,
                               subTitle: LocaleKeys.sureRemoveAd.localize,

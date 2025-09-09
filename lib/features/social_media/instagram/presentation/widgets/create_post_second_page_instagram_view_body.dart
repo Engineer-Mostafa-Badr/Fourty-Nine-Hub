@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/button_label_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/caption_text_field_create_second_post.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_image_create_post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_images_create_post_second.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -21,12 +20,17 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../helpers/manage_vibration.dart';
-import '../../../../../main.dart';
 import '../../../../RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_posts/presentation/pages/Social_home.dart';
 import '../../domain/entities/location_instagram_entity.dart';
 import '../cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
+
+class MusicScreenParams{
+  final CreatePostInstagramCubit cubit;
+  final Function? refreshUI;
+  const MusicScreenParams({required this.cubit, this.refreshUI});
+}
 
 class CreatePostSecondPageInstagramViewBody extends StatefulWidget {
   const CreatePostSecondPageInstagramViewBody({
@@ -64,9 +68,10 @@ class _CreatePostSecondPageInstagramViewBodyState
               child: SingleChildScrollView(
             child:
                 BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
-              buildWhen: (previous, current) =>
-                  previous.usersTag != current.usersTag ||
-                  previous.location != current.location,
+              // buildWhen: (previous, current) =>
+              //     previous.usersTag != current.usersTag ||
+              //     previous.location != current.location ||
+              //     previous.selectedSong != current.selectedSong,
               builder: (context, state) {
                 return Column(
                   children: [
@@ -196,16 +201,39 @@ class _CreatePostSecondPageInstagramViewBodyState
                       svgIcon: context.isDarkMode
                           ? Assets.instagramMusicIconDark
                           : Assets.instagramMusicIcon,
-                      title: LocaleKeys.addMusic.localize,
-                      labelColor:
-                          context.isDarkMode ? Colors.white : Colors.black,
-                      iconAction: Icons.arrow_forward_ios_rounded,
-                      onPressed: () {
+                      title: state.song == null
+                          ? LocaleKeys.addMusic.localize
+                          : state.song!.name,
+                      labelColor: state.song == null
+                          ? (context.isDarkMode ? Colors.white : AppColors.black)
+                          : (context.isDarkMode
+                          ? const Color(0xffFF4622)
+                          : const Color(0xffFF3308)),
+                      iconAction: state.song == null
+                          ? Icons.arrow_forward_ios_rounded
+                          : Icons.close_rounded,
+                      onPressedActionButton:(){
+                        ManageVibration.vibrate();
+                        log('onPressedActionButton pressed');
+                        serviceLocator<CreatePostInstagramCubit>()
+                            .makeSongNull();
+                        setState(() {
+                        });
+                      },
+                      onPressed: () async {
                         context.pushNamed(
                           Routes.INSTAGRAMADDMUSIC,
-                          extra: serviceLocator<CreatePostInstagramCubit>(),
+                          extra: MusicScreenParams(
+                            refreshUI: () async {
+                              await serviceLocator<CreatePostInstagramCubit>().refreshUI();
+                              setState(() {
+                              });
+                              log('set state called');
+                            },
+                            cubit: serviceLocator<CreatePostInstagramCubit>(),
+                          ),
                         );
-                      },
+                        },
                     ),
                   ],
                 );

@@ -124,9 +124,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
     super.build(context);
     return Scaffold(
       appBar: widget.params?.hideAppBar == false
-          ? const PreferredSize(
+          ? PreferredSize(
               preferredSize: Size.fromHeight(30),
-              child: HomeAppbar(isWithBackArrow: true),
+              child: HomeAppbar(isWithBackArrow: true,onBackPressed: (){
+                manageVibration.ManageVibration.vibrate();
+                context.go(Routes.HOME);
+              },),
             )
           : null,
       body: Column(
@@ -215,12 +218,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
           label: context.isArabic ? 'فيس' : LocaleKeys.Face.localize,
         ),
         if (widget.params?.hideAppBar == false)
-        _buildTab(
-          icon: context.isDarkMode
-              ? Assets.instagramAppBarIconDark
-              : Assets.instagramAppBarIcon,
-          label: LocaleKeys.Insta.localize,
-        ),
+          _buildTab(
+            icon: context.isDarkMode
+                ? Assets.instagramAppBarIconDark
+                : Assets.instagramAppBarIcon,
+            label: LocaleKeys.Insta.localize,
+          ),
         _buildTab(
           icon: context.isDarkMode
               ? Assets.twitterAppBarIconDark
@@ -252,7 +255,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 right: 0,
                 child: InkWell(
                   onTap: () {
-      manageVibration.ManageVibration.vibrate();
+                    manageVibration.ManageVibration.vibrate();
                     setState(() {
                       isShowExplain = !isShowExplain;
                     });
@@ -324,8 +327,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
     );
   }
 
-
-
   Widget _buildInstagramTab() {
     return MultiBlocProvider(
       providers: [
@@ -382,7 +383,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     final isSelected = index == 0;
     return GestureDetector(
       onTap: () {
-      manageVibration.ManageVibration.vibrate();
+        manageVibration.ManageVibration.vibrate();
         if (index == 1) {
           context.read<UserCubit>().isLoggedIn
               ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)

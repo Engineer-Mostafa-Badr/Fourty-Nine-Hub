@@ -103,12 +103,13 @@ class _FollowingViewState extends State<FollowingView> {
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.following.length) {
-                    return const Center(child: CustomCircularProgressIndicator());
+                    return const Center(
+                        child: CustomCircularProgressIndicator());
                   }
                   final following = _cubit.following[index];
                   return GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       context.push(Routes.INSTAGRAMPROFILE,
                           extra: following.userId);
                     },

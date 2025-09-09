@@ -73,7 +73,7 @@ class _MyAdCardState extends State<MyAdCard> {
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (widget.item.userId != userId) {
               serviceLocator<AdvertisementCubit>().adViewToAds(widget.item.id);
             }
@@ -104,7 +104,8 @@ class _MyAdCardState extends State<MyAdCard> {
 
                 // Fixed height for image
                 ImageAdsWidget(
-                  images: widget.item.images,
+                  // images: widget.item.images,
+                  images: widget.item.images.isNotEmpty ? widget.item.images : [Assets.logo],
                   isFavourite: widget.item.isFavourite ?? false,
                   onPressedFavorite: () async {
                     if (widget.item.isFavourite == false) {
@@ -384,7 +385,7 @@ class _MyAdCardState extends State<MyAdCard> {
                                 height: 1.60,
                               ),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 bottomSheet(
                                     context: context,
                                     isFloating: true,
@@ -460,7 +461,7 @@ class _MyAdCardState extends State<MyAdCard> {
               height: 30,
               backColor: AppColors.SECONDARY_COLOR_DARK2,
               onPressed: () async {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 if (!context.read<UserCubit>().isLoggedIn) {
                   return pleaseLoginDialog(context);
                   // context.push(Routes.LOGIN);

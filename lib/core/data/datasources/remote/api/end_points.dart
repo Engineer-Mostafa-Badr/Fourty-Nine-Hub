@@ -50,6 +50,8 @@ import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
 import '../../../../../features/social_media/instagram/domain/usecases/get_all_followers_use_case.dart';
+import '../../../../../features/social_media/instagram/domain/usecases/get_for_you_songs_usecase.dart';
+import '../../../../../features/star_feature/domain/entity/profile_entity.dart';
 import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
@@ -77,9 +79,9 @@ class EndPoints {
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
-  static const refreshToken = '/auth/refresh/token';
+  static const refreshToken = '/auth/refresh-token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
-  static const addRateRestaurant = '/restaurant/rating-restaurant/';  
+  static const addRateRestaurant = '/restaurant/rating-restaurant/';
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
@@ -500,6 +502,9 @@ class EndPoints {
   static String acceptRoute(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/accept";
 
+  static String completeRoute(String id) =>
+      "$developmentBaseUrl/captain-share/driver/routes/$id/complete";
+
   static String pickClient(String id) =>
       "$developmentBaseUrl/captain-share/driver/routes/$id/pick-up-passenger";
 
@@ -514,6 +519,9 @@ class EndPoints {
 
   static String joinToRoute(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
+
+  static String iamComing(String id) =>
+      "$developmentBaseUrl/captain-share/routes/$id/iam-coming";
 
   static String routeDetails(String id) =>
       "$developmentBaseUrl/captain-share/routes/$id";
@@ -997,11 +1005,11 @@ class EndPoints {
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
@@ -1233,7 +1241,7 @@ class EndPoints {
     return '/media/confirm/$mediaId';
   }
 
-  // chat_room
+  // chat_roomz
   static String getChats = '/chat/get-chats';
 
   static String assignLabels() {
@@ -1710,6 +1718,7 @@ class EndPoints {
   static String applyViewTripJoin = '/trip-join/offers/';
   static String applyReadRequestTripJoin = '/trip-join/requests/';
   static String createTripJoinOffer = '/trip-join/offers';
+  static String createPickMeOffer = '/pick-me/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
   static const updateDriverLoadingRatingNonSocket =
@@ -1717,18 +1726,20 @@ class EndPoints {
   static const addRateToClientWithDriverLoadingNonSocket =
       '/loading/trip/rating/';
 
-      //! Spot Light
-    // Spotlight Profile Endpoints
-    static const getMySpotlightProfile = '/spotlight/profile/me';
-    static String getSpotlightProfileForUser(String userId) => '/spotlight/profile/$userId';
-  
-  // Spotlight Media Endpoints  
-  static String getMySpotlightMedia({int page = 1, int limit = 10}) => 
+  //! Spot Light
+  // Spotlight Profile Endpoints
+  static const getMySpotlightProfile = '/spotlight/profile/me';
+  static String getSpotlightProfileForUser(String userId) =>
+      '/spotlight/profile/$userId';
+
+  // Spotlight Media Endpoints
+  static String getMySpotlightMedia({int page = 1, int limit = 10}) =>
       '/spotlight/media/me?page=$page&limit=$limit';
-  
-  static String getSpotlightMediaForUser(String userId, {int page = 1, int limit = 10}) => 
+
+  static String getSpotlightMediaForUser(String userId,
+          {int page = 1, int limit = 10}) =>
       '/spotlight/media/$userId?page=$page&limit=$limit';
-  
+
   // Media Upload Endpoints
   static const requestUploadMedia = '/spotlight/media/upload/request';
   static const confirmUploadMedia = '/spotlight/media/upload/confirm';
@@ -1745,4 +1756,119 @@ class EndPoints {
   static String numberOfFollowing(String subCategoryId) =>
       "/follow/numberOfFollowing?subCategory=$subCategoryId";
 
+
+  static String getForYouSongs({required SongsPaginationParams params}) =>
+      '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
+  static String getTrendingSongs({required SongsPaginationParams params}) =>
+      '/songs/onTrending-songs?page=${params.page}&limit=${params.limit}';
+  static String getSavedSongs({required SongsPaginationParams params}) =>
+      '/songs/favorite-songs?page=${params.page}&limit=${params.limit}';
+  static String addRemoveSongsFromFavs({required String songId}) =>
+      '/songs/add-to-favorites/$songId';
+  static String searchSongs({required String query}) =>
+      '/songs/search?query=$query';
+
+  // Chat Endpoints
+  static getSocialConversations({int page = 1, int limit = 10}) =>
+      '/conversations?page=$page&limit=$limit';
+
+  //! Tube Endpoints
+  static String searchProfiles(SearchProfileParams params) =>
+      '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';
+  static String searchTubeVideos(String query) =>
+      '/tube-video/search?query=$query';
+  static String getTubeProfileById(String profileId) =>
+      '/tube-profile/channel/$profileId';
+  static const String getMyProfile = '/tube-profile';
+  static const String updateProfile = '/tube-profile';
+  static const String getAllTubeVideos = '/tube-video';
+  static const String getMyTubeVideos = '/tube-video/me';
+  static String addVideoToFavorite(String videoId) =>
+      '/tube-favorite/video/$videoId';
+  static String removeVideoFromFavorite(String videoId) =>
+      '/tube-favorite/video/$videoId';
+  static const getFavoriteVideos = '/tube-favorite';
+
+  static String getTubeVideoDetails(String videoId) =>
+      '/tube-video/details/$videoId';
+  static String likeTubeVideo(String videoId) => '/tube-video/$videoId/like';
+  static String dislikeTubeVideo(String videoId) =>
+      '/tube-video/$videoId/dislike';
+  static String incrementTubeVideoView(String videoId) =>
+      '/tube-video/$videoId/view';
+
+  // Tube Video with pagination
+  static String getAllTubeVideosWithPagination(
+          {int page = 1, int limit = 10}) =>
+      '/tube-video?page=$page&limit=$limit';
+
+  static String getMyTubeVideosWithPagination({int page = 1, int limit = 10}) =>
+      '/tube-video/me?page=$page&limit=$limit';
+  // Bunny CDN Video Endpoints
+  static const String createBunnyVideo = '/bunny/videos';
+  static const String submitTubeVideo = '/tube-video';
+
+  static String deleteTubeVideo(String videoId) => '/tube-video/$videoId';
+
+  // Tube Video Comments Endpoints
+  static const String createTubeComment = '/tube-comment';
+
+  static String getTubeVideoComments(String videoId,
+          {int page = 1, int limit = 20}) =>
+      '/tube-comment/video/$videoId?page=$page&limit=$limit';
+
+  static String updateTubeComment(String commentId) =>
+      '/tube-comment/edit/$commentId';
+
+  static String deleteTubeComment(String commentId) =>
+      '/tube-comment/$commentId';
+
+  static String likeTubeComment(String commentId) =>
+      '/tube-comment/$commentId/like';
+
+  static String dislikeTubeComment(String commentId) =>
+      '/tube-comment/$commentId/dislike';
+
+  //! Playlist Endpoints
+
+  // Create new playlist
+  static const String createPlaylist = '/tube-playlist';
+
+  // Get all playlists for owner
+  static String getPlaylists(String ownerId) =>
+      '/tube-playlist?ownerId=$ownerId';
+
+  // Get playlist by ID (basic info)
+  static String getPlaylistById(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  // NEW: Get playlist with videos (full details)
+  static String getPlaylistWithVideos(String playlistId) =>
+      '/tube-playlist/$playlistId?includeVideos=true';
+
+  // Add video to playlist
+  static String addVideoToPlaylist(String playlistId) =>
+      '/tube-playlist/add-video/$playlistId';
+
+  // Remove video from playlist
+  static String removeVideoFromPlaylist(String playlistId) =>
+      '/tube-playlist/remove-video/$playlistId';
+
+  // Delete playlist
+  static String deletePlaylist(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  // Update playlist
+  static String updatePlaylist(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  //! Exchange Currency Endpoints
+  static String convertCurrency({
+    required String from,
+    required String to,
+    required double amount,
+  }) =>
+      '/exchange-currency/pair/$from/$to/$amount';
+
+  static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

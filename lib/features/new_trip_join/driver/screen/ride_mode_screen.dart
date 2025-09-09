@@ -56,10 +56,8 @@ class NewRideModeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocProvider(
-      create: (context) =>
-          serviceLocator<CaptainShareDashboardCubit>(),
+      create: (context) => serviceLocator<CaptainShareDashboardCubit>(),
       child: RideModeTabs(),
     );
   }
@@ -73,9 +71,8 @@ class RideModeTabs extends StatefulWidget {
 }
 
 class _RideModeTabsState extends State<RideModeTabs> {
-
   @override
-  initState(){
+  initState() {
     context.read<CaptainShareDashboardCubit>().initData();
     super.initState();
   }
@@ -85,7 +82,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
     return BlocBuilder<CaptainShareDashboardCubit, CaptainShareDashboardState>(
       builder: (context, state) {
         var cubit = context.read<CaptainShareDashboardCubit>();
-        if(state.isLoading){
+        if (state.isLoading) {
           return Center(child: CustomCircularProgressIndicator());
         }
         return Column(
@@ -98,13 +95,11 @@ class _RideModeTabsState extends State<RideModeTabs> {
                 onRefreshSettings: () {
                   cubit.getSettings(context);
                 },
-                isCaptain:
-                state.setting?.data.isCaptainShareEnabled ?? false,
+                isCaptain: state.setting?.data.isCaptainShareEnabled ?? false,
                 isReady: state.setting?.data.isReady ?? false,
                 isRegistered: state.setting != null,
                 isApproved: state.setting?.data.isApproved ?? false,
-                hasActiveTrip:cubit.activeTrip!=null
-            ),
+                hasActiveTrip: cubit.activeTrip != null),
             SizedBox(height: 10.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -112,8 +107,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
               children: [
                 TripOptionWidget(
                   imagePath: Assets.locationTripIcon,
-                  title:
-                  context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
+                  title: context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
                   onTap: () {
                     context.push(Routes.captainShareScreen);
                   },
@@ -139,7 +133,9 @@ class _RideModeTabsState extends State<RideModeTabs> {
                 ),
               ],
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Expanded(child: TripJoinSliders())
           ],
         );
@@ -147,7 +143,6 @@ class _RideModeTabsState extends State<RideModeTabs> {
     );
   }
 }
-
 
 class RideModeButton extends StatelessWidget {
   final void Function()? onTap;
@@ -175,29 +170,37 @@ class RideModeButton extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap:hasActiveTrip?(){
-            showErrorMessage(context, context.isArabic?'برجاء اكمال الرحله الجاريه في توصيله اولا':'Please complete the running trip at ride first');
-          }: isRegistered == false
-              ? () async {
-                  await context.push(Routes.welcomeRideRegister, extra: false);
-                  if (onRefreshSettings != null) onRefreshSettings!();
+          onTap: hasActiveTrip
+              ? () {
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? 'برجاء اكمال الرحله الجاريه في توصيله اولا'
+                          : 'Please complete the running trip at ride first');
                 }
-              : (isApproved == false)
+              : isRegistered == false
                   ? () async {
-                      await context.push(Routes.RIDE_HOME);
+                      await context.push(Routes.welcomeRideRegister,
+                          extra: false);
                       if (onRefreshSettings != null) onRefreshSettings!();
                     }
-                  : (isReady == false || isCaptain == false)
+                  : (isApproved == false)
                       ? () async {
-                          await context.push(Routes.rideModeScreen,
-                              extra: const RideModeParams(
-                                  modeType: 'ride',
-                                  isSocket: true,
-                                  currentIndex: 3));
-
+                          await context.push(Routes.RIDE_HOME);
                           if (onRefreshSettings != null) onRefreshSettings!();
                         }
-                      : onTap,
+                      : (isReady == false || isCaptain == false)
+                          ? () async {
+                              await context.push(Routes.rideModeScreen,
+                                  extra: const RideModeParams(
+                                      modeType: 'ride',
+                                      isSocket: true,
+                                      currentIndex: 3));
+
+                              if (onRefreshSettings != null)
+                                onRefreshSettings!();
+                            }
+                          : onTap,
           child: Container(
             margin: EdgeInsets.all(5.w),
             width: double.infinity,
@@ -262,8 +265,12 @@ class RideModeButton extends StatelessWidget {
           ClickableWidget(
             onTap: () async {
               ManageVibration.vibrate();
-              if(hasActiveTrip) {
-                showErrorMessage(context, context.isArabic?'برجاء اكمال الرحله الجاريه في توصيله اولا':'Please complete the running trip at ride first');
+              if (hasActiveTrip) {
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'برجاء اكمال الرحله الجاريه في توصيله اولا'
+                        : 'Please complete the running trip at ride first');
               } else if (isRegistered == false) {
                 await context.push(Routes.welcomeRideRegister, extra: false);
                 if (onRefreshSettings != null) onRefreshSettings!();

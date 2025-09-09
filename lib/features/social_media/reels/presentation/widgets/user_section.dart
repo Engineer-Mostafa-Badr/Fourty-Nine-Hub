@@ -23,7 +23,7 @@ class UserSection extends StatelessWidget {
           if (reel.location.isNotEmpty)
             GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 context.push(Routes.AllLocationScreen);
               },
               child: const LocationReelsWidget(),
@@ -178,7 +178,7 @@ class UserSection extends StatelessWidget {
                 //     ],
                 //   ),
                 // ),
-               if (reel.user.verified) SizedBox(width: 8.w),
+                if (reel.user.verified) SizedBox(width: 8.w),
                 if (reel.user.verified)
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 6.h),

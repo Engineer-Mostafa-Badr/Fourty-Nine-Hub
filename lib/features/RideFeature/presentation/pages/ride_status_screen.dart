@@ -106,7 +106,7 @@ class RideStatusScreen extends StatelessWidget {
                               },
                               fromLocation: 'أول العاشر من رمضان',
                               toLocation:
-                              'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                                  'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                               onGoogleMap: () {},
                               showOTP: false,
                               showCancelButton: false,
@@ -144,6 +144,7 @@ class ActionButtonsWidget extends StatelessWidget {
   final VoidCallback onSafety;
   final VoidCallback? onMessage;
   final bool? is_show_message;
+  final EdgeInsetsGeometry? padding;
   const ActionButtonsWidget({
     super.key,
     required this.driverImageUrl,
@@ -153,12 +154,13 @@ class ActionButtonsWidget extends StatelessWidget {
     this.is_show_message = false,
     required this.onSafety,
     this.onMessage,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding:padding?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -170,7 +172,7 @@ class ActionButtonsWidget extends StatelessWidget {
           ),
           _buildActionCircle(
             icon: Icons.phone,
-            label: context.isArabic?'اتصل بالعميل':'Contact Client',
+            label: context.isArabic ? 'اتصل بالعميل' : 'Contact Client',
             onTap: onContactDriver,
           ),
           _buildActionCircle(
@@ -243,8 +245,8 @@ Widget buildDriverCircle({
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child:ImageFromInternet(
-                image:driverImageUrl??'',
+              child: ImageFromInternet(
+                image: driverImageUrl ?? '',
                 fit: BoxFit.cover,
               ),
             ),
@@ -261,7 +263,7 @@ Widget buildDriverCircle({
                 right: -16,
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -277,7 +279,9 @@ Widget buildDriverCircle({
                   child: Row(
                     children: [
                       Text(
-                        FormatNumbers().convertNumberToLocalizedString(driverRating.toStringAsFixed(1), isArabic: context.isArabic),
+                        FormatNumbers().convertNumberToLocalizedString(
+                            driverRating.toStringAsFixed(1),
+                            isArabic: context.isArabic),
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,

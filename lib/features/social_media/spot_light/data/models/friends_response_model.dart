@@ -1,97 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/friends_stories_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/pagination_details_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/story_basic_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_basic_entity.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_with_stories_entity.dart';
 
-// Entity classes
-class FriendsStoriesEntity extends Equatable {
-  final List<UserWithStoriesEntity> stories;
-  final PaginationDetailsEntity paginationDetails;
-
-  const FriendsStoriesEntity({
-    required this.stories,
-    required this.paginationDetails,
-  });
-
-  @override
-  List<Object?> get props => [stories, paginationDetails];
-}
-
-class UserWithStoriesEntity extends Equatable {
-  final UserBasicEntity user;
-  final List<StoryBasicEntity> stories;
-  final int storyCount;
-
-  const UserWithStoriesEntity({
-    required this.user,
-    required this.stories,
-    required this.storyCount,
-  });
-
-  @override
-  List<Object?> get props => [user, stories, storyCount];
-}
-
-class UserBasicEntity extends Equatable {
-  final String userId;
-  final String firstName;
-  final String lastName;
-  final String username;
-  final String? userProfileUrl;
-
-  const UserBasicEntity({
-    required this.userId,
-    required this.firstName,
-    required this.lastName,
-    required this.username,
-    this.userProfileUrl,
-  });
-
-  String get fullName => '$firstName $lastName';
-
-  @override
-  List<Object?> get props => [userId, firstName, lastName, username, userProfileUrl];
-}
-
-class StoryBasicEntity extends Equatable {
-  final String id;
-  final bool isViewed;
-
-  const StoryBasicEntity({
-    required this.id,
-    required this.isViewed,
-  });
-
-  @override
-  List<Object?> get props => [id, isViewed];
-}
-
-class PaginationDetailsEntity extends Equatable {
-  final int page;
-  final int limit;
-  final int totalItems;
-  final int totalPages;
-  final bool hasNextPage;
-  final bool hasPrevPage;
-  final int? nextPage;
-  final int? prevPage;
-
-  const PaginationDetailsEntity({
-    required this.page,
-    required this.limit,
-    required this.totalItems,
-    required this.totalPages,
-    required this.hasNextPage,
-    required this.hasPrevPage,
-    this.nextPage,
-    this.prevPage,
-  });
-
-  @override
-  List<Object?> get props => [
-    page, limit, totalItems, totalPages, 
-    hasNextPage, hasPrevPage, nextPage, prevPage
-  ];
-}
-
-// Model classes that extend entities
 class FriendsStoriesModel extends FriendsStoriesEntity {
   const FriendsStoriesModel({
     required super.stories,
@@ -101,18 +14,21 @@ class FriendsStoriesModel extends FriendsStoriesEntity {
   factory FriendsStoriesModel.fromJson(Map<String, dynamic> json) {
     return FriendsStoriesModel(
       stories: (json['stories'] as List<dynamic>?)
-          ?.map((e) => UserWithStoriesModel.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
+              ?.map((e) =>
+                  UserWithStoriesModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
       paginationDetails: PaginationDetailsModel.fromJson(
-        json['paginationDetails'] as Map<String, dynamic>
-      ),
+          json['paginationDetails'] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'stories': stories.map((e) => (e as UserWithStoriesModel).toJson()).toList(),
-      'paginationDetails': (paginationDetails as PaginationDetailsModel).toJson(),
+      'stories':
+          stories.map((e) => (e as UserWithStoriesModel).toJson()).toList(),
+      'paginationDetails':
+          (paginationDetails as PaginationDetailsModel).toJson(),
     };
   }
 }
@@ -128,8 +44,9 @@ class UserWithStoriesModel extends UserWithStoriesEntity {
     return UserWithStoriesModel(
       user: UserBasicModel.fromJson(json['user'] as Map<String, dynamic>),
       stories: (json['stories'] as List<dynamic>?)
-          ?.map((e) => StoryBasicModel.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
+              ?.map((e) => StoryBasicModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
       storyCount: json['storyCount'] ?? 0,
     );
   }
@@ -177,12 +94,25 @@ class StoryBasicModel extends StoryBasicEntity {
   const StoryBasicModel({
     required super.id,
     required super.isViewed,
+    super.type,
+    super.content,
+    super.thumbnailUrl,
+    super.createdAt,
+    super.color,
+    super.fontFamily,
   });
 
   factory StoryBasicModel.fromJson(Map<String, dynamic> json) {
     return StoryBasicModel(
-      id: json['id'] ?? '',
+      id: json['id'] ?? json['_id'] ?? '',
       isViewed: json['isViewed'] ?? false,
+      type: json['type'],
+      content: json['content'],
+      thumbnailUrl: json['thumbnailUrl'] ?? json['thumbnailSignedUrl'],
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      color: json['color'],
+      fontFamily: json['fontFamily'],
     );
   }
 
@@ -190,6 +120,12 @@ class StoryBasicModel extends StoryBasicEntity {
     return {
       'id': id,
       'isViewed': isViewed,
+      'type': type,
+      'content': content,
+      'thumbnailUrl': thumbnailUrl,
+      'createdAt': createdAt?.toIso8601String(),
+      'color': color,
+      'fontFamily': fontFamily,
     };
   }
 }

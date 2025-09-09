@@ -61,7 +61,7 @@ class AnnounceWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         child: InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!context.read<UserCubit>().isLoggedIn) {
               return pleaseLoginDialog(context);
             }

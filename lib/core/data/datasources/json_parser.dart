@@ -121,4 +121,9 @@ class JsonParser implements ApiConsumer {
   void removeTokenFromHeader() {
     // TODO: implement removeTokenFromHeader
   }
+
+  @override
+  void setTokenRefreshCallback(Function(UserTokensEntity p1) callback) {
+    // TODO: implement setTokenRefreshCallback
+  }
 }

@@ -117,9 +117,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
 
         InkWell(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.read<PreloadBloc>().pauseTheVideo();
+              context.read<PreloadBloc>().pauseCurrent();
               context.push(Routes.LOGIN);
             } else {
               context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
@@ -162,9 +162,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         const SizedBox(height: 20),
         GestureDetector(
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.read<PreloadBloc>().pauseTheVideo();
+              context.read<PreloadBloc>().pauseCurrent();
               context.push(Routes.LOGIN);
             } else {
               _showGiftBottomSheet(context);
@@ -217,9 +217,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           ),
           count: reel.commentCount.toString(),
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.read<PreloadBloc>().pauseTheVideo();
+              context.read<PreloadBloc>().pauseCurrent();
               context.push(Routes.LOGIN);
             } else {
               _handleCommentAction(
@@ -249,9 +249,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           count: reel.shareCount.toString(),
           isReversed: true,
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.read<PreloadBloc>().pauseTheVideo();
+              context.read<PreloadBloc>().pauseCurrent();
               context.push(Routes.LOGIN);
             } else {
               showModalBottomSheet(
@@ -290,7 +290,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               size: 25,
             ),
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               showDialog(
                 context: context,
                 barrierColor: Colors.transparent, // يخلي الخلفية شفافة
@@ -314,18 +314,17 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
                               icon: const Icon(Icons.bookmark_border,
                                   color: Colors.white),
                               onPressed: () {
-
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                               },
                             ),
                             IconButton(
                               icon: const Icon(Icons.flag_outlined,
                                   color: Colors.white),
                               onPressed: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 Navigator.pop(context);
                                 if (!serviceLocator<UserCubit>().isLoggedIn) {
-                                  context.read<PreloadBloc>().pauseTheVideo();
+                                  context.read<PreloadBloc>().pauseCurrent();
                                   context.push(Routes.LOGIN);
                                 } else {
                                   _showReportBottomSheet(context);
@@ -370,7 +369,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               //               ),
               //               count: LocaleKeys.report.localize,
               //               onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               //                 if (!serviceLocator<UserCubit>().isLoggedIn) {
               //                   context.read<PreloadBloc>().pauseTheVideo();
               //                   context.push(Routes.LOGIN);
@@ -392,7 +391,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
               //               ),
               //               count: LocaleKeys.save.localize,
               //               onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               //                 if (!serviceLocator<UserCubit>().isLoggedIn) {
               //                   context.read<PreloadBloc>().pauseTheVideo();
               //                   context.push(Routes.LOGIN);
@@ -440,9 +439,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           ),
           count: reel.likeCount.toString(),
           onTap: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.read<PreloadBloc>().pauseTheVideo();
+              context.read<PreloadBloc>().pauseCurrent();
               context.push(Routes.LOGIN);
             } else {
               _handleLikeAction(context, context.read<ReelsCubit>());

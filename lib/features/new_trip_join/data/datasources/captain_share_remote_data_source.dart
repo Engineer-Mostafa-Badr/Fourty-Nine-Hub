@@ -4,9 +4,11 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/create_price_per_seat_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
+import 'package:fourtyninehub/features/new_trip_join/data/models/pickup_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/running_route_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/entities/pickup_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/client_not_shown_use_case.dart';
@@ -32,11 +34,13 @@ abstract class CaptainShareRemoteDataSource {
   Future<Either<Failure, MyBookingEntity>> getDriverRunningRoute();
   Future<Either<Failure, bool>> cancelMyBooking(String id);
   Future<Either<Failure, bool>> acceptRoute(String id);
-  Future<Either<Failure, String>> pickClient(PickClientParams params);
+  Future<Either<Failure, bool>> completeRoute(String id);
+  Future<Either<Failure, PickupEntity>> pickClient(PickClientParams params);
   Future<Either<Failure, bool>> dropClient(DropClientParams params);
   Future<Either<Failure, String>> clientNotShown(ClientNotShownParams params);
   Future<Either<Failure, String>> arrivedToClient(ClientNotShownParams params);
   Future<Either<Failure, MyBookingEntity>> joinToRoute(JoinToRouteParams params);
+  Future<Either<Failure, String>> iamComing(String id);
 }
 
 class CaptainShareRemoteDataSourceImplementation
@@ -272,7 +276,24 @@ class CaptainShareRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, String>> pickClient(PickClientParams params) async {
+  Future<Either<Failure, bool>> completeRoute(String id) async {
+    try {
+      final result = await _apiConsumer.put(
+        EndPoints.completeRoute(id),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(response['status']??false);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PickupEntity>> pickClient(PickClientParams params) async {
     try {
       final result = await _apiConsumer.post(
         EndPoints.pickClient(params.routeId),
@@ -281,7 +302,7 @@ class CaptainShareRemoteDataSourceImplementation
       return result.fold(
             (failure) => Left(failure),
             (response) {
-          return Right(response['data']['polyline']??'');
+          return Right(PickupModel.fromJson(response['data']));
         },
       );
     } catch (e) {
@@ -360,6 +381,24 @@ class CaptainShareRemoteDataSourceImplementation
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> iamComing(String id) async {
+    try {
+      final result = await _apiConsumer.put(
+        EndPoints.iamComing(id),
+      );
+      return result.fold(
+            (failure) => Left(failure),
+            (response) {
+          return Right(response['data']['updatedDriverWaitingTime']);
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   @override
   Future<Either<Failure, MyBookingEntity>> getRouteDetails(String params) async {
     try {

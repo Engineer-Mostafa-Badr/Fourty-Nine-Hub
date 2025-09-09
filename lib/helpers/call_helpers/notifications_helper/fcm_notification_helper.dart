@@ -31,31 +31,31 @@ abstract class FcmNotificationHelper {
   Future onFcmTokenChanges();
   Future<Either<Exception, void>> subscribeTopic(String topic);
   void handleInitialMessage();
-  Future<Either<Exception, void>> sendNotification(SendNotificationParams params);
+  Future<Either<Exception, void>> sendNotification(
+      SendNotificationParams params);
   void dispose();
 }
 
 class FcmNotificationHelperImpl implements FcmNotificationHelper {
   final FirebaseMessaging _firebaseMessaging;
-  
+
   FcmNotificationHelperImpl._internal(this._firebaseMessaging);
-  
+
   // add StreamSubscriptions to control listeners
   StreamSubscription<RemoteMessage>? _onMessageSubscription;
   StreamSubscription<RemoteMessage>? _onMessageOpenedAppSubscription;
   StreamSubscription<String>? _onTokenRefreshSubscription;
-  
+
   // add flag to prevent multiple setup
   bool _isSetupCompleted = false;
-  
+
   // add singleton pattern
   static FcmNotificationHelperImpl? _instance;
-  
+
   factory FcmNotificationHelperImpl(FirebaseMessaging firebaseMessaging) {
     _instance ??= FcmNotificationHelperImpl._internal(firebaseMessaging);
     return _instance!;
   }
-  
 
   @override
   Future<Either<Exception, String>> getFcmToken() async {
@@ -96,9 +96,11 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       // });
       // cancel old token refresh subscription if exists
       _onTokenRefreshSubscription?.cancel();
-      
-      _onTokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((token) {
+
+      _onTokenRefreshSubscription =
+          _firebaseMessaging.onTokenRefresh.listen((token) {
         log('+++++ FCM Token Refreshed +++++++++ $token');
+
         /// TODO: send token to server
       });
     } catch (e) {
@@ -119,15 +121,15 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
   @override
   Future<void> setup(BuildContext context) async {
-    // skip setup if already setup 
+    // skip setup if already setup
     if (_isSetupCompleted) {
       log('+++++ FCM already setup, skipping... +++++++++');
       return;
     }
-    
+
     log('+++++ FCM setup Message +++++++++');
-    
-     // Request permission
+
+    // Request permission
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -147,7 +149,8 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     _disposeListeners();
 
     // add new listeners
-    _onMessageSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    _onMessageSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log('+++++ FCM Message Received +++++++++ ${message.data}');
       await _handleNotification(message, context: context);
     });
@@ -159,6 +162,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
         log('+++++ FCM Message Opened App +++++++++ ${message.data}');
         AudioPlayer player = AudioPlayer();
         await player.play(AssetSource("audio/notification.mp3"));
+
         /// TODO: handle on message open app
       },
     );
@@ -168,7 +172,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
 
     // add token refresh listener
     await onFcmTokenChanges();
-    
+
     _isSetupCompleted = true;
     log('+++++ FCM setup completed +++++++++');
   }
@@ -179,7 +183,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     _onMessageSubscription?.cancel();
     _onMessageOpenedAppSubscription?.cancel();
     _onTokenRefreshSubscription?.cancel();
-    
+
     _onMessageSubscription = null;
     _onMessageOpenedAppSubscription = null;
     _onTokenRefreshSubscription = null;
@@ -206,7 +210,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
     // if (initialMessage != null) {
     AudioPlayer player = AudioPlayer();
     await player.play(AssetSource("audio/notification.mp3"));
-      // await _handleNotification(initialMessage); // your handler
+    // await _handleNotification(initialMessage); // your handler
     // }
     /// TODO: handle initial message
   }
@@ -235,7 +239,7 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
         },
         body: json.encode(params.toMap()),
       );
-      
+
       print('result of sendNotification ${result.body}');
       if (result.statusCode > 199 && result.statusCode < 300) {
         print('+++++++++ ${json.decode(result.body)} ++++++++++');
@@ -268,16 +272,21 @@ Future<String?> _generateAccessKey() async {
 @pragma('vm:entry-point')
 Future<void> _onBackgroundMessage(RemoteMessage message) async {
   if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await DI.execute();
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await DI.execute();
+    } catch (e) {
+      print('Firebase already initialized in background: $e');
+    }
   }
 
   await _handleNotification(message);
 }
 
-Future<void> _handleNotification(RemoteMessage message, {BuildContext? context}) async {
+Future<void> _handleNotification(RemoteMessage message,
+    {BuildContext? context}) async {
   log('++++++++++++++notification received++ ${message.data}');
 
   try {
@@ -287,41 +296,45 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
     //TODO Get Context to show SnackBar
     final overlayContext = navigatorKey.currentContext!;
 
-    if(context != null){
+    if (context != null) {
       AudioPlayer player = AudioPlayer();
       player.play(AssetSource("audio/notification.mp3"));
       toastification.show(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(message.notification?.title ?? 'Notification Title',
-              style: TextStyle(color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
-                  fontSize: 32.sp,
-                  fontWeight: FontWeight.w700,
+            Text(
+              message.notification?.title ?? 'Notification Title',
+              style: TextStyle(
+                color: context.isDarkMode
+                    ? AppColors.whiteColor
+                    : AppColors.PRIMARY_COLOR,
+                fontSize: 32.sp,
+                fontWeight: FontWeight.w700,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(message.notification?.body ??'Notification body',
-              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color,
+            Text(
+              message.notification?.body ?? 'Notification body',
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontSize: 22.sp,
-                  fontWeight: FontWeight.w400
-              ),
+                  fontWeight: FontWeight.w400),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
         autoCloseDuration: const Duration(seconds: 5),
-        progressBarTheme: ProgressIndicatorThemeData(
-            color: AppColors.SECONDARY_COLOR
-        ),
+        progressBarTheme:
+            ProgressIndicatorThemeData(color: AppColors.SECONDARY_COLOR),
         primaryColor: AppColors.SECONDARY_COLOR,
         backgroundColor: Theme.of(context).dialogBackgroundColor,
         callbacks: ToastificationCallbacks(
           onTap: (toastItem) {
             print('Toast ${toastItem.id} tapped');
-            context.pushNamed(message.data['path'] ?? '');
+            context.push(message.data['path'] ?? '');
           },
         ),
         showProgressBar: true,
@@ -335,7 +348,8 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
             Navigator.of(overlayContext).pushNamed(message.data['path'] ?? '');
           },
           child: CustomSnackBar.error(
-            message: "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
+            message:
+                "${message.notification?.title ?? 'Notification Title'} \n${message.notification?.body ?? 'Notification body'}",
             maxLines: 3,
           ),
         ),
@@ -343,12 +357,16 @@ Future<void> _handleNotification(RemoteMessage message, {BuildContext? context})
     }
 
     if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      await DI.execute();
+      try {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        await DI.execute();
+      } catch (e) {
+        print('Firebase already initialized in notification handler: $e');
+      }
     }
-    
+
     if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
       print('+++++ CallWithNotificationHelper +++++++++');
       serviceLocator<CallWithNotificationHelper>()

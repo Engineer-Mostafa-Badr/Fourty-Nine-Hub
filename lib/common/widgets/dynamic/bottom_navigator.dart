@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,15 +11,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
 import '../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
-import '../../../features/notifications/presentation/widgets/icon_with_view_count.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
@@ -50,28 +46,26 @@ class BottomNavigator extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  late List<BottomItemModel> pages;
+  late PageController _pageController;
   Timer? _shuffleTimer;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _initializePages();
+    _pageController = PageController(initialPage: 0);
 
-    // Shuffle every 5 seconds
+    // Toggle between pages every 5 seconds
     _shuffleTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      setState(() {
-        if (pages.any((e) => e.index == 11)) {
-          pages = firstPages;
-        } else {
-          pages = secondPages;
-        }
-      });
+      if (_pageController.hasClients) {
+        _currentPage = _currentPage == 0 ? 1 : 0;
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
     });
-  }
-
-  void _initializePages() {
-    pages = secondPages;
   }
 
   List<BottomItemModel> firstPages = [
@@ -105,15 +99,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       cacheKey: 'chatCount',
       image: Assets.whatsAppIcon,
       index: 3,
-      route: Routes.CHAT,
+      height: 16,
+      route: Routes.conversationsScreen,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
-      localeKey: LocaleKeys.book,
-      cacheKey: 'bookingCount',
+      localeKey: LocaleKeys.chance,
+      cacheKey: 'changeCount',
       index: 4,
-      image: Assets.booking,
-      route: Routes.RIDE_HOME,
+      image: Assets.chanceIcon,
+      route: Routes.CHANCE,
     ),
   ];
 
@@ -163,46 +158,108 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   @override
   void dispose() {
     _shuffleTimer?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomBottomNavigationBar(
-      currentIndex: widget.index,
-      onTap: (index) async {
-        ManageVibration.vibrate();
-
-        if (pages[index].index == 4) {
-          soonDialog(context);
-        } else if (pages[index].index == 0) {
-          context.push(pages[index].route);
-        } else if (pages[index].index == 3) {
-          ManageVibration.vibrate();
-          if (!context.read<UserCubit>().isLoggedIn) {
-            return pleaseLoginDialog(context);
-          }
-          await context.read<UserCubit>().resetUnreadedChatsCounter();
-          HandleCashback.setCount('chatCount', context);
-          context.push(
-            context.read<UserCubit>().isLoggedIn
-                ? Routes.CHAT
-                : Routes.FirstLoginScreen,
-            extra: ChatsViewParams(),
-          );
-          HandleCashback.setCount(pages[index].cacheKey ?? '', context);
-        } else {
-          final selectedItem = pages[index];
-          if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
-            selectedItem.action(context);
-          }
-          HandleCashback.setCount(pages[index].cacheKey ?? '', context);
-        }
-      },
-      items: pages,
-      scrollController: widget.scrollController,
-      isScrollingDown: widget.isScrollingDown,
+    return SizedBox(
+      height: 75,
+      child: Column(
+        children: [
+          // Page indicators
+          Container(
+            height: 4,
+            margin: EdgeInsets.symmetric(vertical: 4.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 8,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: _currentPage == 0 
+                        ? AppColors.PRIMARY_COLOR 
+                        : Colors.grey.withOpacity(0.3),
+                  ),
+                ),
+                SizedBox(width: 4.w),
+                Container(
+                  width: 8,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: _currentPage == 1 
+                        ? AppColors.PRIMARY_COLOR 
+                        : Colors.grey.withOpacity(0.3),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // PageView for bottom navigation
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (page) {
+                setState(() {
+                  _currentPage = page;
+                });
+              },
+              children: [
+                // First page
+                CustomBottomNavigationBar(
+                  currentIndex: widget.index,
+                  onTap: (index) => _handleTap(firstPages[index], index),
+                  items: firstPages,
+                  scrollController: widget.scrollController,
+                  isScrollingDown: widget.isScrollingDown,
+                ),
+                // Second page
+                CustomBottomNavigationBar(
+                  currentIndex: widget.index,
+                  onTap: (index) => _handleTap(secondPages[index], index),
+                  items: secondPages,
+                  scrollController: widget.scrollController,
+                  isScrollingDown: widget.isScrollingDown,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  Future<void> _handleTap(BottomItemModel item, int index) async {
+    ManageVibration.vibrate();
+
+    if (item.index == 4) {
+      soonDialog(context);
+    } else if (item.index == 0) {
+      context.push(item.route);
+    } else if (item.index == 3) {
+      ManageVibration.vibrate();
+      if (!context.read<UserCubit>().isLoggedIn) {
+        return pleaseLoginDialog(context);
+      }
+      await context.read<UserCubit>().resetUnreadedChatsCounter();
+      HandleCashback.setCount('chatCount', context);
+      context.push(
+        context.read<UserCubit>().isLoggedIn
+            ? Routes.conversationsScreen
+            : Routes.FirstLoginScreen,
+      );
+      HandleCashback.setCount(item.cacheKey ?? '', context);
+    } else {
+      final selectedItem = item;
+      if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
+        selectedItem.action(context);
+      }
+      HandleCashback.setCount(item.cacheKey ?? '', context);
+    }
   }
 }
 
@@ -293,106 +350,114 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(12)),
+                  const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
-                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 5, spreadRadius: 2),
               ],
             ),
             child: bottomNavBarHeight == 75
                 ? Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(widget.items.length, (index) {
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      if (index != 2) {
-                        widget.onTap(index);
-                      }
-                    },
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.zero,
-                      child: isScrollingDown
-                          ? Container()
-                          : ClickableWidget(
-                        child: widget.items[index].index != 2 &&
-                            widget.items[index].index != 13
-                            ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16.0),
-                          child: Column(
-                            children: [
-                              (widget.items[index].index ==
-                                  3 ||
-                                  widget.items[index]
-                                      .index ==
-                                      4 ||
-                                  widget.items[index]
-                                      .index ==
-                                      0 ||
-                                  widget.items[index]
-                                      .index ==
-                                      12 ||
-                                  widget.items[index]
-                                      .index ==
-                                      11 ||
-                                  widget.items[index]
-                                      .index ==
-                                      15 ||
-                                  widget.items[index]
-                                      .index ==
-                                      14 ||
-                                  widget.items[index]
-                                      .index ==
-                                      1)
-                                  ? Image.asset(
-                                widget
-                                    .items[index].image!,
-                                height: widget.items[index]
-                                    .height,
-                                width: widget.items[index]
-                                    .height,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors
-                                    .PRIMARY_COLOR,
-                              )
-                                  : SvgPicture.asset(
-                                widget
-                                    .items[index].image!,
-                                height: widget.items[index]
-                                    .height,
-                                width: widget.items[index]
-                                    .height,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : AppColors
-                                    .PRIMARY_COLOR,
-                              ),
-                              if (widget.items[index].index ==
-                                  3)
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                              Expanded(
-                                child: Label(
-                                  text: widget
-                                      .items[index].localeKey
-                                      .localize, // translate on build
-                                  style: Styles.smallText(),
-                                ),
-                              ),
-                            ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: List.generate(widget.items.length, (index) {
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (index != 2) {
+                              widget.onTap(index);
+                            }
+                          },
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.zero,
+                            child: isScrollingDown
+                                ? Container()
+                                : ClickableWidget(
+                                    child: widget.items[index].index != 2 &&
+                                            widget.items[index].index != 13
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16.0),
+                                            child: Column(
+                                              children: [
+                                                (widget.items[index].index ==
+                                                            3 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            4 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            0 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            12 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            11 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            15 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            14 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            1)
+                                                    ? Image.asset(
+                                                        widget.items[index]
+                                                            .image!,
+                                                        height: widget
+                                                            .items[index]
+                                                            .height-1,
+                                                        width: widget
+                                                            .items[index]
+                                                            .height-1,
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
+                                                      )
+                                                    : SvgPicture.asset(
+                                                        widget.items[index]
+                                                            .image!,
+                                                        height: widget
+                                                            .items[index]
+                                                            .height-1,
+                                                        width: widget
+                                                            .items[index]
+                                                            .height-1,
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
+                                                      ),
+                                                if (widget.items[index].index ==
+                                                    3)
+                                                  SizedBox(
+                                                    height: 2.h,
+                                                  ),
+                                                Expanded(
+                                                  child: Label(
+                                                    text: widget
+                                                        .items[index]
+                                                        .localeKey
+                                                        .localize, // translate on build
+                                                    style: Styles.smallText(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ),
                           ),
-                        )
-                            : Container(),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            )
+                        ),
+                      );
+                    }),
+                  )
                 : Container(),
           ),
         ),
@@ -417,7 +482,7 @@ class BottomItemModel {
     this.image,
     this.cacheKey,
     required this.route,
-    this.height = 24,
+    this.height = 20,
   });
 
   void action(BuildContext context) {

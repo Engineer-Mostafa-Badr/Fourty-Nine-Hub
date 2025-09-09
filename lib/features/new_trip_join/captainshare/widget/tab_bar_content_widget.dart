@@ -7,8 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_running_trip_sheet.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/running_map_view_details.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/header_text_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
@@ -203,12 +205,15 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
                           }
                         },
                         onJoin: (phone) {
-                          print("(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)}");
-                          if ((!(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id)) &&
+                          print(
+                              "(cubit.availableBookings[index].clients??[]).any((e)=>e.id==UserCubit.to.state.data?.id) ${(cubit.availableBookings[index].clients ?? []).any((e) => e.id == UserCubit.to.state.data?.id)}");
+                          if ((!(cubit.availableBookings[index].clients ?? [])
+                                  .any((e) =>
+                                      e.id == UserCubit.to.state.data?.id)) &&
                               cubit.availableBookings[index].status ==
                                   'pending') {
                             cubit.joinToRoute(
-                                phone:phone,
+                                phone: phone,
                                 id: cubit.availableBookings[index].id,
                                 context: context);
                           }
@@ -328,21 +333,27 @@ class _BookingsWidgetState extends State<BookingsWidget> {
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
-              itemBuilder: (context, index) => OneWayWidget(
-                  requestType: LocaleKeys.regular.localize,
-                  statusDriver: cubit.myBookings[index].status,
-                  model: cubit.myBookings[index],
-                  cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
-                          cubit.myBookings[index].creatorId) &&
-                      cubit.myBookings[index].status == 'pending',
-                  onCancelBooking: () {
-                    if (cubit.myBookings[index].status == 'pending') {
-                      cubit.cancelMyBooking(
-                          id: cubit.myBookings[index].id,
-                          context: context,
-                          from: 'myBookings');
-                    }
-                  }),
+              itemBuilder: (context, index) => ClickableWidget(
+                onTap: cubit.myBookings[index].status=='accepted'||cubit.myBookings[index].status=='running'?(){
+                  context.push(Routes.RunningMapDetails,extra: cubit.myBookings[index]);
+                }:null,
+                child: OneWayWidget(
+                  onTap: (cubit.myBookings[index].status=='accepted'||cubit.myBookings[index].status=='running')?(){}:null,
+                    requestType: LocaleKeys.regular.localize,
+                    statusDriver: cubit.myBookings[index].status,
+                    model: cubit.myBookings[index],
+                    cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+                            cubit.myBookings[index].creatorId) &&
+                        cubit.myBookings[index].status == 'pending',
+                    onCancelBooking: () {
+                      if (cubit.myBookings[index].status == 'pending') {
+                        cubit.cancelMyBooking(
+                            id: cubit.myBookings[index].id,
+                            context: context,
+                            from: 'myBookings');
+                      }
+                    }),
+              ),
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: cubit.myBookings.length,
             );
@@ -461,21 +472,28 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                   controller: _scrollController,
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemBuilder: (context, index) => OneWayWidget(
-                      requestType: LocaleKeys.regular.localize,
-                      statusDriver: cubit.runningBookings[index].status,
-                      model: cubit.runningBookings[index],
-                      cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
-                              cubit.runningBookings[index].creatorId) &&
-                          cubit.runningBookings[index].status == 'pending',
-                      onCancelBooking: () {
-                        if (cubit.runningBookings[index].status == 'pending') {
-                          cubit.cancelMyBooking(
-                              id: cubit.runningBookings[index].id,
-                              context: context,
-                              from: 'runningBookings');
-                        }
-                      }),
+                  itemBuilder: (context, index) => ClickableWidget(
+                    onTap: (){
+                      context.push(Routes.RunningMapDetails,extra: cubit.runningBookings[index]);
+                    },
+                    child: OneWayWidget(
+                      onTap: (){
+                      },
+                        requestType: LocaleKeys.regular.localize,
+                        statusDriver: cubit.runningBookings[index].status,
+                        model: cubit.runningBookings[index],
+                        cancelButton: ((UserCubit.to.state.data?.id ?? '') ==
+                                cubit.runningBookings[index].creatorId) &&
+                            cubit.runningBookings[index].status == 'pending',
+                        onCancelBooking: () {
+                          if (cubit.runningBookings[index].status == 'pending') {
+                            cubit.cancelMyBooking(
+                                id: cubit.runningBookings[index].id,
+                                context: context,
+                                from: 'runningBookings');
+                          }
+                        }),
+                  ),
                   separatorBuilder: (context, index) => const Sizer(),
                   itemCount: cubit.runningBookings.length,
                 );
@@ -529,11 +547,11 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                     ),
                   ),
                 )),
-            if (state.runningRoute != null &&
-                (state.runningRoute?.yourStatus?.isNotEmpty ?? false))
-              BuildRunningTripSheet(
-                model: state.runningRoute!,
-              ),
+            // if (state.runningRoute != null &&
+            //     (state.runningRoute?.yourStatus?.isNotEmpty ?? false))
+            //   BuildRunningTripSheet(
+            //     model: state.runningRoute!,
+            //   ),
           ],
         );
       },

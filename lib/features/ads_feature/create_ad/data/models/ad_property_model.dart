@@ -10,10 +10,10 @@ class AdPropertyModel extends AdPropertiesEntity {
       required super.values});
   factory AdPropertyModel.fromJson(Map<String, dynamic> json) {
     return AdPropertyModel(
-      id: json['_id'],
-      nameAr: json['name_ar'],
-      nameEn: json['name_en'],
-      type: json['type'],
+      id: json['propId']??json['_id']??'',
+      nameAr: json['name_ar']??'',
+      nameEn: json['name_en']??'',
+      type: json['type']??'',
       values: json['selections'] == null
           ? []
           : (json['selections'] as List)

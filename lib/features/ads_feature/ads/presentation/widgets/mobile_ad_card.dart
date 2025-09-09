@@ -135,8 +135,8 @@ class _MobileAdCardState extends State<MobileAdCard> {
                       child: InkWell(
                         onTap: () {
                           ManageVibration.vibrate();
-                           context.push(Routes.ADdetails,
-                            extra: widget.item.id);},
+                          context.push(Routes.ADdetails, extra: widget.item.id);
+                        },
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

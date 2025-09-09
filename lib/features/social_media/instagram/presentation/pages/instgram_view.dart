@@ -17,8 +17,7 @@ class InstagramView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child:
-          MultiBlocProvider(
+      child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => PostsInstagramCubit(

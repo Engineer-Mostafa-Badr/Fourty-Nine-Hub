@@ -56,13 +56,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-  checkLogin() async {
-    try {
-      if (!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  // checkLogin() async {
+  //   try {
+  //     if (!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
   AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   bool isPaused = false;
@@ -161,15 +161,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ExitWidget(
       child: CustomScaffold(
         key: _scaffoldKey,
-        scaffoldKey:_scaffoldKey,
+        scaffoldKey: _scaffoldKey,
         isMenu: true,
         appBar: HomeAppbar(
-          isWithBackArrow: false,
-            scaffoldKey:_scaffoldKey,
-          language: true,
-            isMenu:true
-          // isHaveLeading: true,
-        ),
+            isWithBackArrow: false,
+            scaffoldKey: _scaffoldKey,
+            language: true,
+            isMenu: true
+            // isHaveLeading: true,
+            ),
         bottomNavigationBar: _isScrollingDown
             ? null
             : BottomNavigator(
@@ -249,6 +249,52 @@ class _FourtyNineViewState extends State<FourtyNineView>
               height: 5.h,
             ),
             GridBlocksWidget(),
+            // Sizer(
+            //   height: 5.h,
+            // ),
+            // TikTok Reels Button
+            // ClickableWidget(
+            //   onTap: () {
+            //     ManageVibration.vibrate();
+            //     if (!context.read<UserCubit>().isLoggedIn) {
+            //       return pleaseLoginDialog(context);
+            //     }
+            //     context.push(Routes.TIKTOK_REELS);
+            //   },
+            //   child: Container(
+            //     height: 50.h,
+            //     margin: EdgeInsets.symmetric(horizontal: 16.w),
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         colors: [Colors.purple, Colors.pink, Colors.orange],
+            //         begin: Alignment.topLeft,
+            //         end: Alignment.bottomRight,
+            //       ),
+            //       borderRadius: BorderRadius.circular(25.r),
+            //     ),
+            //     child: Center(
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Icon(
+            //             Icons.play_circle_filled,
+            //             color: Colors.white,
+            //             size: 24.sp,
+            //           ),
+            //           SizedBox(width: 8.w),
+            //           Text(
+            //             'TikTok Style Reels',
+            //             style: TextStyle(
+            //               color: Colors.white,
+            //               fontSize: 16.sp,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Sizer(
               height: 10.h,
             ),
@@ -271,7 +317,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     children: List.generate(
                       5,
                       (index) => Shimmer.fromColors(
-                        baseColor: context.isDarkMode?Colors.grey[800]!:Colors.grey[100]!,
+                        baseColor: context.isDarkMode
+                            ? Colors.grey[800]!
+                            : Colors.grey[100]!,
                         highlightColor: Colors.white24,
                         child: Container(
                           margin: const EdgeInsets.symmetric(

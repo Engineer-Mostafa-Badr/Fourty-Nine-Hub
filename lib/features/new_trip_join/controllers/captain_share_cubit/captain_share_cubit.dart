@@ -17,6 +17,14 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_pric
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/running_route_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/cancel_my_booking_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/iam_coming_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_arrived_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_no_show_client_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_driver_on_the_way_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_passenger_picked_up_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_route_cancelled_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_update_location_driver_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_price_per_seat_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/create_route_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/get_available_bookings_use_case.dart';
@@ -35,9 +43,11 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_n
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 part 'captain_share_state.dart';
@@ -60,15 +70,48 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   final GetSupportDetailsUseCase getSupportDetailsUseCase;
   final ListenToDriverOnWayUseCase listenToDriverOnWayUseCase;
   final ListenToAcceptRouteUseCase listenToAcceptRouteUseCase;
+  final ListenToDriverArrivedUseCase listenToDriverArrivedUseCase;
+  final ListenToDriverNoShowClientUseCase listenToDriverNoShowClientUseCase;
+  final ListenToPassengerPickedUpUseCase listenToPassengerPickedUpUseCase;
+  final ListenToDriverOnTheWayUseCase listenToDriverOnTheWayUseCase;
+  final ListenToTripAcceptedUseCase listenToTripAcceptedUseCase;
+  final ListenToRouteCancelledUseCase listenToRouteCancelledUseCase;
+  final IamComingUseCase iamComingUseCase;
   final GetRunningRouteUseCase getRunningRouteUseCase;
-  CaptainShareCubit(this.createPricePerSeatUseCase,this.listenToDriverOnWayUseCase,this.getRunningRouteUseCase,this.listenToAcceptRouteUseCase,this.getRouteDetailsUseCase,this.listenToUpdateRouteUseCase,this.listenToCancelRouteUseCase,this.joinToRouteUseCase,this.listenToJoinAvailableRoutesUseCase,this.listenToLeaveAvailableRoutesUseCase,this.listenToNewRouteUseCase,this.createRouteUseCase,this.getRunningBookingsUseCase,this.getExpiredBookingsUseCase, this.getMyBookingsUseCase, this.cancelMyBookingUseCase, this.getAvailableBookingsUseCase, this.getSupportDetailsUseCase)
+  final ListenToUpdateLocationDriverUseCase listenToUpdateLocationDriverUseCase;
+  CaptainShareCubit(
+      this.createPricePerSeatUseCase,
+      this.listenToDriverOnWayUseCase,
+      this.listenToDriverArrivedUseCase,
+      this.listenToTripAcceptedUseCase,
+      this.listenToDriverNoShowClientUseCase,
+      this.listenToPassengerPickedUpUseCase,
+      this.listenToDriverOnTheWayUseCase,
+      this.listenToRouteCancelledUseCase,
+      this.listenToUpdateLocationDriverUseCase,
+      this.iamComingUseCase,
+      this.getRunningRouteUseCase,
+      this.listenToAcceptRouteUseCase,
+      this.getRouteDetailsUseCase,
+      this.listenToUpdateRouteUseCase,
+      this.listenToCancelRouteUseCase,
+      this.joinToRouteUseCase,
+      this.listenToJoinAvailableRoutesUseCase,
+      this.listenToLeaveAvailableRoutesUseCase,
+      this.listenToNewRouteUseCase,
+      this.createRouteUseCase,
+      this.getRunningBookingsUseCase,
+      this.getExpiredBookingsUseCase,
+      this.getMyBookingsUseCase,
+      this.cancelMyBookingUseCase,
+      this.getAvailableBookingsUseCase,
+      this.getSupportDetailsUseCase)
       : super(const CaptainShareState());
 
   TextEditingController supportDescriptionController = TextEditingController();
   TextEditingController supportPhoneController = TextEditingController();
 
-
-  void initData(BuildContext context)async{
+  void initData(BuildContext context) async {
     loadInitialAvailableData(context);
     await listenToJoinRoute();
     listenToNewRoute(context);
@@ -78,27 +121,118 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     listenToAcceptedRoute();
   }
 
+  initRunningRouteData(){
+    listenToDriverArrived();
+    listenToDriverNoShowClient();
+    listenToPassengerPickedUp();
+    listenToDriverOnTheWayToClient();
+    listenToRouteCancelled();
+  }
+
+  listenToDriverArrived() {
+    CliLogger.info('listenToDriverArrived');
+    listenToDriverArrivedUseCase((data) {
+      RunningRouteEntity? runningRoute = state.runningRoute;
+      if (runningRoute != null) {
+        runningRoute.waitingTime = data;
+        // runningRoute.yourStatus = 'driverNoShowPassenger';
+      }
+      emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
+    });
+  }
+  LatLng? driverLocation;
+  LatLng? lastDriverLocation;
+  updateDriverLocation(){
+    CliLogger.info('updateDriverLocation');
+    listenToUpdateLocationDriverUseCase((data) {
+      final newDriverLocation = LatLng(data.latitude, data.longitude);
+      final LatLng? oldDriverLocation = state.driverLocation;
+      log("newDriverLocation $newDriverLocation");
+      lastDriverLocation = driverLocation;
+      driverLocation = newDriverLocation;
+      emit(state.copyWith(
+        driverLocation: newDriverLocation,
+        previousDriverLocation:
+        oldDriverLocation, // <-- Pass the old location here
+        status: CaptainShareStates.success,
+      ));
+      log("driverLocation ${state.driverLocation}");
+      log("driverLocation $driverLocation");
+      log("previousDriverLocation ${state.previousDriverLocation}");
+
+    });
+  }
+
+  listenToRouteCancelled() {
+    CliLogger.info('listenToRouteCancelled');
+    listenToRouteCancelledUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+  listenToRouteAccepted() {
+    CliLogger.info('listenToRouteAccepted');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToTripAcceptedUseCase((data) {
+      final currentLocation = GoRouter.of(currentContext).state.path;
+      if ('$currentLocation' == Paths.rideModeScreen) {
+        return;
+      }
+      showSuccessMessage(currentContext, currentContext.isArabic?'تم قبول الرحله بنجاح':'Trip Accepted Successfully');
+      currentContext.push(Routes.RunningMapDetails);
+    });
+  }
+
+  listenToDriverOnTheWayToClient() {
+    CliLogger.info('listenToDriverOnTheWayToClient');
+    listenToDriverOnTheWayUseCase((data) {
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToDriverNoShowClient() {
+    CliLogger.info('listenToDriverNoShowClient');
+    listenToDriverNoShowClientUseCase((data) {
+      RunningRouteEntity? runningRoute = state.runningRoute;
+      if (runningRoute != null) {
+        runningRoute.waitingTime = data;
+        runningRoute.yourStatus = 'driverNoShowPassenger';
+      }
+      emit(state.copyWith(status: CaptainShareStates.success,runningRoute:runningRoute));
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  listenToPassengerPickedUp() {
+    CliLogger.info('listenToPassengerPickedUp');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToPassengerPickedUpUseCase((data) {
+      showSuccessMessage(currentContext, currentContext.isArabic?'نتمني لك رحلة سعيدة':'We wish you a happy trip');
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
   Future<void> fetchUserLocation() async {
     emit(state.copyWith(status: CaptainShareStates.loading));
 
     try {
       Position position = await _determinePosition();
       List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
+          await placemarkFromCoordinates(position.latitude, position.longitude);
 
       String address = placemarks.isNotEmpty
           ? "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.country}"
           : "Unknown current Location";
 
       GetLocationFromAddressEntity currentLocation =
-      GetLocationFromAddressEntity(
+          GetLocationFromAddressEntity(
         lat: position.latitude,
         lng: position.longitude,
         address: address,
       );
 
       emit(state.copyWith(
-          status: CaptainShareStates.success, currentLocation: currentLocation));
+          status: CaptainShareStates.success,
+          currentLocation: currentLocation));
     } catch (e) {
       log('_fetchUserLocation ${e.toString()}');
     }
@@ -148,14 +282,23 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     CliLogger.info('listenToCancelRoute');
     // TripsResponseEntity
     listenToCancelRouteUseCase((routeId) {
-      if(state.tapIndex==0){
+      if (state.tapIndex == 0) {
         print("routeId.routeId ${routeId.routeId}");
-        availableBookings.removeWhere((element) => element.id==routeId.routeId);
-        showSuccessMessage(context, context.isArabic?'تم الغاء الرحله بواسطة ناشئ الرحلة':'Route canceled by creator');
+        availableBookings
+            .removeWhere((element) => element.id == routeId.routeId);
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم الغاء الرحله بواسطة ناشئ الرحلة'
+                : 'Route canceled by creator');
       }
-      if(state.tapIndex==1){
-        myBookings.removeWhere((element) => element.id==routeId.routeId);
-        showSuccessMessage(context, context.isArabic?'تم الغاء الرحله بواسطة ناشئ الرحلة':'Route canceled by creator');
+      if (state.tapIndex == 1) {
+        myBookings.removeWhere((element) => element.id == routeId.routeId);
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم الغاء الرحله بواسطة ناشئ الرحلة'
+                : 'Route canceled by creator');
       }
       emit(state.copyWith(status: CaptainShareStates.success));
     });
@@ -191,9 +334,9 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
 
   onNavigateToCreateRoute(BuildContext context) async {
     await context.push(Routes.newRouteScreen);
-    if(state.tapIndex==0){
+    if (state.tapIndex == 0) {
       loadInitialAvailableData(context);
-    }else{
+    } else {
       onChangeTapIndex(0, context);
       loadInitialAvailableData(context);
     }
@@ -202,15 +345,24 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   void listenToNewRoute(BuildContext context) {
     CliLogger.info('listenToNewRoute');
     listenToNewRouteUseCase((route) {
-      String userId = UserCubit.to.state.data?.id??'';
-      if(userId==route.creatorId){}else{
-        if(state.tapIndex==0){
+      String userId = UserCubit.to.state.data?.id ?? '';
+      if (userId == route.creatorId) {
+      } else {
+        if (state.tapIndex == 0) {
           availableBookings.insert(0, route);
-          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
-        }else{
-          onChangeTapIndex(0,context);
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تم استقبال رحلة جديدة'
+                  : 'New route accepted');
+        } else {
+          onChangeTapIndex(0, context);
           loadInitialAvailableData(context);
-          showSuccessMessage(context, context.isArabic?'تم استقبال رحلة جديدة':'New route accepted');
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تم استقبال رحلة جديدة'
+                  : 'New route accepted');
         }
         emit(state.copyWith(status: CaptainShareStates.success));
       }
@@ -220,66 +372,71 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   void listenToUpdateRoute(BuildContext context) {
     CliLogger.info('listenToNewRoute');
     listenToUpdateRouteUseCase((route) {
-        if(state.tapIndex==0){
-          availableBookings.removeWhere((e)=>e.id==route.id);
-          availableBookings.insert(0, route);
-        }else if(state.tapIndex==1){
-          myBookings.removeWhere((e)=>e.id==route.id);
-          myBookings.insert(0, route);
-        }
-        emit(state.copyWith(status: CaptainShareStates.success));
+      if (state.tapIndex == 0) {
+        availableBookings.removeWhere((e) => e.id == route.id);
+        availableBookings.insert(0, route);
+      } else if (state.tapIndex == 1) {
+        myBookings.removeWhere((e) => e.id == route.id);
+        myBookings.insert(0, route);
+      }
+      emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
 
-
-  onChangeTapIndex(int index,BuildContext context){
+  onChangeTapIndex(int index, BuildContext context) {
     RunningRouteEntity? runningRoute = state.runningRoute;
-    runningRoute?.yourStatus='';
-    emit(state.copyWith(status: CaptainShareStates.success,runningRoute: runningRoute));
+    runningRoute?.yourStatus = '';
+    emit(state.copyWith(
+        status: CaptainShareStates.success, runningRoute: runningRoute));
 
-    if(index==0) listenToJoinRoute();
-    if(index!=0) listenToLeaveRoute();
-    if(index == 2) getRunningRoute(context);
+    if (index == 0) listenToJoinRoute();
+    if (index != 0) listenToLeaveRoute();
+    if (index == 2) getRunningRoute(context);
     print("state.tapIndex Cubit : $index");
-    emit(state.copyWith(status: CaptainShareStates.success,tapIndex: index,hintText: ''));
+    emit(state.copyWith(
+        status: CaptainShareStates.success, tapIndex: index, hintText: ''));
   }
-  onShowHintTap(int index,BuildContext context){
+
+  onShowHintTap(int index, BuildContext context) {
     String hintText = '';
-    if(index==0) {
-      if(state.hintText=='available'){
+    if (index == 0) {
+      if (state.hintText == 'available') {
         hintText = '';
-      }else{
+      } else {
         hintText = 'available';
       }
     }
-    if(index==1) {
-      if(state.hintText=='myBooking'){
+    if (index == 1) {
+      if (state.hintText == 'myBooking') {
         hintText = '';
-      }else{
+      } else {
         hintText = 'myBooking';
       }
     }
-    if(index==2) {
-      if(state.hintText=='running'){
+    if (index == 2) {
+      if (state.hintText == 'running') {
         hintText = '';
-      }else{
+      } else {
         hintText = 'running';
       }
     }
-    if(index==3) {
-      if(state.hintText=='expired'){
+    if (index == 3) {
+      if (state.hintText == 'expired') {
         hintText = '';
-      }else{
+      } else {
         hintText = 'expired';
       }
     }
-    emit(state.copyWith(status: CaptainShareStates.success,hintText: hintText));
-
+    emit(
+        state.copyWith(status: CaptainShareStates.success, hintText: hintText));
   }
 
   Future<void> cancelMyBooking(
-      {required String id, required BuildContext context, required String from}) async {
-    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      {required String id,
+      required BuildContext context,
+      required String from}) async {
+    final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     final response = await cancelMyBookingUseCase(id);
     response.fold((l) {
@@ -290,45 +447,55 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       //     : errorName == 'SubscribeError'
       //     ? showSubscribeDialog(currentContext, subCategoryId)
       //     : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
-      showSuccessMessage(currentContext,  errorName);
+      showSuccessMessage(currentContext, errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       currentContext.pop();
-      if(from=='available') {
-        availableBookings.removeWhere((e)=> e.id==id);
+      if (from == 'available') {
+        availableBookings.removeWhere((e) => e.id == id);
       }
-      if(from=='myBookings') {
-        myBookings.firstWhere((e)=> e.id==id).status='cancelled';
+      if (from == 'myBookings') {
+        myBookings.firstWhere((e) => e.id == id).status = 'cancelled';
       }
-      if(from=='expiredBookings') {
-        expiredBookings.firstWhere((e)=> e.id==id).status='cancelled';
+      if (from == 'expiredBookings') {
+        expiredBookings.firstWhere((e) => e.id == id).status = 'cancelled';
       }
-      if(from=='runningBookings') {
-        runningBookings.firstWhere((e)=> e.id==id).status='cancelled';
+      if (from == 'runningBookings') {
+        runningBookings.firstWhere((e) => e.id == id).status = 'cancelled';
       }
-      showSuccessMessage(currentContext, currentContext.isArabic?'تم الغاء الحجز بنجاح':'Booking canceled successfully');
+      showSuccessMessage(
+          currentContext,
+          currentContext.isArabic
+              ? 'تم الغاء الحجز بنجاح'
+              : 'Booking canceled successfully');
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
 
   Future<void> joinToRoute(
-      {required String id,required String phone, required BuildContext context}) async {
+      {required String id,
+      required String phone,
+      required BuildContext context}) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if(!serviceEnabled){
-      showErrorMessage(context, context.isArabic?'يرجى الموافقة على إذن الموقع':'Please Allow Location Permission');
+    if (!serviceEnabled) {
+      showErrorMessage(
+          context,
+          context.isArabic
+              ? 'يرجى الموافقة على إذن الموقع'
+              : 'Please Allow Location Permission');
       return;
     }
-    final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     final response = await joinToRouteUseCase(JoinToRouteParams(
-    phone: phone,
-      routeId: id,
-      lat: currentPosition.latitude,
-      lng: currentPosition.longitude
-    ));
+        phone: phone,
+        routeId: id,
+        lat: currentPosition.latitude,
+        lng: currentPosition.longitude));
     response.fold((l) {
       currentContext.pop();
       String errorName = getFailureName(l, currentContext);
@@ -337,12 +504,31 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       //     : errorName == 'SubscribeError'
       //     ? showSubscribeDialog(currentContext, subCategoryId)
       //     : showErrorMessage(currentContext, getFailureMessage(l, currentContext));
-      showSuccessMessage(currentContext,  errorName);
+      showSuccessMessage(currentContext, errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
-      availableBookings.firstWhere((e)=>e.id==data.id).clients = data.clients;
-      availableBookings.firstWhere((e)=>e.id==data.id).availableSeats = data.availableSeats;
+      availableBookings.firstWhere((e) => e.id == data.id).clients =
+          data.clients;
+      availableBookings.firstWhere((e) => e.id == data.id).availableSeats =
+          data.availableSeats;
       currentContext.pop();
+      emit(state.copyWith(status: CaptainShareStates.success));
+    });
+  }
+
+  Future<void> iamComing({required String id}) async {
+    final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await iamComingUseCase(id);
+    response.fold((l) {
+      currentContext.pop();
+      String errorName = getFailureName(l, currentContext);
+      showErrorMessage(currentContext, errorName);
+      emit(state.copyWith(failure: l, status: CaptainShareStates.error));
+    }, (data) {
+      RunningRouteEntity? runningRoute = state.runningRoute;
+      runningRoute?.waitingTime = data;
       emit(state.copyWith(status: CaptainShareStates.success));
     });
   }
@@ -354,10 +540,11 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     response.fold((l) {
       context.pop();
       String errorName = getFailureMessage(l, context);
-      showErrorMessage(context,  errorName);
+      showErrorMessage(context, errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
-      emit(state.copyWith(status: CaptainShareStates.success,routeDetails:data));
+      emit(state.copyWith(
+          status: CaptainShareStates.success, routeDetails: data));
     });
   }
 
@@ -366,10 +553,12 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     final response = await getRunningRouteUseCase(NoParams());
     response.fold((l) {
       String errorName = getFailureMessage(l, context);
-      showErrorMessage(context,  errorName);
+      showErrorMessage(context, errorName);
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
-      emit(state.copyWith(status: CaptainShareStates.success,runningRoute:data));
+      initRunningRouteData();
+      emit(state.copyWith(
+          status: CaptainShareStates.success, runningRoute: data));
     });
   }
 
@@ -390,7 +579,6 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
         status: CaptainShareStates.success, currentLocation: currentLocation));
   }
 
-
   void emitRefreshState() {
     emit(state.copyWith(status: CaptainShareStates.success));
   }
@@ -405,11 +593,13 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     print("toLocation.lat ${toLocation.lat}");
     print("toLocation.lat ${toLocation.lng}");
     print("toLocation.lat ${toLocation.address}");
-    emit(state.copyWith(status: CaptainShareStates.success, toLocation: toLocation));
+    emit(state.copyWith(
+        status: CaptainShareStates.success, toLocation: toLocation));
   }
 
   Future<void> createOffer(
-      {required CreatePricePerSeatParams params, required BuildContext context}) async {
+      {required CreatePricePerSeatParams params,
+      required BuildContext context}) async {
     showLoadingDialog(context);
     final response = await createPricePerSeatUseCase(params);
     response.fold((l) {
@@ -423,22 +613,29 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
       context.pop();
-      emit(state.copyWith(status: CaptainShareStates.success,pricePerSeat:data));
+      emit(state.copyWith(
+          status: CaptainShareStates.success, pricePerSeat: data));
     });
   }
 
   Future<void> createRoute(
-      {required CreatePricePerSeatParams params, required BuildContext context}) async {
+      {required CreatePricePerSeatParams params,
+      required BuildContext context}) async {
     showLoadingDialog(context);
     final response = await createRouteUseCase(params);
     response.fold((l) {
       context.pop();
       String errorName = getFailureName(l, context);
-      errorName == 'DebtError'||errorName == 'Insufficient Funds'
-          ? showDebtDialog(context, '62c8ba9f8e28a58a3edf57ee',context.isArabic?'يجب اين يكون لديك رصيد في المحفظه لانشاء رحله':'You must have a balance to create a route')
+      errorName == 'DebtError' || errorName == 'Insufficient Funds'
+          ? showDebtDialog(
+              context,
+              '62c8ba9f8e28a58a3edf57ee',
+              context.isArabic
+                  ? 'يجب اين يكون لديك رصيد في المحفظه لانشاء رحله'
+                  : 'You must have a balance to create a route')
           : errorName == 'SubscribeError'
-          ? showSubscribeDialog(context, '62c8ba9f8e28a58a3edf57ee')
-          : showErrorMessage(context, getFailureMessage(l, context));
+              ? showSubscribeDialog(context, '62c8ba9f8e28a58a3edf57ee')
+              : showErrorMessage(context, getFailureMessage(l, context));
 
       emit(state.copyWith(failure: l, status: CaptainShareStates.error));
     }, (data) {
@@ -448,7 +645,6 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     });
   }
 
-
   List<MyBookingEntity> myBookings = [];
   bool isLoadingMore = false;
   bool isLoadingMyBookings = false;
@@ -457,7 +653,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   int pageSize = 10;
 
   void loadInitialData(BuildContext context) async {
-    isLoadingMyBookings=true;
+    isLoadingMyBookings = true;
     emit(state.copyWith(status: CaptainShareStates.loading));
     print("object");
     myBookings.clear();
@@ -465,7 +661,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     hasMoreData = true;
     isLoadingMore = false;
     await getMyBookings(context);
-    isLoadingMyBookings=false;
+    isLoadingMyBookings = false;
     emit(state.copyWith(status: CaptainShareStates.success));
   }
 
@@ -476,20 +672,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     isLoadingMore = true;
 
     final response = await getMyBookingsUseCase(
-      PaginationParams(
-          limit: 10,page: currentPage),
+      PaginationParams(limit: 10, page: currentPage),
     );
 
     response.fold(
-          (failure) {
-            print("objectFailure ${getFailureMessage(failure, context)}");
-            emit(
-          state.copyWith(failure: failure, status: CaptainShareStates.error));
-          },
-          (data) {
-            print("objectData ${data.length}");
+      (failure) {
+        print("objectFailure ${getFailureMessage(failure, context)}");
+        emit(
+            state.copyWith(failure: failure, status: CaptainShareStates.error));
+      },
+      (data) {
+        print("objectData ${data.length}");
         myBookings.addAll(data);
-            print("objectData ${myBookings.length}");
+        print("objectData ${myBookings.length}");
 
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -510,7 +705,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   int currentAvailablePage = 1;
 
   void loadInitialAvailableData(BuildContext context) async {
-    isLoadingAvailableBookings=true;
+    isLoadingAvailableBookings = true;
     emit(state.copyWith(status: CaptainShareStates.loading));
     print("object");
     availableBookings.clear();
@@ -518,7 +713,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     hasMoreAvailableData = true;
     isLoadingMoreAvailable = false;
     await getAvailableBookings(context);
-    isLoadingAvailableBookings=false;
+    isLoadingAvailableBookings = false;
     emit(state.copyWith(status: CaptainShareStates.success));
   }
 
@@ -529,20 +724,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     isLoadingMoreAvailable = true;
 
     final response = await getAvailableBookingsUseCase(
-      PaginationParams(
-          limit: 10,page: currentAvailablePage),
+      PaginationParams(limit: 10, page: currentAvailablePage),
     );
 
     response.fold(
-          (failure) {
-            print("objectFailure ${getFailureMessage(failure, context)}");
-            emit(
-          state.copyWith(failure: failure, status: CaptainShareStates.error));
-          },
-          (data) {
-            print("objectData ${data.length}");
-            availableBookings.addAll(data);
-            print("objectData ${availableBookings.length}");
+      (failure) {
+        print("objectFailure ${getFailureMessage(failure, context)}");
+        emit(
+            state.copyWith(failure: failure, status: CaptainShareStates.error));
+      },
+      (data) {
+        print("objectData ${data.length}");
+        availableBookings.addAll(data);
+        print("objectData ${availableBookings.length}");
 
         if (data.length < pageSize) {
           hasMoreAvailableData = false;
@@ -563,7 +757,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   int currentExpiredPage = 1;
 
   void loadInitialExpiredData(BuildContext context) async {
-    isLoadingExpiredBookings=true;
+    isLoadingExpiredBookings = true;
     emit(state.copyWith(status: CaptainShareStates.loading));
     print("object");
     expiredBookings.clear();
@@ -571,7 +765,7 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     hasMoreExpiredData = true;
     isLoadingMoreExpired = false;
     await getExpiredBookings(context);
-    isLoadingExpiredBookings=false;
+    isLoadingExpiredBookings = false;
     emit(state.copyWith(status: CaptainShareStates.success));
   }
 
@@ -582,20 +776,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     isLoadingMoreExpired = true;
 
     final response = await getExpiredBookingsUseCase(
-      PaginationParams(
-          limit: 10,page: currentExpiredPage),
+      PaginationParams(limit: 10, page: currentExpiredPage),
     );
 
     response.fold(
-          (failure) {
-            print("objectFailure ${getFailureMessage(failure, context)}");
-            emit(
-          state.copyWith(failure: failure, status: CaptainShareStates.error));
-          },
-          (data) {
-            print("objectData ${data.length}");
-            expiredBookings.addAll(data);
-            print("objectData ${expiredBookings.length}");
+      (failure) {
+        print("objectFailure ${getFailureMessage(failure, context)}");
+        emit(
+            state.copyWith(failure: failure, status: CaptainShareStates.error));
+      },
+      (data) {
+        print("objectData ${data.length}");
+        expiredBookings.addAll(data);
+        print("objectData ${expiredBookings.length}");
 
         if (data.length < pageSize) {
           hasMoreExpiredData = false;
@@ -616,14 +809,14 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
   int currentRunningPage = 1;
 
   void loadInitialRunningData(BuildContext context) async {
-    isLoadingRunningBookings=true;
+    isLoadingRunningBookings = true;
     emit(state.copyWith(status: CaptainShareStates.loading));
     runningBookings.clear();
     currentRunningPage = 1;
     hasMoreRunningData = true;
     isLoadingMoreRunning = false;
     await getRunningBookings(context);
-    isLoadingRunningBookings=false;
+    isLoadingRunningBookings = false;
     emit(state.copyWith(status: CaptainShareStates.success));
   }
 
@@ -634,20 +827,19 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     isLoadingMoreRunning = true;
 
     final response = await getRunningBookingsUseCase(
-      PaginationParams(
-          limit: 10,page: currentRunningPage),
+      PaginationParams(limit: 10, page: currentRunningPage),
     );
 
     response.fold(
-          (failure) {
-            print("objectFailure ${getFailureMessage(failure, context)}");
-            emit(
-          state.copyWith(failure: failure, status: CaptainShareStates.error));
-          },
-          (data) {
-            print("objectData ${data.length}");
-            runningBookings.addAll(data);
-            print("objectData ${runningBookings.length}");
+      (failure) {
+        print("objectFailure ${getFailureMessage(failure, context)}");
+        emit(
+            state.copyWith(failure: failure, status: CaptainShareStates.error));
+      },
+      (data) {
+        print("objectData ${data.length}");
+        runningBookings.addAll(data);
+        print("objectData ${runningBookings.length}");
 
         if (data.length < pageSize) {
           hasMoreRunningData = false;
@@ -661,7 +853,6 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
     );
   }
 
-
   getEmergencyDetails(
       BuildContext context, SupportRideParams mainParams) async {
     GetSupportDetailsParams params = GetSupportDetailsParams(
@@ -670,13 +861,14 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
         userType: mainParams.userType);
     emit(state.copyWith(status: CaptainShareStates.loading));
     final Either<Failure, SupportDetailsEntity> result =
-    await getSupportDetailsUseCase(params);
+        await getSupportDetailsUseCase(params);
 
     result.fold(
-          (failure) {
-        emit(state.copyWith(status: CaptainShareStates.error, failure: failure));
+      (failure) {
+        emit(
+            state.copyWith(status: CaptainShareStates.error, failure: failure));
       },
-          (data) async {
+      (data) async {
         emit(state.copyWith(
             supportDetails: data,
             supportStatus: data.status,
@@ -684,5 +876,6 @@ class CaptainShareCubit extends Cubit<CaptainShareState> {
       },
     );
   }
+
 
 }

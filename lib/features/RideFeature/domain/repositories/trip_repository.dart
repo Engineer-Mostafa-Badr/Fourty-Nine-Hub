@@ -14,6 +14,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_support_details_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_update_location_driver_use_case.dart';
+import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_cancel_route_use_case.dart';
 
 import '../../../../core/error/failure.dart';
@@ -89,6 +91,14 @@ abstract class TripRepository {
    void listenToNewRoute(Function(MyBookingEntity newBooking) params);
    void listenToDriverTheOnWay(Function(MyBookingEntity newBooking) params);
    void listenToNewRouteDriver(Function(MyBookingEntity newBooking) params);
+   void listenToComingClient(Function(ListenToClientComingParams params) params);
+   void listenToDriverArrived(Function(String waitingTime) params);
+   void listenToRouteCancelled(Function(String message) params);
+   void listenToDriverOnTheWay(Function(String message) params);
+   void listenToTripAccept(Function(String message) params);
+   void listenToUpdateLocationDriver(Function(UpdateLocationDriverParams params) params);
+   void listenToDriverNoShowClient(Function(String waitingTime) params);
+   void listenToPassengerPickedUp(Function(String message) params);
    void listenToJoinAvailableRoutes(Function(bool isJoined) params);
    void listenToLeaveAvailableRoutes(Function(String routeId) params);
    Future<Either<Failure, List<GetLoadingAcceptedEntity>>> getAcceptedNonSocketLoading(ClientPendingTripParams params);

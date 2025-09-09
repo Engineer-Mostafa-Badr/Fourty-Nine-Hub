@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,9 +71,8 @@ class _ReelActionsState extends State<ReelActions> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          
                           UserSection(reel: widget.reel),
-                            const SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           if (widget.reel.caption.isNotEmpty)
                             CaptionWidget(
                               caption: widget.reel.caption,
@@ -84,7 +82,7 @@ class _ReelActionsState extends State<ReelActions> {
                           if (widget.reel.hashtags.isNotEmpty)
                             GestureDetector(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 context.push(Routes.TiktokOptionScreen);
                               },
                               child: const TagWidget(),
@@ -97,7 +95,7 @@ class _ReelActionsState extends State<ReelActions> {
                             const SizedBox(height: 6),
                           if (widget.reel.shopNowUrl.isNotEmpty)
                             const ShopNowButton(),
-                             const SizedBox(height: 50),
+                          const SizedBox(height: 50),
                           // if (widget.reel.audio.audioName.isNotEmpty)
                           //   const SizedBox(height: 6),
                           // if (widget.reel.audio.audioName.isNotEmpty)
@@ -179,9 +177,9 @@ class _UserAvatarState extends State<_UserAvatar> {
       ),
       child: InkWell(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           if (!serviceLocator<UserCubit>().isLoggedIn) {
-            context.read<PreloadBloc>().pauseTheVideo();
+            context.read<PreloadBloc>().pauseCurrent();
             context.push(Routes.LOGIN);
           } else {
             context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
@@ -210,7 +208,7 @@ class _UserAvatarState extends State<_UserAvatar> {
                     bottom: -5,
                     child: GestureDetector(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
                           if (widget.reel.user.areFriends == true) {
                           } else {
@@ -286,9 +284,9 @@ class _UserInfoState extends State<_UserInfo> {
         children: [
           InkWell(
             onTap: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.read<PreloadBloc>().pauseTheVideo();
+                context.read<PreloadBloc>().pauseCurrent();
                 context.push(Routes.LOGIN);
               } else {
                 context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
@@ -311,7 +309,7 @@ class _UserInfoState extends State<_UserInfo> {
                     ? Container()
                     : GestureDetector(
                         onTap: () async {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (context.read<UserCubit>().isLoggedIn) {
                             if (widget.reel.user.isFollowed == true) {
                               var result = await controller.unFollowRequest(
@@ -1762,7 +1760,7 @@ class _AudioAndButtons extends StatelessWidget {
 //                       SvgPicture.asset(Assets.dividerIcon),
 //                       SoundOptionBottomSheet(
 //                         onTap: () {
-//                           context.pushNamed(Routes.UseSoundScreen);
+//                           context.push(Routes.UseSoundScreen);
 //                         },
 //                         icon: Assets.useSoundIcon,
 //                         title: context.isArabic

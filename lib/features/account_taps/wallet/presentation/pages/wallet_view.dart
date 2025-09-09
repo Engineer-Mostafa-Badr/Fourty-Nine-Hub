@@ -36,12 +36,13 @@ class WalletView extends StatelessWidget {
                 icon: Icons.wallet,
                 onTap: () {
                   ManageVibration.vibrate();
-                   bottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    widget: const WalletHistory(
-                      list: [],
-                    ));},
+                  bottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      widget: const WalletHistory(
+                        list: [],
+                      ));
+                },
                 label: 'Balance',
                 value: '${100}'),
             walletInfoCell(

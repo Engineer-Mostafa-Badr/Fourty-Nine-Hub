@@ -1,0 +1,353 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
+import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/error_widget.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/loading_indicator.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+
+import '../../../../service_locator/service_locator.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../controller/profile_cubit/profile_cubit.dart';
+import '../controller/star_cubit/star_cubit.dart';
+import '../utils/enums.dart';
+import '../widgets/profile_components/edit_profile_sheet.dart';
+import '../widgets/profile_components/profile_app_bar.dart';
+import '../widgets/profile_components/profile_header.dart';
+import '../widgets/profile_components/profile_tab_bar.dart';
+import '../widgets/profile_components/profile_tabs_content.dart';
+
+class ProfilePageView extends StatefulWidget {
+  final UserStarEntity? user;
+  final List<StarEntity> userVideos;
+  final bool isCurrentUser;
+  final String? profileId;
+
+  const ProfilePageView({
+    super.key,
+    this.user,
+    required this.userVideos,
+    this.isCurrentUser = true,
+    this.profileId,
+  });
+
+  @override
+  State<ProfilePageView> createState() => _ProfilePageViewState();
+}
+
+class _ProfilePageViewState extends State<ProfilePageView>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  late TabController _tabController;
+  late ProfileCubit _profileCubit;
+  late StarCubit _starCubit;
+  late ScrollController _scrollController;
+
+  List<StarEntity> _userRealVideos = [];
+  bool _isLoadingUserVideos = false;
+
+  bool _isAppBarExpanded = true;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeControllers();
+    _loadProfileAndVideos();
+  }
+
+  void _initializeControllers() {
+    _tabController = TabController(length: 3, vsync: this);
+    _profileCubit = context.read<ProfileCubit>();
+    _starCubit = context.read<StarCubit>();
+    _scrollController = ScrollController();
+
+    // Listen to scroll to handle app bar animation
+    _scrollController.addListener(_handleScroll);
+  }
+
+  void _loadProfileAndVideos() async {
+    // Load profile data
+    if (widget.isCurrentUser && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_profileCubit.isClosed) {
+          _profileCubit.getMyProfile();
+        }
+      });
+    } else if (widget.profileId != null && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_profileCubit.isClosed) {
+          _profileCubit.getProfileById(widget.profileId!);
+        }
+      });
+    }
+
+    // Load user's actual videos
+    await _loadUserActualVideos();
+  }
+
+  Future<void> _loadUserActualVideos() async {
+    print("🎥 Starting to load user actual videos");
+    print("👤 Is current user: ${widget.isCurrentUser}");
+    print("📦 Widget fallback videos: ${widget.userVideos.length}");
+
+    setState(() {
+      _isLoadingUserVideos = true;
+    });
+
+    try {
+      if (widget.isCurrentUser) {
+        // For current user, load their videos from myTalents
+        print("🎬 Loading current user's myTalents");
+        await _starCubit.loadTalents(TalentCategory.myTalents, refresh: true);
+
+        final myTalents = _starCubit.state.myTalents;
+        print("✅ Loaded myTalents: ${myTalents.length}");
+
+        setState(() {
+          _userRealVideos = myTalents;
+        });
+      } else {
+        print("👥 Loading other user's videos");
+
+        // First, ensure available videos are loaded
+        if (_starCubit.state.availableTalents.isEmpty) {
+          print("🔄 Loading available videos first...");
+          await _starCubit.loadTalents(TalentCategory.available, refresh: true);
+        }
+
+        // Filter videos that belong to this specific user from available videos
+        final availableVideos = _starCubit.state.availableTalents;
+        print("📺 Available videos in cubit: ${availableVideos.length}");
+
+        final filteredVideos = availableVideos
+            .where((video) => video.user.id == widget.user?.id)
+            .toList();
+        print(
+            "🔍 Filtered videos for user ${widget.user?.id}: ${filteredVideos.length}");
+
+        // Use filtered videos or fallback to widget videos
+        if (filteredVideos.isNotEmpty) {
+          _userRealVideos = filteredVideos;
+          print("✅ Using filtered videos: ${_userRealVideos.length}");
+        } else {
+          _userRealVideos = widget.userVideos;
+          print("📦 Using fallback widget videos: ${_userRealVideos.length}");
+        }
+      }
+    } catch (e) {
+      print('❌ Error loading user videos: $e');
+      // Fallback to provided videos
+      _userRealVideos = widget.userVideos;
+      print("🆘 Using emergency fallback: ${_userRealVideos.length}");
+    }
+
+    setState(() {
+      _isLoadingUserVideos = false;
+    });
+
+    print("🏁 Finished loading user videos: ${_userRealVideos.length}");
+  }
+
+  void _handleScroll() {
+    const expandedHeight = 200.0;
+    final isExpanded = _scrollController.hasClients &&
+        _scrollController.offset < expandedHeight;
+
+    if (_isAppBarExpanded != isExpanded) {
+      setState(() => _isAppBarExpanded = isExpanded);
+    }
+  }
+
+  void _showEditProfileSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) => BlocProvider.value(
+        value: _profileCubit,
+        child: EditProfileSheet(
+          currentProfile: _profileCubit.state.profile,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, profileState) {
+          return _buildContent(profileState, widget.isCurrentUser);
+        },
+      ),
+    );
+  }
+
+  // Function to get current user ID
+  String? _getCurrentUserId() {
+    try {
+      return UserCubit.to.state.data?.id;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Widget _buildContent(
+      ProfileState profileState, bool isCurrentUserFromProfile) {
+    debugPrint('Profile State: ${profileState.status}');
+    debugPrint('Has Profile: ${profileState.hasProfile}');
+    debugPrint('User Videos Count: ${_userRealVideos.length}');
+    debugPrint('Is Loading User Videos: $_isLoadingUserVideos');
+    debugPrint('Is Current User (ProfileEntity): $isCurrentUserFromProfile');
+
+    if (profileState.isLoading && !profileState.hasProfile) {
+      return const Center(
+        child: StarLoadingIndicator(message: 'Loading profile...'),
+      );
+    }
+
+    if (profileState.isError && !profileState.hasProfile) {
+      return Center(
+        child: StarErrorWidget(
+          message: profileState.failure?.toString() ?? 'Failed to load profile',
+          onRetry: () {
+            if (isCurrentUserFromProfile) {
+              _profileCubit.getMyProfile();
+            } else if (widget.profileId != null) {
+              _profileCubit.getProfileById(widget.profileId!);
+            }
+          },
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        ProfileAppBar(
+          profileUser: widget.user,
+          currentUserId: _getCurrentUserId(),
+          onEditPressed: () {
+            ManageVibration.vibrate();
+            if (isCurrentUserFromProfile) {
+              _showEditProfileSheet();
+            }
+          },
+          onBackPressed: () {
+            ManageVibration.vibrate();
+            Navigator.pop(context);
+          },
+        ),
+        Expanded(
+          child: SafeArea(
+            top: false,
+            child: NestedScrollView(
+              controller: _scrollController,
+              physics: const ClampingScrollPhysics(),
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverToBoxAdapter(
+                    child: ProfileHeader(
+                      profile: profileState.profile,
+                      user: widget.user,
+                      isCurrentUser: isCurrentUserFromProfile,
+                      videosCount: _getVideosCount(profileState),
+                    ),
+                  ),
+                  SliverPersistentHeader(
+                    pinned: true,
+                    floating: false,
+                    delegate: _SliverTabBarDelegate(
+                      ProfileTabBar(tabController: _tabController),
+                    ),
+                  ),
+                ];
+              },
+              body: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: BlocProvider.value(
+                  value: _starCubit,
+                  child: ProfileTabsContent(
+                    tabController: _tabController,
+                    extendedVideos: _userRealVideos,
+                    isCurrentUser: isCurrentUserFromProfile,
+                    userId: isCurrentUserFromProfile ? null : widget.user?.id,
+                    isLoadingUserVideos: _isLoadingUserVideos,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  int _getVideosCount(ProfileState profileState) {
+    // Return actual user videos count
+    if (_userRealVideos.isNotEmpty) {
+      return _userRealVideos.length;
+    }
+
+    // Fallback to profile data or widget data
+    if (widget.isCurrentUser && profileState.profile != null) {
+      return profileState.profile!.videosCount;
+    }
+
+    return widget.userVideos.length;
+  }
+}
+
+// Custom SliverPersistentHeaderDelegate for TabBar
+class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final ProfileTabBar _tabBar;
+
+  _SliverTabBarDelegate(this._tabBar);
+
+  @override
+  double get minExtent => 56.0;
+
+  @override
+  double get maxExtent => 56.0;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      height: 56.0,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: overlapsContent
+            ? [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ]
+            : null,
+      ),
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {
+    return false;
+  }
+}

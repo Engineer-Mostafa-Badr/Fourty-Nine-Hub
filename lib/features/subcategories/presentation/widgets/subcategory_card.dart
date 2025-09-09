@@ -69,7 +69,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                               ? Icons.favorite_outline
                               : Icons.favorite,
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             var result = await widget.onFav();
                             if (result == true) {
                               widget.item.isFavorite = !widget.item.isFavorite!;
@@ -88,7 +88,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                     size: 40.h,
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       if (AuthHelper().isLoggedIn()) {
                         context.push(Routes.CREATEAD,
                             extra: CategorizationEntity(
