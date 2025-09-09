@@ -75,9 +75,15 @@ class LockedProfileScreen extends StatelessWidget {
                         const Sizer(
                           height: 40,
                         ),
-                        customButton(color: AppColors.PRIMARY_COLOR,),
-                        const Sizer(height: 40,),
-                        sectionTitle(context.isArabic ? 'ابحث عن اصدقاء' : 'Find Friends'),
+                        customButton(
+                          color: AppColors.PRIMARY_COLOR,
+                        ),
+                        const Sizer(
+                          height: 40,
+                        ),
+                        sectionTitle(context.isArabic
+                            ? 'ابحث عن اصدقاء'
+                            : 'Find Friends'),
                         const Sizer(),
                         SizedBox(
                           height: 0.22.sh,
@@ -101,17 +107,17 @@ class LockedProfileScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget sectionTitle(String title, {String? trailing}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title,
-            style:const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         if (trailing != null)
           ClickableWidget(
             onTap: () {
-
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
             },
             child: Row(
               children: [
@@ -126,6 +132,7 @@ class LockedProfileScreen extends StatelessWidget {
       ],
     );
   }
+
   Widget profileTile(BuildContext context, {bool isOnline = false}) {
     return Row(
       children: [
@@ -141,9 +148,12 @@ class LockedProfileScreen extends StatelessWidget {
               Positioned(
                 bottom: 10.h,
                 right: 10.h,
-                child: Container(decoration: BoxDecoration(shape: BoxShape.circle,color:Theme.of(context).scaffoldBackgroundColor ),
+                child: Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     padding: EdgeInsets.all(4.h),
-                    child:  CircleAvatar(
+                    child: CircleAvatar(
                       radius: 10.h,
                       backgroundColor: Colors.green,
                     )),
@@ -175,16 +185,16 @@ class LockedProfileScreen extends StatelessWidget {
       ],
     );
   }
-  Widget customButton( {
-        required Color color,
-      }) {
+
+  Widget customButton({
+    required Color color,
+  }) {
     return ClickableWidget(
       onTap: () {
-
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
       },
       child: Container(
-         width: double.infinity,
+        width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.h),
         decoration: BoxDecoration(
           color: color,
@@ -200,9 +210,7 @@ class LockedProfileScreen extends StatelessWidget {
                 color: Colors.white,
                 size: 30.h,
               ),
-              const Sizer(
-
-              ),
+              const Sizer(),
               Text(
                 LocaleKeys.add.localize,
                 style: Styles.mediumText(

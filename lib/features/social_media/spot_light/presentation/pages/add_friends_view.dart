@@ -88,8 +88,10 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                       color: AppColors.getTextColor(context),
                     ),
                     hint: context.isArabic ? 'بحث...' : 'Search...',
-                    style: Styles.mediumText(color: AppColors.getTextColor(context)),
-                    textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                    style: Styles.mediumText(
+                        color: AppColors.getTextColor(context)),
+                    textStyle: Styles.mediumText(
+                        color: AppColors.getTextColor(context)),
                     fillColor: AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -107,7 +109,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                       return FriendsTile(
                         index: index,
                         name: "Ahmed Mohamed",
-                        subtitle: context.isArabic?'مرحباً!':"Say Hi!",
+                        subtitle: context.isArabic ? 'مرحباً!' : "Say Hi!",
                         hasCameraButtons: index == 1 ? false : true,
                         isMyContact: index == 1 ? true : false,
                         hasAcceptButton: index == 1 ? true : false,
@@ -231,7 +233,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       //margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       padding: EdgeInsets.symmetric(vertical: 6.h),
       decoration: BoxDecoration(
-        color: context.isDarkMode?AppColors.getFindFillColor(context):Colors.grey.shade300,
+        color: context.isDarkMode
+            ? AppColors.getFindFillColor(context)
+            : Colors.grey.shade300,
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -273,7 +277,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
         trailing: TextButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             setState(() {
               blockedIndexes.remove(index);
             });
@@ -293,15 +297,16 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextButton.icon(
         onPressed: () {
-
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
         },
         icon: Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-              color: AppColors.getTextColor(context), borderRadius: BorderRadius.circular(6)),
+              color: AppColors.getTextColor(context),
+              borderRadius: BorderRadius.circular(6)),
           child: Text(context.isArabic ? 'جديد' : "New",
-              style: Styles.mediumText(color:AppColors.getReversedTextColor(context))),
+              style: Styles.mediumText(
+                  color: AppColors.getReversedTextColor(context))),
         ),
         label: Text(
           context.isArabic ? 'مشاهدة 2 اخرين' : "view 2 more",

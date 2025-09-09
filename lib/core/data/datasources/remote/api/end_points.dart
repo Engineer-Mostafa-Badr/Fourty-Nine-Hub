@@ -960,7 +960,7 @@ class EndPoints {
       '/user-follow/unfollow/$userId';
 
   static String reactOnTwitterPost(String postId) {
-    return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$postId/toggle-like';
   }
 
   static String reactOnTwitterComment(String commentId) {
@@ -1001,7 +1001,7 @@ class EndPoints {
   }
 
   static String commentOnTwitterPost(String postId) {
-    return '/twitter/comment/create-comment/$postId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$postId/reply';
   }
 
   static String getPostComments(PostCommentsParams params) {
@@ -1013,11 +1013,11 @@ class EndPoints {
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
-    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/${params.postId}/replies?limit=${params.limit}&page=${params.page}';
   }
 
   static String getTwitterCommentReplies(PostCommentsParams params) {
-    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/${params.postId}/replies?limit=${params.limit}&page=${params.page}';
   }
 
   static String deletePost(String postId) {
@@ -1749,6 +1749,13 @@ class EndPoints {
   static const likeMedia = '/spotlight/media/like';
   static const unlikeMedia = '/spotlight/media/unlike';
   static const deleteMedia = '/spotlight/media/delete';
+
+  static String numberOfFollowers(String subCategoryId) =>
+      "/follow/numberOfFollowers?subCategory=$subCategoryId";
+
+  static String numberOfFollowing(String subCategoryId) =>
+      "/follow/numberOfFollowing?subCategory=$subCategoryId";
+
 
   static String getForYouSongs({required SongsPaginationParams params}) =>
       '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
