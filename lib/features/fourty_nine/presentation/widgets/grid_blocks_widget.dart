@@ -250,7 +250,12 @@ class GridBlocksWidget extends StatelessWidget {
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('beAStarCount', context);
-          context.push(Routes.BE_STAR);
+          // context.push(Routes.BE_STAR);
+          context.push(
+            context.read<UserCubit>().isLoggedIn
+                ? Routes.BE_STAR
+                : Routes.FirstLoginScreen,
+          );
         },
         shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .4),
         image: Assets.tube1,
@@ -280,17 +285,15 @@ class GridBlocksWidget extends StatelessWidget {
         image: Assets.chanceImage,
         title: LocaleKeys.chance.localize,
       ),
-
       _buildStarWidget(
         context,
         onTap: () {
           ManageVibration.vibrate();
-          soonDialog(context);
-          // AdInterstitialTop.loadIntersitialAd();
-          // AdInterstitialTop.showInterstitialAd();
-          // context.push(Routes.MARRIAGESUBCATEGORIES);
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          context.push(Routes.EXCHANGECURRENCY);
         },
-        shadowColor: Colors.pinkAccent.withValues(alpha: 0.9),
+        shadowColor: Colors.green.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
         title: context.isArabic ? 'عملات' : 'Exchange',
       ),
