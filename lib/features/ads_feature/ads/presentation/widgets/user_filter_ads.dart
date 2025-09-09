@@ -37,7 +37,7 @@ class _UserFilterAdsState extends State<UserFilterAds> {
         _scrollController.position.maxScrollExtent - 200) {
       context
           .read<AdvertisementCubit>()
-          .loadFilterAdsData(model: widget.model, filter: widget.userType);
+          .loadFilterAdsData(model: widget.model, filter: widget.userType,isFromCity:false);
 
     }
   }

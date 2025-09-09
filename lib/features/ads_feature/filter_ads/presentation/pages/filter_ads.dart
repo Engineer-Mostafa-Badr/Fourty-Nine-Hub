@@ -161,7 +161,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                           controller.filterAds(
                               categorize: widget.filterAdsParams.categorization,
                               userType: widget.filterAdsParams.userType,
-                              context: context);
+                              context: context, isFromCity: false);
                         },
                         child: Container(
                           alignment: Alignment.center,

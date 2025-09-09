@@ -72,7 +72,7 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
       scrollController: _scrollController,
       itemsPerPage: 2,
       loadPage: (page) => widget.controller
-          .loadFilterAdsData(model: widget.model, filter: widget.userType),
+          .loadFilterAdsData(model: widget.model, filter: widget.userType,isFromCity:false),
       banners: bannersList,
       items: List.generate(
           widget.controller.ads.length +
