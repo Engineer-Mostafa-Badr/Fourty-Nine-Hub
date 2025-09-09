@@ -1717,6 +1717,7 @@ class EndPoints {
   static String applyViewTripJoin = '/trip-join/offers/';
   static String applyReadRequestTripJoin = '/trip-join/requests/';
   static String createTripJoinOffer = '/trip-join/offers';
+  static String createPickMeOffer = '/pick-me/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
   static const updateDriverLoadingRatingNonSocket =

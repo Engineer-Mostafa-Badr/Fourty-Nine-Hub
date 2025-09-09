@@ -40,7 +40,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
     context.read<CreateAdCubit>().loadData(
         subCategoryId:
             widget.filterAdsParams.categorization.fromMarriage == false
-                ? widget.filterAdsParams.categorization.mainCategory.id
+                ? widget.filterAdsParams.categorization.subCategory.id
                 : widget.filterAdsParams.categorization.subCategory.id,
         fromMarriage:
             widget.filterAdsParams.categorization.fromMarriage ?? false);
