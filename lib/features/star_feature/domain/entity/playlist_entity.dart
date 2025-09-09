@@ -9,7 +9,8 @@ class PlaylistEntity {
   final DateTime createdAt;
   final int videosCount;
   final Duration totalDuration;
-  final String ownerId; // Add this for user identification
+  final String ownerId;
+  final DateTime? updatedAt;
 
   PlaylistEntity({
     required this.id,
@@ -21,6 +22,7 @@ class PlaylistEntity {
     int? videosCount,
     Duration? totalDuration,
     required this.ownerId,
+    this.updatedAt,
   })  : videosCount = videosCount ?? videos.length,
         totalDuration = totalDuration ?? const Duration();
 
@@ -34,6 +36,7 @@ class PlaylistEntity {
     int? videosCount,
     Duration? totalDuration,
     String? ownerId,
+    DateTime? updatedAt,
   }) {
     return PlaylistEntity(
       id: id ?? this.id,
@@ -45,6 +48,7 @@ class PlaylistEntity {
       videosCount: videosCount ?? this.videosCount,
       totalDuration: totalDuration ?? this.totalDuration,
       ownerId: ownerId ?? this.ownerId,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -106,5 +110,30 @@ class PlaylistVideoParams {
     return {
       'videoId': videoId,
     };
+  }
+}
+
+// Parameters for updating playlist
+class PlaylistParams {
+  final String playlistId;
+  final String? name;
+  final String? description;
+  final String? thumbnailMediaId;
+
+  PlaylistParams({
+    required this.playlistId,
+    this.name,
+    this.description,
+    this.thumbnailMediaId,
+  });
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    
+    if (name != null) data['name'] = name;
+    if (description != null) data['description'] = description;
+    if (thumbnailMediaId != null) data['thumbnail'] = thumbnailMediaId;
+    
+    return data;
   }
 }

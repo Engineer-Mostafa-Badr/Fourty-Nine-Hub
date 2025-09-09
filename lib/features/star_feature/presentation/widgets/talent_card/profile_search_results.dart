@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
-import '../../../../res/style/app_colors.dart';
-import '../../domain/entity/profile_entity.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../domain/entity/profile_entity.dart';
 
 class ProfileSearchResults extends StatelessWidget {
   final List<ProfileEntity> profiles;

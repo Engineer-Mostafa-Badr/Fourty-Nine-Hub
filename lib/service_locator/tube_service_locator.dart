@@ -238,6 +238,13 @@ class TubeServiceLocator {
       );
     }
 
+    // IMPORTANT: Add the missing GetPlaylistWithVideosUseCase
+    if (!serviceLocator.isRegistered<GetPlaylistWithVideosUseCase>()) {
+      serviceLocator.registerLazySingleton<GetPlaylistWithVideosUseCase>(
+        () => GetPlaylistWithVideosUseCase(serviceLocator()),
+      );
+    }
+
     if (!serviceLocator.isRegistered<AddVideoToPlaylistUseCase>()) {
       serviceLocator.registerLazySingleton<AddVideoToPlaylistUseCase>(
         () => AddVideoToPlaylistUseCase(serviceLocator()),
@@ -301,12 +308,13 @@ class TubeServiceLocator {
       ),
     );
 
-    //! NEW: Playlist Cubit Registration
+    //! UPDATED: Playlist Cubit Registration with GetPlaylistWithVideosUseCase
     serviceLocator.registerFactory<PlaylistCubit>(
       () => PlaylistCubit(
         serviceLocator<GetPlaylistsUseCase>(),
         serviceLocator<CreatePlaylistUseCase>(),
         serviceLocator<GetPlaylistByIdUseCase>(),
+        serviceLocator<GetPlaylistWithVideosUseCase>(), // ADDED THIS LINE
         serviceLocator<AddVideoToPlaylistUseCase>(),
         serviceLocator<RemoveVideoFromPlaylistUseCase>(),
         serviceLocator<DeletePlaylistUseCase>(),

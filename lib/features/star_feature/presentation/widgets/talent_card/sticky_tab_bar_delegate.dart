@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-import '../../../../core/extensions/context_extension.dart';
+import '../../../../../core/extensions/context_extension.dart';
 
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;

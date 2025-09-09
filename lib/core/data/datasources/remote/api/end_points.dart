@@ -1830,9 +1830,13 @@ class EndPoints {
   static String getPlaylists(String ownerId) =>
       '/tube-playlist?ownerId=$ownerId';
 
-  // Get playlist by ID
+  // Get playlist by ID (basic info)
   static String getPlaylistById(String playlistId) =>
       '/tube-playlist/$playlistId';
+
+  // NEW: Get playlist with videos (full details)
+  static String getPlaylistWithVideos(String playlistId) =>
+      '/tube-playlist/$playlistId?includeVideos=true';
 
   // Add video to playlist
   static String addVideoToPlaylist(String playlistId) =>

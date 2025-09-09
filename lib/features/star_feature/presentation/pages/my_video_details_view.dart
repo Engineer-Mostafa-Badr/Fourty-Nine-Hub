@@ -9,12 +9,12 @@ import '../../domain/entity/viewer_entity.dart';
 import '../../domain/use_case/comment_use_cases.dart';
 import '../controller/star_cubit/star_cubit.dart';
 import '../controller/video_details_cubit/video_details_cubit.dart';
-import '../widgets/video_details/modals/comments_modal.dart';
-import '../widgets/video_details/modals/viewers_modal.dart';
-import '../widgets/video_details/video_actions_section.dart';
-import '../widgets/video_details/video_details_app_bar.dart';
-import '../widgets/video_details/video_info_section.dart';
-import '../widgets/video_details/video_player_widget.dart';
+import '../widgets/my_video_details/modals/comments_modal.dart';
+import '../widgets/my_video_details/modals/viewers_modal.dart';
+import '../widgets/my_video_details/video_actions_section.dart';
+import '../widgets/my_video_details/video_details_app_bar.dart';
+import '../widgets/my_video_details/video_info_section.dart';
+import '../widgets/my_video_details/video_player_widget.dart';
 
 class VideoDetailsView extends StatefulWidget {
   final StarEntity talent;

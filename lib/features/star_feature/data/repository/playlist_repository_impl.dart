@@ -50,6 +50,22 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
   }
 
   @override
+  Future<Either<Failure, PlaylistEntity>> getPlaylistWithVideos(String playlistId) async {
+    try {
+      print('📥 Repository: Getting playlist with videos: $playlistId');
+      final result = await remoteDataSource.getPlaylistWithVideos(playlistId);
+      print('✅ Repository: Successfully got playlist with ${result.videos.length} videos');
+      return Right(result);
+    } catch (e) {
+      print('❌ Repository: Error getting playlist with videos: $e');
+      if (e is Failure) {
+        return Left(e);
+      }
+      return Left(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, String>> addVideoToPlaylist(PlaylistVideoParams params) async {
     try {
       final result = await remoteDataSource.addVideoToPlaylist(params);
@@ -89,7 +105,7 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
   }
 
   @override
-  Future<Either<Failure, String>> updatePlaylist(UpdatePlaylistParams params) async {
+  Future<Either<Failure, String>> updatePlaylist(PlaylistParams params) async {
     try {
       final result = await remoteDataSource.updatePlaylist(params);
       return Right(result);

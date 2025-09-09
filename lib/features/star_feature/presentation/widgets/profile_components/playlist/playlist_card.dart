@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -12,14 +14,16 @@ class PlaylistCard extends StatelessWidget {
   final bool showMenu;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final int? overrideVideoCount; // أضف دي عشان تقدر تديله العدد الصحيح
 
   const PlaylistCard({
     super.key,
     required this.playlist,
     this.onTap,
-    this.showMenu = false,
+    this.showMenu = true,
     this.onEdit,
     this.onDelete,
+    this.overrideVideoCount, // أضف دي
   });
 
   @override
@@ -68,9 +72,11 @@ class PlaylistCard extends StatelessWidget {
 
   Widget _buildPlaylistThumbnail(BuildContext context) {
     final thumbnailSize = _getResponsivePadding(context, 80);
+    // استخدم العدد المخصص أو العدد من الـ playlist
+    final videoCount = overrideVideoCount ?? playlist.videos.length;
 
     return Container(
-      width: thumbnailSize,
+      width: thumbnailSize * 1.5,
       height: thumbnailSize,
       margin: EdgeInsets.all(_getResponsiveSpacing(context, 12)),
       child: Stack(
@@ -78,12 +84,11 @@ class PlaylistCard extends StatelessWidget {
           // Main thumbnail
           ThumbnailWidget(
             imageUrl: playlist.thumbnail,
-            width: thumbnailSize,
+            width: thumbnailSize * 1.5,
             height: thumbnailSize,
-            showPlayIcon: true,
           ),
 
-          // Video count overlay
+          // Video count overlay - هنا التحديث
           Positioned(
             bottom: 4,
             right: 4,
@@ -96,13 +101,24 @@ class PlaylistCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Text(
-                '${playlist.videosCount}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: _getResponsiveFontSize(context, 10),
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.playlist_play,
+                    color: Colors.white,
+                    size: _getResponsiveFontSize(context, 12),
+                  ),
+                  SizedBox(width: _getResponsiveSpacing(context, 4)),
+                  Text(
+                    '$videoCount',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: _getResponsiveFontSize(context, 10),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -112,6 +128,8 @@ class PlaylistCard extends StatelessWidget {
   }
 
   Widget _buildPlaylistInfo(BuildContext context) {
+    final videoCount = overrideVideoCount ?? playlist.videosCount;
+
     return Padding(
       padding:
           EdgeInsets.symmetric(vertical: _getResponsiveSpacing(context, 12)),
@@ -131,11 +149,11 @@ class PlaylistCard extends StatelessWidget {
           ),
           SizedBox(height: _getResponsiveSpacing(context, 4)),
 
-          // Video count and creation date
+          // Video count and creation date - فك التعليق وحدث العدد
           Text(
             context.isArabic
-                ? '${playlist.videosCount} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
-                : '${playlist.videosCount} videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
+                ? '$videoCount فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
+                : '$videoCount videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
             style: TextStyle(
               fontSize: _getResponsiveFontSize(context, 13),
               color: Colors.grey[600],

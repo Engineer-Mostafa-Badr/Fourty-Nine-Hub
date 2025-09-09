@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../../service_locator/service_locator.dart';
+import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/user_star_entity.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
@@ -43,7 +45,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   }
 
   void _loadPlaylistDetails() {
-    _playlistCubit.getPlaylistDetails(widget.playlist.id);
+    print('🎵 Loading playlist details for: ${widget.playlist.id}');
+    // Use the NEW method to get playlist with videos
+    _playlistCubit.getPlaylistWithVideos(widget.playlist.id);
   }
 
   @override
@@ -76,6 +80,11 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
             }
 
             final playlist = state.selectedPlaylist ?? widget.playlist;
+            final realVideos =
+                playlist.videos; // These are now REAL videos from API
+
+            print('🎵 Displaying playlist: ${playlist.name}');
+            print('📹 Real videos count: ${realVideos.length}');
 
             return CustomScrollView(
               slivers: [
@@ -89,11 +98,11 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
                 // Control Buttons
                 SliverToBoxAdapter(
-                  child: _buildControlButtons(playlist),
+                  child: _buildControlButtons(playlist, realVideos),
                 ),
 
-                // Videos List
-                _buildVideosList(playlist),
+                // Videos List - NOW USING REAL DATA
+                _buildVideosList(playlist, realVideos),
               ],
             );
           },
@@ -128,39 +137,46 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
       ),
       actions: [
         if (widget.isCurrentUser)
-          PopupMenuButton<String>(
-            onSelected: (value) => _handleMenuAction(value, playlist),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Row(
-                  children: [
-                    Icon(Icons.edit, size: 20, color: Colors.grey[700]),
-                    SizedBox(width: 12),
-                    Text(context.isArabic ? 'تعديل' : 'Edit'),
-                  ],
+          BlocProvider(
+            create: (context) => serviceLocator<PlaylistCubit>(),
+            child: PopupMenuButton<String>(
+              onSelected: (value) => _handleMenuAction(value, playlist),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      Icon(Icons.edit, size: 20, color: Colors.grey[700]),
+                      SizedBox(width: 12),
+                      Text(context.isArabic ? 'تعديل' : 'Edit'),
+                    ],
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete, size: 20, color: Colors.red),
-                    SizedBox(width: 12),
-                    Text(
-                      context.isArabic ? 'حذف' : 'Delete',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete, size: 20, color: Colors.red),
+                      SizedBox(width: 12),
+                      Text(
+                        context.isArabic ? 'حذف' : 'Delete',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
       ],
     );
   }
 
   Widget _buildPlaylistHeader(PlaylistEntity playlist) {
+    // أضف دي عشان تشوف إيه اللي بيحصل
+    print('🖼️ Playlist thumbnail URL: "${playlist.thumbnail}"');
+    print('🖼️ Thumbnail isEmpty: ${playlist.thumbnail.isEmpty}');
+
     return Container(
       padding: EdgeInsets.all(20),
       child: Row(
@@ -187,16 +203,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: playlist.thumbnail.isNotEmpty
-                        ? Image.network(
-                            playlist.thumbnail,
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                _buildDefaultPlaylistCover(),
-                          )
-                        : _buildDefaultPlaylistCover(),
+                    child: _buildThumbnailImage(playlist),
                   ),
 
                   // Play overlay
@@ -215,7 +222,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                     ),
                   ),
 
-                  // Video count badge
+                  // Video count badge - USE REAL COUNT
                   Positioned(
                     bottom: 8,
                     right: 8,
@@ -226,7 +233,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        '${playlist.videosCount}',
+                        '${playlist.videos.length}', // REAL count
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -261,8 +268,8 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
                 Text(
                   context.isArabic
-                      ? '${playlist.videosCount} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
-                      : '${playlist.videosCount} videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
+                      ? '${playlist.videos.length} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
+                      : '${playlist.videos.length} videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -286,28 +293,128 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                 SizedBox(height: 16),
 
                 // Privacy/Visibility indicator
-                Row(
-                  children: [
-                    Icon(
-                      Icons.lock_outline,
-                      size: 16,
-                      color: Colors.grey[600],
-                    ),
-                    SizedBox(width: 4),
-                    Text(
-                      context.isArabic ? 'خاصة' : 'Private',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Icon(
+                //       Icons.lock_outline,
+                //       size: 16,
+                //       color: Colors.grey[600],
+                //     ),
+                //     SizedBox(width: 4),
+                //     Text(
+                //       context.isArabic ? 'خاصة' : 'Private',
+                //       style: TextStyle(
+                //         fontSize: 12,
+                //         color: Colors.grey[600],
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+// أضف الدالة دي لمعالجة الـ thumbnail بشكل أفضل
+  Widget _buildThumbnailImage(PlaylistEntity playlist) {
+    // لو الـ thumbnail فاضي، استخدم صورة من أول فيديو
+    if (playlist.thumbnail.isEmpty || playlist.thumbnail.trim().isEmpty) {
+      print('🖼️ Playlist thumbnail is empty, trying first video thumbnail');
+
+      // جرب تجيب thumbnail من أول فيديو
+      if (playlist.videos.isNotEmpty) {
+        final firstVideo = playlist.videos.first;
+        String? videoThumbnail;
+
+        if (firstVideo is TubeVideoModel) {
+          videoThumbnail = firstVideo.thumbnail;
+        } else if (firstVideo.mediaUrl.isNotEmpty) {
+          videoThumbnail = firstVideo.mediaUrl.first.mediaKey;
+        }
+
+        if (videoThumbnail != null && videoThumbnail.isNotEmpty) {
+          print('🖼️ Using first video thumbnail: $videoThumbnail');
+          return Image.network(
+            videoThumbnail,
+            width: 120,
+            height: 120,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              print('🖼️ Error loading video thumbnail: $error');
+              return _buildDefaultPlaylistCover();
+            },
+          );
+        }
+      }
+
+      // لو مفيش فيديوهات أو مفيش thumbnails، استخدم الdefault
+      print('🖼️ No videos or thumbnails found, using default cover');
+      return _buildDefaultPlaylistCover();
+    }
+
+    // لو الـ thumbnail موجود، جرب تحمله
+    print('🖼️ Loading playlist thumbnail: ${playlist.thumbnail}');
+    return Image.network(
+      playlist.thumbnail,
+      width: 120,
+      height: 120,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                : null,
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        print('🖼️ Error loading playlist thumbnail: $error');
+        print('🖼️ Falling back to first video thumbnail');
+
+        // لو فشل تحميل الـ playlist thumbnail، جرب أول فيديو
+        if (playlist.videos.isNotEmpty) {
+          final firstVideo = playlist.videos.first;
+          String? videoThumbnail;
+
+          if (firstVideo is TubeVideoModel) {
+            videoThumbnail = firstVideo.thumbnail;
+          } else if (firstVideo.mediaUrl.isNotEmpty) {
+            videoThumbnail = firstVideo.mediaUrl.first.mediaKey;
+          }
+
+          if (videoThumbnail != null && videoThumbnail.isNotEmpty) {
+            return Image.network(
+              videoThumbnail,
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                print('🖼️ Video thumbnail also failed, using default');
+                return _buildDefaultPlaylistCover();
+              },
+            );
+          }
+        }
+
+        return _buildDefaultPlaylistCover();
+      },
     );
   }
 
@@ -334,7 +441,8 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     );
   }
 
-  Widget _buildControlButtons(PlaylistEntity playlist) {
+  Widget _buildControlButtons(
+      PlaylistEntity playlist, List<StarEntity> videos) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
@@ -342,14 +450,15 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           // Play All button
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: () => _playAllVideos(playlist),
+              onPressed:
+                  videos.isNotEmpty ? () => _playAllVideos(playlist) : null,
               icon: Icon(Icons.play_arrow, size: 20),
               label: Text(
                 context.isArabic ? 'تشغيل الكل' : 'Play All',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: videos.isNotEmpty ? Colors.black : Colors.grey,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
@@ -368,7 +477,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
               border: Border.all(color: Colors.grey[300]!),
             ),
             child: IconButton(
-              onPressed: _toggleShuffle,
+              onPressed: videos.isNotEmpty ? _toggleShuffle : null,
               icon: Icon(
                 Icons.shuffle,
                 color: _isShuffleEnabled ? Colors.blue[600] : Colors.grey[600],
@@ -386,7 +495,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
               border: Border.all(color: Colors.grey[300]!),
             ),
             child: IconButton(
-              onPressed: _toggleRepeat,
+              onPressed: videos.isNotEmpty ? _toggleRepeat : null,
               icon: Icon(
                 Icons.repeat,
                 color: _isRepeatEnabled ? Colors.blue[600] : Colors.grey[600],
@@ -399,11 +508,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     );
   }
 
-  Widget _buildVideosList(PlaylistEntity playlist) {
-    // Mock videos data for now - replace with actual playlist videos
-    final mockVideos = _generateMockVideos(playlist.videosCount);
-
-    if (mockVideos.isEmpty) {
+  Widget _buildVideosList(
+      PlaylistEntity playlist, List<StarEntity> realVideos) {
+    if (realVideos.isEmpty) {
       return SliverFillRemaining(
         hasScrollBody: false,
         child: Center(
@@ -436,6 +543,18 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   color: Colors.grey[500],
                 ),
               ),
+              SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: _loadPlaylistDetails,
+                icon: Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  context.isArabic ? 'تحديث' : 'Refresh',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ],
           ),
         ),
@@ -445,10 +564,10 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final video = mockVideos[index];
+          final video = realVideos[index];
           return _buildVideoItem(video, index, playlist);
         },
-        childCount: mockVideos.length,
+        childCount: realVideos.length,
       ),
     );
   }
@@ -475,11 +594,11 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                 Stack(
                   children: [
                     ThumbnailWidget(
+                      imageUrl: _getVideoThumbnail(video),
                       width: 120,
                       height: 68,
-                      duration: '7:54',
+                      duration: _formatDuration(video),
                       showVolumeIcon: false,
-                      showPlayIcon: !isCurrentVideo,
                     ),
                     if (isCurrentVideo)
                       Positioned.fill(
@@ -502,7 +621,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
                 SizedBox(width: 12),
 
-                // Video info
+                // Video info - REAL DATA
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -559,37 +678,37 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   }
 
   // Helper methods
-  List<StarEntity> _generateMockVideos(int count) {
-    return List.generate(count, (index) {
-      return StarEntity(
-        id: 'playlist_video_$index',
-        title: 'Playlist Video ${index + 1}',
-        description: 'Description for video ${index + 1}',
-        user: UserStarEntity(
-          id: 'user_$index',
-          firstName: 'Artist',
-          lastName: '${index + 1}',
-          email: 'artist$index@example.com',
-          image: '',
-          viewNumber: (index + 1) * 1000,
-          averageRating: 4.0 + (index % 5) * 0.2,
-        ),
-        mediaUrl: [
-          MediaUrlEntity(
-            id: 'media_$index',
-            mediaKey: 'video_$index.mp4',
-            duration: Duration(minutes: 3 + (index % 5), seconds: 30),
-            mediaType: 'video/mp4',
-          ),
-        ],
-        totalViews: (index + 1) * 1500,
-        averageRating: 4,
-        isApproved: true,
-        haveStories: false,
-        storyCount: 0,
-        createdAt: DateTime.now().subtract(Duration(days: index * 7)),
-      );
-    });
+  String? _getVideoThumbnail(StarEntity video) {
+    if (video is TubeVideoModel) {
+      return video.thumbnail;
+    }
+    if (video.mediaUrl.isNotEmpty) {
+      return video.mediaUrl.first.mediaKey;
+    }
+    return null;
+  }
+
+  String _formatDuration(StarEntity video) {
+    Duration duration;
+
+    if (video is TubeVideoModel) {
+      duration = Duration(seconds: video.duration);
+    } else if (video.mediaUrl.isNotEmpty) {
+      duration = video.mediaUrl.first.duration ?? Duration.zero;
+    } else {
+      duration = Duration.zero;
+    }
+
+    if (duration == Duration.zero) return '0:00';
+
+    final minutes = duration.inMinutes.remainder(60).toString();
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+    if (duration.inHours > 0) {
+      final hours = duration.inHours.toString();
+      return '$hours:${minutes.padLeft(2, '0')}:$seconds';
+    }
+    return '$minutes:$seconds';
   }
 
   String _formatNumber(num number) {
@@ -627,14 +746,12 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
   void _playAllVideos(PlaylistEntity playlist) {
     ManageVibration.vibrate();
+    if (playlist.videos.isEmpty) return;
+
     setState(() {
       _currentVideoIndex = 0;
     });
-    // Start playing from first video
-    final videos = _generateMockVideos(playlist.videosCount);
-    if (videos.isNotEmpty) {
-      _playVideoAt(0, videos.first, playlist);
-    }
+    _playVideoAt(0, playlist.videos.first, playlist);
   }
 
   void _playVideoAt(int index, StarEntity video, PlaylistEntity playlist) {
@@ -780,7 +897,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                     backgroundColor: Colors.green,
                   ),
                 );
-                _loadPlaylistDetails(); // Refresh playlist
+                // The cubit will automatically refresh the playlist
               }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -848,7 +965,6 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                     backgroundColor: Colors.green,
                   ),
                 );
-                _loadPlaylistDetails();
               }
             },
             builder: (context, state) {
