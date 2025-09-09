@@ -13,7 +13,9 @@ import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
+import '../features/star_feature/domain/use_case/subscribe_to_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
+import '../features/star_feature/domain/use_case/unsubscribe_from_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
 
 // New imports for Tube Video functionality
@@ -356,12 +358,27 @@ class TubeServiceLocator {
       );
     }
 
+    // NEW: Subscription Use Cases
+    if (!serviceLocator.isRegistered<SubscribeToChannelUseCase>()) {
+      serviceLocator.registerLazySingleton<SubscribeToChannelUseCase>(
+        () => SubscribeToChannelUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<UnsubscribeFromChannelUseCase>()) {
+      serviceLocator.registerLazySingleton<UnsubscribeFromChannelUseCase>(
+        () => UnsubscribeFromChannelUseCase(serviceLocator()),
+      );
+    }
+
     // Cubit - استخدم registerFactory للـ Cubit
     serviceLocator.registerFactory<ProfileCubit>(
       () => ProfileCubit(
         serviceLocator<GetMyProfileUseCase>(),
         serviceLocator<GetProfileByIdUseCase>(),
         serviceLocator<UpdateProfileUseCase>(),
+        serviceLocator<SubscribeToChannelUseCase>(), // NEW
+        serviceLocator<UnsubscribeFromChannelUseCase>(), // NEW
       ),
     );
   }

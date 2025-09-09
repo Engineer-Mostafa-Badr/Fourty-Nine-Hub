@@ -1775,6 +1775,8 @@ class EndPoints {
   static const String updateProfile = '/tube-profile';
   static const String getAllTubeVideos = '/tube-video';
   static const String getMyTubeVideos = '/tube-video/me';
+  static String subscribeToChannel(String profileId) => '/tube-profile/subscribe/$profileId';
+  static String unsubscribeFromChannel(String profileId) => '/tube-profile/unsubscribe/$profileId';
   static String addVideoToFavorite(String videoId) =>
       '/tube-favorite/video/$videoId';
   static String removeVideoFromFavorite(String videoId) =>

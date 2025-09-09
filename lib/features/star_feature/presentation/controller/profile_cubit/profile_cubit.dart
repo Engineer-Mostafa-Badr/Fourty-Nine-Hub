@@ -10,6 +10,8 @@ import '../../../../../routes/pages.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/use_case/get_my_profile_use_case.dart';
 import '../../../domain/use_case/get_profile_by_id_use_case.dart';
+import '../../../domain/use_case/subscribe_to_channel_use_case.dart';
+import '../../../domain/use_case/unsubscribe_from_channel_use_case.dart';
 import '../../../domain/use_case/update_profile_use_case.dart';
 import '../../utils/enums.dart';
 import 'package:equatable/equatable.dart';
@@ -24,11 +26,15 @@ class ProfileCubit extends Cubit<ProfileState> {
   final GetMyProfileUseCase _getMyProfileUseCase;
   final GetProfileByIdUseCase _getProfileByIdUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
+  final SubscribeToChannelUseCase _subscribeToChannelUseCase; // NEW
+  final UnsubscribeFromChannelUseCase _unsubscribeFromChannelUseCase; // NEW
 
   ProfileCubit(
     this._getMyProfileUseCase,
     this._getProfileByIdUseCase,
     this._updateProfileUseCase,
+    this._subscribeToChannelUseCase, // NEW
+    this._unsubscribeFromChannelUseCase, // NEW
   ) : super(const ProfileState());
 
   // Get my profile with loading state
@@ -100,10 +106,88 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  // Subscribe/Unsubscribe methods (إضافة جديدة)
-  Future<void> toggleSubscription(String profileId) async {
-    // إضافة الـ API call للاشتراك/إلغاء الاشتراك
-    // يمكن إضافة endpoint منفصل لده لاحقاً
+  Future<bool> subscribeToChannel(String profileId) async {
+    if (isClosed) return false;
+
+    print('🔔 Subscribing to channel: $profileId');
+
+    final result = await _subscribeToChannelUseCase(profileId);
+
+    if (isClosed) return false;
+
+    return result.fold(
+      (failure) {
+        print('❌ Subscription failed: $failure');
+        _showErrorMessage(failure);
+        return false;
+      },
+      (message) {
+        print('✅ Subscription successful: $message');
+
+        // Update local profile state to reflect subscription
+        if (state.profile != null) {
+          final updatedProfile = state.profile!.copyWith(
+            isSubscribed: true,
+            subscribersCount: state.profile!.subscribersCount + 1,
+          );
+
+          emit(state.copyWith(
+            profile: updatedProfile,
+            message: message,
+          ));
+        }
+
+        _showSuccessMessage(message);
+        return true;
+      },
+    );
+  }
+
+  // NEW: Unsubscribe from channel
+  Future<bool> unsubscribeFromChannel(String profileId) async {
+    if (isClosed) return false;
+
+    print('🔕 Unsubscribing from channel: $profileId');
+
+    final result = await _unsubscribeFromChannelUseCase(profileId);
+
+    if (isClosed) return false;
+
+    return result.fold(
+      (failure) {
+        print('❌ Unsubscription failed: $failure');
+        _showErrorMessage(failure);
+        return false;
+      },
+      (message) {
+        print('✅ Unsubscription successful: $message');
+
+        // Update local profile state to reflect unsubscription
+        if (state.profile != null) {
+          final updatedProfile = state.profile!.copyWith(
+            isSubscribed: false,
+            subscribersCount: state.profile!.subscribersCount - 1,
+          );
+
+          emit(state.copyWith(
+            profile: updatedProfile,
+            message: message,
+          ));
+        }
+
+        _showSuccessMessage(message);
+        return true;
+      },
+    );
+  }
+
+  // NEW: Toggle subscription status
+  Future<bool> toggleSubscription(String profileId) async {
+    if (state.profile?.isSubscribed == true) {
+      return await unsubscribeFromChannel(profileId);
+    } else {
+      return await subscribeToChannel(profileId);
+    }
   }
 
   // Update profile with validation - Enhanced version

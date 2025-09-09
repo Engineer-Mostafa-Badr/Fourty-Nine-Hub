@@ -12,6 +12,8 @@ abstract class ProfileRemoteDataSource {
   Future<String> updateProfile(UpdateProfileParams params);
   Future<Either<Failure, List<ProfileEntity>>> searchProfiles(
       SearchProfileParams params);
+  Future<String> subscribeToChannel(String profileId);
+  Future<String> unsubscribeFromChannel(String profileId);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -31,7 +33,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<ProfileModel> getProfileById(String profileId) async {
-    final response = await apiConsumer.get(EndPoints.getTubeProfileById(profileId));
+    final response =
+        await apiConsumer.get(EndPoints.getTubeProfileById(profileId));
 
     return response.fold(
       (failure) => throw failure,
@@ -66,6 +69,31 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         return Right(
             profiles.map((profile) => ProfileModel.fromJson(profile)).toList());
       },
+    );
+  }
+
+  @override
+  Future<String> subscribeToChannel(String profileId) async {
+    final response = await apiConsumer.post(
+      EndPoints.subscribeToChannel(profileId),
+    );
+
+    return response.fold(
+      (failure) => throw failure,
+      (data) => data['message'] as String,
+    );
+  }
+
+  // NEW: Unsubscribe from channel
+  @override
+  Future<String> unsubscribeFromChannel(String profileId) async {
+    final response = await apiConsumer.delete(
+      EndPoints.unsubscribeFromChannel(profileId),
+    );
+
+    return response.fold(
+      (failure) => throw failure,
+      (data) => data['message'] as String,
     );
   }
 }
