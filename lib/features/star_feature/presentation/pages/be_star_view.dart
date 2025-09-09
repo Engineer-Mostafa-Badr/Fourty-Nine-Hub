@@ -319,7 +319,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ),
                       centerTitle: false,
                       title: Text(
-                        'Tube',
+                        context.isArabic ? 'تيوب' : 'Tube',
                         style: TextStyle(
                           color:
                               context.isDarkMode ? Colors.white : Colors.black,
@@ -345,7 +345,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                'Winners',
+                                context.isArabic ? 'الفائزون' : 'Winners',
                                 style: TextStyle(
                                   color: context.isDarkMode
                                       ? Colors.white
