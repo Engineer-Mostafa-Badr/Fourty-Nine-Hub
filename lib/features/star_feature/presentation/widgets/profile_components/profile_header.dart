@@ -12,6 +12,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/constants/constants.dart';
 import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/user_star_entity.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
@@ -111,7 +112,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 ),
         ),
-        
+
         // Cover photo edit button (only for current user)
         if (widget.isCurrentUser)
           Positioned(
@@ -134,7 +135,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     ),
                   )
                 : GestureDetector(
-                    onTap: () => _showImagePickerDialog(context, ImageType.cover),
+                    onTap: () =>
+                        _showImagePickerDialog(context, ImageType.cover),
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -219,7 +221,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           ),
                   ),
                 ),
-                
+
                 // Profile picture edit button (only for current user)
                 if (widget.isCurrentUser)
                   Positioned(
@@ -243,14 +245,16 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             ),
                           )
                         : GestureDetector(
-                            onTap: () => _showImagePickerDialog(context, ImageType.profile),
+                            onTap: () => _showImagePickerDialog(
+                                context, ImageType.profile),
                             child: Container(
                               width: 24,
                               height: 24,
                               decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: AppColors.PRIMARY_COLOR,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white, width: 2),
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
                               ),
                               child: Icon(
                                 Icons.camera_alt,
@@ -407,10 +411,12 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
   void _showImagePickerDialog(BuildContext context, ImageType imageType) {
     ManageVibration.vibrate();
-    
+
     final title = imageType == ImageType.cover
         ? (context.isArabic ? 'تغيير صورة الغلاف' : 'Change Cover Photo')
-        : (context.isArabic ? 'تغيير الصورة الشخصية' : 'Change Profile Picture');
+        : (context.isArabic
+            ? 'تغيير الصورة الشخصية'
+            : 'Change Profile Picture');
 
     showModalBottomSheet(
       context: context,
@@ -442,7 +448,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 ),
                 SizedBox(height: 20),
-                
+
                 // Title
                 Text(
                   title,
@@ -452,7 +458,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 ),
                 SizedBox(height: 20),
-                
+
                 // Options
                 Column(
                   children: [
@@ -475,8 +481,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         _pickImage(ImageSource.camera, imageType);
                       },
                     ),
-                    if ((imageType == ImageType.cover && widget.profile?.channelCover != null) ||
-                        (imageType == ImageType.profile && widget.profile?.channelPicture != null)) ...[
+                    if ((imageType == ImageType.cover &&
+                            widget.profile?.channelCover != null) ||
+                        (imageType == ImageType.profile &&
+                            widget.profile?.channelPicture != null)) ...[
                       SizedBox(height: 12),
                       _buildImagePickerOption(
                         context: bottomSheetContext,
@@ -515,7 +523,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isDestructive ? Colors.red.withOpacity(0.3) : Colors.grey[300]!,
+            color:
+                isDestructive ? Colors.red.withOpacity(0.3) : Colors.grey[300]!,
           ),
           borderRadius: BorderRadius.circular(12),
         ),
@@ -566,9 +575,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.isArabic
-                ? 'خطأ في اختيار الصورة'
-                : 'Error picking image',
+            context.isArabic ? 'خطأ في اختيار الصورة' : 'Error picking image',
           ),
           backgroundColor: Colors.red,
         ),
@@ -590,7 +597,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       String? mediaId;
 
       await uploadFile.uploadImageSilent(
-        subCategoryId: Constants.tubeSubCategory, // You might need to adjust this
+        subCategoryId:
+            Constants.tubeSubCategory, // You might need to adjust this
         context: context,
         file: imageFile,
         onUploaded: (uploadEntity) {
@@ -602,7 +610,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       if (uploadSuccess && mediaId != null) {
         // Update profile with new image
         await _updateProfileImage(mediaId!, imageType);
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -621,9 +629,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.isArabic
-                ? 'خطأ في رفع الصورة'
-                : 'Error uploading image',
+            context.isArabic ? 'خطأ في رفع الصورة' : 'Error uploading image',
           ),
           backgroundColor: Colors.red,
         ),
@@ -634,7 +640,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   Future<void> _updateProfileImage(String mediaId, ImageType imageType) async {
     final profileCubit = context.read<ProfileCubit>();
     final currentProfile = profileCubit.state.profile;
-    
+
     if (currentProfile != null) {
       await profileCubit.updateProfile(
         channelName: currentProfile.channelName,
@@ -649,7 +655,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     try {
       final profileCubit = context.read<ProfileCubit>();
       final currentProfile = profileCubit.state.profile;
-      
+
       if (currentProfile != null) {
         await profileCubit.updateProfile(
           channelName: currentProfile.channelName,
@@ -657,13 +663,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           channelCover: imageType == ImageType.cover ? "" : null,
           channelPicture: imageType == ImageType.profile ? "" : null,
         );
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              context.isArabic
-                  ? 'تم حذف الصورة'
-                  : 'Image removed',
+              context.isArabic ? 'تم حذف الصورة' : 'Image removed',
             ),
             backgroundColor: Colors.orange,
           ),
@@ -674,9 +678,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.isArabic
-                ? 'خطأ في حذف الصورة'
-                : 'Error removing image',
+            context.isArabic ? 'خطأ في حذف الصورة' : 'Error removing image',
           ),
           backgroundColor: Colors.red,
         ),

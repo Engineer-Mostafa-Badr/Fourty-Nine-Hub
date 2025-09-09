@@ -307,11 +307,12 @@ class _RefreshSettingsWidgetState extends State<RefreshSettingsWidget>
                                     Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue.withOpacity(0.1),
+                                        color: AppColors.PRIMARY_COLOR
+                                          ..withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: Colors.blue.withOpacity(0.3),
-                                        ),
+                                        // border: Border.all(
+                                        //   color: Colors.blue.withOpacity(0.3),
+                                        // ),
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
@@ -321,7 +322,7 @@ class _RefreshSettingsWidgetState extends State<RefreshSettingsWidget>
                                             children: [
                                               Icon(
                                                 Icons.schedule,
-                                                color: Colors.blue.shade700,
+                                                color: Colors.white,
                                                 size: 20,
                                               ),
                                               const SizedBox(width: 8),
@@ -331,7 +332,7 @@ class _RefreshSettingsWidgetState extends State<RefreshSettingsWidget>
                                                     : 'Refresh interval:',
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Colors.blue.shade700,
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -339,10 +340,6 @@ class _RefreshSettingsWidgetState extends State<RefreshSettingsWidget>
                                           ),
                                           const SizedBox(height: 8),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 4,
-                                            ),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               border: Border.all(
@@ -352,33 +349,88 @@ class _RefreshSettingsWidgetState extends State<RefreshSettingsWidget>
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
-                                            child: DropdownButtonHideUnderline(
-                                              child: DropdownButton<Duration>(
-                                                value: cubit.refreshInterval,
-                                                isExpanded: true,
-                                                items: cubit
-                                                    .getAvailableRefreshIntervals()
-                                                    .map((interval) {
-                                                  return DropdownMenuItem<
-                                                      Duration>(
-                                                    value: interval,
-                                                    child: Text(
-                                                      _getIntervalText(interval,
-                                                          context.isArabic),
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (value) {
-                                                  if (value != null) {
-                                                    cubit.setRefreshInterval(
-                                                        value);
-                                                  }
-                                                },
+                                            child: DropdownMenu<Duration>(
+                                              initialSelection:
+                                                  cubit.refreshInterval,
+                                              width: double.infinity,
+                                              hintText: context.isArabic
+                                                  ? 'اختر الفترة'
+                                                  : 'Select interval',
+                                              // تخصيص الألوان
+                                              textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
                                               ),
+                                              inputDecorationTheme:
+                                                  InputDecorationTheme(
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                border: InputBorder.none,
+                                                enabledBorder: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                  horizontal: 12,
+                                                  vertical: 8,
+                                                ),
+                                              ),
+                                              // تخصيص لون الـ dropdown menu
+                                              menuStyle: MenuStyle(
+                                                backgroundColor:
+                                                    WidgetStateProperty.all(
+                                                        Colors.white),
+                                                elevation:
+                                                    WidgetStateProperty.all(8),
+                                                shape: WidgetStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    side: BorderSide(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.3),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              dropdownMenuEntries: cubit
+                                                  .getAvailableRefreshIntervals()
+                                                  .map((interval) =>
+                                                      DropdownMenuEntry<
+                                                          Duration>(
+                                                        value: interval,
+                                                        label: _getIntervalText(
+                                                            interval,
+                                                            context.isArabic),
+                                                        style: ButtonStyle(
+                                                          foregroundColor:
+                                                              WidgetStateProperty
+                                                                  .all(Colors
+                                                                      .black),
+                                                          backgroundColor:
+                                                              WidgetStateProperty
+                                                                  .resolveWith(
+                                                                      (states) {
+                                                            if (states.contains(
+                                                                WidgetState
+                                                                    .hovered)) {
+                                                              return Colors.blue
+                                                                  .withOpacity(
+                                                                      0.1);
+                                                            }
+                                                            return Colors.white;
+                                                          }),
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                              onSelected: (value) {
+                                                if (value != null) {
+                                                  cubit.setRefreshInterval(
+                                                      value);
+                                                }
+                                              },
                                             ),
-                                          ),
+                                          )
                                         ],
                                       ),
                                     ),

@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/profile_page.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';

@@ -14,6 +14,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
   final GetPlaylistsUseCase _getPlaylistsUseCase;
   final CreatePlaylistUseCase _createPlaylistUseCase;
   final GetPlaylistByIdUseCase _getPlaylistByIdUseCase;
+  final GetPlaylistWithVideosUseCase _getPlaylistWithVideosUseCase; // NEW
   final AddVideoToPlaylistUseCase _addVideoToPlaylistUseCase;
   final RemoveVideoFromPlaylistUseCase _removeVideoFromPlaylistUseCase;
   final DeletePlaylistUseCase _deletePlaylistUseCase;
@@ -23,6 +24,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     this._getPlaylistsUseCase,
     this._createPlaylistUseCase,
     this._getPlaylistByIdUseCase,
+    this._getPlaylistWithVideosUseCase, // NEW
     this._addVideoToPlaylistUseCase,
     this._removeVideoFromPlaylistUseCase,
     this._deletePlaylistUseCase,
@@ -132,7 +134,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     );
 
     print('🎵 Creating playlist: $name');
-    print('📸 Thumbnail ID: ${thumbnailMediaId ?? 'none'}');
+    print('🖼️ Thumbnail ID: ${thumbnailMediaId ?? 'none'}');
 
     final result = await _createPlaylistUseCase(params);
 
@@ -155,7 +157,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     );
   }
 
-  // Get playlist details by ID
+  // Get playlist details by ID (basic info only)
   Future<void> getPlaylistDetails(String playlistId) async {
     if (playlistId.isEmpty || playlistId.length != 24) {
       emit(state.copyWith(
@@ -177,6 +179,40 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         ));
       },
       (playlist) {
+        emit(state.copyWith(
+          status: PlaylistStatus.success,
+          selectedPlaylist: playlist,
+          failure: null,
+        ));
+      },
+    );
+  }
+
+  // NEW METHOD: Get playlist with full video details
+  Future<void> getPlaylistWithVideos(String playlistId) async {
+    if (playlistId.isEmpty || playlistId.length != 24) {
+      emit(state.copyWith(
+        status: PlaylistStatus.error,
+        failure: UnknownFailure('Invalid playlist ID format'),
+      ));
+      return;
+    }
+
+    print('🎵 Loading playlist with videos: $playlistId');
+    emit(state.copyWith(status: PlaylistStatus.loading));
+
+    final result = await _getPlaylistWithVideosUseCase(playlistId);
+
+    result.fold(
+      (failure) {
+        print('❌ Failed to load playlist with videos: $failure');
+        emit(state.copyWith(
+          status: PlaylistStatus.error,
+          failure: failure,
+        ));
+      },
+      (playlist) {
+        print('✅ Loaded playlist with ${playlist.videos.length} videos');
         emit(state.copyWith(
           status: PlaylistStatus.success,
           selectedPlaylist: playlist,
@@ -222,14 +258,19 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         print('✅ Video added to playlist successfully');
         // Update local state
         _updatePlaylistAfterVideoAction(playlistId, videoId, true);
+        
+        // If we have the selected playlist loaded with videos, refresh it
+        if (state.selectedPlaylist != null && state.selectedPlaylist!.id == playlistId) {
+          getPlaylistWithVideos(playlistId);
+        }
+        
         return true;
       },
     );
   }
 
   // Remove video from playlist
-  Future<bool> removeVideoFromPlaylist(
-      String playlistId, String videoId) async {
+  Future<bool> removeVideoFromPlaylist(String playlistId, String videoId) async {
     // Validate IDs
     if (playlistId.isEmpty || playlistId.length != 24) {
       emit(state.copyWith(
@@ -250,16 +291,26 @@ class PlaylistCubit extends Cubit<PlaylistState> {
       videoId: videoId,
     );
 
+    print('🗑️ Removing video $videoId from playlist $playlistId');
+
     final result = await _removeVideoFromPlaylistUseCase(params);
 
     return result.fold(
       (failure) {
+        print('❌ Failed to remove video from playlist: $failure');
         emit(state.copyWith(failure: failure));
         return false;
       },
       (message) {
+        print('✅ Video removed from playlist successfully');
         // Update local state
         _updatePlaylistAfterVideoAction(playlistId, videoId, false);
+        
+        // If we have the selected playlist loaded with videos, refresh it
+        if (state.selectedPlaylist != null && state.selectedPlaylist!.id == playlistId) {
+          getPlaylistWithVideos(playlistId);
+        }
+        
         return true;
       },
     );
@@ -296,6 +347,9 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         emit(state.copyWith(
           status: PlaylistStatus.success,
           playlists: updatedPlaylists,
+          selectedPlaylist: state.selectedPlaylist?.id == playlistId 
+              ? null 
+              : state.selectedPlaylist,
           failure: null,
         ));
         return true;
@@ -320,7 +374,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
     emit(state.copyWith(status: PlaylistStatus.updating));
 
-    final params = UpdatePlaylistParams(
+    final params = PlaylistParams(
       playlistId: playlistId,
       name: name,
       description: description,
@@ -341,14 +395,19 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         emit(state.copyWith(status: PlaylistStatus.success));
         // Refresh to get updated data
         getMyPlaylists(refresh: true);
+        
+        // If this is the selected playlist, refresh it too
+        if (state.selectedPlaylist?.id == playlistId) {
+          getPlaylistWithVideos(playlistId);
+        }
+        
         return true;
       },
     );
   }
 
   // Helper method to update playlist after video action
-  void _updatePlaylistAfterVideoAction(
-      String playlistId, String videoId, bool isAdding) {
+  void _updatePlaylistAfterVideoAction(String playlistId, String videoId, bool isAdding) {
     final updatedPlaylists = state.playlists.map((playlist) {
       if (playlist.id == playlistId) {
         final newVideosCount = isAdding

@@ -11,10 +11,11 @@ abstract class PlaylistRemoteDataSource {
   Future<String> createPlaylist(CreatePlaylistParams params);
   Future<PlaylistListResponseModel> getPlaylists(GetPlaylistsParams params);
   Future<PlaylistModel> getPlaylistById(String playlistId);
+  Future<PlaylistModel> getPlaylistWithVideos(String playlistId); // New method
   Future<String> addVideoToPlaylist(PlaylistVideoParams params);
   Future<String> removeVideoFromPlaylist(PlaylistVideoParams params);
   Future<String> deletePlaylist(String playlistId);
-  Future<String> updatePlaylist(UpdatePlaylistParams params);
+  Future<String> updatePlaylist(PlaylistParams params);
 }
 
 class PlaylistRemoteDataSourceImpl implements PlaylistRemoteDataSource {
@@ -36,7 +37,8 @@ class PlaylistRemoteDataSourceImpl implements PlaylistRemoteDataSource {
   }
 
   @override
-  Future<PlaylistListResponseModel> getPlaylists(GetPlaylistsParams params) async {
+  Future<PlaylistListResponseModel> getPlaylists(
+      GetPlaylistsParams params) async {
     final response = await apiConsumer.get(
       EndPoints.getPlaylists(params.ownerId),
       queryParameters: {
@@ -60,7 +62,6 @@ class PlaylistRemoteDataSourceImpl implements PlaylistRemoteDataSource {
     return response.fold(
       (failure) => throw failure,
       (data) {
-        // Parse the single playlist response
         final playlistData = data['data'] as Map<String, dynamic>;
         return PlaylistModel.fromJson(playlistData);
       },
@@ -68,28 +69,84 @@ class PlaylistRemoteDataSourceImpl implements PlaylistRemoteDataSource {
   }
 
   @override
+  Future<PlaylistModel> getPlaylistWithVideos(String playlistId) async {
+    print('🎵 Fetching playlist with videos: $playlistId');
+
+    final response = await apiConsumer.get(
+      EndPoints.getPlaylistWithVideos(playlistId),
+    );
+
+    return response.fold(
+      (failure) {
+        print('❌ Failed to fetch playlist with videos: $failure');
+        throw failure;
+      },
+      (data) {
+        print('✅ Successfully fetched playlist with videos');
+        print('📊 Response data keys: ${data.keys.toList()}');
+
+        try {
+          final playlistData = data['data'] as Map<String, dynamic>;
+          final playlist = PlaylistModel.fromJson(playlistData);
+
+          print('🎵 Parsed playlist: ${playlist.name}');
+          print('📹 Videos count: ${playlist.videos.length}');
+
+          return playlist;
+        } catch (e, stackTrace) {
+          print('❌ Error parsing playlist with videos: $e');
+          print('❌ Stack trace: $stackTrace');
+          throw ServerFailure(
+            message: 'Failed to parse playlist data: $e',
+            name: 'Parse Error',
+          );
+        }
+      },
+    );
+  }
+
+  @override
   Future<String> addVideoToPlaylist(PlaylistVideoParams params) async {
+    print('🎵 Adding video ${params.videoId} to playlist ${params.playlistId}');
+
     final response = await apiConsumer.post(
       EndPoints.addVideoToPlaylist(params.playlistId),
       data: params.toJson(),
     );
 
     return response.fold(
-      (failure) => throw failure,
-      (data) => data['message'] as String? ?? 'Video added to playlist successfully',
+      (failure) {
+        print('❌ Failed to add video to playlist: $failure');
+        throw failure;
+      },
+      (data) {
+        print('✅ Successfully added video to playlist');
+        return data['message'] as String? ??
+            'Video added to playlist successfully';
+      },
     );
   }
 
   @override
   Future<String> removeVideoFromPlaylist(PlaylistVideoParams params) async {
+    print(
+        '🗑️ Removing video ${params.videoId} from playlist ${params.playlistId}');
+
     final response = await apiConsumer.delete(
       EndPoints.removeVideoFromPlaylist(params.playlistId),
       data: params.toJson(),
     );
 
     return response.fold(
-      (failure) => throw failure,
-      (data) => data['message'] as String? ?? 'Video removed from playlist successfully',
+      (failure) {
+        print('❌ Failed to remove video from playlist: $failure');
+        throw failure;
+      },
+      (data) {
+        print('✅ Successfully removed video from playlist');
+        return data['message'] as String? ??
+            'Video removed from playlist successfully';
+      },
     );
   }
 
@@ -106,7 +163,7 @@ class PlaylistRemoteDataSourceImpl implements PlaylistRemoteDataSource {
   }
 
   @override
-  Future<String> updatePlaylist(UpdatePlaylistParams params) async {
+  Future<String> updatePlaylist(PlaylistParams params) async {
     final response = await apiConsumer.put(
       EndPoints.updatePlaylist(params.playlistId),
       data: params.toJson(),

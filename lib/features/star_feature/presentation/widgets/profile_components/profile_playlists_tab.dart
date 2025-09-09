@@ -126,10 +126,13 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
                   itemCount: state.playlists.length,
                   itemBuilder: (context, index) {
                     final playlist = state.playlists[index];
-                    return PlaylistCard(
+                    return // في ProfilePlaylistsTab
+                        PlaylistCard(
                       playlist: playlist,
                       onTap: () => _handlePlaylistTap(context, playlist),
                       showMenu: widget.isCurrentUser,
+                      overrideVideoCount:
+                          playlist.videosCount, // أو العدد الصحيح من الـ API
                       onEdit: widget.isCurrentUser
                           ? () => _showEditPlaylistDialog(context, playlist)
                           : null,
@@ -281,28 +284,32 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
               color: Colors.black87,
             ),
           ),
-          ElevatedButton.icon(
-            onPressed: (state.isCreating || !_playlistCubit.isAuthenticated)
-                ? null
-                : () => _showCreatePlaylistDialog(context),
-            icon: state.isCreating
-                ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Icon(Icons.add, size: 20),
-            label: Text(
-              context.isArabic ? 'إنشاء قائمة' : 'Create',
-              style: TextStyle(fontSize: 14),
-            ),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
+          // ElevatedButton.icon(
+          //   onPressed: (state.isCreating || !_playlistCubit.isAuthenticated)
+          //       ? null
+          //       : () => _showCreatePlaylistDialog(context),
+          //   icon: state.isCreating
+          //       ? SizedBox(
+          //           width: 16,
+          //           height: 16,
+          //           child: CircularProgressIndicator(strokeWidth: 2),
+          //         )
+          //       : Icon(
+          //           Icons.add,
+          //           size: 20,
+          //           color: Colors.white,
+          //         ),
+          //   label: Text(
+          //     context.isArabic ? 'إنشاء قائمة' : 'Create',
+          //     style: TextStyle(fontSize: 14, color: Colors.white),
+          //   ),
+          //   style: ElevatedButton.styleFrom(
+          //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(20),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -378,20 +385,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
 
   void _showCreatePlaylistDialog(BuildContext context) {
     if (!_playlistCubit.isAuthenticated) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic
-                ? 'يرجى تسجيل الدخول أولاً'
-                : 'Please log in first',
-          ),
-          backgroundColor: Colors.orange,
-          action: SnackBarAction(
-            label: context.isArabic ? 'تسجيل الدخول' : 'Log In',
-            onPressed: () => context.push(Routes.FirstLoginScreen),
-          ),
-        ),
-      );
+      context.push(Routes.FirstLoginScreen);
       return;
     }
 
@@ -400,112 +394,115 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
 
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'إنشاء قائمة تشغيل جديدة' : 'Create New Playlist',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: context.isArabic ? 'اسم القائمة' : 'Playlist Name',
-                hintText: context.isArabic
-                    ? 'أدخل اسم القائمة'
-                    : 'Enter playlist name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+      builder: (dialogContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: AlertDialog(
+          title: Text(
+            context.isArabic
+                ? 'إنشاء قائمة تشغيل جديدة'
+                : 'Create New Playlist',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: context.isArabic ? 'اسم القائمة' : 'Playlist Name',
+                  hintText: context.isArabic
+                      ? 'أدخل اسم القائمة'
+                      : 'Enter playlist name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: descriptionController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: context.isArabic ? 'الوصف' : 'Description',
+                  hintText: context.isArabic
+                      ? 'أدخل وصف القائمة'
+                      : 'Enter playlist description',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                context.isArabic ? 'إلغاء' : 'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
               ),
             ),
-            SizedBox(height: 16),
-            TextField(
-              controller: descriptionController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: context.isArabic
-                    ? 'الوصف (اختياري)'
-                    : 'Description (optional)',
-                hintText: context.isArabic
-                    ? 'أدخل وصف القائمة'
-                    : 'Enter playlist description',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+            BlocConsumer<PlaylistCubit, PlaylistState>(
+              listener: (context, state) {
+                if (state.isSuccess && !state.isCreating) {
+                  Navigator.pop(dialogContext);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'تم إنشاء قائمة التشغيل بنجاح'
+                            : 'Playlist created successfully',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else if (state.isError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        _getErrorMessage(context, state),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: state.isCreating
+                      ? null
+                      : () async {
+                          if (nameController.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  context.isArabic
+                                      ? 'يرجى إدخال اسم القائمة'
+                                      : 'Please enter playlist name',
+                                ),
+                                backgroundColor: Colors.orange,
+                              ),
+                            );
+                            return;
+                          }
+
+                          await _playlistCubit.createPlaylist(
+                            name: nameController.text.trim(),
+                            description: descriptionController.text.trim(),
+                          );
+                        },
+                  child: state.isCreating
+                      ? SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(context.isArabic ? 'إنشاء' : 'Create'),
+                );
+              },
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ),
-          BlocConsumer<PlaylistCubit, PlaylistState>(
-            listener: (context, state) {
-              if (state.isSuccess && !state.isCreating) {
-                Navigator.pop(dialogContext);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم إنشاء قائمة التشغيل بنجاح'
-                          : 'Playlist created successfully',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              } else if (state.isError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      _getErrorMessage(context, state),
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: state.isCreating
-                    ? null
-                    : () async {
-                        if (nameController.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.isArabic
-                                    ? 'يرجى إدخال اسم القائمة'
-                                    : 'Please enter playlist name',
-                              ),
-                              backgroundColor: Colors.orange,
-                            ),
-                          );
-                          return;
-                        }
-
-                        await _playlistCubit.createPlaylist(
-                          name: nameController.text.trim(),
-                          description: descriptionController.text.trim(),
-                        );
-                      },
-                child: state.isCreating
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(context.isArabic ? 'إنشاء' : 'Create'),
-              );
-            },
-          ),
-        ],
       ),
     );
   }
@@ -517,82 +514,85 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
 
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'تعديل قائمة التشغيل' : 'Edit Playlist',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: context.isArabic ? 'اسم القائمة' : 'Playlist Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+      builder: (dialogContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: AlertDialog(
+          title: Text(
+            context.isArabic ? 'تعديل قائمة التشغيل' : 'Edit Playlist',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: context.isArabic ? 'اسم القائمة' : 'Playlist Name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: descriptionController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: context.isArabic ? 'الوصف' : 'Description',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                context.isArabic ? 'إلغاء' : 'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
               ),
             ),
-            SizedBox(height: 16),
-            TextField(
-              controller: descriptionController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: context.isArabic ? 'الوصف' : 'Description',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+            BlocConsumer<PlaylistCubit, PlaylistState>(
+              listener: (context, state) {
+                if (state.isSuccess && !state.isUpdating) {
+                  Navigator.pop(dialogContext);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'تم تحديث قائمة التشغيل بنجاح'
+                            : 'Playlist updated successfully',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: state.isUpdating
+                      ? null
+                      : () async {
+                          await _playlistCubit.updatePlaylist(
+                            playlistId: playlist.id,
+                            name: nameController.text.trim(),
+                            description: descriptionController.text.trim(),
+                          );
+                        },
+                  child: state.isUpdating
+                      ? SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(context.isArabic ? 'حفظ' : 'Save'),
+                );
+              },
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ),
-          BlocConsumer<PlaylistCubit, PlaylistState>(
-            listener: (context, state) {
-              if (state.isSuccess && !state.isUpdating) {
-                Navigator.pop(dialogContext);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم تحديث قائمة التشغيل بنجاح'
-                          : 'Playlist updated successfully',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: state.isUpdating
-                    ? null
-                    : () async {
-                        await _playlistCubit.updatePlaylist(
-                          playlistId: playlist.id,
-                          name: nameController.text.trim(),
-                          description: descriptionController.text.trim(),
-                        );
-                      },
-                child: state.isUpdating
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(context.isArabic ? 'حفظ' : 'Save'),
-              );
-            },
-          ),
-        ],
       ),
     );
   }
@@ -600,65 +600,68 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
   void _showDeleteConfirmation(BuildContext context, PlaylistEntity playlist) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'حذف قائمة التشغيل' : 'Delete Playlist',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          context.isArabic
-              ? 'هل أنت متأكد من حذف قائمة التشغيل "${playlist.name}"؟ لا يمكن التراجع عن هذا الإجراء.'
-              : 'Are you sure you want to delete playlist "${playlist.name}"? This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
+      builder: (dialogContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: AlertDialog(
+          title: Text(
+            context.isArabic ? 'حذف قائمة التشغيل' : 'Delete Playlist',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            context.isArabic
+                ? 'هل أنت متأكد من حذف قائمة التشغيل "${playlist.name}"؟ لا يمكن التراجع عن هذا الإجراء.'
+                : 'Are you sure you want to delete playlist "${playlist.name}"? This action cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                context.isArabic ? 'إلغاء' : 'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
-          ),
-          BlocConsumer<PlaylistCubit, PlaylistState>(
-            listener: (context, state) {
-              if (state.isSuccess && !state.isDeleting) {
-                Navigator.pop(dialogContext);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم حذف قائمة التشغيل بنجاح'
-                          : 'Playlist deleted successfully',
+            BlocConsumer<PlaylistCubit, PlaylistState>(
+              listener: (context, state) {
+                if (state.isSuccess && !state.isDeleting) {
+                  Navigator.pop(dialogContext);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'تم حذف قائمة التشغيل بنجاح'
+                            : 'Playlist deleted successfully',
+                      ),
+                      backgroundColor: Colors.red,
                     ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: state.isDeleting
+                      ? null
+                      : () async {
+                          await _playlistCubit.deletePlaylist(playlist.id);
+                        },
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
                   ),
+                  child: state.isDeleting
+                      ? SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(context.isArabic ? 'حذف' : 'Delete'),
                 );
-              }
-            },
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: state.isDeleting
-                    ? null
-                    : () async {
-                        await _playlistCubit.deletePlaylist(playlist.id);
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                ),
-                child: state.isDeleting
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Text(context.isArabic ? 'حذف' : 'Delete'),
-              );
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

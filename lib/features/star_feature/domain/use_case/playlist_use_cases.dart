@@ -4,6 +4,20 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import '../entity/playlist_entity.dart';
 import '../repository/playlist_repository.dart';
 
+// Get Playlist With Videos Use Case (NEW)
+class GetPlaylistWithVideosUseCase extends UseCase<PlaylistEntity, String> {
+  final PlaylistRepository _repository;
+
+  GetPlaylistWithVideosUseCase(this._repository);
+
+  @override
+  Future<Either<Failure, PlaylistEntity>> call(String playlistId) async {
+    return await _repository.getPlaylistWithVideos(playlistId);
+  }
+}
+
+// Existing use cases remain the same...
+
 // Create Playlist Use Case
 class CreatePlaylistUseCase extends UseCase<String, CreatePlaylistParams> {
   final PlaylistRepository _repository;
@@ -77,13 +91,13 @@ class DeletePlaylistUseCase extends UseCase<String, String> {
 }
 
 // Update Playlist Use Case
-class UpdatePlaylistUseCase extends UseCase<String, UpdatePlaylistParams> {
+class UpdatePlaylistUseCase extends UseCase<String, PlaylistParams> {
   final PlaylistRepository _repository;
 
   UpdatePlaylistUseCase(this._repository);
 
   @override
-  Future<Either<Failure, String>> call(UpdatePlaylistParams params) async {
+  Future<Either<Failure, String>> call(PlaylistParams params) async {
     return await _repository.updatePlaylist(params);
   }
 }

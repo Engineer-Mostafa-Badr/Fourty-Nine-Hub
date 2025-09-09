@@ -460,7 +460,7 @@ class TalentCardBuilders {
       child: Center(
         child: ElevatedButton.icon(
           onPressed: () => cubit.loadTalents(category),
-          icon: Icon(Icons.refresh, size: 18),
+          icon: Icon(Icons.refresh, size: 18, color: Colors.white),
           label: Text(
             context.isArabic ? 'تحميل المزيد' : 'Load More',
             style: TextStyle(fontSize: 14, color: Colors.white),
