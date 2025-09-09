@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -44,6 +45,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   final ApplyViewTripJoinUseCase applyViewTripJoinUseCase;
   final ApplyReadRequestTripJoinUseCase applyReadRequestTripJoinUseCase;
   final CreateTripJoinOfferUseCase createTripJoinOfferUseCase;
+  final CreatePickMeOfferUseCase createPickMeOfferUseCase;
   final GetRequestCountTripJoinUseCase getRequestCountTripJoinUseCase;
   // Future<void> deleteMyAdsTrip(String tripId,BuildContext context) async {
   //   emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
@@ -179,6 +181,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       this.applyViewTripJoinUseCase,
       this.applyReadRequestTripJoinUseCase,
       this.createTripJoinOfferUseCase,
+      this.createPickMeOfferUseCase,
       this.getRequestCountTripJoinUseCase)
       : super(ViewAllTripJoinState());
 
@@ -242,6 +245,30 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
 
     final response = await createTripJoinOfferUseCase(params);
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) {
+        emit(state.copyWith(
+          deleteMyTripJoinEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+        showSuccessMessage(context, tripData.message ?? "Success");
+      },
+    );
+  }
+
+  Future<void> createPickMeOffer(
+      CreatePickMeParams params, BuildContext context) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await createPickMeOfferUseCase(params);
     response.fold(
       (failure) {
         var currentContext =
