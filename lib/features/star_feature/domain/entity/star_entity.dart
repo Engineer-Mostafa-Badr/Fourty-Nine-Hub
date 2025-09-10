@@ -4,7 +4,7 @@ import 'user_star_entity.dart';
 class StarEntity {
   final String id;
   final UserStarEntity user;
-  final List<MediaUrlEntity> mediaUrl;
+  final List mediaUrl;
   final String title;
   final String description;
   final bool isApproved;
@@ -12,13 +12,17 @@ class StarEntity {
   final num averageRating;
   final bool haveStories;
   final int storyCount;
+  final int likes; // Added likes property
+  final int dislikes; // Added dislikes property
 
   DateTime? createdAt;
   String? createAt;
 
-  Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  Duration get publishedDuration =>
+      DateTime.now().difference(createdAt ?? DateTime.now());
 
-  String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
+  String get sinceTime =>
+      DurationHelper().getTimeDifference(createdAt ?? DateTime.now());
 
   StarEntity({
     required this.id,
@@ -31,6 +35,8 @@ class StarEntity {
     required this.averageRating,
     required this.haveStories,
     required this.storyCount,
+    this.likes = 0, // Default value for likes
+    this.dislikes = 0, // Default value for dislikes
     this.createdAt,
     this.createAt,
   });
@@ -38,7 +44,7 @@ class StarEntity {
   StarEntity copyWith({
     String? id,
     UserStarEntity? user,
-    List<MediaUrlEntity>? mediaUrl,
+    List? mediaUrl,
     String? title,
     String? description,
     bool? isApproved,
@@ -46,6 +52,10 @@ class StarEntity {
     num? averageRating,
     bool? haveStories,
     int? storyCount,
+    int? likes, // Added likes parameter
+    int? dislikes, // Added dislikes parameter
+    DateTime? createdAt,
+    String? createAt,
   }) =>
       StarEntity(
         id: id ?? this.id,
@@ -58,6 +68,10 @@ class StarEntity {
         averageRating: averageRating ?? this.averageRating,
         haveStories: haveStories ?? this.haveStories,
         storyCount: storyCount ?? this.storyCount,
+        likes: likes ?? this.likes, // Added likes assignment
+        dislikes: dislikes ?? this.dislikes, // Added dislikes assignment
+        createdAt: createdAt ?? this.createdAt,
+        createAt: createAt ?? this.createAt,
       );
 }
 

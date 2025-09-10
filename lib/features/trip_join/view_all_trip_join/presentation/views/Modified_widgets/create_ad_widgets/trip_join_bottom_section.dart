@@ -67,8 +67,9 @@ class TripJoinBottomSection extends StatelessWidget {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              formatDistance(
-                                  expectedPriceTripEntity?.distance ?? 0),
+                              "${expectedPriceTripEntity?.distance ?? 0} ${LocaleKeys.KM.tr()}",
+                              // formatDistance(
+                              //     expectedPriceTripEntity?.distance ?? 0),
                               style: Styles.headerText(
                                   color: AppColors.getTextColor(context)),
                               overflow: TextOverflow.ellipsis,

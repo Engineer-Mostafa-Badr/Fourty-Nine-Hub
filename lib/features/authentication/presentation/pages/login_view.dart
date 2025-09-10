@@ -238,7 +238,7 @@ class _LoginViewState extends State<LoginView> {
             context.go(Routes.HOME);
           },
           child: Scaffold(
-            resizeToAvoidBottomInset: true,
+            resizeToAvoidBottomInset: false,
             appBar: const BackAppBar(),
             body: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

@@ -13,8 +13,7 @@ import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import '../controller/cubit/star_cubit.dart';
-import '../controller/cubit/star_state.dart';
+import '../controller/star_cubit/star_cubit.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -27,6 +26,7 @@ import '../../../authentication/presentation/controllers/user_cubit/user_cubit.d
 import '../pages/add_talent_widget.dart';
 import '../pages/all_winner_view.dart';
 import '../../../../helpers/manage_vibration.dart';
+import '../utils/enums.dart';
 
 class CreateStar extends StatefulWidget {
   const CreateStar({super.key});
@@ -69,57 +69,59 @@ class _CreateStarState extends State<CreateStar> {
         preferredSize: const Size.fromHeight(40),
         child: BackAppBar(
           label: LocaleKeys.addStar.localize,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GestureDetector(
-                onTap: () {
-      ManageVibration.vibrate();
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => BlocProvider(
-                  //       create: (context) => serviceLocator<StarCubit>(),
-                  //       child: const AllWinnerView(),
-                  //     ),
-                  //   ),
-                  // );
-                },
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-      ManageVibration.vibrate();
-                        if (!context.read<UserCubit>().isLoggedIn) {
-                          pleaseLoginDialog(context);
-                        }else {
-                          Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider(
-                              create: (context) => serviceLocator<StarCubit>(),
-                              child: const AllWinnerView(),
-                            ),
-                          ),
-                        );
-                        }
-                      },
-                      child: Text(
-                        LocaleKeys.winners.localize,
-                        style: TextStyle(
-                          color: context.isDarkMode?Colors.white:Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32.sp,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Image.asset(
-                      Assets.winners,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         ManageVibration.vibrate();
+          //         // Navigator.of(context).push(
+          //         //   MaterialPageRoute(
+          //         //     builder: (context) => BlocProvider(
+          //         //       create: (context) => serviceLocator<StarCubit>(),
+          //         //       child: const AllWinnerView(),
+          //         //     ),
+          //         //   ),
+          //         // );
+          //       },
+          //       child: Row(
+          //         children: [
+          //           GestureDetector(
+          //             onTap: () {
+          //               ManageVibration.vibrate();
+          //               if (!context.read<UserCubit>().isLoggedIn) {
+          //                 pleaseLoginDialog(context);
+          //               } else {
+          //                 Navigator.of(context).push(
+          //                   MaterialPageRoute(
+          //                     builder: (context) => BlocProvider(
+          //                       create: (context) =>
+          //                           serviceLocator<StarCubit>(),
+          //                       child: const AllWinnerView(),
+          //                     ),
+          //                   ),
+          //                 );
+          //               }
+          //             },
+          //             child: Text(
+          //               LocaleKeys.winners.localize,
+          //               style: TextStyle(
+          //                 color:
+          //                     context.isDarkMode ? Colors.white : Colors.black,
+          //                 fontWeight: FontWeight.bold,
+          //                 fontSize: 32.sp,
+          //               ),
+          //             ),
+          //           ),
+          //           const SizedBox(width: 4),
+          //           Image.asset(
+          //             Assets.winners,
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ],
         ),
       ),
       body: BlocProvider(
@@ -138,7 +140,7 @@ class _CreateStarState extends State<CreateStar> {
                       titleController.clear();
                       descController.clear();
                       controller.selectedImages == [];
-                      context.read<StarCubit>().selectedVideo == null;
+                      // context.read<StarCubit>().selectedVideo == null;
                     });
                   }
                   if (state.status == StarStates.error) {
@@ -153,7 +155,7 @@ class _CreateStarState extends State<CreateStar> {
                 },
                 builder: (BuildContext context, state) {
                   controllerStar = context.read<StarCubit>();
-                  _videoControllers = state.video?.map((video) {
+                  _videoControllers = state.videos?.map((video) {
                         return VideoPlayerController.file(File(video.file.path))
                           ..initialize().then((_) {
                             setState(() {});

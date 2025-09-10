@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +25,11 @@ import '../enums/wallet_types_enums.dart';
 import '../utils/custom_show_dialog.dart';
 
 showErrorMessage(BuildContext context, String message) {
-  if (message == 'Unauthorized') return;
+  if (message == 'Unauthorized' || message == 'Unknown Error') return;
+
+  // Log the error message for debugging
+  log('🚨 showErrorMessage: $message');
+
   ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

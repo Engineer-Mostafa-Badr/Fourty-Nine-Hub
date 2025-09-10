@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -93,7 +95,10 @@ String getFailureMessage(Failure failure, BuildContext context) {
   } else if (failure is UnknownFailure) {
     return localizeMessage(failure.error);
   } else {
-    return localizeMessage('Unknown Failure');
+    // Log the unknown failure type for debugging
+    log('🚨 Unknown Failure Type: ${failure.runtimeType}');
+    log('🚨 Failure Details: ${failure.toString()}');
+    return localizeMessage('Unknown Error - Please try again');
   }
 }
 
@@ -104,7 +109,7 @@ String getFailureName(Failure failure, BuildContext context) {
     if (failure.errors != null && failure.errors!.isNotEmpty) {
       return '$message\n${failure.errors!.join('\n')}';
     }
-    return failure.name??'Unknown Error';
+    return failure.name??'Unknown';
   } else if (failure is InvalidOtpFailure) {
     return failure.message;
   } else if (failure is UnauthorizedFailure) {

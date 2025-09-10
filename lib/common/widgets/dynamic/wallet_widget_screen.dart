@@ -11,6 +11,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
 import '../../../features/payment/presentation/cache_out_cubit/payment_cubit.dart';
@@ -100,7 +101,8 @@ class _WalletWidgetScreenState extends State<WalletWidgetScreen> {
                       ManageVibration.vibrate();
                       AdInterstitialTop.loadIntersitialAd();
                       AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.BALANCE);
+
+                      context.push(Routes.CASHBACK);
                       // context.push(Routes.CASHBACK);
                     },
                         LocaleKeys.balance.tr(),
