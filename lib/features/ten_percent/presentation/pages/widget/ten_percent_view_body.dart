@@ -92,9 +92,9 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                             ),
                       label: LocaleKeys.uploadBill.localize,
                       onPressed: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         await context
-                            .read<TenPercentCubit>()
+                            .read<TenPercentCubit>() 
                             .uploadTrafficBill(context: context);
                       },
                     ),
@@ -170,7 +170,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                             ),
                       label: LocaleKeys.uploadBill.localize,
                       onPressed: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         await context
                             .read<TenPercentCubit>()
                             .uploadElectricityBill(context: context);
@@ -247,7 +247,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                             ),
                       label: LocaleKeys.uploadBill.localize,
                       onPressed: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         await context
                             .read<TenPercentCubit>()
                             .uploadMobileBill(context: context);
@@ -311,7 +311,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                   : CustomButtonWalletAndGiftAndCashback(
                       title: LocaleKeys.sendRequest.localize,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // if (state.mobileId == null &&
                         //     state.electricityId == null &&
                         //     state.trafficId == null) {

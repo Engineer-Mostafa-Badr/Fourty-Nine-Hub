@@ -18,6 +18,7 @@ class TenPercentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(

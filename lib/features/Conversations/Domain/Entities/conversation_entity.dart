@@ -8,6 +8,8 @@ class ConversationEntity {
   final ProfileEntity? profile;
   final LastMessageEntity? lastMessage;
   bool isTyping = false;
+  bool isRecording = false;
+  bool inConversation = false;
 
   ConversationEntity({
     required this.conversationId,

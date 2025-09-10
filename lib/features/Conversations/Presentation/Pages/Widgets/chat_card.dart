@@ -238,15 +238,15 @@ class _ChatCardState extends State<ChatCard> {
             // //       ),
             // //     ),
             // //   ),
-            // if (widget.chat!.online)
-            //   const Positioned(
-            //     bottom: 0,
-            //     right: 0,
-            //     child: CircleAvatar(
-            //       radius: 5,
-            //       backgroundColor: Colors.green,
-            //     ),
-            //   ),
+            if (widget.chat?.isOnline == true)
+              const Positioned(
+                bottom: 2,
+                right: 2,
+                child: CircleAvatar(
+                  radius: 5,
+                  backgroundColor: Colors.green,
+                ),
+              ),
           ],
         ),
       ),
@@ -404,7 +404,7 @@ class _ChatCardState extends State<ChatCard> {
               // if (!widget.chat!.typing || !widget.chat!.recording)
               //   if (widget.chat!.lastMessage?.byMe ?? false)
               //     if (widget.chat!.lastMessage?.delivered ?? false)
-              if(widget.chat?.lastMessage?.sender?.isMe ?? false)
+              if((widget.chat?.lastMessage?.sender?.isMe ?? false) && (widget.chat?.isTyping == false && widget.chat?.isRecording == false && widget.chat?.inConversation == false))
                 Image.asset(
                   Assets.doubleCheck,
                   width: 18,
@@ -471,7 +471,11 @@ class _ChatCardState extends State<ChatCard> {
               ,
               Expanded(
                 child: Label(
-                  text: widget.chat?.lastMessage?.content == null
+                  text:
+                      widget.chat?.inConversation == true? context.isArabic? "...يقرأ" : "reading..." :
+                  widget.chat?.isRecording == true? context.isArabic? "...يسجل" : "recording..." :
+                  widget.chat?.isTyping == true? context.isArabic? "...يكتب" : "typing..." :
+                  widget.chat?.lastMessage?.content == null
                       ? context.isArabic
                       ? "لا توجد رسائل حتي الان"
                       : "No messages until now"
@@ -483,7 +487,7 @@ class _ChatCardState extends State<ChatCard> {
                   //     : '${widget.chat?.lastMessage?.text}',
                   style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
-                    color: context.isDarkMode
+                    color:(widget.chat?.isTyping == true || widget.chat?.isRecording == true || widget.chat?.inConversation == true)? AppColors.PRIMARY_COLOR_DARK : context.isDarkMode
                         ? Colors.white54
                         : AppColors.DARK_GRAY_COLOR,
                   ),

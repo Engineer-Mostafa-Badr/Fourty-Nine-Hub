@@ -103,7 +103,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         // )
                         //     : _buildLoginWidget(context: context),
                         context.read<UserCubit>().isLoggedIn
-                            ? accountWidget(context: context, user: UserCubit.to.state.data)
+                            ? accountWidget(
+                                context: context, user: UserCubit.to.state.data)
                             : _buildLoginWidget(context: context),
                         Divider(
                           color: context.isDarkMode
@@ -123,7 +124,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   }
                                   AdInterstitialTop.loadIntersitialAd();
                                   AdInterstitialTop.showInterstitialAd();
-                                  var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                  var currentContext = AppPages
+                                      .router
+                                      .configuration
+                                      .navigatorKey
+                                      .currentContext!;
                                   currentContext.pop();
                                   Navigator.push(
                                     context,
@@ -256,7 +261,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 12),
+                    padding: const EdgeInsetsDirectional.only(
+                      end: 12,
+                      start: 0,
+                      top: 20,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -270,6 +279,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context.pop();
                               context.push(Routes.QURAAN);
                             }),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                             image: Assets.azkar,
                             label: LocaleKeys.azkar.localize,
@@ -280,6 +292,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context.pop();
                               context.push(Routes.AZKAAR);
                             }),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                             label: LocaleKeys.ride.localize,
                             image: Assets.rideIcon,
@@ -288,6 +303,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context.pop();
                               context.push(Routes.RIDE_HOME);
                             }),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                             label: LocaleKeys.tripJoin.localize,
                             image: Assets.newTripJoin,
@@ -300,6 +318,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ? Routes.newRideModeScreen
                                   : Routes.FirstLoginScreen);
                             }),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         // drawerRollWidget(
                         //   label: LocaleKeys.loading.localize,
                         //   image: Assets.loading,
@@ -319,6 +340,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.VISITA);
                           },
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                           label: LocaleKeys.meal.localize,
                           image: Assets.meal,
@@ -328,6 +352,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.FOOD);
                           },
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                           label: LocaleKeys.marriage.localize,
                           image: Assets.married,
@@ -336,6 +363,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.pop();
                             context.push(Routes.MARRIAGESUBCATEGORIES);
                           },
+                        ),
+                        const SizedBox(
+                          height: 8,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.tube.localize,
@@ -348,6 +378,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.BE_STAR);
                           },
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                           label: LocaleKeys.find.localize,
                           image: Assets.find,
@@ -356,6 +389,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.pop();
                             context.push(Routes.Tinder);
                           },
+                        ),
+                        const SizedBox(
+                          height: 8,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.reel.localize,
@@ -366,39 +402,48 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.REELS);
                           },
                         ),
-                        drawerRollWidget(
-                          label: LocaleKeys.spotlight.localize,
-                          image: Assets.spotlight,
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            if (!context.read<UserCubit>().isLoggedIn) {
-                              return pleaseLoginDialog(context);
-                            }
-                            context.pop();
-                            context.push(Routes.SPOTLIGHT);
-                          },
+                        const SizedBox(
+                          height: 8,
                         ),
                         // drawerRollWidget(
-                        //   label: LocaleKeys.meet.localize,
-                        //   image: Assets.meet,
+                        //   label: LocaleKeys.spotlight.localize,
+                        //   image: Assets.spotlight,
                         //   onTap: () {
-
+                        //     ManageVibration.vibrate();
+                        //     if (!context.read<UserCubit>().isLoggedIn) {
+                        //       return pleaseLoginDialog(context);
+                        //     }
                         //     context.pop();
-                        //     context.push(Routes.MEETINGROOM);
+                        //     context.push(Routes.SPOTLIGHT);
                         //   },
                         // ),
-                        drawerRollWidget(
-                          label: LocaleKeys.live.localize,
-                          image: Assets.liveIcon,
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            if (!context.read<UserCubit>().isLoggedIn) {
-                              return pleaseLoginDialog(context);
-                            }
-                            context.pop();
-                            context.push(Routes.LIVE);
-                          },
-                        ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // // drawerRollWidget(
+                        // //   label: LocaleKeys.meet.localize,
+                        // //   image: Assets.meet,
+                        // //   onTap: () {
+
+                        // //     context.pop();
+                        // //     context.push(Routes.MEETINGROOM);
+                        // //   },
+                        // // ),
+                        // drawerRollWidget(
+                        //   label: LocaleKeys.live.localize,
+                        //   image: Assets.liveIcon,
+                        //   onTap: () {
+                        //     ManageVibration.vibrate();
+                        //     if (!context.read<UserCubit>().isLoggedIn) {
+                        //       return pleaseLoginDialog(context);
+                        //     }
+                        //     context.pop();
+                        //     context.push(Routes.LIVE);
+                        //   },
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
                         // drawerRollWidget(
                         //   label: LocaleKeys.snap.localize,
                         //   image: Assets.snap,
@@ -420,6 +465,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.CHAT, extra: ChatsViewParams());
                           },
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                           label: context.isArabic ? 'العاب' : "Games",
                           image: Assets.gamesIcon,
@@ -431,6 +479,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //     extra: ChatsViewParams());
                           },
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                           label: LocaleKeys.ads.localize,
                           image: Assets.spcialAdsIcon,
@@ -440,6 +491,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.pop();
                             context.push(Routes.CREATECOMPANYAD);
                           },
+                        ),
+                        const SizedBox(
+                          height: 8,
                         ),
                         drawerRollWidget(
                           label: context.isArabic ? 'المزاد' : "Auction",
@@ -453,6 +507,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.MAZADAT);
                           },
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         drawerRollWidget(
                           label: LocaleKeys.chance.localize,
                           image: Assets.chanceIcon,
@@ -465,7 +522,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.CHANCE);
                           },
                         ),
-
                       ],
                     ),
                   ),
@@ -815,6 +871,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               height: 35.h,
               fit: BoxFit.cover,
             ),
+          const SizedBox(
+            height: 4,
+          ),
           Label(
             text: label,
             style: Styles.mediumText(
@@ -835,7 +894,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
         if (context.read<UserCubit>().isLoggedIn) {
-          var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
           currentContext.pop();
           context.go(Routes.LUCKYWHEEL);
         } else {
@@ -1038,141 +1098,159 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         },
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        ManageVibration.vibrate();
-                        if (!context.read<UserCubit>().isLoggedIn) {
-                          return pleaseLoginDialog(context);
-                        }
-                        bottomSheet(
-                          context: context,
-                          asAlertDialog: true,
-                          isDismissible: false,
-                          backColor:
-                              context.isDarkMode ? Color(0xff0D0D0D) : null,
-                          widget: Wrap(
-                            spacing: 20,
-                            runSpacing: 20,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: context.isDarkMode
-                                      ? Color(0xff131313)
-                                      : HexColor('f9f9f9'),
-                                ),
-                                child: ListTile(
-                                  leading: SvgPicture.asset(
-                                    context.isDarkMode
-                                        ? Assets.drawerGalleryIconDark
-                                        : Assets.drawerGalleryIcon,
-                                  ),
-                                  title: Label(
-                                    text: LocaleKeys.gallery.localize,
-                                  ),
-                                  onTap: () async {
-                                    ManageVibration.vibrate();
-                                    await context.read<UserCubit>().uploadPhoto(
-                                        isGallery: true, context: context);
-                                    // Reload user data if needed
-                                  },
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: context.isDarkMode
-                                      ? Color(0xff131313)
-                                      : HexColor('f9f9f9'),
-                                ),
-                                child: ListTile(
-                                  // leading: const Icon(Icons.camera_alt),
-                                  leading: SvgPicture.asset(
-                                    context.isDarkMode
-                                        ? Assets.drawerCameraIconDark
-                                        : Assets.drawerCameraIcon,
-                                  ),
-                                  title:
-                                      Label(text: LocaleKeys.camera.localize),
-                                  onTap: () async {
-                                    ManageVibration.vibrate();
-                                    await context.read<UserCubit>().uploadPhoto(
-                                        isGallery: false, context: context);
-                                    // Reload user data if needed
-                                  },
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: GestureDetector(
+                        onTap: () async {
+                          ManageVibration.vibrate();
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          }
+                          bottomSheet(
+                            context: context,
+                            asAlertDialog: true,
+                            isDismissible: false,
+                            backColor:
+                                context.isDarkMode ? Color(0xff0D0D0D) : null,
+                            widget: Wrap(
+                              spacing: 20,
+                              runSpacing: 20,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: context.isDarkMode
-                                        ? Color(0xff333333)
-                                        : AppColors.BG_GRAY_COLOR),
-                                child: ListTile(
-                                  // leading: const Icon(Icons.camera_alt),
-                                  title: Center(
-                                    child: Label(
-                                      text: LocaleKeys.cancel.localize,
-                                      style: Styles.mediumText(
-                                        fontSize: 36,
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        height: 1.60,
+                                        ? Color(0xff131313)
+                                        : HexColor('f9f9f9'),
+                                  ),
+                                  child: ListTile(
+                                    leading: SvgPicture.asset(
+                                      context.isDarkMode
+                                          ? Assets.drawerGalleryIconDark
+                                          : Assets.drawerGalleryIcon,
+                                    ),
+                                    title: Label(
+                                      text: LocaleKeys.gallery.localize,
+                                    ),
+                                    onTap: () async {
+                                      ManageVibration.vibrate();
+                                      await context
+                                          .read<UserCubit>()
+                                          .uploadPhoto(
+                                              isGallery: true,
+                                              context: context);
+                                      // Reload user data if needed
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: context.isDarkMode
+                                        ? Color(0xff131313)
+                                        : HexColor('f9f9f9'),
+                                  ),
+                                  child: ListTile(
+                                    // leading: const Icon(Icons.camera_alt),
+                                    leading: SvgPicture.asset(
+                                      context.isDarkMode
+                                          ? Assets.drawerCameraIconDark
+                                          : Assets.drawerCameraIcon,
+                                    ),
+                                    title:
+                                        Label(text: LocaleKeys.camera.localize),
+                                    onTap: () async {
+                                      ManageVibration.vibrate();
+                                      await context
+                                          .read<UserCubit>()
+                                          .uploadPhoto(
+                                              isGallery: false,
+                                              context: context);
+                                      // Reload user data if needed
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: context.isDarkMode
+                                          ? Color(0xff333333)
+                                          : AppColors.BG_GRAY_COLOR),
+                                  child: ListTile(
+                                    // leading: const Icon(Icons.camera_alt),
+                                    title: Center(
+                                      child: Label(
+                                        text: LocaleKeys.cancel.localize,
+                                        style: Styles.mediumText(
+                                          fontSize: 36,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          height: 1.60,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  onTap: () async {
-                                    ManageVibration.vibrate();
-                                    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-                                    currentContext.pop();
+                                    onTap: () async {
+                                      ManageVibration.vibrate();
+                                      var currentContext = AppPages
+                                          .router
+                                          .configuration
+                                          .navigatorKey
+                                          .currentContext!;
+                                      currentContext.pop();
 
-                                    // Reload user data if needed
-                                  },
+                                      // Reload user data if needed
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          );
+                          // showModalBottomSheet(
+                          //   context: context,
+                          //   builder: (BuildContext context) {
+                          //     return Wrap(
+                          //       children: <Widget>[
+                          //         ListTile(
+                          //           leading: const Icon(Icons.photo_library),
+                          //           title: const Text('Gallery'),
+                          //           onTap: () async {
+                          //             // Navigator.pop(context);
+                          //             await context.read<UserCubit>().uploadPhoto(
+                          //                 isGallery: true, context: context);
+                          //             // Reload user data if needed
+                          //           },
+                          //         ),
+                          //         ListTile(
+                          //           leading: const Icon(Icons.camera_alt),
+                          //           title: const Text('Camera'),
+                          //           onTap: () async {
+                          //             // Navigator.pop(context);
+                          //             await context.read<UserCubit>().uploadPhoto(
+                          //                 isGallery: false, context: context);
+                          //             // Reload user data if needed
+                          //           },
+                          //         ),
+                          //       ],
+                          //     );
+                          //   },
+                          // );
+                        },
+                        child: Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: AppColors.PRIMARY_COLOR,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
                           ),
-                        );
-                        // showModalBottomSheet(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return Wrap(
-                        //       children: <Widget>[
-                        //         ListTile(
-                        //           leading: const Icon(Icons.photo_library),
-                        //           title: const Text('Gallery'),
-                        //           onTap: () async {
-                        //             // Navigator.pop(context);
-                        //             await context.read<UserCubit>().uploadPhoto(
-                        //                 isGallery: true, context: context);
-                        //             // Reload user data if needed
-                        //           },
-                        //         ),
-                        //         ListTile(
-                        //           leading: const Icon(Icons.camera_alt),
-                        //           title: const Text('Camera'),
-                        //           onTap: () async {
-                        //             // Navigator.pop(context);
-                        //             await context.read<UserCubit>().uploadPhoto(
-                        //                 isGallery: false, context: context);
-                        //             // Reload user data if needed
-                        //           },
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // );
-                      },
-                      child: Container(
-                        margin: EdgeInsetsDirectional.only(end: 5, bottom: 5),
-                        child: Image.asset(
-                          Assets.cameraOutlined,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.SECONDARY_COLOR,
-                          width: 40.w,
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 12,
+                          ),
                         ),
                       ),
                     )
@@ -1295,9 +1373,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   children: [
                     CustomSwitchButton(
                       value: context
-                          .read<CustomPageCubit>()
-                          .state
-                          .activate?.customPage??false,
+                              .read<CustomPageCubit>()
+                              .state
+                              .activate
+                              ?.customPage ??
+                          false,
                       onChanged: (value) async {
                         showAnimatedDialog(
                           context,
@@ -1316,7 +1396,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     Expanded(
                                       child: AppButton(
                                         onPressed: () {
-                                          var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                                          var currentContext = AppPages
+                                              .router
+                                              .configuration
+                                              .navigatorKey
+                                              .currentContext!;
                                           currentContext.pop();
                                         },
                                         label: LocaleKeys.cancel.localize,
@@ -1363,7 +1447,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         return CustomSwitchButton(
                           value: floatingNavigatorCubit.floatingNavigatorEnable,
                           onChanged: (value) async {
-                            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                            var currentContext = AppPages.router.configuration
+                                .navigatorKey.currentContext!;
                             currentContext.pop();
                             floatingNavigatorCubit
                                 .changeFloatingNavigatorEnable();
@@ -1391,7 +1476,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         return CustomSwitchButton(
                           value: choiceRulerCubit.choiceRulerEnabled,
                           onChanged: (value) async {
-                            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                            var currentContext = AppPages.router.configuration
+                                .navigatorKey.currentContext!;
                             currentContext.pop();
                             choiceRulerCubit.changeChoiceRulerEnabled();
                           },
