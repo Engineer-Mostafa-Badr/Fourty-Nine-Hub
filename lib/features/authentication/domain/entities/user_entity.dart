@@ -28,12 +28,8 @@ class UserEntity extends Equatable {
   final bool isGuest;
   final UserType userType;
 
-  // Existing
+  // final String? birthday;
   final DateTime? birthday;
-
-  // NEW
-  final int? profileViews;     // ← add this
-  final DateTime? joinedAt;    // ← optional, if your API sends "joinedAt"
 
   const UserEntity({
     required this.id,
@@ -63,9 +59,6 @@ class UserEntity extends Equatable {
     this.birthday,
     this.isGuest = false,
     this.userType = UserType.authenticated,
-    // NEW
-    this.profileViews,
-    this.joinedAt,
   });
 
   factory UserEntity.guest() {
@@ -82,8 +75,6 @@ class UserEntity extends Equatable {
       wallet: 0,
       isGuest: true,
       userType: UserType.guest,
-       profileViews: 0,
-      joinedAt: null,
     );
   }
 
@@ -91,26 +82,23 @@ class UserEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    username,
-    firstName,
-    lastName,
-    email,
-    profilePicture,
-    profileCover,
-    friendsCount,
-    followersCount,
-    followingCount,
-    wallet,
-    firebaseToken,
-    birthday,
-    isAccountVerified,
-    isGuest,
-    userType,
-     profileViews,
-    joinedAt,
-    gender,
-  ];
+        id,
+        username,
+        firstName,
+        lastName,
+        email,
+        profilePicture,
+        profileCover,
+        friendsCount,
+        followersCount,
+        followingCount,
+        wallet,
+        firebaseToken,
+        birthday,
+        isAccountVerified,
+        isGuest,
+        userType,
+      ];
 
   bool isMyAccount(String anotherId) {
     return id == anotherId;

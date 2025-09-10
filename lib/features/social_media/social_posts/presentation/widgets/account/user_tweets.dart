@@ -9,7 +9,6 @@ import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../../../domain/entities/user_profile_entity.dart';
 import '../../../../twitter/domain/entities/twitter_post_comment_entity.dart';
 import '../../../../twitter/domain/entities/twitter_post_entity.dart';
@@ -71,9 +70,6 @@ class _UserTweetsState extends State<UserTweets> {
                 final user = context.read<UserCubit>().state.data;
                 return state.status == StateStatus.success
                     ? TwitterPostCard(
-                  onRepost: () => controller.onRepost(postId: state.postDetails!.id),
-
-                  isDetailed: false,
                         fromProfile: user?.id == widget.userData.id,
                         post: controller
                             .userTweetsPagingController.itemList![index],

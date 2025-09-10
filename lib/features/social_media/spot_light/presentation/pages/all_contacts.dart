@@ -30,26 +30,20 @@ class _AllContactsViewState extends State<AllContactsView> {
                 Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      visualDensity:
-                          const VisualDensity(horizontal: -4, vertical: -2),
+                      visualDensity:const VisualDensity(horizontal: -4,vertical: -2),
                       icon: Icon(
                         Icons.arrow_back_rounded,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        color:context.isDarkMode?Colors.white:Colors.black ,
                         size: 50.h,
                       ),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () =>Navigator.of(context).pop(),
                     )),
                 const Sizer(),
                 FormTextField(
-                  prefix: Icon(
-                    Icons.search,
-                    color: AppColors.getTextColor(context),
-                  ),
+                  prefix: Icon(Icons.search,color:AppColors.getTextColor(context),),
                   hint: context.isArabic ? 'بحث...' : 'Search...',
-                  style:
-                      Styles.mediumText(color: AppColors.getTextColor(context)),
-                  textStyle:
-                      Styles.mediumText(color: AppColors.getTextColor(context)),
+                  style: Styles.mediumText(color: AppColors.getTextColor(context)),
+                  textStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
                   fillColor: AppColors.getFillColor(context),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -119,7 +113,8 @@ class _AllContactsViewState extends State<AllContactsView> {
         ),
         trailing: TextButton(
           onPressed: () {
-            ManageVibration.vibrate();
+
+      ManageVibration.vibrate();
           },
           clipBehavior: Clip.none,
           child: Text(
@@ -130,4 +125,5 @@ class _AllContactsViewState extends State<AllContactsView> {
       ),
     );
   }
+
 }

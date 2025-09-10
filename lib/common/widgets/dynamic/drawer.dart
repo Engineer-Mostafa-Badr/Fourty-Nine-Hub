@@ -256,9 +256,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 12,top: 30),
+                    padding: const EdgeInsetsDirectional.only(end: 12),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         drawerRollWidget(
                             image: Assets.quran,

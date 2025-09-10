@@ -6,7 +6,6 @@ class FilterEntity {
   final String? governorateId;
   final String? cityId;
   final String? filter;
-  final String? isFrom;
   final String? subCategoryId;
   final int? limit;
   final int? page;
@@ -19,6 +18,5 @@ class FilterEntity {
       this.limit,
       this.page,
       this.subCategoryId,
-      this.isFrom,
       this.filter});
 }

@@ -592,7 +592,7 @@ abstract class Paths {
   static const VERIFICATION = 'Verification';
 
   // Cashback
-  static const CASHBACK = 'Cashback';
+  static const CASHBACK = 'CashBack';
 
   //reels
   static const useSoundScreen = 'UseSoundScreen';

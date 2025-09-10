@@ -4,6 +4,7 @@ class ProfileModel extends ProfileEntity {
   const ProfileModel({
     required super.id,
     required super.userId,
+    super.user,
     super.channelPicture,
     required super.channelName,
     super.channelCover,
@@ -12,23 +13,44 @@ class ProfileModel extends ProfileEntity {
     required super.channelDescription,
     super.subscribers,
     super.isSubscribed,
+    super.subscribersCount,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
       id: json['_id'] ?? '',
-      userId: json['userId'] ?? '',
-      channelPicture: json['channelPicture'] != null
-          ? MediaModel.fromJson(json['channelPicture'])
-          : null,
+      userId: json['user']?['_id'] ?? json['userId'] ?? '',
+      // Add user information parsing
+      user: json['user'] != null ? UserInfoModel.fromJson(json['user']) : null,
+      // Updated: channelPicture is now a direct URL string, not an object
+      channelPicture:
+          json['channelPicture'] != null && json['channelPicture'] is String
+              ? MediaModel(
+                  id: '',
+                  mediaKey: json['channelPicture'] as String,
+                )
+              : json['channelPicture'] != null && json['channelPicture'] is Map
+                  ? MediaModel.fromJson(json['channelPicture'])
+                  : null,
       channelName: json['channelName'] ?? '',
-      channelCover: json['channelCover'] != null
-          ? MediaModel.fromJson(json['channelCover'])
-          : null,
+      // Updated: channelCover is now a direct URL string, not an object
+      channelCover:
+          json['channelCover'] != null && json['channelCover'] is String
+              ? MediaModel(
+                  id: '',
+                  mediaKey: json['channelCover'] as String,
+                )
+              : json['channelCover'] != null && json['channelCover'] is Map
+                  ? MediaModel.fromJson(json['channelCover'])
+                  : null,
       videosCount: json['videosCount'] ?? 0,
       isWinner: json['isWinner'] ?? false,
       channelDescription: json['channelDescription'] ?? '',
-      subscribers: json['subscribers'] != null
+      // Updated: subscribers is now a count, not an array
+      subscribersCount: json['subscribers'] is int
+          ? json['subscribers']
+          : (json['subscribers'] as List?)?.length ?? 0,
+      subscribers: json['subscribers'] is List
           ? List<String>.from(json['subscribers'])
           : [],
       isSubscribed: json['isSubscribed'] ?? false,
@@ -39,17 +61,40 @@ class ProfileModel extends ProfileEntity {
     return {
       '_id': id,
       'userId': userId,
-      'channelPicture': channelPicture != null
-          ? (channelPicture as MediaModel).toJson()
-          : null,
+      'user': user is UserInfoModel ? (user as UserInfoModel).toJson() : null,
+      'channelPicture': channelPicture?.mediaKey,
       'channelName': channelName,
-      'channelCover':
-          channelCover != null ? (channelCover as MediaModel).toJson() : null,
+      'channelCover': channelCover?.mediaKey,
       'videosCount': videosCount,
       'isWinner': isWinner,
       'channelDescription': channelDescription,
-      'subscribers': subscribers,
+      'subscribers': subscribersCount,
       'isSubscribed': isSubscribed,
+    };
+  }
+}
+
+class UserInfoModel extends UserInfo {
+  const UserInfoModel({
+    required super.id,
+    required super.gender,
+    required super.isAccountVerified,
+  });
+
+  factory UserInfoModel.fromJson(Map<String, dynamic> json) {
+    return UserInfoModel(
+      id: json['_id'] ?? '',
+      gender: json['gender'] ?? '',
+      isAccountVerified: json['isAccountVerified'] ?? false,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'gender': gender,
+      'isAccountVerified': isAccountVerified,
     };
   }
 }

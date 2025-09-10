@@ -168,14 +168,12 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<UserTokensEntity?> _refreshToken() async {
-
     try {
-      String? lastRefreshToken = await CacheManager.getRefreshToken();
       print('🔄 AuthInterceptor: Calling refresh token API');
       final response = await serviceLocator<Dio>().post(
         "https://49backend.com/api/v1/auth/refresh-token",
         data: {
-          'refreshToken': lastRefreshToken??'',
+          'refreshToken': _token?.refreshToken,
         },
         options: Options(
           headers: {

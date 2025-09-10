@@ -7,11 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
-import 'package:fourtyninehub/features/ten_percent/data/datasources/ten_percent_remote_data_source.dart';
-import 'package:fourtyninehub/features/ten_percent/data/repositories/ten_percent_repo_impl.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/repositories/ten_percent_repo.dart';
-import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_request_use_case.dart';
-import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
@@ -33,7 +28,6 @@ import '../features/social_media/stories/data/repositories/StoriesRpo.dart';
 import '../features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
 import '../features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import '../features/social_media/tinder/domain/use_case/get_gifts_use_case.dart';
-import '../features/social_media/twitter/presentation/twitter/presentation/pages/test.dart';
 import '../helpers/call_helpers/call_helper/call_kit_helper.dart';
 import '../helpers/call_helpers/call_helper/call_with_notification_helper.dart';
 import '../helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
@@ -97,6 +91,7 @@ import 'new_trip_join_service_location.dart';
 import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
+import 'ten_percent_service_locator.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -196,26 +191,6 @@ class DI {
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
           () => StoryRepository(),
-    );
-    serviceLocator.registerLazySingleton<TenPercentCubit>(
-          () => TenPercentCubit(
-            serviceLocator()
-          ),
-    );
-    serviceLocator.registerLazySingleton<SentBillRequestUseCase>(
-          () => SentBillRequestUseCase(
-            serviceLocator()
-          ),
-    );
-    serviceLocator.registerLazySingleton<TenPercentRepo>(
-          () => TenPercentRepoImpl(
-            serviceLocator()
-          ),
-    );
-    serviceLocator.registerLazySingleton<TenPercentRemoteDataSource>(
-          () => TenPercentRemoteDataSourceImpl(
-            serviceLocator()
-          ),
     );
     serviceLocator.registerLazySingleton<GetGiftsUseCase>(
           () => GetGiftsUseCase(serviceLocator()),
@@ -424,6 +399,9 @@ class DI {
 
     //! Exchange Currency
     CurrencyServiceLocator.execute(serviceLocator: serviceLocator);
+    
+    //! Ten Percent
+    TenPercentServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

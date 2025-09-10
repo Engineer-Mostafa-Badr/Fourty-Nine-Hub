@@ -1169,7 +1169,59 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    // Description (إذا كان موجود)
+                    if (widget.talent.description.isNotEmpty) ...[
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.talent.description,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                              ),
+                              maxLines: _showFullDescription ? null : 2,
+                              overflow: _showFullDescription
+                                  ? TextOverflow.visible
+                                  : TextOverflow.ellipsis,
+                            ),
+                            if (widget.talent.description.length > 100)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _showFullDescription =
+                                        !_showFullDescription;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    _showFullDescription
+                                        ? (context.isArabic
+                                            ? 'إظهار أقل'
+                                            : 'Show less')
+                                        : (context.isArabic
+                                            ? 'إظهار المزيد'
+                                            : 'Show more'),
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
 
                     // Channel info and subscribe - استخدم الداتا الحقيقية
                     Row(
@@ -1442,62 +1494,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                         // ),
                       ],
                     ),
-
                     const SizedBox(height: 16),
-
-                    // Description (إذا كان موجود)
-                    if (widget.talent.description.isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.talent.description,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                              maxLines: _showFullDescription ? null : 2,
-                              overflow: _showFullDescription
-                                  ? TextOverflow.visible
-                                  : TextOverflow.ellipsis,
-                            ),
-                            if (widget.talent.description.length > 100)
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _showFullDescription =
-                                        !_showFullDescription;
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Text(
-                                    _showFullDescription
-                                        ? (context.isArabic
-                                            ? 'إظهار أقل'
-                                            : 'Show less')
-                                        : (context.isArabic
-                                            ? 'إظهار المزيد'
-                                            : 'Show more'),
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
                     // Comments section header
                     GestureDetector(
                       onTap: () => _showCommentsModal(commentState.comments),

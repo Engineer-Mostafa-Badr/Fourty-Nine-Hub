@@ -1,5 +1,4 @@
 import '../../../../../core/utils/duration_helper.dart';
-import '../../data/models/twitter_user_model.dart';
 import 'twitter_comment_reply_entity.dart';
 
 class TwitterPostCommentEntity {
@@ -19,8 +18,6 @@ class TwitterPostCommentEntity {
   List<TwitterCommentReplyEntity>? replies;
   final DateTime createdAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt);
-  TwitterUserModel? ownerData;
-  Map<String, dynamic>? postData;
 
   String get sinceTime =>
       DurationHelper().sinceTime(duration: publishedDuration);
@@ -39,11 +36,7 @@ class TwitterPostCommentEntity {
       this.addReply = false,
       this.isReact = false,
       this.edit = false,
-      this.replies,
-        this.ownerData,
-        this.postData
-
-      });
+      this.replies});
 
   //toJson
   Map<String, dynamic> toJson() => {

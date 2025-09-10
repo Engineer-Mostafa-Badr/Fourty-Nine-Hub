@@ -40,7 +40,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
     context.read<CreateAdCubit>().loadData(
         subCategoryId:
             widget.filterAdsParams.categorization.fromMarriage == false
-                ? widget.filterAdsParams.categorization.subCategory.id
+                ? widget.filterAdsParams.categorization.mainCategory.id
                 : widget.filterAdsParams.categorization.subCategory.id,
         fromMarriage:
             widget.filterAdsParams.categorization.fromMarriage ?? false);
@@ -161,7 +161,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                           controller.filterAds(
                               categorize: widget.filterAdsParams.categorization,
                               userType: widget.filterAdsParams.userType,
-                              context: context, isFromCity: false);
+                              context: context);
                         },
                         child: Container(
                           alignment: Alignment.center,

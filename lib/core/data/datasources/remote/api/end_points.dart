@@ -960,7 +960,7 @@ class EndPoints {
       '/user-follow/unfollow/$userId';
 
   static String reactOnTwitterPost(String postId) {
-    return '/twitter/posts/$postId/toggle-like';
+    return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String reactOnTwitterComment(String commentId) {
@@ -1001,7 +1001,7 @@ class EndPoints {
   }
 
   static String commentOnTwitterPost(String postId) {
-    return '/twitter/posts/$postId/reply';
+    return '/twitter/comment/create-comment/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String getPostComments(PostCommentsParams params) {
@@ -1013,11 +1013,11 @@ class EndPoints {
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
-    return '/twitter/posts/${params.postId}/replies?limit=${params.limit}&page=${params.page}';
+    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
   }
 
   static String getTwitterCommentReplies(PostCommentsParams params) {
-    return '/twitter/posts/${params.postId}/replies?limit=${params.limit}&page=${params.page}';
+    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
   }
 
   static String deletePost(String postId) {
@@ -1127,7 +1127,7 @@ class EndPoints {
   static const createAd = '/ads/create-ads';
 
   static filterAd(FilterModel filter) =>
-      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty ?? false) ? "government=${filter.governorateId}&" : ''}${filter.cityId?.isNotEmpty ?? false ? "city=${filter.cityId}&" : ""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}&isFrom=${filter.isFrom}';
+      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty ?? false) ? "government=${filter.governorateId}&" : ''}${filter.cityId?.isNotEmpty ?? false ? "city=${filter.cityId}&" : ""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
 
   static deleteFood(String id) => '/food/delete-food-item/$id';
   static const addFood = '/food/add-food';
@@ -1718,7 +1718,6 @@ class EndPoints {
   static String applyViewTripJoin = '/trip-join/offers/';
   static String applyReadRequestTripJoin = '/trip-join/requests/';
   static String createTripJoinOffer = '/trip-join/offers';
-  static String createPickMeOffer = '/pick-me/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
   static const updateDriverLoadingRatingNonSocket =
@@ -1750,13 +1749,6 @@ class EndPoints {
   static const unlikeMedia = '/spotlight/media/unlike';
   static const deleteMedia = '/spotlight/media/delete';
 
-  static String numberOfFollowers(String subCategoryId) =>
-      "/follow/numberOfFollowers?subCategory=$subCategoryId";
-
-  static String numberOfFollowing(String subCategoryId) =>
-      "/follow/numberOfFollowing?subCategory=$subCategoryId";
-
-
   static String getForYouSongs({required SongsPaginationParams params}) =>
       '/songs/fetch-songs?page=${params.page}&limit=${params.limit}';
   static String getTrendingSongs({required SongsPaginationParams params}) =>
@@ -1783,6 +1775,8 @@ class EndPoints {
   static const String updateProfile = '/tube-profile';
   static const String getAllTubeVideos = '/tube-video';
   static const String getMyTubeVideos = '/tube-video/me';
+  static String subscribeToChannel(String profileId) => '/tube-profile/subscribe/$profileId';
+  static String unsubscribeFromChannel(String profileId) => '/tube-profile/unsubscribe/$profileId';
   static String addVideoToFavorite(String videoId) =>
       '/tube-favorite/video/$videoId';
   static String removeVideoFromFavorite(String videoId) =>

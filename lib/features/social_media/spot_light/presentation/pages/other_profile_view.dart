@@ -32,7 +32,7 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Container(
                 // height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
+                decoration:  BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   //context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
@@ -55,13 +55,11 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              infoButton(context, '🎈', "Apr 2", Colors.red),
+                              infoButton(context,'🎈', "Apr 2", Colors.red),
                               const Sizer(),
-                              infoButton(
-                                  context, null, "3", Colors.grey.shade300),
+                              infoButton(context,null, "3", Colors.grey.shade300),
                               const Sizer(),
-                              infoButton(context, '♈', "Aries",
-                                  Colors.purple.shade200),
+                              infoButton(context,'♈', "Aries", Colors.purple.shade200),
                             ],
                           ),
                           const Sizer(
@@ -70,13 +68,13 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              postsButton(context, Icons.camera_alt),
+                              postsButton(context,Icons.camera_alt),
                               const Sizer(),
-                              postsButton(context, Icons.messenger),
+                              postsButton(context,Icons.messenger),
                               const Sizer(),
-                              postsButton(context, Icons.videocam_rounded),
+                              postsButton(context,Icons.videocam_rounded),
                               const Sizer(),
-                              postsButton(context, Icons.call),
+                              postsButton(context,Icons.call),
                             ],
                           ),
                         ],
@@ -96,16 +94,13 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget infoButton(
-      BuildContext context, String? icon, String text, Color color) {
+  Widget infoButton(BuildContext context,String? icon, String text, Color color) {
     return Container(
       width: 152.h,
       height: 80.h,
       //padding: const EdgeInsets.symmetric( vertical: 8),
       decoration: BoxDecoration(
-        color: context.isDarkMode
-            ? AppColors.SPLASH_BLACK_COLOR
-            : Colors.transparent,
+        color: context.isDarkMode?AppColors.SPLASH_BLACK_COLOR:Colors.transparent,
         border: Border.all(
           color: const Color(0xFF333231),
         ),
@@ -135,23 +130,24 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
   }
 
   Widget postsButton(
-    BuildContext context,
+      BuildContext context,
     IconData icon,
   ) {
     return ClickableWidget(
       onTap: () {
-        ManageVibration.vibrate();
+
+      ManageVibration.vibrate();
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 30.h),
         decoration: BoxDecoration(
-          color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          color: context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
           child: Icon(
             icon,
-            color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
+            color:context.isDarkMode?AppColors.PRIMARY_COLOR: Colors.white,
           ),
         ),
       ),
@@ -194,8 +190,7 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
               text:
                   context.isArabic ? "بيننا اصدقاء مشتركين" : "Mutual Friends",
               style: Styles.smallText(
-                color:
-                    context.isDarkMode ? Color(0xFF969696) : Color(0xFF606060),
+                color: context.isDarkMode?Color(0xFF969696):Color(0xFF606060),
               ),
             ),
           ],
