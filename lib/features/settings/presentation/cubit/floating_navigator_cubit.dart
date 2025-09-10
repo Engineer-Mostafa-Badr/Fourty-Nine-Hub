@@ -11,8 +11,7 @@ class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
   static FloatingNavigatorCubit get(context) => BlocProvider.of(context);
 
   bool floatingNavigatorStatus = false;
-  bool floatingNavigatorEnable = true;
-
+  bool floatingNavigatorEnable = false;
 
   Future<void> getEnableFloatingNavigatorStatus() async {
     floatingNavigatorEnable = await CacheManager.getFloatingNavigatorEnable();
@@ -36,8 +35,7 @@ class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
     }
     print(floatingNavigatorStatus);
     print(
-        'getFloatingNavigator saved to ${await CacheManager
-            .getFloatingNavigator()}');
+        'getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
   }
 
   Future<void> changeFloatingNavigatorEnable({bool? forceValue}) async {
@@ -50,7 +48,6 @@ class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
     }
     print(floatingNavigatorEnable);
     print(
-        'getFloatingNavigator saved to ${await CacheManager
-            .getFloatingNavigatorEnable()}');
+        'getFloatingNavigator saved to ${await CacheManager.getFloatingNavigatorEnable()}');
   }
 }

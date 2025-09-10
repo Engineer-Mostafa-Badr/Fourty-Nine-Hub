@@ -497,17 +497,24 @@ class _CustomScaffoldState extends State<CustomScaffold>
                   : Container(),
               Material(
                 color: Colors.transparent,
-                child: ClickableWidget(
-                  onTap: () {
+                child: GestureDetector(
+                  onHorizontalDragStart: (details) {
                     ManageVibration.vibrate();
                     floatingNavigatorCubit.changeFloatingNavigator();
+                  },
+                  onHorizontalDragUpdate: (details) {
+                    // منطق أثناء السحب الأفقي
+                    print('Horizontal drag: ${details.localPosition.dx}');
+                  },
+                  onHorizontalDragEnd: (details) {
+                    // منطق عند انتهاء السحب
+                    print('Horizontal drag ended');
                   },
                   child: Container(
                     width: 40,
                     color: Colors.transparent,
                     alignment: AlignmentDirectional.topStart,
                     child: Container(
-                      // padding: EdgeInsets.all(50),
                       height: 100,
                       width: 10,
                       decoration: BoxDecoration(
