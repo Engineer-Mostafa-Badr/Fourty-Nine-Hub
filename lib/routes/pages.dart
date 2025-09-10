@@ -383,6 +383,7 @@ import '../features/ads_feature/create_ad/domain/entities/categorization_entity.
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
 import '../features/auction/presentation/cubit/auction_cubit.dart';
+import '../features/auction/presentation/screens/create_auction_screen.dart';
 import '../features/auction/presentation/screens/fetch_available_auction_screen.dart';
 import '../features/authentication/domain/entities/forget_password_questions_entity.dart';
 import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
@@ -4853,6 +4854,17 @@ class AppPages {
                     create: (_) =>
                         serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
                     child: AuctionScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.createAuctionScreen,
+                name: Routes.createAuctionScreen,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (_) =>
+                        serviceLocator<AuctionCubit>(),
+                    child: CreateAuctionScreen(),
                   );
                 },
               ),

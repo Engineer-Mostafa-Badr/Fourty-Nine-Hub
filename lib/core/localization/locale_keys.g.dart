@@ -1630,5 +1630,6 @@ abstract class  LocaleKeys {
   static const retry = 'retry';
   static const favorite = 'favorite';
   static const myAuction = 'myAuction';
+  static const uploadVideo = 'uploadVideo';
 
 }

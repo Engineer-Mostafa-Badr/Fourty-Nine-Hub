@@ -9,12 +9,17 @@ import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../shared_web_socket.dart';
+import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
+import '../../domain/entities/auction_sub_category_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/usecases/fetch_available_auction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
+import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
+import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
+import '../models/auction_sub_category_model.dart';
 import '../models/get_all_auction_model.dart';
 
 
@@ -27,6 +32,8 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, List<AuctionParticipantsEntity>>> getParticipantsAuction({required PriceAuctionParams params});
   void sendBid(String auctionId, int newPrice);
   void listenToNewBidAuction(Function(AuctionParticipantsEntity trip) params);
+  Future<Either<Failure, List<AuctionMainCategoryEntity>>> getAuctionMainCategory({required GetAuctionParams params});
+  Future<Either<Failure, List<AuctionSubCategoryEntity>>> getAuctionSubCategory({required GetSubCategoryAuctionParams params});
 
 }
 
@@ -162,6 +169,40 @@ class AuctionRemoteDataSourceImpl
     } catch (e, st) {
       CliLogger.info("❌ Error while setting up bid listener: $e\n$st");
     }
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionMainCategoryEntity>>> getAuctionMainCategory({required GetAuctionParams params})async {
+    final url = "${EndPoints.fetchAuctionMainCategory}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => AuctionMainCategoryModel .fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionSubCategoryEntity>>> getAuctionSubCategory({required GetSubCategoryAuctionParams params}) async{
+    final url = "${EndPoints.fetchAuctionSubCategory}${params.id}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => AuctionSubCategoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
   }
 
 

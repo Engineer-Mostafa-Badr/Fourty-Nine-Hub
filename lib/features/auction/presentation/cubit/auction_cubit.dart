@@ -2,16 +2,23 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/auction/auction_helper.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
+import '../../../../common/functions/global/upload_image.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
+import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
+import '../../domain/entities/auction_sub_category_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/usecases/bid_auction_use_case.dart';
 import '../../domain/usecases/fetch_available_auction_use_case.dart';
+import '../../domain/usecases/fetch_main_category_auction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
+import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
 import '../../domain/usecases/join_auction_use_case.dart';
 import '../../domain/usecases/listen_to_new_auction_use_case.dart';
 import '../../domain/usecases/listen_to_new_bid_auction_use_case.dart';
@@ -20,7 +27,7 @@ import '../../domain/usecases/listen_to_new_bid_auction_use_case.dart';
 part 'auction_state.dart';
 
 class AuctionCubit extends Cubit<AuctionState> {
-  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase)  : super(AuctionState());
+  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase)  : super(AuctionState());
 
   final GetAvailableAuctionUseCase getAvailableAuctionUseCase;
   final ListenToNewAuctionUseCase listenToNewAuctionUseCase;
@@ -29,6 +36,72 @@ class AuctionCubit extends Cubit<AuctionState> {
   final GetParticipantsAuctionUseCase getParticipantsAuctionUseCase;
   final BidAuctionUseCase bidAuctionUseCase;
   final ListenToNewBidAuctionUseCase listenToNewBidAuctionUseCase;
+  final GetAuctionMainCategoryUseCase getAuctionMainCategoryUseCase;
+  final GetAuctionSubCategoryUseCase getAuctionSubCategoryUseCase;
+
+  Future<void> uploadMedia({required bool isImage}) async {
+    emit(state.copyWith(isUploading: true, status: StateStatus.loading));
+
+    try {
+      await UploadMediaHelper.uploadMedia(
+        isImage: isImage,
+        onUploaded: (uploadFileEntity) {
+          final newList = List<UploadFileEntity>.from(state.uploadedFiles)
+            ..add(uploadFileEntity);
+
+          emit(state.copyWith(
+            uploadedFiles: newList,
+            status: StateStatus.success,
+            isUploading: false,
+          ));
+        },
+      );
+
+      // If user cancels picker, hide loading
+      if (!state.isUploading) return; // already handled by onUploaded
+      emit(state.copyWith(isUploading: false));
+
+    } catch (e) {
+      // In case of error or cancellation
+      emit(state.copyWith(isUploading: false, status: StateStatus.error));
+    }
+  }
+
+/*
+  /// Upload image or video
+  Future<void> uploadMedia({required bool isImage}) async {
+    emit(state.copyWith(isUploading: true, status: StateStatus.loading));
+
+    await UploadMediaHelper.uploadMedia(
+      isImage: isImage,
+      onUploaded: (uploadFileEntity) {
+        final newList = List<UploadFileEntity>.from(state.uploadedFiles)
+          ..add(uploadFileEntity);
+
+        emit(state.copyWith(
+          uploadedFiles: newList,
+          status: StateStatus.success,
+          isUploading: false,
+        ));
+      },
+    );
+  }
+*/
+  /// Delete file from list
+  void deleteUploadedFile(UploadFileEntity file) {
+    final newList = List<UploadFileEntity>.from(state.uploadedFiles)
+      ..remove(file);
+
+    emit(state.copyWith(uploadedFiles: newList));
+  }
+
+  /// Get all media IDs
+  List<String> getAllMediaIds() {
+    return state.uploadedFiles.map((e) => e.mediaId).toList();
+  }
+
+
+
 
   List<AuctionParticipantsEntity> participants = [];
   bool hasMoreParticipants = true;
@@ -237,5 +310,151 @@ class AuctionCubit extends Cubit<AuctionState> {
       },
     );
   }
+
+
+
+
+  List<AuctionMainCategoryEntity> mainCategories = [];
+  bool hasMoreMainCategories = true;
+  int currentPageMainCategories = 1;
+  bool isMoreMainCategoryAuction = false;
+  bool isMainCategoryAuction = false;
+
+  void loadInitialMainCategoryAuction() async {
+    emit(state.copyWith(status: StateStatus.loading)); // emit loading state
+    isMainCategoryAuction = true;
+    availableAuctionNonSocketData.clear();
+    currentPageMainCategories = 1;
+    hasMoreMainCategories = true;
+    await getMainCategoryAuction();
+    isMainCategoryAuction = false;
+    emit(state.copyWith(status: StateStatus.success));
+  }
+
+  Future<void> getMainCategoryAuction() async {
+    if (!hasMoreMainCategories || isMoreMainCategoryAuction) {
+      return;
+    }
+    isMoreMainCategoryAuction = true;
+    emit(state.copyWith(status: StateStatus.loading));
+    final response = await getAuctionMainCategoryUseCase(
+        GetAuctionParams(
+            page: currentPageMainCategories, limit: 5));
+    response.fold(
+          (failure) {
+        isMoreMainCategoryAuction = false;
+        emit(state.copyWith(
+            failure: failure,
+            // isAuctionMoreLogs: false,
+            status: StateStatus.error));
+      },
+          (data) {
+            mainCategories.addAll(data);
+        if ((data.length ?? 0) < 5) {
+          hasMoreMainCategories = false;
+          // emit(state.copyWith(isAuctionMore: false));
+          emit(state.copyWith(status: StateStatus.loading));
+        } else {
+          currentPageMainCategories++;
+        }
+
+        isMoreMainCategoryAuction = false;
+        emit(state.copyWith(
+          auctionMainData: data,
+        ));
+      },
+    );
+  }
+
+  /// Load subcategories by mainCategoryId
+  Future<void> loadSubCategories(String mainCategoryId) async {
+    emit(state.copyWith(status: StateStatus.loading));
+    subCategories.clear();
+    currentPageSubCategories = 1;
+    hasMoreSubCategories = true;
+    await getSubCategories(mainCategoryId);
+    emit(state.copyWith(status: StateStatus.success));
+  }
+
+  Future<void> getSubCategories(String mainCategoryId) async {
+    if (!hasMoreSubCategories || isLoadingMoreSubCategories) return;
+
+    isLoadingMoreSubCategories = true;
+    final response = await getAuctionSubCategoryUseCase(
+      GetSubCategoryAuctionParams(
+        id: mainCategoryId,
+        page: currentPageSubCategories,
+        limit: 10,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        isLoadingMoreSubCategories = false;
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+          (data) {
+        subCategories.addAll(data);
+        if (data.length < 10) {
+          hasMoreSubCategories = false;
+        } else {
+          currentPageSubCategories++;
+        }
+        isLoadingMoreSubCategories = false;
+        emit(state.copyWith(status: StateStatus.success));
+      },
+    );
+  }
+  List<AuctionSubCategoryEntity> subCategories = [];
+  bool hasMoreSubCategories = true;
+  int currentPageSubCategories = 1;
+  bool isLoadingMoreSubCategories = false;
+
+
+/*
+  List<AuctionMainCategoryEntity> mainCategories = [];
+  bool hasMoreMainCategories = true;
+  int currentPageMainCategories = 1;
+  bool isLoadingMoreMainCategories = false;
+*/
+
+/*
+  /// Load initial main categories
+  Future<void> loadInitialMainCategories() async {
+    emit(state.copyWith(status: StateStatus.loading));
+    mainCategories.clear();
+    currentPageMainCategories = 1;
+    hasMoreMainCategories = true;
+    await getMainCategories();
+    emit(state.copyWith(status: StateStatus.success));
+  }
+
+  Future<void> getMainCategories() async {
+    if (!hasMoreMainCategories || isLoadingMoreMainCategories) return;
+
+    isLoadingMoreMainCategories = true;
+    final response = await getAuctionMainCategoryUseCase(
+      GetAuctionParams(page: currentPageMainCategories, limit: 10),
+    );
+
+    response.fold(
+          (failure) {
+        isLoadingMoreMainCategories = false;
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+          (data) {
+        mainCategories.addAll(data);
+        if (data.length < 10) {
+          hasMoreMainCategories = false;
+        } else {
+          currentPageMainCategories++;
+        }
+        isLoadingMoreMainCategories = false;
+        emit(state.copyWith(status: StateStatus.success));
+      },
+    );
+  }
+*/
+
 
 }

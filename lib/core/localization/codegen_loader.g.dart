@@ -1653,7 +1653,8 @@ class CodegenLoader extends AssetLoader{
   "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
   "retry": "إعادة المحاولة",
   "favorite": "المفضلة",
-  "myAuction": "مزادتي"
+  "myAuction": "مزادتي",
+  "uploadVideo": "رفع الفيديو"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3314,7 +3315,8 @@ static const Map<String,dynamic> _en = {
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
   "watch": "Watch",
   "favorite": "Favorite",
-  "myAuction": "My Auction"
+  "myAuction": "My Auction",
+  "uploadVideo": "Upload Video"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

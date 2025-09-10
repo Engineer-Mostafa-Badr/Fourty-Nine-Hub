@@ -1,8 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_main_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_sub_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/get_all_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_available_auction_use_case.dart';
+import 'package:fourtyninehub/features/auction/domain/usecases/fetch_sub_category_auction_use_case.dart';
 
 import '../../domain/repositories/auction_repo.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
@@ -47,6 +50,16 @@ class AuctionRepoImpl implements AuctionRepository {
   @override
   void listenToNewBidAuction(Function(AuctionParticipantsEntity trip) params) {
     return _remoteDataSource.listenToNewBidAuction(params);
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionMainCategoryEntity>>> getAuctionMainCategory({required GetAuctionParams params}) {
+    return _remoteDataSource.getAuctionMainCategory(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionSubCategoryEntity>>> getAuctionSubCategory({required GetSubCategoryAuctionParams params}) {
+    return _remoteDataSource.getAuctionSubCategory(params: params);
   }
 
 
