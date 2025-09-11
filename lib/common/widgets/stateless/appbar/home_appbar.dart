@@ -81,6 +81,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       scrolledUnderElevation: 0,
+      clipBehavior: Clip.none,
       bottom: bottom,
       leading: isHaveLeading
           ? InkWell(
@@ -144,8 +145,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
           // if (showLanguage)
 
-          if (isWithBackArrow) SizedBox(width: 20.w),
-          if (isWithBackArrow)
+          // if (isWithBackArrow)
+          if (isWithBackArrow) ...[
+            SizedBox(width: 20.w),
             Expanded(
               child: IconAppButton(
                 onPressed: () =>
@@ -154,6 +156,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 size: 20,
               ),
             ),
+          ],
           SizedBox(
             width: 20.w,
           ),

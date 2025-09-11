@@ -264,7 +264,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     padding: const EdgeInsetsDirectional.only(
                       end: 12,
                       start: 12,
-                      top: 20,
+                      top: 12,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1034,7 +1034,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     print("Test User ${user?.firstName}");
     // context.read<GetWalletCubit>();
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: Column(
         children: [
           Row(

@@ -106,6 +106,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       image: Assets.whatsAppIcon,
       index: 3,
       route: Routes.conversationsScreen,
+      height: 24,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,

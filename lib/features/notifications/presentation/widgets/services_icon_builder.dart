@@ -18,6 +18,8 @@ class ServicesIconBuilder extends StatelessWidget {
           context.watch<GetUnreadNotificationsCountCubit>();
 
       return CustomNotificationWidget(
+        bottom: 25,
+        start: 25,
         icon: Image.asset(
           context.isDarkMode?Assets.hand_dark:Assets.hand,
           fit: BoxFit.cover,
