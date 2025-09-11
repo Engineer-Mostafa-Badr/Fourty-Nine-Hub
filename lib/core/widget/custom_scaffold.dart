@@ -21,6 +21,7 @@ import '../../features/social_media/chat/chat_view/presentation/pages/chats_view
 import '../../main.dart';
 import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';
+import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
 
@@ -171,21 +172,37 @@ class _CustomScaffoldState extends State<CustomScaffold>
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 35.h,
-        height: 35.h,
-        padding: padding ?? const EdgeInsets.all(0),
-        child: isSvg != true
-            ? Image.asset(
-                image,
-                fit: BoxFit.cover,
-                color: context.isDarkMode ? AppColors.whiteColor : null,
-              )
-            : SvgPicture.asset(
-                image,
-                fit: BoxFit.cover,
-                color: context.isDarkMode ? AppColors.whiteColor : null,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 35.h,
+            height: 35.h,
+            padding: padding ?? const EdgeInsets.all(0),
+            child: isSvg != true
+                ? Image.asset(
+                    image,
+                    fit: BoxFit.cover,
+                    color: context.isDarkMode ? AppColors.whiteColor : null,
+                  )
+                : SvgPicture.asset(
+                    image,
+                    fit: BoxFit.cover,
+                    color: context.isDarkMode ? AppColors.whiteColor : null,
+                  ),
+          ),
+          SizedBox(height: 4.h),
+          SizedBox(
+            width: 100.w,
+            child: Label(
+              text: label,
+              style: Styles.smallText(
+                  fontSize: 20, color: AppColors.PRIMARY_COLOR),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
+          ),
+        ],
       ),
     );
   }

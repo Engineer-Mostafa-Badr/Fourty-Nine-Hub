@@ -101,6 +101,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       index: 3,
       height: 16,
       route: Routes.conversationsScreen,
+      height: 24,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,

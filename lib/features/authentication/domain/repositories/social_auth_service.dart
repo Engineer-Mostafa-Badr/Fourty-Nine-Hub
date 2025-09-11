@@ -361,9 +361,9 @@ class SocialAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    // هذا يجب أن يطابق CLIENT_ID في GoogleService-Info.plist
+    // هذا يجب أن يطابق CLIENT_ID في google-services.json
     serverClientId:
-        '361206050719-6go2s7r10d1pckpo715rmc21jne7fddo.apps.googleusercontent.com',
+        '361206050719-emvcef150sp0t169dr2qhndd5u340cll.apps.googleusercontent.com',
         
   );
 

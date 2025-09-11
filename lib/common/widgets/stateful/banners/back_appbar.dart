@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -48,9 +51,9 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: automaticallyImplyLeading,
       leading: leading ??
           IconButton(
-            onPressed: () {
-      ManageVibration.vibrate();
-              context.go(Routes.HOME);
+            onPressed: () async {
+              ManageVibration.vibrate();
+              await _handleBackNavigation(context);
             },
             visualDensity: VisualDensity(horizontal: -4),
             icon: Icon(
@@ -80,6 +83,32 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _handleBackNavigation(BuildContext context) async {
+    // Get the current route path to check if we're on login page
+    final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+    
+    // Check if we're on the login page - this indicates user was redirected here due to session expiry
+    if (currentLocation.contains('/login') || currentLocation.contains(Routes.LOGIN)) {
+      // User is on login page, likely due to expired refresh token
+      // Apply same logout logic as when refresh token fails
+      await _performLogoutCleanup();
+    }
+    
+    context.go(Routes.HOME);
+  }
+
+  Future<void> _performLogoutCleanup() async {
+    // Clear all tokens and auth data (same as UserCubit.logout logic)
+    await CacheManager.deleteAllTokens();
+    
+    // Clear login state
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("ISLOGIN", false);
+    
+    // Disconnect WebSocket
+    SharedWebSocket.disconnect();
   }
 
   @override
