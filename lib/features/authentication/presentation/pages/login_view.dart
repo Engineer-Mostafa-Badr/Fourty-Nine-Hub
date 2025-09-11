@@ -248,9 +248,16 @@ class _LoginViewState extends State<LoginView> {
           }
         },
         child: PopScope(
-          onPopInvoked: (bool value) {
-            // Handle the pop event
-            // For example, you can show a confirmation dialog
+          onPopInvoked: (bool value) async {
+            // Logout while keeping important settings (onboarding, language, dark mode)
+            // This also sets ISLOGIN to false
+            await CacheManager.logoutKeepingSettings();
+            
+            // Remove token from API consumer
+            final userCubit = serviceLocator<UserCubit>();
+            userCubit.removeToken();
+            
+            // Navigate to home in guest mode
             context.go(Routes.HOME);
           },
           child: GestureDetector(
