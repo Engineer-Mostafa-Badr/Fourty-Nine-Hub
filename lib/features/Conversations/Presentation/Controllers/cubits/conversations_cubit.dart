@@ -32,14 +32,17 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     this.listenToStopTypingUseCase,
   ) : super(ConversationsState()){
     try {
-
-      SharedWebSocket.socket!.on('conversation:participant-joined', (data) {
+      // Participant Joined
+      SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
         log("decoded data : \n$data");
         try {
           // final decodedData = jsonDecode(data);
           CliLogger.info("conversation:participant-joined :  $data");
 
           // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
 
         } catch (e) {
           CliLogger.error("conversation:participant-joined Error :  $e");
@@ -49,16 +52,19 @@ class ConversationsCubit extends Cubit<ConversationsState> {
       CliLogger.error("conversation:participant-joined Error :  $e");
     }
 
-
+    // Participant Left
     try {
 
-      SharedWebSocket.socket!.on('conversation:participant-left', (data) {
+      SharedWebSocket.socket?.on('conversation:participant-left', (data) {
         log("decoded data : \n$data");
         try {
           // final decodedData = jsonDecode(data);
           CliLogger.info("conversation:participant-left :  $data");
 
           // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
 
         } catch (e) {
           CliLogger.error("conversation:participant-left Error :  $e");
@@ -68,15 +74,18 @@ class ConversationsCubit extends Cubit<ConversationsState> {
       CliLogger.error("conversation:participant-left Error :  $e");
     }
 
-
+    // friend:status (online or offline)
     try {
-      SharedWebSocket.socket!.on('friend:status', (data) {
+      SharedWebSocket.socket?.on('friend:status', (data) {
         log("decoded data : \n$data");
         try {
           // final decodedData = jsonDecode(data);
           CliLogger.info("friend:status :  $data");
 
           // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
+          socialConversations.firstWhere((element) => element.profile?.id == data['friendUserId']).isOnline = data['online'] ?? false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
 
         } catch (e) {
           CliLogger.error("friend:status Error :  $e");
@@ -86,9 +95,53 @@ class ConversationsCubit extends Cubit<ConversationsState> {
       CliLogger.error("friend:status Error :  $e");
     }
 
+    // Participant Start Recording
+    try {
 
+      SharedWebSocket.socket?.on('conversation:participant-started-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-started-recording :  $data");
+
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-started-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-started-recording Error :  $e");
+    }
+
+    // Participant Stop Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-stop-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-stop-recording :  $data");
+
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-stop-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-stop-recording Error :  $e");
+    }
+
+    // Conversation Update List
     _listenToUpdateSocialList();
+    // Conversation Start Typing
     _listenToStartTyping();
+    // Conversation Stop Typing
     _listenToStopTyping();
   }
 
@@ -149,7 +202,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   }
 
   Future<void> getSocialConversations() async {
-    if (!hasMoreDataSocialConversations || isLoadingMoreSocialConversation) return;
+    if (hasMoreDataSocialConversations || isLoadingMoreSocialConversation) return;
     isLoadingMoreSocialConversation = true;
     emit(state.copyWith(status: ConversationsStates.loading));
     await _fetchSocialConversations();

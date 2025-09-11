@@ -312,6 +312,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   Future<Either<Failure, void>> logout() async {
     String? refreshToken = await CacheManager.getRefreshToken();
     String? deviceId = await getDeviceId();
+    
+    // إذا لم يكن هناك refresh token، قم بمسح البيانات المحلية فقط
+    if (refreshToken == null || refreshToken.isEmpty) {
+      log('⚠️ No refresh token available, clearing local tokens only');
+      await CacheManager.deleteAllTokens();
+      _apiConsumer.removeTokenFromHeader();
+      return const Right(null);
+    }
+    
     var params = {
       "refreshToken": refreshToken,
       "deviceId": deviceId

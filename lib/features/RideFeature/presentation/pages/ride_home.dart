@@ -70,6 +70,7 @@ import '../controllers/cubits/car_location_cubit.dart';
 import 'dashboards/widgets/build_safety_sheet.dart';
 import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
+import 'widgets/driver_profile_modal.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -1856,30 +1857,35 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         spacing: 6,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            height: 30,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
+                          GestureDetector(
+                            onTap: () {
+                              showDriverProfileSheet(context);
+                            },
+                            child: Container(
+                              height: 30,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                  color: context.isDarkMode
+                                      ? AppColors.GREY_DARK_COLOR
+                                      : AppColors.whiteColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 3)),
+                                  ]),
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                Assets.targetLocation,
                                 color: context.isDarkMode
-                                    ? AppColors.GREY_DARK_COLOR
-                                    : AppColors.whiteColor,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      spreadRadius: 2,
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 3)),
-                                ]),
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              Assets.targetLocation,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : null,
-                              width: 35.w,
-                              height: 35.w,
+                                    ? AppColors.whiteColor
+                                    : null,
+                                width: 35.w,
+                                height: 35.w,
+                              ),
                             ),
                           ),
                           Expanded(

@@ -76,25 +76,25 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   String? token;
 
   UserCubit(
-      this._getUserUseCase,
-      this._getTokensUseCase,
-      this._attachTokenUseCase,
-      this._saveTokensUseCase,
-      this._signOutUseCase,
-      this.cacheService,
-      this._updateUserBioUseCase,
-      this._updateUserNameUseCase,
-      this._createNormalChatUseCase,
-      this._createAnonymousChatUseCase,
-      this._updateProfileViewUseCase,
-      this._getProfileViewsUseCase,
-      this._getProfileViewsByUserIdUseCase,
-      // this.updateSocketLocationUseCase,
-      // this._getUnreadedChatsCounterUsecase,
-      this._signInAsGuestUseCase,
-      this._checkGuestStateUseCase,
-      this._convertGuestToUserUseCase,
-      ) : super(const BasicState());
+    this._getUserUseCase,
+    this._getTokensUseCase,
+    this._attachTokenUseCase,
+    this._saveTokensUseCase,
+    this._signOutUseCase,
+    this.cacheService,
+    this._updateUserBioUseCase,
+    this._updateUserNameUseCase,
+    this._createNormalChatUseCase,
+    this._createAnonymousChatUseCase,
+    this._updateProfileViewUseCase,
+    this._getProfileViewsUseCase,
+    this._getProfileViewsByUserIdUseCase,
+    // this.updateSocketLocationUseCase,
+    // this._getUnreadedChatsCounterUsecase,
+    this._signInAsGuestUseCase,
+    this._checkGuestStateUseCase,
+    this._convertGuestToUserUseCase,
+  ) : super(const BasicState());
   bool get isAuthenticated => state.data != null && !isGuestMode;
   bool get isGuestMode => state.data?.isGuest == true;
 
@@ -147,15 +147,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final guestResult = await _checkGuestStateUseCase(const NoParams());
 
     guestResult.fold(
-          (failure) {
+      (failure) {
         var currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         // فحص التوكن العادي
         attachToken();
       },
-          (isGuest) {
+      (isGuest) {
         if (isGuest) {
           emit(state.copyWith(
             status: StateStatus.success,
@@ -189,16 +189,17 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     ));
 
     result.fold(
-          (failure) {
+      (failure) {
         var currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: StateStatus.error,
           failure: failure,
-        ));},
-          (tokens) async {
+        ));
+      },
+      (tokens) async {
         // حفظ التوكنز
         await CacheManager.saveAccessToken(tokens.accessToken);
         await CacheManager.saveRefreshToken(tokens.refreshToken);
@@ -231,11 +232,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         CreateAnonymousChatParams(otherUserId: otherId));
     ChatEntity? chat;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          chat = data;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      chat = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return chat;
   }
 
@@ -247,11 +248,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         CreateNormalChatParams(otherUserId: otherId, categoryId: categoryId));
     ChatEntity? chat;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          chat = data;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      chat = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return chat;
   }
 
@@ -263,14 +264,14 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await repository.getGuestData();
 
     return result.fold(
-          (failure) {
+      (failure) {
         var currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         return null;
       },
-          (data) => data?[key] as T?,
+      (data) => data?[key] as T?,
     );
   }
 
@@ -279,11 +280,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final response = await _getProfileViewsUseCase(
         GetProfileViewsParams(isProfile: isProfile));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          profileViews = r.reversed.toList();
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      profileViews = r.reversed.toList();
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
   Future<void> getProfileViewByUserId(
@@ -292,11 +293,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final response = await _getProfileViewsByUserIdUseCase(
         GetProfileViewsParams(isProfile: isProfile, userId: userId));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          profileViewsByUserId = r.reversed.toList();
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      profileViewsByUserId = r.reversed.toList();
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
   // Future<Either<Failure, UserEntity>?> getUser() async {
@@ -321,17 +322,18 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   // }
 
   Future<Either<Failure, UserEntity>?> getUser() async {
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     if (!isTokenAttached || isGuestMode) return null;
     print("🚀 getUser() called");
     final result = await _getUserUseCase(const NoParams());
-    SharedWebSocket.connect(token: (await CacheManager.getAccessToken())??'');
+    SharedWebSocket.connect(token: (await CacheManager.getAccessToken()) ?? '');
 
     emit(
       result.fold(
-            (failure) {
+        (failure) {
           var currentContext =
-          AppPages.router.configuration.navigatorKey.currentContext!;
+              AppPages.router.configuration.navigatorKey.currentContext!;
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
           return state.copyWith(
@@ -339,7 +341,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
             failure: failure,
           );
         },
-            (user) {
+        (user) {
           log("user is :${user.id}");
           return state.copyWith(status: StateStatus.success, data: user);
         },
@@ -353,8 +355,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     // UserTokensEntity? token;
     result.fold(
-          (_) {},
-          (tokens) {
+      (_) {},
+      (tokens) {
         _attachTokenUseCase(tokens);
         isTokenAttached = true;
         // token = tokens!;
@@ -421,8 +423,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       // مسح Guest state
       final result = await _checkGuestStateUseCase(const NoParams());
       result.fold(
-            (failure) => emit(state.copyWith(status: StateStatus.error)),
-            (_) async {
+        (failure) => emit(state.copyWith(status: StateStatus.error)),
+        (_) async {
           await CacheManager.deleteAllTokens();
           emit(state.copyWith(
             status: StateStatus.success,
@@ -435,14 +437,16 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       // تسجيل خروج عادي
       final result = await _signOutUseCase(const NoParams());
       result.fold(
-            (l) {
-          var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+        (l) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
           currentContext.pop();
           currentContext.pop();
-          showErrorMessage(currentContext, currentContext.isArabic?'حدث خطأ':'Something went wrong');
+          showErrorMessage(currentContext,
+              currentContext.isArabic ? 'حدث خطأ' : 'Something went wrong');
           emit(state.copyWith(status: StateStatus.error));
         },
-            (r) async {
+        (r) async {
           setLogOut();
           emit(state.copyWith(
             status: StateStatus.success,
@@ -456,7 +460,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
   Future<void> setLogOut() async {
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("ISLOGIN", false);
     currentContext.pop();
@@ -486,8 +491,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final currentDataResult = await repository.getGuestData();
 
     currentDataResult.fold(
-          (failure) => null,
-          (currentData) async {
+      (failure) => null,
+      (currentData) async {
         final updatedData = currentData ?? <String, dynamic>{};
         updatedData[key] = value;
         await repository.saveGuestData(updatedData);
@@ -499,17 +504,21 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     cacheService.setLogin(value);
   }
 
+  removeToken() {
+    serviceLocator<ApiConsumer>().removeTokenFromHeader();
+  }
+
   Future<void> signInAsGuest() async {
     emit(state.copyWith(status: StateStatus.loading));
 
     final result = await _signInAsGuestUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(state.copyWith(
+      (failure) => emit(state.copyWith(
         status: StateStatus.error,
         failure: failure,
       )),
-          (guestUser) => emit(state.copyWith(
+      (guestUser) => emit(state.copyWith(
         status: StateStatus.success,
         data: guestUser,
       )),
@@ -523,11 +532,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       userId: userId,
     ));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          log("status = $r");
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      log("status = $r");
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
   Future<void> updateUserBio({required String bio}) async {
@@ -572,11 +581,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
             data: {'profilePictureId': data.mediaId},
           );
           return response.fold(
-                (failure) {
+            (failure) {
               emit(state.copyWith(status: StateStatus.error, failure: failure));
               return Left(failure);
             },
-                (data) {
+            (data) {
               getUser();
               emit(state.copyWith(
                 status: StateStatus.success,
