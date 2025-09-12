@@ -229,7 +229,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.logout.localize,
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  // context.push(Routes.LOGIN);
+                                  context.push(Routes.LOGIN);
                                   showAnimatedDialog(
                                     context,
                                     AlertDialog(
