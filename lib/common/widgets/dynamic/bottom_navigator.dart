@@ -99,9 +99,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       cacheKey: 'chatCount',
       image: Assets.whatsAppIcon,
       index: 3,
-      height: 16,
       route: Routes.conversationsScreen,
-      height: 24,
+      height: 18,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,

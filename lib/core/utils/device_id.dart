@@ -14,3 +14,19 @@ Future<String> getDeviceId() async {
     return "Unknown";
   }
 }
+
+Future<String> getDeviceName() async {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  if (Platform.isAndroid) {
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    return androidInfo.name; // Unique ID on Android
+  } else if (Platform.isIOS) {
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    return iosInfo.name; // Unique ID on iOS
+  } else {
+    return "Unknown";
+  }
+}
+
+
+

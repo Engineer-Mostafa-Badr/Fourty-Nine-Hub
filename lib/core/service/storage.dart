@@ -160,6 +160,12 @@ class Storage{
     await prefs.setBool(Constants.vibrationKey, value);
   }
 
+  /// Sets the login value
+  static Future<void> setLoginValue(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("ISLOGIN", value);
+  }
+
   /// Gets the boolean value (default is true if not set)
   static Future<bool> getVibrationValue() async {
     final prefs = await SharedPreferences.getInstance();
