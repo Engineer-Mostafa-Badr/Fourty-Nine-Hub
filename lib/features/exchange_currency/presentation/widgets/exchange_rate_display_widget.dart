@@ -16,6 +16,25 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
     required this.baseCurrency,
   });
 
+  String _formatNumberForLocale(BuildContext context, double number, {int decimalPlaces = 4}) {
+    final formattedNumber = number.toStringAsFixed(decimalPlaces);
+    if (context.isArabic) {
+      // Convert English numerals to Arabic numerals
+      return formattedNumber
+          .replaceAll('0', '٠')
+          .replaceAll('1', '١')
+          .replaceAll('2', '٢')
+          .replaceAll('3', '٣')
+          .replaceAll('4', '٤')
+          .replaceAll('5', '٥')
+          .replaceAll('6', '٦')
+          .replaceAll('7', '٧')
+          .replaceAll('8', '٨')
+          .replaceAll('9', '٩');
+    }
+    return formattedNumber;
+  }
+
   // توليد نقاط الرسم البياني بناءً على سعر الصرف الحقيقي
   List<FlSpot> _generateDataPointsForCurrency(String currencyCode) {
     if (currencyRates?.conversionRates == null) {
@@ -213,7 +232,7 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              entry.value.toStringAsFixed(4),
+                              _formatNumberForLocale(context, entry.value),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -223,7 +242,7 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                             // عرض النسبة المئوية للتغيير
                             if (chartPoints.length >= 2)
                               Text(
-                                _getPercentageChange(chartPoints),
+                                _getPercentageChange(context, chartPoints),
                                 style: TextStyle(
                                   color: chartColor,
                                   fontSize: 10,
@@ -245,7 +264,7 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
   }
 
   // حساب النسبة المئوية للتغيير
-  String _getPercentageChange(List<FlSpot> spots) {
+  String _getPercentageChange(BuildContext context, List<FlSpot> spots) {
     if (spots.length < 2) return '';
 
     double firstValue = spots.first.y;
@@ -253,7 +272,7 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
     double changePercent = ((lastValue - firstValue) / firstValue) * 100;
 
     String sign = changePercent >= 0 ? '+' : '';
-    return '$sign${changePercent.toStringAsFixed(1)}%';
+    return '$sign${_formatNumberForLocale(context, changePercent, decimalPlaces: 1)}%';
   }
 
   List<MapEntry<String, double>> _getDisplayRates() {

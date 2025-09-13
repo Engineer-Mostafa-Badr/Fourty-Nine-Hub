@@ -197,7 +197,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
             child: Label(
               text: label,
               style: Styles.mediumText(
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
                 fontSize: 20,
                 color: context.isDarkMode ? Colors.white : Colors.black,
               ),
