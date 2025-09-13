@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
@@ -311,7 +312,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<Either<Failure, void>> logout() async {
-    String? refreshToken = await CacheManager.getRefreshToken();
+    String? refreshToken = await Storage.getRefreshToken();
+    print("refreshToken $refreshToken");
     String? deviceId = await getDeviceId();
     
     // إذا لم يكن هناك refresh token، قم بمسح البيانات المحلية فقط

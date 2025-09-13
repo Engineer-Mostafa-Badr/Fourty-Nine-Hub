@@ -227,8 +227,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
-                                onTap: () {
+                                onTap: () async {
                                   ManageVibration.vibrate();
+                                  String? refreshToken = await Storage.getRefreshToken();
+                                  print("refreshToken $refreshToken");
                                   // context.push(Routes.LOGIN);
                                   showAnimatedDialog(
                                     context,
