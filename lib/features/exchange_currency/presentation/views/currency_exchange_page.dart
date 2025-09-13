@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -36,7 +38,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     WidgetsBinding.instance.addObserver(this);
 
     // Initialize controllers
-    _amountController.text = '1000.00';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _amountController.text = '0.00'.toArabicNumbers(context);
+    });
 
     // Animation controllers
     _refreshAnimationController = AnimationController(
@@ -99,12 +103,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
       backgroundColor: Colors.grey.shade50,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
-        child: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.grey.shade50,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          titleSpacing: 0,
+        child: BackAppBar(
+          // scrolledUnderElevation: 0,
+          // backgroundColor: Colors.grey.shade50,
+          // elevation: 0,
+          // titleSpacing: 0,
+          label: context.isArabic ? 'تبديل العملات' : 'Exchange',
           leading: SizedBox(
             width: 30,
             height: 30,
@@ -115,14 +119,14 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               onPressed: () => Navigator.pop(context),
             ),
           ),
-          title: Text(
-            context.isArabic ? 'تبديل العملات' : 'Exchange',
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // title: Text(
+          //   context.isArabic ? 'تبديل العملات' : 'Exchange',
+          //   style: const TextStyle(
+          //     color: Colors.black,
+          //     fontSize: 16,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
           actions: [
             // Settings toggle
             BlocBuilder<CurrencyCubit, CurrencyState>(
@@ -534,13 +538,46 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(12)),
                                           ),
-                                          hintText: '0.00',
+                                          hintText:
+                                              '0.00'.toArabicNumbers(context),
                                           hintStyle: TextStyle(
                                             color: Colors.grey.shade400,
                                           ),
                                           filled: true,
                                           fillColor: Colors.grey.shade50,
                                         ),
+                                        inputFormatters: [
+                                          TextInputFormatter.withFunction(
+                                              (oldValue, newValue) {
+                                            // Convert Arabic numbers to English for processing
+                                            String convertedText =
+                                                newValue.text;
+                                            const arabicToEnglish = {
+                                              '٠': '0',
+                                              '١': '1',
+                                              '٢': '2',
+                                              '٣': '3',
+                                              '٤': '4',
+                                              '٥': '5',
+                                              '٦': '6',
+                                              '٧': '7',
+                                              '٨': '8',
+                                              '٩': '9',
+                                              '،': '.',
+                                            };
+
+                                            arabicToEnglish
+                                                .forEach((arabic, english) {
+                                              convertedText = convertedText
+                                                  .replaceAll(arabic, english);
+                                            });
+
+                                            return TextEditingValue(
+                                              text: convertedText,
+                                              selection: newValue.selection,
+                                            );
+                                          }),
+                                        ],
                                         onChanged: (value) {
                                           final amount =
                                               double.tryParse(value) ?? 0.0;
@@ -970,28 +1007,33 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
   }
 
   String _getConvertedAmount(CurrencyState state, CurrencyCubit cubit) {
+    String result = '0.00';
     if (state is CurrencyConverted) {
-      return state.exchangeRate.conversionResult.toStringAsFixed(2);
+      result = state.exchangeRate.conversionResult.toStringAsFixed(2);
     } else if (state is CurrencyUpdatedSilently) {
-      return state.exchangeRate.conversionResult.toStringAsFixed(2);
+      result = state.exchangeRate.conversionResult.toStringAsFixed(2);
     } else if (cubit.lastExchangeRate != null) {
-      return cubit.lastExchangeRate!.conversionResult.toStringAsFixed(2);
+      result = cubit.lastExchangeRate!.conversionResult.toStringAsFixed(2);
     }
-    return '0.00';
+    return result.toArabicNumbers(context);
   }
 
   String _getExchangeRateText(CurrencyState state) {
     final cubit = context.read<CurrencyCubit>();
+    String result = '';
 
     if (state is CurrencyConverted) {
-      return '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
+      result =
+          '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
     } else if (state is CurrencyUpdatedSilently) {
-      return '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
+      result =
+          '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
     } else if (cubit.lastExchangeRate != null) {
       final rate = cubit.lastExchangeRate!;
-      return '1 ${rate.baseCode} = ${rate.conversionRate.toStringAsFixed(4)} ${rate.targetCode}';
+      result =
+          '1 ${rate.baseCode} = ${rate.conversionRate.toStringAsFixed(4)} ${rate.targetCode}';
     }
-    return '';
+    return result.toArabicNumbers(context);
   }
 
   String _getCurrencyFlag(String code) {
@@ -1146,7 +1188,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                         ),
                       ),
                       title: Text(
-                        '${currency.code} - ${currency.name}',
+                        '${currency.code} - ${context.isArabic ? currency.nameAr : currency.name}',
                         style: TextStyle(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,

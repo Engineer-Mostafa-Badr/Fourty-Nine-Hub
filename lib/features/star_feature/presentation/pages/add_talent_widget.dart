@@ -12,6 +12,8 @@ import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../routes/pages.dart';
 import '../../domain/use_case/upload_my_star_use_case.dart';
+import '../../domain/use_case/get_active_categories_use_case.dart';
+import '../../data/model/active_category_model.dart';
 import '../controller/star_cubit/star_cubit.dart';
 import '../../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +22,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/abstract/use_case.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
@@ -47,6 +50,11 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   // Media IDs from upload
   String? _thumbnailMediaId;
   String? _videoMediaId;
+
+  // Category related
+  List<ActiveCategory> _categories = [];
+  ActiveCategory? _selectedCategory;
+  bool _isLoadingCategories = false;
 
   final FocusNode _titleFocusNode = FocusNode();
   bool _isUploading = false;
@@ -166,6 +174,13 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   ),
                 ),
               ),
+
+              SizedBox(height: 20.h),
+
+              // Category Dropdown Section
+              _buildSectionTitle(context.isArabic ? 'الفئة' : 'Category'),
+              SizedBox(height: 8.h),
+              _buildCategoryDropdown(),
 
               SizedBox(height: 20.h),
 
@@ -301,6 +316,97 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         fontWeight: FontWeight.w600,
         color: AppColors.getTextColor(context),
       ),
+    );
+  }
+
+  Widget _buildCategoryDropdown() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.getFindFillColor(context),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+          color: _selectedCategory != null
+              ? AppColors.getRedColor(context).withOpacity(0.5)
+              : AppColors.getTextColor(context).withOpacity(0.1),
+          width: 1.5,
+        ),
+      ),
+      child: _isLoadingCategories
+          ? Container(
+              height: 60.h,
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.getRedColor(context),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Text(
+                    context.isArabic ? 'جاري تحميل الفئات...' : 'Loading categories...',
+                    style: TextStyle(
+                      color: AppColors.getTextColor(context).withOpacity(0.6),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : DropdownButtonFormField<ActiveCategory>(
+              decoration: InputDecoration(
+                hintText: context.isArabic ? 'اختر فئة' : 'Select a category',
+                hintStyle: TextStyle(
+                  color: AppColors.getTextColor(context).withOpacity(0.5),
+                ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 16.h,
+                ),
+              ),
+              value: _selectedCategory,
+              items: _categories.map((category) {
+                return DropdownMenuItem<ActiveCategory>(
+                  value: category,
+                  child: Text(
+                    context.isArabic ? category.nameAr : category.nameEn,
+                    style: TextStyle(
+                      color: AppColors.getTextColor(context),
+                      fontSize: 14,
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: _isUploading
+                  ? null
+                  : (ActiveCategory? newCategory) {
+                      setState(() {
+                        _selectedCategory = newCategory;
+                      });
+                    },
+              validator: (value) {
+                if (value == null) {
+                  return context.isArabic
+                      ? 'يرجى اختيار فئة'
+                      : 'Please select a category';
+                }
+                return null;
+              },
+              dropdownColor: AppColors.getFindFillColor(context),
+              style: TextStyle(
+                color: AppColors.getTextColor(context),
+              ),
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColors.getTextColor(context).withOpacity(0.6),
+              ),
+            ),
     );
   }
 
@@ -852,6 +958,18 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       return;
     }
 
+    if (_selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.isArabic
+              ? 'يرجى اختيار فئة'
+              : 'Please select a category'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     // // Check subscription first
     // serviceLocator<SubscriptionController>().checkIfUserSubscribed(
     //   onSubscribed: () => _performUpload(),
@@ -1053,6 +1171,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       _selectedThumbnail = null;
       _videoMediaId = null;
       _thumbnailMediaId = null;
+      _selectedCategory = null;
     });
     _videoController?.dispose();
     _videoController = null;
@@ -1070,8 +1189,38 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   @override
   void initState() {
     super.initState();
+    _loadCategories();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _titleFocusNode.requestFocus();
     });
+  }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      _isLoadingCategories = true;
+    });
+
+    try {
+      final getActiveCategoriesUseCase = serviceLocator<GetActiveCategoriesUseCase>();
+      final result = await getActiveCategoriesUseCase(NoParams());
+
+      result.fold(
+        (failure) {
+          print("Error loading categories: $failure");
+          // Show error message to user if needed
+        },
+        (response) {
+          setState(() {
+            _categories = response.data.categories;
+            _isLoadingCategories = false;
+          });
+        },
+      );
+    } catch (e) {
+      print("Exception loading categories: $e");
+      setState(() {
+        _isLoadingCategories = false;
+      });
+    }
   }
 }

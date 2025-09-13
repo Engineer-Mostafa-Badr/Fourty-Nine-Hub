@@ -4,9 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/utils/format_numbers.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
+import '../../../account_taps/wallet/presentation/widgets/custom_winner_appbar.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
 import '../../domain/entity/star_entity.dart';
 
 import '../controller/star_cubit/star_cubit.dart';
@@ -260,6 +269,30 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     }
   }
 
+  String getSubTitleAppBar(BuildContext context,
+      {WinnersTenPercentState? state}) {
+    if (state == null) {
+      return '';
+    }
+    late final String winners;
+    if (state.winners?.totalWinners == 0) {
+      winners = context.isArabic ? 'لا يوجد فائزين' : 'No Winners';
+    } else if (state.winners?.totalWinners == 1) {
+      winners = context.isArabic ? 'فائز' : 'Winner';
+    } else if (state.winners?.totalWinners == 2) {
+      winners = context.isArabic ? 'فائزين' : 'Winners';
+    } else if ((state.winners?.totalWinners ?? 0) > 2 &&
+        (state.winners?.totalWinners ?? 0) < 11) {
+      winners = context.isArabic ? 'فائزين' : 'Winners';
+    } else {
+      winners = context.isArabic ? 'فائز' : 'Winner';
+    }
+    if (state.winners?.totalWinners == 0 || state.winners == null) {
+      return '';
+    }
+    return '${FormatNumbers().formatNumber(state.winners?.totalWinners ?? 0, useArabicNumerals: context.isArabic)} $winners / ${FormatNumbers().formatNumber(state.winners?.totalAmount ?? 0, useArabicNumerals: context.isArabic)} ${context.isArabic ? state.winners?.currencyAr ?? '' : state.winners?.currencyEn ?? ''}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -309,7 +342,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       backgroundColor:
                           context.isDarkMode ? Colors.black : Colors.white,
                       toolbarHeight: 30,
-                      titleSpacing: 16,
+                      titleSpacing: 0,
                       leading: BackButton(
                         onPressed: () {
                           ManageVibration.vibrate();
@@ -328,36 +361,16 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                         ),
                       ),
                       actions: [
+                        Label(
+                          text: getSubTitleAppBar(context),
+                          style: Styles.smallText(),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '(15/3700)',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                context.isArabic ? 'الفائزون' : 'Winners',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(width: 4),
-                              Icon(Icons.emoji_events, color: Colors.orange),
-                            ],
-                          ),
+                          padding: const EdgeInsetsDirectional.only(end: 16),
+                          child: Image.asset(Assets.cupImage),
                         ),
                       ],
                     ),
