@@ -1669,7 +1669,7 @@ class CodegenLoader extends AssetLoader{
   "startFrom": "يبدأ من",
   "myBidders": "مزايدِيَّ",
   "ended": "انتهى",
-  "winner": "فائز"
+  "winnerAuction": "فائز"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3346,7 +3346,7 @@ static const Map<String,dynamic> _en = {
   "startFrom": "Start from",
   "myBidders": "My Bidders",
   "ended": "Ended",
-  "winner": "Winner"
+  "winnerAuction": "Winner"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

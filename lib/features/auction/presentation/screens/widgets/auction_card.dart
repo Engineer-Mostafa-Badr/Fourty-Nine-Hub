@@ -245,7 +245,7 @@ class AuctionCard extends StatelessWidget {
                             // participants
                             Flexible(
                               child: Text(
-                                "${_getParticipantCount()} participants",
+                                "${_getParticipantCount()} ${LocaleKeys.participants.localize}",
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 13,
@@ -264,7 +264,7 @@ class AuctionCard extends StatelessWidget {
                                   const SizedBox(width: 4),
                                   Flexible(
                                     child: Text(
-                                      "${_getViewCount()} views",
+                                      "${_getViewCount()} ${LocaleKeys.views.localize}",
                                       style: Styles.mediumText(
                                         color: context.isDarkMode ? Colors.white : Colors.black,
                                       ),
@@ -281,7 +281,7 @@ class AuctionCard extends StatelessWidget {
                       // 👉 Button on right
                       AppButton(
                         width: 91,
-                        backColor: auction.isWinner == true ?  AppColors.cFFAC3F :  AppColors.whiteColor,
+                        backColor: auction.isWinner == true ?  AppColors.cFFAC3F :  AppColors.PRIMARY_COLOR_DARK,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -297,7 +297,7 @@ class AuctionCard extends StatelessWidget {
                           color:auction.isWinner == true ?  AppColors.black :  AppColors.whiteColor,
                           fontWeight: FontWeight.w500
                         ),
-                        label: auction.isWinner == true ? LocaleKeys.winner.localize : LocaleKeys.joinNow.localize,
+                        label: auction.isWinner == true ? LocaleKeys.winnerAuction.localize : LocaleKeys.joinNow.localize,
                       ),
                     ],
                   ),
