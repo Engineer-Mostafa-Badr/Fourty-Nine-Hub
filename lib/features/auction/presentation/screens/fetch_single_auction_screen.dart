@@ -174,7 +174,7 @@ class _AuctionDetails extends StatelessWidget {
         Row(
           children: [
             Text(
-              "Current Price: \$${auction.currentPrice ?? 0}",
+              "Current Price: \$${auction.price ?? 0}",
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,

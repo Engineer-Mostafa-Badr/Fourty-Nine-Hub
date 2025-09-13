@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../res/style/app_colors.dart';
+import '../../../domain/entities/get_all_auction_entity.dart';
 
 class AuctionImageCarousel extends StatefulWidget {
-  final List<String> images;
+  final List<AuctionMediaEntity> images;
 
   const AuctionImageCarousel({super.key, required this.images});
 
@@ -92,7 +93,7 @@ class _AuctionImageCarouselState extends State<AuctionImageCarousel> {
             return ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                imageUrl,
+                imageUrl.mediaKey!,
                 height: 201,
                 width: double.infinity,
                 fit: BoxFit.cover,

@@ -2,6 +2,8 @@ part of 'auction_cubit.dart';
 class AuctionState {
   final StateStatus? status;
   final List<GetAvailableAuctionEntity>? getAvailableAuction;
+  final List<GetAvailableAuctionEntity>? getExpiredAuction;
+  final List<GetAvailableAuctionEntity>? getFavoriteAuction;
   final List<AuctionParticipantsEntity>? auctionParticipants;
   final List<AuctionMainCategoryEntity>? auctionMainData;
   final Failure? failure;
@@ -16,6 +18,8 @@ class AuctionState {
     this.singleAuction,
     this.auctionParticipants,
     this.auctionMainData,
+    this.getExpiredAuction,
+    this.getFavoriteAuction,
     this.uploadedFiles = const [],
     this.isUploading = false,
   });
@@ -29,6 +33,8 @@ class AuctionState {
     List<AuctionMainCategoryEntity>? auctionMainData,
     List<UploadFileEntity>? uploadedFiles,
     bool? isUploading,
+    List<GetAvailableAuctionEntity>? getExpiredAuction,
+    List<GetAvailableAuctionEntity>? getFavoriteAuction,
   }) {
     return AuctionState(
       status: status ?? this.status,
@@ -39,6 +45,8 @@ class AuctionState {
       auctionMainData: auctionMainData ?? this.auctionMainData,
       uploadedFiles: uploadedFiles ?? this.uploadedFiles,
       isUploading: isUploading ?? this.isUploading,
+      getExpiredAuction: getExpiredAuction ?? this.getExpiredAuction,
+      getFavoriteAuction: getFavoriteAuction ?? this.getFavoriteAuction,
     );
   }
 }

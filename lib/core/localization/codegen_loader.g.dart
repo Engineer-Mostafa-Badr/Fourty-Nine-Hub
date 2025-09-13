@@ -1654,7 +1654,17 @@ class CodegenLoader extends AssetLoader{
   "retry": "إعادة المحاولة",
   "favorite": "المفضلة",
   "myAuction": "مزادتي",
-  "uploadVideo": "رفع الفيديو"
+  "uploadVideo": "رفع الفيديو",
+  "addAuction": "إضافة مزاد",
+  "joinNow": "انضم الآن",
+  "minBiddingPrice": "الحد الأدنى لسعر المزايدة",
+  "selectStartDateAndTime": "اختر تاريخ ووقت البداية",
+  "selectEndDateAndTime": "اختر تاريخ ووقت الانتهاء",
+  "noMediaUploadedYet": "لم يتم رفع أي وسائط بعد",
+  "uploadImagesOrVideo": "قم برفع صور أو فيديوهات للبدء",
+  "selectMainCategoryAuction": "اختر القسم الرئيسي",
+  "selectSubCategoryAuction": "اختر القسم الفرعي",
+  "auctionTime": "وقت المزاد"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3316,7 +3326,17 @@ static const Map<String,dynamic> _en = {
   "watch": "Watch",
   "favorite": "Favorite",
   "myAuction": "My Auction",
-  "uploadVideo": "Upload Video"
+  "uploadVideo": "Upload Video",
+  "addAuction": "Add Auction",
+  "joinNow": "Join Now",
+  "minBiddingPrice": "Min Bidding Price",
+  "selectStartDateAndTime": "Select Start Date & Time",
+  "selectEndDateAndTime": "Select End Date & Time",
+  "noMediaUploadedYet": "No media Uploaded yet",
+  "uploadImagesOrVideo": "Upload Images or videos to get started",
+  "selectMainCategoryAuction": "Select Main Category",
+  "selectSubCategoryAuction": "Select Sub Category",
+  "auctionTime": "Auction Time"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

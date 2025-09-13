@@ -34,6 +34,8 @@ abstract class AuctionRemoteDataSource {
   void listenToNewBidAuction(Function(AuctionParticipantsEntity trip) params);
   Future<Either<Failure, List<AuctionMainCategoryEntity>>> getAuctionMainCategory({required GetAuctionParams params});
   Future<Either<Failure, List<AuctionSubCategoryEntity>>> getAuctionSubCategory({required GetSubCategoryAuctionParams params});
+  Future<Either<Failure, List<GetAvailableAuctionEntity >>> getExpiredAuction({required GetAuctionParams params});
+  Future<Either<Failure, List<GetAvailableAuctionEntity >>> getFavoriteAuction({required GetAuctionParams params});
 
 }
 
@@ -199,6 +201,40 @@ class AuctionRemoteDataSourceImpl
           (data) {
         final rideList = (data['data'] as List)
             .map((e) => AuctionSubCategoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getExpiredAuction({required GetAuctionParams params})async {
+    final url = "${EndPoints.fetchExpiredAuction}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => GetAvailableAuctionModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getFavoriteAuction({required GetAuctionParams params}) async{
+    final url = "${EndPoints.fetchFavoriteAuction}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => GetAvailableAuctionModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(rideList);
       },

@@ -62,6 +62,16 @@ class AuctionRepoImpl implements AuctionRepository {
     return _remoteDataSource.getAuctionSubCategory(params: params);
   }
 
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getExpiredAuction({required GetAuctionParams params}) {
+    return _remoteDataSource.getExpiredAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getFavoriteAuction({required GetAuctionParams params}) {
+    return _remoteDataSource.getFavoriteAuction(params: params);
+  }
+
 
 
 

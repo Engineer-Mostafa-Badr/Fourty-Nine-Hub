@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:video_player/video_player.dart';
@@ -30,6 +31,7 @@ class CreateAuctionScreen extends StatefulWidget {
   @override
   State<CreateAuctionScreen> createState() => _CreateAuctionScreenState();
 }
+
 class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
   String? selectedMainCategory;
   String? selectedSubCategory;
@@ -52,7 +54,76 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
   final _timeController = TextEditingController();
   DateTime? _startAt; // NEW
   DateTime? _endAt;   // NEW
+  Future<void> _pickDateTime(BuildContext context, {required bool isStart}) async {
+    final now = DateTime.now();
+    final isDark = context.isDarkMode;
 
+    // Pick date
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: now,
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: isDark ? Colors.red :AppColors.PRIMARY_COLOR, // header, buttons
+              onPrimary: Colors.white, // text/icon on primary
+              onSurface: isDark ? Colors.white : Colors.black, // text on background
+              surface: isDark ? Colors.black : Colors.white,
+              background: isDark ? Colors.black : Colors.white,
+            ),
+            dialogBackgroundColor: isDark ? Colors.black : Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate == null) return;
+
+    // Pick time
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(now),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            timePickerTheme: TimePickerThemeData(
+              dialHandColor: isDark ? AppColors.PRIMARY_COLOR_DARK: AppColors.PRIMARY_COLOR,
+              // dialBackgroundColor: isDark ? Colors.grey[900] : Colors.blue,
+              hourMinuteTextColor: isDark ? AppColors.PRIMARY_COLOR_DARK : Colors.black,
+              dayPeriodTextColor: isDark ?  AppColors.PRIMARY_COLOR_DARK : Colors.black,
+              entryModeIconColor: isDark ?  AppColors.PRIMARY_COLOR_DARK : Colors.black,
+            ),
+            dialogBackgroundColor: isDark ? Colors.black : Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedTime == null) return;
+
+    final combined = DateTime(
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
+      pickedTime.hour,
+      pickedTime.minute,
+    );
+
+    setState(() {
+      if (isStart) {
+        _startAt = combined;
+      } else {
+        _endAt = combined;
+      }
+    });
+  }
+
+/*
   Future<void> _pickDateTime(BuildContext context, {required bool isStart}) async {
     final now = DateTime.now();
 
@@ -113,7 +184,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
       }
     });
   }
-
+*/
   @override
   void dispose() {
     for (var controller in _videoControllers.values) {
@@ -154,13 +225,15 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Auction", style: TextStyle(color: Colors.black)),
+        title:  Text(LocaleKeys.addAuction.localize,
+            // style: TextStyle(color: Colors.black)
+        ),
         // centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon:  Icon(Icons.arrow_back_ios, color: context.isDarkMode  ? Colors.white : Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -212,7 +285,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                "No media uploaded yet",
+                                LocaleKeys.noMediaUploadedYet.localize,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[600],
@@ -221,7 +294,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "Upload images or videos to get started",
+                                LocaleKeys.uploadImagesOrVideo.localize,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey[500],
@@ -416,7 +489,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
-                                    "Uploading media...",
+                                   "${ LocaleKeys.uploadingImage.localize}....",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -437,12 +510,45 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
             ),
 
             const SizedBox(height: 15),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    onPressed: () => context.read<AuctionCubit>().uploadMedia(isImage: true),
+                    label: LocaleKeys.uploadImage.localize,
+                    backColor: AppColors.PRIMARY_COLOR_DARK,
+                    iconWidget: Icon(Icons.file_upload_outlined,color: Colors.white,),
+                    // icon: Icons.file_upload_outlined,
+
+                    // child: Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: const [
+                    //     Icon(Icons.image_rounded),
+                    //     SizedBox(width: 12),
+                    //     Text("Add Image"),
+                    //   ],
+                    // ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: AppButton(
+                    onPressed: () => context.read<AuctionCubit>().uploadMedia(isImage: false),
+                    label: LocaleKeys.uploadVideo.localize,
+                    backColor: AppColors.PRIMARY_COLOR_DARK,
+                    iconWidget: Icon(Icons.file_upload_outlined,color: Colors.white,),
+                    // icon: Icons.file_upload_outlined,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
 
             // ---------------- Main Category Dropdown ----------------
             BlocBuilder<AuctionCubit, AuctionState>(
               builder: (context, state) {
                 return PaginatedDropdown(
-                  title: selectedMainCategory ?? "Select Main Category",
+                  title: selectedMainCategory ??  LocaleKeys.selectMainCategoryAuction.localize,
                   items: cubit.mainCategories.map((e) => e.nameEn ?? "").toList(),
                   hasMore: cubit.hasMoreMainCategories,
                   loadMore: () => cubit.getMainCategoryAuction(),
@@ -467,7 +573,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
               BlocBuilder<AuctionCubit, AuctionState>(
                 builder: (context, state) {
                   return PaginatedDropdown(
-                    title: selectedSubCategory ?? "Select Sub Category",
+                    title: selectedSubCategory ??  LocaleKeys.selectSubCategoryAuction.localize,
                     items: cubit.subCategories.map((e) => e.nameEn ?? "").toList(),
                     hasMore: cubit.hasMoreSubCategories,
                     loadMore: () async {
@@ -489,11 +595,11 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
             const SizedBox(height: 16),
 
             // ---------------- Text Fields ----------------
-            _buildTextField("Title", controller: _titleController),
-            _buildTextField("Description", controller: _descriptionController),
-            _buildTextField("Price",
+            _buildTextField(LocaleKeys.title.localize, controller: _titleController),
+            _buildTextField(LocaleKeys.desc.localize, controller: _descriptionController),
+            _buildTextField(LocaleKeys.price.localize,
                 keyboardType: TextInputType.number, controller: _priceController),
-            _buildTextField("Min Bidding Price",
+            _buildTextField(LocaleKeys.minBiddingPrice.localize,
                 keyboardType: TextInputType.number,
                 controller: _minBidPriceController),
             // ---------------- Time Pickers ----------------
@@ -507,9 +613,9 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Auction Time",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                   Text(
+                   LocaleKeys.auctionTime.localize,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.black),
                   ),
                   const SizedBox(height: 12),
 
@@ -530,7 +636,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                           Text(
                             _startAt != null
                                 ? "${_startAt!.toLocal()}".split('.')[0] // show local date
-                                : "Select Start Date & Time",
+                                :  LocaleKeys.selectStartDateAndTime.localize,
                             style: TextStyle(
                               fontSize: 14,
                               color: _startAt != null ? Colors.black : Colors.grey[600],
@@ -560,7 +666,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                           Text(
                             _endAt != null
                                 ? "${_endAt!.toLocal()}".split('.')[0]
-                                : "Select End Date & Time",
+                                :  LocaleKeys.selectEndDateAndTime.localize,
                             style: TextStyle(
                               fontSize: 14,
                               color: _endAt != null ? Colors.black : Colors.grey[600],
@@ -699,7 +805,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: [ 
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -1136,6 +1242,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
 
 }
 */
+
 // ---------------- PaginatedDropdown Widget ----------------
 class PaginatedDropdown extends StatefulWidget {
   final String title;
@@ -1186,7 +1293,7 @@ class _PaginatedDropdownState extends State<PaginatedDropdown> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
-              color: AppColors.cF5F5F5,
+              color:  AppColors.cF5F5F5,
               // border: Border.all(color: Colors.grey.shade400), // Thin border
               borderRadius: BorderRadius.circular(25),
             ),
@@ -1194,7 +1301,8 @@ class _PaginatedDropdownState extends State<PaginatedDropdown> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(widget.title, style: Styles.mediumText(
-                  fontWeight: FontWeight.w400
+                  fontWeight: FontWeight.w400,
+                  color:AppColors.black
                 )),
                 Icon(
                   isOpen
@@ -1218,7 +1326,10 @@ class _PaginatedDropdownState extends State<PaginatedDropdown> {
               // border: Border.all(color: Colors.grey.shade400),
             ),
             child: widget.items.isEmpty
-                ? const Center(child: Text("No items"))
+                ?  Center(child: Text("No items", style: Styles.mediumText(
+                fontWeight: FontWeight.w400,
+                color:AppColors.black
+            )))
                 : ListView.builder(
               controller: _scrollController,
               itemCount: widget.items.length + (widget.hasMore ? 1 : 0),
@@ -1235,7 +1346,8 @@ class _PaginatedDropdownState extends State<PaginatedDropdown> {
                       child: Text(
                         widget.items[index],
                         style:Styles.mediumText(
-                            fontWeight: FontWeight.w600
+                            fontWeight: FontWeight.w600,
+                         color: AppColors.black
                         )
                       ),
                     ),

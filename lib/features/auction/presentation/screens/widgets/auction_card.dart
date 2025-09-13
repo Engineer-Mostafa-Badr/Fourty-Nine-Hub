@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -15,254 +17,268 @@ class AuctionCard extends StatelessWidget {
 
   AuctionCard({required this.auction});
 
+
   String _formatTimeLeft() {
-    // Add your time calculation logic here
-    return "1h Left"; // placeholder
+    final endAt = auction.endAt;
+    if (endAt == null) return '';
+
+    final nowUtc = DateTime.now().toUtc();
+    final endUtc = endAt.isUtc ? endAt : endAt.toUtc();
+
+    if (endUtc.isBefore(nowUtc)) return 'Ended';
+
+    final diff = endUtc.difference(nowUtc);
+
+    final days = diff.inDays;
+    final hours = diff.inHours % 24;
+    final minutes = diff.inMinutes % 60;
+    final seconds = diff.inSeconds % 60;
+
+    if (days > 0) {
+      if (hours > 0) return '${days}d ${hours}h left';
+      return '${days}d left';
+    }
+
+    if (hours > 0) {
+      if (minutes > 0) return '${hours}h ${minutes}m left';
+      return '${hours}h left';
+    }
+
+    if (minutes > 0) return '${minutes}m left';
+    if (seconds > 0) return '${seconds}s left';
+
+    return 'Less than 1s left';
   }
 
   String _getParticipantCount() {
-    // Add your participant count logic here
-    return "120"; // placeholder
+    final count = auction.numberOfParticipants ?? 0;
+    return NumberFormat.compact().format(count); // e.g. 1K, 2.5K
   }
 
   String _getViewCount() {
-    // Add your view count logic here
-    return "50.7k"; // placeholder
+    final count = auction.views ?? 0;
+    return NumberFormat.compact().format(count); // e.g. 0, 1, 1K, 50.7K
   }
 
-  List<String> images = [
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1624555130581-1d9cca783bc0?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  ];
+
   @override
   Widget build(BuildContext context) {
     bool isEnded = auction.status == "ended";
 
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      color: Colors.white,
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image + heart
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AuctionImageCarousel(
-                  images: images,
-                  // images: auction.media ?? [],
-                ),
-              ),
-              // Image.network(
-              //   auction.media?.first.mediaKey ?? "",
-              //   height: 160,
-              //   width: double.infinity,
-              //   fit: BoxFit.cover,
-              //   errorBuilder: (_, __, ___) => Container(
-              //     height: 160,
-              //     color: Colors.grey[200],
-              //     child: const Icon(Icons.image, size: 40, color: Colors.grey),
-              //   ),
-              // ),
-              PositionedDirectional(
-                top: 12,
-                start: 12,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    // color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.favorite_border,
-                      color: Colors.red[400], size: 30),
-                ),
-              ),
-            ],
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: context.isDarkMode ? Colors.white : Colors.transparent),
+        borderRadius: BorderRadius.circular(16)
+      ),
+      child: Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        // elevation: 4,
 
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        // color:context.isDarkMode ? Colors.black: Colors.white,
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image + heart
+            Stack(
               children: [
-                // Title
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        auction.title ?? "No Title",
-                        style: Styles.mediumText(
-                          // fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          // height: 1.2,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Flexible(
-                      child: Text.rich(
-                        TextSpan(
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black87,
-                          ),
-                          children: [
-                            const TextSpan(text: "Price Now "),
-                            TextSpan(
-                              text: "${auction.currentPrice ?? 0} ",
-                              style: Styles.mediumText(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            TextSpan(
-                              text: "EGP",
-                              style: Styles.mediumText(
-                                fontWeight: FontWeight.w600, // bold
-                              ),
-                            ),
-                          ],
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AuctionImageCarousel(
+                    images: auction.media!,
+                    // images: auction.media ?? [],
+                  ),
                 ),
-                const SizedBox(height: 8),
 
-                // Price row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text.rich(
-                        TextSpan(
-                          style: Styles.mediumText(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          children: [
-                            const TextSpan(text: "Start from "),
-                            TextSpan(
-                              text: "${auction.startPrice ?? 0} ",
-                              style: Styles.mediumText(
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w400, // lighter
-                              ),
-                            ),
-                            TextSpan(
-                              text: "EGP",
-                              style: Styles.mediumText(
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w600, // bold
-                              ),
-                            ),
-                          ],
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                PositionedDirectional(
+                  top: 12,
+                  start: 12,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      // color: Colors.white,
+                      shape: BoxShape.circle,
                     ),
-                    Flexible(
-                      child: Text(
-                        isEnded ? "Ended" : _formatTimeLeft(),
-                        style: Styles.mediumText(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
+                    child: Icon(Icons.favorite_border,
+                        color: Colors.red[400], size: 30),
+                  ),
                 ),
-                const SizedBox(height: 12),
-
-                // Status and stats row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // 👈 Left side
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "${_getParticipantCount()} participants",
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Flexible(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.visibility,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    "${_getViewCount()} views",
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                        ],
-                      ),
-                    ),
-
-                    AppButton(
-                      width: 91,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider(
-                              create: (_) => serviceLocator<AuctionCubit>(),
-                              child: SingleAuctionScreen(
-                                  auctionId: auction.id ?? ""),
-                            ),
-                          ),
-                        );
-                      },
-                      label:
-                      isEnded ? "Winner" : "Join Now",
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Join button
               ],
             ),
-          ),
-        ],
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          auction.title ?? "No Title",
+                          style: Styles.mediumText(
+                            // fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: context.isDarkMode ? Colors.white : Colors.black
+                            // height: 1.2,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Flexible(
+                        child: Text.rich(
+                          TextSpan(
+                            style:Styles.mediumText(
+                              // fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color:context.isDarkMode ? Colors.white :  Colors.black,
+                            ),
+                            children: [
+                              const TextSpan(text: "Price Now "),
+                              TextSpan(
+                                text: "${auction.price ?? 0} ",
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.w400,
+                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "EGP",
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600, // bold
+                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Price row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text.rich(
+                          TextSpan(
+                            style: Styles.mediumText(
+                              color:context.isDarkMode ? Colors.white :  Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            children: [
+                              const TextSpan(text: "Start from "),
+                              TextSpan(
+                                text: "${auction.price ?? 0} ",
+                                style: Styles.mediumText(
+                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                  fontWeight: FontWeight.w400, // lighter
+                                ),
+                              ),
+                              TextSpan(
+                                text: "EGP",
+                                style: Styles.mediumText(
+                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                  fontWeight: FontWeight.w600, // bold
+                                ),
+                              ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          isEnded ? "Ended" : _formatTimeLeft(),
+                          style: Styles.mediumText(
+                            color:context.isDarkMode ? Colors.white :  Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // 👈 Left side (participants + views)
+                      Flexible(
+                        child: Row(
+                          children: [
+                            // participants
+                            Flexible(
+                              child: Text(
+                                "${_getParticipantCount()} participants",
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 12), // spacing between text + views
+                            // views
+                            Flexible(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.visibility, size: 16, color: Colors.grey),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      "${_getViewCount()} views",
+                                      style: Styles.mediumText(
+                                        color: context.isDarkMode ? Colors.white : Colors.black,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 👉 Button on right
+                      AppButton(
+                        width: 91,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => serviceLocator<AuctionCubit>(),
+                                child: SingleAuctionScreen(auctionId: auction.id ?? ""),
+                              ),
+                            ),
+                          );
+                        },
+                        label: isEnded ? "Winner" : "Join Now",
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Join button
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

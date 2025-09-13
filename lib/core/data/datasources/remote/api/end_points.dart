@@ -1833,6 +1833,8 @@ class EndPoints {
 static String getExchangeRates(String code) => '/exchange-currency/$code';
 
   static String fetchAvailableAuction = '/auctions/available';
+  static String fetchExpiredAuction = '/auctions/expired';
+  static String fetchFavoriteAuction = '/auction-fav';
   static String fetchSingleAuction = '/auctions/';
   static String fetchParticipantAuction = '/auctions/participant-prices/';
   static String fetchAuctionSubCategory = '/auctions/sub-categories/';

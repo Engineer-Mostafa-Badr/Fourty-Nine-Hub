@@ -1643,7 +1643,17 @@
   "watch": "مشاهدة",
   "favorite": "المفضلة",
   "myAuction": "مزادتي",
-  "uploadVideo": "رفع الفيديو"
+  "uploadVideo": "رفع الفيديو",
+  "addAuction": "إضافة مزاد",
+  "joinNow": "انضم الآن",
+  "minBiddingPrice": "الحد الأدنى لسعر المزايدة",
+  "selectStartDateAndTime": "اختر تاريخ ووقت البداية",
+  "selectEndDateAndTime": "اختر تاريخ ووقت الانتهاء",
+  "noMediaUploadedYet": "لم يتم رفع أي وسائط بعد",
+  "uploadImagesOrVideo": "قم برفع صور أو فيديوهات للبدء",
+  "selectMainCategoryAuction": "اختر القسم الرئيسي",
+  "selectSubCategoryAuction": "اختر القسم الفرعي",
+  "auctionTime": "وقت المزاد"
 
 
 }

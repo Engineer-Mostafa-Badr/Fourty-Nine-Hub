@@ -1659,7 +1659,17 @@
   "watch": "Watch",
   "favorite": "Favorite",
   "myAuction": "My Auction",
-  "uploadVideo": "Upload Video"
+  "uploadVideo": "Upload Video",
+  "addAuction": "Add Auction",
+  "joinNow": "Join Now",
+  "minBiddingPrice": "Min Bidding Price",
+  "selectStartDateAndTime": "Select Start Date & Time",
+  "selectEndDateAndTime": "Select End Date & Time",
+  "noMediaUploadedYet": "No media Uploaded yet",
+  "uploadImagesOrVideo": "Upload Images or videos to get started",
+  "selectMainCategoryAuction": "Select Main Category",
+  "selectSubCategoryAuction": "Select Sub Category",
+  "auctionTime": "Auction Time"
 
 
 
