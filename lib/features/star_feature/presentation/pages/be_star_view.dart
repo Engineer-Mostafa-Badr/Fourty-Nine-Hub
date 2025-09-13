@@ -13,10 +13,9 @@ import '../controller/star_cubit/star_cubit.dart';
 import '../utils/enums.dart';
 import '../widgets/be_star_floating_button.dart';
 import '../widgets/be_star_header_section.dart';
-import '../widgets/be_star_search_bar.dart';
 import '../widgets/common/loading_indicator.dart';
-import '../widgets/profile_search_results.dart';
-import '../widgets/sticky_tab_bar_delegate.dart';
+import '../widgets/talent_card/profile_search_results.dart';
+import '../widgets/talent_card/sticky_tab_bar_delegate.dart';
 import '../widgets/talent_card/talent_card.dart';
 import '../widgets/talent_card/talent_card_builders.dart';
 import 'my_video_details_view.dart';
@@ -320,7 +319,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ),
                       centerTitle: false,
                       title: Text(
-                        'Tube',
+                        context.isArabic ? 'تيوب' : 'Tube',
                         style: TextStyle(
                           color:
                               context.isDarkMode ? Colors.white : Colors.black,
@@ -346,7 +345,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                'Winners',
+                                context.isArabic ? 'الفائزون' : 'Winners',
                                 style: TextStyle(
                                   color: context.isDarkMode
                                       ? Colors.white

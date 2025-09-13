@@ -64,6 +64,51 @@ class CacheManager {
     return prefs.getString(_refreshTokenKey);
   }
 
+  // Clear only tokens (without clearing all prefs)
+  static Future<bool> clearTokens() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_accessTokenKey);
+      await prefs.remove(_refreshTokenKey);
+      // Also clear the login status
+      await prefs.setBool("ISLOGIN", false);
+      log("Tokens cleared - ref token :${prefs.getString(_refreshTokenKey)} , access token : ${prefs.getString(_accessTokenKey)}");
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Logout while keeping important settings (onboarding, language, dark mode)
+  static Future<bool> logoutKeepingSettings() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      // Save current settings before clearing
+      bool? isDarkMode = prefs.getBool(themeDarkKey);
+      bool? hasSeenOnboarding = prefs.getBool(showOnboarding);
+      
+      // Clear tokens and login status
+      await prefs.remove(_accessTokenKey);
+      await prefs.remove(_refreshTokenKey);
+      await prefs.setBool("ISLOGIN", false);
+      
+      // Restore important settings
+      if (isDarkMode != null) {
+        await prefs.setBool(themeDarkKey, isDarkMode);
+      }
+      if (hasSeenOnboarding != null) {
+        await prefs.setBool(showOnboarding, hasSeenOnboarding);
+      }
+      
+      log("Logout completed keeping settings - ref token :${prefs.getString(_refreshTokenKey)} , access token : ${prefs.getString(_accessTokenKey)}");
+      return true;
+    } catch (e) {
+      log("Error in logoutKeepingSettings: $e");
+      return false;
+    }
+  }
+
   // Delete all tokens
 
   static Future<bool> deleteAllTokens() async {

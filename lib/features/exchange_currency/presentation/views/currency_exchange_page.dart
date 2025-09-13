@@ -8,6 +8,7 @@ import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../logic/currency_cubit.dart';
 import '../widgets/exchange_rate_display_widget.dart';
+import '../widgets/refresh_settings_widget.dart';
 
 class CurrencyExchangePage extends StatefulWidget {
   const CurrencyExchangePage({super.key});
@@ -16,20 +17,80 @@ class CurrencyExchangePage extends StatefulWidget {
   State<CurrencyExchangePage> createState() => _CurrencyExchangePageState();
 }
 
-class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
+class _CurrencyExchangePageState extends State<CurrencyExchangePage>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   final TextEditingController _amountController = TextEditingController();
   bool _isExpanded = false;
+  bool _showSettings = false;
+
+  late AnimationController _refreshAnimationController;
+  late AnimationController _pulseAnimationController;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    // Add app lifecycle observer
+    WidgetsBinding.instance.addObserver(this);
+
+    // Initialize controllers
     _amountController.text = '1000.00';
+
+    // Animation controllers
+    _refreshAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _pulseAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _rotationAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: _refreshAnimationController,
+      curve: Curves.linear,
+    ));
+
+    _pulseAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.1,
+    ).animate(CurvedAnimation(
+      parent: _pulseAnimationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Start pulse animation for auto-refresh indicator
+    _pulseAnimationController.repeat(reverse: true);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _amountController.dispose();
+    _refreshAnimationController.dispose();
+    _pulseAnimationController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    context.read<CurrencyCubit>().onAppStateChanged(state);
+  }
+
+  void _startRefreshAnimation() {
+    _refreshAnimationController.repeat();
+  }
+
+  void _stopRefreshAnimation() {
+    _refreshAnimationController.stop();
+    _refreshAnimationController.reset();
   }
 
   @override
@@ -37,7 +98,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
+        preferredSize: const Size.fromHeight(60),
         child: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.grey.shade50,
@@ -62,6 +123,77 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: [
+            // Settings toggle
+            BlocBuilder<CurrencyCubit, CurrencyState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: Icon(
+                    _showSettings ? Icons.close : Icons.settings,
+                    color: AppColors.PRIMARY_COLOR,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _showSettings = !_showSettings;
+                    });
+                    ManageVibration.vibrate();
+                  },
+                );
+              },
+            ),
+
+            // Auto-refresh status indicator
+            BlocBuilder<CurrencyCubit, CurrencyState>(
+              builder: (context, state) {
+                final cubit = context.read<CurrencyCubit>();
+
+                if (state is CurrencyRefreshing) {
+                  _startRefreshAnimation();
+                } else {
+                  _stopRefreshAnimation();
+                }
+
+                return AnimatedBuilder(
+                  animation: _rotationAnimation,
+                  builder: (context, child) {
+                    return Transform.rotate(
+                      angle: _rotationAnimation.value * 2 * 3.14159,
+                      child: AnimatedBuilder(
+                        animation: _pulseAnimation,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: cubit.autoRefreshEnabled
+                                ? _pulseAnimation.value
+                                : 1.0,
+                            child: IconButton(
+                              icon: Icon(
+                                cubit.autoRefreshEnabled
+                                    ? Icons.sync
+                                    : Icons.sync_disabled,
+                                color: cubit.autoRefreshEnabled
+                                    ? Colors.green
+                                    : Colors.grey,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                ManageVibration.vibrate();
+                                if (cubit.autoRefreshEnabled) {
+                                  cubit.disableAutoRefresh();
+                                } else {
+                                  cubit.enableAutoRefresh();
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
       body: BlocConsumer<CurrencyCubit, CurrencyState>(
@@ -71,6 +203,62 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
               SnackBar(
                 content: Text(state.message),
                 backgroundColor: Colors.red,
+                action: SnackBarAction(
+                  label: context.isArabic ? 'إعادة المحاولة' : 'Retry',
+                  textColor: Colors.white,
+                  onPressed: () {
+                    context.read<CurrencyCubit>().forceRefresh();
+                  },
+                ),
+              ),
+            );
+          } else if (state is CurrencyUpdatedSilently) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.sync, color: Colors.white, size: 16),
+                    const SizedBox(width: 8),
+                    Text(context.isArabic
+                        ? 'تم تحديث الأسعار تلقائياً'
+                        : 'Rates updated automatically'),
+                  ],
+                ),
+                backgroundColor: Colors.blue,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          } else if (state is CurrencyRatesUpdatedSilently) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.update, color: Colors.white, size: 16),
+                    const SizedBox(width: 8),
+                    Text(context.isArabic
+                        ? 'تم تحديث قائمة الأسعار'
+                        : 'Rate list updated'),
+                  ],
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          } else if (state is CurrencyRefreshed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.check_circle,
+                        color: Colors.white, size: 16),
+                    const SizedBox(width: 8),
+                    Text(context.isArabic
+                        ? 'تم التحديث بنجاح'
+                        : 'Refreshed successfully'),
+                  ],
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
               ),
             );
           }
@@ -84,6 +272,105 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  // Settings widget (collapsible)
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: _showSettings ? null : 0,
+                    child: _showSettings
+                        ? const RefreshSettingsWidget()
+                        : const SizedBox.shrink(),
+                  ),
+
+                  // Auto-refresh status indicator (compact)
+                  if (!_showSettings && cubit.lastUpdateTime != null)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: cubit.autoRefreshEnabled
+                              ? [
+                                  Colors.green.withOpacity(0.1),
+                                  Colors.green.withOpacity(0.05)
+                                ]
+                              : [
+                                  Colors.grey.withOpacity(0.1),
+                                  Colors.grey.withOpacity(0.05)
+                                ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: cubit.autoRefreshEnabled
+                              ? Colors.green.withOpacity(0.3)
+                              : Colors.grey.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          AnimatedBuilder(
+                            animation: _pulseAnimation,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: cubit.autoRefreshEnabled
+                                    ? _pulseAnimation.value
+                                    : 1.0,
+                                child: Icon(
+                                  cubit.autoRefreshEnabled
+                                      ? Icons.sync
+                                      : Icons.sync_disabled,
+                                  size: 16,
+                                  color: cubit.autoRefreshEnabled
+                                      ? Colors.green
+                                      : Colors.grey,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              context.isArabic
+                                  ? 'آخر تحديث: ${cubit.getTimeSinceLastUpdate()}'
+                                  : 'Last update: ${cubit.getTimeSinceLastUpdate()}',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: cubit.autoRefreshEnabled
+                                    ? Colors.green.shade700
+                                    : Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          if (cubit.autoRefreshEnabled)
+                            GestureDetector(
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                cubit.forceRefresh();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  context.isArabic ? 'تحديث' : 'Refresh',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+
                   // Main conversion card
                   Container(
                     margin: const EdgeInsets.all(16),
@@ -95,6 +382,13 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                         colors: [Color(0xff0B1035), Color(0xffddf6f3)],
                       ),
                       borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -102,8 +396,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                         Text(
                           context.isArabic
                               ? 'تبديل العملات'
-                              : 'Change Currency',
-                          style: TextStyle(
+                              : 'Currency Exchange',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -113,8 +407,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                         Text(
                           context.isArabic
                               ? 'تبديل العملات بشكل سريع وعرض السعر للعملة في الوقت الحالي'
-                              : 'Changing its currency instantaneously and\nknowing the currency rate moment by moment',
-                          style: TextStyle(
+                              : 'Exchange currencies instantly and view real-time rates',
+                          style: const TextStyle(
                             color: Colors.white70,
                             fontSize: 14,
                           ),
@@ -128,6 +422,13 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,91 +436,110 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                               Text(
                                 context.isArabic ? 'المبلغ' : 'Amount',
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Colors.grey.shade600,
                                   fontSize: 14,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                               const SizedBox(height: 12),
 
-                              // إصلاح الـ Row الأول - Amount Section
+                              // Amount Section
                               Row(
                                 children: [
-                                  // Currency selector - مع تحديد عرض ثابت
+                                  // Currency selector
                                   GestureDetector(
-                                    onTap: () => _showFromCurrencySelector(
-                                        context, cubit),
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      _showFromCurrencySelector(context, cubit);
+                                    },
                                     child: Container(
-                                      width: 120, // عرض ثابت
+                                      width: 120,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 8),
+                                          horizontal: 12, vertical: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade50,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: Colors.grey.shade200,
+                                        ),
+                                      ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
                                             _getCurrencyFlag(
                                                 cubit.fromCurrency),
-                                            style: const TextStyle(
-                                                fontSize: 24), // قللت الحجم
+                                            style:
+                                                const TextStyle(fontSize: 20),
                                           ),
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
                                               cubit.fromCurrency,
                                               style: const TextStyle(
-                                                fontSize: 20, // قللت الحجم
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                           const SizedBox(width: 4),
-                                          const Icon(Icons.keyboard_arrow_down,
-                                              size: 16),
+                                          Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: 16,
+                                            color: Colors.grey.shade600,
+                                          ),
                                         ],
                                       ),
                                     ),
                                   ),
 
-                                  const SizedBox(
-                                      width: 8), // مسافة ثابتة بدلاً من Spacer
+                                  const SizedBox(width: 12),
 
-                                  // Amount input - استخدام Expanded
+                                  // Amount input
                                   Expanded(
                                     child: SizedBox(
-                                      height: 45,
+                                      height: 48,
                                       child: TextField(
                                         controller: _amountController,
                                         keyboardType: const TextInputType
-                                            .numberWithOptions(
-                                          decimal: true,
-                                        ),
+                                            .numberWithOptions(decimal: true),
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(
-                                          fontSize: 16, // قللت الحجم
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 8),
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 16, vertical: 12),
                                           border: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Color(0xffEFEFEF)),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(7)),
+                                                color: Colors.grey.shade200),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(12)),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Color(0xffEFEFEF)),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(7)),
+                                                color: Colors.grey.shade200),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(12)),
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Color(0xffEFEFEF)),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(7)),
+                                                color: AppColors.PRIMARY_COLOR),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(12)),
                                           ),
                                           hintText: '0.00',
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey.shade400,
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.grey.shade50,
                                         ),
                                         onChanged: (value) {
                                           final amount =
@@ -233,88 +553,109 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                               ),
 
                               // Swap button
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 20),
                               Row(
                                 children: [
                                   Expanded(
                                     child: Divider(
-                                      color: Color(0xffE7E7EE),
+                                      color: Colors.grey.shade300,
                                       thickness: 1,
                                     ),
                                   ),
-                                  Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        ManageVibration.vibrate();
-                                        cubit.swapCurrencies();
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF1B2951),
-                                          shape: BoxShape.circle,
-                                          // borderRadius: BorderRadius.circular(25),
+                                  const SizedBox(width: 16),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      cubit.swapCurrencies();
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          colors: [
+                                            Color(0xFF1B2951),
+                                            Color(0xFF2A3A5C)
+                                          ],
                                         ),
-                                        // child: const Icon(
-                                        //   Icons.swap_vert,
-                                        //   color: Colors.white,
-                                        //   size: 24,
-                                        // ),
-                                        child: SvgPicture.asset(
-                                          Assets.swapIcon,
-                                          height: 24,
-                                          width: 24,
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFF1B2951)
+                                                .withOpacity(0.3),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: SvgPicture.asset(
+                                        Assets.swapIcon,
+                                        height: 20,
+                                        width: 20,
+                                        colorFilter: const ColorFilter.mode(
+                                          Colors.white,
+                                          BlendMode.srcIn,
                                         ),
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(width: 16),
                                   Expanded(
                                     child: Divider(
-                                      color: Color(0xffE7E7EE),
+                                      color: Colors.grey.shade300,
                                       thickness: 1,
                                     ),
                                   ),
                                 ],
                               ),
 
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 20),
                               Text(
                                 context.isArabic
                                     ? 'المبلغ المحول'
                                     : 'Converted Amount',
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Colors.grey.shade600,
                                   fontSize: 14,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                               const SizedBox(height: 12),
 
-                              // إصلاح الـ Row الثاني - Converted Amount Section
+                              // Converted Amount Section
                               Row(
                                 children: [
-                                  // To Currency selector - مع تحديد عرض ثابت
+                                  // To Currency selector
                                   GestureDetector(
-                                    onTap: () =>
-                                        _showToCurrencySelector(context, cubit),
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      _showToCurrencySelector(context, cubit);
+                                    },
                                     child: Container(
-                                      width: 120, // نفس العرض
+                                      width: 120,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 8),
+                                          horizontal: 12, vertical: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.shade50,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: Colors.red.shade200,
+                                        ),
+                                      ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
                                             _getCurrencyFlag(cubit.toCurrency),
                                             style:
-                                                const TextStyle(fontSize: 24),
+                                                const TextStyle(fontSize: 20),
                                           ),
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
                                               cubit.toCurrency,
                                               style: const TextStyle(
-                                                fontSize: 20,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.red,
                                               ),
@@ -322,38 +663,43 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                             ),
                                           ),
                                           const SizedBox(width: 4),
-                                          const Icon(Icons.keyboard_arrow_down,
-                                              size: 16),
+                                          Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: 16,
+                                            color: Colors.red.shade600,
+                                          ),
                                         ],
                                       ),
                                     ),
                                   ),
 
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: 12),
 
-                                  // Converted amount display - استخدام Expanded
+                                  // Converted amount display
                                   Expanded(
                                     child: Container(
-                                      height: 45,
+                                      height: 48,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 4),
+                                          horizontal: 16, vertical: 12),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(7),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.green.shade50,
+                                            Colors.green.shade100,
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
-                                            color: const Color(0xffEFEFEF)),
+                                          color: Colors.green.shade200,
+                                        ),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          state is CurrencyConverted
-                                              ? state
-                                                  .exchangeRate.conversionResult
-                                                  .toStringAsFixed(2)
-                                              : '00.00',
-                                          style: const TextStyle(
+                                          _getConvertedAmount(state, cubit),
+                                          style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green.shade700,
                                           ),
                                           textAlign: TextAlign.right,
                                         ),
@@ -375,15 +721,17 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF1B2951), Color(0xFF2A3A5C)],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0x40000000), // #00000040
-                            offset: Offset(0, 4), // x: 0, y: 4
-                            blurRadius: 4,
-                            spreadRadius: 0,
+                            color: const Color(0xFF1B2951).withOpacity(0.3),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
                           ),
                         ],
-                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: ElevatedButton(
                         onPressed: state is CurrencyLoading
@@ -398,11 +746,11 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                 cubit.convertCurrency();
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1B2951),
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          elevation: 0, // إزالة الظل الافتراضي
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                         ),
                         child: state is CurrencyLoading
@@ -415,43 +763,67 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                                       Colors.white),
                                 ),
                               )
-                            : Text(
-                                context.isArabic ? 'حساب' : 'Calculate',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.calculate,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    context.isArabic ? 'حساب' : 'Calculate',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                       ),
                     ),
                   ),
 
                   // Exchange rate info
-                  if (state is CurrencyConverted) ...[
+                  if (_shouldShowExchangeRate(state)) ...[
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        context.isArabic
-                            ? 'سعر الصرف الإرشادي'
-                            : 'Indicative Exchange Rate',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 14,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.blue.shade200,
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(2)} ${state.exchangeRate.targetCode}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        child: Column(
+                          children: [
+                            Text(
+                              context.isArabic
+                                  ? 'سعر الصرف الإرشادي'
+                                  : 'Indicative Exchange Rate',
+                              style: TextStyle(
+                                color: Colors.blue.shade700,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _getExchangeRateText(state),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade800,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.start,
                       ),
                     ),
                   ],
@@ -461,6 +833,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                   // Expandable rates section
                   GestureDetector(
                     onTap: () {
+                      ManageVibration.vibrate();
                       setState(() {
                         _isExpanded = !_isExpanded;
                       });
@@ -472,28 +845,53 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1B2951),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF1B2951), Color(0xFF2A3A5C)],
+                        ),
                         borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF1B2951).withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
                       ),
                       child: Row(
                         children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Icons.language,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               context.isArabic
                                   ? 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم'
-                                  : 'You can check the current exchange rate\nin all countries of the world',
-                              style: TextStyle(
+                                  : 'Check exchange rates\nfor all world currencies',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
+                                fontWeight: FontWeight.w500,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
-                          Icon(
-                            _isExpanded
-                                ? Icons.keyboard_arrow_up
-                                : Icons.keyboard_arrow_down,
-                            color: Colors.white,
+                          AnimatedRotation(
+                            turns: _isExpanded ? 0.5 : 0,
+                            duration: const Duration(milliseconds: 300),
+                            child: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                              size: 24,
+                            ),
                           ),
                         ],
                       ),
@@ -505,18 +903,40 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
                     const SizedBox(height: 16),
                     BlocBuilder<CurrencyCubit, CurrencyState>(
                       builder: (context, state) {
-                        if (state is CurrencyRatesLoaded) {
+                        if (state is CurrencyRatesLoaded ||
+                            state is CurrencyRatesUpdatedSilently) {
+                          final currencyRates = state is CurrencyRatesLoaded
+                              ? state.currencyRates
+                              : (state as CurrencyRatesUpdatedSilently)
+                                  .currencyRates;
                           return ExchangeRateDisplayWidget(
-                            currencyRates: state.currencyRates,
+                            currencyRates: currencyRates,
                             baseCurrency: cubit.fromCurrency,
                           );
                         } else if (state is CurrencyLoading) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(32),
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF1B2951)),
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.all(32),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Center(
+                              child: Column(
+                                children: [
+                                  CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Color(0xFF1B2951)),
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'Loading exchange rates...',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
@@ -540,6 +960,38 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
         },
       ),
     );
+  }
+
+  // Helper methods
+  bool _shouldShowExchangeRate(CurrencyState state) {
+    return state is CurrencyConverted ||
+        state is CurrencyUpdatedSilently ||
+        (context.read<CurrencyCubit>().lastExchangeRate != null);
+  }
+
+  String _getConvertedAmount(CurrencyState state, CurrencyCubit cubit) {
+    if (state is CurrencyConverted) {
+      return state.exchangeRate.conversionResult.toStringAsFixed(2);
+    } else if (state is CurrencyUpdatedSilently) {
+      return state.exchangeRate.conversionResult.toStringAsFixed(2);
+    } else if (cubit.lastExchangeRate != null) {
+      return cubit.lastExchangeRate!.conversionResult.toStringAsFixed(2);
+    }
+    return '0.00';
+  }
+
+  String _getExchangeRateText(CurrencyState state) {
+    final cubit = context.read<CurrencyCubit>();
+
+    if (state is CurrencyConverted) {
+      return '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
+    } else if (state is CurrencyUpdatedSilently) {
+      return '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
+    } else if (cubit.lastExchangeRate != null) {
+      final rate = cubit.lastExchangeRate!;
+      return '1 ${rate.baseCode} = ${rate.conversionRate.toStringAsFixed(4)} ${rate.targetCode}';
+    }
+    return '';
   }
 
   String _getCurrencyFlag(String code) {
@@ -577,6 +1029,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
         cubit.setFromCurrency(currency);
         setState(() {});
       },
+      context.isArabic ? 'اختر العملة الأساسية' : 'Choose Base Currency',
     );
   }
 
@@ -589,6 +1042,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
         cubit.setToCurrency(currency);
         setState(() {});
       },
+      context.isArabic ? 'اختر العملة المستهدفة' : 'Choose Target Currency',
     );
   }
 
@@ -597,107 +1051,120 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage> {
     List<dynamic> currencies,
     String selectedCurrency,
     Function(String) onSelected,
+    String title,
   ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(color: Color(0xff000000), width: 1),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.9,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.85,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
         child: Column(
           children: [
+            // Handle bar
             Container(
-              width: 150,
+              width: 40,
               height: 4,
               margin: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: Color(0xff000000),
+                color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            Padding(
+
+            // Header
+            Container(
               padding: const EdgeInsets.all(16),
-              child: Text(
-                context.isArabic ? 'اختر العملة' : 'Choose Currency',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                border: Border(
+                  bottom: BorderSide(color: Colors.grey.shade200),
                 ),
               ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
             ),
+
+            // Currency list
             Expanded(
               child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: currencies.length,
                 itemBuilder: (context, index) {
                   final currency = currencies[index];
                   final isSelected = currency.code == selectedCurrency;
-                  return RadioListTile<String>(
-                    value: currency.code,
-                    groupValue: selectedCurrency,
-                    onChanged: (value) {
-                      if (value != null) {
-                        onSelected(value);
+                  return Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.PRIMARY_COLOR.withOpacity(0.1)
+                          : null,
+                      borderRadius: BorderRadius.circular(12),
+                      border: isSelected
+                          ? Border.all(
+                              color: AppColors.PRIMARY_COLOR.withOpacity(0.3))
+                          : null,
+                    ),
+                    child: ListTile(
+                      onTap: () {
+                        onSelected(currency.code);
                         Navigator.pop(context);
-                      }
-                    },
-                    secondary: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.grey.shade100,
-                      child: Text(
-                        currency.flag,
-                        style: const TextStyle(fontSize: 18),
+                        ManageVibration.vibrate();
+                      },
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(
+                            currency.flag,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
-                    ),
-                    title: Text(
-                      '${currency.code} - ${currency.name}',
-                      style: TextStyle(
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
+                      title: Text(
+                        '${currency.code} - ${currency.name}',
+                        style: TextStyle(
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.w500,
+                          color: isSelected
+                              ? AppColors.PRIMARY_COLOR
+                              : Colors.black87,
+                        ),
                       ),
+                      trailing: isSelected
+                          ? Icon(
+                              Icons.check_circle,
+                              color: AppColors.PRIMARY_COLOR,
+                              size: 24,
+                            )
+                          : null,
                     ),
-                    activeColor: AppColors.PRIMARY_COLOR,
-                    controlAffinity: ListTileControlAffinity.trailing,
                   );
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x40000000), // #00000040
-                      offset: Offset(0, 4), // x: 0, y: 4
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.PRIMARY_COLOR,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: Text(
-                    context.isArabic ? 'تم' : 'Done',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
               ),
             ),
           ],

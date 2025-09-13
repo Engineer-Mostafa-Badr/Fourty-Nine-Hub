@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/profile_page.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/widgets/talent_card_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -1076,14 +1075,17 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BlocProvider<ProfileCubit>(
-          create: (context) => serviceLocator<ProfileCubit>()
-            ..getProfileById(widget.talent.user.id),
-          child: ProfilePageView(
-            user: widget.talent.user,
-            userVideos: [], // يمكن تحميلها لاحقاً
-            isCurrentUser: false,
-            profileId: widget.talent.user.id,
+        builder: (context) => BlocProvider(
+          create: (context) => serviceLocator<StarCubit>(),
+          child: BlocProvider<ProfileCubit>(
+            create: (context) => serviceLocator<ProfileCubit>()
+              ..getProfileById(widget.talent.user.id),
+            child: ProfilePageView(
+              user: widget.talent.user,
+              userVideos: [],
+              isCurrentUser: false,
+              profileId: widget.talent.user.id,
+            ),
           ),
         ),
       ),
@@ -1092,12 +1094,12 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
   Widget _buildVideoInfo() {
     return BlocProvider.value(
-      value: _commentCubit, // تأكد إن الـ cubit متوفر
+      value: _commentCubit,
       child: BlocBuilder<CommentCubit, CommentState>(
         builder: (context, commentState) {
           return BlocBuilder<StarCubit, StarState>(
             builder: (context, starState) {
-              final starCubit = _starCubit; // استخدم الـ instance المحلي
+              final starCubit = _starCubit;
               final isFavorite = starCubit.isFavorite(widget.talent.id);
 
               return Container(
@@ -1167,7 +1169,59 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    // Description (إذا كان موجود)
+                    if (widget.talent.description.isNotEmpty) ...[
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.talent.description,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                              ),
+                              maxLines: _showFullDescription ? null : 2,
+                              overflow: _showFullDescription
+                                  ? TextOverflow.visible
+                                  : TextOverflow.ellipsis,
+                            ),
+                            if (widget.talent.description.length > 100)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _showFullDescription =
+                                        !_showFullDescription;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    _showFullDescription
+                                        ? (context.isArabic
+                                            ? 'إظهار أقل'
+                                            : 'Show less')
+                                        : (context.isArabic
+                                            ? 'إظهار المزيد'
+                                            : 'Show more'),
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
 
                     // Channel info and subscribe - استخدم الداتا الحقيقية
                     Row(
@@ -1440,62 +1494,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                         // ),
                       ],
                     ),
-
                     const SizedBox(height: 16),
-
-                    // Description (إذا كان موجود)
-                    if (widget.talent.description.isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.talent.description,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                              maxLines: _showFullDescription ? null : 2,
-                              overflow: _showFullDescription
-                                  ? TextOverflow.visible
-                                  : TextOverflow.ellipsis,
-                            ),
-                            if (widget.talent.description.length > 100)
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _showFullDescription =
-                                        !_showFullDescription;
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Text(
-                                    _showFullDescription
-                                        ? (context.isArabic
-                                            ? 'إظهار أقل'
-                                            : 'Show less')
-                                        : (context.isArabic
-                                            ? 'إظهار المزيد'
-                                            : 'Show more'),
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
                     // Comments section header
                     GestureDetector(
                       onTap: () => _showCommentsModal(commentState.comments),

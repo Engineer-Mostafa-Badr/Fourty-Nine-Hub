@@ -13,10 +13,13 @@ class StatusIconBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return CustomNotificationWidget(
+        bottom: 25,
+        start: 25,
         icon: Image.asset(
-          context.isDarkMode?Assets.status_dark:Assets.status,
+          context.isDarkMode ? Assets.status_dark : Assets.status,
           fit: BoxFit.fitWidth,
-        ), unreadCount: 0,
+        ),
+        unreadCount: 0,
       );
     });
   }

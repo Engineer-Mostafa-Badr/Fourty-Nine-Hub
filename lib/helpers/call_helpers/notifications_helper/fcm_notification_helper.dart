@@ -300,15 +300,19 @@ Future<void> _handleNotification(RemoteMessage message,
       AudioPlayer player = AudioPlayer();
       player.play(AssetSource("audio/notification.mp3"));
       toastification.show(
+        closeButton: ToastCloseButton(
+            buttonBuilder: (context,v) => const Icon(
+              Icons.close,
+              color: AppColors.whiteColor,
+            )
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               message.notification?.title ?? 'Notification Title',
               style: TextStyle(
-                color: context.isDarkMode
-                    ? AppColors.whiteColor
-                    : AppColors.PRIMARY_COLOR,
+                color: AppColors.whiteColor,
                 fontSize: 32.sp,
                 fontWeight: FontWeight.w700,
               ),
@@ -318,7 +322,7 @@ Future<void> _handleNotification(RemoteMessage message,
             Text(
               message.notification?.body ?? 'Notification body',
               style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  color: AppColors.whiteColor,
                   fontSize: 22.sp,
                   fontWeight: FontWeight.w400),
               maxLines: 1,
@@ -328,9 +332,9 @@ Future<void> _handleNotification(RemoteMessage message,
         ),
         autoCloseDuration: const Duration(seconds: 5),
         progressBarTheme:
-            ProgressIndicatorThemeData(color: AppColors.SECONDARY_COLOR),
-        primaryColor: AppColors.SECONDARY_COLOR,
-        backgroundColor: Theme.of(context).dialogBackgroundColor,
+            ProgressIndicatorThemeData(color: AppColors.PRIMARY_COLOR),
+        primaryColor: AppColors.whiteColor,
+        backgroundColor: AppColors.SECONDARY_COLOR,
         callbacks: ToastificationCallbacks(
           onTap: (toastItem) {
             print('Toast ${toastItem.id} tapped');

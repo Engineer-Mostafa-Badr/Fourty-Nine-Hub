@@ -1777,6 +1777,8 @@ class EndPoints {
   static const String updateProfile = '/tube-profile';
   static const String getAllTubeVideos = '/tube-video';
   static const String getMyTubeVideos = '/tube-video/me';
+  static String subscribeToChannel(String profileId) => '/tube-profile/subscribe/$profileId';
+  static String unsubscribeFromChannel(String profileId) => '/tube-profile/unsubscribe/$profileId';
   static String addVideoToFavorite(String videoId) =>
       '/tube-favorite/video/$videoId';
   static String removeVideoFromFavorite(String videoId) =>
@@ -1823,12 +1825,46 @@ class EndPoints {
   static String dislikeTubeComment(String commentId) =>
       '/tube-comment/$commentId/dislike';
 
-      //! Exchange Currency Endpoints
-      static String convertCurrency({
-  required String from,
-  required String to,
-  required double amount,
-}) => '/exchange-currency/pair/$from/$to/$amount';
+  //! Playlist Endpoints
+
+  // Create new playlist
+  static const String createPlaylist = '/tube-playlist';
+
+  // Get all playlists for owner
+  static String getPlaylists(String ownerId) =>
+      '/tube-playlist?ownerId=$ownerId';
+
+  // Get playlist by ID (basic info)
+  static String getPlaylistById(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  // NEW: Get playlist with videos (full details)
+  static String getPlaylistWithVideos(String playlistId) =>
+      '/tube-playlist/$playlistId?includeVideos=true';
+
+  // Add video to playlist
+  static String addVideoToPlaylist(String playlistId) =>
+      '/tube-playlist/add-video/$playlistId';
+
+  // Remove video from playlist
+  static String removeVideoFromPlaylist(String playlistId) =>
+      '/tube-playlist/remove-video/$playlistId';
+
+  // Delete playlist
+  static String deletePlaylist(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  // Update playlist
+  static String updatePlaylist(String playlistId) =>
+      '/tube-playlist/$playlistId';
+
+  //! Exchange Currency Endpoints
+  static String convertCurrency({
+    required String from,
+    required String to,
+    required double amount,
+  }) =>
+      '/exchange-currency/pair/$from/$to/$amount';
 
 static String getExchangeRates(String code) => '/exchange-currency/$code';
 
@@ -1841,4 +1877,5 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchAuctionMainCategory = '/auctions/main-categories';
 
 
+  static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

@@ -6,6 +6,7 @@ import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../new_trip_join/captainshare/screen/captain_share_screen.dart';
 import '../../../../new_trip_join/presentation/view/widget/trip_option_widget.dart';
 import '../../../view_all_pick_me/presentation/views/all_pickme_view.dart';
@@ -108,6 +109,7 @@ class _TripJoinViewState extends State<TripJoinView>
     return SharedScaffold(
       mainCategoryId: 1,
       isWithBackArrow: true,
+
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -312,7 +314,7 @@ class _TripJoinViewState extends State<TripJoinView>
             title: context.isArabic ? "انشر رحلتك" : "Post your ride",
             onTap: () {
               ManageVibration.vibrate();
-              context.push(Routes.TRIP_JOIN,extra: false);
+              context.push(Routes.TRIP_JOIN, extra: false);
             },
           ),
         );

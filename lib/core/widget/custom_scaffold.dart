@@ -21,6 +21,7 @@ import '../../features/social_media/chat/chat_view/presentation/pages/chats_view
 import '../../main.dart';
 import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';
+import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
 
@@ -171,21 +172,37 @@ class _CustomScaffoldState extends State<CustomScaffold>
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 35.h,
-        height: 35.h,
-        padding: padding ?? const EdgeInsets.all(0),
-        child: isSvg != true
-            ? Image.asset(
-                image,
-                fit: BoxFit.cover,
-                color: context.isDarkMode ? AppColors.whiteColor : null,
-              )
-            : SvgPicture.asset(
-                image,
-                fit: BoxFit.cover,
-                color: context.isDarkMode ? AppColors.whiteColor : null,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 35.h,
+            height: 35.h,
+            padding: padding ?? const EdgeInsets.all(0),
+            child: isSvg != true
+                ? Image.asset(
+                    image,
+                    fit: BoxFit.cover,
+                    color: context.isDarkMode ? AppColors.whiteColor : null,
+                  )
+                : SvgPicture.asset(
+                    image,
+                    fit: BoxFit.cover,
+                    color: context.isDarkMode ? AppColors.whiteColor : null,
+                  ),
+          ),
+          SizedBox(height: 4.h),
+          SizedBox(
+            width: 100.w,
+            child: Label(
+              text: label,
+              style: Styles.smallText(
+                  fontSize: 20, color: AppColors.PRIMARY_COLOR),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -497,17 +514,24 @@ class _CustomScaffoldState extends State<CustomScaffold>
                   : Container(),
               Material(
                 color: Colors.transparent,
-                child: ClickableWidget(
-                  onTap: () {
+                child: GestureDetector(
+                  onHorizontalDragStart: (details) {
                     ManageVibration.vibrate();
                     floatingNavigatorCubit.changeFloatingNavigator();
+                  },
+                  onHorizontalDragUpdate: (details) {
+                    // منطق أثناء السحب الأفقي
+                    print('Horizontal drag: ${details.localPosition.dx}');
+                  },
+                  onHorizontalDragEnd: (details) {
+                    // منطق عند انتهاء السحب
+                    print('Horizontal drag ended');
                   },
                   child: Container(
                     width: 40,
                     color: Colors.transparent,
                     alignment: AlignmentDirectional.topStart,
                     child: Container(
-                      // padding: EdgeInsets.all(50),
                       height: 100,
                       width: 10,
                       decoration: BoxDecoration(

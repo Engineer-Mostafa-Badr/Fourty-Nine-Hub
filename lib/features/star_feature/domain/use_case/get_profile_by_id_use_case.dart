@@ -12,6 +12,6 @@ class GetProfileByIdUseCase extends UseCase<ProfileEntity, String> {
 
   @override
   Future<Either<Failure, ProfileEntity>> call(String profileId) async {
-    return await repository.getProfileById(profileId);
+    return await repository.getProfileById(profileId);  
   }
 }

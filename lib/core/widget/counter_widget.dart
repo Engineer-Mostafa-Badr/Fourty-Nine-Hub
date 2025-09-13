@@ -28,13 +28,13 @@ class CounterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width??42.w,
-      height: height??42.w,
+      width: width ?? 42.w,
+      height: height ?? 42.w,
       // padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
           border: Border.all(
               color: borderColor ?? AppColors.getReversedTextColor(context),
-              width: borderWidth ?? 1.w),
+              width: borderWidth ?? 5.w),
           shape: BoxShape.circle,
           color: bgColor ?? AppColors.getRedColor(context)),
       alignment: AlignmentDirectional.center,

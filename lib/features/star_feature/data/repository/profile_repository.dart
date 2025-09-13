@@ -64,4 +64,31 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(UnknownFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> subscribeToChannel(String profileId) async {
+    try {
+      final result = await remoteDataSource.subscribeToChannel(profileId);
+      return Right(result);
+    } catch (e) {
+      if (e is Failure) {
+        return Left(e);
+      }
+      return Left(UnknownFailure(e.toString()));
+    }
+  }
+
+  // NEW: Unsubscribe from channel
+  @override
+  Future<Either<Failure, String>> unsubscribeFromChannel(String profileId) async {
+    try {
+      final result = await remoteDataSource.unsubscribeFromChannel(profileId);
+      return Right(result);
+    } catch (e) {
+      if (e is Failure) {
+        return Left(e);
+      }
+      return Left(UnknownFailure(e.toString()));
+    }
+  }
 }

@@ -149,55 +149,62 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          _getCurrencyFlag(entry.key),
-                          style: const TextStyle(fontSize: 24),
+                        Row(
+                          children: [
+                            Text(
+                              _getCurrencyFlag(entry.key),
+                              style: const TextStyle(fontSize: 24),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              entry.key,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          entry.key,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        const Spacer(),
+                        // const Spacer(),
                         // الرسم البياني المعتمد على البيانات الحقيقية
-                        SizedBox(
-                          width: 80,
-                          height: 25,
-                          child: LineChart(
-                            LineChartData(
-                              gridData: const FlGridData(show: false),
-                              titlesData: const FlTitlesData(show: false),
-                              borderData: FlBorderData(show: false),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: chartPoints,
-                                  isCurved: true,
-                                  color: chartColor,
-                                  barWidth: 1.5,
-                                  dotData: const FlDotData(show: false),
-                                  belowBarData: BarAreaData(
-                                    show: true,
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        chartColor.withOpacity(0.3),
-                                        chartColor.withOpacity(0.1),
-                                        Colors.transparent,
-                                      ],
+                        Center(
+                          child: SizedBox(
+                            width: 120,
+                            height: 40,
+                            child: LineChart(
+                              LineChartData(
+                                gridData: const FlGridData(show: false),
+                                titlesData: const FlTitlesData(show: false),
+                                borderData: FlBorderData(show: false),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    spots: chartPoints,
+                                    isCurved: true,
+                                    color: chartColor,
+                                    barWidth: 1.5,
+                                    dotData: const FlDotData(show: false),
+                                    belowBarData: BarAreaData(
+                                      show: true,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          chartColor.withOpacity(0.3),
+                                          chartColor.withOpacity(0.1),
+                                          Colors.transparent,
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                              minX: 0,
-                              maxX: 9,
-                              minY: chartRange['min']!,
-                              maxY: chartRange['max']!,
+                                ],
+                                minX: 0,
+                                maxX: 9,
+                                minY: chartRange['min']!,
+                                maxY: chartRange['max']!,
+                              ),
                             ),
                           ),
                         ),

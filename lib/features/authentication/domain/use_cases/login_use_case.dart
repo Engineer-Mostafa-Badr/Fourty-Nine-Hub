@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
+import '../../../../core/utils/device_id.dart';
+
 class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
   final AuthRepository _repository;
 
@@ -31,6 +33,8 @@ class LoginParams extends Equatable {
         'email': email,
         'password': password,
         'fcmToken': token,
+        'deviceId': await getDeviceId(),
+        'deviceName': await getDeviceName(),
         // 'fcmToken': 'fcmToken',
       };
 

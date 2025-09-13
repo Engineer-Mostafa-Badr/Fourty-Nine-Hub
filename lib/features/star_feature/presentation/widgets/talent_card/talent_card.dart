@@ -16,10 +16,12 @@ import '../../../../authentication/presentation/controllers/user_cubit/user_cubi
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/comment_cubit/comment_cubit.dart';
+import '../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../helper/youtube_style_video_player.dart';
 import '../../pages/profile_page.dart';
+import '../profile_components/playlist_bottom_sheet.dart';
 import 'talent_card_info_section.dart';
 import 'talent_card_overlay_controls.dart';
 import '../common/options_bottom_sheet.dart';
@@ -234,52 +236,58 @@ class _TalentCardState extends State<TalentCard> {
   }
 
   static void _navigateToProfile(BuildContext context, StarEntity talent) {
-    final mockVideos = List.generate(
-      10,
-      (index) => StarEntity(
-        id: '${talent.id}_mock_$index',
-        title: '${talent.title} - Part ${index + 1}',
-        description: 'Mock video ${index + 1}',
-        user: talent.user,
-        mediaUrl: talent.mediaUrl,
-        totalViews: talent.totalViews + (index * 1000),
-        averageRating: talent.averageRating,
-        isApproved: talent.isApproved,
-        haveStories: talent.haveStories,
-        storyCount: talent.storyCount,
-        createdAt: DateTime.now().subtract(Duration(days: index * 30)),
-      ),
-    );
+    // Get current user ID to determine if this is current user or another user
+    final currentUserId = UserCubit.to.state.data?.id;
 
-    // تحديد إذا كان ده الملف الشخصي للمستخدم الحالي أم لا
-    final currentUserId = UserCubit
-        .to.state.data?.id; // أو أي طريقة تحصل بيها على الـ current user ID
-    final isCurrentUser = currentUserId == talent.user.id;
+    // تحديد إذا كان المستخدم الحالي بناءً على ProfileEntity userId
+    // سنحتاج لجلب ProfileEntity أولاً لمعرفة userId الصحيح
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BlocProvider<ProfileCubit>(
-          create: (context) {
-            final profileCubit = serviceLocator<ProfileCubit>();
-            if (isCurrentUser) {
-              // لو المستخدم الحالي، اجلب الملف الشخصي للمستخدم
-              profileCubit.getMyProfile();
-            } else {
-              // لو مستخدم آخر، اجلب الملف الشخصي بالـ ID
-              // هنا محتاجين نحصل على الـ profile ID من الـ talent.user.id أو أي مكان تاني
+        builder: (context) => BlocProvider(
+          create: (context) => serviceLocator<StarCubit>(),
+          child: BlocProvider<ProfileCubit>(
+            create: (context) {
+              final profileCubit = serviceLocator<ProfileCubit>();
+
+              // نبدأ بجلب البروفايل بناءً على الـ channel/profile ID
+              // سنحتاج لمعرفة الـ profile ID من StarEntity أو talent.user.id
               profileCubit.getProfileById(talent.user.id);
-            }
-            return profileCubit;
-          },
-          child: ProfilePageView(
-            user: talent.user,
-            userVideos: mockVideos,
-            isCurrentUser:
-                isCurrentUser, // تمرير المعلومة دي للـ ProfilePageView
-            profileId: isCurrentUser
-                ? null
-                : talent.user.id, // تمرير الـ profile ID لو مش current user
+
+              return profileCubit;
+            },
+            child: BlocConsumer<ProfileCubit, ProfileState>(
+              listener: (context, profileState) {
+                // لما يتحمل البروفايل، نتحقق من userId
+                if (profileState.isSuccess && profileState.profile != null) {
+                  final profileUserId = profileState.profile!.userId;
+                  final isCurrentUser = currentUserId == profileUserId;
+
+                  print("🔍 Profile Navigation Debug:");
+                  print("   Current User ID: $currentUserId");
+                  print("   Profile User ID: $profileUserId");
+                  print("   Is Current User: $isCurrentUser");
+                }
+              },
+              builder: (context, profileState) {
+                // تحديد إذا كان المستخدم الحالي بناءً على ProfileEntity
+                bool isCurrentUser = false;
+                if (profileState.profile != null) {
+                  isCurrentUser = currentUserId == profileState.profile!.userId;
+                } else {
+                  // fallback للطريقة القديمة لحين تحميل البروفايل
+                  isCurrentUser = currentUserId == talent.user.id;
+                }
+
+                return ProfilePageView(
+                  user: talent.user,
+                  userVideos: [], // Start with empty, will be loaded dynamically
+                  isCurrentUser: isCurrentUser,
+                  profileId: talent.user.id, // channel/profile ID
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -298,6 +306,59 @@ class _TalentCardState extends State<TalentCard> {
     );
   }
 
+  // void _showTubeVideoOptions(BuildContext context, StarEntity talent) {
+  //   final cubit = context.read<StarCubit>();
+
+  //   OptionsBottomSheet.showOptions(
+  //     context: context,
+  //     options: [
+  //       OptionItem(
+  //         icon: Icons.playlist_add,
+  //         title: context.isArabic ? 'إنشاء قائمة' : 'Add to playlist',
+  //         onTap: () {
+  //           ManageVibration.vibrate();
+  //           Navigator.pop(context);
+  //         },
+  //       ),
+  //       OptionItem(
+  //         icon: cubit.isFavorite(talent.id)
+  //             ? Icons.favorite
+  //             : Icons.favorite_border,
+  //         title: cubit.isFavorite(talent.id)
+  //             ? (context.isArabic
+  //                 ? 'إزالة من المفضلة'
+  //                 : 'Remove from favorites')
+  //             : (context.isArabic ? 'إضافة للمفضلة' : 'Add to favorites'),
+  //         onTap: () {
+  //           ManageVibration.vibrate();
+  //           Navigator.pop(context);
+  //           cubit.toggleFavorite(talent.id);
+  //         },
+  //       ),
+  //       if (_isTubeVideo()) ...[
+  //         OptionItem(
+  //           icon: Icons.share,
+  //           title: context.isArabic ? 'مشاركة' : 'Share',
+  //           onTap: () {
+  //             ManageVibration.vibrate();
+  //             Navigator.pop(context);
+  //           },
+  //         ),
+  //       ],
+  //       OptionItem(
+  //         icon: Icons.flag,
+  //         title: context.isArabic ? 'ابلاغ' : 'Report',
+  //         iconColor: Colors.red,
+  //         textColor: Colors.red,
+  //         onTap: () {
+  //           ManageVibration.vibrate();
+  //           Navigator.pop(context);
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
+
   void _showTubeVideoOptions(BuildContext context, StarEntity talent) {
     final cubit = context.read<StarCubit>();
 
@@ -306,10 +367,11 @@ class _TalentCardState extends State<TalentCard> {
       options: [
         OptionItem(
           icon: Icons.playlist_add,
-          title: context.isArabic ? 'إنشاء قائمة' : 'Add to playlist',
+          title: context.isArabic ? 'إضافة إلى قائمة تشغيل' : 'Add to playlist',
           onTap: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
+            _showPlaylistBottomSheet(context, talent);
           },
         ),
         OptionItem(
@@ -334,6 +396,25 @@ class _TalentCardState extends State<TalentCard> {
             onTap: () {
               ManageVibration.vibrate();
               Navigator.pop(context);
+              _shareVideo(context, talent);
+            },
+          ),
+          OptionItem(
+            icon: Icons.download,
+            title: context.isArabic ? 'تحميل' : 'Download',
+            onTap: () {
+              ManageVibration.vibrate();
+              Navigator.pop(context);
+              _downloadVideo(context, talent);
+            },
+          ),
+          OptionItem(
+            icon: Icons.watch_later_outlined,
+            title: context.isArabic ? 'مشاهدة لاحقاً' : 'Watch later',
+            onTap: () {
+              ManageVibration.vibrate();
+              Navigator.pop(context);
+              _addToWatchLater(context, talent);
             },
           ),
         ],
@@ -345,11 +426,111 @@ class _TalentCardState extends State<TalentCard> {
           onTap: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
+            _reportVideo(context, talent);
           },
         ),
       ],
     );
   }
+
+// Helper method to show playlist bottom sheet
+  void _showPlaylistBottomSheet(BuildContext context, StarEntity talent) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: PlaylistBottomSheet(video: talent),
+      ),
+    );
+  }
+
+// Helper methods for other options
+  void _shareVideo(BuildContext context, StarEntity talent) {
+    // Implement share functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared',
+        ),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  void _downloadVideo(BuildContext context, StarEntity talent) {
+    // Implement download functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          context.isArabic ? 'بدء تحميل الفيديو' : 'Download started',
+        ),
+        backgroundColor: Colors.blue,
+      ),
+    );
+  }
+
+  void _addToWatchLater(BuildContext context, StarEntity talent) {
+    // Implement watch later functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          context.isArabic
+              ? 'تم إضافة الفيديو للمشاهدة لاحقاً'
+              : 'Added to Watch Later',
+        ),
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
+
+  void _reportVideo(BuildContext context, StarEntity talent) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          context.isArabic ? 'الإبلاغ عن الفيديو' : 'Report Video',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          context.isArabic
+              ? 'هل تريد الإبلاغ عن هذا الفيديو لانتهاكه قواعد المجتمع؟'
+              : 'Do you want to report this video for violating community guidelines?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              context.isArabic ? 'إلغاء' : 'Cancel',
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    context.isArabic
+                        ? 'تم الإبلاغ عن الفيديو'
+                        : 'Video reported',
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(context.isArabic ? 'إبلاغ' : 'Report'),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   static bool _isVideoUrl(String url) {
     return url.toLowerCase().contains('.mp4') ||
