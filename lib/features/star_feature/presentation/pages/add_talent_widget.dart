@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -56,6 +57,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   ActiveCategory? _selectedCategory;
   bool _isLoadingCategories = false;
 
+  // Loading states for media selection
+  bool _isLoadingVideo = false;
+  bool _isLoadingThumbnail = false;
+
   final FocusNode _titleFocusNode = FocusNode();
   bool _isUploading = false;
   String _uploadStatus = '';
@@ -82,7 +87,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _titleController,
-                enabled: !_isUploading,
+                enabled: !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -131,7 +136,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _descriptionController,
-                enabled: !_isUploading,
+                enabled: !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
