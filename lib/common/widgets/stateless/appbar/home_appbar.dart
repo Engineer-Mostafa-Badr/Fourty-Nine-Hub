@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -261,9 +262,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                       color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     ),
                     height: 20,
-                    unreadCount: !context.read<UserCubit>().isLoggedIn ? 0 : getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.total ?? 0,
+                    unreadCount: !context.read<UserCubit>().isLoggedIn ? 0 : getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.total ?? 0),
                   ),
-                ),
               );
             },
           ),

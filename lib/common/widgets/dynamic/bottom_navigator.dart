@@ -97,7 +97,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       icon: FontAwesomeIcons.plus,
       localeKey: LocaleKeys.chat,
       cacheKey: 'chatCount',
-      image: Assets.whatsAppIcon,
+      image: Assets.whatsApp,
       index: 3,
       route: Routes.conversationsScreen,
       height: 18,
@@ -105,7 +105,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     BottomItemModel(
       icon: FontAwesomeIcons.car,
       localeKey: LocaleKeys.chance,
-      cacheKey: 'changeCount',
+      cacheKey: 'chanceCount',
       index: 4,
       image: Assets.chanceIcon,
       route: Routes.CHANCE,
