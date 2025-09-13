@@ -485,7 +485,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                         .changeFloatingNavigator();
                                     context.push(
                                         context.read<UserCubit>().isLoggedIn
-                                            ? Routes.MAZADAT
+                                            ? Routes.availableAuctionScreen
                                             : Routes.FirstLoginScreen);
                                   },
                                 ),
