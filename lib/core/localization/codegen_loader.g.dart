@@ -1668,7 +1668,8 @@ class CodegenLoader extends AssetLoader{
   "priceNow": "السعر الآن",
   "startFrom": "يبدأ من",
   "myBidders": "مزايدِيَّ",
-  "ended": "انتهى"
+  "ended": "انتهى",
+  "winner": "فائز"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3344,7 +3345,8 @@ static const Map<String,dynamic> _en = {
   "priceNow": "Price Now",
   "startFrom": "Start from",
   "myBidders": "My Bidders",
-  "ended": "Ended"
+  "ended": "Ended",
+  "winner": "Winner"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

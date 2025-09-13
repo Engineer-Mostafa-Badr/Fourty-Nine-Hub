@@ -1645,5 +1645,6 @@ abstract class  LocaleKeys {
   static const startFrom = 'startFrom';
   static const myBidders = 'myBidders';
   static const ended = 'ended';
+  static const winner = 'winner';
 
 }

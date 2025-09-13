@@ -281,6 +281,7 @@ class AuctionCard extends StatelessWidget {
                       // 👉 Button on right
                       AppButton(
                         width: 91,
+                        backColor: auction.isWinner == true ?  AppColors.cFFAC3F :  AppColors.whiteColor,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -292,7 +293,11 @@ class AuctionCard extends StatelessWidget {
                             ),
                           );
                         },
-                        label: isEnded ? "Winner" : "Join Now",
+                        style: Styles.mediumText(
+                          color:auction.isWinner == true ?  AppColors.black :  AppColors.whiteColor,
+                          fontWeight: FontWeight.w500
+                        ),
+                        label: auction.isWinner == true ? LocaleKeys.winner.localize : LocaleKeys.joinNow.localize,
                       ),
                     ],
                   ),
