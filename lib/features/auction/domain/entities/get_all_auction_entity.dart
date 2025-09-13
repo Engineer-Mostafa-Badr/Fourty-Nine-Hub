@@ -2,15 +2,15 @@ class GetAvailableAuctionEntity {
   final String? id;
   final String? title;
   final String? description;
-  final int? minBiddingPrice;
-  final int? price;
-  final int? lastPrice;
-  final int? numberOfParticipants;
+  final num? minBiddingPrice;
+  final num? price;
+  final num? lastPrice;
+  final num? numberOfParticipants;
   final DateTime? startAt;
   final DateTime? endAt;
   final List<AuctionMediaEntity>? media;
   final String? status;
-  final int? views;
+  final num? views;
   final bool? isFavorite;
   final DateTime? createdAt;
   final bool? isWinner;
@@ -34,6 +34,43 @@ class GetAvailableAuctionEntity {
     this.isWinner,
     this.winnerData,
   });
+  GetAvailableAuctionEntity copyWith({
+    String? id,
+    String? title,
+    String? description,
+    num? minBiddingPrice,
+    num? price,
+    num? lastPrice,
+    num? numberOfParticipants,
+    DateTime? startAt,
+    DateTime? endAt,
+    List<AuctionMediaEntity>? media,
+    String? status,
+    num? views,
+    bool? isFavorite,
+    DateTime? createdAt,
+    bool? isWinner,
+    dynamic winnerData,
+  }) {
+    return GetAvailableAuctionEntity(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      minBiddingPrice: minBiddingPrice ?? this.minBiddingPrice,
+      price: price ?? this.price,
+      lastPrice: lastPrice ?? this.lastPrice,
+      numberOfParticipants: numberOfParticipants ?? this.numberOfParticipants,
+      startAt: startAt ?? this.startAt,
+      endAt: endAt ?? this.endAt,
+      media: media ?? this.media,
+      status: status ?? this.status,
+      views: views ?? this.views,
+      isFavorite: isFavorite ?? this.isFavorite,
+      createdAt: createdAt ?? this.createdAt,
+      isWinner: isWinner ?? this.isWinner,
+      winnerData: winnerData ?? this.winnerData,
+    );
+  }
 }
 
 class AuctionMediaEntity {

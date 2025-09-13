@@ -9,14 +9,17 @@ import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../shared_web_socket.dart';
+import '../../domain/entities/add_favorite_auction_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
+import '../../domain/usecases/add_favorite_auction_use_case.dart';
 import '../../domain/usecases/fetch_available_auction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
+import '../models/add_favorite_auction_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
 import '../models/auction_sub_category_model.dart';
@@ -36,6 +39,7 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, List<AuctionSubCategoryEntity>>> getAuctionSubCategory({required GetSubCategoryAuctionParams params});
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getExpiredAuction({required GetAuctionParams params});
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getFavoriteAuction({required GetAuctionParams params});
+  Future<Either<Failure, AddFavoriteAuctionEntity >> addFavoriteAuction({required FavoriteAuctionParams params});
 
 }
 
@@ -237,6 +241,20 @@ class AuctionRemoteDataSourceImpl
             .map((e) => GetAvailableAuctionModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteAuctionEntity>> addFavoriteAuction({required FavoriteAuctionParams params}) async{
+    final url = "${EndPoints.addFavoriteAuction}${params.id}/addOrRemove";
+    final response = await _apiConsumer.post(url,);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AddFavoriteAuctionModel.fromJson(data);
+        return Right(blockRestaurantModel);
       },
     );
   }

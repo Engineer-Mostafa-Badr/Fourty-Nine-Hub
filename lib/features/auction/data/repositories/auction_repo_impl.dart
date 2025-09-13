@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/add_favorite_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_main_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_sub_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/get_all_auction_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/usecases/add_favorite_auction_use_case.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_available_auction_use_case.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_sub_category_auction_use_case.dart';
 
@@ -70,6 +72,11 @@ class AuctionRepoImpl implements AuctionRepository {
   @override
   Future<Either<Failure, List<GetAvailableAuctionEntity>>> getFavoriteAuction({required GetAuctionParams params}) {
     return _remoteDataSource.getFavoriteAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteAuctionEntity>> addFavoriteAuction({required FavoriteAuctionParams params}) {
+    return _remoteDataSource.addFavoriteAuction(params: params);
   }
 
 

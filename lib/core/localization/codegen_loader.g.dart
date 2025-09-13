@@ -1250,8 +1250,8 @@ class CodegenLoader extends AssetLoader{
   "billCashback": "هدايا فواتير",
   "selectBill": "حدد الفاتورة",
   "billValue": "قيمة الفاتورة",
-  "trafficViolation": "مخالفة مرور",
-  "electricityBill": "فاتورة كهرباء",
+  "trafficViolation": "مخالفة المرور",
+  "electricityBill": "فاتورة الكهرباء",
   "mobileBill": "فاتورة موبايل",
   "enterBillValue": "ادخل قيمة الفاتورة",
   "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
@@ -1664,7 +1664,8 @@ class CodegenLoader extends AssetLoader{
   "uploadImagesOrVideo": "قم برفع صور أو فيديوهات للبدء",
   "selectMainCategoryAuction": "اختر القسم الرئيسي",
   "selectSubCategoryAuction": "اختر القسم الفرعي",
-  "auctionTime": "وقت المزاد"
+  "auctionTime": "وقت المزاد",
+  "priceNow": "السعر الآن"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3336,7 +3337,8 @@ static const Map<String,dynamic> _en = {
   "uploadImagesOrVideo": "Upload Images or videos to get started",
   "selectMainCategoryAuction": "Select Main Category",
   "selectSubCategoryAuction": "Select Sub Category",
-  "auctionTime": "Auction Time"
+  "auctionTime": "Auction Time",
+  "priceNow": "Price Now"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

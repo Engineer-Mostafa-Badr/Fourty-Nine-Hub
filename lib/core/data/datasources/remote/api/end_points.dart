@@ -1875,7 +1875,8 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchParticipantAuction = '/auctions/participant-prices/';
   static String fetchAuctionSubCategory = '/auctions/sub-categories/';
   static String fetchAuctionMainCategory = '/auctions/main-categories';
+  static String addFavoriteAuction = '/auction-fav/';
 
 
-  static String getExchangeRates(String code) => '/exchange-currency/$code';
+  // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

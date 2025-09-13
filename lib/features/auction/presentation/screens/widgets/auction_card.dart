@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -14,8 +16,13 @@ import 'auction_image_slider.dart';
 
 class AuctionCard extends StatelessWidget {
   final GetAvailableAuctionEntity auction;
+  final bool isFavorite;
 
-  AuctionCard({required this.auction});
+  const AuctionCard({
+    super.key,
+    required this.auction,
+    this.isFavorite = false,
+  });
 
 
   String _formatTimeLeft() {
@@ -59,6 +66,10 @@ class AuctionCard extends StatelessWidget {
     final count = auction.views ?? 0;
     return NumberFormat.compact().format(count); // e.g. 0, 1, 1K, 50.7K
   }
+  String _formatNumber(num? number) {
+    if (number == null) return "0";
+    return NumberFormat.decimalPattern().format(number);
+  }
 
 
   @override
@@ -94,16 +105,30 @@ class AuctionCard extends StatelessWidget {
                 PositionedDirectional(
                   top: 12,
                   start: 12,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      // color: Colors.white,
-                      shape: BoxShape.circle,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<AuctionCubit>().toggleFavoriteAuction(auction.id ?? "");
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        // 👇 if forceFavorite=true → always heart filled
+                        isFavorite
+                            ? Icons.favorite
+                            : (auction.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border),
+                        color: Colors.red[400],
+                        size: 30,
+                      ),
                     ),
-                    child: Icon(Icons.favorite_border,
-                        color: Colors.red[400], size: 30),
                   ),
+
                 ),
+
               ],
             ),
 
@@ -138,16 +163,17 @@ class AuctionCard extends StatelessWidget {
                               color:context.isDarkMode ? Colors.white :  Colors.black,
                             ),
                             children: [
-                              const TextSpan(text: "Price Now "),
+                               TextSpan(text:LocaleKeys.priceNow.localize),
                               TextSpan(
-                                text: "${auction.price ?? 0} ",
+                                text: "${_formatNumber(auction.price ?? 0)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
-                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                  color: context.isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
+
                               TextSpan(
-                                text: "EGP",
+                                text: LocaleKeys.EGP.localize,
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w600, // bold
                                   color:context.isDarkMode ? Colors.white :  Colors.black,

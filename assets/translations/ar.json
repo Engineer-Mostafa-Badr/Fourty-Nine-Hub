@@ -1653,7 +1653,8 @@
   "uploadImagesOrVideo": "قم برفع صور أو فيديوهات للبدء",
   "selectMainCategoryAuction": "اختر القسم الرئيسي",
   "selectSubCategoryAuction": "اختر القسم الفرعي",
-  "auctionTime": "وقت المزاد"
+  "auctionTime": "وقت المزاد",
+  "priceNow": "السعر الآن"
 
 
 }

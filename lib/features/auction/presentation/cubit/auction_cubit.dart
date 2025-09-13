@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/auction/auction_helper.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -9,10 +10,12 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../common/functions/global/upload_image.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
+import '../../domain/entities/add_favorite_auction_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
+import '../../domain/usecases/add_favorite_auction_use_case.dart';
 import '../../domain/usecases/bid_auction_use_case.dart';
 import '../../domain/usecases/fetch_available_auction_use_case.dart';
 import '../../domain/usecases/fetch_expired_auction_use_case.dart';
@@ -29,7 +32,7 @@ import '../../domain/usecases/listen_to_new_bid_auction_use_case.dart';
 part 'auction_state.dart';
 
 class AuctionCubit extends Cubit<AuctionState> {
-  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase)  : super(AuctionState());
+  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase)  : super(AuctionState());
 
   final GetAvailableAuctionUseCase getAvailableAuctionUseCase;
   final ListenToNewAuctionUseCase listenToNewAuctionUseCase;
@@ -42,7 +45,159 @@ class AuctionCubit extends Cubit<AuctionState> {
   final GetAuctionSubCategoryUseCase getAuctionSubCategoryUseCase;
   final GetExpiredAuctionUseCase getExpiredAuctionUseCase;
   final GetFavoriteAuctionUseCase getFavoriteAuctionUseCase;
+  final AddFavoriteAuctionUseCase addFavoriteAuctionUseCase;
 
+  Future<void> toggleFavoriteAuction(String auctionId) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await addFavoriteAuctionUseCase(
+      FavoriteAuctionParams(id: auctionId),
+    );
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ));
+      },
+          (entity) {
+        // ✅ Update Available auctions
+        availableAuctionNonSocketData =
+            availableAuctionNonSocketData.map((a) {
+              if (a.id == auctionId) {
+                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
+              }
+              return a;
+            }).toList();
+
+        // ✅ Update Expired auctions
+        expiredAuctionNonSocketData =
+            expiredAuctionNonSocketData.map((a) {
+              if (a.id == auctionId) {
+                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
+              }
+              return a;
+            }).toList();
+
+        // ✅ Update Favorites list
+        final index =
+        favoriteAuctionNonSocketData.indexWhere((a) => a.id == auctionId);
+
+        if (index != -1) {
+          // Already in favorites → unfavorite → remove from list
+          favoriteAuctionNonSocketData = favoriteAuctionNonSocketData
+              .where((a) => a.id != auctionId)
+              .toList();
+        } else {
+          // Not in favorites → favorited from Available/Expired → add to list
+
+          final addedFromAvailable =
+          availableAuctionNonSocketData.firstWhereOrNull((a) => a.id == auctionId);
+          final addedFromExpired =
+          expiredAuctionNonSocketData.firstWhereOrNull((a) => a.id == auctionId);
+
+          final newFav = addedFromAvailable ?? addedFromExpired;
+          if (newFav != null) {
+            favoriteAuctionNonSocketData = [
+              ...favoriteAuctionNonSocketData,
+              newFav.copyWith(isFavorite: true),
+            ];
+          }
+        }
+
+        emit(state.copyWith(
+          status: StateStatus.success,
+          addFavoriteAuctionEntity: entity,
+          getAvailableAuction: availableAuctionNonSocketData,
+          getExpiredAuction: expiredAuctionNonSocketData,
+          getFavoriteAuction: favoriteAuctionNonSocketData,
+        ));
+      },
+    );
+  }
+
+
+
+  /*
+  Future<void> toggleFavoriteAuction(String auctionId) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await addFavoriteAuctionUseCase(
+      FavoriteAuctionParams(id: auctionId),
+    );
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ));
+      },
+          (entity) {
+        // Find the auction in all lists and flip its isFavorite flag
+        favoriteAuctionNonSocketData =
+            favoriteAuctionNonSocketData.map((a) {
+              if (a.id == auctionId) {
+                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
+              }
+              return a;
+            }).toList();
+
+        availableAuctionNonSocketData =
+            availableAuctionNonSocketData.map((a) {
+              if (a.id == auctionId) {
+                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
+              }
+              return a;
+            }).toList();
+
+        expiredAuctionNonSocketData =
+            expiredAuctionNonSocketData.map((a) {
+              if (a.id == auctionId) {
+                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
+              }
+              return a;
+            }).toList();
+
+        emit(state.copyWith(
+          status: StateStatus.success,
+          addFavoriteAuctionEntity: entity,
+          getAvailableAuction: availableAuctionNonSocketData,
+          getExpiredAuction: expiredAuctionNonSocketData,
+          getFavoriteAuction: favoriteAuctionNonSocketData,
+        ));
+      },
+    );
+  }
+*/
+/*
+  Future<void> toggleFavoriteAuction(String auctionId) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await addFavoriteAuctionUseCase(
+      FavoriteAuctionParams(id: auctionId),
+    );
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ));
+      },
+          (entity) {
+        // Entity comes from AddFavoriteAuctionEntity
+        CliLogger.info("⭐ Favorite updated: ${entity.message}");
+
+        emit(state.copyWith(
+          status: StateStatus.success,
+          addFavoriteAuctionEntity: entity,
+        ));
+      },
+    );
+  }
+*/
   Future<void> uploadMedia({required bool isImage}) async {
     emit(state.copyWith(isUploading: true, status: StateStatus.loading));
 
@@ -71,27 +226,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     }
   }
 
-/*
-  /// Upload image or video
-  Future<void> uploadMedia({required bool isImage}) async {
-    emit(state.copyWith(isUploading: true, status: StateStatus.loading));
 
-    await UploadMediaHelper.uploadMedia(
-      isImage: isImage,
-      onUploaded: (uploadFileEntity) {
-        final newList = List<UploadFileEntity>.from(state.uploadedFiles)
-          ..add(uploadFileEntity);
-
-        emit(state.copyWith(
-          uploadedFiles: newList,
-          status: StateStatus.success,
-          isUploading: false,
-        ));
-      },
-    );
-  }
-*/
-  /// Delete file from list
   void deleteUploadedFile(UploadFileEntity file) {
     final newList = List<UploadFileEntity>.from(state.uploadedFiles)
       ..remove(file);
@@ -99,7 +234,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     emit(state.copyWith(uploadedFiles: newList));
   }
 
-  /// Get all media IDs
+
   List<String> getAllMediaIds() {
     return state.uploadedFiles.map((e) => e.mediaId).toList();
   }
@@ -143,29 +278,6 @@ class AuctionCubit extends Cubit<AuctionState> {
     });
   }
 
-  // void listenToNewBids() {
-  //   CliLogger.info('🎧 Listening to new bids...');
-  //
-  //   listenToNewBidAuctionUseCase((newParticipant) {
-  //     CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
-  //
-  //     // check if user already exists in participants
-  //     final index = participants.indexWhere((p) => p.userId == newParticipant.userId);
-  //
-  //     if (index != -1) {
-  //       // update existing participant bid
-  //       participants[index] = newParticipant;
-  //     } else {
-  //       // add new participant
-  //       participants.insert(0, newParticipant);
-  //     }
-  //
-  //     emit(state.copyWith(
-  //       auctionParticipants: List.from(participants),
-  //       status: StateStatus.success,
-  //     ));
-  //   });
-  // }
 
   /// Fetch paginated participants
   Future<void> getParticipants(String auctionId) async {
@@ -306,63 +418,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     );
   }
 
-/*
-  List<GetAvailableAuctionEntity> availableAuctionNonSocketData = [];
-  bool hasMoreAvailableNonSocketAuction = true;
-  int currentPageAvailableNonSocketAuction = 1;
-  bool isAuctionMoreAvailableNonSocketAuction = false;
-  bool isAuctionAvailableNonSocketAuction = false;
 
-  void loadInitialAvailableNonSocketAuction() async {
-    emit(state.copyWith(status: StateStatus.loading)); // emit loading state
-    isAuctionAvailableNonSocketAuction = true;
-    availableAuctionNonSocketData.clear();
-    currentPageAvailableNonSocketAuction = 1;
-    hasMoreAvailableNonSocketAuction = true;
-    await getAvailableNonSocketAuction();
-    isAuctionAvailableNonSocketAuction = false;
-    emit(state.copyWith(status: StateStatus.success));
-  }
-
-  Future<void> getAvailableNonSocketAuction() async {
-    if (!hasMoreAvailableNonSocketAuction || isAuctionMoreAvailableNonSocketAuction) {
-      return;
-    }
-    isAuctionMoreAvailableNonSocketAuction = true;
-    emit(state.copyWith(status: StateStatus.loading));
-    final response = await getAvailableAuctionUseCase(
-        GetAuctionParams(
-            page: currentPageAvailableNonSocketAuction, limit: 5));
-    response.fold(
-          (failure) {
-        isAuctionMoreAvailableNonSocketAuction = false;
-        emit(state.copyWith(
-            failure: failure,
-            // isAuctionMoreLogs: false,
-            status: StateStatus.error));
-      },
-          (data) {
-        availableAuctionNonSocketData.addAll(data);
-        // if ((data.length ?? 0) < 5) {
-        //   hasMoreAvailableNonSocketAuction = false;
-        //   // emit(state.copyWith(isAuctionMore: false));
-        //   emit(state.copyWith(status: StateStatus.loading));
-        // }
-        if (data.isEmpty || data.length < 5) {
-          hasMoreAvailableNonSocketAuction = false;
-          emit(state.copyWith(status: StateStatus.success));
-        } else {
-          currentPageAvailableNonSocketAuction++;
-        }
-
-        isAuctionMoreAvailableNonSocketAuction = false;
-        emit(state.copyWith(
-          getAvailableAuction: data,
-        ));
-      },
-    );
-  }
-*/
 
   void joinAuction(String auctionId) {
     try {

@@ -10,6 +10,7 @@ class AuctionState {
   final GetAvailableAuctionEntity? singleAuction;
   final List<UploadFileEntity> uploadedFiles; // store multiple uploaded files
   final bool isUploading;
+  final AddFavoriteAuctionEntity? addFavoriteAuctionEntity;
 
   AuctionState({
     this.status,
@@ -20,6 +21,7 @@ class AuctionState {
     this.auctionMainData,
     this.getExpiredAuction,
     this.getFavoriteAuction,
+    this.addFavoriteAuctionEntity,
     this.uploadedFiles = const [],
     this.isUploading = false,
   });
@@ -35,6 +37,7 @@ class AuctionState {
     bool? isUploading,
     List<GetAvailableAuctionEntity>? getExpiredAuction,
     List<GetAvailableAuctionEntity>? getFavoriteAuction,
+    AddFavoriteAuctionEntity? addFavoriteAuctionEntity,
   }) {
     return AuctionState(
       status: status ?? this.status,
@@ -47,6 +50,7 @@ class AuctionState {
       isUploading: isUploading ?? this.isUploading,
       getExpiredAuction: getExpiredAuction ?? this.getExpiredAuction,
       getFavoriteAuction: getFavoriteAuction ?? this.getFavoriteAuction,
+      addFavoriteAuctionEntity: addFavoriteAuctionEntity ?? this.addFavoriteAuctionEntity,
     );
   }
 }

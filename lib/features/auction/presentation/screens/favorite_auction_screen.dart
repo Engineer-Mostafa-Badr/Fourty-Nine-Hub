@@ -71,7 +71,7 @@ class FavoriteAuctionScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final auction = auctions[index];
                 print("🎯 Rendering auction at index $index: ${auction.toString()}");
-                return AuctionCard(auction: auction);
+                return AuctionCard(auction: auction,isFavorite: true,);
               },
             ),
             PositionedDirectional(

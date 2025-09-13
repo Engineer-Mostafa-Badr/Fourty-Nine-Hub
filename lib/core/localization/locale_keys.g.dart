@@ -1641,5 +1641,6 @@ abstract class  LocaleKeys {
   static const selectMainCategoryAuction = 'selectMainCategoryAuction';
   static const selectSubCategoryAuction = 'selectSubCategoryAuction';
   static const auctionTime = 'auctionTime';
+  static const priceNow = 'priceNow';
 
 }
