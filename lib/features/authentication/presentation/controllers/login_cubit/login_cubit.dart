@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/social_auth_service.dart';
@@ -130,6 +131,7 @@ class LoginCubit extends Cubit<LoginState> {
           log("Token userToken refresh ${userToken.refreshToken}");
           await CacheManager.saveAccessToken(userToken.accessToken);
           await CacheManager.saveRefreshToken(userToken.refreshToken);
+          await Storage.setRefreshToken(userToken.refreshToken);
 
           // await DI.reset();
           // await DI.execute(token: await CacheManager.getAccessToken());

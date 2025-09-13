@@ -155,6 +155,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
       }else{
         print("No Expiration");
+        context.read<UserCubit>().attachToken();
+        context.read<UserCubit>().getUser();
+        context.read<CreatePostCubit>().loadData();
+        context.read<SecretsCubit>().getAllSecrets();
+        context.read<CustomPageCubit>().fetchActivate();
+        context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+        context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+        context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+        context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+        context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
         if (!isShowOnboarding) {
           nextRoute = Routes.ChooseLangScreen;
         } else if (isActivate) {
@@ -223,6 +233,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
+      await Storage.setRefreshToken(refreshToken);
       serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       return newToken;
