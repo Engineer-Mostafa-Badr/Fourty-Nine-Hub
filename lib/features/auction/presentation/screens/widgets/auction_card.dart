@@ -224,7 +224,7 @@ class AuctionCard extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          isEnded ? "Ended" : _formatTimeLeft(),
+                          isEnded ? "${LocaleKeys.ended.localize}" : _formatTimeLeft(),
                           style: Styles.mediumText(
                             color:context.isDarkMode ? Colors.white :  Colors.black,
                             fontWeight: FontWeight.w500,
