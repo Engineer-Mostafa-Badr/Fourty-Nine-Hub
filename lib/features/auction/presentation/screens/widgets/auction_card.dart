@@ -201,16 +201,16 @@ class AuctionCard extends StatelessWidget {
                               fontWeight: FontWeight.w400,
                             ),
                             children: [
-                              const TextSpan(text: "Start from "),
+                               TextSpan(text: LocaleKeys.startFrom.localize),
                               TextSpan(
-                                text: "${auction.price ?? 0} ",
+                                text: "${_formatNumber(auction.price ?? 0)} ",
                                 style: Styles.mediumText(
-                                  color:context.isDarkMode ? Colors.white :  Colors.black,
-                                  fontWeight: FontWeight.w400, // lighter
+                                  fontWeight: FontWeight.w400,
+                                  color: context.isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
                               TextSpan(
-                                text: "EGP",
+                                text: LocaleKeys.EGP.localize,
                                 style: Styles.mediumText(
                                   color:context.isDarkMode ? Colors.white :  Colors.black,
                                   fontWeight: FontWeight.w600, // bold

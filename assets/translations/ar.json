@@ -1642,7 +1642,7 @@
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
   "watch": "مشاهدة",
   "favorite": "المفضلة",
-  "myAuction": "مزادتي",
+  "myAuction": "مزادي",
   "uploadVideo": "رفع الفيديو",
   "addAuction": "إضافة مزاد",
   "joinNow": "انضم الآن",
@@ -1654,7 +1654,8 @@
   "selectMainCategoryAuction": "اختر القسم الرئيسي",
   "selectSubCategoryAuction": "اختر القسم الفرعي",
   "auctionTime": "وقت المزاد",
-  "priceNow": "السعر الآن"
+  "priceNow": "السعر الآن",
+  "startFrom": "يبدأ من"
 
 
 }

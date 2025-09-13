@@ -1653,7 +1653,7 @@ class CodegenLoader extends AssetLoader{
   "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
   "retry": "إعادة المحاولة",
   "favorite": "المفضلة",
-  "myAuction": "مزادتي",
+  "myAuction": "مزادي",
   "uploadVideo": "رفع الفيديو",
   "addAuction": "إضافة مزاد",
   "joinNow": "انضم الآن",
@@ -1665,7 +1665,8 @@ class CodegenLoader extends AssetLoader{
   "selectMainCategoryAuction": "اختر القسم الرئيسي",
   "selectSubCategoryAuction": "اختر القسم الفرعي",
   "auctionTime": "وقت المزاد",
-  "priceNow": "السعر الآن"
+  "priceNow": "السعر الآن",
+  "startFrom": "يبدأ من"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3338,7 +3339,8 @@ static const Map<String,dynamic> _en = {
   "selectMainCategoryAuction": "Select Main Category",
   "selectSubCategoryAuction": "Select Sub Category",
   "auctionTime": "Auction Time",
-  "priceNow": "Price Now"
+  "priceNow": "Price Now",
+  "startFrom": "Start from"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
