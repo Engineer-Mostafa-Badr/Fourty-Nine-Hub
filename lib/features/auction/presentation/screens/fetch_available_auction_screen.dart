@@ -160,7 +160,7 @@ class _AuctionScreenState extends State<AuctionScreen>
                         LocaleKeys.available.localize,
                         LocaleKeys.expired.localize,
                         LocaleKeys.favorite.localize,
-                        LocaleKeys.requestLog.localize
+                        LocaleKeys.myBidders.localize
                       ];
                       return AnimatedBuilder(
                         animation: _tabController,

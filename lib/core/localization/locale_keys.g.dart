@@ -1643,5 +1643,6 @@ abstract class  LocaleKeys {
   static const auctionTime = 'auctionTime';
   static const priceNow = 'priceNow';
   static const startFrom = 'startFrom';
+  static const myBidders = 'myBidders';
 
 }

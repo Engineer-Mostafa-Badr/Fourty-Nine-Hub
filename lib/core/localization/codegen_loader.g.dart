@@ -1666,7 +1666,8 @@ class CodegenLoader extends AssetLoader{
   "selectSubCategoryAuction": "اختر القسم الفرعي",
   "auctionTime": "وقت المزاد",
   "priceNow": "السعر الآن",
-  "startFrom": "يبدأ من"
+  "startFrom": "يبدأ من",
+  "myBidders": "مزايدِيَّ"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3340,7 +3341,8 @@ static const Map<String,dynamic> _en = {
   "selectSubCategoryAuction": "Select Sub Category",
   "auctionTime": "Auction Time",
   "priceNow": "Price Now",
-  "startFrom": "Start from"
+  "startFrom": "Start from",
+  "myBidders": "My Bidders"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
