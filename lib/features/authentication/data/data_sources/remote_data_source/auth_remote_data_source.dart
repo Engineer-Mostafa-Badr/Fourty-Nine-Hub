@@ -293,12 +293,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       data: await params.toJson(),
     );
     return result.fold(
-      (failure) {
-        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-        log("loginWithPhone ${getFailureMessage(failure, currentContext)}");
-        log("loginWithPhone ${getFailureName(failure, currentContext)}");
-        return Left(failure);
-      },
+      (failure) => Left(failure),
       (response) async {
         _apiConsumer.attachToken(UserTokensModel.fromJson(
           response['data'],
