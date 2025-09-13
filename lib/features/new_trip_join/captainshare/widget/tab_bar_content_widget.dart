@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -139,16 +140,61 @@ class AvailableTripsWidget extends StatefulWidget {
   State<AvailableTripsWidget> createState() => _AvailableTripsWidgetState();
 }
 
-class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
+class _AvailableTripsWidgetState extends State<AvailableTripsWidget> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _isVisible = true;
   final double _lastScrollOffset = 0;
+  late AnimationController _animationController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
+    _scrollController.addListener(_scrollListener);
+    
+    // Initialize animation controller with 600ms duration
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    // Initialize animations
+    _slideAnimation = Tween<double>(
+      begin: 100.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _rotationAnimation = Tween<double>(
+      begin: 0.3,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    // Start with visible state
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -161,14 +207,10 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
+      _animationController.reverse();
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
+      _animationController.forward();
     }
   }
 
@@ -226,46 +268,51 @@ class _AvailableTripsWidgetState extends State<AvailableTripsWidget> {
             bottom: 0.h,
             start: 0,
             end: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isVisible ? 1 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          context.push(Routes.captainShareInfoScreen);
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..translate(0.0, _slideAnimation.value)
+                    ..rotateZ(_rotationAnimation.value),
+                  child: Opacity(
+                    opacity: _opacityAnimation.value,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              context.push(Routes.captainShareInfoScreen);
+                            },
+                            child: Container(
+                              height: 48.h,
+                              width: 48.h,
+                              decoration: BoxDecoration(
+                                  color: AppColors.getButtonPrimaryColor(context),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                size: 19,
+                                Icons.question_mark,
+                                color: context.isDarkMode
+                                    ? AppColors.black
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                          TripJoinFloatingActionButton(
+                            title: LocaleKeys.createRoute.localize,
+                            onTap: () {
+                              cubit.onNavigateToCreateRoute(context);
+                            },
+                          ),
+                        ],
                       ),
-                      TripJoinFloatingActionButton(
-                        title: LocaleKeys.createRoute.localize,
-                        onTap: () {
-                          cubit.onNavigateToCreateRoute(context);
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],
@@ -283,16 +330,61 @@ class BookingsWidget extends StatefulWidget {
   State<BookingsWidget> createState() => _BookingsWidgetState();
 }
 
-class _BookingsWidgetState extends State<BookingsWidget> {
+class _BookingsWidgetState extends State<BookingsWidget> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _isVisible = true;
   final double _lastScrollOffset = 0;
+  late AnimationController _animationController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
+    _scrollController.addListener(_scrollListener);
+    
+    // Initialize animation controller with 600ms duration
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    // Initialize animations
+    _slideAnimation = Tween<double>(
+      begin: 100.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _rotationAnimation = Tween<double>(
+      begin: 0.3,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    // Start with visible state
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -305,14 +397,10 @@ class _BookingsWidgetState extends State<BookingsWidget> {
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
+      _animationController.reverse();
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
+      _animationController.forward();
     }
   }
 
@@ -363,48 +451,53 @@ class _BookingsWidgetState extends State<BookingsWidget> {
             bottom: 0.h,
             start: 0,
             end: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isVisible ? 1 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          context
-                              .read<CaptainShareCubit>()
-                              .onNavigateToCreateRoute(context);
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..translate(0.0, _slideAnimation.value)
+                    ..rotateZ(_rotationAnimation.value),
+                  child: Opacity(
+                    opacity: _opacityAnimation.value,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CaptainShareCubit>()
+                                  .onNavigateToCreateRoute(context);
+                            },
+                            child: Container(
+                              height: 48.h,
+                              width: 48.h,
+                              decoration: BoxDecoration(
+                                  color: AppColors.getButtonPrimaryColor(context),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                size: 19,
+                                Icons.question_mark,
+                                color: context.isDarkMode
+                                    ? AppColors.black
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                          TripJoinFloatingActionButton(
+                            title: LocaleKeys.createRoute.localize,
+                            onTap: () {
+                              context.push(Routes.newRouteScreen);
+                            },
+                          ),
+                        ],
                       ),
-                      TripJoinFloatingActionButton(
-                        title: LocaleKeys.createRoute.localize,
-                        onTap: () {
-                          context.push(Routes.newRouteScreen);
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             )),
       ],
     );
@@ -420,16 +513,61 @@ class RunningTripsWidget extends StatefulWidget {
   State<RunningTripsWidget> createState() => _RunningTripsWidgetState();
 }
 
-class _RunningTripsWidgetState extends State<RunningTripsWidget> {
+class _RunningTripsWidgetState extends State<RunningTripsWidget> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _isVisible = true;
   final double _lastScrollOffset = 0;
+  late AnimationController _animationController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _scrollController = ScrollController()..addListener(_scrollListener);
+    _scrollController.addListener(_scrollListener);
+    
+    // Initialize animation controller with 600ms duration
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    // Initialize animations
+    _slideAnimation = Tween<double>(
+      begin: 100.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _rotationAnimation = Tween<double>(
+      begin: 0.3,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    // Start with visible state
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -442,14 +580,10 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
+      _animationController.reverse();
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
+      _animationController.forward();
     }
   }
 
@@ -503,49 +637,54 @@ class _RunningTripsWidgetState extends State<RunningTripsWidget> {
                 bottom: 0.h,
                 start: 0,
                 end: 0,
-                child: AnimatedSlide(
-                  duration: const Duration(milliseconds: 300),
-                  offset: _isVisible ? Offset.zero : const Offset(0, 2),
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: _isVisible ? 1 : 0,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 30.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              context
-                                  .read<CaptainShareCubit>()
-                                  .onNavigateToCreateRoute(context);
-                            },
-                            child: Container(
-                              height: 48.h,
-                              width: 48.h,
-                              decoration: BoxDecoration(
-                                  color:
-                                      AppColors.getButtonPrimaryColor(context),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Icon(
-                                size: 19,
-                                Icons.question_mark,
-                                color: context.isDarkMode
-                                    ? AppColors.black
-                                    : Colors.white,
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return Transform(
+                      transform: Matrix4.identity()
+                        ..translate(0.0, _slideAnimation.value)
+                        ..rotateZ(_rotationAnimation.value),
+                      child: Opacity(
+                        opacity: _opacityAnimation.value,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 30.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  context
+                                      .read<CaptainShareCubit>()
+                                      .onNavigateToCreateRoute(context);
+                                },
+                                child: Container(
+                                  height: 48.h,
+                                  width: 48.h,
+                                  decoration: BoxDecoration(
+                                      color:
+                                          AppColors.getButtonPrimaryColor(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Icon(
+                                    size: 19,
+                                    Icons.question_mark,
+                                    color: context.isDarkMode
+                                        ? AppColors.black
+                                        : Colors.white,
+                                  ),
+                                ),
                               ),
-                            ),
+                              TripJoinFloatingActionButton(
+                                title: LocaleKeys.createRoute.localize,
+                                onTap: () {
+                                  context.push(Routes.newRouteScreen);
+                                },
+                              ),
+                            ],
                           ),
-                          TripJoinFloatingActionButton(
-                            title: LocaleKeys.createRoute.localize,
-                            onTap: () {
-                              context.push(Routes.newRouteScreen);
-                            },
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 )),
             // if (state.runningRoute != null &&
             //     (state.runningRoute?.yourStatus?.isNotEmpty ?? false))
@@ -568,25 +707,63 @@ class ExpiredTripsWidget extends StatefulWidget {
   State<ExpiredTripsWidget> createState() => _ExpiredTripsWidgetState();
 }
 
-class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
+class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _isVisible = true;
   final double _lastScrollOffset = 0;
+  Timer? _delayTimer;
+  late AnimationController _animationController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    // _scrollController = ScrollController()..addListener(_scrollListener);
-    _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        _isVisible = false;
-      } else {
-        _isVisible = true;
-      }
-      setState(() {});
-    });
+    _scrollController.addListener(_scrollListener);
+    
+    // Initialize animation controller with 600ms duration
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    // Initialize animations
+    _slideAnimation = Tween<double>(
+      begin: 100.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _rotationAnimation = Tween<double>(
+      begin: 0.3,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    // Start with visible state
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _delayTimer?.cancel();
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -599,14 +776,18 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
-      if (_isVisible) {
-        setState(() => _isVisible = false);
-      }
+      // Hide immediately when scrolling down
+      _delayTimer?.cancel();
+      _animationController.reverse();
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
-      if (!_isVisible) {
-        setState(() => _isVisible = true);
-      }
+      // Show with delay when scrolling up
+      _delayTimer?.cancel();
+      _delayTimer = Timer(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          _animationController.forward();
+        }
+      });
     }
   }
 
@@ -649,48 +830,53 @@ class _ExpiredTripsWidgetState extends State<ExpiredTripsWidget> {
             bottom: 0.h,
             start: 0,
             end: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isVisible ? 1 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          context
-                              .read<CaptainShareCubit>()
-                              .onNavigateToCreateRoute(context);
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..translate(0.0, _slideAnimation.value)
+                    ..rotateZ(_rotationAnimation.value),
+                  child: Opacity(
+                    opacity: _opacityAnimation.value,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CaptainShareCubit>()
+                                  .onNavigateToCreateRoute(context);
+                            },
+                            child: Container(
+                              height: 48.h,
+                              width: 48.h,
+                              decoration: BoxDecoration(
+                                  color: AppColors.getButtonPrimaryColor(context),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                size: 19,
+                                Icons.question_mark,
+                                color: context.isDarkMode
+                                    ? AppColors.black
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                          TripJoinFloatingActionButton(
+                            title: LocaleKeys.createRoute.localize,
+                            onTap: () {
+                              context.push(Routes.newRouteScreen);
+                            },
+                          ),
+                        ],
                       ),
-                      TripJoinFloatingActionButton(
-                        title: LocaleKeys.createRoute.localize,
-                        onTap: () {
-                          context.push(Routes.newRouteScreen);
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             )),
       ],
     );

@@ -3,7 +3,7 @@ import '../../../../res/style/const.dart';
 
 import '../../../subcategories/domain/entities/sub_category_entity.dart';
 
-class MainCategoryEntity extends Equatable {
+class MainCategoryEntity {
   final String id;
   final String? name;
   final String? nameEn;
