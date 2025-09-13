@@ -79,8 +79,6 @@ class _SplashScreenState extends State<SplashScreen> {
       print("context.isUserLoggedIn1 ${context.isUserLoggedIn}");
       if (!isShowOnboarding) {
         nextRoute = Routes.ChooseLangScreen;
-      } else if (isActivate) {
-        nextRoute = Routes.PAGEPREVIEW;
       } else {
         nextRoute = Routes.HOME;
       }
@@ -115,6 +113,7 @@ class _SplashScreenState extends State<SplashScreen> {
           print("tokens !=null ${tokens !=null}");
           if(tokens !=null){
             context.read<UserCubit>().attachToken();
+            context.read<UserCubit>().getUser();
             context.read<CreatePostCubit>().loadData();
             context.read<SecretsCubit>().getAllSecrets();
             context.read<CustomPageCubit>().fetchActivate();
@@ -229,6 +228,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return newToken;
     } catch (e) {
       context.read<UserCubit>().attachToken();
+      context.read<UserCubit>().getUser();
       context.read<CreatePostCubit>().loadData();
       context.read<SecretsCubit>().getAllSecrets();
       context.read<CustomPageCubit>().fetchActivate();

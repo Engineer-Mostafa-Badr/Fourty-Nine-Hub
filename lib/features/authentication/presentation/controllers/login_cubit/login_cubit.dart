@@ -116,6 +116,7 @@ class LoginCubit extends Cubit<LoginState> {
         (failure) {
           var currentContext =
               AppPages.router.configuration.navigatorKey.currentContext!;
+          print("getFailureMessage(failure, currentContext) ${getFailureName(failure, currentContext)}");
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
           emit(LoginError(failure));
