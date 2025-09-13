@@ -34,6 +34,7 @@ class LoginParams extends Equatable {
         'password': password,
         'fcmToken': token,
         'deviceId': await getDeviceId(),
+
         // 'fcmToken': 'fcmToken',
       };
 
