@@ -8,24 +8,24 @@ class ChanceViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(18.0),
+      padding: const EdgeInsets.all(24.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
             Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(20),
               ),
-              elevation: 5,
+              elevation: 8,
               child: Container(
                 width: double.infinity,
-                height: 180.h,
+                height: 220.h,
                 decoration: BoxDecoration(
                   color: Colors.purple,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     'assets/images/chance.png',
                     fit: BoxFit.fill,
@@ -34,7 +34,7 @@ class ChanceViewBody extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 24,
             ),
             const ListViewCard(),
           ],

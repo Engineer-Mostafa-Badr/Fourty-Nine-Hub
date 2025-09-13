@@ -21,7 +21,7 @@ class WinnersTenPercentViewBody extends StatelessWidget {
             winners: state.winners!.latestWinners
                 .map(
                   (w) => WinnersGridViewModel(
-                    image: w.profilePictureKey,
+                    image: w.profilePictureKey ?? '',
                     name: '${w.firstName} ${w.lastName}',
                     // title: context.isArabic
                     //     ? w.competitionNameAr

@@ -30,7 +30,7 @@ class LatestWinnersModel extends LatestWinnersEntity {
     required super.userId,
     required super.firstName,
     required super.lastName,
-    required super.profilePictureKey,
+    super.profilePictureKey,
     required super.winAmount,
     required super.winAt,
   });
