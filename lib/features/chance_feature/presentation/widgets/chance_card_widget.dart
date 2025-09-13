@@ -51,7 +51,7 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: AppColors.SHADOW_LIGHT,
         ),
         child: Row(
@@ -59,7 +59,7 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
             ImageCardWidget(
               image: widget.image.photo,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 16),
             Expanded(
               flex: 3,
               child: Column(
@@ -67,16 +67,16 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
                 children: [
                   Text(
                     widget.chance.title,
-                    style: Styles.mediumText(fontSize: 50.sp),
+                    style: Styles.mediumText(fontSize: 60.sp),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         '${widget.chance.price}',
                         style: TextStyle(
-                          fontSize: 40.sp,
+                          fontSize: 48.sp,
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).primaryColor,
                         ),
@@ -84,16 +84,16 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
                       Text(
                         'EGP',
                         style: TextStyle(
-                          fontSize: 25.sp,
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.SECONDARY_COLOR,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 14.h),
                   const NotSubscribedWidget(),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 24.h),
                   const LinerProgressIndicator(),
                 ],
               ),

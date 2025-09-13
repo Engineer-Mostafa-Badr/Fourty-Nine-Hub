@@ -166,6 +166,18 @@ class Storage{
     await prefs.setBool("ISLOGIN", value);
   }
 
+  /// Sets the refreshToken
+  static Future<void> setRefreshToken(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("RefreshToken", value);
+  }
+
+  /// get the refreshToken
+  static Future<String?> getRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("RefreshToken");
+  }
+
   /// Gets the boolean value (default is true if not set)
   static Future<bool> getVibrationValue() async {
     final prefs = await SharedPreferences.getInstance();

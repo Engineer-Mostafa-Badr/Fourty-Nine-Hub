@@ -2,6 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'dart:ui';
 
 import '../../../star_feature/presentation/widgets/talent_card/sticky_tab_bar_delegate.dart';
 import 'chance_detail_view.dart';
@@ -71,34 +76,35 @@ class _ChanceMainViewState extends State<ChanceMainView>
               elevation: 0,
               surfaceTintColor: Colors.transparent,
               backgroundColor: Colors.white,
-              toolbarHeight: 60.h,
-              titleSpacing: 16.w,
-              leading: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.black87),
+              toolbarHeight: 30.h,
+              titleSpacing: 24.w,
+              leading: Icon(Icons.arrow_back_ios,
+                  size: 28.sp, color: Colors.black87),
               centerTitle: false,
               title: Text(
-                'Chance',
+                context.isArabic ? 'فرصة' : 'Chance',
                 style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w700,
                   color: Colors.black87,
                 ),
               ),
               actions: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '(22/1500) Winners',
+                        '(22/1500) ${context.isArabic ? 'فائز' : 'Winner'}',
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 22.sp,
                           color: Colors.grey[600],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: 4.w),
-                      Text('🏆', style: TextStyle(fontSize: 16.sp)),
+                      SizedBox(width: 8.w),
+                      Text('🏆', style: TextStyle(fontSize: 28.sp)),
                     ],
                   ),
                 ),
@@ -151,71 +157,30 @@ class _ChanceMainViewState extends State<ChanceMainView>
 
   Widget _buildBanner() {
     return Container(
-      margin: EdgeInsets.all(16.w),
-      height: 200.h,
+      margin: EdgeInsets.all(24.w),
+      height: 300.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12.r),
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF2E3440), Color(0xFF4C566A)],
-                ),
+        borderRadius: BorderRadius.circular(20.r),
+        child: Container(
+          height: 180.h,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop',
               ),
+              fit: BoxFit.cover,
             ),
-            // Building silhouettes
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 120.h,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            // Overlay text
-            Positioned(
-              top: 16.h,
-              left: 16.w,
-              right: 16.w,
-              child: Text(
-                'Join by buying a share in the product. Everyone who joins enters the draw, and one lucky winner will get the product.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -223,17 +188,26 @@ class _ChanceMainViewState extends State<ChanceMainView>
 
   Widget _buildCategoriesSection() {
     final categories = [
-      'Cars', 'Real Estate', 'Electronics', 'Home Appliances',
-      'Furniture', 'Fashion & Clothing', 'Watches & Accessories',
-      'Sports Equipment', 'Books & Stationery', 'Pets & Pet Supplies',
-      'Health & Beauty Products', 'Toys & Kids Items', 'Tools & Hardware'
+      'Cars',
+      'Real Estate',
+      'Electronics',
+      'Home Appliances',
+      'Furniture',
+      'Fashion & Clothing',
+      'Watches & Accessories',
+      'Sports Equipment',
+      'Books & Stationery',
+      'Pets & Pet Supplies',
+      'Health & Beauty Products',
+      'Toys & Kids Items',
+      'Tools & Hardware'
     ];
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      margin: EdgeInsets.symmetric(horizontal: 24.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -248,8 +222,8 @@ class _ChanceMainViewState extends State<ChanceMainView>
             title: Text(
               category,
               style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w600,
               ),
             ),
             onTap: () {
@@ -429,16 +403,17 @@ class _ChanceMainViewState extends State<ChanceMainView>
               progress: progress,
               participants: participants,
               views: views,
-              description: 'Win a trip to the Maldives Win a trip to the Maldives...',
+              description:
+                  'Win a trip to the Maldives Win a trip to the Maldives...',
             ),
           ),
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        margin: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(24.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -454,13 +429,15 @@ class _ChanceMainViewState extends State<ChanceMainView>
             Stack(
               children: [
                 Container(
-                  height: 200.h,
+                  height: 350.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(12.r)),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(12.r)),
                     child: CarouselSlider(
                       options: CarouselOptions(
                         height: 200.h,
@@ -495,7 +472,7 @@ class _ChanceMainViewState extends State<ChanceMainView>
                       child: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: isFavorite ? Colors.red : Colors.grey,
-                        size: 16.sp,
+                        size: 30.sp,
                       ),
                     ),
                   ),
@@ -516,7 +493,9 @@ class _ChanceMainViewState extends State<ChanceMainView>
                           margin: EdgeInsets.symmetric(horizontal: 2.w),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: index == 0 ? Colors.white : Colors.white.withOpacity(0.5),
+                            color: index == 0
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.5),
                           ),
                         );
                       }).toList(),
@@ -526,7 +505,7 @@ class _ChanceMainViewState extends State<ChanceMainView>
             ),
             // Content Section
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(28.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -534,28 +513,31 @@ class _ChanceMainViewState extends State<ChanceMainView>
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.w700,
                       color: Colors.black87,
                     ),
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         '$price EGP',
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 24.sp,
                           color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
                         endDate,
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: status == ChanceStatus.available 
-                              ? Colors.orange : Colors.grey[600],
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w600,
+                          color: status == ChanceStatus.available
+                              ? Colors.orange
+                              : Colors.grey[600],
                         ),
                       ),
                     ],
@@ -565,8 +547,9 @@ class _ChanceMainViewState extends State<ChanceMainView>
                   Text(
                     '${(progress * 100).toInt()}% claimed',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 22.sp,
                       color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   SizedBox(height: 4.h),
@@ -574,7 +557,9 @@ class _ChanceMainViewState extends State<ChanceMainView>
                     value: progress,
                     backgroundColor: Colors.grey[200],
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      status == ChanceStatus.winner ? Colors.green : Colors.orange,
+                      status == ChanceStatus.winner
+                          ? Colors.green
+                          : Colors.orange,
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -587,25 +572,28 @@ class _ChanceMainViewState extends State<ChanceMainView>
                           Text(
                             '$participants participants',
                             style: TextStyle(
-                              fontSize: 11.sp,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600,
                               color: Colors.red,
                             ),
                           ),
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 16.w),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 6.h),
                             decoration: BoxDecoration(
                               color: const Color(0xFF1E3A8A),
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.visibility, color: Colors.white, size: 12.sp),
+                                Icon(Icons.visibility,
+                                    color: Colors.white, size: 12.sp),
                                 SizedBox(width: 4.w),
                                 Text(
                                   '${views}K views',
                                   style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 16.sp,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -630,23 +618,28 @@ class _ChanceMainViewState extends State<ChanceMainView>
                                   progress: progress,
                                   participants: participants,
                                   views: views,
-                                  description: 'Win a trip to the Maldives Win a trip to the Maldives...',
+                                  description:
+                                      'Win a trip to the Maldives Win a trip to the Maldives...',
                                 ),
                               ),
                             );
                           }
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 10.h),
                           decoration: BoxDecoration(
-                            color: status == ChanceStatus.winner 
-                                ? Colors.orange : Colors.red,
-                            borderRadius: BorderRadius.circular(8.r),
+                            color: status == ChanceStatus.winner
+                                ? Colors.orange
+                                : Colors.red,
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Text(
-                            status == ChanceStatus.winner ? 'Winner' : 'Join Now',
+                            status == ChanceStatus.winner
+                                ? 'Winner'
+                                : 'Join Now',
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 18.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
@@ -667,103 +660,124 @@ class _ChanceMainViewState extends State<ChanceMainView>
   void _showWinnerDialog(String winnerName) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.8),
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
-        child: Stack(
-          children: [
-            // Blurred background effect
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-              ),
-            ),
-            // Dialog content
-            Container(
-              padding: EdgeInsets.all(24.w),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              width: double.infinity,
+              height: 150.h,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.95),
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(24.r),
+                color: Colors.white.withOpacity(0.2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
+                    color: const Color(0x40000000),
+                    blurRadius: 4,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              child: Stack(
                 children: [
-                  // Winner crown
-                  Text('👑', style: TextStyle(fontSize: 32.sp)),
-                  SizedBox(height: 12.h),
-                  // Winner avatar
-                  CircleAvatar(
-                    radius: 30.r,
-                    backgroundImage: const NetworkImage(
-                      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // Winner avatar with crown
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ImageFromInternet(
+                              width: 120.w,
+                              height: 120.h,
+                              image:
+                                  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+                              isCircle: true,
+                              firstChar: winnerName[0].toUpperCase(),
+                              charPadding: 3,
+                            ),
+                            Positioned(
+                              top: -25.h,
+                              right: -2.w,
+                              child: SvgPicture.asset(
+                                context.isDarkMode
+                                    ? Assets.crownIconDark
+                                    : Assets.crownIcon,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 20.w),
+                        // Winner details
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              winnerName,
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              '21/3/2024',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            Text(
+                              '10000 EGP',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            Text(
+                              'iPhone 16',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 12.h),
-                  // Winner details
-                  Text(
-                    winnerName,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    '21/3/2024',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    '10000 EGP',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    'iPhone 16',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  SizedBox(height: 20.h),
-                  // Close button
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 32.w,
-                      height: 32.h,
-                      decoration: const BoxDecoration(
-                        color: Colors.grey,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 16.sp,
+                  // Close button positioned at top right
+                  Positioned(
+                    top: 12.h,
+                    right: 12.w,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 30.w,
+                        height: 30.h,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -116,7 +116,8 @@ class CacheManager {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_accessTokenKey);
       await prefs.remove(_refreshTokenKey);
-      await prefs.clear();
+      await prefs.remove('RefreshToken');
+      // await prefs.clear();
       log("all tokens deleted ref token :${prefs.getString(_refreshTokenKey)} , access token : ${prefs.getString(_accessTokenKey)}");
       return true;
     } catch (e) {
