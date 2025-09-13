@@ -1720,6 +1720,8 @@ class EndPoints {
   static String createTripJoinOffer = '/trip-join/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
+
+
   static const updateDriverLoadingRatingNonSocket =
       '/loading/trip/rating/driver';
   static const addRateToClientWithDriverLoadingNonSocket =
@@ -1864,5 +1866,17 @@ class EndPoints {
   }) =>
       '/exchange-currency/pair/$from/$to/$amount';
 
-  static String getExchangeRates(String code) => '/exchange-currency/$code';
+static String getExchangeRates(String code) => '/exchange-currency/$code';
+
+  static String fetchAvailableAuction = '/auctions/available';
+  static String fetchExpiredAuction = '/auctions/expired';
+  static String fetchFavoriteAuction = '/auction-fav';
+  static String fetchSingleAuction = '/auctions/';
+  static String fetchParticipantAuction = '/auctions/participant-prices/';
+  static String fetchAuctionSubCategory = '/auctions/sub-categories/';
+  static String fetchAuctionMainCategory = '/auctions/main-categories';
+  static String addFavoriteAuction = '/auction-fav/';
+
+
+  // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

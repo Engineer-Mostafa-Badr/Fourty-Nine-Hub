@@ -14,7 +14,7 @@ class ChanceView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
+        preferredSize: const Size.fromHeight(60),
         child: BackAppBar(
           label: LocaleKeys.chance.localize,
         ),

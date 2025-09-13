@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -61,41 +63,38 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     _hasNavigated = true;
     print("🚀 SplashScreen setting _hasNavigated = true");
+    final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+    print("🚀 currentLocation = $currentLocation");
 
     String? accessToken = await CacheManager.getAccessToken();
     String? refreshToken = await CacheManager.getRefreshToken();
-
-    serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
-    // bool isAccessTokenExpired = JwtDecoder.isExpired(accessToken??'');
-    // bool isRefreshTokenExpired = JwtDecoder.isExpired(refreshToken??'');
-    // print("isRefreshTokenExpired $isRefreshTokenExpired");
-    // print("isAccessTokenExpired $isAccessTokenExpired");
     final isActivate = await CacheManager.getActivation() ?? false;
     final isShowOnboarding = await CacheManager.getShowOnboarding();
     String nextRoute;
-    print("context.isUserLoggedIn ${context.isUserLoggedIn}");
+    serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
+    bool isAccessTokenExpired = (accessToken != null && accessToken.isNotEmpty)?JwtDecoder.isExpired(accessToken):false;
+    bool isRefreshTokenExpired = (refreshToken != null && refreshToken.isNotEmpty)?JwtDecoder.isExpired(refreshToken??''):false;
+
     if(context.isUserLoggedIn!=true){
       print("context.isUserLoggedIn1 ${context.isUserLoggedIn}");
       if (!isShowOnboarding) {
         nextRoute = Routes.ChooseLangScreen;
-      } else if (isActivate) {
-        nextRoute = Routes.PAGEPREVIEW;
       } else {
         nextRoute = Routes.HOME;
       }
 
       print('Navigating to: $nextRoute');
 
-      if (mounted) {
+      if (mounted&&(currentLocation!=nextRoute)) {
         context.go(nextRoute);
       }
       return;
     }
-    var response = await serviceLocator<ApiConsumer>().get(
-        '/settings',
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
-    response.fold((l) {
+
+    if(isRefreshTokenExpired){
+      print("isRefreshTokenExpired");
+      await CacheManager.deleteAllTokens();
+      await Storage.setLoginValue(false);
       if (!isShowOnboarding) {
         nextRoute = Routes.ChooseLangScreen;
       } else if (isActivate) {
@@ -104,132 +103,83 @@ class _SplashScreenState extends State<SplashScreen> {
         nextRoute = Routes.HOME;
       }
 
-      print('Navigating to: $nextRoute');
-
-      if (mounted) {
+      if (mounted&&(currentLocation!=nextRoute)) {
         context.go(nextRoute);
       }
-    }, (data) async {
-     if(data['data']['isLoggedIn'] != true){
-       print("isAccessTokenExpired");
-       UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
-       print("tokens !=null ${tokens !=null}");
-       if(tokens !=null){
-         context.read<UserCubit>().attachToken();
-         context.read<CreatePostCubit>().loadData();
-         context.read<SecretsCubit>().getAllSecrets();
-         context.read<CustomPageCubit>().fetchActivate();
-         context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-         context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-         context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-         context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-         context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+    }else{
+      if(isAccessTokenExpired){
+          print("isAccessTokenExpired");
+          UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
+          print("tokens !=null ${tokens !=null}");
+          if(tokens !=null){
+            context.read<UserCubit>().attachToken();
+            context.read<UserCubit>().getUser();
+            context.read<CreatePostCubit>().loadData();
+            context.read<SecretsCubit>().getAllSecrets();
+            context.read<CustomPageCubit>().fetchActivate();
+            context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+            context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+            context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+            context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+            context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
 
-         if (!isShowOnboarding) {
-           nextRoute = Routes.ChooseLangScreen;
-         } else if (isActivate) {
-           nextRoute = Routes.PAGEPREVIEW;
-         } else {
-           nextRoute = Routes.HOME;
-         }
+            if (!isShowOnboarding) {
+              nextRoute = Routes.ChooseLangScreen;
+            } else if (isActivate) {
+              nextRoute = Routes.PAGEPREVIEW;
+            } else {
+              nextRoute = Routes.HOME;
+            }
 
-         print('Navigating to: $nextRoute');
+            print('Navigating to: $nextRoute');
 
-         if (mounted) {
-           context.go(nextRoute);
-         }
-       }
-     }else{
-       print("No need refresh token");
-       context.read<UserCubit>().attachToken();
-       context.read<CreatePostCubit>().loadData();
-       context.read<SecretsCubit>().getAllSecrets();
-       context.read<CustomPageCubit>().fetchActivate();
-       context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-       context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-       context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-       context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-       context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+            if (mounted&&(currentLocation!=nextRoute)) {
+              context.go(nextRoute);
+            }
+          }else{
+            print("No Expiration");
+            if (!isShowOnboarding) {
+              nextRoute = Routes.ChooseLangScreen;
+            } else if (isActivate) {
+              nextRoute = Routes.PAGEPREVIEW;
+            } else {
+              nextRoute = Routes.LOGIN;
+            }
 
-       if (!isShowOnboarding) {
-         nextRoute = Routes.ChooseLangScreen;
-       } else if (isActivate) {
-         nextRoute = Routes.PAGEPREVIEW;
-       } else {
-         nextRoute = Routes.HOME;
-       }
+            print('Navigating to: $nextRoute');
 
-       print('Navigating to: $nextRoute');
+            if (mounted&&(currentLocation!=nextRoute)) {
+              context.go(nextRoute);
+            }
+          }
 
-       if (mounted) {
-         context.go(nextRoute);
-       }
-     }
-    });
-    // if(isRefreshTokenExpired){
-    //   print("isRefreshTokenExpired");
-    //   final prefs = await SharedPreferences.getInstance();
-    //   await prefs.setBool("ISLOGIN", false);
-    //   await Future.delayed(const Duration(seconds: 2));
-    //   context.read<UserCubit>().attachToken();
-    //   context.read<CreatePostCubit>().loadData();
-    //   context.read<SecretsCubit>().getAllSecrets();
-    //   context.read<CustomPageCubit>().fetchActivate();
-    //   context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-    //   context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-    //   context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-    //   context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-    //   context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
-    //   if (!isShowOnboarding) {
-    //     nextRoute = Routes.ChooseLangScreen;
-    //   } else if (isActivate) {
-    //     nextRoute = Routes.PAGEPREVIEW;
-    //   } else {
-    //     nextRoute = Routes.HOME;
-    //   }
-    //
-    //   print('Navigating to: $nextRoute');
-    //
-    //   if (mounted) {
-    //     context.go(nextRoute);
-    //   }
-    //   return;
-    // }
-    // if(isAccessTokenExpired){
-    //   print("isAccessTokenExpired");
-    //   UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
-    //   print("tokens !=null ${tokens !=null}");
-    //   if(tokens !=null){
-    //     if (!isShowOnboarding) {
-    //       nextRoute = Routes.ChooseLangScreen;
-    //     } else if (isActivate) {
-    //       nextRoute = Routes.PAGEPREVIEW;
-    //     } else {
-    //       nextRoute = Routes.HOME;
-    //     }
-    //
-    //     print('Navigating to: $nextRoute');
-    //
-    //     if (mounted) {
-    //       context.go(nextRoute);
-    //     }
-    //   }
-    // }
-    // if(!isRefreshTokenExpired && !isAccessTokenExpired) {
-    //   if (!isShowOnboarding) {
-    //     nextRoute = Routes.ChooseLangScreen;
-    //   } else if (isActivate) {
-    //     nextRoute = Routes.PAGEPREVIEW;
-    //   } else {
-    //     nextRoute = Routes.HOME;
-    //   }
-    //
-    //   print('Navigating to: $nextRoute');
-    //
-    //   if (mounted) {
-    //     context.go(nextRoute);
-    //   }
-    // }
+      }else{
+        print("No Expiration");
+        context.read<UserCubit>().attachToken();
+        context.read<UserCubit>().getUser();
+        context.read<CreatePostCubit>().loadData();
+        context.read<SecretsCubit>().getAllSecrets();
+        context.read<CustomPageCubit>().fetchActivate();
+        context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+        context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+        context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+        context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+        context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+        if (!isShowOnboarding) {
+          nextRoute = Routes.ChooseLangScreen;
+        } else if (isActivate) {
+          nextRoute = Routes.PAGEPREVIEW;
+        } else {
+          nextRoute = Routes.HOME;
+        }
+
+        print('Navigating to: $nextRoute');
+
+        if (mounted&&(currentLocation!=nextRoute)) {
+          context.go(nextRoute);
+        }
+      }
+    }
   }
 
 
@@ -283,11 +233,13 @@ class _SplashScreenState extends State<SplashScreen> {
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
+      await Storage.setRefreshToken(refreshToken);
       serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       return newToken;
     } catch (e) {
       context.read<UserCubit>().attachToken();
+      context.read<UserCubit>().getUser();
       context.read<CreatePostCubit>().loadData();
       context.read<SecretsCubit>().getAllSecrets();
       context.read<CustomPageCubit>().fetchActivate();

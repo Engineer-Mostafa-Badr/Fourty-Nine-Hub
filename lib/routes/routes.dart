@@ -315,6 +315,9 @@ abstract class Routes {
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
   static const conversationsScreen = '/ConversationsScreen';
   static const tubeProfile =  '/BeAStar/TubeProfile';
+  static const availableAuctionScreen =  '/AvailableAuctionScreen';
+  static const createAuctionScreen =  '/CreateAuctionScreen';
+
 }
 
 abstract class Paths {
@@ -615,4 +618,8 @@ abstract class Paths {
   static const conversationsScreen = 'ConversationsScreen';
 
   static const tubeProfile = 'TubeProfile';
+
+  static const availableAuctionScreen =  'AvailableAuctionScreen';
+  static const createAuctionScreen =  'CreateAuctionScreen';
+
 }

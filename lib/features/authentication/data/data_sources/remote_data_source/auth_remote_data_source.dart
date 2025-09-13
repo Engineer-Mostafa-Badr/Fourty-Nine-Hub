@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
@@ -27,6 +28,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_ot
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
@@ -310,8 +312,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<Either<Failure, void>> logout() async {
-    String? refreshToken = await CacheManager.getRefreshToken();
+    String? refreshToken = await Storage.getRefreshToken();
+    print("refreshToken $refreshToken");
     String? deviceId = await getDeviceId();
+    //
+    // // إذا لم يكن هناك refresh token، قم بمسح البيانات المحلية فقط
+    // if (refreshToken == null || refreshToken.isEmpty) {
+    //   log('⚠️ No refresh token available, clearing local tokens only');
+    //   await CacheManager.deleteAllTokens();
+    //   _apiConsumer.removeTokenFromHeader();
+    //   return const Right(null);
+    // }
+    
     var params = {
       "refreshToken": refreshToken,
       "deviceId": deviceId

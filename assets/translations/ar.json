@@ -1640,6 +1640,25 @@
   "reportClient": "تقرير العميل",
   "uploadingImage": "جاري تحميل الصورة...",
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
-  "watch": "مشاهدة"
+  "watch": "مشاهدة",
+  "favorite": "المفضلة",
+  "myAuction": "مزادي",
+  "uploadVideo": "رفع الفيديو",
+  "addAuction": "إضافة مزاد",
+  "joinNow": "انضم الآن",
+  "minBiddingPrice": "الحد الأدنى لسعر المزايدة",
+  "selectStartDateAndTime": "اختر تاريخ ووقت البداية",
+  "selectEndDateAndTime": "اختر تاريخ ووقت الانتهاء",
+  "noMediaUploadedYet": "لم يتم رفع أي وسائط بعد",
+  "uploadImagesOrVideo": "قم برفع صور أو فيديوهات للبدء",
+  "selectMainCategoryAuction": "اختر القسم الرئيسي",
+  "selectSubCategoryAuction": "اختر القسم الفرعي",
+  "auctionTime": "وقت المزاد",
+  "priceNow": "السعر الآن",
+  "startFrom": "يبدأ من",
+  "myBidders": "مزايدِيَّ",
+  "ended": "انتهى",
+  "winnerAuction": "فائز"
+
 
 }

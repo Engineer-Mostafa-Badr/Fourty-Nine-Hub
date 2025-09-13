@@ -1628,5 +1628,23 @@ abstract class  LocaleKeys {
   static const selectCarModel = 'selectCarModel';
   static const checkInternetConnection = 'checkInternetConnection';
   static const retry = 'retry';
+  static const favorite = 'favorite';
+  static const myAuction = 'myAuction';
+  static const uploadVideo = 'uploadVideo';
+  static const addAuction = 'addAuction';
+  static const joinNow = 'joinNow';
+  static const minBiddingPrice = 'minBiddingPrice';
+  static const selectStartDateAndTime = 'selectStartDateAndTime';
+  static const selectEndDateAndTime = 'selectEndDateAndTime';
+  static const noMediaUploadedYet = 'noMediaUploadedYet';
+  static const uploadImagesOrVideo = 'uploadImagesOrVideo';
+  static const selectMainCategoryAuction = 'selectMainCategoryAuction';
+  static const selectSubCategoryAuction = 'selectSubCategoryAuction';
+  static const auctionTime = 'auctionTime';
+  static const priceNow = 'priceNow';
+  static const startFrom = 'startFrom';
+  static const myBidders = 'myBidders';
+  static const ended = 'ended';
+  static const winnerAuction = 'winnerAuction';
 
 }

@@ -106,9 +106,10 @@ class _TripJoinViewState extends State<TripJoinView>
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      // mainCategoryId: 1,
-      // isWithBackArrow: true,
+    return SharedScaffold(
+      mainCategoryId: 1,
+      isWithBackArrow: true,
+
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(

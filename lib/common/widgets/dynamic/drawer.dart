@@ -227,8 +227,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
-                                onTap: () {
+                                onTap: () async {
                                   ManageVibration.vibrate();
+                                  String? refreshToken = await Storage.getRefreshToken();
+                                  print("refreshToken $refreshToken");
+                                  // context.push(Routes.LOGIN);
                                   showAnimatedDialog(
                                     context,
                                     AlertDialog(
@@ -504,7 +507,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.MAZADAT);
+                            context.push(Routes.availableAuctionScreen);
                           },
                         ),
                         const SizedBox(
@@ -1034,7 +1037,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     print("Test User ${user?.firstName}");
     // context.read<GetWalletCubit>();
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: Column(
         children: [
           Row(

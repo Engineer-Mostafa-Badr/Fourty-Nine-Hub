@@ -303,7 +303,7 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.push(Routes.MAZADAT);
+          context.push(Routes.availableAuctionScreen);
         },
         shadowColor: Colors.green.withValues(alpha: 0.9),
         image: Assets.bidImage,

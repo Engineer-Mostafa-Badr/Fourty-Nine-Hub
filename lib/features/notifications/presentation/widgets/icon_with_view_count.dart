@@ -43,29 +43,41 @@ class CustomNotificationWidget extends StatelessWidget {
     required this.icon,
     required this.unreadCount,
     this.height,
+    this.bottom,
+    this.top,
+    this.start,
+    this.end,
   });
 
   final Widget icon;
   final int unreadCount;
   final double? height;
+  final double? bottom;
+  final double? top;
+  final double? start;
+  final double? end;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Container(
+        SizedBox(
           height: height ?? 40,
-          margin: unreadCount==0?null:const EdgeInsetsDirectional.only(
-              top: 16, end: 8, start: 8, bottom: 8),
+          // margin: unreadCount==0?null:const EdgeInsetsDirectional.only(
+          //     top: 16, end: 8, start: 8, bottom: 8),
+
           // padding: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,bottom: 8),
           child: icon,
         ),
         Visibility(
           visible: unreadCount != 0,
           child: PositionedDirectional(
-            top: 11.h,
-            end: -2,
+            // top: 17.h,
+            bottom: bottom ?? 17.h,
+            start: start ?? 15.w,
+
+            // end: 5,
             child: CounterWidget(
               unreadCount: unreadCount,
             ),
