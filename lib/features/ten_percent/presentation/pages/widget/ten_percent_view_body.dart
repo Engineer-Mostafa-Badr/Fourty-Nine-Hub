@@ -425,7 +425,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
               left: 0,
               right: 0,
               child: Container(
-                height: 70,
+                // height: 80,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                 ),

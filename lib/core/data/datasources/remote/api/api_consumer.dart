@@ -163,6 +163,18 @@ class BaseApiConsumer extends ApiConsumer {
     if (e is DioException) {
       final statusCode = e.response?.statusCode;
       final data = e.response?.data;
+      
+      // Handle nested error structure like { "success": false, "error": { "message": "...", "name": "..." } }
+      if (data is Map && data['error'] is Map) {
+        final error = data['error'] as Map;
+        return ServerFailure(
+          message: error['message']?.toString() ?? 'Unknown Error',
+          name: error['name']?.toString() ?? 'Server Error',
+          statusCode: statusCode,
+        );
+      }
+      
+      // Handle direct error structure like { "message": "...", "name": "..." }
       return ServerFailure(
         message: data?['message']?.toString() ?? 'Unknown Error',
         name: data?['name']?.toString() ?? 'Server Error',

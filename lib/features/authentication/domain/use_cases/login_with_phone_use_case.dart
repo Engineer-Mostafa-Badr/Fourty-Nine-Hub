@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
@@ -32,8 +33,8 @@ class LoginWithPhoneParams extends Equatable {
         'phoneNumber': phoneNumber,
         'password': password,
         'fcmToken': token,
-        "deviceId":
-            "3b53853fa46eedcdb5bacfcfa154fddadd4ad9d504c13c5d60ffc533245d63dd",
+        'deviceId': await getDeviceId(),
+        'deviceName': await getDeviceName(),
         // 'fcmToken': 'fcmToken',
       };
 
