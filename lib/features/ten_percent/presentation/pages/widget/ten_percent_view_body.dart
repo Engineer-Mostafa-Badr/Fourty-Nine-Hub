@@ -86,10 +86,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                       const SizedBox(
                         height: 16,
                       ),
-                      _buildChanceBanner(),
-                      const SizedBox(
-                        height: 24,
-                      ),
+
                       Label(
                         text: LocaleKeys.trafficViolation.localize,
                         style: Styles.headerText(
