@@ -85,6 +85,7 @@ class EndPoints {
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
+
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
 
@@ -215,6 +216,9 @@ class EndPoints {
 
   static String deleteMyStar({required String id}) =>
       '/talent/$id?subCategory=${Constants.tubeSubCategory}';
+
+  // Get active categories for talent feature
+  static const String getActiveCategories = '/tube-categories';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';

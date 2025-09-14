@@ -10,6 +10,32 @@ import '../logic/currency_cubit.dart';
 import '../widgets/exchange_rate_display_widget.dart';
 import '../widgets/refresh_settings_widget.dart';
 
+class ArabicNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Convert English numerals to Arabic numerals for display
+    String arabicText = newValue.text
+        .replaceAll('0', '٠')
+        .replaceAll('1', '١')
+        .replaceAll('2', '٢')
+        .replaceAll('3', '٣')
+        .replaceAll('4', '٤')
+        .replaceAll('5', '٥')
+        .replaceAll('6', '٦')
+        .replaceAll('7', '٧')
+        .replaceAll('8', '٨')
+        .replaceAll('9', '٩');
+
+    return TextEditingValue(
+      text: arabicText,
+      selection: newValue.selection,
+    );
+  }
+}
+
 class CurrencyExchangePage extends StatefulWidget {
   const CurrencyExchangePage({super.key});
 
@@ -93,8 +119,47 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     _refreshAnimationController.reset();
   }
 
+  void _updateControllerTextForLocale() {
+    if (context.isArabic) {
+      // Convert current text to Arabic numerals
+      String currentText = _amountController.text;
+      String arabicText = currentText
+          .replaceAll('0', '٠')
+          .replaceAll('1', '١')
+          .replaceAll('2', '٢')
+          .replaceAll('3', '٣')
+          .replaceAll('4', '٤')
+          .replaceAll('5', '٥')
+          .replaceAll('6', '٦')
+          .replaceAll('7', '٧')
+          .replaceAll('8', '٨')
+          .replaceAll('9', '٩');
+      _amountController.text = arabicText;
+    } else {
+      // Convert current text to English numerals
+      String currentText = _amountController.text;
+      String englishText = currentText
+          .replaceAll('٠', '0')
+          .replaceAll('١', '1')
+          .replaceAll('٢', '2')
+          .replaceAll('٣', '3')
+          .replaceAll('٤', '4')
+          .replaceAll('٥', '5')
+          .replaceAll('٦', '6')
+          .replaceAll('٧', '7')
+          .replaceAll('٨', '8')
+          .replaceAll('٩', '9');
+      _amountController.text = englishText;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Update controller text based on current locale
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateControllerTextForLocale();
+    });
+    
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: PreferredSize(
@@ -504,6 +569,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                         controller: _amountController,
                                         keyboardType: const TextInputType
                                             .numberWithOptions(decimal: true),
+                                        inputFormatters: context.isArabic 
+                                            ? [ArabicNumberInputFormatter()]
+                                            : null,
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(
                                           fontSize: 16,
@@ -534,7 +602,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(12)),
                                           ),
-                                          hintText: '0.00',
+                                          hintText: context.isArabic ? '٠.٠٠' : '0.00',
                                           hintStyle: TextStyle(
                                             color: Colors.grey.shade400,
                                           ),
@@ -542,8 +610,19 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           fillColor: Colors.grey.shade50,
                                         ),
                                         onChanged: (value) {
-                                          final amount =
-                                              double.tryParse(value) ?? 0.0;
+                                          // Convert Arabic numerals back to English for parsing
+                                          String englishValue = value
+                                              .replaceAll('٠', '0')
+                                              .replaceAll('١', '1')
+                                              .replaceAll('٢', '2')
+                                              .replaceAll('٣', '3')
+                                              .replaceAll('٤', '4')
+                                              .replaceAll('٥', '5')
+                                              .replaceAll('٦', '6')
+                                              .replaceAll('٧', '7')
+                                              .replaceAll('٨', '8')
+                                              .replaceAll('٩', '9');
+                                          final amount = double.tryParse(englishValue) ?? 0.0;
                                           cubit.setAmount(amount);
                                         },
                                       ),
@@ -739,8 +818,19 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             : () {
                                 ManageVibration.vibrate();
                                 FocusScope.of(context).unfocus();
+                                String englishText = _amountController.text
+                                    .replaceAll('٠', '0')
+                                    .replaceAll('١', '1')
+                                    .replaceAll('٢', '2')
+                                    .replaceAll('٣', '3')
+                                    .replaceAll('٤', '4')
+                                    .replaceAll('٥', '5')
+                                    .replaceAll('٦', '6')
+                                    .replaceAll('٧', '7')
+                                    .replaceAll('٨', '8')
+                                    .replaceAll('٩', '9');
                                 final amount =
-                                    double.tryParse(_amountController.text) ??
+                                    double.tryParse(englishText) ??
                                         0.0;
                                 cubit.setAmount(amount);
                                 cubit.convertCurrency();
@@ -969,27 +1059,50 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
         (context.read<CurrencyCubit>().lastExchangeRate != null);
   }
 
-  String _getConvertedAmount(CurrencyState state, CurrencyCubit cubit) {
-    if (state is CurrencyConverted) {
-      return state.exchangeRate.conversionResult.toStringAsFixed(2);
-    } else if (state is CurrencyUpdatedSilently) {
-      return state.exchangeRate.conversionResult.toStringAsFixed(2);
-    } else if (cubit.lastExchangeRate != null) {
-      return cubit.lastExchangeRate!.conversionResult.toStringAsFixed(2);
+  String _formatNumberForLocale(double number, {int decimalPlaces = 2}) {
+    final formattedNumber = number.toStringAsFixed(decimalPlaces);
+    if (context.isArabic) {
+      // Convert English numerals to Arabic numerals
+      return formattedNumber
+          .replaceAll('0', '٠')
+          .replaceAll('1', '١')
+          .replaceAll('2', '٢')
+          .replaceAll('3', '٣')
+          .replaceAll('4', '٤')
+          .replaceAll('5', '٥')
+          .replaceAll('6', '٦')
+          .replaceAll('7', '٧')
+          .replaceAll('8', '٨')
+          .replaceAll('9', '٩');
     }
-    return '0.00';
+    return formattedNumber;
+  }
+
+  String _getConvertedAmount(CurrencyState state, CurrencyCubit cubit) {
+    double amount = 0.0;
+    if (state is CurrencyConverted) {
+      amount = state.exchangeRate.conversionResult;
+    } else if (state is CurrencyUpdatedSilently) {
+      amount = state.exchangeRate.conversionResult;
+    } else if (cubit.lastExchangeRate != null) {
+      amount = cubit.lastExchangeRate!.conversionResult;
+    }
+    return _formatNumberForLocale(amount);
   }
 
   String _getExchangeRateText(CurrencyState state) {
     final cubit = context.read<CurrencyCubit>();
 
     if (state is CurrencyConverted) {
-      return '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
+      final formattedRate = _formatNumberForLocale(state.exchangeRate.conversionRate, decimalPlaces: 4);
+      return '1 ${state.exchangeRate.baseCode} = $formattedRate ${state.exchangeRate.targetCode}';
     } else if (state is CurrencyUpdatedSilently) {
-      return '1 ${state.exchangeRate.baseCode} = ${state.exchangeRate.conversionRate.toStringAsFixed(4)} ${state.exchangeRate.targetCode}';
+      final formattedRate = _formatNumberForLocale(state.exchangeRate.conversionRate, decimalPlaces: 4);
+      return '1 ${state.exchangeRate.baseCode} = $formattedRate ${state.exchangeRate.targetCode}';
     } else if (cubit.lastExchangeRate != null) {
       final rate = cubit.lastExchangeRate!;
-      return '1 ${rate.baseCode} = ${rate.conversionRate.toStringAsFixed(4)} ${rate.targetCode}';
+      final formattedRate = _formatNumberForLocale(rate.conversionRate, decimalPlaces: 4);
+      return '1 ${rate.baseCode} = $formattedRate ${rate.targetCode}';
     }
     return '';
   }

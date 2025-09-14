@@ -27,6 +27,29 @@ class CounterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("formatNumber(unreadCount, isArabic: context.isArabic) ${formatNumber(unreadCount, isArabic: context.isArabic)}");
+    String arabicText = unreadCount.toString()
+        .replaceAll('0','٠')
+        .replaceAll('1','١')
+        .replaceAll('2','٢')
+        .replaceAll('3','٣')
+        .replaceAll('4','٤')
+        .replaceAll('5','٥')
+        .replaceAll('6','٦')
+        .replaceAll('7','٧')
+        .replaceAll('8','٨')
+        .replaceAll('9','٩');
+    String englishText = unreadCount.toString()
+        .replaceAll('٠', '0')
+        .replaceAll('١', '1')
+        .replaceAll('٢', '2')
+        .replaceAll('٣', '3')
+        .replaceAll('٤', '4')
+        .replaceAll('٥', '5')
+        .replaceAll('٦', '6')
+        .replaceAll('٧', '7')
+        .replaceAll('٨', '8')
+        .replaceAll('٩', '9');
     return Container(
       width: width ?? 42.w,
       height: height ?? 42.w,
@@ -39,7 +62,7 @@ class CounterWidget extends StatelessWidget {
           color: bgColor ?? AppColors.getRedColor(context)),
       alignment: AlignmentDirectional.center,
       child: AutoSizeText(
-        formatNumber(unreadCount, isArabic: context.isArabic),
+        context.isArabic?arabicText:englishText,
         style: TextStyle(
           fontSize: fontSize ?? 4.sp,
           color: txtColor ?? AppColors.getReversedTextColor(context),

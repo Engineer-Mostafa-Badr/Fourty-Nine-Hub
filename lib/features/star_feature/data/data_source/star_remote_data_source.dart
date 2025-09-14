@@ -8,6 +8,7 @@ import '../model/comment_model.dart';
 import '../model/star_model.dart';
 import '../model/star_winner_model.dart';
 import '../model/tube_video_models.dart'; // New import
+import '../model/active_category_model.dart';
 import '../../domain/entity/banner_talent_entity.dart';
 import '../../domain/entity/star_entity.dart';
 import '../../domain/entity/star_winner_entity.dart';
@@ -49,6 +50,9 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, String>> deleteComment(String commentId);
   Future<Either<Failure, String>> likeComment(String commentId);
   Future<Either<Failure, String>> dislikeComment(String commentId);
+
+  // Get active categories
+  Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories();
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -548,6 +552,31 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       (response) {
         print("Dislike Comment Success: ${response['message']}");
         return Right(response['message'] ?? 'Comment disliked successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories() async {
+    final response = await _apiConsumer.get(EndPoints.getActiveCategories);
+
+    return response.fold(
+      (failure) {
+        print("Get Active Categories Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get Active Categories Success: ${response['data']}");
+        try {
+          final activeCategoriesResponse = ActiveCategoryResponse.fromJson(response);
+          return Right(activeCategoriesResponse);
+        } catch (e) {
+          print("Parse Active Categories Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse categories data: $e',
+            name: 'Parse Error',
+          ));
+        }
       },
     );
   }
