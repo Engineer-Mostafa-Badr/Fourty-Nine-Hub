@@ -85,7 +85,6 @@ class EndPoints {
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
-
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
 
@@ -1724,8 +1723,6 @@ class EndPoints {
   static String createTripJoinOffer = '/trip-join/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
-
-
   static const updateDriverLoadingRatingNonSocket =
       '/loading/trip/rating/driver';
   static const addRateToClientWithDriverLoadingNonSocket =
@@ -1779,10 +1776,12 @@ class EndPoints {
       '/tube-profile/channel/$profileId';
   static const String getMyProfile = '/tube-profile';
   static const String updateProfile = '/tube-profile';
-  static const String getAllTubeVideos = '/tube-video';
-  static const String getMyTubeVideos = '/tube-video/me';
-  static String subscribeToChannel(String profileId) => '/tube-profile/subscribe/$profileId';
-  static String unsubscribeFromChannel(String profileId) => '/tube-profile/unsubscribe/$profileId';
+  // static const String getAllTubeVideos = '/tube-video';
+  // static const String getMyTubeVideos = '/tube-video/me';
+  static String subscribeToChannel(String profileId) =>
+      '/tube-profile/subscribe/$profileId';
+  static String unsubscribeFromChannel(String profileId) =>
+      '/tube-profile/unsubscribe/$profileId';
   static String addVideoToFavorite(String videoId) =>
       '/tube-favorite/video/$videoId';
   static String removeVideoFromFavorite(String videoId) =>
@@ -1799,7 +1798,7 @@ class EndPoints {
 
   // Tube Video with pagination
   static String getAllTubeVideosWithPagination(
-          {int page = 1, int limit = 10}) =>
+          {int page = 1, int limit = 5}) =>
       '/tube-video?page=$page&limit=$limit';
 
   static String getMyTubeVideosWithPagination({int page = 1, int limit = 10}) =>
@@ -1870,7 +1869,7 @@ class EndPoints {
   }) =>
       '/exchange-currency/pair/$from/$to/$amount';
 
-static String getExchangeRates(String code) => '/exchange-currency/$code';
+  static String getExchangeRates(String code) => '/exchange-currency/$code';
 
   static String fetchAvailableAuction = '/auctions/available';
   static String fetchExpiredAuction = '/auctions/expired';
@@ -1880,7 +1879,6 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchAuctionSubCategory = '/auctions/sub-categories/';
   static String fetchAuctionMainCategory = '/auctions/main-categories';
   static String addFavoriteAuction = '/auction-fav/';
-
 
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

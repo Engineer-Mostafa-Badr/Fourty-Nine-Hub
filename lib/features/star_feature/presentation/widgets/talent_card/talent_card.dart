@@ -649,6 +649,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
     }
   }
 
+
   void _handleVisibilityChanged(VisibilityInfo info) {
     _visibilityFraction = info.visibleFraction;
 

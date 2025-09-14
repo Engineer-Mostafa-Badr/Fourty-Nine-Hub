@@ -87,25 +87,27 @@ class TalentCardBuilders {
 
         final controller = scrollController ?? ScrollController();
 
-        return SliverFillRemaining(
-          hasScrollBody: false,
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * .6,
-            child: OlxPaginationWidget(
-              items: List.generate(
-                talentsToShow.length,
-                (index) => TalentCard(
-                  talent: talentsToShow[index],
+        // Use SliverList directly instead of nested CustomScrollView
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (index >= talentsToShow.length) {
+                return _buildLoadMoreWidget(
+                    context, state, TalentCategory.available, cubit);
+              }
+
+              final talent = talentsToShow[index];
+              return Container(
+                margin: EdgeInsets.only(bottom: 8),
+                child: TalentCard(
+                  key: ValueKey('talent_${talent.id}'),
+                  talent: talent,
                   cubit: cubit,
                 ),
-              ),
-              banners: bannersList,
-              loadPage: (page) => isSearching
-                  ? Future.value()
-                  : cubit.loadTalents(TalentCategory.available),
-              scrollController: controller,
-              itemsPerPage: 1,
-            ),
+              );
+            },
+            childCount: talentsToShow.length +
+                (state.hasMore(TalentCategory.available) ? 1 : 0),
           ),
         );
       },

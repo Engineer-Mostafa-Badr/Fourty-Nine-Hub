@@ -36,6 +36,8 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   }
 
   void _scrollListener() {
+    if (!mounted) return; // Safety check
+
     if (widget.scrollController.hasClients &&
         widget.scrollController.position.pixels >=
             widget.scrollController.position.maxScrollExtent - 100 &&
@@ -45,14 +47,21 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   }
 
   Future<void> _loadPage(int page) async {
-    if (_isLoading) return;
+    if (_isLoading || !mounted) return;
+
     setState(() => _isLoading = true);
-    await widget.loadPage(page);
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        _currentPage = page;
-      });
+
+    try {
+      await widget.loadPage(page);
+    } catch (e) {
+      debugPrint('Error loading page $page: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _currentPage = page;
+        });
+      }
     }
   }
 

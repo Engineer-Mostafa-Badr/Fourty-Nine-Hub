@@ -8,7 +8,6 @@ import '../../../../../helpers/manage_vibration.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 
-
 class TalentCardOverlayControls extends StatelessWidget {
   final StarEntity talent;
   final StarCubit cubit;
@@ -64,16 +63,64 @@ class TalentCardOverlayControls extends StatelessWidget {
 }
 
 // Private component for options and rating
-class OptionsAndRatingSection extends StatelessWidget {
+class OptionsAndRatingSection extends StatefulWidget {
   final StarEntity talent;
   final StarCubit cubit;
   final VoidCallback onMoreOptionsTap;
 
   const OptionsAndRatingSection({
+    super.key,
     required this.talent,
     required this.cubit,
     required this.onMoreOptionsTap,
   });
+
+  @override
+  State<OptionsAndRatingSection> createState() =>
+      _OptionsAndRatingSectionState();
+}
+
+class _OptionsAndRatingSectionState extends State<OptionsAndRatingSection> {
+  int? _selectedRating;
+  bool _isAnimating = false;
+  bool _shouldFadeOut = false;
+  bool _showFinalRating = false;
+
+  void _onStarTap(int rating) async {
+    if (_isAnimating) return;
+
+    setState(() {
+      _selectedRating = rating;
+      _isAnimating = true;
+      _shouldFadeOut = false;
+    });
+
+    ManageVibration.vibrate();
+
+    // Wait for 300ms to show the selected stars
+    await Future.delayed(Duration(milliseconds: 300));
+
+    if (mounted) {
+      // Start fade out animation
+      setState(() {
+        _shouldFadeOut = true;
+      });
+
+      // Wait for fade out to complete (600ms)
+      await Future.delayed(Duration(milliseconds: 600));
+
+      if (mounted) {
+        // Update the rating and show snack bar
+        widget.cubit.updateRating(widget.talent.id, rating);
+
+        // Show final rating display
+        setState(() {
+          _showFinalRating = true;
+          _isAnimating = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +133,7 @@ class OptionsAndRatingSection extends StatelessWidget {
           width: 28,
           height: 28,
           child: IconButton(
-            onPressed: onMoreOptionsTap,
+            onPressed: widget.onMoreOptionsTap,
             icon: Icon(
               Icons.more_vert,
               color: context.isDarkMode ? Colors.white : Colors.black,
@@ -97,29 +144,72 @@ class OptionsAndRatingSection extends StatelessWidget {
         ),
         SizedBox(height: 16),
 
-        // Stars rating
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: List.generate(
-            5,
-            (starIndex) => GestureDetector(
-              onTap: () {
-                ManageVibration.vibrate();
-                cubit.updateRating(talent.id, starIndex + 1);
-              },
-              child: Icon(
-                starIndex < talent.averageRating
-                    ? Icons.star
-                    : Icons.star_border,
-                color: starIndex < talent.averageRating
-                    ? Colors.amber
-                    : Colors.grey[400],
-                size: 16,
+        // Stars rating - only show if video hasn't been rated yet and not animating
+        if (!widget.cubit.isVideoRated(widget.talent.id) && !_isAnimating)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: List.generate(
+              5,
+              (starIndex) => GestureDetector(
+                onTap: () => _onStarTap(starIndex + 1),
+                child: Icon(
+                  starIndex < widget.talent.averageRating
+                      ? Icons.star
+                      : Icons.star_border,
+                  color: starIndex < widget.talent.averageRating
+                      ? Colors.amber
+                      : Colors.grey[400],
+                  size: 16,
+                ),
               ),
             ),
           ),
-        ),
+
+        // Animated stars during rating selection
+        if (_selectedRating != null && _isAnimating)
+          AnimatedOpacity(
+            opacity: _shouldFadeOut ? 0.0 : 1.0,
+            duration: Duration(milliseconds: 600),
+            curve: Curves.easeInOut,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: List.generate(
+                5,
+                (starIndex) => Icon(
+                  starIndex < _selectedRating! ? Icons.star : Icons.star_border,
+                  color: starIndex < _selectedRating!
+                      ? Colors.amber
+                      : Colors.grey[400],
+                  size: 16,
+                ),
+              ),
+            ),
+          ),
+
+        // Final rating display - show single star with rating number
+        if (_showFinalRating && _selectedRating != null)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                _selectedRating.toString(),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 2),
+              Icon(
+                Icons.star,
+                color: Colors.amber,
+                size: 16,
+              ),
+            ],
+          ),
       ],
     );
   }

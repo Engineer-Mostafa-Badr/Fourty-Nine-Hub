@@ -1,4 +1,5 @@
 part of 'star_cubit.dart';
+
 class StarState {
   final StarStates status;
   final Failure? failure;
@@ -14,12 +15,16 @@ class StarState {
   final List<UploadFileEntity>? videos;
   final BannerTalentEntity? banner;
   final Set<String> favoriteIds;
+  final Set<String> ratedVideos; // Track videos that have been rated by user
 
   // Search and filter state
   final String searchQuery;
   final List<StarEntity> searchResults;
   final List<ProfileEntity> searchProfileResults;
   final bool isSearchingProfiles;
+
+  // Messages
+  final String? successMessage;
 
   StarState({
     this.status = StarStates.initial,
@@ -32,11 +37,14 @@ class StarState {
     this.videos,
     this.banner,
     Set<String>? favoriteIds,
+    Set<String>? ratedVideos,
     this.searchQuery = '',
     List<StarEntity>? searchResults,
     List<ProfileEntity>? searchProfileResults,
     this.isSearchingProfiles = false,
+    this.successMessage,
   })  : searchProfileResults = searchProfileResults ?? [],
+        ratedVideos = ratedVideos ?? {},
         talents = talents ??
             {
               TalentCategory.available: [],
@@ -92,10 +100,12 @@ class StarState {
     List<UploadFileEntity>? videos,
     BannerTalentEntity? banner,
     Set<String>? favoriteIds,
+    Set<String>? ratedVideos,
     String? searchQuery,
     List<StarEntity>? searchResults,
     List<ProfileEntity>? searchProfileResults,
     bool? isSearchingProfiles,
+    String? successMessage,
   }) {
     return StarState(
       status: status ?? this.status,
@@ -108,10 +118,12 @@ class StarState {
       videos: videos ?? this.videos,
       banner: banner ?? this.banner,
       favoriteIds: favoriteIds ?? this.favoriteIds,
+      ratedVideos: ratedVideos ?? this.ratedVideos,
       searchQuery: searchQuery ?? this.searchQuery,
       searchResults: searchResults ?? this.searchResults,
       searchProfileResults: searchProfileResults ?? this.searchProfileResults,
       isSearchingProfiles: isSearchingProfiles ?? this.isSearchingProfiles,
+      successMessage: successMessage ?? this.successMessage,
     );
   }
 }

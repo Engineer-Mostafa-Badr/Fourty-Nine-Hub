@@ -269,19 +269,18 @@ class TubeVideoPaginationModel {
 
   factory TubeVideoPaginationModel.fromJson(Map<String, dynamic> json) {
     try {
+      final page = _parseIntSafely(json['page'], 1);
+      final limit = _parseIntSafely(json['limit'], 10);
+      final total = _parseIntSafely(json['total'], 0);
+      final pages = _parseIntSafely(json['pages'], 0);
+
+      print("🔍 Pagination parsed - page: $page, limit: $limit, total: $total, pages: $pages");
+
       return TubeVideoPaginationModel(
-        page: (json['page'] ?? 1) is int
-            ? json['page']
-            : int.tryParse(json['page'].toString()) ?? 1,
-        limit: (json['limit'] ?? 10) is int
-            ? json['limit']
-            : int.tryParse(json['limit'].toString()) ?? 10,
-        total: (json['total'] ?? 0) is int
-            ? json['total']
-            : int.tryParse(json['total'].toString()) ?? 0,
-        pages: (json['pages'] ?? 0) is int
-            ? json['pages']
-            : int.tryParse(json['pages'].toString()) ?? 0,
+        page: page,
+        limit: limit,
+        total: total,
+        pages: pages,
       );
     } catch (e) {
       print("⚠️ Failed to parse pagination, using defaults: $e");
@@ -289,9 +288,20 @@ class TubeVideoPaginationModel {
         page: 1,
         limit: 10,
         total: 0,
-        pages: 0,
+        pages: 1, // Changed from 0 to 1 to ensure hasMore works correctly
       );
     }
+  }
+
+  static int _parseIntSafely(dynamic value, int defaultValue) {
+    if (value == null) return defaultValue;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) {
+      final parsed = int.tryParse(value);
+      if (parsed != null) return parsed;
+    }
+    return defaultValue;
   }
 
   @override

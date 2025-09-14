@@ -122,99 +122,17 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     );
   }
 
-  // Widget _buildVideoContent(VideoDetailsState state) {
-  //   // Handle loading state
-  //   if (state is VideoDetailsInitial || state is VideoDetailsLoading) {
-  //     return const Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           CircularProgressIndicator(),
-  //           SizedBox(height: 16),
-  //           Text('Loading video...'),
-  //         ],
-  //       ),
-  //     );
-  //   }
-
-  //   // Handle error state
-  //   if (state is VideoDetailsError) {
-  //     return Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Icon(
-  //             Icons.error_outline,
-  //             size: 64,
-  //             color: Colors.red,
-  //           ),
-  //           SizedBox(height: 16),
-  //           Text(
-  //             'Error loading video',
-  //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-  //           ),
-  //           SizedBox(height: 8),
-  //           Text(
-  //             state.message,
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(color: Colors.grey[600]),
-  //           ),
-  //           SizedBox(height: 16),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               context.read<VideoDetailsCubit>().initialize();
-  //             },
-  //             child: Text('Retry'),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   }
-
-  //   // Handle loaded state
-  //   if (state is VideoDetailsLoaded) {
-  //     return Column(
-  //       children: [
-  //         // Video Player Section
-  //         VideoPlayerWidget(
-  //           controller: state.videoController,
-  //           isInitialized: state.isInitialized,
-  //           isPlaying: state.isPlaying,
-  //           isMuted: state.isMuted,
-  //           onPlayPause: () =>
-  //               context.read<VideoDetailsCubit>().togglePlayPause(),
-  //           onMute: () => context.read<VideoDetailsCubit>().toggleMute(),
-  //         ),
-
-  //         // Video Info Section
-  //         VideoInfoSection(
-  //           talent: state.talent,
-  //           onRatingChanged: _handleRatingChange,
-  //         ),
-
-  //         // Action Buttons Section
-  //         // Use the cubit from the current BlocProvider context
-  //         BlocBuilder<VideoDetailsCubit, VideoDetailsState>(
-  //           builder: (context, videoState) {
-  //             return VideoActionsSection(
-  //               talent: state.talent,
-  //               cubit: widget.cubit ??
-  //                   context.read<
-  //                       StarCubit>(), // Fallback to getting StarCubit from context
-  //               onViewersPressed: () => _showViewersModal(state.viewers),
-  //               onCommentsPressed: () => _showCommentsModal(state.comments),
-  //               onDeletePressed: _handleDelete,
-  //             );
-  //           },
-  //         ),
-  //       ],
-  //     );
-  //   }
-
-  //   return const SizedBox();
-  // }
-
   Widget _buildVideoContent(VideoDetailsState state) {
+    // Handle loading state
+    if (state is VideoDetailsLoading) {
+      return _buildLoadingState();
+    }
+
+    // Handle error state
+    if (state is VideoDetailsError) {
+      return _buildErrorState(state.message);
+    }
+
     // Handle loaded state
     if (state is VideoDetailsLoaded) {
       return Column(
@@ -248,6 +166,106 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     }
 
     return const SizedBox();
+  }
+
+  Widget _buildLoadingState() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          // Video Loading Section
+          Container(
+            width: double.infinity,
+            height: 250,
+            color: Colors.black,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Loading video...',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Content Loading
+          Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(String message) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          // Error Video Section
+          Container(
+            width: double.infinity,
+            height: 250,
+            color: Colors.black,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 48,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Failed to load video',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<VideoDetailsCubit>().initialize();
+                    },
+                    child: Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Error Details
+          Expanded(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _handleBack() {

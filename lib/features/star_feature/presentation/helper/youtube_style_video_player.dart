@@ -21,6 +21,7 @@ import '../../data/model/comment_model.dart';
 import '../../domain/use_case/comment_use_cases.dart';
 import '../controller/comment_cubit/comment_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
+import '../utils/video_utils.dart';
 import '../widgets/common/options_bottom_sheet.dart';
 
 // YouTube Style Video Player
@@ -560,15 +561,160 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     WidgetsBinding.instance.addObserver(this);
   }
 
-  void _initializeVideo() {
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
+  void _initializeVideo() async {
+    print('🎥 TalentVideoPlayer: Initializing video: ${widget.videoUrl}');
+
+    try {
+      // First attempt - standard initialization with timeout
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        formatHint:
+            VideoFormat.hls, // Try HLS format first for better compatibility
+      );
+
+      await _controller.initialize().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          throw TimeoutException(
+              'Video initialization timeout', Duration(seconds: 15));
+        },
+      );
+
+      if (mounted) {
+        print('✅ TalentVideoPlayer: Video initialized successfully');
         setState(() {
           _isInitialized = true;
         });
         widget.onDurationLoaded?.call(_controller.value.duration);
         _controller.play();
+      }
+    } catch (error) {
+      print('❌ TalentVideoPlayer: Video initialization error: $error');
+
+      // Check if it's a codec error
+      if (error.toString().contains('MediaCodec') ||
+          error.toString().contains('ExoPlaybackException') ||
+          error.toString().contains('codec')) {
+        print(
+            '🔧 TalentVideoPlayer: Detected codec error, trying fallback strategies...');
+        await _handleCodecError();
+      } else {
+        // Try standard retry for other errors
+        if (mounted) {
+          _retryVideoInitialization();
+        }
+      }
+    }
+  }
+
+  void _retryVideoInitialization() {
+    print('🔄 TalentVideoPlayer: Retrying video initialization...');
+
+    try {
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
+
+      _controller.initialize().then((_) {
+        if (mounted) {
+          print('✅ TalentVideoPlayer: Video loaded with retry method');
+          setState(() {
+            _isInitialized = true;
+          });
+          widget.onDurationLoaded?.call(_controller.value.duration);
+          _controller.play();
+        }
+      }).catchError((secondError) {
+        print('❌ TalentVideoPlayer: Retry failed: $secondError');
+
+        if (mounted) {
+          // Show error state in UI
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to load video. Please try again.'),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'Retry',
+                textColor: Colors.white,
+                onPressed: () => _initializeVideo(),
+              ),
+            ),
+          );
+        }
       });
+    } catch (e) {
+      print('💥 TalentVideoPlayer: Exception during retry: $e');
+    }
+  }
+
+  Future<void> _handleCodecError() async {
+    print(
+        '🔧 TalentVideoPlayer: Handling codec error with intelligent fallback strategies...');
+    print('📱 Device info: ${VideoUtils.getDeviceInfo()}');
+
+    final strategies = [
+      VideoInitializationStrategy.noFormatHint,
+      VideoInitializationStrategy.dashFormat,
+      VideoInitializationStrategy.otherFormat,
+      VideoInitializationStrategy.alternativeOptions,
+    ];
+
+    for (int i = 0; i < strategies.length; i++) {
+      final strategy = strategies[i];
+      print('🔄 TalentVideoPlayer: Trying strategy ${i + 1}: $strategy...');
+
+      try {
+        _controller = await VideoInitializer.initializeWithStrategy(
+          widget.videoUrl,
+          strategy,
+        );
+
+        if (mounted) {
+          print('✅ TalentVideoPlayer: Video loaded with strategy $strategy');
+          setState(() {
+            _isInitialized = true;
+          });
+          widget.onDurationLoaded?.call(_controller.value.duration);
+          _controller.play();
+          return;
+        }
+      } catch (error) {
+        print('❌ TalentVideoPlayer: Strategy $strategy failed: $error');
+
+        // Dispose failed controller before trying next strategy
+        try {
+          _controller.dispose();
+        } catch (e) {
+          // Ignore disposal errors
+        }
+
+        continue;
+      }
+    }
+
+    // All strategies failed - show error to user
+    if (mounted) {
+      print('💥 TalentVideoPlayer: All codec fallback strategies failed');
+      final deviceInfo = VideoUtils.getDeviceInfo();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Video format not supported on ${deviceInfo['platform']}. Please try another video.'),
+          backgroundColor: Colors.orange,
+          duration: Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Retry',
+            textColor: Colors.white,
+            onPressed: () => _initializeVideo(),
+          ),
+        ),
+      );
+    }
   }
 
   @override

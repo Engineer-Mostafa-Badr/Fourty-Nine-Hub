@@ -36,6 +36,7 @@ class UploadManager {
     required File videoFile,
     required File thumbnailFile,
     required String subCategoryId,
+    required String categoryId, // إضافة categoryId
   }) async {
     int retryCount = 0;
 
@@ -119,6 +120,7 @@ class UploadManager {
               description: description,
               videoMediaId: bunnyData.mediaId,
               thumbnailMediaId: thumbnailMediaId!,
+              category: categoryId, // إضافة categoryId المطلوب
               duration: duration,
             ),
           );

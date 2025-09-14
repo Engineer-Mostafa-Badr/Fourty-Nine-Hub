@@ -43,15 +43,55 @@ class ProfileTabsContent extends StatelessWidget {
           userId: userId,
         ),
 
-        // Playlists Tab - استخدام PlaylistCubit
-        BlocProvider(
-          create: (context) => serviceLocator<PlaylistCubit>(),
-          child: ProfilePlaylistsTab(
-            isCurrentUser: isCurrentUser,
-            userId: userId,
-          ),
-        ),
+        // Playlists Tab - Create safe fallback for PlaylistCubit
+        _buildPlaylistsTab(isCurrentUser, userId),
       ],
     );
+  }
+
+  Widget _buildPlaylistsTab(bool isCurrentUser, String? userId) {
+    try {
+      return BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: ProfilePlaylistsTab(
+          isCurrentUser: isCurrentUser,
+          userId: userId,
+        ),
+      );
+    } catch (e) {
+      print('PlaylistCubit error: $e');
+      // Return a fallback widget instead of crashing
+      return Container(
+        padding: EdgeInsets.all(16),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.playlist_play,
+                size: 64,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Playlists not available',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Please try again later',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[400],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

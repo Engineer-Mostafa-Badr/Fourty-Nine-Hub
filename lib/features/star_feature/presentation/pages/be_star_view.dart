@@ -8,11 +8,14 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/star_entity.dart';
 
 import '../controller/star_cubit/star_cubit.dart';
 import '../utils/enums.dart';
+import '../utils/memory_manager.dart';
 import '../widgets/be_star_floating_button.dart';
 import '../widgets/be_star_header_section.dart';
 import '../widgets/common/loading_indicator.dart';
@@ -44,16 +47,11 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   String? _selectedVideoUrl;
   bool _showVideoDetails = false;
 
-  // Main scroll controller for the outer CustomScrollView
-  final ScrollController _mainScrollController = ScrollController();
-
-  // Individual controllers for each tab content
+  // Individual controllers for each tab content (keep for specific use cases)
   final ScrollController _availableController = ScrollController();
   final ScrollController _favoriteController = ScrollController();
   final ScrollController _historyController = ScrollController();
   final ScrollController _myTalentController = ScrollController();
-
-  bool _isSyncing = false;
 
   @override
   void initState() {
@@ -62,11 +60,16 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_onTabChanged);
     _searchController.addListener(_onSearchChanged);
-    // Initialize all data
-    _cubit.initializeAllData();
 
-    // Setup scroll synchronization
-    _setupScrollSynchronization();
+    // Initialize memory manager
+    MemoryManager().init();
+
+    // Initialize data with delay for better performance
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _cubit.initializeAllData();
+      }
+    });
 
     // Add debugging
     _debugInitialization();
@@ -77,70 +80,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
       print("🎯 BeStarView initialized");
       context.read<StarCubit>().debugMyTalentsFlow();
     });
-  }
-
-  void _setupScrollSynchronization() {
-    // Sync main controller with active tab controller
-    _mainScrollController.addListener(() => _syncFromMain());
-
-    // Sync tab controllers with main controller
-    _availableController.addListener(() => _syncToMain(_availableController));
-    _favoriteController.addListener(() => _syncToMain(_favoriteController));
-    _historyController.addListener(() => _syncToMain(_historyController));
-    _myTalentController.addListener(() => _syncToMain(_myTalentController));
-  }
-
-  void _syncFromMain() {
-    if (_isSyncing || !mounted) return;
-    _isSyncing = true;
-
-    final activeController = _getActiveTabController();
-    if (activeController != null &&
-        activeController.hasClients &&
-        _mainScrollController.hasClients &&
-        mounted) {
-      activeController.jumpTo(_mainScrollController.offset.clamp(
-        activeController.position.minScrollExtent,
-        activeController.position.maxScrollExtent,
-      ));
-    }
-    _isSyncing = false;
-  }
-
-  void _syncToMain(ScrollController tabController) {
-    if (_isSyncing || !mounted) return;
-    if (tabController != _getActiveTabController()) return;
-    _isSyncing = true;
-
-    if (_mainScrollController.hasClients &&
-        tabController.hasClients &&
-        mounted) {
-      _mainScrollController.jumpTo(tabController.offset.clamp(
-        _mainScrollController.position.minScrollExtent,
-        _mainScrollController.position.maxScrollExtent,
-      ));
-    }
-    _isSyncing = false;
-  }
-
-  ScrollController? _getActiveTabController() {
-    try {
-      switch (_selectedTabIndex) {
-        case 0:
-          return _availableController.hasClients ? _availableController : null;
-        case 1:
-          return _favoriteController.hasClients ? _favoriteController : null;
-        case 2:
-          return _historyController.hasClients ? _historyController : null;
-        case 3:
-          return _myTalentController.hasClients ? _myTalentController : null;
-        default:
-          return null;
-      }
-    } catch (e) {
-      debugPrint('Error getting active tab controller: $e');
-      return null;
-    }
   }
 
   void _onTabChanged() {
@@ -191,12 +130,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     // إلغاء الـ timer السابق
     _searchDebounce?.cancel();
 
-    // إنشاء timer جديد للتأخير
-    _searchDebounce = Timer(Duration(milliseconds: 500), () {
-      if (_searchController.text.isNotEmpty) {
-        _cubit.searchTubeVideos(_searchController.text);
-      } else {
-        _cubit.searchTubeVideos(''); // مسح النتائج
+    // إنشاء timer جديد للتأخير مع وقت أطول لتقليل الضغط
+    _searchDebounce = Timer(Duration(milliseconds: 800), () {
+      if (mounted) {
+        // Check if widget is still mounted
+        final query = _searchController.text.trim();
+        if (query.isNotEmpty && query.length >= 2) {
+          // بحث فقط إذا كان النص أكثر من حرفين
+          _cubit.searchTubeVideos(query);
+        } else {
+          _cubit.searchTubeVideos(''); // مسح النتائج
+        }
       }
     });
   }
@@ -269,7 +213,26 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         isLoggedIn: context.watch<UserCubit>().isLoggedIn,
         showButton: _showFloatingButton,
       ),
-      body: BlocBuilder<StarCubit, StarState>(
+      body: BlocConsumer<StarCubit, StarState>(
+        listener: (context, state) {
+          if (state.status == StarStates.ratingSuccess &&
+              state.successMessage != null) {
+            final rating = int.tryParse(state.successMessage!) ?? 0;
+            final arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥'];
+
+            final message = context.isArabic
+                ? 'تم تقييم الفيديو بـ ${arabicNumbers[rating]} ${rating == 1 ? 'نجمة' : 'نجوم'}'
+                : 'Video rated with $rating ${rating == 1 ? 'star' : 'stars'}';
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: Theme.of(context).primaryColor,
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        },
         builder: (BuildContext context, state) {
           if (state.status == StarStates.loading &&
               state.availableTalents.isEmpty) {
@@ -297,7 +260,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                 return false;
               },
               child: NestedScrollView(
-                controller: _mainScrollController,
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return [
@@ -310,8 +272,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       surfaceTintColor: Colors.transparent,
                       backgroundColor:
                           context.isDarkMode ? Colors.black : Colors.white,
-                      toolbarHeight: 38,
-                      titleSpacing: 0,
+                      toolbarHeight: 30,
                       leading: BackButton(
                         onPressed: () {
                           ManageVibration.vibrate();
@@ -320,8 +281,10 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                         color: context.isDarkMode ? Colors.white : Colors.black,
                       ),
                       centerTitle: false,
-                      title: Text(
-                        context.isArabic ? 'تيوب' : 'Tube',
+                      titleSpacing:
+                          0, // Remove default spacing between leading and title
+                      title: Label(
+                        text: context.isArabic ? 'تيوب' : 'Tube',
                         style: TextStyle(
                           color:
                               context.isDarkMode ? Colors.white : Colors.black,
@@ -336,28 +299,22 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                '(15/3700)',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                                // make it arabic
+                                context.isArabic ? '(١٥/٣٧٠٠)' : '(15/3700)',
+                                style: Styles.smallText(),
                               ),
                               SizedBox(width: 4),
                               Text(
                                 context.isArabic ? 'الفائزون' : 'Winners',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
+                                style: Styles.headerText(
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 28),
                               ),
                               SizedBox(width: 4),
-                              Image.asset(Assets.cupImage,width: 24,height: 24),
+                              Image.asset(Assets.cupImage,
+                                  width: 24, height: 24),
                             ],
                           ),
                         ),
@@ -401,23 +358,18 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ),
                   ];
                 },
-                body: Builder(
-                  builder: (context) {
-                    if (_isSearching && _isSearchingProfiles) {
-                      return CustomScrollView(
-                        slivers: [
-                          ProfileSearchResults(
-                            profiles: state.searchProfileResults,
-                            isLoading: state.isSearchingProfiles,
-                          ),
-                        ],
-                      );
-                    } else if (_isSearching && !_isSearchingProfiles) {
-                      return _buildTalentSearchResults(state);
-                    } else {
-                      return _buildSynchronizedTabContent(state);
-                    }
-                  },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    // Available Tab
+                    _buildTabContent(0, state),
+                    // Favorites Tab
+                    _buildTabContent(1, state),
+                    // History Tab
+                    _buildTabContent(2, state),
+                    // My Talents Tab
+                    _buildTabContent(3, state),
+                  ],
                 ),
               ),
             ),
@@ -427,42 +379,62 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildSynchronizedTabContent(StarState state) {
-    return CustomScrollView(
-      slivers: [
-        // Your existing tab content as slivers
-        _getTabContentSliver(state),
-      ],
-    );
-  }
+  Widget _buildTabContent(int tabIndex, StarState state) {
+    if (_isSearching && _isSearchingProfiles) {
+      return CustomScrollView(
+        slivers: [
+          ProfileSearchResults(
+            profiles: state.searchProfileResults,
+            isLoading: state.isSearchingProfiles,
+          ),
+        ],
+      );
+    } else if (_isSearching && !_isSearchingProfiles) {
+      return _buildTalentSearchResults(state);
+    }
 
-  Widget _getTabContentSliver(StarState state) {
-    switch (_selectedTabIndex) {
+    switch (tabIndex) {
       case 0: // Available
-        return TalentCardBuilders.buildAvailableContentSliver(
-          context: context,
-          cubit: _cubit,
-          isSearching: false,
-          scrollController: _availableController,
+        return CustomScrollView(
+          slivers: [
+            TalentCardBuilders.buildAvailableContentSliver(
+              context: context,
+              cubit: _cubit,
+              isSearching: false,
+              scrollController: _availableController,
+            ),
+          ],
         );
       case 1: // Favorites
-        return TalentCardBuilders.buildFavoriteContentSliver(
-          context: context,
-          cubit: _cubit,
+        return CustomScrollView(
+          slivers: [
+            TalentCardBuilders.buildFavoriteContentSliver(
+              context: context,
+              cubit: _cubit,
+            ),
+          ],
         );
       case 2: // History
-        return TalentCardBuilders.buildHistoryContentSliver(
-          context: context,
-          cubit: _cubit,
+        return CustomScrollView(
+          slivers: [
+            TalentCardBuilders.buildHistoryContentSliver(
+              context: context,
+              cubit: _cubit,
+            ),
+          ],
         );
       case 3: // My Talents
         return _buildMyTalentContent(state);
       default:
-        return TalentCardBuilders.buildAvailableContentSliver(
-          context: context,
-          cubit: _cubit,
-          isSearching: false,
-          scrollController: _availableController,
+        return CustomScrollView(
+          slivers: [
+            TalentCardBuilders.buildAvailableContentSliver(
+              context: context,
+              cubit: _cubit,
+              isSearching: false,
+              scrollController: _availableController,
+            ),
+          ],
         );
     }
   }
@@ -472,25 +444,33 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     if (_showVideoDetails &&
         _selectedVideoTalent != null &&
         _selectedVideoUrl != null) {
-      return SliverToBoxAdapter(
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.75,
-          child: BlocProvider<StarCubit>.value(
-            value: _cubit, // Provide the cubit explicitly
-            child: VideoDetailsView(
-              talent: _selectedVideoTalent!,
-              mediaUrl: _selectedVideoUrl!,
-              cubit: _cubit,
-              onBack: _onBackFromVideoDetails,
+      return CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.75,
+              child: BlocProvider<StarCubit>.value(
+                value: _cubit, // Provide the cubit explicitly
+                child: VideoDetailsView(
+                  talent: _selectedVideoTalent!,
+                  mediaUrl: _selectedVideoUrl!,
+                  cubit: _cubit,
+                  onBack: _onBackFromVideoDetails,
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       );
     } else {
-      return TalentCardBuilders.buildMyTalentContentSliver(
-        context: context,
-        cubit: _cubit,
-        onVideoTap: _onVideoSelected,
+      return CustomScrollView(
+        slivers: [
+          TalentCardBuilders.buildMyTalentContentSliver(
+            context: context,
+            cubit: _cubit,
+            onVideoTap: _onVideoSelected,
+          ),
+        ],
       );
     }
   }
@@ -538,49 +518,34 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   @override
   void dispose() {
     try {
+      // Cancel debounce timer first
+      _searchDebounce?.cancel();
+
       // Remove listeners first with proper checks
-      _tabController.removeListener(_onTabChanged);
-      _searchController.removeListener(_onSearchChanged);
-
-      // Remove scroll listeners with proper checks
-      if (_mainScrollController.hasClients &&
-          _mainScrollController.hasListeners) {
-        _mainScrollController.removeListener(() => _syncFromMain());
+      if (_tabController.hasListeners) {
+        _tabController.removeListener(_onTabChanged);
       }
-
-      if (_availableController.hasClients &&
-          _availableController.hasListeners) {
-        _availableController
-            .removeListener(() => _syncToMain(_availableController));
-      }
-
-      if (_favoriteController.hasClients && _favoriteController.hasListeners) {
-        _favoriteController
-            .removeListener(() => _syncToMain(_favoriteController));
-      }
-
-      if (_historyController.hasClients && _historyController.hasListeners) {
-        _historyController
-            .removeListener(() => _syncToMain(_historyController));
-      }
-
-      if (_myTalentController.hasClients && _myTalentController.hasListeners) {
-        _myTalentController
-            .removeListener(() => _syncToMain(_myTalentController));
+      if (_searchController.hasListeners) {
+        _searchController.removeListener(_onSearchChanged);
       }
     } catch (e) {
       print('Error during controller disposal: $e');
     }
 
-    // Then dispose controllers
-    _searchDebounce?.cancel();
-    _tabController.dispose();
-    _searchController.dispose();
-    _mainScrollController.dispose();
-    _availableController.dispose();
-    _favoriteController.dispose();
-    _historyController.dispose();
-    _myTalentController.dispose();
+    // Then dispose controllers safely
+    try {
+      _tabController.dispose();
+      _searchController.dispose();
+      _availableController.dispose();
+      _favoriteController.dispose();
+      _historyController.dispose();
+      _myTalentController.dispose();
+    } catch (e) {
+      debugPrint('Error disposing controllers: $e');
+    }
+
+    // Dispose memory manager
+    MemoryManager().dispose();
 
     super.dispose();
   }

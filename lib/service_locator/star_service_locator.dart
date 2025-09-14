@@ -2,8 +2,10 @@ import '../features/star_feature/data/data_source/star_remote_data_source.dart';
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
 import '../features/star_feature/data/repository/star_repository_impl.dart';
 import '../features/star_feature/data/repository/profile_repository.dart';
+import '../features/star_feature/data/repository/playlist_repository_impl.dart';
 import '../features/star_feature/domain/repository/star_repository.dart';
 import '../features/star_feature/domain/repository/profile_repository.dart';
+import '../features/star_feature/domain/repository/playlist_repository.dart';
 import '../features/star_feature/domain/use_case/delete_my_star_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_banner_use_case.dart';
@@ -26,7 +28,12 @@ import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
+import '../features/star_feature/domain/use_case/comment_use_cases.dart';
+import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
+import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
+import '../features/star_feature/presentation/controller/profile_cubit/profile_cubit.dart';
+import '../features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
 import '../features/ten_percent/data/datasources/ten_percent_remote_data_source.dart';
 import '../features/ten_percent/data/repositories/ten_percent_repo_impl.dart';
 import '../features/ten_percent/domain/repositories/ten_percent_repo.dart';
@@ -58,6 +65,11 @@ class StarServiceLocator {
 
     serviceLocator
         .registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(
+              serviceLocator(),
+            ));
+
+    serviceLocator
+        .registerLazySingleton<PlaylistRepository>(() => PlaylistRepositoryImpl(
               serviceLocator(),
             ));
 
@@ -176,6 +188,93 @@ class StarServiceLocator {
     serviceLocator.registerLazySingleton<DeleteTubeVideoUseCase>(
       () => DeleteTubeVideoUseCase(serviceLocator()),
     );
+
+    // Register Comment Use Cases
+    serviceLocator.registerLazySingleton<CreateCommentUseCase>(
+      () => CreateCommentUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<GetCommentsUseCase>(
+      () => GetCommentsUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<UpdateCommentUseCase>(
+      () => UpdateCommentUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<DeleteCommentUseCase>(
+      () => DeleteCommentUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<LikeCommentUseCase>(
+      () => LikeCommentUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<DislikeCommentUseCase>(
+      () => DislikeCommentUseCase(serviceLocator()),
+    );
+
+    // Register Playlist Use Cases
+    serviceLocator.registerLazySingleton<GetPlaylistsUseCase>(
+      () => GetPlaylistsUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<CreatePlaylistUseCase>(
+      () => CreatePlaylistUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<GetPlaylistByIdUseCase>(
+      () => GetPlaylistByIdUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<GetPlaylistWithVideosUseCase>(
+      () => GetPlaylistWithVideosUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<AddVideoToPlaylistUseCase>(
+      () => AddVideoToPlaylistUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<RemoveVideoFromPlaylistUseCase>(
+      () => RemoveVideoFromPlaylistUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<DeletePlaylistUseCase>(
+      () => DeletePlaylistUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<UpdatePlaylistUseCase>(
+      () => UpdatePlaylistUseCase(serviceLocator()),
+    );
+
+    // Register Cubits
+    serviceLocator.registerFactory<CommentCubit>(() => CommentCubit(
+      serviceLocator<CreateCommentUseCase>(),
+      serviceLocator<GetCommentsUseCase>(),
+      serviceLocator<UpdateCommentUseCase>(),
+      serviceLocator<DeleteCommentUseCase>(),
+      serviceLocator<LikeCommentUseCase>(),
+      serviceLocator<DislikeCommentUseCase>(),
+    ));
+
+    serviceLocator.registerFactory<ProfileCubit>(() => ProfileCubit(
+      serviceLocator<GetMyProfileUseCase>(),
+      serviceLocator<GetProfileByIdUseCase>(),
+      serviceLocator<UpdateProfileUseCase>(),
+      serviceLocator<SubscribeToChannelUseCase>(),
+      serviceLocator<UnsubscribeFromChannelUseCase>(),
+    ));
+
+    serviceLocator.registerFactory<PlaylistCubit>(() => PlaylistCubit(
+      serviceLocator<GetPlaylistsUseCase>(),
+      serviceLocator<CreatePlaylistUseCase>(),
+      serviceLocator<GetPlaylistByIdUseCase>(),
+      serviceLocator<GetPlaylistWithVideosUseCase>(),
+      serviceLocator<AddVideoToPlaylistUseCase>(),
+      serviceLocator<RemoveVideoFromPlaylistUseCase>(),
+      serviceLocator<DeletePlaylistUseCase>(),
+      serviceLocator<UpdatePlaylistUseCase>(),
+    ));
 
     serviceLocator.registerFactory<StarCubit>(() => StarCubit(
           serviceLocator<FetchAllStarUseCase>(),

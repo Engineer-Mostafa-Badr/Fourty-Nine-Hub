@@ -1,4 +1,4 @@
-enum StarStates { loading, initial, success, uploadSuccess, error }
+enum StarStates { loading, initial, success, uploadSuccess, error, ratingSuccess, loaded }
 
 enum TalentCategory {
   available, // All available talents

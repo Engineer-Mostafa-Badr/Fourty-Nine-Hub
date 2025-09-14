@@ -255,13 +255,14 @@ class StarCubit extends Cubit<StarState> {
       print("⏳ Already loading $category, skipping...");
       return;
     }
+
     if (category == TalentCategory.favorites) {
       // Use the new API for favorites
       await loadFavoriteVideos(refresh: refresh);
       return;
     }
 
-    if (!state.hasMore(category)) {
+    if (!refresh && !state.hasMore(category)) {
       print("🔚 No more data for $category, skipping...");
       return;
     }
@@ -452,21 +453,32 @@ class StarCubit extends Cubit<StarState> {
     final hasMore = Map<TalentCategory, bool>.from(state.hasMoreData);
     final pages = Map<TalentCategory, int>.from(state.currentPages);
 
-    // Update based on API pagination info
-    hasMore[category] =
-        tubeResponse.pagination.page < tubeResponse.pagination.pages;
-    if (hasMore[category] == true) {
-      pages[category] = tubeResponse.pagination.page + 1;
+    // More robust pagination logic
+    final currentPage = tubeResponse.pagination.page;
+    final totalPages = tubeResponse.pagination.pages;
+    final videosCount = tubeResponse.videos.length;
+    final limit = tubeResponse.pagination.limit;
+
+    // Check if there are more pages available
+    hasMore[category] = currentPage < totalPages && videosCount >= limit;
+
+    // Only increment page if we have more data
+    if (hasMore[category]!) {
+      pages[category] = currentPage + 1;
     }
 
-    // خاص للـ myTalents - تأكد ان hasMore مضبوط صح
-    if (category == TalentCategory.myTalents) {
-      print("🔍 MyTalents Pagination Update:");
-      print("   Current page: ${tubeResponse.pagination.page}");
-      print("   Total pages: ${tubeResponse.pagination.pages}");
-      print("   Has more: ${hasMore[category]}");
-      print("   Videos count: ${tubeResponse.videos.length}");
+    // Special handling for edge cases
+    if (videosCount == 0 || (totalPages > 0 && currentPage >= totalPages)) {
+      hasMore[category] = false;
     }
+
+    print("🔍 $category Pagination Update:");
+    print("   Current page: $currentPage");
+    print("   Total pages: $totalPages");
+    print("   Videos count: $videosCount");
+    print("   Limit: $limit");
+    print("   Has more: ${hasMore[category]}");
+    print("   Next page: ${pages[category]}");
 
     emit(state.copyWith(
       hasMoreData: hasMore,
@@ -560,45 +572,97 @@ class StarCubit extends Cubit<StarState> {
   }
 
   // New Tube Video specific methods
-  // Enhanced like functionality with optimistic updates
+  // Enhanced like functionality with optimistic updates and toggle behavior
   Future<void> likeTubeVideo(String videoId) async {
-    // Optimistic update
-    _updateVideoInteraction(videoId, 'like');
+    // Check current like status for toggle behavior
+    final video = _findVideoById(videoId);
+    final wasLiked = video != null && _isVideoLikedByCurrentUser(videoId);
+
+    // Optimistic update - toggle behavior
+    if (wasLiked) {
+      _updateVideoInteraction(videoId, 'unlike');
+    } else {
+      // If disliked, remove dislike first, then add like
+      if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+        _updateVideoInteraction(videoId, 'undislike');
+      }
+      _updateVideoInteraction(videoId, 'like');
+    }
 
     final response = await _likeTubeVideoUseCase(videoId);
 
     response.fold(
       (failure) {
         // Revert optimistic update on failure
-        _updateVideoInteraction(videoId, 'unlike');
+        if (wasLiked) {
+          _updateVideoInteraction(videoId, 'like');
+        } else {
+          _updateVideoInteraction(videoId, 'unlike');
+          if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+            _updateVideoInteraction(videoId, 'dislike');
+          }
+        }
         _showErrorMessage(failure);
       },
       (success) {
         if (!success) {
           // Revert optimistic update if API returned false
-          _updateVideoInteraction(videoId, 'unlike');
+          if (wasLiked) {
+            _updateVideoInteraction(videoId, 'like');
+          } else {
+            _updateVideoInteraction(videoId, 'unlike');
+            if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+              _updateVideoInteraction(videoId, 'dislike');
+            }
+          }
         }
       },
     );
   }
 
-// Enhanced dislike functionality with optimistic updates
+// Enhanced dislike functionality with optimistic updates and toggle behavior
   Future<void> dislikeTubeVideo(String videoId) async {
-    // Optimistic update
-    _updateVideoInteraction(videoId, 'dislike');
+    // Check current dislike status for toggle behavior
+    final video = _findVideoById(videoId);
+    final wasDisliked = video != null && _isVideoDislikedByCurrentUser(videoId);
+
+    // Optimistic update - toggle behavior
+    if (wasDisliked) {
+      _updateVideoInteraction(videoId, 'undislike');
+    } else {
+      // If liked, remove like first, then add dislike
+      if (video != null && _isVideoLikedByCurrentUser(videoId)) {
+        _updateVideoInteraction(videoId, 'unlike');
+      }
+      _updateVideoInteraction(videoId, 'dislike');
+    }
 
     final response = await _dislikeTubeVideoUseCase(videoId);
 
     response.fold(
       (failure) {
         // Revert optimistic update on failure
-        _updateVideoInteraction(videoId, 'undislike');
+        if (wasDisliked) {
+          _updateVideoInteraction(videoId, 'dislike');
+        } else {
+          _updateVideoInteraction(videoId, 'undislike');
+          if (video != null && _isVideoLikedByCurrentUser(videoId)) {
+            _updateVideoInteraction(videoId, 'like');
+          }
+        }
         _showErrorMessage(failure);
       },
       (success) {
         if (!success) {
           // Revert optimistic update if API returned false
-          _updateVideoInteraction(videoId, 'undislike');
+          if (wasDisliked) {
+            _updateVideoInteraction(videoId, 'dislike');
+          } else {
+            _updateVideoInteraction(videoId, 'undislike');
+            if (video != null && _isVideoLikedByCurrentUser(videoId)) {
+              _updateVideoInteraction(videoId, 'like');
+            }
+          }
         }
       },
     );
@@ -881,10 +945,12 @@ class StarCubit extends Cubit<StarState> {
   //   );
   // }
 
-  // Rating management
+  // Rating management - Updated to track rated videos but keep them visible
   void updateRating(String id, int rating) {
     final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+    final ratedVideos = Set<String>.from(state.ratedVideos);
 
+    // Update the rating in all categories
     for (final category in TalentCategory.values) {
       talents[category] = talents[category]?.map((talent) {
             if (talent.id == id) {
@@ -897,7 +963,40 @@ class StarCubit extends Cubit<StarState> {
           [];
     }
 
-    emit(state.copyWith(talents: talents));
+    // Add to rated videos set to track that user has rated this video
+    ratedVideos.add(id);
+
+    emit(state.copyWith(
+      talents: talents,
+      ratedVideos: ratedVideos,
+    ));
+
+    // Show success message with rating count
+    showRatingSuccessMessage(rating);
+  }
+
+  // Helper method to check if a video has been rated by the user
+  bool isVideoRated(String videoId) {
+    return state.ratedVideos.contains(videoId);
+  }
+
+  // Show rating success message
+  void showRatingSuccessMessage(int rating) {
+    // This will be handled by the UI layer to show snack bar with rating count
+    emit(state.copyWith(
+      status: StarStates.ratingSuccess,
+      successMessage: rating.toString(), // Pass rating as string to be formatted in UI
+    ));
+
+    // Reset status after a short delay
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (!isClosed) {
+        emit(state.copyWith(
+          status: StarStates.loaded,
+          successMessage: null,
+        ));
+      }
+    });
   }
 
   // New method to fetch videos for a specific user
@@ -978,6 +1077,23 @@ class StarCubit extends Cubit<StarState> {
   bool isVideoDisliked(String videoId) {
     final video = getVideoById(videoId);
     return video?.dislikes != null && video!.dislikes > 0;
+  }
+
+  // Helper methods for the new like/dislike logic
+  TubeVideoModel? _findVideoById(String videoId) {
+    return getVideoById(videoId);
+  }
+
+  bool _isVideoLikedByCurrentUser(String videoId) {
+    // For now, we'll use the simple counter approach
+    // In future, you might want to track user-specific like status
+    return isVideoLiked(videoId);
+  }
+
+  bool _isVideoDislikedByCurrentUser(String videoId) {
+    // For now, we'll use the simple counter approach
+    // In future, you might want to track user-specific dislike status
+    return isVideoDisliked(videoId);
   }
 
 // Bulk operations for video management
