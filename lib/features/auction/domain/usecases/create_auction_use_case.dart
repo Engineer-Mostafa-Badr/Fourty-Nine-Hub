@@ -1,47 +1,58 @@
 import 'package:dartz/dartz.dart';
 
 
+import '../../../../core/abstract/use_case.dart';
+import '../../../../core/error/failure.dart';
+import '../entities/add_favorite_auction_entity.dart';
 import '../repositories/auction_repo.dart';
-//
-// class CreateAuctionUseCase extends UseCase<BlockAdEntity, UpdateAdParams> {
-//   final AuctionRepository _repo;
-//
-//   CreateAuctionUseCase(this._repo);
-//   @override
-//   Future<Either<Failure, BlockAdEntity>> call(UpdateAdParams params) async {
-//     return await _repo.updateAd(params: params);
-//   }
-//
-// }
-//
-// class UpdateAdParams {
-//   final String id;
-//   final num price;
-//   final num totalRating;
-//   final String title;
-//   final String desc;
-//   final String phone;
-//   final List<String> images;
-//
-//   UpdateAdParams({
-//     required this.id,
-//     required this.price,
-//     required this.totalRating,
-//     required this.title,
-//     required this.desc,
-//     required this.phone,
-//     required this.images,
-//   });
-//
-//   Map<String, dynamic> toJson() => {
-//     'price': price,
-//     'totalRating': totalRating,
-//     'title': title,
-//     'desc': desc,
-//     'phone': phone,
-//     'images': images,
-//   };
-// }
-//
-//
+
+class CreateAuctionUseCase extends UseCase<CreateAuctionEntity , CreateAuctionParams> {
+  final AuctionRepository _repo;
+
+  CreateAuctionUseCase(this._repo);
+  @override
+  Future<Either<Failure, CreateAuctionEntity >> call(CreateAuctionParams params) async {
+    return await _repo.createAuction(params: params);
+  }
+
+}
+
+class CreateAuctionParams {
+  final String mainCategoryId;
+  final String subCategoryId;
+  final String title;
+  final String description;
+  final num price;
+  final num minBiddingPrice;
+  final String startAt; // or DateTime if you want to convert before JSON
+  final String endAt;   // same as above
+  final List<String> media;
+
+  CreateAuctionParams({
+    required this.mainCategoryId,
+    required this.subCategoryId,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.minBiddingPrice,
+    required this.startAt,
+    required this.endAt,
+    required this.media,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'mainCategoryId': mainCategoryId,
+    'subCategoryId': subCategoryId,
+    'title': title,
+    'description': description,
+    'price': price,
+    'minBiddingPrice': minBiddingPrice,
+    'startAt': startAt,
+    'endAt': endAt,
+    'media': media,
+  };
+}
+
+
+
 

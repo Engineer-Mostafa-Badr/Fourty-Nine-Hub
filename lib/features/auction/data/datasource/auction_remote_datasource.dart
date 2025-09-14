@@ -10,20 +10,29 @@ import '../../../../core/data/datasources/remote/socket/socket_data_source.dart'
 import '../../../../core/error/failure.dart';
 import '../../../../shared_web_socket.dart';
 import '../../domain/entities/add_favorite_auction_entity.dart';
+import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
+import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
+import '../../domain/entities/listen_winner_bid_entity.dart';
+import '../../domain/entities/my_bidders_entity.dart';
 import '../../domain/usecases/add_favorite_auction_use_case.dart';
+import '../../domain/usecases/create_auction_use_case.dart';
 import '../../domain/usecases/fetch_available_auction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
 import '../models/add_favorite_auction_model.dart';
+import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
 import '../models/auction_sub_category_model.dart';
+import '../models/error_bid_auction_model.dart';
 import '../models/get_all_auction_model.dart';
+import '../models/listen_winner_bid_model.dart';
+import '../models/my_bidders_model.dart';
 
 
 abstract class AuctionRemoteDataSource {
@@ -40,6 +49,13 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getExpiredAuction({required GetAuctionParams params});
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getFavoriteAuction({required GetAuctionParams params});
   Future<Either<Failure, AddFavoriteAuctionEntity >> addFavoriteAuction({required FavoriteAuctionParams params});
+  Future<Either<Failure, List<GetAvailableAuctionEntity >>> getMyAuction({required GetAuctionParams params});
+  void listenToBidError(Function(BidErrorEntity error) onError);
+  void listenToBidWinner(Function(BidWinnerEntity winner) onData); // ✅ fixed naming
+  void leaveAuction(String auctionId);
+  Future<Either<Failure, CreateAuctionEntity  >> createAuction({required CreateAuctionParams  params});
+  Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params});
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
 
 }
 
@@ -149,11 +165,13 @@ class AuctionRemoteDataSourceImpl
       CliLogger.info("❌ Error while sending bid: $e");
     }
   }
-
   @override
   void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
     try {
       CliLogger.info("🔔 Listening to new bids...");
+
+      // remove any old listeners to avoid duplicates
+      SharedWebSocket.socket?.off("auction:new-amount-bid");
 
       SharedWebSocket.socket?.on("auction:new-amount-bid", (data) {
         CliLogger.info("📩 New bid received: $data");
@@ -161,7 +179,6 @@ class AuctionRemoteDataSourceImpl
         try {
           final decoded = (data is String) ? jsonDecode(data) : data;
 
-          // 👇 unwrap "data" if the backend sends { "data": {...} }
           final payload = decoded is Map && decoded.containsKey("data")
               ? decoded["data"]
               : decoded;
@@ -176,6 +193,33 @@ class AuctionRemoteDataSourceImpl
       CliLogger.info("❌ Error while setting up bid listener: $e\n$st");
     }
   }
+
+  // @override
+  // void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
+  //   try {
+  //     CliLogger.info("🔔 Listening to new bids...");
+  //
+  //     SharedWebSocket.socket?.on("auction:new-amount-bid", (data) {
+  //       CliLogger.info("📩 New bid received: $data");
+  //
+  //       try {
+  //         final decoded = (data is String) ? jsonDecode(data) : data;
+  //
+  //         // 👇 unwrap "data" if the backend sends { "data": {...} }
+  //         final payload = decoded is Map && decoded.containsKey("data")
+  //             ? decoded["data"]
+  //             : decoded;
+  //
+  //         final participant = AuctionParticipantsModel.fromJson(payload);
+  //         onData(participant);
+  //       } catch (e, st) {
+  //         CliLogger.info("❌ Error parsing new bid: $e\n$st");
+  //       }
+  //     });
+  //   } catch (e, st) {
+  //     CliLogger.info("❌ Error while setting up bid listener: $e\n$st");
+  //   }
+  // }
 
   @override
   Future<Either<Failure, List<AuctionMainCategoryEntity>>> getAuctionMainCategory({required GetAuctionParams params})async {
@@ -254,6 +298,138 @@ class AuctionRemoteDataSourceImpl
           (l) => Left(l),
           (data) {
         final blockRestaurantModel = AddFavoriteAuctionModel.fromJson(data);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getMyAuction({required GetAuctionParams params})async {
+    final url = "${EndPoints.fetchMyAuction}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => GetAvailableAuctionModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  void listenToBidError(Function(BidErrorEntity error) onError) {
+    try {
+      CliLogger.info("🔔 Listening to bid errors...");
+
+      SharedWebSocket.socket?.on("error", (data) {
+        CliLogger.info("📩 Bid error received: $data");
+
+        try {
+          final decoded = (data is String) ? jsonDecode(data) : data;
+
+          // 👇 unwrap "data" if the backend sends { "data": {...} }
+          final payload = decoded is Map && decoded.containsKey("data")
+              ? decoded["data"]
+              : decoded;
+
+          final errorEntity = BidErrorModel.fromJson(payload);
+          onError(errorEntity);
+        } catch (e, st) {
+          CliLogger.info("❌ Error parsing bid error: $e\n$st");
+        }
+      });
+    } catch (e, st) {
+      CliLogger.info("❌ Error while setting up bid error listener: $e\n$st");
+    }
+  }
+
+  @override
+  void listenToBidWinner(Function(BidWinnerEntity winner) onData) {
+    try {
+      CliLogger.info("👑 Listening for auction winners...");
+
+      SharedWebSocket.socket?.on(
+          SocketIOListeners.auctionWinner,
+              (data) {
+        CliLogger.info("👑 Winner event received: $data");
+
+        try {
+          final decoded = (data is String) ? jsonDecode(data) : data;
+
+          // 👇 unwrap "data" if backend sends { "data": {...} }
+          final payload = decoded is Map && decoded.containsKey("data")
+              ? decoded["data"]
+              : decoded;
+
+          final winner = BidWinnerModel.fromJson(payload);
+          onData(winner); // ✅ forward to cubit via repository
+        } catch (e, st) {
+          CliLogger.info("❌ Error parsing winner event: $e\n$st");
+        }
+      });
+    } catch (e, st) {
+      CliLogger.info("❌ Error while setting up winner listener: $e\n$st");
+    }
+  }
+
+  @override
+  void leaveAuction(String auctionId) {
+    try {
+      CliLogger.info("Leaving auction $auctionId");
+      // send just the string ID
+      SharedWebSocket.socket?.emit(
+        SocketIOListeners.leaveAuction,
+        auctionId,
+      );
+    } catch (e) {
+      CliLogger.info("Error while joining auction: $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, CreateAuctionEntity >> createAuction({required CreateAuctionParams params}) async{
+    final url = "${EndPoints.createAuction2}";
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = CreateAuctionModel .fromJson(data);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params})async {
+    final url = "${EndPoints.fetchMyBidders}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => MyBiddersModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction() async{
+    final url = "${EndPoints.auctionBanner}";
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AuctionBannerModel.fromJson(data);
         return Right(blockRestaurantModel);
       },
     );

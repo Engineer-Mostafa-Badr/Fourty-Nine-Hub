@@ -1642,7 +1642,7 @@
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
   "watch": "مشاهدة",
   "favorite": "المفضلة",
-  "myAuction": "مزادي",
+  "myAuction": "مزاداتي",
   "uploadVideo": "رفع الفيديو",
   "addAuction": "إضافة مزاد",
   "joinNow": "انضم الآن",
@@ -1658,7 +1658,9 @@
   "startFrom": "يبدأ من",
   "myBidders": "مزايدِيَّ",
   "ended": "انتهى",
-  "winnerAuction": "فائز"
+  "winnerAuction": "فائز",
+  "wonTheAuction": "فاز بالمزاد على",
+  "forAuction": "مقابل"
 
 
 }

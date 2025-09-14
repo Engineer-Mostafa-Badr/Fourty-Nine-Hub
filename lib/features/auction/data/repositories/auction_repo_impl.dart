@@ -1,11 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/add_favorite_auction_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_banner_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_main_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_sub_category_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/error_bid_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/get_all_auction_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/listen_winner_bid_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/my_bidders_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/add_favorite_auction_use_case.dart';
+import 'package:fourtyninehub/features/auction/domain/usecases/create_auction_use_case.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_available_auction_use_case.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_sub_category_auction_use_case.dart';
 
@@ -77,6 +82,41 @@ class AuctionRepoImpl implements AuctionRepository {
   @override
   Future<Either<Failure, AddFavoriteAuctionEntity>> addFavoriteAuction({required FavoriteAuctionParams params}) {
     return _remoteDataSource.addFavoriteAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> getMyAuction({required GetAuctionParams params}) {
+    return _remoteDataSource.getMyAuction(params: params);
+  }
+
+  @override
+  void listenToBidError(Function(BidErrorEntity error) onError) {
+    return  _remoteDataSource.listenToBidError(onError);
+  }
+
+  @override
+  void listenToBidWinner(Function(BidWinnerEntity winner) onData) {
+    return  _remoteDataSource.listenToBidWinner(onData);
+  }
+
+  @override
+  void leaveAuction(String auctionId) {
+    _remoteDataSource.leaveAuction(auctionId);
+  }
+
+  @override
+  Future<Either<Failure, CreateAuctionEntity >> createAuction({required CreateAuctionParams params}) {
+    return _remoteDataSource.createAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params}) {
+    return _remoteDataSource.getMyBidderAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction() {
+    return _remoteDataSource.bannerAuction();
   }
 
 
