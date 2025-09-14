@@ -94,6 +94,8 @@ abstract class SocketIOListeners {
   static const String listenToUpdateLocationDriver = 'CAPTAIN_SHARE:ROUTE_LOCATION_UPDATED';
   static const String newAvailableAuction = 'auction:updated-list';
   static const String joinAuction = 'join:auction';
+  static const String leaveAuction = 'leave:auction';
+  static const String auctionWinner = 'auction:winner';
   static const String bidAuction = 'auction:add:bid:amount';
 
 }

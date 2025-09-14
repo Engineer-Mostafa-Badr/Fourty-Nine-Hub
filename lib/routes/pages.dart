@@ -128,7 +128,6 @@ import 'package:fourtyninehub/features/installment_feature/installment_list/pres
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/married/presentation/pages/married_view.dart';
-import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/route_details_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/running_map_view_details.dart';
@@ -385,6 +384,7 @@ import '../features/ads_feature/create_company_ad/presentation/pages/create_comp
 import '../features/auction/presentation/cubit/auction_cubit.dart';
 import '../features/auction/presentation/screens/create_auction_screen.dart';
 import '../features/auction/presentation/screens/fetch_available_auction_screen.dart';
+import '../features/auction/presentation/screens/my_auction_screen.dart';
 import '../features/authentication/domain/entities/forget_password_questions_entity.dart';
 import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
@@ -427,11 +427,7 @@ import '../features/installment_feature/installments/presentation/pages/installm
 import '../features/installment_feature/installments/presentation/pages/installment_orders_list.dart';
 import '../features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import '../features/lucky_wheel/presentation/pages/lucky_wheel.dart';
-import '../features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
-import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_details.dart';
-import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
-import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
-import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
+
 import '../features/new_trip_join/driver/screen/captain_ride_details.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/payment/presentation/pages/payment_view.dart';
@@ -2293,45 +2289,45 @@ class AppPages {
                     customTransition(context, state, const MarriedView()),
               ),
               // MazadatView
-              GoRoute(
-                  path: Paths.MAZADAT,
-                  name: Routes.MAZADAT,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<AuctionListCubit>(
-                            child: const MazadatView(),
-                            create: (_) => serviceLocator()),
-                      ),
-                  routes: [
-                    GoRoute(
-                      path: Paths.MAZADDETAILS,
-                      name: Routes.MAZADDETAILS,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<AuctionDetailsCubit>(
-                          create: (_) => serviceLocator(),
-                          child: MazadDetails(id: state.extra as String),
-                        ),
-                      ),
-                    ),
+              // GoRoute(
+              //     path: Paths.MAZADAT,
+              //     name: Routes.MAZADAT,
+              //     pageBuilder: (context, state) => customTransition(
+              //           context,
+              //           state,
+              //           BlocProvider<AuctionListCubit>(
+              //               child: const MazadatView(),
+              //               create: (_) => serviceLocator()),
+              //         ),
+              //     routes: [
+              //       GoRoute(
+              //         path: Paths.MAZADDETAILS,
+              //         name: Routes.MAZADDETAILS,
+              //         pageBuilder: (context, state) => customTransition(
+              //           context,
+              //           state,
+              //           BlocProvider<AuctionDetailsCubit>(
+              //             create: (_) => serviceLocator(),
+              //             child: MazadDetails(id: state.extra as String),
+              //           ),
+              //         ),
+              //       ),
                     // CreateAuctionView
-                    GoRoute(
-                      path: Paths.CREATEAUCTION,
-                      name: Routes.CREATEAUCTION,
-                      pageBuilder: (context, state) => customTransition(
-                          context,
-                          state,
-                          BlocProvider.value(
-                            value: serviceLocator<CreateAuctionCubit>(),
-                            child: CreateAuctionView(
-                              adId: state.extra as String,
-                            ),
-                          )),
-                    ),
-                    // OtherAccountView
-                  ]),
+                  //   GoRoute(
+                  //     path: Paths.CREATEAUCTION,
+                  //     name: Routes.CREATEAUCTION,
+                  //     pageBuilder: (context, state) => customTransition(
+                  //         context,
+                  //         state,
+                  //         BlocProvider.value(
+                  //           value: serviceLocator<CreateAuctionCubit>(),
+                  //           child: CreateAuctionView(
+                  //             adId: state.extra as String,
+                  //           ),
+                  //         )),
+                  //   ),
+                  //   // OtherAccountView
+                  // ]),
 
               // ChatView
               GoRoute(
@@ -4868,6 +4864,17 @@ class AppPages {
                     create: (_) =>
                         serviceLocator<AuctionCubit>(),
                     child: CreateAuctionScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.myAuctionScreen,
+                name: Routes.myAuctionScreen,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (_) =>
+                        serviceLocator<AuctionCubit>()..getMyAuction(),
+                    child: MyAuctionScreen(),
                   );
                 },
               ),

@@ -1,29 +1,22 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
+import '../../../../helpers/subscription_method.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../domain/entities/auction_main_category_entity.dart';
-import '../../domain/entities/auction_sub_category_entity.dart';
-import '../cubit/auction_cubit.dart';
-// Import your cubit and entities
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/usecases/create_auction_use_case.dart';
+import '../cubit/auction_cubit.dart';
 
 class CreateAuctionScreen extends StatefulWidget {
   const CreateAuctionScreen({super.key});
@@ -123,68 +116,6 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
     });
   }
 
-/*
-  Future<void> _pickDateTime(BuildContext context, {required bool isStart}) async {
-    final now = DateTime.now();
-
-    // Pick date
-    final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: now,
-      firstDate: now,
-      lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Colors.redAccent,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (pickedDate == null) return;
-
-    // Pick time
-    final pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(now),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            timePickerTheme: const TimePickerThemeData(
-              dialHandColor: Colors.redAccent,
-              dialBackgroundColor: Colors.white,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (pickedTime == null) return;
-
-    final combined = DateTime(
-      pickedDate.year,
-      pickedDate.month,
-      pickedDate.day,
-      pickedTime.hour,
-      pickedTime.minute,
-    );
-
-    setState(() {
-      if (isStart) {
-        _startAt = combined;
-      } else {
-        _endAt = combined;
-      }
-    });
-  }
-*/
   @override
   void dispose() {
     for (var controller in _videoControllers.values) {
@@ -223,7 +154,43 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
   Widget build(BuildContext context) {
     final cubit = context.read<AuctionCubit>();
 
-    return Scaffold(
+    return BlocListener<AuctionCubit, AuctionState>(
+      listener: (context, state) {
+        // 🔹 Error handling
+        if (state.status == StateStatus.error && state.failure != null) {
+          final errorMessage =getFailureMessage(state.failure!, context) ?? "Something went wrong!";
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage)),
+          );
+        }
+
+        // 🔹 Success handling
+        if (state.status == StateStatus.success && state.createAuction != null) {
+          final response = state.createAuction!;
+
+          if (response.data?.userSubscription == false) {
+            // 🚨 Not subscribed → open subscription
+            SubscriptionMethod().subscribe(
+              subscribeId: response.data?.subCategoryId ?? '',
+              onSubscribe: () {
+                context.pop(); // close subscription screen
+                context.pop(); // close create screen
+              },
+              showRegular: false,
+              title: "Subscribe",
+            );
+          } else {
+            // 🎉 Successfully created
+            if (response.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(response.message!)),
+              );
+            }
+            context.pop(true); // close create auction screen
+          }
+        }
+      },
+  child: Scaffold(
       appBar: AppBar(
         title:  Text(LocaleKeys.addAuction.localize,
             // style: TextStyle(color: Colors.black)
@@ -681,8 +648,8 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
             ),
 
 
-            const SizedBox(height: 20),
 
+            // ---------------- Publish Button ----------------
             // ---------------- Publish Button ----------------
             SizedBox(
               height: 50,
@@ -694,21 +661,72 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                   ),
                 ),
                 onPressed: () {
+                  // if (true) {
+                  //   SubscriptionMethod().subscribe(
+                  //     subscribeId: '662cfacc35ddb6ba8094f80f',
+                  //     onSubscribe: () {
+                  //       context.pop();
+                  //       context.pop();
+                  //     },
+                  //     showRegular: false,
+                  //     title: "Subscribe"
+                  //   );
+                  //   return;
+                  // }
                   final mediaIds = cubit.getAllMediaIds(); // from AuctionCubit
-                  print("Title: ${_titleController.text}");
-                  print("Description: ${_descriptionController.text}");
-                  print("Price: ${_priceController.text}");
-                  print("Min Bid Price: ${_minBidPriceController.text}");
-                  print("Time: ${_timeController.text}");
-                  print("Main Category ID: $selectedMainCategoryId");
-                  print("Sub Category ID: $selectedSubCategoryId");
-                  print("Media IDs: $mediaIds");
-                  if (_startAt != null && _endAt != null) {
-                    print("startAt: ${_startAt!.toUtc().toIso8601String()}");
-                    print("endAt: ${_endAt!.toUtc().toIso8601String()}");
-                  } else {
-                    print("⚠️ Please select start and end time");
+
+                  // Validate all fields
+                  final title = _titleController.text.trim();
+                  final description = _descriptionController.text.trim();
+                  final priceText = _priceController.text.trim();
+                  final minBidText = _minBidPriceController.text.trim();
+
+                  if (selectedMainCategoryId == null ||
+                      selectedSubCategoryId == null ||
+                      title.isEmpty ||
+                      description.isEmpty ||
+                      priceText.isEmpty ||
+                      minBidText.isEmpty ||
+                      _startAt == null ||
+                      _endAt == null ||
+                      mediaIds.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("⚠️ Please fill all fields and upload at least one media item."),
+                        backgroundColor: Colors.redAccent,
+                      ),
+                    );
+                    return;
                   }
+
+                  final price = num.tryParse(priceText);
+                  final minBiddingPrice = num.tryParse(minBidText);
+
+                  if (price == null || minBiddingPrice == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("⚠️ Price and Min Bid Price must be valid numbers."),
+                        backgroundColor: Colors.redAccent,
+                      ),
+                    );
+                    return;
+                  }
+
+                  // Create params
+                  final params = CreateAuctionParams(
+                    mainCategoryId: selectedMainCategoryId!,
+                    subCategoryId: selectedSubCategoryId!,
+                    title: title,
+                    description: description,
+                    price: price,
+                    minBiddingPrice: minBiddingPrice,
+                    startAt: _startAt!.toUtc().toIso8601String(),
+                    endAt: _endAt!.toUtc().toIso8601String(),
+                    media: mediaIds,
+                  );
+
+                  // Call cubit
+                  cubit.createAuction(params: params);
                 },
                 child: const Text(
                   "Publish",
@@ -716,10 +734,44 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                 ),
               ),
             ),
+
+            // SizedBox(
+            //   height: 50,
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: Colors.redAccent,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(25),
+            //       ),
+            //     ),
+            //     onPressed: () {
+            //       final mediaIds = cubit.getAllMediaIds(); // from AuctionCubit
+            //       print("Title: ${_titleController.text}");
+            //       print("Description: ${_descriptionController.text}");
+            //       print("Price: ${_priceController.text}");
+            //       print("Min Bid Price: ${_minBidPriceController.text}");
+            //       print("Time: ${_timeController.text}");
+            //       print("Main Category ID: $selectedMainCategoryId");
+            //       print("Sub Category ID: $selectedSubCategoryId");
+            //       print("Media IDs: $mediaIds");
+            //       if (_startAt != null && _endAt != null) {
+            //         print("startAt: ${_startAt!.toUtc().toIso8601String()}");
+            //         print("endAt: ${_endAt!.toUtc().toIso8601String()}");
+            //       } else {
+            //         print("⚠️ Please select start and end time");
+            //       }
+            //     },
+            //     child: const Text(
+            //       "Publish",
+            //       style: TextStyle(fontSize: 16, color: Colors.white),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
-    );
+    ),
+);
   }
 
   // UPDATED: added controller support
@@ -740,6 +792,134 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
     );
   }
 }
+
+
+
+// ---------------- PaginatedDropdown Widget ----------------
+class PaginatedDropdown extends StatefulWidget {
+  final String title;
+  final List<String> items;
+  final Future<void> Function() loadMore;
+  final Function(String) onSelected;
+  final bool hasMore;
+
+  const PaginatedDropdown({
+    super.key,
+    required this.title,
+    required this.items,
+    required this.loadMore,
+    required this.onSelected,
+    required this.hasMore,
+  });
+
+  @override
+  State<PaginatedDropdown> createState() => _PaginatedDropdownState();
+}
+
+class _PaginatedDropdownState extends State<PaginatedDropdown> {
+  bool isOpen = false;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 50) {
+        if (widget.hasMore) {
+          widget.loadMore();
+        }
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // --- Dropdown Button ---
+        GestureDetector(
+          onTap: () => setState(() => isOpen = !isOpen),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            decoration: BoxDecoration(
+              color:  AppColors.cF5F5F5,
+              // border: Border.all(color: Colors.grey.shade400), // Thin border
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.title, style: Styles.mediumText(
+                  fontWeight: FontWeight.w400,
+                  color:AppColors.black
+                )),
+                Icon(
+                  isOpen
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: Colors.black54,
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // --- Dropdown List ---
+        if (isOpen)
+          Container(
+            height: 250, // Adjust height
+            margin: const EdgeInsets.only(top: 6),
+            decoration: BoxDecoration(
+              color: AppColors.cE1E1E1, // Light grey background like image
+              borderRadius: BorderRadius.circular(8),
+              // border: Border.all(color: Colors.grey.shade400),
+            ),
+            child: widget.items.isEmpty
+                ?  Center(child: Text("No items", style: Styles.mediumText(
+                fontWeight: FontWeight.w400,
+                color:AppColors.black
+            )))
+                : ListView.builder(
+              controller: _scrollController,
+              itemCount: widget.items.length + (widget.hasMore ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index < widget.items.length) {
+                  return InkWell(
+                    onTap: () {
+                      widget.onSelected(widget.items[index]);
+                      setState(() => isOpen = false);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 14),
+                      child: Text(
+                        widget.items[index],
+                        style:Styles.mediumText(
+                            fontWeight: FontWeight.w600,
+                         color: AppColors.black
+                        )
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 
 /*
 class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
@@ -805,7 +985,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [ 
+          children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -1242,132 +1422,6 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
 
 }
 */
-
-// ---------------- PaginatedDropdown Widget ----------------
-class PaginatedDropdown extends StatefulWidget {
-  final String title;
-  final List<String> items;
-  final Future<void> Function() loadMore;
-  final Function(String) onSelected;
-  final bool hasMore;
-
-  const PaginatedDropdown({
-    super.key,
-    required this.title,
-    required this.items,
-    required this.loadMore,
-    required this.onSelected,
-    required this.hasMore,
-  });
-
-  @override
-  State<PaginatedDropdown> createState() => _PaginatedDropdownState();
-}
-
-class _PaginatedDropdownState extends State<PaginatedDropdown> {
-  bool isOpen = false;
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 50) {
-        if (widget.hasMore) {
-          widget.loadMore();
-        }
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // --- Dropdown Button ---
-        GestureDetector(
-          onTap: () => setState(() => isOpen = !isOpen),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            decoration: BoxDecoration(
-              color:  AppColors.cF5F5F5,
-              // border: Border.all(color: Colors.grey.shade400), // Thin border
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(widget.title, style: Styles.mediumText(
-                  fontWeight: FontWeight.w400,
-                  color:AppColors.black
-                )),
-                Icon(
-                  isOpen
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: Colors.black54,
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // --- Dropdown List ---
-        if (isOpen)
-          Container(
-            height: 250, // Adjust height
-            margin: const EdgeInsets.only(top: 6),
-            decoration: BoxDecoration(
-              color: AppColors.cE1E1E1, // Light grey background like image
-              borderRadius: BorderRadius.circular(8),
-              // border: Border.all(color: Colors.grey.shade400),
-            ),
-            child: widget.items.isEmpty
-                ?  Center(child: Text("No items", style: Styles.mediumText(
-                fontWeight: FontWeight.w400,
-                color:AppColors.black
-            )))
-                : ListView.builder(
-              controller: _scrollController,
-              itemCount: widget.items.length + (widget.hasMore ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index < widget.items.length) {
-                  return InkWell(
-                    onTap: () {
-                      widget.onSelected(widget.items[index]);
-                      setState(() => isOpen = false);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 14),
-                      child: Text(
-                        widget.items[index],
-                        style:Styles.mediumText(
-                            fontWeight: FontWeight.w600,
-                         color: AppColors.black
-                        )
-                      ),
-                    ),
-                  );
-                } else {
-                  return const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-      ],
-    );
-  }
-}
-
 /*
 // ---------------- PaginatedDropdown Widget ----------------
 class PaginatedDropdown extends StatefulWidget {

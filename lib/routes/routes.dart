@@ -317,6 +317,7 @@ abstract class Routes {
   static const tubeProfile =  '/BeAStar/TubeProfile';
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
   static const createAuctionScreen =  '/CreateAuctionScreen';
+  static const myAuctionScreen =  '/MyAuctionScreen';
 
 }
 
@@ -621,5 +622,6 @@ abstract class Paths {
 
   static const availableAuctionScreen =  'AvailableAuctionScreen';
   static const createAuctionScreen =  'CreateAuctionScreen';
+  static const myAuctionScreen =  'MyAuctionScreen';
 
 }

@@ -13,8 +13,23 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
-class AvailableAuctionScreen extends StatelessWidget {
+
+
+class AvailableAuctionScreen extends StatefulWidget {
   const AvailableAuctionScreen({super.key});
+
+  @override
+  State<AvailableAuctionScreen> createState() => _AvailableAuctionScreenState();
+}
+
+class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
+
+  Future<void> _addAuction() async {
+    final result = await context.push(Routes.createAuctionScreen);
+    if (result == true) {
+      context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +89,10 @@ class AvailableAuctionScreen extends StatelessWidget {
               end: 16,
               top: MediaQuery.of(context).size.height * 0.50,
               child: FloatingActionButton.extended(
-                onPressed: () {
-                  context.push(Routes.createAuctionScreen);
-                },
+                onPressed: ()=> _addAuction(),
+                // onPressed: () {
+                //   context.push(Routes.createAuctionScreen);
+                // },
                 backgroundColor: AppColors.PRIMARY_COLOR,
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: Text(
