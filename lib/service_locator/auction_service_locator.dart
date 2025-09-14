@@ -5,6 +5,7 @@ import '../features/auction/data/datasource/auction_remote_datasource.dart';
 import '../features/auction/data/repositories/auction_repo_impl.dart';
 import '../features/auction/domain/repositories/auction_repo.dart';
 import '../features/auction/domain/usecases/add_favorite_auction_use_case.dart';
+import '../features/auction/domain/usecases/banner_auction_use_case.dart';
 import '../features/auction/domain/usecases/bid_auction_use_case.dart';
 import '../features/auction/domain/usecases/bid_winner_auction_use_case.dart';
 import '../features/auction/domain/usecases/create_auction_use_case.dart';
@@ -102,9 +103,14 @@ class AuctionServiceLocator {
         () => GetMyBiddersAuctionUseCase (serviceLocator()));
 
 
+   serviceLocator.registerLazySingleton<BannerAuctionUseCase >(
+        () => BannerAuctionUseCase (serviceLocator()));
+
+
 
     serviceLocator
         .registerFactory<AuctionCubit>(() => AuctionCubit(
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failure.dart';
 import '../entities/add_favorite_auction_entity.dart';
+import '../entities/auction_banner_entity.dart';
 import '../entities/auction_main_category_entity.dart';
 import '../entities/auction_participants_entity.dart';
 import '../entities/auction_sub_category_entity.dart';
@@ -31,6 +32,7 @@ abstract class AuctionRepository {
   Future<Either<Failure, List<AuctionParticipantsEntity>>> getParticipantsAuction({required PriceAuctionParams params});
   Future<Either<Failure, AddFavoriteAuctionEntity >> addFavoriteAuction({required FavoriteAuctionParams params});
   Future<Either<Failure, CreateAuctionEntity  >> createAuction({required CreateAuctionParams  params});
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
 
   void listenToNewAuction(Function(GetAvailableAuctionEntity trip) params);
   void listenToNewBidAuction(Function(AuctionParticipantsEntity trip) params);

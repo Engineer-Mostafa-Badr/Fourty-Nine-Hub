@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/add_favorite_auction_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_banner_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_main_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_sub_category_entity.dart';
@@ -111,6 +112,11 @@ class AuctionRepoImpl implements AuctionRepository {
   @override
   Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params}) {
     return _remoteDataSource.getMyBidderAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction() {
+    return _remoteDataSource.bannerAuction();
   }
 
 

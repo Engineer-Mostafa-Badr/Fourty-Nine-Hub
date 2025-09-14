@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/utils/format_numbers.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -24,6 +25,7 @@ import 'available_auction_screen.dart';
 import 'expired_auction_screen.dart';
 import 'favorite_auction_screen.dart';
 import 'my_auction_screen.dart';
+import 'my_bidders_screen.dart';
 
 class AuctionScreen extends StatefulWidget {
   const AuctionScreen({super.key});
@@ -62,7 +64,7 @@ class _AuctionScreenState extends State<AuctionScreen>
             // cubit.getFavoriteAuctions(); // implement in cubit
             break;
           case 3:
-            // cubit.getRequestLogs(); // implement in cubit
+            cubit.getMyBidders(); // implement in cubit
             break;
           case 4:
             cubit.getMyAuction(); // implement in cubit for My Auction tab
@@ -78,6 +80,111 @@ class _AuctionScreenState extends State<AuctionScreen>
     super.dispose();
   }
 
+  Widget _buildBannerWidget(AuctionState state, BuildContext context) {
+    // Show loading while fetching data from API
+
+    // Show error state with retry option
+    if (state.status == StateStatus.error) {
+      return Container(
+        height: 100,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, color: Colors.grey.shade600),
+            const SizedBox(height: 4),
+            Text(
+              "Failed to load banner",
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Show network image with loading and error handling
+    if (state.auctionBanner?.data != null &&
+        state.auctionBanner!.data!.isNotEmpty) {
+      return Image.network(
+        state.auctionBanner!.data!,
+        height: 100,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        // Loading indicator while image is being downloaded
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+
+          return Container(
+            height: 100,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                  loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          );
+        },
+        // Error fallback without using assets
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: 100,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.image_not_supported,
+                    color: Colors.grey.shade600, size: 30),
+                const SizedBox(height: 4),
+                Text(
+                  "Image not available",
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    // Default placeholder when no banner data
+    return Container(
+      height: 100,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.image, color: Colors.grey.shade600, size: 30),
+          const SizedBox(height: 4),
+          Text(
+            "No banner available",
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,40 +193,188 @@ class _AuctionScreenState extends State<AuctionScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ===== TOP CONTAINER =====
-          Container(
-            padding:
-                const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
-            color: context.isDarkMode ? Colors.black : Colors.white,
-            child: Column(
-              children: [
-                Row(
-                  children: const [
-                    Icon(Icons.arrow_back_ios, size: 20),
-                    SizedBox(width: 8),
-                    Text("Auction",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
-                    Spacer(),
-                    Text("(22/1500) Winners",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14)),
-                    SizedBox(width: 6),
-                    Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+          // BlocBuilder<AuctionCubit, AuctionState>(
+          //   builder: (context, state) {
+          //     return Container(
+          //       padding:
+          //       const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
+          //       color: context.isDarkMode ? Colors.black : Colors.white,
+          //       child: Column(
+          //         children: [
+          //           Row(
+          //             children: const [
+          //               Icon(Icons.arrow_back_ios, size: 20),
+          //               SizedBox(width: 8),
+          //               Text("Auction",
+          //                   style: TextStyle(
+          //                       fontSize: 18, fontWeight: FontWeight.w600)),
+          //               Spacer(),
+          //               Text("(22/1500) Winners",
+          //                   style: TextStyle(
+          //                       fontWeight: FontWeight.w500, fontSize: 14)),
+          //               SizedBox(width: 6),
+          //               Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+          //             ],
+          //           ),
+          //           const SizedBox(height: 16),
+          //           ClipRRect(
+          //             borderRadius: BorderRadius.circular(12),
+          //             child: (state.auctionBanner?.data != null &&
+          //                 state.auctionBanner!.data!.isNotEmpty)
+          //                 ? Image.network(
+          //               state.auctionBanner!.data!,
+          //               height: 100,
+          //               width: double.infinity,
+          //               fit: BoxFit.cover,
+          //               errorBuilder: (context, error, stackTrace) {
+          //                 // 👇 صورة افتراضية من الـ assets لو حصل error
+          //                 return Image.asset(
+          //                  Assets.auctionBanner,
+          //                   height: 100,
+          //                   width: double.infinity,
+          //                   fit: BoxFit.cover,
+          //                 );
+          //               },
+          //             )
+          //                 : Image.asset(
+          //               Assets.auctionBanner,
+          //               height: 100,
+          //               width: double.infinity,
+          //               fit: BoxFit.cover,
+          //             ),
+          //           ),
+          //
+          //           // ClipRRect(
+          //           //   borderRadius: BorderRadius.circular(12),
+          //           //   child: Image.network(
+          //           //     "${state.auctionBanner?.data ?? ""}",
+          //           //     // "https://picsum.photos/400/120",
+          //           //     height: 100,
+          //           //     width: double.infinity,
+          //           //     fit: BoxFit.cover,
+          //           //   ),
+          //           // ),
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // ),
+          /*
+          BlocBuilder<AuctionCubit, AuctionState>(
+            builder: (context, state) {
+              return Container(
+                padding: const EdgeInsets.only(
+                    top: 40, left: 16, right: 16, bottom: 16),
+                color: context.isDarkMode ? Colors.black : Colors.white,
+                child: Column(
+                  children: [
+                    Row(
+                      children: const [
+                        Icon(Icons.arrow_back_ios, size: 20),
+                        SizedBox(width: 8),
+                        Text("Auction",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600)),
+                        Spacer(),
+                        Text("(22/1500) Winners",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 14)),
+                        SizedBox(width: 6),
+                        Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: (state.auctionBanner?.data != null &&
+                          state.auctionBanner!.data!.isNotEmpty)
+                          ? Image.network(
+                        state.auctionBanner!.data!,
+                        height: 100,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        // ✅ Loading indicator
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          // دايماً هيرجع loading طول ما الصورة مش جاهزة
+                          return Container(
+                            height: 100,
+                            width: double.infinity,
+                            color: Colors.grey.shade200,
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicator(),
+                          );
+                        },
+                        // ✅ Error fallback
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            Assets.auctionBanner,
+                            height: 100,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        Assets.auctionBanner,
+                        height: 100,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    "https://picsum.photos/400/120",
-                    height: 100,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
+*/
+          BlocBuilder<AuctionCubit, AuctionState>(
+            builder: (context, state) {
+              return Container(
+                padding: const EdgeInsets.only(
+                    top: 40, left: 16, right: 16, bottom: 16),
+                color: context.isDarkMode ? Colors.black : Colors.white,
+                child: Column(
+                  children: [
+                    Row(
+                      children: const [
+                        Icon(Icons.arrow_back_ios, size: 20),
+                        SizedBox(width: 8),
+                        Text("Auction",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600)),
+                        Spacer(),
+                        Text("(22/1500) Winners",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 14)),
+                        SizedBox(width: 6),
+                        Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // 👇 Show loader while fetching
+                    if (state.isLoading)
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    else
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: _buildBannerWidget(state, context),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+
+
 
           // ===== CUSTOM TAB BAR CONTAINER =====
           // ===== CUSTOM TAB BAR CONTAINER =====
@@ -166,7 +421,7 @@ class _AuctionScreenState extends State<AuctionScreen>
                                     cubit.loadInitialFavoriteNonSocketAuction();
                                     break;
                                   case 3:
-                                    // cubit.getRequestLogs();
+                                    cubit.loadInitialMyBidders();
                                     break;
                                   case 4:
                                     cubit.loadInitialMyAuction();
@@ -269,12 +524,11 @@ class _AuctionScreenState extends State<AuctionScreen>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children:  [
+              children: [
                 AvailableAuctionScreen(),
                 ExpiredAuctionScreen(),
                 FavoriteAuctionScreen(),
-
-                Center(child: Text("Request Log")),
+                MyBiddersScreen(),
                 MyAuctionScreen(), // 5th tab content
               ],
             ),

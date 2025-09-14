@@ -10,6 +10,7 @@ import '../../../../core/data/datasources/remote/socket/socket_data_source.dart'
 import '../../../../core/error/failure.dart';
 import '../../../../shared_web_socket.dart';
 import '../../domain/entities/add_favorite_auction_entity.dart';
+import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
@@ -24,6 +25,7 @@ import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
 import '../models/add_favorite_auction_model.dart';
+import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
 import '../models/auction_sub_category_model.dart';
@@ -53,6 +55,7 @@ abstract class AuctionRemoteDataSource {
   void leaveAuction(String auctionId);
   Future<Either<Failure, CreateAuctionEntity  >> createAuction({required CreateAuctionParams  params});
   Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params});
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
 
 }
 
@@ -414,6 +417,20 @@ class AuctionRemoteDataSourceImpl
             .map((e) => MyBiddersModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuctionBannerEntity>> bannerAuction() async{
+    final url = "${EndPoints.auctionBanner}";
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AuctionBannerModel.fromJson(data);
+        return Right(blockRestaurantModel);
       },
     );
   }

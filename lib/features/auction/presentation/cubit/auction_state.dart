@@ -11,11 +11,13 @@ class AuctionState {
   final GetAvailableAuctionEntity? singleAuction;
   final List<UploadFileEntity> uploadedFiles; // store multiple uploaded files
   final bool isUploading;
+  final bool isLoading;
   final AddFavoriteAuctionEntity? addFavoriteAuctionEntity;
   final CreateAuctionEntity ? createAuction;
   final BidErrorEntity? bidError;
   final BidWinnerEntity? bidWinner; // 👑 new field
   final List<MyBiddersEntity>? myBiddersData;
+  final AuctionBannerEntity? auctionBanner;
   AuctionState({
     this.status,
     this.getAvailableAuction,
@@ -31,8 +33,10 @@ class AuctionState {
     this.bidWinner,
     this.createAuction,
     this.myBiddersData,
+    this.auctionBanner,
     this.uploadedFiles = const [],
     this.isUploading = false,
+    this.isLoading = false,
   });
 
   AuctionState copyWith({
@@ -44,6 +48,7 @@ class AuctionState {
     List<AuctionMainCategoryEntity>? auctionMainData,
     List<UploadFileEntity>? uploadedFiles,
     bool? isUploading,
+    bool? isLoading,
     List<GetAvailableAuctionEntity>? getExpiredAuction,
     List<GetAvailableAuctionEntity>? getFavoriteAuction,
     AddFavoriteAuctionEntity? addFavoriteAuctionEntity,
@@ -52,6 +57,7 @@ class AuctionState {
     BidWinnerEntity? bidWinner,
     CreateAuctionEntity ? createAuction,
     List<MyBiddersEntity>? myBiddersData,
+    AuctionBannerEntity? auctionBanner,
   }) {
     return AuctionState(
       status: status ?? this.status,
@@ -70,6 +76,8 @@ class AuctionState {
       bidWinner: bidWinner ?? this.bidWinner,
       createAuction: createAuction ?? this.createAuction,
       myBiddersData: myBiddersData ?? this.myBiddersData,
+      auctionBanner: auctionBanner ?? this.auctionBanner,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

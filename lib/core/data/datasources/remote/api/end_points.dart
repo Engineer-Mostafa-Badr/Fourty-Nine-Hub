@@ -1879,6 +1879,7 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchMyAuction = '/auctions/my';
   static String createAuction2 = '/auctions';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
+  static String auctionBanner = '/auctions/banner';
 
 
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
