@@ -1646,5 +1646,7 @@ abstract class  LocaleKeys {
   static const myBidders = 'myBidders';
   static const ended = 'ended';
   static const winnerAuction = 'winnerAuction';
+  static const wonTheAuction = 'wonTheAuction';
+  static const forAuction = 'forAuction';
 
 }
