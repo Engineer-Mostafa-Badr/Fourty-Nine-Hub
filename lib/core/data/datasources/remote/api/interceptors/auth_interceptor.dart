@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -441,6 +442,7 @@ class AuthInterceptor extends Interceptor {
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(newRefreshToken);
+      await Storage.setRefreshToken(refreshToken);
       serviceLocator<Dio>().options.headers['Authorization'] =
           'Bearer $accessToken';
 

@@ -350,7 +350,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(12)),
+                  const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
                 BoxShadow(
                     color: Colors.black12, blurRadius: 5, spreadRadius: 2),
@@ -358,106 +358,110 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             ),
             child: bottomNavBarHeight == 75
                 ? Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(widget.items.length, (index) {
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      if (index != 2) {
-                        widget.onTap(index);
-                      }
-                    },
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.zero,
-                      child: isScrollingDown
-                          ? Container()
-                          : ClickableWidget(
-                        child: widget.items[index].index != 2 &&
-                            widget.items[index].index != 13
-                            ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16.0),
-                          child: Column(
-                            children: [
-                              (widget.items[index].index ==
-                                  3 ||
-                                  widget.items[index]
-                                      .index ==
-                                      4 ||
-                                  widget.items[index]
-                                      .index ==
-                                      0 ||
-                                  widget.items[index]
-                                      .index ==
-                                      12 ||
-                                  widget.items[index]
-                                      .index ==
-                                      11 ||
-                                  widget.items[index]
-                                      .index ==
-                                      15 ||
-                                  widget.items[index]
-                                      .index ==
-                                      14 ||
-                                  widget.items[index]
-                                      .index ==
-                                      1)
-                                  ? Image.asset(
-                                widget.items[index]
-                                    .image!,
-                                height: widget
-                                    .items[index]
-                                    .height-1,
-                                width: widget
-                                    .items[index]
-                                    .height-1,
-                                color: context
-                                    .isDarkMode
-                                    ? Colors.white
-                                    : AppColors
-                                    .PRIMARY_COLOR,
-                              )
-                                  : SvgPicture.asset(
-                                widget.items[index]
-                                    .image!,
-                                height: widget
-                                    .items[index]
-                                    .height-1,
-                                width: widget
-                                    .items[index]
-                                    .height-1,
-                                color: context
-                                    .isDarkMode
-                                    ? Colors.white
-                                    : AppColors
-                                    .PRIMARY_COLOR,
-                              ),
-                              if (widget.items[index].index ==
-                                  3)
-                                SizedBox(
-                                  height: 2.h,
-                                ),
-                              Expanded(
-                                child: Label(
-                                  text: widget
-                                      .items[index]
-                                      .localeKey
-                                      .localize, // translate on build
-                                  style: Styles.smallText(),
-                                ),
-                              ),
-                            ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: List.generate(widget.items.length, (index) {
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (index != 2) {
+                              widget.onTap(index);
+                            }
+                          },
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.zero,
+                            child: isScrollingDown
+                                ? Container()
+                                : ClickableWidget(
+                                    child: widget.items[index].index != 2 &&
+                                            widget.items[index].index != 13
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16.0),
+                                            child: Column(
+                                              children: [
+                                                (widget.items[index].index ==
+                                                            3 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            4 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            0 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            12 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            11 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            15 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            14 ||
+                                                        widget.items[index]
+                                                                .index ==
+                                                            1)
+                                                    ? Image.asset(
+                                                        widget.items[index]
+                                                            .image!,
+                                                        height: widget
+                                                                .items[index]
+                                                                .height -
+                                                            1,
+                                                        width: widget
+                                                                .items[index]
+                                                                .height -
+                                                            1,
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
+                                                      )
+                                                    : SvgPicture.asset(
+                                                        widget.items[index]
+                                                            .image!,
+                                                        height: widget
+                                                                .items[index]
+                                                                .height -
+                                                            1,
+                                                        width: widget
+                                                                .items[index]
+                                                                .height -
+                                                            1,
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
+                                                      ),
+                                                if (widget.items[index].index ==
+                                                    3)
+                                                  SizedBox(
+                                                    height: 2.h,
+                                                  ),
+                                                Expanded(
+                                                  child: Label(
+                                                    text: widget
+                                                        .items[index]
+                                                        .localeKey
+                                                        .localize, // translate on build
+                                                    style: Styles.smallText(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ),
                           ),
-                        )
-                            : Container(),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            )
+                        ),
+                      );
+                    }),
+                  )
                 : Container(),
           ),
         ),

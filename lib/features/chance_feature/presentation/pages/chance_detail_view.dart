@@ -80,10 +80,10 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
           // Header
           Container(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 8.h,
-              left: 16.w,
-              right: 16.w,
-              bottom: 8.h,
+              top: MediaQuery.of(context).padding.top + 12.h,
+              left: 20.w,
+              right: 20.w,
+              bottom: 12.h,
             ),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -100,19 +100,19 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Icon(Icons.arrow_back_ios,
-                      size: 20.sp, color: Colors.black87),
+                      size: 28.sp, color: Colors.black87),
                 ),
                 const Spacer(),
                 Text(
                   'Chance',
                   style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.w700,
                     color: Colors.black87,
                   ),
                 ),
                 const Spacer(),
-                Container(width: 20.w), // Balance the layout
+                Container(width: 28.w), // Balance the layout
               ],
             ),
           ),
@@ -123,14 +123,14 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                 children: [
                   // Favorite Icon
                   Container(
-                    margin: EdgeInsets.all(16.w),
+                    margin: EdgeInsets.all(20.w),
                     child: Stack(
                       children: [
                         // Image Carousel
                         Container(
-                          height: 250.h,
+                          height: 300.h,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(16.r),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.1),
@@ -140,10 +140,10 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             ],
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(16.r),
                             child: CarouselSlider(
                               options: CarouselOptions(
-                                height: 250.h,
+                                height: 300.h,
                                 viewportFraction: 1.0,
                                 enableInfiniteScroll: false,
                                 autoPlay: true,
@@ -175,7 +175,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               child: Icon(
                                 Icons.favorite,
                                 color: Colors.red,
-                                size: 16.sp,
+                                size: 30.sp,
                               ),
                             ),
                           ),
@@ -185,8 +185,8 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                   ),
                   // Content Card
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16.w),
-                    padding: EdgeInsets.all(20.w),
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    padding: EdgeInsets.all(24.w),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12.r),
@@ -205,7 +205,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         Text(
                           widget.title,
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 24.sp,
                             fontWeight: FontWeight.w700,
                             color: Colors.black87,
                           ),
@@ -215,7 +215,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         Text(
                           widget.description,
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 18.sp,
                             color: Colors.grey[600],
                             height: 1.4,
                           ),
@@ -228,7 +228,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             Text(
                               'Collected',
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: 18.sp,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -236,7 +236,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             Text(
                               '${(widget.price * widget.progress).toInt()} EGP',
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: 18.sp,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -259,15 +259,17 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             Text(
                               'Target:',
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 16.sp,
                                 color: Colors.red,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               '${widget.price} EGP',
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 16.sp,
                                 color: Colors.red,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -294,12 +296,12 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         Row(
                           children: [
                             Icon(Icons.visibility,
-                                size: 16.sp, color: Colors.grey[600]),
-                            SizedBox(width: 4.w),
+                                size: 30.sp, color: Colors.grey[600]),
+                            SizedBox(width: 6.w),
                             Text(
                               '${widget.views}K views',
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 24.sp,
                                 color: Colors.grey[600],
                               ),
                             ),
@@ -329,8 +331,8 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         Text(
                           'Your Shares',
                           style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.w700,
                             color: Colors.grey[700],
                           ),
                         ),
@@ -338,7 +340,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         Text(
                           '2 EGP',
                           style: TextStyle(
-                            fontSize: 24.sp,
+                            fontSize: 28.sp,
                             fontWeight: FontWeight.w700,
                             color: Colors.black87,
                           ),
@@ -349,13 +351,13 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                   SizedBox(height: 30.h),
                   // Join Button
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16.w),
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () => _showParticipateBottomSheet(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
                         ),
@@ -363,8 +365,8 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       child: Text(
                         'Join',
                         style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
                       ),
@@ -382,7 +384,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
   Widget _buildTimeUnit(String value, String label) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8.r),
@@ -392,7 +394,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
           Text(
             value,
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 20.sp,
               fontWeight: FontWeight.w700,
               color: Colors.black87,
             ),
@@ -400,7 +402,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
           Text(
             label,
             style: TextStyle(
-              fontSize: 10.sp,
+              fontSize: 14.sp,
               color: Colors.grey[600],
             ),
           ),
@@ -425,7 +427,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Padding(
-          padding: EdgeInsets.all(24.w),
+          padding: EdgeInsets.all(28.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
