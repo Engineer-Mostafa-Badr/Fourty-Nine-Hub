@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/data/models/driver_statistics_model.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -41,7 +42,9 @@ class DriverDashboardRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, String>> acceptTrip({required String id}) async {
-    final response = await _apiConsumer.put(EndPoints.acceptTripRider(id));
+    final response = await _apiConsumer.put(EndPoints.acceptTripRider(id),data: {
+      "driverDeviceId":await getDeviceId(),
+    });
     return response.fold((l) => Left(l), (data) => Right(id));
   }
 
@@ -49,7 +52,7 @@ class DriverDashboardRemoteDataSourceImpl
   Future<Either<Failure, bool>> createOffer(
       {required CreateRiderOfferParams params}) async {
     final response = await _apiConsumer
-        .post(EndPoints.createOffer(params.tripId), data: params.toJson());
+        .post(EndPoints.createOffer(params.tripId), data: await params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

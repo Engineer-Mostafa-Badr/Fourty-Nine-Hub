@@ -85,7 +85,7 @@ class _CustomPageState extends State<CustomPage> {
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
                     ManageVibration.vibrate();
-                    context.push(Routes.PAGEPREVIEW,
+                    context.push(Routes.HOME,
                         extra: state.activate?.customPage == true);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
@@ -148,6 +148,7 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                           onPressed: () {
                             ManageVibration.vibrate();
                             controller.updateActivate(v);
+                            context.go(Routes.HOME);
                             Restart.restartApp();
                           },
                           label: LocaleKeys.restart.localize,
