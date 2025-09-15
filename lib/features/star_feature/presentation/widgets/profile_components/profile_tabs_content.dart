@@ -7,6 +7,7 @@ import '../../controller/playlist_cubit/playlist_cubit.dart';
 import 'profile_home_tab.dart';
 import 'profile_playlists_tab.dart';
 import 'profile_videos_tab.dart';
+import 'profile_watch_later_tab.dart';
 
 class ProfileTabsContent extends StatelessWidget {
   final TabController tabController;
@@ -45,6 +46,12 @@ class ProfileTabsContent extends StatelessWidget {
 
         // Playlists Tab - Create safe fallback for PlaylistCubit
         _buildPlaylistsTab(isCurrentUser, userId),
+
+        // Watch Later Tab - Only for current user
+        ProfileWatchLaterTab(
+          isCurrentUser: isCurrentUser,
+          userId: userId,
+        ),
       ],
     );
   }

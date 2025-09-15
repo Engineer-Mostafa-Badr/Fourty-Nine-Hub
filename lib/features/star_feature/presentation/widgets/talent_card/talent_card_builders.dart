@@ -5,9 +5,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
-import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
+import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../domain/entity/playlist_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/comment_cubit/comment_cubit.dart';
@@ -87,27 +87,25 @@ class TalentCardBuilders {
 
         final controller = scrollController ?? ScrollController();
 
-        // Use SliverList directly instead of nested CustomScrollView
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index >= talentsToShow.length) {
-                return _buildLoadMoreWidget(
-                    context, state, TalentCategory.available, cubit);
-              }
-
-              final talent = talentsToShow[index];
-              return Container(
-                margin: EdgeInsets.only(bottom: 8),
-                child: TalentCard(
-                  key: ValueKey('talent_${talent.id}'),
-                  talent: talent,
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).height * .6,
+            child: OlxPaginationWidget(
+              items: List.generate(
+                talentsToShow.length,
+                (index) => TalentCard(
+                  talent: talentsToShow[index],
                   cubit: cubit,
                 ),
-              );
-            },
-            childCount: talentsToShow.length +
-                (state.hasMore(TalentCategory.available) ? 1 : 0),
+              ),
+              banners: bannersList,
+              loadPage: (page) => isSearching
+                  ? Future.value()
+                  : cubit.loadTalents(TalentCategory.available),
+              scrollController: controller,
+              itemsPerPage: 1,
+            ),
           ),
         );
       },

@@ -3,6 +3,7 @@ enum StarStates { loading, initial, success, uploadSuccess, error, ratingSuccess
 enum TalentCategory {
   available, // All available talents
   favorites, // User's favorite talents
+  watchLater, // User's watch later videos
   history, // User's viewing history
   myTalents // User's uploaded talents
 }

@@ -58,7 +58,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   void _initializeControllers() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _profileCubit = context.read<ProfileCubit>();
     _starCubit = context.read<StarCubit>();
     _scrollController = ScrollController();
@@ -233,65 +233,73 @@ class _ProfilePageViewState extends State<ProfilePageView>
       );
     }
 
-    return Column(
-      children: [
-        ProfileAppBar(
-          profileUser: widget.user,
-          currentUserId: _getCurrentUserId(),
-          onEditPressed: () {
-            ManageVibration.vibrate();
-            if (isCurrentUserFromProfile) {
-              _showEditProfileSheet();
-            }
-          },
-          onBackPressed: () {
-            ManageVibration.vibrate();
-            Navigator.pop(context);
-          },
-        ),
-        Expanded(
-          child: SafeArea(
-            top: false,
-            child: NestedScrollView(
-              controller: _scrollController,
-              physics: const ClampingScrollPhysics(),
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: ProfileHeader(
-                      profile: profileState.profile,
-                      user: widget.user,
-                      isCurrentUser: isCurrentUserFromProfile,
-                      videosCount: _getVideosCount(profileState),
-                    ),
-                  ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    floating: false,
-                    delegate: _SliverTabBarDelegate(
-                      ProfileTabBar(tabController: _tabController),
-                    ),
-                  ),
-                ];
+    return NestedScrollView(
+      controller: _scrollController,
+      physics: const BouncingScrollPhysics(),
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          // Add the app bar as a sliver so it can scroll with the content
+          SliverAppBar(
+            expandedHeight: kToolbarHeight,
+            pinned: false,
+            floating: true,
+            snap: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                ManageVibration.vibrate();
+                Navigator.pop(context);
               },
-              body: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: BlocProvider.value(
-                  value: _starCubit,
-                  child: ProfileTabsContent(
-                    tabController: _tabController,
-                    extendedVideos: _userRealVideos,
-                    isCurrentUser: isCurrentUserFromProfile,
-                    userId: isCurrentUserFromProfile ? null : widget.user?.id,
-                    isLoadingUserVideos: _isLoadingUserVideos,
-                  ),
+            ),
+            actions: [
+              if (isCurrentUserFromProfile)
+                IconButton(
+                  icon: Icon(Icons.edit, color: Colors.black),
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    _showEditProfileSheet();
+                  },
                 ),
-              ),
+            ],
+            title: Text(
+              widget.user?.firstName ?? 'Profile',
+              style: TextStyle(color: Colors.black),
             ),
           ),
+          SliverToBoxAdapter(
+            child: ProfileHeader(
+              profile: profileState.profile,
+              user: widget.user,
+              isCurrentUser: isCurrentUserFromProfile,
+              videosCount: _getVideosCount(profileState),
+            ),
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            floating: true,
+            delegate: _SliverTabBarDelegate(
+              ProfileTabBar(tabController: _tabController),
+            ),
+          ),
+        ];
+      },
+      body: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: BlocProvider.value(
+          value: _starCubit,
+          child: ProfileTabsContent(
+            tabController: _tabController,
+            extendedVideos: _userRealVideos,
+            isCurrentUser: isCurrentUserFromProfile,
+            userId: isCurrentUserFromProfile ? null : widget.user?.id,
+            isLoadingUserVideos: _isLoadingUserVideos,
+          ),
         ),
-      ],
+      ),
     );
   }
 

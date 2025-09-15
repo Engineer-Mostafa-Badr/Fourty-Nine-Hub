@@ -1861,6 +1861,15 @@ class EndPoints {
   static String updatePlaylist(String playlistId) =>
       '/tube-playlist/$playlistId';
 
+  // Watch Later Endpoints
+  static String addVideoToWatchLater(String videoId) =>
+      '/tube-watch-later/video/$videoId';
+
+  static const String getWatchLaterVideos = '/tube-watch-later';
+
+  static String removeVideoFromWatchLater(String videoId) =>
+      '/tube-watch-later/video/$videoId';
+
   //! Exchange Currency Endpoints
   static String convertCurrency({
     required String from,

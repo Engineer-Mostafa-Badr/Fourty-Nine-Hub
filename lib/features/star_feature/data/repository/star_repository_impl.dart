@@ -44,6 +44,22 @@ class StarRepositoryImpl extends StarRepository {
     return _remoteDataSource.getFavoriteVideos();
   }
 
+  // Watch Later implementations
+  @override
+  Future<Either<Failure, String>> addVideoToWatchLater(String videoId) {
+    return _remoteDataSource.addVideoToWatchLater(videoId);
+  }
+
+  @override
+  Future<Either<Failure, String>> removeVideoFromWatchLater(String videoId) {
+    return _remoteDataSource.removeVideoFromWatchLater(videoId);
+  }
+
+  @override
+  Future<Either<Failure, List<TubeVideoModel>>> getWatchLaterVideos() {
+    return _remoteDataSource.getWatchLaterVideos();
+  }
+
   @override
   Future<Either<Failure, List<StarEntity>>> fetchMyStar() {
     return _remoteDataSource.fetchMyStar();

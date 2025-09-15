@@ -47,6 +47,9 @@ class TalentCard extends StatefulWidget {
 class _TalentCardState extends State<TalentCard> {
   bool _hasIncrementedView = false;
 
+  // Use widget.cubit consistently throughout the widget
+  StarCubit get cubit => widget.cubit;
+
   @override
   Widget build(BuildContext context) {
     final mediaUrl = _getVideoUrl();
@@ -207,12 +210,12 @@ class _TalentCardState extends State<TalentCard> {
   }
 
   // Navigation methods
-  static void _navigateToVideoPlayer(
+  void _navigateToVideoPlayer(
     BuildContext context,
     String mediaUrl,
     StarEntity talent,
   ) {
-    final starCubit = context.read<StarCubit>();
+    final starCubit = widget.cubit;
 
     Navigator.push(
       context,
@@ -300,7 +303,7 @@ class _TalentCardState extends State<TalentCard> {
       title: LocaleKeys.alert.localize,
       subTitle: LocaleKeys.remove.localize,
       action: () {
-        context.read<StarCubit>().deleteMyTubeVideo(talent.id);
+        cubit.deleteMyTubeVideo(talent.id);
         Navigator.pop(context);
       },
     );
@@ -360,7 +363,7 @@ class _TalentCardState extends State<TalentCard> {
   // }
 
   void _showTubeVideoOptions(BuildContext context, StarEntity talent) {
-    final cubit = context.read<StarCubit>();
+    // Use the widget's cubit parameter
 
     OptionsBottomSheet.showOptions(
       context: context,
@@ -408,15 +411,23 @@ class _TalentCardState extends State<TalentCard> {
               _downloadVideo(context, talent);
             },
           ),
-          OptionItem(
-            icon: Icons.watch_later_outlined,
-            title: context.isArabic ? 'مشاهدة لاحقاً' : 'Watch later',
-            onTap: () {
-              ManageVibration.vibrate();
-              Navigator.pop(context);
-              _addToWatchLater(context, talent);
-            },
-          ),
+          (() {
+            final isWatchLater = cubit.isWatchLater(talent.id);
+            return OptionItem(
+              icon:
+                  isWatchLater ? Icons.watch_later : Icons.watch_later_outlined,
+              title: context.isArabic
+                  ? (isWatchLater
+                      ? 'إزالة من المشاهدة لاحقاً'
+                      : 'مشاهدة لاحقاً')
+                  : (isWatchLater ? 'Remove from Watch Later' : 'Watch Later'),
+              onTap: () {
+                ManageVibration.vibrate();
+                Navigator.pop(context);
+                _addToWatchLater(context, talent);
+              },
+            );
+          })(),
         ],
         OptionItem(
           icon: Icons.flag,
@@ -472,17 +483,11 @@ class _TalentCardState extends State<TalentCard> {
   }
 
   void _addToWatchLater(BuildContext context, StarEntity talent) {
-    // Implement watch later functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic
-              ? 'تم إضافة الفيديو للمشاهدة لاحقاً'
-              : 'Added to Watch Later',
-        ),
-        backgroundColor: Colors.orange,
-      ),
-    );
+    print("🎬 Adding video to watch later: ${talent.id}");
+    print("🎬 Cubit instance: ${cubit.runtimeType}");
+
+    // Call the cubit to toggle watch later
+    cubit.toggleWatchLater(talent.id);
   }
 
   void _reportVideo(BuildContext context, StarEntity talent) {
@@ -530,7 +535,6 @@ class _TalentCardState extends State<TalentCard> {
       ),
     );
   }
-
 
   static bool _isVideoUrl(String url) {
     return url.toLowerCase().contains('.mp4') ||
@@ -648,7 +652,6 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
       widget.cubit.toggleFavorite(widget.talent!.id);
     }
   }
-
 
   void _handleVisibilityChanged(VisibilityInfo info) {
     _visibilityFraction = info.visibleFraction;

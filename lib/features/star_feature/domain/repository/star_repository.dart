@@ -25,13 +25,19 @@ abstract class StarRepository {
   Future<Either<Failure, String>> removeVideoFromFavorite(String videoId);
   Future<Either<Failure, List<TubeVideoModel>>> getFavoriteVideos();
 
+  // Watch Later methods
+  Future<Either<Failure, String>> addVideoToWatchLater(String videoId);
+  Future<Either<Failure, String>> removeVideoFromWatchLater(String videoId);
+  Future<Either<Failure, List<TubeVideoModel>>> getWatchLaterVideos();
+
   // New Tube Video methods
 
   Future<Either<Failure, TubeVideoListResponse>> fetchAllTubeVideos(
       StarPaginationParams params);
   Future<Either<Failure, TubeVideoListResponse>> fetchMyTubeVideos(
       StarPaginationParams params);
-  Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(String videoId); // Todo: Get video by ID
+  Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(
+      String videoId); // Todo: Get video by ID
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
@@ -40,7 +46,8 @@ abstract class StarRepository {
 
   // New Comment methods
   Future<Either<Failure, String>> createComment(CreateCommentParams params);
-  Future<Either<Failure, CommentsListResponse>> getVideoComments(GetCommentsParams params);
+  Future<Either<Failure, CommentsListResponse>> getVideoComments(
+      GetCommentsParams params);
   Future<Either<Failure, String>> updateComment(UpdateCommentParams params);
   Future<Either<Failure, String>> deleteComment(String commentId);
   Future<Either<Failure, String>> likeComment(String commentId);

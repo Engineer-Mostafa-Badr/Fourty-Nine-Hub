@@ -43,6 +43,10 @@ class ProfileTabBar extends StatelessWidget {
             height: 48.0,
             text: context.isArabic ? 'قوائم التشغيل' : 'Playlists',
           ),
+          Tab(
+            height: 48.0,
+            text: context.isArabic ? 'الشاهد لاحقاً' : 'Watch Later',
+          ),
         ],
       ),
     );

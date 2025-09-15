@@ -1,5 +1,6 @@
 import '../features/star_feature/data/data_source/star_remote_data_source.dart';
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
+import '../features/star_feature/data/data_source/playlist_remote_data_source.dart';
 import '../features/star_feature/data/repository/star_repository_impl.dart';
 import '../features/star_feature/data/repository/profile_repository.dart';
 import '../features/star_feature/data/repository/playlist_repository_impl.dart';
@@ -12,6 +13,7 @@ import '../features/star_feature/domain/use_case/fetch_banner_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
 import '../features/star_feature/domain/use_case/search_profiles_use_case.dart';
+import '../features/star_feature/domain/use_case/tube_watch_later_use_cases.dart';
 import '../features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import '../features/star_feature/domain/use_case/get_active_categories_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
@@ -51,6 +53,10 @@ class StarServiceLocator {
             ));
     serviceLocator.registerLazySingleton<ProfileRemoteDataSource>(
         () => ProfileRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<PlaylistRemoteDataSource>(
+        () => PlaylistRemoteDataSourceImpl(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<TenPercentRemoteDataSource>(
@@ -161,6 +167,19 @@ class StarServiceLocator {
       () => GetFavoriteVideosUseCase(serviceLocator()),
     );
 
+    // Register Watch Later Use Cases
+    serviceLocator.registerLazySingleton<AddVideoToWatchLaterUseCase>(
+      () => AddVideoToWatchLaterUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<RemoveVideoFromWatchLaterUseCase>(
+      () => RemoveVideoFromWatchLaterUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<GetWatchLaterVideosUseCase>(
+      () => GetWatchLaterVideosUseCase(serviceLocator()),
+    );
+
     serviceLocator.registerLazySingleton<FetchAllTubeVideosUseCase>(
       () => FetchAllTubeVideosUseCase(serviceLocator()),
     );
@@ -249,32 +268,32 @@ class StarServiceLocator {
 
     // Register Cubits
     serviceLocator.registerFactory<CommentCubit>(() => CommentCubit(
-      serviceLocator<CreateCommentUseCase>(),
-      serviceLocator<GetCommentsUseCase>(),
-      serviceLocator<UpdateCommentUseCase>(),
-      serviceLocator<DeleteCommentUseCase>(),
-      serviceLocator<LikeCommentUseCase>(),
-      serviceLocator<DislikeCommentUseCase>(),
-    ));
+          serviceLocator<CreateCommentUseCase>(),
+          serviceLocator<GetCommentsUseCase>(),
+          serviceLocator<UpdateCommentUseCase>(),
+          serviceLocator<DeleteCommentUseCase>(),
+          serviceLocator<LikeCommentUseCase>(),
+          serviceLocator<DislikeCommentUseCase>(),
+        ));
 
     serviceLocator.registerFactory<ProfileCubit>(() => ProfileCubit(
-      serviceLocator<GetMyProfileUseCase>(),
-      serviceLocator<GetProfileByIdUseCase>(),
-      serviceLocator<UpdateProfileUseCase>(),
-      serviceLocator<SubscribeToChannelUseCase>(),
-      serviceLocator<UnsubscribeFromChannelUseCase>(),
-    ));
+          serviceLocator<GetMyProfileUseCase>(),
+          serviceLocator<GetProfileByIdUseCase>(),
+          serviceLocator<UpdateProfileUseCase>(),
+          serviceLocator<SubscribeToChannelUseCase>(),
+          serviceLocator<UnsubscribeFromChannelUseCase>(),
+        ));
 
     serviceLocator.registerFactory<PlaylistCubit>(() => PlaylistCubit(
-      serviceLocator<GetPlaylistsUseCase>(),
-      serviceLocator<CreatePlaylistUseCase>(),
-      serviceLocator<GetPlaylistByIdUseCase>(),
-      serviceLocator<GetPlaylistWithVideosUseCase>(),
-      serviceLocator<AddVideoToPlaylistUseCase>(),
-      serviceLocator<RemoveVideoFromPlaylistUseCase>(),
-      serviceLocator<DeletePlaylistUseCase>(),
-      serviceLocator<UpdatePlaylistUseCase>(),
-    ));
+          serviceLocator<GetPlaylistsUseCase>(),
+          serviceLocator<CreatePlaylistUseCase>(),
+          serviceLocator<GetPlaylistByIdUseCase>(),
+          serviceLocator<GetPlaylistWithVideosUseCase>(),
+          serviceLocator<AddVideoToPlaylistUseCase>(),
+          serviceLocator<RemoveVideoFromPlaylistUseCase>(),
+          serviceLocator<DeletePlaylistUseCase>(),
+          serviceLocator<UpdatePlaylistUseCase>(),
+        ));
 
     serviceLocator.registerFactory<StarCubit>(() => StarCubit(
           serviceLocator<FetchAllStarUseCase>(),
@@ -288,6 +307,11 @@ class StarServiceLocator {
           serviceLocator<AddVideoToFavoriteUseCase>(),
           serviceLocator<RemoveVideoFromFavoriteUseCase>(),
           serviceLocator<GetFavoriteVideosUseCase>(),
+          // Watch Later dependencies
+          serviceLocator<AddVideoToWatchLaterUseCase>(),
+          serviceLocator<RemoveVideoFromWatchLaterUseCase>(),
+          serviceLocator<GetWatchLaterVideosUseCase>(),
+          // New Tube Video dependencies
           serviceLocator<FetchAllTubeVideosUseCase>(),
           serviceLocator<FetchMyTubeVideosUseCase>(),
           serviceLocator<FetchTubeVideoDetailsByIdUseCase>(),

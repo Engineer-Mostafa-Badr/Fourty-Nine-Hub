@@ -19,6 +19,7 @@ import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/search_tube_videos_use_case.dart';
 import '../../../domain/use_case/tube_favorite_use_cases.dart';
+import '../../../domain/use_case/tube_watch_later_use_cases.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
 // New imports for Tube Video functionality
 import '../../../domain/use_case/fetch_all_tube_videos_use_case.dart';
@@ -46,6 +47,11 @@ class StarCubit extends Cubit<StarState> {
   final RemoveVideoFromFavoriteUseCase _removeVideoFromFavoriteUseCase;
   final GetFavoriteVideosUseCase _getFavoriteVideosUseCase;
 
+  // Watch Later use cases
+  final AddVideoToWatchLaterUseCase _addVideoToWatchLaterUseCase;
+  final RemoveVideoFromWatchLaterUseCase _removeVideoFromWatchLaterUseCase;
+  final GetWatchLaterVideosUseCase _getWatchLaterVideosUseCase;
+
   // New Tube Video use cases
   final FetchAllTubeVideosUseCase _fetchAllTubeVideosUseCase;
   final FetchMyTubeVideosUseCase _fetchMyTubeVideosUseCase;
@@ -67,6 +73,10 @@ class StarCubit extends Cubit<StarState> {
     this._addVideoToFavoriteUseCase,
     this._removeVideoFromFavoriteUseCase,
     this._getFavoriteVideosUseCase,
+    // Watch Later use cases
+    this._addVideoToWatchLaterUseCase,
+    this._removeVideoFromWatchLaterUseCase,
+    this._getWatchLaterVideosUseCase,
     // New Tube Video use cases
     this._fetchAllTubeVideosUseCase,
     this._fetchMyTubeVideosUseCase,
@@ -86,7 +96,8 @@ class StarCubit extends Cubit<StarState> {
 
     await Future.wait([
       loadTalents(TalentCategory.available, refresh: true),
-      loadTalents(TalentCategory.myTalents, refresh: true), // اضف refresh هنا
+      loadTalents(TalentCategory.myTalents, refresh: true),
+      loadWatchLaterVideos(refresh: true),
       _fetchBanner(),
     ]);
 
@@ -241,6 +252,98 @@ class StarCubit extends Cubit<StarState> {
     );
   }
 
+  // Watch Later functionality
+  Future<void> toggleTubeWatchLater(String videoId) async {
+    print("🎬 toggleTubeWatchLater called with videoId: $videoId");
+    final isWatchLater = state.watchLaterIds.contains(videoId);
+    print("🎬 Current watch later state: $isWatchLater");
+
+    // Optimistic update
+    final updatedWatchLater = Set<String>.from(state.watchLaterIds);
+    if (isWatchLater) {
+      updatedWatchLater.remove(videoId);
+    } else {
+      updatedWatchLater.add(videoId);
+    }
+
+    emit(state.copyWith(watchLaterIds: updatedWatchLater));
+    print("🎬 Updated watch later IDs: $updatedWatchLater");
+
+    // API call
+    print("🎬 Making API call: ${isWatchLater ? 'remove' : 'add'}");
+    final response = isWatchLater
+        ? await _removeVideoFromWatchLaterUseCase(videoId)
+        : await _addVideoToWatchLaterUseCase(videoId);
+
+    response.fold(
+      (failure) {
+        print("🎬 API call failed: $failure");
+        // Revert optimistic update on failure
+        emit(state.copyWith(watchLaterIds: state.watchLaterIds));
+        _showErrorMessage(failure);
+      },
+      (message) {
+        print("🎬 API call succeeded: $message");
+        // Success - refresh watch later list
+        loadWatchLaterVideos();
+
+        // Show success message
+        final currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext;
+        if (currentContext != null) {
+          ScaffoldMessenger.of(currentContext).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  // Load watch later videos from API
+  Future<void> loadWatchLaterVideos({bool refresh = false}) async {
+    if (refresh) {
+      _resetPagination(TalentCategory.watchLater);
+    }
+
+    if (state.isLoading(TalentCategory.watchLater)) return;
+
+    final loadingStates = Map<TalentCategory, bool>.from(state.loadingStates);
+    loadingStates[TalentCategory.watchLater] = true;
+    emit(state.copyWith(loadingStates: loadingStates));
+
+    final response = await _getWatchLaterVideosUseCase(const NoParams());
+
+    response.fold(
+      (failure) {
+        _handleError(TalentCategory.watchLater, failure);
+      },
+      (watchLaterVideos) {
+        // Update watch later IDs based on API response
+        final watchLaterIds = watchLaterVideos.map((video) => video.id).toSet();
+
+        // Update talents data
+        final talents =
+            Map<TalentCategory, List<StarEntity>>.from(state.talents);
+        talents[TalentCategory.watchLater] = watchLaterVideos.cast<StarEntity>();
+
+        final loadingStates =
+            Map<TalentCategory, bool>.from(state.loadingStates);
+        loadingStates[TalentCategory.watchLater] = false;
+
+        emit(state.copyWith(
+          talents: talents,
+          watchLaterIds: watchLaterIds,
+          loadingStates: loadingStates,
+          status: StarStates.success,
+        ));
+      },
+    );
+  }
+
   Future<void> loadTalents(
     TalentCategory category, {
     bool refresh = false,
@@ -259,6 +362,12 @@ class StarCubit extends Cubit<StarState> {
     if (category == TalentCategory.favorites) {
       // Use the new API for favorites
       await loadFavoriteVideos(refresh: refresh);
+      return;
+    }
+
+    if (category == TalentCategory.watchLater) {
+      // Use the new API for watch later
+      await loadWatchLaterVideos(refresh: refresh);
       return;
     }
 
@@ -285,6 +394,10 @@ class StarCubit extends Cubit<StarState> {
         case TalentCategory.favorites:
           print("❤️ Updating favorites list...");
           newTalents = _updateFavoritesList();
+          break;
+        case TalentCategory.watchLater:
+          print("🕒 Updating watch later list...");
+          newTalents = _updateWatchLaterList();
           break;
         case TalentCategory.myTalents:
           print("👤 Fetching my talents...");
@@ -442,6 +555,12 @@ class StarCubit extends Cubit<StarState> {
   List<StarEntity> _updateFavoritesList() {
     return state.availableTalents
         .where((talent) => state.favoriteIds.contains(talent.id))
+        .toList();
+  }
+
+  List<StarEntity> _updateWatchLaterList() {
+    return state.availableTalents
+        .where((talent) => state.watchLaterIds.contains(talent.id))
         .toList();
   }
 
@@ -892,6 +1011,15 @@ class StarCubit extends Cubit<StarState> {
     return state.favoriteIds.contains(talentId);
   }
 
+  // Watch Later management
+  Future<void> toggleWatchLater(String talentId) async {
+    await toggleTubeWatchLater(talentId);
+  }
+
+  bool isWatchLater(String talentId) {
+    return state.watchLaterIds.contains(talentId);
+  }
+
   // Search functionality
   void searchTalents(String query) {
     if (query.isEmpty) {
@@ -1161,4 +1289,6 @@ class StarCubit extends Cubit<StarState> {
   List<StarEntity> get allTalents => state.availableTalents;
   List<StarEntity> get favoriteTalents => state.favoriteTalents;
   Set<String> get favoriteIds => state.favoriteIds;
+  List<StarEntity> get watchLaterTalents => state.watchLaterTalents;
+  Set<String> get watchLaterIds => state.watchLaterIds;
 }

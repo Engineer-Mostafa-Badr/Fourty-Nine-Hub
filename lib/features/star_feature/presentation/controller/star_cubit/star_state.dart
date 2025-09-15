@@ -15,6 +15,7 @@ class StarState {
   final List<UploadFileEntity>? videos;
   final BannerTalentEntity? banner;
   final Set<String> favoriteIds;
+  final Set<String> watchLaterIds;
   final Set<String> ratedVideos; // Track videos that have been rated by user
 
   // Search and filter state
@@ -37,6 +38,7 @@ class StarState {
     this.videos,
     this.banner,
     Set<String>? favoriteIds,
+    Set<String>? watchLaterIds,
     Set<String>? ratedVideos,
     this.searchQuery = '',
     List<StarEntity>? searchResults,
@@ -49,6 +51,7 @@ class StarState {
             {
               TalentCategory.available: [],
               TalentCategory.favorites: [],
+              TalentCategory.watchLater: [],
               TalentCategory.history: [],
               TalentCategory.myTalents: [],
             },
@@ -56,6 +59,7 @@ class StarState {
             {
               TalentCategory.available: false,
               TalentCategory.favorites: false,
+              TalentCategory.watchLater: false,
               TalentCategory.history: false,
               TalentCategory.myTalents: false,
             },
@@ -63,6 +67,7 @@ class StarState {
             {
               TalentCategory.available: true,
               TalentCategory.favorites: true,
+              TalentCategory.watchLater: true,
               TalentCategory.history: true,
               TalentCategory.myTalents: true,
             },
@@ -70,11 +75,13 @@ class StarState {
             {
               TalentCategory.available: 1,
               TalentCategory.favorites: 1,
+              TalentCategory.watchLater: 1,
               TalentCategory.history: 1,
               TalentCategory.myTalents: 1,
             },
         winners = winners ?? [],
         favoriteIds = favoriteIds ?? {},
+        watchLaterIds = watchLaterIds ?? {},
         searchResults = searchResults ?? [];
 
   // Helper getters for easy access
@@ -82,6 +89,8 @@ class StarState {
       talents[TalentCategory.available] ?? [];
   List<StarEntity> get favoriteTalents =>
       talents[TalentCategory.favorites] ?? [];
+  List<StarEntity> get watchLaterTalents =>
+      talents[TalentCategory.watchLater] ?? [];
   List<StarEntity> get historyTalents => talents[TalentCategory.history] ?? [];
   List<StarEntity> get myTalents => talents[TalentCategory.myTalents] ?? [];
 
@@ -100,6 +109,7 @@ class StarState {
     List<UploadFileEntity>? videos,
     BannerTalentEntity? banner,
     Set<String>? favoriteIds,
+    Set<String>? watchLaterIds,
     Set<String>? ratedVideos,
     String? searchQuery,
     List<StarEntity>? searchResults,
@@ -118,6 +128,7 @@ class StarState {
       videos: videos ?? this.videos,
       banner: banner ?? this.banner,
       favoriteIds: favoriteIds ?? this.favoriteIds,
+      watchLaterIds: watchLaterIds ?? this.watchLaterIds,
       ratedVideos: ratedVideos ?? this.ratedVideos,
       searchQuery: searchQuery ?? this.searchQuery,
       searchResults: searchResults ?? this.searchResults,
