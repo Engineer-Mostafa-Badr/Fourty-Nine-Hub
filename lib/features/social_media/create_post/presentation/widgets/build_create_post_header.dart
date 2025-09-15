@@ -22,12 +22,14 @@ class BuildCreatePostHeader extends StatelessWidget {
   const BuildCreatePostHeader(
       {super.key,
       required this.sheetController,
+      required this.isTwitter,
       required this.controller,
       required this.state});
 
   final SheetController sheetController;
   final CreatePostCubit controller;
   final CreatePostState state;
+  final bool isTwitter;
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +250,7 @@ class BuildCreatePostHeader extends StatelessWidget {
                 const SizedBox(
                   height: 11,
                 ),
+                !isTwitter?
                 Wrap(
                   spacing: 5, // المسافة الأفقية بين العناصر
                   runSpacing: 8, // المسافة الرأسية بين الصفوف
@@ -358,7 +361,7 @@ class BuildCreatePostHeader extends StatelessWidget {
                               : LocaleKeys.off.localize,width: 14,height: 14,),
                     ),
                   ],
-                ),
+                ):Container(),
                 const SizedBox(
                   height: 8,
                 ),

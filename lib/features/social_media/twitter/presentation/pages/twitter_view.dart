@@ -66,7 +66,7 @@ class _Twitter11State extends State<Twitter11> {
           end: 10,
           child: CustomElevatedButton(
             onPressed: () {
-              ManageVibration.vibrate();
+      ManageVibration.vibrate();
               if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATEPOST, extra: 'twitter');
               } else {
@@ -78,8 +78,7 @@ class _Twitter11State extends State<Twitter11> {
             backgoundColor: AppColors.getButtonPrimaryColor(context),
             child: Text(
               LocaleKeys.createPost.localize,
-              style: Styles.smallText(
-                  color: AppColors.getReversedTextColor(context)),
+              style: Styles.smallText(color: AppColors.getReversedTextColor(context)),
             ),
           ),
         ),
@@ -99,7 +98,7 @@ class _Twitter11State extends State<Twitter11> {
 
   Widget _buildTwitterWidget() {
     return BlocProvider<TwitterCubit>(
-      create: (_) => serviceLocator()..loadData(),
+      create: (_) => serviceLocator()..loadGlobalData(),
       child:
           BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
         if (state.status == StateStatus.error) {

@@ -86,6 +86,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/pages/home_page.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/all_appointments_cubit/all_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments_screen.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
@@ -460,6 +461,7 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
@@ -525,7 +527,9 @@ class AppPages {
                       //   create: (context) => serviceLocator<ThumbnailsCubit>(),
                       // ),
                     ],
-                    child: const FourtyNineView(),
+                    child: HomePage(
+                      state: state.extra as dynamic,
+                    ),
                     // child: const BeStarView(),
                     // child: const GetAllTalents(),
                   ),
@@ -584,29 +588,29 @@ class AppPages {
                         const CustomPage(),
                       ),
                   routes: [
-                    GoRoute(
-                      path: Paths.PAGEPREVIEW,
-                      name: Routes.PAGEPREVIEW,
-                      pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<SliderCubit>()..loadData(),
-                            ),
-                            // BlocProvider(
-                            //   create: (context) =>
-                            //       serviceLocator<ThumbnailsCubit>(),
-                            // ),
-                          ],
-                          child: PagePreview(
-                            state: state.extra as dynamic,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // GoRoute(
+                    //   path: Paths.PAGEPREVIEW,
+                    //   name: Routes.PAGEPREVIEW,
+                    //   pageBuilder: (context, state) => customTransition(
+                    //     context,
+                    //     state,
+                    //     MultiBlocProvider(
+                    //       providers: [
+                    //         BlocProvider(
+                    //           create: (context) =>
+                    //               serviceLocator<SliderCubit>()..loadData(),
+                    //         ),
+                    //         // BlocProvider(
+                    //         //   create: (context) =>
+                    //         //       serviceLocator<ThumbnailsCubit>(),
+                    //         // ),
+                    //       ],
+                    //       child: PagePreview(
+                    //         state: state.extra as dynamic,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ]),
               GoRoute(
                 path: Routes.onBoardingScreen,
@@ -2102,7 +2106,15 @@ class AppPages {
                       path: Paths.CREATEPOST,
                       name: Routes.CREATEPOST,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const CreatePostView()),
+                          context, state, const CreatePostView(
+
+                      )),
+                    ),
+                    GoRoute(
+                      path: Paths.CREATEPOSTTWITTER,
+                      name: Routes.CREATEPOSTTWITTER,
+                      pageBuilder: (context, state) => customTransition(
+                          context, state, const CreatePostTwitter()),
                     ),
                     GoRoute(
                       path: Paths.LIFEEVENT,

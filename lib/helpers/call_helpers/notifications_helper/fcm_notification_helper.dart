@@ -301,9 +301,12 @@ Future<void> _handleNotification(RemoteMessage message,
       player.play(AssetSource("audio/notification.mp3"));
       toastification.show(
         closeButton: ToastCloseButton(
-            buttonBuilder: (context,v) => const Icon(
-              Icons.close,
-              color: AppColors.whiteColor,
+            buttonBuilder: (context,v) => GestureDetector(
+              onTap: () => toastification.dismissAll(),
+              child: const Icon(
+                Icons.close,
+                color: AppColors.whiteColor,
+              ),
             )
         ),
         title: Column(
