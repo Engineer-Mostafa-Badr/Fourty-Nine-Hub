@@ -1885,6 +1885,6 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String auctionBanner = '/auctions/banner';
 
-
+  static String getDriverRatings(String driverId) => '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

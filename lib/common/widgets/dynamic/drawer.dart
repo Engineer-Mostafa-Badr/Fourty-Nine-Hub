@@ -16,6 +16,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
@@ -226,8 +227,31 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   context.pop();
                                   context.push(Routes.CONTACTUS);
                                 }),
+                            // drawerListTile(
+                            //     // icon: Icons.logout,
+                            //     image: Assets.sign_out_icon,
+                            //     requireLogin: true,
+                            //     label: LocaleKeys.logout.localize,
+                            //     onTap: () async {
+                            //       ManageVibration.vibrate();
+                            //       String? refreshToken = await Storage.getRefreshToken();
+                            //       print("refreshToken $refreshToken");
+                            //       // context.push(Routes.LOGIN);
+                            //       showAnimatedDialog(
+                            //         context,
+                            //         AlertDialog(
+                            //           backgroundColor: Theme.of(context)
+                            //               .drawerTheme
+                            //               .backgroundColor,
+                            //           shape: RoundedRectangleBorder(
+                            //             borderRadius: BorderRadius.circular(20),
+                            //           ),
+                            //           content: const LogoutWidget(),
+                            //         ),
+                            //       );
+                            //     }),
                             drawerListTile(
-                                // icon: Icons.logout,
+                              // icon: Icons.logout,
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
@@ -235,20 +259,176 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ManageVibration.vibrate();
                                   String? refreshToken = await Storage.getRefreshToken();
                                   print("refreshToken $refreshToken");
-                                  // context.push(Routes.LOGIN);
-                                  showAnimatedDialog(
-                                    context,
-                                    AlertDialog(
-                                      backgroundColor: Theme.of(context)
-                                          .drawerTheme
-                                          .backgroundColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      content: const LogoutWidget(),
+
+                                  context.pop();
+
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                                     ),
+                                    builder: (context) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Center(
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 5,
+                                                  margin: const EdgeInsets.only(bottom: 12),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[400],
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                ),
+                                              ),
+                                               Text(
+                                               context.isArabic?  "هذا الجهاز" : "This device",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                          
+                                              FutureBuilder(
+                                                future: getDeviceName(),
+                                                builder: (context, snapshot) => ListTile(
+                                                  leading: const Icon(Icons.android, color: Colors.green),
+                                          
+                                                  title:  Text(snapshot.data.toString(), style: TextStyle(fontSize: 16)),
+                                                  subtitle:  Text("Cairo, Egypt | 10:55 ${context.isArabic ? "ص" : "AM"}"),
+                                                  // subtitle: ,
+                                                  trailing:  Text(context.isArabic ? "متصل" : "Connected", style: TextStyle(color: Colors.green)),
+                                                ),
+                                              ),
+                                          
+                                              const Divider(),
+                                          
+                                              ListTile(
+                                                leading: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
+                                                title:  Text( context.isArabic ? "انهاء جميع الجلسات" : "End all sessions", style: TextStyle(color: AppColors.PRIMARY_COLOR_DARK, fontSize: 18)),
+                                                onTap: () {
+                                                  ManageVibration.vibrate();
+                                                  showAnimatedDialog(
+                                                    context,
+                                                    AlertDialog(
+                                                      backgroundColor: Theme.of(context)
+                                                          .drawerTheme
+                                                          .backgroundColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      content: const LogoutFromAllDevicesWidget(),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                          
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                child: Text( context.isArabic ? "تسجيل الخروج من جميع الأجهزة" : "Logout from all devices", style: TextStyle(color: AppColors.grey, fontSize: 16)),
+                                              ),
+                                          
+                                              // const Divider(),
+                                          
+                                              const SizedBox(height: 24),
+                                          
+                                               Text(
+                                                context.isArabic?   "الجلسات النشطة" : "Active sessions",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              ListTile(
+                                                leading: const Icon(Icons.apple, color: Colors.green),
+                                                title: const Text("IPhone 15 Pro Max", style: TextStyle(fontSize: 16)),
+                                                subtitle: Text("Cairo, Egypt | 10:55 ${context.isArabic ? "ص" : "AM"}"),
+                                                isThreeLine: true,
+                                                trailing: IconButton(
+                                                  icon: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
+                                                  onPressed: () {
+                                                    ManageVibration.vibrate();
+                                                    showAnimatedDialog(
+                                                      context,
+                                                      AlertDialog(
+                                                        backgroundColor: Theme.of(context)
+                                                            .drawerTheme
+                                                            .backgroundColor,
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        content: const LogoutFromSpecificDeviceWidget(deviceName: "IPhone 15 Pro Max",),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: const Icon(Icons.android, color: Colors.green),
+                                                title: const Text("Samsung Galaxy S20", style: TextStyle(fontSize: 16)),
+                                                subtitle:  Text("Cairo, Egypt | 10:55 ${context.isArabic ? "ص" : "AM"}"),
+                                                isThreeLine: true,
+                                                trailing: IconButton(
+                                                  icon: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
+                                                  onPressed: () {
+                                                    ManageVibration.vibrate();
+                                                    showAnimatedDialog(
+                                                      context,
+                                                      AlertDialog(
+                                                        backgroundColor: Theme.of(context)
+                                                            .drawerTheme
+                                                            .backgroundColor,
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        content: const LogoutFromSpecificDeviceWidget(deviceName: "Samsung Galaxy S20",),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+
+                                          
+                                              AppButton(
+                                                height: 70.h,
+                                                label: context.isArabic ? "تسجيل الخروج من هذا الجهاز" : "Logout from this device",
+                                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                                onPressed: () async {
+                                                  ManageVibration.vibrate();
+                                                  String? refreshToken = await Storage.getRefreshToken();
+                                                  print("refreshToken $refreshToken");
+                                                  // context.push(Routes.LOGIN);
+                                                  showAnimatedDialog(
+                                                    context,
+                                                    AlertDialog(
+                                                      backgroundColor: Theme.of(context)
+                                                          .drawerTheme
+                                                          .backgroundColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      content: const LogoutWidget(),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   );
-                                }),
+                                }
+                            ),
                             drawerListTile(
                                 // icon: Icons.logout,
                                 image: Assets.deleteAccount,
