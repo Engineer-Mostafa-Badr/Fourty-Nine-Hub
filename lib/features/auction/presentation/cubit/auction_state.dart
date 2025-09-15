@@ -4,14 +4,20 @@ class AuctionState {
   final List<GetAvailableAuctionEntity>? getAvailableAuction;
   final List<GetAvailableAuctionEntity>? getExpiredAuction;
   final List<GetAvailableAuctionEntity>? getFavoriteAuction;
+  final List<GetAvailableAuctionEntity>? getMyAuction;
   final List<AuctionParticipantsEntity>? auctionParticipants;
   final List<AuctionMainCategoryEntity>? auctionMainData;
   final Failure? failure;
   final GetAvailableAuctionEntity? singleAuction;
   final List<UploadFileEntity> uploadedFiles; // store multiple uploaded files
   final bool isUploading;
+  final bool isLoading;
   final AddFavoriteAuctionEntity? addFavoriteAuctionEntity;
-
+  final CreateAuctionEntity ? createAuction;
+  final BidErrorEntity? bidError;
+  final BidWinnerEntity? bidWinner; // 👑 new field
+  final List<MyBiddersEntity>? myBiddersData;
+  final AuctionBannerEntity? auctionBanner;
   AuctionState({
     this.status,
     this.getAvailableAuction,
@@ -22,8 +28,15 @@ class AuctionState {
     this.getExpiredAuction,
     this.getFavoriteAuction,
     this.addFavoriteAuctionEntity,
+    this.getMyAuction,
+    this.bidError,
+    this.bidWinner,
+    this.createAuction,
+    this.myBiddersData,
+    this.auctionBanner,
     this.uploadedFiles = const [],
     this.isUploading = false,
+    this.isLoading = false,
   });
 
   AuctionState copyWith({
@@ -35,9 +48,16 @@ class AuctionState {
     List<AuctionMainCategoryEntity>? auctionMainData,
     List<UploadFileEntity>? uploadedFiles,
     bool? isUploading,
+    bool? isLoading,
     List<GetAvailableAuctionEntity>? getExpiredAuction,
     List<GetAvailableAuctionEntity>? getFavoriteAuction,
     AddFavoriteAuctionEntity? addFavoriteAuctionEntity,
+    List<GetAvailableAuctionEntity>? getMyAuction,
+    BidErrorEntity? bidError,
+    BidWinnerEntity? bidWinner,
+    CreateAuctionEntity ? createAuction,
+    List<MyBiddersEntity>? myBiddersData,
+    AuctionBannerEntity? auctionBanner,
   }) {
     return AuctionState(
       status: status ?? this.status,
@@ -51,6 +71,13 @@ class AuctionState {
       getExpiredAuction: getExpiredAuction ?? this.getExpiredAuction,
       getFavoriteAuction: getFavoriteAuction ?? this.getFavoriteAuction,
       addFavoriteAuctionEntity: addFavoriteAuctionEntity ?? this.addFavoriteAuctionEntity,
+      getMyAuction: getMyAuction ?? this.getMyAuction,
+      bidError: bidError ?? this.bidError,
+      bidWinner: bidWinner ?? this.bidWinner,
+      createAuction: createAuction ?? this.createAuction,
+      myBiddersData: myBiddersData ?? this.myBiddersData,
+      auctionBanner: auctionBanner ?? this.auctionBanner,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

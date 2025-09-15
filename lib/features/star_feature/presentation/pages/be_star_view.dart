@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/star_entity.dart';
@@ -308,8 +310,8 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       surfaceTintColor: Colors.transparent,
                       backgroundColor:
                           context.isDarkMode ? Colors.black : Colors.white,
-                      toolbarHeight: 30,
-                      titleSpacing: 16,
+                      toolbarHeight: 38,
+                      titleSpacing: 0,
                       leading: BackButton(
                         onPressed: () {
                           ManageVibration.vibrate();
@@ -355,7 +357,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                                 ),
                               ),
                               SizedBox(width: 4),
-                              Icon(Icons.emoji_events, color: Colors.orange),
+                              Image.asset(Assets.cupImage,width: 24,height: 24),
                             ],
                           ),
                         ),

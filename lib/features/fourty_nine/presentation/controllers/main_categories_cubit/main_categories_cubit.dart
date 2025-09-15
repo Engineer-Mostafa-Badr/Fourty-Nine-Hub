@@ -34,6 +34,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -59,6 +60,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final FourtyNineSharedData _fourtyNineSharedData =
       FourtyNineSharedData.instance;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
+  final DeleteFavoriteCategoryUseCase _deleteFavoriteCategoryUseCase;
   final GetWalletHomeUseCase _getWalletHomeUseCase;
   final GetCurrencyUseCase _currencyUseCase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
@@ -72,6 +74,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   MainCategoriesCubit(
       this._getMainCategoriesUseCase,
       this._toggleFavoriteCategoryUseCase,
+      this._deleteFavoriteCategoryUseCase,
       this._getWalletHomeUseCase,
       this._currencyUseCase,
       this.updateSocketLocationUseCase,
@@ -221,7 +224,22 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+    print("toggleFavoriteMedicalService");
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+            (data) {
+          result = data;
+          emit(state.copyWith(status: StateStatus.success));
+        });
+    return result;
+  }
+
+  Future<bool> deleteFavoriteMedicalService(String subcategoryId) async {
+    print("deleteFavoriteMedicalService");
+    final response = await _deleteFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
             (failure) =>
@@ -276,6 +294,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
+    print("toggleSubCategoryToFavorites");
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(

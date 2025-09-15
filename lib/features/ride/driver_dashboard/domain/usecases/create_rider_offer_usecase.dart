@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 
 import '../repositories/driver_dashboard_repo.dart';
 
@@ -26,8 +27,9 @@ class CreateRiderOfferParams {
     required this.lat,
     required this.lng,
   });
-  Map<String, dynamic> toJson() => {
+  Future<Map<String, dynamic>> toJson() async => {
     "priceOffer": price,
+    "driverDeviceId": await getDeviceId(),
     "location": {
       "latitude": lat,
       "longitude": lng

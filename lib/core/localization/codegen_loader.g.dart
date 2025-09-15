@@ -1653,7 +1653,7 @@ class CodegenLoader extends AssetLoader{
   "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
   "retry": "إعادة المحاولة",
   "favorite": "المفضلة",
-  "myAuction": "مزادي",
+  "myAuction": "مزاداتي",
   "uploadVideo": "رفع الفيديو",
   "addAuction": "إضافة مزاد",
   "joinNow": "انضم الآن",
@@ -1669,7 +1669,9 @@ class CodegenLoader extends AssetLoader{
   "startFrom": "يبدأ من",
   "myBidders": "مزايدِيَّ",
   "ended": "انتهى",
-  "winnerAuction": "فائز"
+  "winnerAuction": "فائز",
+  "wonTheAuction": "فاز بالمزاد على",
+  "forAuction": "مقابل"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3330,7 +3332,7 @@ static const Map<String,dynamic> _en = {
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
   "watch": "Watch",
   "favorite": "Favorite",
-  "myAuction": "My Auction",
+  "myAuction": "My Auctions",
   "uploadVideo": "Upload Video",
   "addAuction": "Add Auction",
   "joinNow": "Join Now",
@@ -3346,7 +3348,9 @@ static const Map<String,dynamic> _en = {
   "startFrom": "Start from",
   "myBidders": "My Bidders",
   "ended": "Ended",
-  "winnerAuction": "Winner"
+  "winnerAuction": "Winner",
+  "wonTheAuction": "Won the Auction of the",
+  "forAuction": "For"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

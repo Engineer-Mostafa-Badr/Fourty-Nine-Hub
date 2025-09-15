@@ -1,4 +1,4 @@
-import '../../../../core/utils/device_id.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 
 class RequestTripUseCaseParams {
   final String subcategoryId;
@@ -48,7 +48,7 @@ class RequestTripUseCaseParams {
   });
 
   //toJson
-  Future<Map<String, dynamic>> toJson() async =>{
+  Future<Map<String, dynamic>> toJson() async => {
     "price": price,
     "fromTitle": fromTitle,
     "toTitle": toTitle,
@@ -69,11 +69,11 @@ class RequestTripUseCaseParams {
     "isPremium" : isPremium,
     "polyline" : polyline,
     "riderPhone": phoneNumber,
+    "clientDeviceId": await getDeviceId(),
     "clientCurrentLocation": {
       "latitude": startLocation[1],
       "longitude": startLocation[0],
-    },
-    'deviceId': await getDeviceId(),
+    }
   };
 
 }

@@ -378,22 +378,22 @@ class AuthInterceptor extends Interceptor {
     try {
       // التحقق من وجود refresh token قبل إرساله
       final refreshToken = _token?.refreshToken;
-      if (refreshToken == null || refreshToken.isEmpty) {
-        print(
-            '❌ AuthInterceptor: No refresh token available, redirecting to login');
-        removeTokenFromHeader();
-        await CacheManager.clearTokens();
-        try {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext;
-          if (currentContext != null && currentContext.mounted) {
-            currentContext.go(Routes.LOGIN);
-          }
-        } catch (e) {
-          print('❌ Navigation error: $e');
-        }
-        return null;
-      }
+      // if (refreshToken == null || refreshToken.isEmpty) {
+      //   print(
+      //       '❌ AuthInterceptor: No refresh token available, redirecting to login');
+      //   // removeTokenFromHeader();
+      //   // await CacheManager.clearTokens();
+      //   try {
+      //     var currentContext =
+      //         AppPages.router.configuration.navigatorKey.currentContext;
+      //     if (currentContext != null && currentContext.mounted) {
+      //       currentContext.go(Routes.LOGIN);
+      //     }
+      //   } catch (e) {
+      //     print('❌ Navigation error: $e');
+      //   }
+      //   return null;
+      // }
 
       print('🔄 AuthInterceptor: Calling refresh token API');
       final response = await serviceLocator<Dio>().post(
@@ -442,7 +442,7 @@ class AuthInterceptor extends Interceptor {
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(newRefreshToken);
-      await Storage.setRefreshToken(refreshToken);
+      await Storage.setRefreshToken(refreshToken??'');
       serviceLocator<Dio>().options.headers['Authorization'] =
           'Bearer $accessToken';
 

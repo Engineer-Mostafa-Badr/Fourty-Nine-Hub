@@ -165,7 +165,7 @@ class AuctionCard extends StatelessWidget {
                             children: [
                                TextSpan(text:LocaleKeys.priceNow.localize),
                               TextSpan(
-                                text: "${_formatNumber(auction.price ?? 0)} ",
+                                text: "${_formatNumber(auction.lastPrice ?? 0)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
@@ -278,11 +278,16 @@ class AuctionCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // 👉 Button on right
                       AppButton(
                         width: 91,
-                        backColor: auction.isWinner == true ?  AppColors.cFFAC3F :  AppColors.PRIMARY_COLOR_DARK,
-                        onPressed: () {
+                        backColor: auction.status == "expired"
+                            ? AppColors.grey // or any color for expired
+                            : auction.isWinner == true
+                            ? AppColors.cFFAC3F
+                            : AppColors.PRIMARY_COLOR_DARK,
+                        onPressed: auction.status == "expired"
+                            ? (){} // disable button if expired
+                            : () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -294,11 +299,41 @@ class AuctionCard extends StatelessWidget {
                           );
                         },
                         style: Styles.mediumText(
-                          color:auction.isWinner == true ?  AppColors.black :  AppColors.whiteColor,
-                          fontWeight: FontWeight.w500
+                          color: auction.status == "expired"
+                              ? AppColors.grey.shade700 // optional text color for expired
+                              : auction.isWinner == true
+                              ? AppColors.black
+                              : AppColors.whiteColor,
+                          fontWeight: FontWeight.w500,
                         ),
-                        label: auction.isWinner == true ? LocaleKeys.winnerAuction.localize : LocaleKeys.joinNow.localize,
+                        label: auction.status == "expired"
+                            ? "Expired" // or LocaleKeys.expired.localize
+                            : auction.isWinner == true
+                            ? LocaleKeys.winnerAuction.localize
+                            : LocaleKeys.joinNow.localize,
                       ),
+
+                      // 👉 Button on right
+                      // AppButton(
+                      //   width: 91,
+                      //   backColor: auction.isWinner == true ?  AppColors.cFFAC3F :  AppColors.PRIMARY_COLOR_DARK,
+                      //   onPressed: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (_) => BlocProvider(
+                      //           create: (_) => serviceLocator<AuctionCubit>(),
+                      //           child: SingleAuctionScreen(auctionId: auction.id ?? ""),
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      //   style: Styles.mediumText(
+                      //     color:auction.isWinner == true ?  AppColors.black :  AppColors.whiteColor,
+                      //     fontWeight: FontWeight.w500
+                      //   ),
+                      //   label: auction.isWinner == true ? LocaleKeys.winnerAuction.localize : LocaleKeys.joinNow.localize,
+                      // ),
                     ],
                   ),
 

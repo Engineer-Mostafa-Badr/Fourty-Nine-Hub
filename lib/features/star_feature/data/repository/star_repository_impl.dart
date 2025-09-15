@@ -10,6 +10,7 @@ import '../../domain/use_case/fetch_all_star_use_case.dart';
 import '../../domain/use_case/upload_my_star_use_case.dart';
 import '../model/comment_model.dart';
 import '../model/tube_video_models.dart';
+import '../model/active_category_model.dart';
 
 class StarRepositoryImpl extends StarRepository {
   final StarRemoteDataSource _remoteDataSource;
@@ -137,5 +138,10 @@ class StarRepositoryImpl extends StarRepository {
   @override
   Future<Either<Failure, String>> dislikeComment(String commentId) {
     return _remoteDataSource.dislikeComment(commentId);
+  }
+
+  @override
+  Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories() {
+    return _remoteDataSource.getActiveCategories();
   }
 }

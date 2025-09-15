@@ -1658,7 +1658,7 @@
   "yourRequestHasBeenSentYouWillReceiveOffersShortly": "Your request has been sent. You will receive offers shortly.",
   "watch": "Watch",
   "favorite": "Favorite",
-  "myAuction": "My Auction",
+  "myAuction": "My Auctions",
   "uploadVideo": "Upload Video",
   "addAuction": "Add Auction",
   "joinNow": "Join Now",
@@ -1674,7 +1674,9 @@
   "startFrom": "Start from",
   "myBidders": "My Bidders",
   "ended": "Ended",
-  "winnerAuction": "Winner"
+  "winnerAuction": "Winner",
+  "wonTheAuction": "Won the Auction of the",
+  "forAuction": "For"
 
 
 

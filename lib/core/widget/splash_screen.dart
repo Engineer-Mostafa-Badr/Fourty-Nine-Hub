@@ -98,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!isShowOnboarding) {
         nextRoute = Routes.ChooseLangScreen;
       } else if (isActivate) {
-        nextRoute = Routes.PAGEPREVIEW;
+        nextRoute = Routes.HOME;
       } else {
         nextRoute = Routes.HOME;
       }
@@ -126,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen> {
             if (!isShowOnboarding) {
               nextRoute = Routes.ChooseLangScreen;
             } else if (isActivate) {
-              nextRoute = Routes.PAGEPREVIEW;
+              nextRoute = Routes.HOME;
             } else {
               nextRoute = Routes.HOME;
             }
@@ -141,7 +141,7 @@ class _SplashScreenState extends State<SplashScreen> {
             if (!isShowOnboarding) {
               nextRoute = Routes.ChooseLangScreen;
             } else if (isActivate) {
-              nextRoute = Routes.PAGEPREVIEW;
+              nextRoute = Routes.HOME;
             } else {
               nextRoute = Routes.LOGIN;
             }
@@ -168,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (!isShowOnboarding) {
           nextRoute = Routes.ChooseLangScreen;
         } else if (isActivate) {
-          nextRoute = Routes.PAGEPREVIEW;
+          nextRoute = Routes.HOME;
         } else {
           nextRoute = Routes.HOME;
         }

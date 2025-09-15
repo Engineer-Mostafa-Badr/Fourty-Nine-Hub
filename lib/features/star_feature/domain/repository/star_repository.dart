@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failure.dart';
 import '../../data/model/comment_model.dart';
 import '../../data/model/tube_video_models.dart';
+import '../../data/model/active_category_model.dart';
 import '../entity/banner_talent_entity.dart';
 import '../entity/star_entity.dart';
 import '../entity/star_winner_entity.dart';
@@ -44,4 +45,7 @@ abstract class StarRepository {
   Future<Either<Failure, String>> deleteComment(String commentId);
   Future<Either<Failure, String>> likeComment(String commentId);
   Future<Either<Failure, String>> dislikeComment(String commentId);
+
+  // Get active categories
+  Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories();
 }

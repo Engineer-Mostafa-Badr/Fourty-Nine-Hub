@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
@@ -408,7 +409,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     try {
       final response = await _apiConsumer.post(
         EndPoints.requestTrip(params.subcategoryId),
-        data: await  params.toJson(),
+        data: await params.toJson(),
       );
 
       return response.fold((failure) => Left(failure), (data) {
@@ -1138,7 +1139,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     try {
       final response = await _apiConsumer.put(
         EndPoints.acceptOfferByClient(offerId),
-        data: {'deviceId': await getDeviceId()},
+        data: {
+          "clientDeviceId": await getDeviceId(),
+        }
       );
       return response.fold((failure) => Left(failure), (data) {
         log('accepted trip id before : ${data['data']['tripId']}');

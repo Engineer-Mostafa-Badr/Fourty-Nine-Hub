@@ -20,6 +20,7 @@ import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -66,6 +67,7 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   var widgejsonData;
   bool hasVibration = false;
+  bool activeCustomPage = false;
   @override
   void initState() {
     initVibrationValue();
@@ -75,8 +77,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   initVibrationValue() async {
     bool vibration = await Storage.getVibrationValue();
+    bool activation = await CacheManager.getActivation() ?? false;
     setState(() {
       hasVibration = vibration;
+      activeCustomPage = activation;
     });
   }
 
@@ -1555,61 +1559,65 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CustomSwitchButton(
-                      value: context
-                              .read<CustomPageCubit>()
-                              .state
-                              .activate
-                              ?.customPage ??
-                          false,
+                      value: activeCustomPage,
                       onChanged: (value) async {
-                        showAnimatedDialog(
-                          context,
-                          AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Label(
-                                    text: LocaleKeys.restartToApply.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w400)),
-                                const Sizer(),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AppButton(
-                                        onPressed: () {
-                                          var currentContext = AppPages
-                                              .router
-                                              .configuration
-                                              .navigatorKey
-                                              .currentContext!;
-                                          currentContext.pop();
-                                        },
-                                        label: LocaleKeys.cancel.localize,
-                                      ),
-                                    ),
-                                    const Sizer(
-                                      width: 16,
-                                    ),
-                                    Expanded(
-                                      child: AppButton(
-                                        backColor: AppColors.PRIMARY_COLOR,
-                                        onPressed: () {
-                                          context
-                                              .read<CustomPageCubit>()
-                                              .updateActivate(value);
-                                          Restart.restartApp();
-                                        },
-                                        label: LocaleKeys.restart.localize,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        CacheManager.updateActive(value);
+                        context.pop();
+
+                        // showAnimatedDialog(
+                        //   context,
+                        //   AlertDialog(
+                        //     content: Column(
+                        //       mainAxisSize: MainAxisSize.min,
+                        //       crossAxisAlignment: CrossAxisAlignment.center,
+                        //       children: [
+                        //         Label(
+                        //             text: LocaleKeys.restartToApply.localize,
+                        //             style: Styles.headerText(
+                        //                 fontWeight: FontWeight.w400)),
+                        //         const Sizer(),
+                        //         Row(
+                        //           children: [
+                        //             Expanded(
+                        //               child: AppButton(
+                        //                 onPressed: () {
+                        //                   var currentContext = AppPages
+                        //                       .router
+                        //                       .configuration
+                        //                       .navigatorKey
+                        //                       .currentContext!;
+                        //                   currentContext.pop();
+                        //                 },
+                        //                 label: LocaleKeys.cancel.localize,
+                        //               ),
+                        //             ),
+                        //             const Sizer(
+                        //               width: 16,
+                        //             ),
+                        //             Expanded(
+                        //               child: AppButton(
+                        //                 backColor: AppColors.PRIMARY_COLOR,
+                        //                 onPressed: () {
+                        //                   setState(() {
+                        //                     activeCustomPage= value;
+                        //                   });
+                        //                   var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                        //                   context.pop();
+                        //                   context.pop();
+                        //                   // context.pop();
+                        //                   Future.delayed(Duration(seconds: 1));
+                        //                   currentContext.go(Routes.HOME);
+                        //                   // Restart.restartApp();
+                        //                 },
+                        //                 label: LocaleKeys.restart.localize,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // );
                       },
                     ),
                     SizedBox(

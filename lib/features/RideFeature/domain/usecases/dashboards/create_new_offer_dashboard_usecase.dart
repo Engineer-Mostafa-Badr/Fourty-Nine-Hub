@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../repositories/trip_repository.dart';
@@ -36,8 +37,9 @@ class CreateNewOfferDashboardUsecaseParam {
   final CreateOfferLocation? location;
   final String tripId;
 
-  Map<String, dynamic> toJson() => {
+  Future<Map<String, dynamic>> toJson() async => {
         "priceOffer": priceOffer,
+        "driverDeviceId": await getDeviceId(),
         // "location": location?.toJson(),
         "tripId": tripId
       };

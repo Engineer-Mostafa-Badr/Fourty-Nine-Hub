@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -7,9 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheManager {
   static late SharedPreferences prefs;
+  static final StreamController<bool> _activationStreamController = StreamController<bool>.broadcast();
+  
   static init() async {
     prefs = await SharedPreferences.getInstance();
   }
+  
+  // Stream to listen for activation changes
+  static Stream<bool> get activationStream => _activationStreamController.stream;
 
   static const _accessTokenKey = 'accessToken';
   static const _refreshTokenKey = 'refreshToken';
@@ -37,6 +43,8 @@ class CacheManager {
   static Future<void> updateActive(bool active) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(activeCustomPage, active);
+    // Emit the change through the stream
+    _activationStreamController.add(active);
   }
 
   // Save refresh token

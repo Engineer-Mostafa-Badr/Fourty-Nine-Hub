@@ -46,6 +46,8 @@ class WinnersTenPercentView extends StatelessWidget {
     );
   }
 
+
+
   String getSubTitleAppBar(BuildContext context,
       {required WinnersTenPercentState state}) {
     late final String winners;

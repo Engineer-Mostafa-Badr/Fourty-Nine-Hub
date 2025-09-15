@@ -25,7 +25,7 @@ abstract class Routes {
   static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
   static const RIDEDETAILSTRIPS = '/RIDEDETAILSTRIPS';
   static const TripReceiptScreen = '/TripReceiptScreen';
-  static const PAGEPREVIEW = '/CustomPage/PagePreview';
+  // static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
   static const UploadRiderImages = '/UploadRiderImages';
@@ -317,6 +317,7 @@ abstract class Routes {
   static const tubeProfile =  '/BeAStar/TubeProfile';
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
   static const createAuctionScreen =  '/CreateAuctionScreen';
+  static const myAuctionScreen =  '/MyAuctionScreen';
 
 }
 
@@ -335,7 +336,7 @@ abstract class Paths {
   static const MY_TALENT = 'MyTalent';
   static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
-  static const PAGEPREVIEW = 'PagePreview';
+  // static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       'RIDEOPENSTREETMAPSEARCHANDPICK';
@@ -595,7 +596,7 @@ abstract class Paths {
   static const VERIFICATION = 'Verification';
 
   // Cashback
-  static const CASHBACK = 'CashBack';
+  static const CASHBACK = 'Cashback';
 
   //reels
   static const useSoundScreen = 'UseSoundScreen';
@@ -621,5 +622,6 @@ abstract class Paths {
 
   static const availableAuctionScreen =  'AvailableAuctionScreen';
   static const createAuctionScreen =  'CreateAuctionScreen';
+  static const myAuctionScreen =  'MyAuctionScreen';
 
 }
