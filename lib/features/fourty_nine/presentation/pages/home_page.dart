@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/pages/fourty_nine.dart';
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     print("isActivate $isActivate");
-    return !isActivate
+    return (!isActivate||!context.isUserLoggedIn)
         ? const FourtyNineView()
         : ExitWidget(
           child: PagePreview(
