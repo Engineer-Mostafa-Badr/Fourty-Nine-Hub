@@ -1877,6 +1877,6 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchAuctionMainCategory = '/auctions/main-categories';
   static String addFavoriteAuction = '/auction-fav/';
 
-
+  static String getDriverRatings(String driverId) => '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

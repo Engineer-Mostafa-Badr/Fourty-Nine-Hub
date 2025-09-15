@@ -96,6 +96,138 @@ class _LogoutWidgetState extends State<LogoutWidget> {
 
 }
 
+
+
+class LogoutFromSpecificDeviceWidget extends StatefulWidget {
+  const LogoutFromSpecificDeviceWidget({super.key, required this.deviceName});
+  final String deviceName;
+
+  @override
+  State<LogoutFromSpecificDeviceWidget> createState() => _LogoutFromSpecificDeviceWidgetState();
+}
+
+class _LogoutFromSpecificDeviceWidgetState extends State<LogoutFromSpecificDeviceWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.read<UserCubit>();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+
+      // shrinkWrap: true,
+      children: [
+        Label(
+          text: LocaleKeys.logout.localize,
+
+          style: Styles.headerText(
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        Text(
+           context.isArabic? "هل انت متأكد من تسجيل الخروج من جهاز ${widget.deviceName}" : "Are you sure to logout from device ${widget.deviceName}",
+          textAlign: TextAlign.center,
+          style: Styles.mediumText(
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            Expanded(
+                child: AppButton(
+                  height: 50.h,
+                  label: LocaleKeys.no.localize,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  onPressed: () => context.pop(),
+                  backColor: AppColors.DARK_GRAY_COLOR,
+                )),
+            const Sizer(),
+            Expanded(
+              child: AppButton(
+                height: 50.h,
+                label: LocaleKeys.logout.localize,
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                onPressed: () async {
+                  ManageVibration.vibrate();
+                  context.pop();
+                },
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+// final Socket _socket = serviceLocator<Socket>();
+
+
+}
+
+
+
+class LogoutFromAllDevicesWidget extends StatefulWidget {
+  const LogoutFromAllDevicesWidget({super.key});
+
+  @override
+  State<LogoutFromAllDevicesWidget> createState() => _LogoutFromAllDevicesWidgetState();
+}
+
+class _LogoutFromAllDevicesWidgetState extends State<LogoutFromAllDevicesWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.read<UserCubit>();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+
+      // shrinkWrap: true,
+      children: [
+        Label(
+          text: LocaleKeys.logout.localize,
+          style: Styles.headerText(
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        Text(
+           context.isArabic? "هل انت متاءكد من تسجيل الخروج من جميع الأجهزة" : "Are you sure to logout from all devices",
+          textAlign: TextAlign.center,
+          style: Styles.mediumText(
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            Expanded(
+                child: AppButton(
+                  height: 50.h,
+                  label: LocaleKeys.no.localize,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  onPressed: () => context.pop(),
+                  backColor: AppColors.DARK_GRAY_COLOR,
+                )),
+            const Sizer(),
+            Expanded(
+              child: AppButton(
+                height: 50.h,
+                label: LocaleKeys.logout.localize,
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                onPressed: () async {
+                  ManageVibration.vibrate();
+                  context.pop();
+                },
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+// final Socket _socket = serviceLocator<Socket>();
+
+
+}
+
 /*{
     "status": true,
     "message": "success",

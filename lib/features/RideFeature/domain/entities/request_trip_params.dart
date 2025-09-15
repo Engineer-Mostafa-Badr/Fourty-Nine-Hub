@@ -1,3 +1,5 @@
+import '../../../../core/utils/device_id.dart';
+
 class RequestTripUseCaseParams {
   final String subcategoryId;
   final double price;
@@ -46,7 +48,7 @@ class RequestTripUseCaseParams {
   });
 
   //toJson
-  Map<String, dynamic> toJson() => {
+  Future<Map<String, dynamic>> toJson() async =>{
     "price": price,
     "fromTitle": fromTitle,
     "toTitle": toTitle,
@@ -70,7 +72,8 @@ class RequestTripUseCaseParams {
     "clientCurrentLocation": {
       "latitude": startLocation[1],
       "longitude": startLocation[0],
-    }
+    },
+    'deviceId': await getDeviceId(),
   };
 
 }

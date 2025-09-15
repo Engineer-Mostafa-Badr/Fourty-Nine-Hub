@@ -88,6 +88,7 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
+import '../../../../core/utils/device_id.dart';
 import '../../../food_feature/restaurants_list/data/models/rate_response_model.dart';
 import '../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import '../../domain/entities/client/client_all_rating_entity.dart';
@@ -95,6 +96,7 @@ import '../../domain/entities/client/driver_all_rating_entity.dart';
 import '../../domain/entities/create_no_track_trip_entity.dart';
 import '../../domain/entities/dashboards/create_non_track_offer_entity.dart';
 import '../../domain/entities/dashboards/update_driver_settings_entity.dart';
+import '../../domain/entities/driver_ratings_entity.dart';
 import '../../domain/entities/get_client_accepted_trips_entity.dart';
 import '../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../domain/entities/get_client_past_trips_entity.dart';
@@ -120,6 +122,7 @@ import '../models/dashboards/get_offers_response_model.dart';
 import '../../../account_taps/my_adds/data/model/click_model.dart';
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../models/dashboards/update_driver_settings_model.dart';
+import '../models/driver_ratings_model.dart';
 import '../models/get_client_accepted_trips_model.dart';
 import '../models/get_client_offer_trips_model.dart';
 import '../models/get_client_past_trips_model.dart';
@@ -284,7 +287,7 @@ abstract class RideRemoteDataSource {
 
   Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params);
 
-
+  Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId});
 
 }
 
@@ -405,7 +408,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     try {
       final response = await _apiConsumer.post(
         EndPoints.requestTrip(params.subcategoryId),
-        data: params.toJson(),
+        data: await  params.toJson(),
       );
 
       return response.fold((failure) => Left(failure), (data) {
@@ -1135,6 +1138,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     try {
       final response = await _apiConsumer.put(
         EndPoints.acceptOfferByClient(offerId),
+        data: {'deviceId': await getDeviceId()},
       );
       return response.fold((failure) => Left(failure), (data) {
         log('accepted trip id before : ${data['data']['tripId']}');
@@ -1692,6 +1696,19 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (l) => Left(l),
           (data) {
         return Right(data['data']?['availableMap']?['code']?.toString().toLowerCase()??'eg');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId}) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getDriverRatings(driverId),
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(DriverRatingsModel.fromJson(data['data']));
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_ratings_usecase.dart';
+
 import '../features/RideFeature/data/repositories/ride_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/ride_repository.dart';
 import '../features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
@@ -225,9 +227,12 @@ class RideServiceLocatorUpdated {
         GetAvailableMapCountryUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<PartialPaymentInTripUseCase>(() =>
         PartialPaymentInTripUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDriverRatingsUseCase>(() =>
+        GetDriverRatingsUseCase( serviceLocator()));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

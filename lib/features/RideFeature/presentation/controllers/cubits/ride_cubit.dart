@@ -90,9 +90,11 @@ import '../../../../../routes/pages.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
+import '../../../domain/entities/driver_ratings_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 import '../../../domain/entities/trip_viewer_entity.dart';
 import '../../../domain/usecases/get_available_map_country_usecase.dart';
+import '../../../domain/usecases/get_driver_ratings_usecase.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
@@ -193,6 +195,8 @@ class RideCubit extends Cubit<RideState> {
 
   final PartialPaymentInTripUseCase partialPaymentInTripUseCase;
 
+  final GetDriverRatingsUseCase getDriverRatingsUseCase;
+
   RideCubit(
     this.getRideCategories,
     this.getShippingCategoriesUsecase,
@@ -230,6 +234,7 @@ class RideCubit extends Cubit<RideState> {
     this.getAllHistoryTripsUseCase,
     this.getAvailableMapCountryUseCase,
     this.partialPaymentInTripUseCase,
+    this.getDriverRatingsUseCase,
   ) : super(RideState(
           rideOffers: [],
         )) {
@@ -3160,5 +3165,24 @@ class RideCubit extends Cubit<RideState> {
     state.wayPointTwo = null;
     await fetchUserLocation();
     emit(state.copyWith(status: RideStates.success));
+  }
+
+  Future<void> getDriverRatings({required String driverId, required BuildContext context}) async {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+      showLoadingDialog(context, canPop: false);
+    // });
+    final Either<Failure, DriverRatingsEntity> result =
+        await getDriverRatingsUseCase(driverId: driverId);
+    result.fold(
+      (failure) {
+        context.pop();
+        showErrorMessage(context, getFailureMessage(failure, context));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
+      (data) async {
+        context.pop();
+        emit(state.copyWith(status: RideStates.success, driverRatings: data));
+      },
+    );
   }
 }
