@@ -28,8 +28,6 @@ class DriverProfileModal extends StatelessWidget {
               return BlocBuilder<RideCubit, RideState>(
                 builder: (context, state) {
                   if(state.driverRatings == null){return Center(child: Text(context.isArabic? "لا يوجد تقييمات": "No Ratings"),);}
-                  state.driverRatings?.driverDetailsEntity.currentRank = DriverRank.platinum;
-                  state.driverRatings?.driverDetailsEntity.isAccountVerified = true;
                   Color rankColor = (state.driverRatings?.driverDetailsEntity.currentRank.toColor()) ?? Color(0xFFFFD700);
 
                   return Container(
@@ -54,7 +52,6 @@ class DriverProfileModal extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-
                             Stack(
                               children: [
                                 CircleAvatar(
