@@ -25,7 +25,7 @@ abstract class Routes {
   static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
   static const RIDEDETAILSTRIPS = '/RIDEDETAILSTRIPS';
   static const TripReceiptScreen = '/TripReceiptScreen';
-  static const PAGEPREVIEW = '/CustomPage/PagePreview';
+  // static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
   static const UploadRiderImages = '/UploadRiderImages';
@@ -336,7 +336,7 @@ abstract class Paths {
   static const MY_TALENT = 'MyTalent';
   static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
-  static const PAGEPREVIEW = 'PagePreview';
+  // static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       'RIDEOPENSTREETMAPSEARCHANDPICK';
