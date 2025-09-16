@@ -121,6 +121,8 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, String>> verifyQuestions(
     VerifyQuestionsParams params,
   );
+
+  Future<Either<Failure, void>> signOutFromAllDevices();
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -689,5 +691,17 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return iosInfo.identifierForVendor ?? 'unknown_ios_device';
     }
     return 'unknown_device';
+  }
+
+  @override
+  Future<Either<Failure, void>> signOutFromAllDevices() async {
+    var result = await _apiConsumer.post(EndPoints.logoutFromAllDevices);
+    return result.fold((l) => Left(l), (r) async {
+      await CacheManager.deleteAllTokens();
+      _apiConsumer.removeTokenFromHeader();
+      // await registerSocket();
+
+      return Right(r);
+    });
   }
 }

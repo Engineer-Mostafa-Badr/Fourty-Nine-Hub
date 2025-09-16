@@ -403,4 +403,9 @@ class AuthRepositoryImpl extends AuthRepository {
     // Implementation لنقل البيانات للسيرفر
     // مثال: رفع السلة، المفضلة، إلخ
   }
+
+  @override
+  Future<Either<Failure, void>> signOutFromAllDevices() async {
+    return _remoteDataSource.signOutFromAllDevices();
+  }
 }

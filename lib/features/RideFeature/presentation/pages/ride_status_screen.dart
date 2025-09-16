@@ -145,6 +145,7 @@ class ActionButtonsWidget extends StatelessWidget {
   final VoidCallback? onMessage;
   final bool? is_show_message;
   final EdgeInsetsGeometry? padding;
+  final VoidCallback? onDriverImageClick;
   const ActionButtonsWidget({
     super.key,
     required this.driverImageUrl,
@@ -155,6 +156,7 @@ class ActionButtonsWidget extends StatelessWidget {
     required this.onSafety,
     this.onMessage,
     this.padding,
+    this.onDriverImageClick,
   });
 
   @override
@@ -169,6 +171,7 @@ class ActionButtonsWidget extends StatelessWidget {
             driverName: driverName,
             driverRating: driverRating,
             context: context,
+            onDriverImageClick: onDriverImageClick,
           ),
           _buildActionCircle(
             icon: Icons.phone,
@@ -229,6 +232,7 @@ Widget buildDriverCircle({
   required String driverName,
   required double? driverRating,
   required BuildContext context,
+  VoidCallback? onDriverImageClick,
 }) {
   return Column(
     mainAxisSize: MainAxisSize.min,
@@ -237,17 +241,20 @@ Widget buildDriverCircle({
         alignment: Alignment.topRight,
         clipBehavior: Clip.none,
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              color: AppColors.buttonDialog,
-              shape: BoxShape.circle,
-            ),
-            child: ClipOval(
-              child: ImageFromInternet(
-                image: driverImageUrl ?? '',
-                fit: BoxFit.cover,
+          GestureDetector(
+            onTap: onDriverImageClick ?? () {},
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: const BoxDecoration(
+                color: AppColors.buttonDialog,
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: ImageFromInternet(
+                  image: driverImageUrl ?? '',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

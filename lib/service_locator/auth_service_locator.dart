@@ -44,6 +44,7 @@ import '../features/authentication/domain/use_cases/register_use_case.dart';
 import '../features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/send_forget_password_question_use_case.dart';
 import '../features/authentication/domain/use_cases/signIn_as_guest_use_case.dart';
+import '../features/authentication/domain/use_cases/sign_out_from_all_devicec_use_case.dart';
 import '../features/authentication/domain/use_cases/sign_out_usecase.dart';
 import '../features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import '../features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
@@ -183,6 +184,10 @@ class AuthServiceLocator {
       () => ConvertGuestToUserUseCase(serviceLocator()),
     );
 
+    serviceLocator.registerLazySingleton(
+      () => SignOutFromAllDevicesUseCase(serviceLocator()),
+    );
+
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
       () {
@@ -222,7 +227,7 @@ class AuthServiceLocator {
         serviceLocator<SignInAsGuestUseCase>(),
         serviceLocator<CheckGuestStateUseCase>(),
         serviceLocator<ConvertGuestToUserUseCase>(),
-        // serviceLocator()
+        serviceLocator(),
       ),
     );
     // serviceLocator.registerSingleton(

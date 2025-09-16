@@ -107,4 +107,6 @@ abstract class AuthRepository {
   Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
       VerifyPhoneOTPParams params);
   Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params);
+
+  Future<Either<Failure, void>> signOutFromAllDevices();
 }

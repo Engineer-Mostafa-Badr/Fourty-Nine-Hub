@@ -39,6 +39,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/get_user_use_case.dart';
+import '../../../domain/use_cases/sign_out_from_all_devicec_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -54,6 +55,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final UpdateUserBioUseCase _updateUserBioUseCase;
   final UpdateUserNameUseCase _updateUserNameUseCase;
   final SignOutUseCase _signOutUseCase;
+  final SignOutFromAllDevicesUseCase _signOutFromAllDevices;
   final CacheService cacheService;
   final CreateNormalChatUseCase _createNormalChatUseCase;
   final CreateAnonymousChatUseCase _createAnonymousChatUseCase;
@@ -94,6 +96,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._signInAsGuestUseCase,
     this._checkGuestStateUseCase,
     this._convertGuestToUserUseCase,
+    this._signOutFromAllDevices,
   ) : super(const BasicState());
   bool get isAuthenticated => state.data != null && !isGuestMode;
   bool get isGuestMode => state.data?.isGuest == true;
@@ -457,6 +460,30 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         },
       );
     }
+  }
+
+  Future<void> signOutFromAllDevices() async {
+    final result = await _signOutFromAllDevices(const NoParams());
+    result.fold(
+          (l) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
+        currentContext.pop();
+        showErrorMessage(currentContext,
+            currentContext.isArabic ? 'حدث خطأ' : 'Something went wrong');
+        emit(state.copyWith(status: StateStatus.error));
+      },
+          (r) async {
+        setLogOut();
+        emit(state.copyWith(
+          status: StateStatus.success,
+          token: null,
+          data: null,
+        ));
+        SharedWebSocket.disconnect();
+      },
+    );
   }
 
   Future<void> setLogOut() async {

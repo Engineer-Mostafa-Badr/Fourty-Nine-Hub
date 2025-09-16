@@ -213,7 +213,7 @@ class _LogoutFromAllDevicesWidgetState extends State<LogoutFromAllDevicesWidget>
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () async {
                   ManageVibration.vibrate();
-                  context.pop();
+                  await controller.signOutFromAllDevices();
                 },
               ),
             ),
