@@ -366,13 +366,19 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                                 style: Styles.smallText(),
                               ),
                               SizedBox(width: 4),
-                              Text(
-                                context.isArabic ? 'الفائزون' : 'Winners',
-                                style: Styles.headerText(
+                              GestureDetector(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                },
+                                child: Text(
+                                  context.isArabic ? 'الفائزون' : 'Winners',
+                                  style: Styles.headerText(
                                     color: context.isDarkMode
                                         ? Colors.white
                                         : Colors.black,
-                                    fontSize: 28),
+                                    fontSize: 28,
+                                  ),
+                                ),
                               ),
                               SizedBox(width: 4),
                               Image.asset(Assets.cupImage,

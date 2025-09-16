@@ -6,6 +6,8 @@ class TubeVideoModel extends StarEntity {
   final int duration;
   final String? videoUrl;
   final String? thumbnail;
+  final bool isLike;
+  final bool isDislike;
 
   TubeVideoModel({
     required super.id,
@@ -26,6 +28,8 @@ class TubeVideoModel extends StarEntity {
     required this.duration,
     this.videoUrl,
     this.thumbnail,
+    this.isLike = false,
+    this.isDislike = false,
   });
 
   factory TubeVideoModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +55,8 @@ class TubeVideoModel extends StarEntity {
       duration: json['duration'] ?? 0,
       videoUrl: json['videoUrl'],
       thumbnail: json['thumbnail'],
+      isLike: json['isLike'] ?? false,
+      isDislike: json['isDislike'] ?? false,
       haveStories: false, // Not available in new API
       storyCount: 0, // Not available in new API
       createdAt:
@@ -78,6 +84,8 @@ class TubeVideoModel extends StarEntity {
     int? duration,
     String? videoUrl,
     String? thumbnail,
+    bool? isLike,
+    bool? isDislike,
   }) =>
       TubeVideoModel(
         id: id ?? this.id,
@@ -98,6 +106,8 @@ class TubeVideoModel extends StarEntity {
         duration: duration ?? this.duration,
         videoUrl: videoUrl ?? this.videoUrl,
         thumbnail: thumbnail ?? this.thumbnail,
+        isLike: isLike ?? this.isLike,
+        isDislike: isDislike ?? this.isDislike,
       );
 
   Map<String, dynamic> toJson() {
@@ -114,6 +124,8 @@ class TubeVideoModel extends StarEntity {
       'likes': likes,
       'dislikes': dislikes,
       'averageRating': averageRating,
+      'isLike': isLike,
+      'isDislike': isDislike,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': createdAt?.toIso8601String(),
     };

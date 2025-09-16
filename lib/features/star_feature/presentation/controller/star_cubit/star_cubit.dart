@@ -328,7 +328,8 @@ class StarCubit extends Cubit<StarState> {
         // Update talents data
         final talents =
             Map<TalentCategory, List<StarEntity>>.from(state.talents);
-        talents[TalentCategory.watchLater] = watchLaterVideos.cast<StarEntity>();
+        talents[TalentCategory.watchLater] =
+            watchLaterVideos.cast<StarEntity>();
 
         final loadingStates =
             Map<TalentCategory, bool>.from(state.loadingStates);
@@ -866,18 +867,38 @@ class StarCubit extends Cubit<StarState> {
           if (talent.id == videoId && talent is TubeVideoModel) {
             switch (action) {
               case 'like':
-                return talent.copyWith(likes: talent.likes + 1);
+                return talent.copyWith(
+                  likes: talent.isLike ? talent.likes : talent.likes + 1,
+                  isLike: true,
+                  dislikes: talent.isDislike
+                      ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
+                      : talent.dislikes,
+                  isDislike: false, // إزالة الـ dislike لو موجود
+                );
               case 'unlike':
                 return talent.copyWith(
-                    likes:
-                        (talent.likes - 1).clamp(0, double.infinity).toInt());
+                  likes: talent.isLike
+                      ? (talent.likes - 1).clamp(0, double.infinity).toInt()
+                      : talent.likes,
+                  isLike: false,
+                );
               case 'dislike':
-                return talent.copyWith(dislikes: talent.dislikes + 1);
+                return talent.copyWith(
+                  dislikes:
+                      talent.isDislike ? talent.dislikes : talent.dislikes + 1,
+                  isDislike: true,
+                  likes: talent.isLike
+                      ? (talent.likes - 1).clamp(0, double.infinity).toInt()
+                      : talent.likes,
+                  isLike: false, // إزالة الـ like لو موجود
+                );
               case 'undislike':
                 return talent.copyWith(
-                    dislikes: (talent.dislikes - 1)
-                        .clamp(0, double.infinity)
-                        .toInt());
+                  dislikes: talent.isDislike
+                      ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
+                      : talent.dislikes,
+                  isDislike: false,
+                );
               default:
                 return talent;
             }
@@ -1113,7 +1134,8 @@ class StarCubit extends Cubit<StarState> {
     // This will be handled by the UI layer to show snack bar with rating count
     emit(state.copyWith(
       status: StarStates.ratingSuccess,
-      successMessage: rating.toString(), // Pass rating as string to be formatted in UI
+      successMessage:
+          rating.toString(), // Pass rating as string to be formatted in UI
     ));
 
     // Reset status after a short delay
@@ -1199,12 +1221,18 @@ class StarCubit extends Cubit<StarState> {
   // Check if video is liked/disliked
   bool isVideoLiked(String videoId) {
     final video = getVideoById(videoId);
-    return video?.likes != null && video!.likes > 0;
+    if (video is TubeVideoModel) {
+      return video.isLike;
+    }
+    return false;
   }
 
   bool isVideoDisliked(String videoId) {
     final video = getVideoById(videoId);
-    return video?.dislikes != null && video!.dislikes > 0;
+    if (video is TubeVideoModel) {
+      return video.isDislike;
+    }
+    return false;
   }
 
   // Helper methods for the new like/dislike logic

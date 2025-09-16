@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../domain/entity/star_entity.dart';
@@ -195,9 +196,9 @@ class _OptionsAndRatingSectionState extends State<OptionsAndRatingSection> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                _selectedRating.toString(),
+                _selectedRating.toString().toArabicNumbers(context),
                 style: TextStyle(
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),

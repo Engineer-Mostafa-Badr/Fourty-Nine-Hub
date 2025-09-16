@@ -25,6 +25,7 @@ import '../profile_components/playlist_bottom_sheet.dart';
 import 'talent_card_info_section.dart';
 import 'talent_card_overlay_controls.dart';
 import '../common/options_bottom_sheet.dart';
+import '../../../../../core/messages/messages.dart';
 
 class TalentCard extends StatefulWidget {
   final StarEntity talent;
@@ -460,25 +461,19 @@ class _TalentCardState extends State<TalentCard> {
 // Helper methods for other options
   void _shareVideo(BuildContext context, StarEntity talent) {
     // Implement share functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared',
-        ),
-        backgroundColor: Colors.green,
-      ),
+    showSuccessMessage(
+      context,
+      context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared',
     );
   }
 
   void _downloadVideo(BuildContext context, StarEntity talent) {
     // Implement download functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic ? 'بدء تحميل الفيديو' : 'Download started',
-        ),
-        backgroundColor: Colors.blue,
-      ),
+    showSuccessMessage(
+      context,
+      context.isArabic ? 'بدء تحميل الفيديو' : 'Download started',
+      color: Colors.blue,
+      icon: Icons.download,
     );
   }
 
@@ -491,48 +486,23 @@ class _TalentCardState extends State<TalentCard> {
   }
 
   void _reportVideo(BuildContext context, StarEntity talent) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'الإبلاغ عن الفيديو' : 'Report Video',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
+    showConfirmDialog(
+      context,
+      context.isArabic
+          ? 'هل تريد الإبلاغ عن هذا الفيديو لانتهاكه قواعد المجتمع؟'
+          : 'Do you want to report this video for violating community guidelines?',
+      () {
+        showSuccessMessage(
+          context,
           context.isArabic
-              ? 'هل تريد الإبلاغ عن هذا الفيديو لانتهاكه قواعد المجتمع؟'
-              : 'Do you want to report this video for violating community guidelines?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic
-                        ? 'تم الإبلاغ عن الفيديو'
-                        : 'Video reported',
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            child: Text(context.isArabic ? 'إبلاغ' : 'Report'),
-          ),
-        ],
-      ),
+              ? 'تم الإبلاغ عن الفيديو'
+              : 'Video reported',
+          color: Colors.red,
+          icon: Icons.flag,
+        );
+      },
+      confirmText: LocaleKeys.report.localize,
+      cancelText: LocaleKeys.cancel.localize,
     );
   }
 
@@ -592,19 +562,69 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
     _initializeVideo();
   }
 
-  void _initializeVideo() {
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
+  void _initializeVideo() async {
+    print('🎥 TalentVideoPlayerWidget: Initializing video: ${widget.videoUrl}');
+
+    try {
+      // First attempt - standard initialization with timeout
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        formatHint: VideoFormat.hls, // Try HLS format first for better compatibility
+      );
+
+      await _controller.initialize().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          throw TimeoutException('Video initialization timeout', Duration(seconds: 15));
+        },
+      );
+
+      if (mounted) {
+        print('✅ TalentVideoPlayerWidget: Video initialized successfully');
+        setState(() {
+          _isInitialized = true;
+          _isMuted = widget.startMuted;
+          _controller.setVolume(_isMuted ? 0 : 1);
+        });
+
+        _controller.addListener(_videoListener);
+      }
+    } catch (error) {
+      print('❌ TalentVideoPlayerWidget: Video initialization error: $error');
+
+      // Try fallback initialization
+      try {
+        _controller = VideoPlayerController.network(
+          widget.videoUrl,
+          videoPlayerOptions: VideoPlayerOptions(
+            mixWithOthers: false,
+            allowBackgroundPlayback: false,
+          ),
+        );
+
+        await _controller.initialize();
+
         if (mounted) {
+          print('✅ TalentVideoPlayerWidget: Video loaded with fallback method');
           setState(() {
             _isInitialized = true;
             _isMuted = widget.startMuted;
             _controller.setVolume(_isMuted ? 0 : 1);
           });
-        }
-      });
 
-    _controller.addListener(_videoListener);
+          _controller.addListener(_videoListener);
+        }
+      } catch (fallbackError) {
+        print('❌ TalentVideoPlayerWidget: Fallback initialization failed: $fallbackError');
+        // Don't show SnackBar in cards as it might be called multiple times
+        // Just mark as failed to initialize
+        if (mounted) {
+          setState(() {
+            _isInitialized = false;
+          });
+        }
+      }
+    }
   }
 
   void _videoListener() {

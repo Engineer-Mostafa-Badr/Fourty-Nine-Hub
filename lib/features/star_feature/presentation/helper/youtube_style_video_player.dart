@@ -18,6 +18,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../service_locator/service_locator.dart';
 import '../../data/model/comment_model.dart';
+import '../../data/model/tube_video_models.dart';
 import '../../domain/use_case/comment_use_cases.dart';
 import '../controller/comment_cubit/comment_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
@@ -92,6 +93,120 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
       setState(() {
         _isPlaying = _controller.value.isPlaying;
       });
+    }
+  }
+
+  void _retryVideoInitialization() {
+    print('🔄 YouTubeStyleVideoPlayer: Retrying video initialization...');
+
+    try {
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
+
+      _controller.initialize().then((_) {
+        if (mounted) {
+          print('✅ YouTubeStyleVideoPlayer: Video loaded with retry method');
+          setState(() {
+            _isInitialized = true;
+            _isMuted = widget.startMuted;
+            _controller.setVolume(_isMuted ? 0 : 1);
+          });
+          _controller.addListener(_videoListener);
+
+          if (widget.autoPlay && _visibilityFraction > 0.5) {
+            _controller.play();
+            setState(() => _isPlaying = true);
+          }
+        }
+      }).catchError((secondError) {
+        print('❌ YouTubeStyleVideoPlayer: Retry failed: $secondError');
+
+        if (mounted) {
+          // Show error state in UI
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to load video. Please try again.'),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'Retry',
+                textColor: Colors.white,
+                onPressed: () => _initializeVideo(),
+              ),
+            ),
+          );
+        }
+      });
+    } catch (e) {
+      print('💥 YouTubeStyleVideoPlayer: Exception during retry: $e');
+    }
+  }
+
+  Future<void> _handleCodecError() async {
+    print(
+        '🔧 YouTubeStyleVideoPlayer: Handling codec error with intelligent fallback strategies...');
+    print('📱 Device info: ${VideoUtils.getDeviceInfo()}');
+
+    final strategies = VideoUtils.getFallbackStrategies('codec error');
+
+    for (int i = 0; i < strategies.length; i++) {
+      final strategy = strategies[i];
+      print(
+          '🔄 YouTubeStyleVideoPlayer: Trying strategy ${i + 1}: $strategy...');
+
+      try {
+        _controller = await VideoInitializer.initializeWithStrategy(
+          widget.videoUrl,
+          strategy,
+        );
+
+        if (mounted) {
+          print(
+              '✅ YouTubeStyleVideoPlayer: Video loaded with strategy $strategy');
+          setState(() {
+            _isInitialized = true;
+            _isMuted = widget.startMuted;
+            _controller.setVolume(_isMuted ? 0 : 1);
+          });
+          _controller.addListener(_videoListener);
+
+          if (widget.autoPlay && _visibilityFraction > 0.5) {
+            _controller.play();
+            setState(() => _isPlaying = true);
+          }
+          return;
+        }
+      } catch (error) {
+        print('❌ YouTubeStyleVideoPlayer: Strategy $strategy failed: $error');
+
+        // Dispose failed controller before trying next strategy
+        try {
+          await _controller.dispose();
+        } catch (e) {
+          print('⚠️ YouTubeStyleVideoPlayer: Error disposing controller: $e');
+        }
+
+        // If this is the last strategy and it failed, show error to user
+        if (i == strategies.length - 1) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Video format not supported on this device'),
+                backgroundColor: Colors.red,
+                action: SnackBarAction(
+                  label: 'Retry',
+                  textColor: Colors.white,
+                  onPressed: () => _initializeVideo(),
+                ),
+              ),
+            );
+          }
+        }
+      }
     }
   }
 
@@ -474,66 +589,30 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   bool _isPlaying = true;
   bool _showControls = false;
   bool _showFullDescription = false;
-  bool _isLiked = false;
-  bool _isDisliked = false;
+  // Remove local state variables - will use API data instead
   bool _isSubscribed = false;
+
+  // Helper methods to get like/dislike states from TubeVideoModel
+  bool get _isLiked {
+    if (widget.talent is TubeVideoModel) {
+      return (widget.talent as TubeVideoModel).isLike;
+    }
+    return false;
+  }
+
+  bool get _isDisliked {
+    if (widget.talent is TubeVideoModel) {
+      return (widget.talent as TubeVideoModel).isDislike;
+    }
+    return false;
+  }
+
   bool _isFullscreen = false;
   Timer? _hideControlsTimer;
   bool _isDragging = false;
   final TextEditingController _commentController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // Mock comments data
-  // List<Map<String, dynamic>> comments = [
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Reminds me of...',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  // ];
   late CommentCubit _commentCubit;
   late StarCubit _starCubit;
 
@@ -1507,6 +1586,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                       children: [
                         // Like button
                         Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(20),
@@ -1533,41 +1613,25 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                             : Colors.grey[700],
                                       ),
                                       onPressed: () {
-                                        // Toggle like state أولاً
-                                        setState(() {
-                                          if (_isLiked) {
-                                            // لو كان liked، شيل الـ like
-                                            _isLiked = false;
-                                          } else {
-                                            // لو مش liked، اعمل like وشيل الـ dislike لو موجود
-                                            _isLiked = true;
-                                            _isDisliked =
-                                                false; // شيل الـ dislike
-                                          }
-                                        });
-
-                                        // اعمل API call
+                                        // اعمل API call - الـ cubit هيتولى تحديث الحالة
                                         starCubit
                                             .likeTubeVideo(widget.talent.id);
                                       },
                                     ),
 
-                                    // عرض العدد الديناميكي
+                                    // عرض عدد الـ likes
                                     BlocBuilder<StarCubit, StarState>(
                                       builder: (context, starState) {
-                                        // احسب الـ likes count بناءً على الحالة الحالية
-                                        int baseLikes =
-                                            widget.talent.totalViews ~/
-                                                100; // العدد الأساسي
-                                        int currentLikes = baseLikes;
-
-                                        // لو الفيديو liked، زود واحد
-                                        if (_isLiked) {
-                                          currentLikes = baseLikes + 1;
+                                        // استخدم العدد الحقيقي من الـ model
+                                        int likes = 0;
+                                        if (widget.talent is TubeVideoModel) {
+                                          likes =
+                                              (widget.talent as TubeVideoModel)
+                                                  .likes;
                                         }
 
                                         return Text(
-                                          '$currentLikes',
+                                          '$likes',
                                           style: TextStyle(
                                             color: Colors.grey[700],
                                             fontSize: 14,
@@ -1595,21 +1659,30 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                             : Colors.grey[700],
                                       ),
                                       onPressed: () {
-                                        // Toggle dislike state
-                                        setState(() {
-                                          if (_isDisliked) {
-                                            // لو كان disliked، شيل الـ dislike
-                                            _isDisliked = false;
-                                          } else {
-                                            // لو مش disliked، اعمل dislike وشيل الـ like لو موجود
-                                            _isDisliked = true;
-                                            _isLiked = false; // شيل الـ like
-                                          }
-                                        });
-
-                                        // اعمل API call
+                                        // اعمل API call - الـ cubit هيتولى تحديث الحالة
                                         starCubit
                                             .dislikeTubeVideo(widget.talent.id);
+                                      },
+                                    ),
+
+                                    // عرض عدد الـ dislikes
+                                    BlocBuilder<StarCubit, StarState>(
+                                      builder: (context, starState) {
+                                        // استخدم العدد الحقيقي من الـ model
+                                        int dislikes = 0;
+                                        if (widget.talent is TubeVideoModel) {
+                                          dislikes =
+                                              (widget.talent as TubeVideoModel)
+                                                  .dislikes;
+                                        }
+
+                                        return Text(
+                                          '$dislikes',
+                                          style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 14,
+                                          ),
+                                        );
                                       },
                                     ),
                                   ],

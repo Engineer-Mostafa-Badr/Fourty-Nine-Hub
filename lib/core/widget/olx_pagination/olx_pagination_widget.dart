@@ -24,6 +24,7 @@ class OlxPaginationWidget extends StatefulWidget {
 }
 
 class _OlxPaginationWidget extends State<OlxPaginationWidget> {
+  // final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   int _currentPage = 1; // Start at page 1
 
@@ -36,10 +37,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   }
 
   void _scrollListener() {
-    if (!mounted) return; // Safety check
-
-    if (widget.scrollController.hasClients &&
-        widget.scrollController.position.pixels >=
+    if (widget.scrollController.position.pixels >=
             widget.scrollController.position.maxScrollExtent - 100 &&
         !_isLoading) {
       _loadNextPage();
@@ -47,22 +45,13 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   }
 
   Future<void> _loadPage(int page) async {
-    if (_isLoading || !mounted) return;
-
+    if (_isLoading) return;
     setState(() => _isLoading = true);
-
-    try {
-      await widget.loadPage(page);
-    } catch (e) {
-      debugPrint('Error loading page $page: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _currentPage = page;
-        });
-      }
-    }
+    await widget.loadPage(page);
+    setState(() {
+      _isLoading = false;
+      _currentPage = page;
+    });
   }
 
   Future<void> _loadNextPage() async {
@@ -70,14 +59,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   }
 
   @override
-
   void dispose() {
-      //   widget.scrollController
-      // ..removeListener(_scrollListener)
-      // ..dispose();
-
-    // IMPORTANT: Only remove listener, DO NOT dispose the controller
-    // The parent widget is responsible for disposing the controller
     widget.scrollController.removeListener(_scrollListener);
     super.dispose();
   }
@@ -85,6 +67,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height * 0.6;
+    // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
     return GlowingOverscrollIndicator(

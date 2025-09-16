@@ -6,9 +6,11 @@ import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:path/path.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../domain/entity/star_entity.dart';
+import '../../../data/model/tube_video_models.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../helper/youtube_style_video_player.dart';
 import '../common/options_bottom_sheet.dart';
@@ -47,12 +49,12 @@ class TalentHistoryItem extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: Colors.white,
+        color: context.isDarkMode ? Colors.black : const Color.fromARGB(255, 163, 155, 155),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thumbnail + Overlays
-            _buildThumbnailWithOverlays(140, 90),
+            _buildThumbnailWithOverlays(context, 140, 90),
             const SizedBox(width: 12),
 
             // Video info
@@ -68,7 +70,8 @@ class TalentHistoryItem extends StatelessWidget {
     );
   }
 
-  Widget _buildThumbnailWithOverlays(double width, double height) {
+  Widget _buildThumbnailWithOverlays(
+      BuildContext context, double width, double height) {
     return Container(
       width: width,
       height: height,
@@ -115,7 +118,7 @@ class TalentHistoryItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                '7:54',
+                _getDuration().toArabicNumbers(context),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -142,7 +145,7 @@ class TalentHistoryItem extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 15,
-            color: Colors.black87,
+            color: context.isDarkMode ? Colors.white : Colors.black87,
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -151,7 +154,7 @@ class TalentHistoryItem extends StatelessWidget {
         Text(
           "${talent.user.firstName} ${talent.user.lastName}",
           style: TextStyle(
-            color: Colors.grey[600],
+            color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
             fontSize: 13,
             fontWeight: FontWeight.w400,
           ),
@@ -160,7 +163,7 @@ class TalentHistoryItem extends StatelessWidget {
         Text(
           "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}",
           style: TextStyle(
-            color: Colors.grey[600],
+            color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
             fontSize: 13,
           ),
         ),
@@ -183,10 +186,33 @@ class TalentHistoryItem extends StatelessWidget {
         child: Icon(
           Icons.more_vert,
           size: 20,
-          color: Colors.grey[700],
+          color: context.isDarkMode ? Colors.grey[300] : Colors.grey[700],
         ),
       ),
     );
+  }
+
+  String _getDuration() {
+    // Check if talent is TubeVideoModel to get duration
+    if (talent is TubeVideoModel) {
+      final tubeVideo = talent as TubeVideoModel;
+      if (tubeVideo.duration > 0) {
+        return _formatDuration(tubeVideo.duration);
+      }
+    }
+    // Fallback duration for non-tube videos
+    return "0:30";
+  }
+
+  String _formatDuration(int seconds) {
+    final duration = Duration(seconds: seconds);
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    if (duration.inHours > 0) {
+      return "${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}";
+    } else {
+      return "${duration.inMinutes}:${twoDigits(duration.inSeconds.remainder(60))}";
+    }
   }
 
   void _showHistoryOptions(
