@@ -27,6 +27,142 @@ import 'talent_card_overlay_controls.dart';
 import '../common/options_bottom_sheet.dart';
 import '../../../../../core/messages/messages.dart';
 
+// class VideoPlayerManager {
+//   static VideoPlayerManager? _instance;
+//   static VideoPlayerManager get instance {
+//     _instance ??= VideoPlayerManager._();
+//     return _instance!;
+//   }
+
+//   VideoPlayerManager._();
+
+//   // Track all active controllers
+//   final Map<String, VideoPlayerController> _controllers = {};
+//   final int _maxConcurrentVideos = 2; // Limit concurrent videos
+
+//   // Get or create controller with resource management
+//   Future<VideoPlayerController?> getController(
+//       String videoUrl, String videoId) async {
+//     // Clean up excess controllers if needed
+//     if (_controllers.length >= _maxConcurrentVideos) {
+//       await _cleanupOldestController();
+//     }
+
+//     // Return existing controller if available
+//     if (_controllers.containsKey(videoId)) {
+//       return _controllers[videoId];
+//     }
+
+//     try {
+//       final controller = VideoPlayerController.network(videoUrl);
+//       await controller.initialize();
+//       _controllers[videoId] = controller;
+//       return controller;
+//     } catch (e) {
+//       print('Failed to create video controller: $e');
+//       return null;
+//     }
+//   }
+
+//   // Clean up oldest controller
+//   Future<void> _cleanupOldestController() async {
+//     if (_controllers.isEmpty) return;
+
+//     final oldestKey = _controllers.keys.first;
+//     final controller = _controllers[oldestKey];
+
+//     if (controller != null) {
+//       await controller.dispose();
+//       _controllers.remove(oldestKey);
+//     }
+//   }
+
+//   // Dispose specific controller
+//   Future<void> disposeController(String videoId) async {
+//     final controller = _controllers[videoId];
+//     if (controller != null) {
+//       await controller.dispose();
+//       _controllers.remove(videoId);
+//     }
+//   }
+
+//   // Dispose all controllers
+//   Future<void> disposeAll() async {
+//     for (final controller in _controllers.values) {
+//       await controller.dispose();
+//     }
+//     _controllers.clear();
+//   }
+// }
+
+class VideoPlayerManager {
+  static VideoPlayerManager? _instance;
+  static VideoPlayerManager get instance {
+    _instance ??= VideoPlayerManager._();
+    return _instance!;
+  }
+
+  VideoPlayerManager._();
+
+  // Track all active controllers
+  final Map<String, VideoPlayerController> _controllers = {};
+  final int _maxConcurrentVideos = 2; // Limit concurrent videos
+
+  // Get or create controller with resource management
+  Future<VideoPlayerController?> getController(
+      String videoUrl, String videoId) async {
+    // Clean up excess controllers if needed
+    if (_controllers.length >= _maxConcurrentVideos) {
+      await _cleanupOldestController();
+    }
+
+    // Return existing controller if available
+    if (_controllers.containsKey(videoId)) {
+      return _controllers[videoId];
+    }
+
+    try {
+      final controller = VideoPlayerController.network(videoUrl);
+      await controller.initialize();
+      _controllers[videoId] = controller;
+      return controller;
+    } catch (e) {
+      print('Failed to create video controller: $e');
+      return null;
+    }
+  }
+
+  // Clean up oldest controller
+  Future<void> _cleanupOldestController() async {
+    if (_controllers.isEmpty) return;
+
+    final oldestKey = _controllers.keys.first;
+    final controller = _controllers[oldestKey];
+
+    if (controller != null) {
+      await controller.dispose();
+      _controllers.remove(oldestKey);
+    }
+  }
+
+  // Dispose specific controller
+  Future<void> disposeController(String videoId) async {
+    final controller = _controllers[videoId];
+    if (controller != null) {
+      await controller.dispose();
+      _controllers.remove(videoId);
+    }
+  }
+
+  // Dispose all controllers
+  Future<void> disposeAll() async {
+    for (final controller in _controllers.values) {
+      await controller.dispose();
+    }
+    _controllers.clear();
+  }
+}
+
 class TalentCard extends StatefulWidget {
   final StarEntity talent;
   final StarCubit cubit;
@@ -494,9 +630,7 @@ class _TalentCardState extends State<TalentCard> {
       () {
         showSuccessMessage(
           context,
-          context.isArabic
-              ? 'تم الإبلاغ عن الفيديو'
-              : 'Video reported',
+          context.isArabic ? 'تم الإبلاغ عن الفيديو' : 'Video reported',
           color: Colors.red,
           icon: Icons.flag,
         );
@@ -545,95 +679,86 @@ class TalentVideoPlayerWidget extends StatefulWidget {
 }
 
 class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   bool _isInitialized = false;
+  bool _isInitializing = false;
   bool _isPlaying = false;
   bool _isMuted = false;
   bool _showControls = true;
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
+  bool _isDisposed = false;
 
   Timer? _playDelayTimer;
-  Timer? _pauseDelayTimer;
+  Timer? _initTimer;
+
+  String get videoId => '${widget.talent?.id ?? widget.videoUrl.hashCode}';
 
   @override
   void initState() {
     super.initState();
-    _initializeVideo();
+    _isMuted = widget.startMuted;
+    // Don't initialize immediately, wait for visibility
   }
 
-  void _initializeVideo() async {
-    print('🎥 TalentVideoPlayerWidget: Initializing video: ${widget.videoUrl}');
+  Future<void> _initializeVideo() async {
+    if (_isInitializing || _isDisposed || _controller != null) return;
+
+    setState(() {
+      _isInitializing = true;
+    });
 
     try {
-      // First attempt - standard initialization with timeout
-      _controller = VideoPlayerController.network(
+      final controller = await VideoPlayerManager.instance.getController(
         widget.videoUrl,
-        formatHint: VideoFormat.hls, // Try HLS format first for better compatibility
+        videoId,
       );
 
-      await _controller.initialize().timeout(
-        Duration(seconds: 15),
-        onTimeout: () {
-          throw TimeoutException('Video initialization timeout', Duration(seconds: 15));
-        },
-      );
+      if (controller != null && mounted && !_isDisposed) {
+        _controller = controller;
+        _controller!.setVolume(_isMuted ? 0 : 1);
+        _controller!.setLooping(false);
+        _controller!.addListener(_videoListener);
 
-      if (mounted) {
-        print('✅ TalentVideoPlayerWidget: Video initialized successfully');
         setState(() {
           _isInitialized = true;
-          _isMuted = widget.startMuted;
-          _controller.setVolume(_isMuted ? 0 : 1);
+          _isInitializing = false;
         });
 
-        _controller.addListener(_videoListener);
+        // Auto-play immediately after initialization if widget.autoPlay is true
+        if (widget.autoPlay && _visibilityFraction > 0.3) {
+          await Future.delayed(Duration(milliseconds: 100));
+          if (mounted &&
+              !_isDisposed &&
+              _controller != null &&
+              !_controller!.value.isPlaying) {
+            _controller!.play();
+            setState(() => _isPlaying = true);
+            _trackVideoStart();
+          }
+        }
       }
     } catch (error) {
-      print('❌ TalentVideoPlayerWidget: Video initialization error: $error');
-
-      // Try fallback initialization
-      try {
-        _controller = VideoPlayerController.network(
-          widget.videoUrl,
-          videoPlayerOptions: VideoPlayerOptions(
-            mixWithOthers: false,
-            allowBackgroundPlayback: false,
-          ),
-        );
-
-        await _controller.initialize();
-
-        if (mounted) {
-          print('✅ TalentVideoPlayerWidget: Video loaded with fallback method');
-          setState(() {
-            _isInitialized = true;
-            _isMuted = widget.startMuted;
-            _controller.setVolume(_isMuted ? 0 : 1);
-          });
-
-          _controller.addListener(_videoListener);
-        }
-      } catch (fallbackError) {
-        print('❌ TalentVideoPlayerWidget: Fallback initialization failed: $fallbackError');
-        // Don't show SnackBar in cards as it might be called multiple times
-        // Just mark as failed to initialize
-        if (mounted) {
-          setState(() {
-            _isInitialized = false;
-          });
-        }
+      print('Video initialization error: $error');
+      if (mounted && !_isDisposed) {
+        setState(() {
+          _isInitialized = false;
+          _isInitializing = false;
+        });
       }
     }
   }
 
   void _videoListener() {
-    if (_controller.value.isPlaying != _isPlaying) {
+    if (!mounted || _isDisposed || _controller == null) return;
+
+    final isPlaying = _controller!.value.isPlaying;
+    if (isPlaying != _isPlaying) {
       setState(() {
-        _isPlaying = _controller.value.isPlaying;
+        _isPlaying = isPlaying;
       });
 
-      if (_controller.value.isPlaying && !_hasTrackedView) {
+      if (isPlaying && !_hasTrackedView) {
         _trackVideoStart();
       }
     }
@@ -647,23 +772,22 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   }
 
   void _togglePlayPause() {
-    if (_controller.value.isPlaying) {
-      _controller.pause();
+    if (_controller == null || !_isInitialized) return;
+
+    if (_controller!.value.isPlaying) {
+      _controller!.pause();
     } else {
-      _controller.play();
+      _controller!.play();
       if (!_hasTrackedView) {
         _trackVideoStart();
       }
     }
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
   }
 
   void _toggleMute() {
     setState(() {
       _isMuted = !_isMuted;
-      _controller.setVolume(_isMuted ? 0 : 1);
+      _controller?.setVolume(_isMuted ? 0 : 1);
     });
   }
 
@@ -674,30 +798,63 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   }
 
   void _handleVisibilityChanged(VisibilityInfo info) {
+    if (_isDisposed) return;
+
     _visibilityFraction = info.visibleFraction;
 
-    if (!_isInitialized) return;
-
+    // Cancel timers
     _playDelayTimer?.cancel();
-    _pauseDelayTimer?.cancel();
+    _initTimer?.cancel();
 
-    if (info.visibleFraction > 0.5) {
-      if (!_controller.value.isPlaying && widget.autoPlay) {
-        _playDelayTimer = Timer(Duration(milliseconds: 600), () {
+    if (info.visibleFraction > 0.3) {
+      // Lower threshold for better UX
+      // Visible - initialize if needed
+      if (!_isInitialized && !_isInitializing) {
+        _initTimer = Timer(Duration(milliseconds: 200), () {
+          if (mounted && !_isDisposed && _visibilityFraction > 0.3) {
+            _initializeVideo();
+          }
+        });
+      } else if (_isInitialized && widget.autoPlay && !_isPlaying) {
+        // Auto-play if initialized with shorter delay
+        _playDelayTimer = Timer(Duration(milliseconds: 300), () {
           if (mounted &&
-              !_controller.value.isPlaying &&
-              _visibilityFraction > 0.5 &&
-              widget.autoPlay) {
-            _controller.play();
+              !_isDisposed &&
+              _controller != null &&
+              !_controller!.value.isPlaying &&
+              _visibilityFraction > 0.3) {
+            _controller!.play();
             setState(() => _isPlaying = true);
             _trackVideoStart();
           }
         });
       }
-    } else {
-      if (_controller.value.isPlaying) {
-        _controller.pause();
+    } else if (info.visibleFraction < 0.2) {
+      // Adjusted threshold
+      // Not visible - pause and potentially dispose
+      if (_controller != null && _controller!.value.isPlaying) {
+        _controller!.pause();
         setState(() => _isPlaying = false);
+      }
+
+      // Dispose if completely out of view
+      if (info.visibleFraction == 0) {
+        _disposeController();
+      }
+    }
+  }
+
+  Future<void> _disposeController() async {
+    if (_controller != null) {
+      _controller!.removeListener(_videoListener);
+      // Don't dispose from manager yet, let it handle resource management
+      // Just remove our reference
+      _controller = null;
+      if (mounted) {
+        setState(() {
+          _isInitialized = false;
+          _isPlaying = false;
+        });
       }
     }
   }
@@ -712,26 +869,21 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
         height: double.infinity,
         placeholder: (context, url) => Container(
           color: Colors.grey[300],
-          child: Icon(
-            Icons.video_library,
-            size: 48,
-            color: Colors.grey[600],
-          ),
+          child: Icon(Icons.video_library, size: 48, color: Colors.grey[600]),
         ),
-        errorWidget: (context, url, error) => Image.asset(
-          'assets/images/testforvideo.jpg',
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        errorWidget: (context, url, error) => _buildFallbackThumbnail(),
       );
     }
+    return _buildFallbackThumbnail();
+  }
 
-    return Image.asset(
-      widget.thumbnailUrl ?? 'assets/images/testforvideo.jpg',
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
+  Widget _buildFallbackThumbnail() {
+    return Container(
+      color: Colors.grey[300],
+      child: Center(
+        child:
+            Icon(Icons.play_circle_outline, size: 64, color: Colors.grey[600]),
+      ),
     );
   }
 
@@ -742,67 +894,63 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
         : false;
 
     return VisibilityDetector(
-      key: Key('video-${widget.videoUrl}'),
+      key: Key('video-$videoId'),
       onVisibilityChanged: _handleVisibilityChanged,
       child: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
-          setState(() => _showControls = !_showControls);
+          if (_isInitialized) {
+            setState(() => _showControls = !_showControls);
+          }
           widget.onTap?.call();
         },
         child: Container(
-          height: MediaQuery.sizeOf(context).height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.3,
           width: double.infinity,
           color: Colors.black,
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Background Thumbnail
-              if (widget.thumbnailUrl != null && !_isPlaying)
-                Positioned.fill(
-                  child: _buildThumbnail(),
-                ),
+              // Thumbnail (always show when not playing)
+              if (!_isPlaying) Positioned.fill(child: _buildThumbnail()),
 
-              // Video Player
-              if (_isInitialized)
+              // Video Player (only when initialized)
+              if (_isInitialized && _controller != null)
                 AnimatedOpacity(
                   opacity: _isPlaying ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 300),
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: _controller!.value.aspectRatio,
+                      child: VideoPlayer(_controller!),
+                    ),
                   ),
                 ),
 
-              // Loading Indicator
-              if (!_isInitialized)
-                const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
+              // Loading Indicator (only when initializing)
+              if (_isInitializing)
+                Container(
+                  color: Colors.black54,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
                   ),
                 ),
 
-              // Play button overlay when paused
-              // if (_isInitialized && !_isPlaying)
-              //   Center(
-              //     child: GestureDetector(
-              //       onTap: _togglePlayPause,
-              //       child: Container(
-              //         padding: EdgeInsets.all(16),
-              //         decoration: BoxDecoration(
-              //           color: Colors.black.withOpacity(0.7),
-              //           shape: BoxShape.circle,
-              //         ),
-              //         child: Icon(
-              //           Icons.play_arrow,
-              //           color: Colors.white,
-              //           size: 32,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
+              // Play button overlay (only when initialized but not playing)
+              if (_isInitialized && !_isPlaying && !_isInitializing)
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.6),
+                      shape: BoxShape.circle,
+                    ),
+                    child:
+                        Icon(Icons.play_arrow, color: Colors.white, size: 40),
+                  ),
+                ),
 
-              // Top Left Controls (Favorite)
+              // Favorite button
               Positioned(
                 top: 8,
                 left: 8,
@@ -813,9 +961,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
                   ),
                   child: IconButton(
                     icon: Icon(
-                      isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border_rounded,
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: Color(0xffFF0000),
                       size: 20,
                     ),
@@ -826,7 +972,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
                 ),
               ),
 
-              // Top Right Controls (Mute) - only when playing
+              // Mute button (only when playing)
               if (_isInitialized && _isPlaying)
                 Positioned(
                   top: 8,
@@ -857,10 +1003,10 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _playDelayTimer?.cancel();
-    _pauseDelayTimer?.cancel();
-    _controller.removeListener(_videoListener);
-    _controller.dispose();
+    _initTimer?.cancel();
+    _disposeController();
     super.dispose();
   }
 }
