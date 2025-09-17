@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../service_locator/service_locator.dart';
@@ -135,7 +136,10 @@ class ProfileVideoGrid extends StatelessWidget {
                   top: 4,
                   right: 4,
                   child: GestureDetector(
-                    onTap: () => _showVideoOptions(context, video),
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      _showVideoOptions(context, video);
+                    },
                     child: Container(
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
@@ -171,7 +175,7 @@ class ProfileVideoGrid extends StatelessWidget {
               ),
               SizedBox(height: 4),
               Text(
-                "${_formatViewCount(video.totalViews)} ${context.isArabic ? 'مشاهدة' : 'views'}",
+                "${_formatViewCount(video.totalViews, context)} ${context.isArabic ? 'مشاهدة' : 'views'}",
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[600],
@@ -259,7 +263,7 @@ class ProfileVideoGrid extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    "${_formatViewCount(video.totalViews)} ${context.isArabic ? 'مشاهدة' : 'views'} • ${_formatTimeAgo(video.createdAt ?? DateTime.now())}",
+                    "${_formatViewCount(video.totalViews, context)} ${context.isArabic ? 'مشاهدة' : 'views'} • ${_formatTimeAgo(video.createdAt ?? DateTime.now(), context).toArabicNumbers(context)}",
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey[600],
@@ -277,7 +281,7 @@ class ProfileVideoGrid extends StatelessWidget {
                         ),
                         SizedBox(width: 4),
                         Text(
-                          '${video.likes}',
+                          video.likes.toString().toArabicNumbers(context),
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[500],
@@ -291,7 +295,9 @@ class ProfileVideoGrid extends StatelessWidget {
                         ),
                         SizedBox(width: 4),
                         Text(
-                          video.averageRating.toStringAsFixed(1),
+                          video.averageRating
+                              .toStringAsFixed(1)
+                              .toArabicNumbers(context),
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[500],
@@ -366,32 +372,33 @@ class ProfileVideoGrid extends StatelessWidget {
     return '$minutes:$seconds';
   }
 
-  String _formatViewCount(num views) {
+  String _formatViewCount(num views, BuildContext context) {
     if (views >= 1000000) {
       return '${(views / 1000000).toStringAsFixed(1)}M';
     } else if (views >= 1000) {
       return '${(views / 1000).toStringAsFixed(1)}K';
     }
-    return views.toString();
+    return views.toString().toArabicNumbers(context);
   }
 
-  String _formatTimeAgo(DateTime dateTime) {
+  String _formatTimeAgo(DateTime dateTime, BuildContext context) {
     final difference = DateTime.now().difference(dateTime);
+    final isArabic = context.isArabic;
 
     if (difference.inDays > 365) {
       final years = (difference.inDays / 365).floor();
-      return '${years}y ago';
+      return isArabic ? 'منذ ${years} سنة' : '${years}y ago';
     } else if (difference.inDays > 30) {
       final months = (difference.inDays / 30).floor();
-      return '${months}mo ago';
+      return isArabic ? 'منذ ${months} شهر' : '${months}mo ago';
     } else if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
+      return isArabic ? 'منذ ${difference.inDays} يوم' : '${difference.inDays}d ago';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
+      return isArabic ? 'منذ ${difference.inHours} ساعة' : '${difference.inHours}h ago';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
+      return isArabic ? 'منذ ${difference.inMinutes} دقيقة' : '${difference.inMinutes}m ago';
     }
-    return 'Just now';
+    return isArabic ? 'الآن' : 'Just now';
   }
 
   void _showVideoOptions(BuildContext context, StarEntity video) {

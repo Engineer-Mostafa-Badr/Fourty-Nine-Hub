@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
@@ -9,8 +10,10 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:path/path.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../data/model/tube_video_models.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../helper/youtube_style_video_player.dart';
 import '../common/options_bottom_sheet.dart';
@@ -39,17 +42,23 @@ class TalentHistoryItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TalentVideoPlayer(
-              talent: talent,
-              videoUrl: mediaUrl,
-              // cubit: cubit,
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: cubit),
+                BlocProvider.value(value: serviceLocator<CommentCubit>()),
+              ],
+              child: TalentVideoPlayer(
+                talent: talent,
+                videoUrl: mediaUrl,
+                // cubit: cubit,
+              ),
             ),
           ),
         );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: context.isDarkMode ? Colors.black : const Color.fromARGB(255, 163, 155, 155),
+        color: context.isDarkMode ? Colors.black : Colors.white,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -72,6 +81,8 @@ class TalentHistoryItem extends StatelessWidget {
 
   Widget _buildThumbnailWithOverlays(
       BuildContext context, double width, double height) {
+    final tubeVideo =
+        talent is TubeVideoModel ? talent as TubeVideoModel : null;
     return Container(
       width: width,
       height: height,
@@ -85,7 +96,9 @@ class TalentHistoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               color: Colors.grey[300],
               image: DecorationImage(
-                image: AssetImage('assets/images/testforvideo.jpg'),
+                image: NetworkImage(talent.mediaUrl.isNotEmpty
+                    ? tubeVideo?.thumbnail ?? talent.mediaUrl.first.mediaKey
+                    : 'assets/images/testforvideo.jpg'),
                 fit: BoxFit.cover,
               ),
             ),

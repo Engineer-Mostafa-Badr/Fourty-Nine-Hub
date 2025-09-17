@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
@@ -16,6 +17,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/user_star_entity.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
+import '../../helper/youtube_style_video_player.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
   final PlaylistEntity playlist;
@@ -233,7 +236,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        '${playlist.videos.length}', // REAL count
+                        playlist.videos.length
+                            .toString()
+                            .toArabicNumbers(context), // REAL count
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -268,7 +273,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
                 Text(
                   context.isArabic
-                      ? '${playlist.videos.length} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
+                      ? '${playlist.videos.length.toString().toArabicNumbers(context)} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}'
                       : '${playlist.videos.length} videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
                   style: TextStyle(
                     fontSize: 14,
@@ -761,18 +766,25 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     });
 
     // Navigate to video player with playlist context
-    Navigator.pushNamed(
+    Navigator.push(
       context,
-      '/video-player',
-      arguments: {
-        'video': video,
-        'mediaUrl':
-            video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '',
-        'playlist': playlist,
-        'currentIndex': index,
-        'isShuffleEnabled': _isShuffleEnabled,
-        'isRepeatEnabled': _isRepeatEnabled,
-      },
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StarCubit>.value(
+              value: serviceLocator<StarCubit>(),
+            ),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: TalentVideoPlayer(
+            videoUrl:
+                video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '',
+            talent: video,
+          ),
+        ),
+      ),
     );
   }
 

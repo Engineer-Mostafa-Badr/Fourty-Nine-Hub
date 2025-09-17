@@ -199,13 +199,7 @@ class StarCubit extends Cubit<StarState> {
         final currentContext =
             AppPages.router.configuration.navigatorKey.currentContext;
         if (currentContext != null) {
-          ScaffoldMessenger.of(currentContext).showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          showSuccessMessage(currentContext, message);
         }
       },
     );
@@ -291,13 +285,7 @@ class StarCubit extends Cubit<StarState> {
         final currentContext =
             AppPages.router.configuration.navigatorKey.currentContext;
         if (currentContext != null) {
-          ScaffoldMessenger.of(currentContext).showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: Colors.green,
-              duration: const Duration(seconds: 2),
-            ),
-          );
+          showSuccessMessage(currentContext, message);
         }
       },
     );

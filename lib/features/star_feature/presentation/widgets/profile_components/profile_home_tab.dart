@@ -5,11 +5,13 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
 import '../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../utils/enums.dart';
 import '../common/loading_indicator.dart';
 import '../talent_card/talent_card.dart';
+import '../../helper/youtube_style_video_player.dart';
 import 'playlist_bottom_sheet.dart';
 import 'video/video_card_widget.dart';
 
@@ -273,13 +275,24 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
   void _navigateToVideo(BuildContext context, StarEntity video) {
     final mediaUrl =
         video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
-    Navigator.pushNamed(
+    Navigator.push(
       context,
-      '/video-player',
-      arguments: {
-        'video': video,
-        'mediaUrl': mediaUrl,
-      },
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StarCubit>.value(
+              value: serviceLocator<StarCubit>(),
+            ),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: TalentVideoPlayer(
+            videoUrl: mediaUrl,
+            talent: video,
+          ),
+        ),
+      ),
     );
   }
 

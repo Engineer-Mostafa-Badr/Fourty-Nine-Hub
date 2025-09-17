@@ -362,7 +362,9 @@ class TalentMyItem extends StatelessWidget {
               leading: Icon(Icons.edit),
               title: Text(LocaleKeys.edit.localize),
               onTap: () {
+                ManageVibration.vibrate();
                 Navigator.pop(context);
+                //Todo
                 // Add edit functionality
               },
             ),
@@ -370,16 +372,21 @@ class TalentMyItem extends StatelessWidget {
               leading: Icon(Icons.share),
               title: Text(LocaleKeys.share.localize),
               onTap: () {
+                ManageVibration.vibrate();
+
                 Navigator.pop(context);
+                //Todo
                 // Add share functionality
               },
             ),
             ListTile(
               leading: Icon(Icons.delete, color: Colors.red),
-              title: Text(LocaleKeys.delete.localize,
+              title: Text(context.isArabic ? 'حذف الفيديو' : 'Delete Video',
                   style: TextStyle(color: Colors.red)),
               onTap: () {
+                ManageVibration.vibrate();
                 Navigator.pop(context);
+                //Todo
                 _showDeleteDialog(context);
               },
             ),
@@ -396,7 +403,7 @@ class TalentMyItem extends StatelessWidget {
           ? 'هل أنت متأكد من حذف هذا الفيديو؟ لا يمكن التراجع عن هذا الإجراء.'
           : 'Are you sure you want to delete this video? This action cannot be undone.',
       () => cubit.deleteMyTubeVideo(talent.id),
-      confirmText: LocaleKeys.delete.localize,
+      confirmText: context.isArabic ? 'حذف الفيديو' : 'Delete Video',
       cancelText: LocaleKeys.cancel.localize,
     );
   }

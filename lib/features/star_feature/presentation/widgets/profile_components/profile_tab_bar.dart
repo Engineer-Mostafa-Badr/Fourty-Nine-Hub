@@ -3,10 +3,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 class ProfileTabBar extends StatelessWidget {
   final TabController tabController;
+  final bool isCurrentUser;
 
   const ProfileTabBar({
     super.key,
     required this.tabController,
+    this.isCurrentUser = true,
   });
 
   @override
@@ -43,10 +45,11 @@ class ProfileTabBar extends StatelessWidget {
             height: 48.0,
             text: context.isArabic ? 'قوائم التشغيل' : 'Playlists',
           ),
-          Tab(
-            height: 48.0,
-            text: context.isArabic ? 'الشاهد لاحقاً' : 'Watch Later',
-          ),
+          if (isCurrentUser)
+            Tab(
+              height: 48.0,
+              text: context.isArabic ? 'الشاهد لاحقاً' : 'Watch Later',
+            ),
         ],
       ),
     );

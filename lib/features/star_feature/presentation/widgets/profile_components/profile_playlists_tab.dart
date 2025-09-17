@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/profile_components/playlist/playlist_card.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -276,7 +277,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
         children: [
           Text(
             context.isArabic
-                ? 'قوائم التشغيل (${state.playlists.length})'
+                ? 'قوائم التشغيل (${state.playlists.length.toString().toArabicNumbers(context)})'
                 : 'Playlists (${state.playlists.length})',
             style: TextStyle(
               fontSize: 16,

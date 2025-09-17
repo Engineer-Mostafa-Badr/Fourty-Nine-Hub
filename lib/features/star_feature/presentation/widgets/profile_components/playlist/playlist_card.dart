@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/thumbnail_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PlaylistCard extends StatelessWidget {
@@ -111,7 +113,7 @@ class PlaylistCard extends StatelessWidget {
                   ),
                   SizedBox(width: _getResponsiveSpacing(context, 4)),
                   Text(
-                    '$videoCount',
+                    videoCount.toString().toArabicNumbers(context),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: _getResponsiveFontSize(context, 10),
@@ -152,7 +154,7 @@ class PlaylistCard extends StatelessWidget {
           // Video count and creation date - فك التعليق وحدث العدد
           Text(
             context.isArabic
-                ? '$videoCount فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
+                ? '${videoCount.toString().toArabicNumbers(context)} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}'
                 : '$videoCount videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
             style: TextStyle(
               fontSize: _getResponsiveFontSize(context, 13),
@@ -183,10 +185,14 @@ class PlaylistCard extends StatelessWidget {
         ManageVibration.vibrate();
         switch (value) {
           case 'edit':
+            ManageVibration.vibrate();
             onEdit?.call();
+            context.pop();
             break;
           case 'delete':
+            ManageVibration.vibrate();
             onDelete?.call();
+            context.pop();
             break;
         }
       },

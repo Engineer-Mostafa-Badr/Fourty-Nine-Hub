@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/error_widget.dart';
@@ -58,7 +59,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   void _initializeControllers() {
-    _tabController = TabController(length: 4, vsync: this);
+    // Set tab length based on user type: 4 for current user, 3 for others
+    final tabLength = widget.isCurrentUser ? 4 : 3;
+    _tabController = TabController(length: tabLength, vsync: this);
     _profileCubit = context.read<ProfileCubit>();
     _starCubit = context.read<StarCubit>();
     _scrollController = ScrollController();
@@ -204,6 +207,17 @@ class _ProfilePageViewState extends State<ProfilePageView>
     }
   }
 
+  // Function to get app bar title based on profile type
+  String _getAppBarTitle(bool isCurrentUser) {
+    if (isCurrentUser) {
+      return context.isArabic ? 'ملف شخصي' : 'My Profile';
+    } else {
+      // For other users, show their name
+      final userName = widget.user?.firstName ?? widget.user?.lastName ?? '';
+      return userName.isNotEmpty ? userName : (context.isArabic ? 'الملف الشخصي' : 'Profile');
+    }
+  }
+
   Widget _buildContent(
       ProfileState profileState, bool isCurrentUserFromProfile) {
     debugPrint('Profile State: ${profileState.status}');
@@ -241,10 +255,12 @@ class _ProfilePageViewState extends State<ProfilePageView>
         return [
           // Add the app bar as a sliver so it can scroll with the content
           SliverAppBar(
-            expandedHeight: kToolbarHeight,
+            // expandedHeight: kToolbarHeight,
             pinned: false,
             floating: true,
             snap: true,
+            toolbarHeight: 40,
+            // titleSpacing: 0,
             backgroundColor: Colors.white,
             elevation: 0,
             leading: IconButton(
@@ -265,7 +281,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 ),
             ],
             title: Text(
-              widget.user?.firstName ?? 'Profile',
+              _getAppBarTitle(isCurrentUserFromProfile),
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -281,7 +297,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
             pinned: true,
             floating: true,
             delegate: _SliverTabBarDelegate(
-              ProfileTabBar(tabController: _tabController),
+              ProfileTabBar(
+                tabController: _tabController,
+                isCurrentUser: isCurrentUserFromProfile,
+              ),
             ),
           ),
         ];

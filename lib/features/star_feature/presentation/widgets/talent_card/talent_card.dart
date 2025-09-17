@@ -26,6 +26,8 @@ import 'talent_card_info_section.dart';
 import 'talent_card_overlay_controls.dart';
 import '../common/options_bottom_sheet.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 
 // class VideoPlayerManager {
 //   static VideoPlayerManager? _instance;
@@ -256,7 +258,10 @@ class _TalentCardState extends State<TalentCard> {
           talent: widget.talent,
           cubit: widget.cubit,
           onProfileTap: () => _navigateToProfile(context, widget.talent),
-          onMoreOptionsTap: () => _showTubeVideoOptions(context, widget.talent),
+          onMoreOptionsTap: () {
+            ManageVibration.vibrate();
+            _showTubeVideoOptions(context, widget.talent);
+          },
         ),
       ],
     );
@@ -539,15 +544,6 @@ class _TalentCardState extends State<TalentCard> {
               _shareVideo(context, talent);
             },
           ),
-          OptionItem(
-            icon: Icons.download,
-            title: context.isArabic ? 'تحميل' : 'Download',
-            onTap: () {
-              ManageVibration.vibrate();
-              Navigator.pop(context);
-              _downloadVideo(context, talent);
-            },
-          ),
           (() {
             final isWatchLater = cubit.isWatchLater(talent.id);
             return OptionItem(
@@ -622,21 +618,12 @@ class _TalentCardState extends State<TalentCard> {
   }
 
   void _reportVideo(BuildContext context, StarEntity talent) {
-    showConfirmDialog(
-      context,
-      context.isArabic
-          ? 'هل تريد الإبلاغ عن هذا الفيديو لانتهاكه قواعد المجتمع؟'
-          : 'Do you want to report this video for violating community guidelines?',
-      () {
-        showSuccessMessage(
-          context,
-          context.isArabic ? 'تم الإبلاغ عن الفيديو' : 'Video reported',
-          color: Colors.red,
-          icon: Icons.flag,
-        );
-      },
-      confirmText: LocaleKeys.report.localize,
-      cancelText: LocaleKeys.cancel.localize,
+    bottomSheet(
+      context: context,
+      widget: ReportView(
+        id: talent.id,
+        categoryId: talent.user.id, // Using user id as category id
+      ),
     );
   }
 
@@ -731,6 +718,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
           if (mounted &&
               !_isDisposed &&
               _controller != null &&
+              _controller!.value.isInitialized &&
               !_controller!.value.isPlaying) {
             _controller!.play();
             setState(() => _isPlaying = true);
@@ -772,7 +760,8 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   }
 
   void _togglePlayPause() {
-    if (_controller == null || !_isInitialized) return;
+    if (_controller == null || !_isInitialized || _isDisposed) return;
+    if (!_controller!.value.isInitialized) return;
 
     if (_controller!.value.isPlaying) {
       _controller!.pause();
@@ -821,6 +810,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
           if (mounted &&
               !_isDisposed &&
               _controller != null &&
+              _controller!.value.isInitialized &&
               !_controller!.value.isPlaying &&
               _visibilityFraction > 0.3) {
             _controller!.play();
@@ -832,7 +822,9 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
     } else if (info.visibleFraction < 0.2) {
       // Adjusted threshold
       // Not visible - pause and potentially dispose
-      if (_controller != null && _controller!.value.isPlaying) {
+      if (_controller != null &&
+          _controller!.value.isInitialized &&
+          _controller!.value.isPlaying) {
         _controller!.pause();
         setState(() => _isPlaying = false);
       }
@@ -915,14 +907,18 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
               if (!_isPlaying) Positioned.fill(child: _buildThumbnail()),
 
               // Video Player (only when initialized)
-              if (_isInitialized && _controller != null)
+              if (_isInitialized && _controller != null && !_isDisposed)
                 AnimatedOpacity(
                   opacity: _isPlaying ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 300),
                   child: Center(
                     child: AspectRatio(
-                      aspectRatio: _controller!.value.aspectRatio,
-                      child: VideoPlayer(_controller!),
+                      aspectRatio: _controller!.value.isInitialized
+                          ? _controller!.value.aspectRatio
+                          : 16 / 9,
+                      child: _controller!.value.isInitialized
+                          ? VideoPlayer(_controller!)
+                          : Container(color: Colors.black),
                     ),
                   ),
                 ),
@@ -937,18 +933,18 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
                 ),
 
               // Play button overlay (only when initialized but not playing)
-              if (_isInitialized && !_isPlaying && !_isInitializing)
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      shape: BoxShape.circle,
-                    ),
-                    child:
-                        Icon(Icons.play_arrow, color: Colors.white, size: 40),
-                  ),
-                ),
+              // if (_isInitialized && !_isPlaying && !_isInitializing)
+              //   Center(
+              //     child: Container(
+              //       padding: EdgeInsets.all(16),
+              //       decoration: BoxDecoration(
+              //         color: Colors.black.withOpacity(0.6),
+              //         shape: BoxShape.circle,
+              //       ),
+              //       child:
+              //           Icon(Icons.play_arrow, color: Colors.white, size: 40),
+              //     ),
+              //   ),
 
               // Favorite button
               Positioned(

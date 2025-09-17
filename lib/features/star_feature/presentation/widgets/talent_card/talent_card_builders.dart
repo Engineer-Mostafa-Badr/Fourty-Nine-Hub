@@ -8,7 +8,7 @@ import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
-import '../video_player/talent_video_player.dart';
+import '../../helper/youtube_style_video_player.dart';
 import '../../utils/enums.dart';
 import 'talent_card.dart';
 import 'talent_history_item.dart';

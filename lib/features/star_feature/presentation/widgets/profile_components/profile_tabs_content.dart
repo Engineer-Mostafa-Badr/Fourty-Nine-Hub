@@ -48,10 +48,11 @@ class ProfileTabsContent extends StatelessWidget {
         _buildPlaylistsTab(isCurrentUser, userId),
 
         // Watch Later Tab - Only for current user
-        ProfileWatchLaterTab(
-          isCurrentUser: isCurrentUser,
-          userId: userId,
-        ),
+        if (isCurrentUser)
+          ProfileWatchLaterTab(
+            isCurrentUser: isCurrentUser,
+            userId: userId,
+          ),
       ],
     );
   }

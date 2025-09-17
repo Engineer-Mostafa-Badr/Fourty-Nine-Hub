@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
@@ -1354,7 +1356,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                     Row(
                       children: [
                         Text(
-                          '${_formatViewCount(widget.talent.totalViews)} ${context.isArabic ? 'مشاهدة' : 'views'}',
+                          '${_formatViewCount(widget.talent.totalViews).toArabicNumbers(context)} ${context.isArabic ? 'مشاهدة' : 'views'}',
                           style:
                               TextStyle(color: Colors.grey[600], fontSize: 14),
                         ),
@@ -1365,7 +1367,8 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                         ),
                         Text(
                           _formatTimeAgo(
-                              widget.talent.createdAt ?? DateTime.now()),
+                                  widget.talent.createdAt ?? DateTime.now())
+                              .toArabicNumbers(context),
                           style:
                               TextStyle(color: Colors.grey[600], fontSize: 14),
                         ),
@@ -1492,7 +1495,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                   ),
                                 ),
                                 Text(
-                                  '${_formatViewCount(widget.talent.user.viewNumber)} ${context.isArabic ? 'مشترك' : 'subscribers'}',
+                                  '${_formatViewCount(widget.talent.user.viewNumber).toArabicNumbers(context)} ${context.isArabic ? 'مشترك' : 'subscribers'}',
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 12,
@@ -1629,9 +1632,11 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                               (widget.talent as TubeVideoModel)
                                                   .likes;
                                         }
-
+                                        // make it arabic numbers
                                         return Text(
-                                          '$likes',
+                                          likes
+                                              .toString()
+                                              .toArabicNumbers(context),
                                           style: TextStyle(
                                             color: Colors.grey[700],
                                             fontSize: 14,
@@ -1677,7 +1682,9 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                         }
 
                                         return Text(
-                                          '$dislikes',
+                                          dislikes
+                                              .toString()
+                                              .toArabicNumbers(context),
                                           style: TextStyle(
                                             color: Colors.grey[700],
                                             fontSize: 14,
@@ -1738,8 +1745,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                Text(
-                                  '${commentState.totalComments}',
+                                Label(
+                                  text: commentState.totalComments
+                                      .toString()
+                                      .toArabicNumbers(context),
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 14,
@@ -2344,8 +2353,9 @@ class _CommentsModalState extends State<CommentsModal> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Comments (${state.totalComments})', // تأكد إن العدد يظهر هنا
+                    Label(
+                      text:
+                          '${context.isArabic ? 'التعليقات' : 'Comments'} (${state.totalComments.toString().toArabicNumbers(context)})', // تأكد إن العدد يظهر هنا
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -2469,7 +2479,7 @@ class _CommentsModalState extends State<CommentsModal> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      comment.timeAgo,
+                      comment.timeAgo.toArabicNumbers(context),
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[500],
@@ -2501,8 +2511,10 @@ class _CommentsModalState extends State<CommentsModal> {
                                 : Colors.grey[600],
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            '${comment.likes}',
+                          Label(
+                            text: comment.likes
+                                .toString()
+                                .toArabicNumbers(context),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -2516,13 +2528,28 @@ class _CommentsModalState extends State<CommentsModal> {
                       onTap: () {
                         context.read<CommentCubit>().dislikeComment(comment.id);
                       },
-                      child: Icon(
-                        comment.isDisliked
-                            ? Icons.thumb_down
-                            : Icons.thumb_down_outlined,
-                        size: 16,
-                        color:
-                            comment.isDisliked ? Colors.red : Colors.grey[600],
+                      child: Row(
+                        children: [
+                          Icon(
+                            comment.isDisliked
+                                ? Icons.thumb_down
+                                : Icons.thumb_down_outlined,
+                            size: 16,
+                            color: comment.isDisliked
+                                ? Colors.red
+                                : Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Label(
+                            text: comment.dislikes
+                                .toString()
+                                .toArabicNumbers(context),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

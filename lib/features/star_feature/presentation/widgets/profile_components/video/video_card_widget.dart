@@ -15,11 +15,13 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../data/model/tube_video_models.dart';
+import '../../../controller/comment_cubit/comment_cubit.dart';
 import '../../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../../controller/star_cubit/star_cubit.dart';
+import '../../../helper/youtube_style_video_player.dart';
 import '../playlist_bottom_sheet.dart';
 
-class VideoCardWidget extends StatelessWidget {
+class VideoCardWidget extends StatefulWidget {
   final TubeVideoModel video;
   final int index;
   final bool isHorizontal;
@@ -34,13 +36,59 @@ class VideoCardWidget extends StatelessWidget {
   });
 
   @override
+  State<VideoCardWidget> createState() => _VideoCardWidgetState();
+}
+
+class _VideoCardWidgetState extends State<VideoCardWidget> {
+  int? _selectedRating;
+  bool _isAnimating = false;
+  bool _shouldFadeOut = false;
+  bool _showFinalRating = false;
+
+  void _onStarTap(int rating) async {
+    if (_isAnimating) return;
+
+    setState(() {
+      _selectedRating = rating;
+      _isAnimating = true;
+      _shouldFadeOut = false;
+    });
+
+    ManageVibration.vibrate();
+
+    // Wait for 300ms to show the selected stars
+    await Future.delayed(Duration(milliseconds: 300));
+
+    if (mounted) {
+      // Start fade out animation
+      setState(() {
+        _shouldFadeOut = true;
+      });
+
+      // Wait for fade out to complete (600ms)
+      await Future.delayed(Duration(milliseconds: 600));
+
+      if (mounted) {
+        // Update the rating and show snack bar
+        context.read<StarCubit>().updateRating(widget.video.id, rating);
+
+        // Show final rating display
+        setState(() {
+          _showFinalRating = true;
+          _isAnimating = false;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap == null
+      onTap: widget.onTap == null
           ? () => _navigateToVideo(context)
           : () {
               ManageVibration.vibrate();
-              onTap?.call();
+              widget.onTap?.call();
             },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,11 +150,12 @@ class VideoCardWidget extends StatelessWidget {
           children: [
             // Main thumbnail
             ThumbnailWidget(
-              imageUrl:
-                  video.thumbnail?.isNotEmpty == true ? video.thumbnail : null,
+              imageUrl: widget.video.thumbnail?.isNotEmpty == true
+                  ? widget.video.thumbnail
+                  : null,
               width: double.infinity,
               height: double.infinity,
-              duration: _formatDuration(video),
+              duration: _formatDuration(widget.video),
               showVolumeIcon: true,
               onTap: () {
                 ManageVibration.vibrate();
@@ -129,12 +178,13 @@ class VideoCardWidget extends StatelessWidget {
   Widget _buildFavoriteButton(BuildContext context) {
     return BlocBuilder<StarCubit, dynamic>(
       builder: (context, state) {
-        final isFavorite = context.read<StarCubit>().isFavorite(video.id);
+        final isFavorite =
+            context.read<StarCubit>().isFavorite(widget.video.id);
 
         return GestureDetector(
           onTap: () {
             ManageVibration.vibrate();
-            context.read<StarCubit>().toggleFavorite(video.id);
+            context.read<StarCubit>().toggleFavorite(widget.video.id);
           },
           child: Container(
             padding: EdgeInsets.all(_getResponsiveSpacing(context, 6)),
@@ -197,10 +247,10 @@ class VideoCardWidget extends StatelessWidget {
         child: CircleAvatar(
           radius: 20,
           backgroundColor: Colors.grey[300],
-          backgroundImage: video.user.image.isNotEmpty
-              ? NetworkImage(video.user.image)
+          backgroundImage: widget.video.user.image.isNotEmpty
+              ? NetworkImage(widget.video.user.image)
               : null,
-          child: video.user.image.isEmpty
+          child: widget.video.user.image.isEmpty
               ? Icon(
                   Icons.person,
                   size: _getResponsiveIconSize(context, 14),
@@ -218,7 +268,7 @@ class VideoCardWidget extends StatelessWidget {
       children: [
         // Title
         Text(
-          video.title,
+          widget.video.title,
           style: TextStyle(
             fontSize: _getResponsiveFontSize(context, 15),
             fontWeight: FontWeight.w600,
@@ -232,7 +282,7 @@ class VideoCardWidget extends StatelessWidget {
 
         // Author
         Text(
-          "${video.user.firstName} ${video.user.lastName}",
+          "${widget.video.user.firstName} ${widget.video.user.lastName}",
           style: TextStyle(
             fontSize: _getResponsiveFontSize(context, 13),
             fontWeight: FontWeight.w500,
@@ -254,7 +304,7 @@ class VideoCardWidget extends StatelessWidget {
             SizedBox(width: _getResponsiveSpacing(context, 4)),
             Expanded(
               child: Text(
-                "${video.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(video.createdAt ?? DateTime.now(), locale: context.locale.languageCode)}",
+                "${widget.video.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize} • ${timeago.format(widget.video.createdAt ?? DateTime.now(), locale: context.locale.languageCode).toArabicNumbers(context)}",
                 style: TextStyle(
                   fontSize: _getResponsiveFontSize(context, 12),
                   color: Colors.grey[600],
@@ -303,42 +353,138 @@ class VideoCardWidget extends StatelessWidget {
   }
 
   Widget _buildStarRating(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        5,
-        (starIndex) => GestureDetector(
-          onTap: () {
-            ManageVibration.vibrate();
-            context.read<StarCubit>().updateRating(video.id, starIndex + 1);
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: _getResponsiveSpacing(context, 1),
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, state) {
+        // Check if video has been rated
+        final isVideoRated =
+            context.read<StarCubit>().isVideoRated(widget.video.id);
+
+        // Show rating stars only if video hasn't been rated and not animating
+        if (!isVideoRated && !_isAnimating) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(
+              5,
+              (starIndex) => GestureDetector(
+                onTap: () => _onStarTap(starIndex + 1),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _getResponsiveSpacing(context, 1),
+                  ),
+                  child: Icon(
+                    starIndex < widget.video.averageRating
+                        ? Icons.star
+                        : Icons.star_border,
+                    color: starIndex < widget.video.averageRating
+                        ? Colors.amber[600]
+                        : Colors.grey[400],
+                    size: _getResponsiveIconSize(context, 18),
+                  ),
+                ),
+              ),
             ),
-            child: Icon(
-              starIndex < video.averageRating ? Icons.star : Icons.star_border,
-              color: starIndex < video.averageRating
-                  ? Colors.amber[600]
-                  : Colors.grey[400],
-              size: _getResponsiveIconSize(context, 18),
+          );
+        }
+
+        // Animated stars during rating selection
+        if (_selectedRating != null && _isAnimating) {
+          return AnimatedOpacity(
+            opacity: _shouldFadeOut ? 0.0 : 1.0,
+            duration: Duration(milliseconds: 600),
+            curve: Curves.easeInOut,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(
+                5,
+                (starIndex) => Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _getResponsiveSpacing(context, 1),
+                  ),
+                  child: Icon(
+                    starIndex < _selectedRating!
+                        ? Icons.star
+                        : Icons.star_border,
+                    color: starIndex < _selectedRating!
+                        ? Colors.amber[600]
+                        : Colors.grey[400],
+                    size: _getResponsiveIconSize(context, 18),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Final rating display - show single star with rating number
+        if (_showFinalRating && _selectedRating != null) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _selectedRating.toString().toArabicNumbers(context),
+                style: TextStyle(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 4),
+              Icon(
+                Icons.star,
+                color: Colors.amber[600],
+                size: _getResponsiveIconSize(context, 18),
+              ),
+            ],
+          );
+        }
+
+        // Default case - show current rating as read-only
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            5,
+            (starIndex) => Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: _getResponsiveSpacing(context, 1),
+              ),
+              child: Icon(
+                starIndex < widget.video.averageRating
+                    ? Icons.star
+                    : Icons.star_border,
+                color: starIndex < widget.video.averageRating
+                    ? Colors.amber[600]
+                    : Colors.grey[400],
+                size: _getResponsiveIconSize(context, 18),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   void _navigateToVideo(BuildContext context) {
-    final mediaUrl =
-        video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
-    Navigator.pushNamed(
+    final mediaUrl = widget.video.mediaUrl.isNotEmpty
+        ? widget.video.mediaUrl.first.mediaKey
+        : '';
+    Navigator.push(
       context,
-      '/video-player',
-      arguments: {
-        'video': video,
-        'mediaUrl': mediaUrl,
-      },
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StarCubit>.value(
+              value: serviceLocator<StarCubit>(),
+            ),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: TalentVideoPlayer(
+            videoUrl: mediaUrl,
+            talent: widget.video,
+          ),
+        ),
+      ),
     );
   }
 
@@ -394,7 +540,7 @@ class VideoCardWidget extends StatelessWidget {
           title: context.isArabic ? 'إضافة إلى قائمة تشغيل' : 'Add to playlist',
           onTap: () {
             Navigator.pop(context);
-            _showPlaylistBottomSheet(context, video);
+            _showPlaylistBottomSheet(context, widget.video);
           },
         ),
         OptionItem(
@@ -408,17 +554,17 @@ class VideoCardWidget extends StatelessWidget {
           onTap: () => Navigator.pop(context),
         ),
         OptionItem(
-          icon: cubit.isFavorite(video.id)
+          icon: cubit.isFavorite(widget.video.id)
               ? Icons.favorite
               : Icons.favorite_border,
-          title: cubit.isFavorite(video.id)
+          title: cubit.isFavorite(widget.video.id)
               ? (context.isArabic
                   ? 'إزالة من المفضلة'
                   : 'Remove from favorites')
               : (context.isArabic ? 'إضافة للمفضلة' : 'Add to favorites'),
           onTap: () {
             Navigator.pop(context);
-            cubit.toggleFavorite(video.id);
+            cubit.toggleFavorite(widget.video.id);
           },
         ),
         OptionItem(
