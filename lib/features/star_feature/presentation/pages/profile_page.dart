@@ -69,7 +69,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
     // Listen to scroll to handle app bar animation
     _scrollController.addListener(_handleScroll);
 
-    print('🔧 TabController initialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
+    print(
+        '🔧 TabController initialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
   }
 
   void _loadProfileAndVideos() async {
@@ -188,7 +189,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
       _tabController.dispose();
       final tabLength = widget.isCurrentUser ? 4 : 3;
       _tabController = TabController(length: tabLength, vsync: this);
-      print('🔄 TabController reinitialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
+      print(
+          '🔄 TabController reinitialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
     }
   }
 
@@ -229,7 +231,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
     } else {
       // For other users, show their name
       final userName = widget.user?.firstName ?? widget.user?.lastName ?? '';
-      return userName.isNotEmpty ? userName : (context.isArabic ? 'الملف الشخصي' : 'Profile');
+      return userName.isNotEmpty
+          ? userName
+          : (context.isArabic ? 'الملف الشخصي' : 'Profile');
     }
   }
 

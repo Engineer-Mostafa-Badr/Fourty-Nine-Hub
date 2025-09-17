@@ -188,6 +188,7 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
               video: video,
               index: index,
               isHorizontal: true,
+              starCubit: _starCubit,
               onTap: () => _navigateToVideo(context, video),
             ),
           );
@@ -281,7 +282,7 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
         builder: (context) => MultiBlocProvider(
           providers: [
             BlocProvider<StarCubit>.value(
-              value: serviceLocator<StarCubit>(),
+              value: _starCubit, // استخدام نفس ال cubit instance
             ),
             BlocProvider<CommentCubit>(
               create: (context) => serviceLocator<CommentCubit>(),

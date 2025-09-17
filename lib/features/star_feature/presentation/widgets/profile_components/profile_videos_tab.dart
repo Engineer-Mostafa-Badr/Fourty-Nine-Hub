@@ -530,7 +530,7 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
         builder: (context) => MultiBlocProvider(
           providers: [
             BlocProvider<StarCubit>.value(
-              value: serviceLocator<StarCubit>(),
+              value: _starCubit, // استخدام نفس ال cubit instance
             ),
             BlocProvider<CommentCubit>(
               create: (context) => serviceLocator<CommentCubit>(),

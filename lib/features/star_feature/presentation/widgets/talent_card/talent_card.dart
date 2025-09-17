@@ -195,59 +195,63 @@ class _TalentCardState extends State<TalentCard> {
     final thumbnailUrl = _getThumbnailUrl();
     final isVideo = _isVideoUrl(mediaUrl);
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      color: context.isDarkMode ? Colors.black : Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Video/Image Section with Favorite Overlay
-          GestureDetector(
-            onTap: () {
-              ManageVibration.vibrate();
-              if (isVideo) {
-                _incrementViewIfNeeded();
-                _navigateToVideoPlayer(context, mediaUrl, widget.talent);
-              } else {
-                _navigateToProfile(context, widget.talent);
-              }
-            },
-            child: Stack(
-              children: [
-                // Video or Image Container
-                isVideo
-                    ? TalentVideoPlayerWidget(
-                        videoUrl: mediaUrl,
-                        title: widget.talent.title,
-                        autoPlay: true,
-                        startMuted: true,
-                        thumbnailUrl: thumbnailUrl,
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, starState) {
+        return Container(
+          margin: EdgeInsets.only(bottom: 16),
+          color: context.isDarkMode ? Colors.black : Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Video/Image Section with Favorite Overlay
+              GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  if (isVideo) {
+                    _incrementViewIfNeeded();
+                    _navigateToVideoPlayer(context, mediaUrl, widget.talent);
+                  } else {
+                    _navigateToProfile(context, widget.talent);
+                  }
+                },
+                child: Stack(
+                  children: [
+                    // Video or Image Container
+                    isVideo
+                        ? TalentVideoPlayerWidget(
+                            videoUrl: mediaUrl,
+                            title: widget.talent.title,
+                            autoPlay: true,
+                            startMuted: true,
+                            thumbnailUrl: thumbnailUrl,
+                            talent: widget.talent,
+                            cubit: widget.cubit,
+                            onTap: () => _navigateToVideoPlayer(
+                                context, mediaUrl, widget.talent),
+                            onVideoStarted: () => _incrementViewIfNeeded(),
+                          )
+                        : _buildImageContainer(mediaUrl),
+
+                    // Favorite Overlay (only for non-video content)
+                    if (!isVideo)
+                      TalentCardOverlayControls(
                         talent: widget.talent,
                         cubit: widget.cubit,
-                        onTap: () => _navigateToVideoPlayer(
-                            context, mediaUrl, widget.talent),
-                        onVideoStarted: () => _incrementViewIfNeeded(),
-                      )
-                    : _buildImageContainer(mediaUrl),
+                        isPlaying: false,
+                      ),
+                  ],
+                ),
+              ),
 
-                // Favorite Overlay (only for non-video content)
-                if (!isVideo)
-                  TalentCardOverlayControls(
-                    talent: widget.talent,
-                    cubit: widget.cubit,
-                    isPlaying: false,
-                  ),
-              ],
-            ),
+              // Video Info Section with enhanced tube video info
+              _buildVideoInfoSection(),
+
+              // Delete Button for My Talents
+              if (widget.isMyTalent) _buildDeleteButton(context, widget.talent),
+            ],
           ),
-
-          // Video Info Section with enhanced tube video info
-          _buildVideoInfoSection(),
-
-          // Delete Button for My Talents
-          if (widget.isMyTalent) _buildDeleteButton(context, widget.talent),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -627,7 +631,7 @@ class _TalentCardState extends State<TalentCard> {
     );
   }
 
-  static bool _isVideoUrl(String url) {
+  bool _isVideoUrl(String url) {
     return url.toLowerCase().contains('.mp4') ||
         url.toLowerCase().contains('.mov') ||
         url.toLowerCase().contains('.avi') ||

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
+import '../../utils/enums.dart';
 
 class TalentCardOverlayControls extends StatelessWidget {
   final StarEntity talent;
@@ -51,6 +52,8 @@ class TalentCardOverlayControls extends StatelessWidget {
                 onPressed: () {
                   ManageVibration.vibrate();
                   cubit.toggleFavorite(talent.id);
+              // Force refresh all screens
+              cubit.emit(cubit.state.copyWith(status: StarStates.success));
                 },
                 padding: const EdgeInsets.all(8),
                 constraints: const BoxConstraints(),

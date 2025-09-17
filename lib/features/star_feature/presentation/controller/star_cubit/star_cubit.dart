@@ -100,6 +100,7 @@ class StarCubit extends Cubit<StarState> {
     await Future.wait([
       loadTalents(TalentCategory.available, refresh: true),
       loadTalents(TalentCategory.myTalents, refresh: true),
+      loadFavoriteVideos(refresh: true),
       loadWatchLaterVideos(refresh: true),
       _fetchBanner(),
     ]);
@@ -176,7 +177,9 @@ class StarCubit extends Cubit<StarState> {
 
   // Toggle favorite for tube videos
   Future<void> toggleTubeFavorite(String videoId) async {
+    print("🔄 Toggle favorite for video: $videoId");
     final isFavorite = state.favoriteIds.contains(videoId);
+    print("🔄 Current favorite status: $isFavorite");
 
     // Optimistic update
     final updatedFavorites = Set<String>.from(state.favoriteIds);
@@ -186,7 +189,8 @@ class StarCubit extends Cubit<StarState> {
       updatedFavorites.add(videoId);
     }
 
-    emit(state.copyWith(favoriteIds: updatedFavorites));
+    print("🔄 Updated favorites count: ${updatedFavorites.length}");
+    emit(state.copyWith(favoriteIds: updatedFavorites, status: StarStates.success));
 
     // API call
     final response = isFavorite
@@ -1082,7 +1086,9 @@ class StarCubit extends Cubit<StarState> {
   }
 
   bool isFavorite(String talentId) {
-    return state.favoriteIds.contains(talentId);
+    final result = state.favoriteIds.contains(talentId);
+    print("💖 Check if $talentId is favorite: $result (total favorites: ${state.favoriteIds.length})");
+    return result;
   }
 
   // Watch Later management

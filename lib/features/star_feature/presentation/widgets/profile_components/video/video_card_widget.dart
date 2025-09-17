@@ -26,6 +26,7 @@ class VideoCardWidget extends StatefulWidget {
   final int index;
   final bool isHorizontal;
   final VoidCallback? onTap;
+  final StarCubit? starCubit;
 
   const VideoCardWidget({
     super.key,
@@ -33,6 +34,7 @@ class VideoCardWidget extends StatefulWidget {
     required this.index,
     this.isHorizontal = false,
     this.onTap,
+    this.starCubit,
   });
 
   @override
@@ -176,7 +178,7 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
   }
 
   Widget _buildFavoriteButton(BuildContext context) {
-    return BlocBuilder<StarCubit, dynamic>(
+    return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         final isFavorite =
             context.read<StarCubit>().isFavorite(widget.video.id);
@@ -473,7 +475,7 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
         builder: (context) => MultiBlocProvider(
           providers: [
             BlocProvider<StarCubit>.value(
-              value: serviceLocator<StarCubit>(),
+              value: widget.starCubit ?? context.read<StarCubit>(),
             ),
             BlocProvider<CommentCubit>(
               create: (context) => serviceLocator<CommentCubit>(),
@@ -543,16 +545,16 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
             _showPlaylistBottomSheet(context, widget.video);
           },
         ),
-        OptionItem(
-          icon: Icons.play_arrow,
-          title: context.isArabic ? 'تشغيل التالي' : 'Play next in queue',
-          onTap: () => Navigator.pop(context),
-        ),
-        OptionItem(
-          icon: Icons.block,
-          title: context.isArabic ? 'غير مهتم' : 'Not interested',
-          onTap: () => Navigator.pop(context),
-        ),
+        // OptionItem(
+        //   icon: Icons.play_arrow,
+        //   title: context.isArabic ? 'تشغيل التالي' : 'Play next in queue',
+        //   onTap: () => Navigator.pop(context),
+        // ),
+        // OptionItem(
+        //   icon: Icons.block,
+        //   title: context.isArabic ? 'غير مهتم' : 'Not interested',
+        //   onTap: () => Navigator.pop(context),
+        // ),
         OptionItem(
           icon: cubit.isFavorite(widget.video.id)
               ? Icons.favorite
