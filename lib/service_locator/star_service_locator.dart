@@ -29,6 +29,7 @@ import '../features/star_feature/domain/use_case/fetch_tube_video_details_by_idu
 import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
+import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/comment_use_cases.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
@@ -204,6 +205,10 @@ class StarServiceLocator {
       () => IncrementTubeVideoViewUseCase(serviceLocator()),
     );
 
+    serviceLocator.registerLazySingleton<RateTubeVideoUseCase>(
+      () => RateTubeVideoUseCase(serviceLocator()),
+    );
+
     serviceLocator.registerLazySingleton<DeleteTubeVideoUseCase>(
       () => DeleteTubeVideoUseCase(serviceLocator()),
     );
@@ -318,6 +323,7 @@ class StarServiceLocator {
           serviceLocator<LikeTubeVideoUseCase>(),
           serviceLocator<DislikeTubeVideoUseCase>(),
           serviceLocator<IncrementTubeVideoViewUseCase>(),
+          serviceLocator<RateTubeVideoUseCase>(),
           serviceLocator<DeleteTubeVideoUseCase>(),
         ));
 

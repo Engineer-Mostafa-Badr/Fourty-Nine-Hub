@@ -8,11 +8,35 @@ class ProfileTabBar extends StatelessWidget {
   const ProfileTabBar({
     super.key,
     required this.tabController,
-    this.isCurrentUser = true,
+    required this.isCurrentUser,
   });
 
   @override
   Widget build(BuildContext context) {
+    final tabs = [
+      Tab(
+        height: 48.0, // إضافة height للتاب
+        text: context.isArabic ? 'الرئيسية' : 'Home',
+      ),
+      Tab(
+        height: 48.0,
+        text: context.isArabic ? 'الفيديوهات' : 'Videos',
+      ),
+      Tab(
+        height: 48.0,
+        text: context.isArabic ? 'قوائم التشغيل' : 'Playlists',
+      ),
+      if (isCurrentUser)
+        Tab(
+          height: 48.0,
+          text: context.isArabic ? 'الشاهد لاحقاً' : 'Watch Later',
+        ),
+    ];
+
+    print(
+        '📊 ProfileTabBar: Creating ${tabs.length} tabs for isCurrentUser: $isCurrentUser');
+    print('📊 TabController length: ${tabController.length}');
+
     return Container(
       height: 56.0, // إضافة height صريح
       color: Colors.white,
@@ -32,25 +56,7 @@ class ProfileTabBar extends StatelessWidget {
           fontSize: _getResponsiveFontSize(context, 16), // تقليل من 18 إلى 16
           fontWeight: FontWeight.normal,
         ),
-        tabs: [
-          Tab(
-            height: 48.0, // إضافة height للتاب
-            text: context.isArabic ? 'الرئيسية' : 'Home',
-          ),
-          Tab(
-            height: 48.0,
-            text: context.isArabic ? 'الفيديوهات' : 'Videos',
-          ),
-          Tab(
-            height: 48.0,
-            text: context.isArabic ? 'قوائم التشغيل' : 'Playlists',
-          ),
-          if (isCurrentUser)
-            Tab(
-              height: 48.0,
-              text: context.isArabic ? 'الشاهد لاحقاً' : 'Watch Later',
-            ),
-        ],
+        tabs: tabs,
       ),
     );
   }

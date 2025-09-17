@@ -1795,6 +1795,7 @@ class EndPoints {
       '/tube-video/$videoId/dislike';
   static String incrementTubeVideoView(String videoId) =>
       '/tube-video/$videoId/view';
+  static String rateTubeVideo = '/tube-rate';
 
   // Tube Video with pagination
   static String getAllTubeVideosWithPagination(

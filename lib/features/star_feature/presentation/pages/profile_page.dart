@@ -68,6 +68,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
     // Listen to scroll to handle app bar animation
     _scrollController.addListener(_handleScroll);
+
+    print('🔧 TabController initialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
   }
 
   void _loadProfileAndVideos() async {
@@ -175,6 +177,19 @@ class _ProfilePageViewState extends State<ProfilePageView>
         ),
       ),
     );
+  }
+
+  @override
+  void didUpdateWidget(ProfilePageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if isCurrentUser changed and reinitialize TabController if needed
+    if (oldWidget.isCurrentUser != widget.isCurrentUser) {
+      _tabController.dispose();
+      final tabLength = widget.isCurrentUser ? 4 : 3;
+      _tabController = TabController(length: tabLength, vsync: this);
+      print('🔄 TabController reinitialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
+    }
   }
 
   @override

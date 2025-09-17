@@ -229,7 +229,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.logout.localize,
                                 onTap: () async {
                                   ManageVibration.vibrate();
-                                  String? refreshToken = await Storage.getRefreshToken();
+                                  String? refreshToken =
+                                      await Storage.getRefreshToken();
                                   print("refreshToken $refreshToken");
                                   // context.push(Routes.LOGIN);
                                   showAnimatedDialog(
@@ -264,10 +265,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: 12,
+                    padding: EdgeInsetsDirectional.only(
+                      end: 12.h,
                       start: 0,
-                      top: 20,
+                      top: 15.h,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -282,8 +283,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context.pop();
                               context.push(Routes.QURAAN);
                             }),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                             image: Assets.azkar,
@@ -295,8 +296,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context.pop();
                               context.push(Routes.AZKAAR);
                             }),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                             label: LocaleKeys.ride.localize,
@@ -306,8 +307,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context.pop();
                               context.push(Routes.RIDE_HOME);
                             }),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                             label: LocaleKeys.tripJoin.localize,
@@ -321,8 +322,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ? Routes.newRideModeScreen
                                   : Routes.FirstLoginScreen);
                             }),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         // drawerRollWidget(
                         //   label: LocaleKeys.loading.localize,
@@ -343,8 +344,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.VISITA);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.meal.localize,
@@ -355,8 +356,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.FOOD);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.marriage.localize,
@@ -367,8 +368,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.MARRIAGESUBCATEGORIES);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.tube.localize,
@@ -381,8 +382,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.BE_STAR);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.find.localize,
@@ -393,8 +394,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.Tinder);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.reel.localize,
@@ -405,8 +406,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.REELS);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         // drawerRollWidget(
                         //   label: LocaleKeys.spotlight.localize,
@@ -468,8 +469,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.CHAT, extra: ChatsViewParams());
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: context.isArabic ? 'العاب' : "Games",
@@ -482,8 +483,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //     extra: ChatsViewParams());
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.ads.localize,
@@ -495,8 +496,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.CREATECOMPANYAD);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: context.isArabic ? 'المزاد' : "Auction",
@@ -510,8 +511,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.availableAuctionScreen);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: 8.h,
                         ),
                         drawerRollWidget(
                           label: LocaleKeys.chance.localize,
@@ -777,7 +778,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         },
         child: Padding(
           padding: const EdgeInsetsDirectional.only(
-              top: 12.0, bottom: 5.0, start: 16),
+              top: 10.0, bottom: 5.0, start: 16),
           child: Row(
             children: [
               image != null && icon == null
@@ -1037,7 +1038,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     print("Test User ${user?.firstName}");
     // context.read<GetWalletCubit>();
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8),
+      padding: EdgeInsets.only(left: 8.w, right: 8.w),
       child: Column(
         children: [
           Row(

@@ -12,6 +12,7 @@ import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
+import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/subscribe_to_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
@@ -318,6 +319,7 @@ class TubeServiceLocator {
         serviceLocator<LikeTubeVideoUseCase>(),
         serviceLocator<DislikeTubeVideoUseCase>(),
         serviceLocator<IncrementTubeVideoViewUseCase>(),
+        serviceLocator<RateTubeVideoUseCase>(),
         serviceLocator<DeleteTubeVideoUseCase>(),
       ),
     );

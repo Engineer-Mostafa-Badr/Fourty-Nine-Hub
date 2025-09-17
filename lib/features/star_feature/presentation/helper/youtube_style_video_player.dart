@@ -594,15 +594,25 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   // Remove local state variables - will use API data instead
   bool _isSubscribed = false;
 
-  // Helper methods to get like/dislike states from TubeVideoModel
-  bool get _isLiked {
+  // Helper methods to get like/dislike states from updated video data
+  bool _isLiked(StarCubit starCubit) {
+    final updatedVideo = starCubit.getVideoById(widget.talent.id);
+    if (updatedVideo != null) {
+      return updatedVideo.isLike;
+    }
+    // Fallback to original data
     if (widget.talent is TubeVideoModel) {
       return (widget.talent as TubeVideoModel).isLike;
     }
     return false;
   }
 
-  bool get _isDisliked {
+  bool _isDisliked(StarCubit starCubit) {
+    final updatedVideo = starCubit.getVideoById(widget.talent.id);
+    if (updatedVideo != null) {
+      return updatedVideo.isDislike;
+    }
+    // Fallback to original data
     if (widget.talent is TubeVideoModel) {
       return (widget.talent as TubeVideoModel).isDislike;
     }
@@ -1605,33 +1615,38 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        _isLiked
-                                            ? Icons.thumb_up
-                                            : Icons.thumb_up_outlined,
-                                        size: 20,
-                                        color: _isLiked
-                                            ? Colors.blue
-                                            : Colors.grey[700],
-                                      ),
-                                      onPressed: () {
-                                        // اعمل API call - الـ cubit هيتولى تحديث الحالة
-                                        starCubit
-                                            .likeTubeVideo(widget.talent.id);
+                                    BlocBuilder<StarCubit, StarState>(
+                                      builder: (context, starState) {
+                                        final isLiked = _isLiked(starCubit);
+                                        return IconButton(
+                                          icon: Icon(
+                                            isLiked
+                                                ? Icons.thumb_up
+                                                : Icons.thumb_up_outlined,
+                                            size: 20,
+                                            color: isLiked
+                                                ? Colors.blue
+                                                : Colors.grey[700],
+                                          ),
+                                          onPressed: () {
+                                            ManageVibration.vibrate();
+                                            // اعمل API call - الـ cubit هيتولى تحديث الحالة
+                                            starCubit.likeTubeVideo(
+                                                widget.talent.id);
+                                          },
+                                        );
                                       },
                                     ),
 
                                     // عرض عدد الـ likes
                                     BlocBuilder<StarCubit, StarState>(
                                       builder: (context, starState) {
-                                        // استخدم العدد الحقيقي من الـ model
-                                        int likes = 0;
-                                        if (widget.talent is TubeVideoModel) {
-                                          likes =
-                                              (widget.talent as TubeVideoModel)
-                                                  .likes;
-                                        }
+                                        // استخدم العدد المحدث من الـ cubit
+                                        final updatedVideo = starCubit
+                                            .getVideoById(widget.talent.id);
+                                        int likes = updatedVideo?.likes ??
+                                            widget.talent.likes;
+
                                         // make it arabic numbers
                                         return Text(
                                           likes
@@ -1653,33 +1668,38 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                           horizontal: 8),
                                     ),
 
-                                    IconButton(
-                                      icon: Icon(
-                                        _isDisliked
-                                            ? Icons.thumb_down
-                                            : Icons.thumb_down_outlined,
-                                        size: 20,
-                                        color: _isDisliked
-                                            ? Colors.red
-                                            : Colors.grey[700],
-                                      ),
-                                      onPressed: () {
-                                        // اعمل API call - الـ cubit هيتولى تحديث الحالة
-                                        starCubit
-                                            .dislikeTubeVideo(widget.talent.id);
+                                    BlocBuilder<StarCubit, StarState>(
+                                      builder: (context, starState) {
+                                        final isDisliked =
+                                            _isDisliked(starCubit);
+                                        return IconButton(
+                                          icon: Icon(
+                                            isDisliked
+                                                ? Icons.thumb_down
+                                                : Icons.thumb_down_outlined,
+                                            size: 20,
+                                            color: isDisliked
+                                                ? Colors.red
+                                                : Colors.grey[700],
+                                          ),
+                                          onPressed: () {
+                                            ManageVibration.vibrate();
+                                            // اعمل API call - الـ cubit هيتولى تحديث الحالة
+                                            starCubit.dislikeTubeVideo(
+                                                widget.talent.id);
+                                          },
+                                        );
                                       },
                                     ),
 
                                     // عرض عدد الـ dislikes
                                     BlocBuilder<StarCubit, StarState>(
                                       builder: (context, starState) {
-                                        // استخدم العدد الحقيقي من الـ model
-                                        int dislikes = 0;
-                                        if (widget.talent is TubeVideoModel) {
-                                          dislikes =
-                                              (widget.talent as TubeVideoModel)
-                                                  .dislikes;
-                                        }
+                                        // استخدم العدد المحدث من الـ cubit
+                                        final updatedVideo = starCubit
+                                            .getVideoById(widget.talent.id);
+                                        int dislikes = updatedVideo?.dislikes ??
+                                            widget.talent.dislikes;
 
                                         return Text(
                                           dislikes

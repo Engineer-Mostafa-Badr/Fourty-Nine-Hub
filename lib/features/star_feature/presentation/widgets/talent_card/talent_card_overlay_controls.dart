@@ -145,8 +145,8 @@ class _OptionsAndRatingSectionState extends State<OptionsAndRatingSection> {
         ),
         SizedBox(height: 16),
 
-        // Stars rating - only show if video hasn't been rated yet and not animating
-        if (!widget.cubit.isVideoRated(widget.talent.id) && !_isAnimating)
+        // Stars rating - show average rating or allow rating if not rated yet
+        if (!widget.talent.isRate && !_isAnimating && !_showFinalRating)
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -155,16 +155,37 @@ class _OptionsAndRatingSectionState extends State<OptionsAndRatingSection> {
               (starIndex) => GestureDetector(
                 onTap: () => _onStarTap(starIndex + 1),
                 child: Icon(
-                  starIndex < widget.talent.averageRating
-                      ? Icons.star
-                      : Icons.star_border,
-                  color: starIndex < widget.talent.averageRating
-                      ? Colors.amber
-                      : Colors.grey[400],
+                  Icons.star_border,
+                  color: Colors.grey[400],
                   size: 16,
                 ),
               ),
             ),
+          ),
+
+        // Show average rating if video has been rated
+        if (widget.talent.isRate && widget.talent.averageRating > 0)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                widget.talent.averageRating
+                    .toStringAsFixed(1)
+                    .toArabicNumbers(context),
+                style: TextStyle(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 4),
+              Icon(
+                Icons.star,
+                color: Colors.amber,
+                size: 16,
+              ),
+            ],
           ),
 
         // Animated stars during rating selection
@@ -190,27 +211,27 @@ class _OptionsAndRatingSectionState extends State<OptionsAndRatingSection> {
           ),
 
         // Final rating display - show single star with rating number
-        if (_showFinalRating && _selectedRating != null)
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                _selectedRating.toString().toArabicNumbers(context),
-                style: TextStyle(
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 2),
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-                size: 16,
-              ),
-            ],
-          ),
+        // if (_showFinalRating && _selectedRating != null)
+        //   Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     mainAxisAlignment: MainAxisAlignment.end,
+        //     children: [
+        //       Text(
+        //         _selectedRating.toString().toArabicNumbers(context),
+        //         style: TextStyle(
+        //           color: context.isDarkMode ? Colors.white : Colors.black,
+        //           fontSize: 12,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       SizedBox(width: 2),
+        //       Icon(
+        //         Icons.star,
+        //         color: Colors.amber,
+        //         size: 16,
+        //       ),
+        //     ],
+        //   ),
       ],
     );
   }

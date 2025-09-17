@@ -41,6 +41,7 @@ abstract class StarRepository {
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
+  Future<Either<Failure, bool>> rateTubeVideo(String videoId, double rate);
   //Todo: Delete End points
   Future<Either<Failure, bool>> deleteTubeVideo(String videoId);
 

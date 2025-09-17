@@ -22,6 +22,7 @@ class TubeVideoModel extends StarEntity {
     required super.storyCount,
     required super.likes, // Pass to parent class
     required super.dislikes, // Pass to parent class
+    required super.isRate, // Pass to parent class
     super.createdAt,
     super.createAt,
     this.userId,
@@ -57,6 +58,7 @@ class TubeVideoModel extends StarEntity {
       thumbnail: json['thumbnail'],
       isLike: json['isLike'] ?? false,
       isDislike: json['isDislike'] ?? false,
+      isRate: json['isRate'] ?? false, // Add isRate from API
       haveStories: false, // Not available in new API
       storyCount: 0, // Not available in new API
       createdAt:
@@ -78,6 +80,7 @@ class TubeVideoModel extends StarEntity {
     int? storyCount,
     int? likes,
     int? dislikes,
+    bool? isRate,
     DateTime? createdAt,
     String? createAt,
     String? userId,
@@ -100,6 +103,7 @@ class TubeVideoModel extends StarEntity {
         storyCount: storyCount ?? this.storyCount,
         likes: likes ?? this.likes,
         dislikes: dislikes ?? this.dislikes,
+        isRate: isRate ?? this.isRate,
         createdAt: createdAt ?? this.createdAt,
         createAt: createAt ?? this.createAt,
         userId: userId ?? this.userId,

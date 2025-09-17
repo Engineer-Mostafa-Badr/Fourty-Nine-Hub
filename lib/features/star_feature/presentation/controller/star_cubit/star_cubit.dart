@@ -28,6 +28,7 @@ import '../../../domain/use_case/fetch_tube_video_details_by_iduse_case.dart';
 import '../../../domain/use_case/like_tube_video_use_case.dart';
 import '../../../domain/use_case/dislike_tube_video_use_case.dart';
 import '../../../domain/use_case/increment_tube_video_view_use_case.dart';
+import '../../../domain/use_case/rate_tube_video_use_case.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
@@ -59,6 +60,7 @@ class StarCubit extends Cubit<StarState> {
   final LikeTubeVideoUseCase _likeTubeVideoUseCase;
   final DislikeTubeVideoUseCase _dislikeTubeVideoUseCase;
   final IncrementTubeVideoViewUseCase _incrementTubeVideoViewUseCase;
+  final RateTubeVideoUseCase _rateTubeVideoUseCase;
   final DeleteTubeVideoUseCase _deleteTubeVideoUseCase;
 
   StarCubit(
@@ -84,6 +86,7 @@ class StarCubit extends Cubit<StarState> {
     this._likeTubeVideoUseCase,
     this._dislikeTubeVideoUseCase,
     this._incrementTubeVideoViewUseCase,
+    this._rateTubeVideoUseCase,
     this._deleteTubeVideoUseCase,
   ) : super(StarState());
 
@@ -132,7 +135,10 @@ class StarCubit extends Cubit<StarState> {
 
   // البحث في الفيديوهات
   Future<void> searchTubeVideos(String query) async {
+    print("🔍 Searching for videos with query: '$query'");
+
     if (query.isEmpty) {
+      print("🔍 Empty query, clearing results");
       emit(state.copyWith(
         searchResults: [],
         searchQuery: '',
@@ -151,6 +157,7 @@ class StarCubit extends Cubit<StarState> {
 
     response.fold(
       (failure) {
+        print("🔍 Search failed: ${failure.toString()}");
         emit(state.copyWith(
           status: StarStates.error,
           failure: failure,
@@ -158,6 +165,7 @@ class StarCubit extends Cubit<StarState> {
         _showErrorMessage(failure);
       },
       (videos) {
+        print("🔍 Search success: Found ${videos.length} videos");
         emit(state.copyWith(
           searchResults: videos.cast<StarEntity>(),
           status: StarStates.success,
@@ -844,6 +852,34 @@ class StarCubit extends Cubit<StarState> {
     );
   }
 
+  Future<void> rateVideo(String videoId, double rating) async {
+    emit(state.copyWith(status: StarStates.loading));
+
+    final response = await _rateTubeVideoUseCase(
+      RateTubeVideoParams(videoId: videoId, rate: rating),
+    );
+
+    response.fold(
+      (failure) {
+        _showErrorMessage(failure);
+        emit(state.copyWith(status: StarStates.error, failure: failure));
+      },
+      (success) {
+        if (success) {
+          // Update video rating in state
+          _updateVideoRatingInState(videoId, rating);
+
+          // Show success message with rating
+          emit(state.copyWith(
+            status: StarStates.ratingSuccess,
+            successMessage: rating.toInt().toString(),
+          ));
+        }
+        emit(state.copyWith(status: StarStates.success));
+      },
+    );
+  }
+
   // Helper methods for updating local state
   void _updateVideoInteraction(String videoId, String action) {
     final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
@@ -935,6 +971,35 @@ class StarCubit extends Cubit<StarState> {
     }
 
     emit(state.copyWith(talents: talents));
+  }
+
+  void _updateVideoRatingInState(String videoId, double rating) {
+    final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+    final ratedVideos = Set<String>.from(state.ratedVideos);
+
+    for (final category in TalentCategory.values) {
+      final categoryTalents = talents[category];
+      if (categoryTalents != null) {
+        final updatedTalents = categoryTalents.map((talent) {
+          if (talent.id == videoId) {
+            return talent.copyWith(
+              isRate: true,
+              averageRating: rating,
+            );
+          }
+          return talent;
+        }).toList();
+        talents[category] = updatedTalents;
+      }
+    }
+
+    // Add to rated videos set
+    ratedVideos.add(videoId);
+
+    emit(state.copyWith(
+      talents: talents,
+      ratedVideos: ratedVideos,
+    ));
   }
 
   void _resetPagination(TalentCategory category) {
@@ -1082,34 +1147,10 @@ class StarCubit extends Cubit<StarState> {
   //   );
   // }
 
-  // Rating management - Updated to track rated videos but keep them visible
+  // Rating management - Updated to call API and track rated videos
   void updateRating(String id, int rating) {
-    final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
-    final ratedVideos = Set<String>.from(state.ratedVideos);
-
-    // Update the rating in all categories
-    for (final category in TalentCategory.values) {
-      talents[category] = talents[category]?.map((talent) {
-            if (talent.id == id) {
-              return talent.copyWith(
-                averageRating: rating.toDouble(),
-              );
-            }
-            return talent;
-          }).toList() ??
-          [];
-    }
-
-    // Add to rated videos set to track that user has rated this video
-    ratedVideos.add(id);
-
-    emit(state.copyWith(
-      talents: talents,
-      ratedVideos: ratedVideos,
-    ));
-
-    // Show success message with rating count
-    showRatingSuccessMessage(rating);
+    // Call the API to rate the video
+    rateVideo(id, rating.toDouble());
   }
 
   // Helper method to check if a video has been rated by the user

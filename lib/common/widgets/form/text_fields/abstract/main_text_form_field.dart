@@ -114,7 +114,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
                     TextSelection.fromPosition(TextPosition(offset: length));
               }
             },
-        autofocus: true,
+        autofocus: false,
         autofillHints: widget.autofillHints,
         onEditingComplete: widget.onEditComplete,
         cursorColor: widget.cursorColor,

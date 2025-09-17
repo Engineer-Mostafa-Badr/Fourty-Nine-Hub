@@ -27,33 +27,38 @@ class ProfileTabsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final children = [
+      // Home Tab - عرض For You + User's content
+      ProfileHomeTab(
+        videos: extendedVideos,
+        isCurrentUser: isCurrentUser,
+        userId: userId,
+      ),
+
+      // Videos Tab - عرض فيديوهات المستخدم الحقيقية
+      ProfileVideosTab(
+        videos: extendedVideos, // Pass real user videos
+        isCurrentUser: isCurrentUser,
+        userId: userId,
+      ),
+
+      // Playlists Tab - Create safe fallback for PlaylistCubit
+      _buildPlaylistsTab(isCurrentUser, userId),
+
+      // Watch Later Tab - Only for current user
+      if (isCurrentUser)
+        ProfileWatchLaterTab(
+          isCurrentUser: isCurrentUser,
+          userId: userId,
+        ),
+    ];
+
+    print('📋 ProfileTabsContent: Creating ${children.length} tab views for isCurrentUser: $isCurrentUser');
+    print('📋 TabController length: ${tabController.length}');
+
     return TabBarView(
       controller: tabController,
-      children: [
-        // Home Tab - عرض For You + User's content
-        ProfileHomeTab(
-          videos: extendedVideos,
-          isCurrentUser: isCurrentUser,
-          userId: userId,
-        ),
-
-        // Videos Tab - عرض فيديوهات المستخدم الحقيقية
-        ProfileVideosTab(
-          videos: extendedVideos, // Pass real user videos
-          isCurrentUser: isCurrentUser,
-          userId: userId,
-        ),
-
-        // Playlists Tab - Create safe fallback for PlaylistCubit
-        _buildPlaylistsTab(isCurrentUser, userId),
-
-        // Watch Later Tab - Only for current user
-        if (isCurrentUser)
-          ProfileWatchLaterTab(
-            isCurrentUser: isCurrentUser,
-            userId: userId,
-          ),
-      ],
+      children: children,
     );
   }
 

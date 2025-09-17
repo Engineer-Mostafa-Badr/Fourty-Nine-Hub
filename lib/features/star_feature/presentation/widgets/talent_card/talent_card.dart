@@ -750,12 +750,27 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
         _trackVideoStart();
       }
     }
+
+    // Check if video has ended and handle auto-next
+    if (_controller!.value.position >= _controller!.value.duration &&
+        _controller!.value.duration.inMilliseconds > 0) {
+      _handleVideoEnd();
+    }
   }
 
   void _trackVideoStart() {
     if (!_hasTrackedView) {
       _hasTrackedView = true;
       widget.onVideoStarted?.call();
+    }
+  }
+
+  void _handleVideoEnd() {
+    // Video ended - just reset to beginning for now
+    if (_controller != null && _controller!.value.isInitialized) {
+      _controller!.seekTo(Duration.zero);
+      _controller!.pause();
+      setState(() => _isPlaying = false);
     }
   }
 

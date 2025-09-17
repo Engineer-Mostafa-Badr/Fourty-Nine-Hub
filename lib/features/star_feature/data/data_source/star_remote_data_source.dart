@@ -45,6 +45,7 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
+  Future<Either<Failure, bool>> rateTubeVideo(String videoId, double rate);
   Future<Either<Failure, bool>> deleteTubeVideo(String videoId);
 
   // New Comment methods
@@ -482,6 +483,28 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       },
       (response) {
         print("Increment Tube Video View Success: ${response['message']}");
+        return Right(response['status'] == true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> rateTubeVideo(String videoId, double rate) async {
+    final response = await _apiConsumer.post(
+      EndPoints.rateTubeVideo,
+      data: {
+        'videoId': videoId,
+        'rate': rate,
+      },
+    );
+
+    return response.fold(
+      (failure) {
+        print("Rate Tube Video Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Rate Tube Video Success: ${response['message']}");
         return Right(response['status'] == true);
       },
     );
