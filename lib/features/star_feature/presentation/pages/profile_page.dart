@@ -209,7 +209,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
       backgroundColor: Colors.white,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
-          return _buildContent(profileState, widget.isCurrentUser);
+          return SafeArea(
+              child: _buildContent(profileState, widget.isCurrentUser));
         },
       ),
     );

@@ -24,8 +24,10 @@ import '../../data/model/tube_video_models.dart';
 import '../../domain/use_case/comment_use_cases.dart';
 import '../controller/comment_cubit/comment_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
+import '../controller/playlist_cubit/playlist_cubit.dart';
 import '../utils/video_utils.dart';
 import '../widgets/common/options_bottom_sheet.dart';
+import '../widgets/common/add_to_playlist_dialog.dart';
 
 // YouTube Style Video Player
 class YouTubeStyleVideoPlayer extends StatefulWidget {
@@ -2228,9 +2230,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     OptionsBottomSheet.showOptions(context: context, options: [
       OptionItem(
         icon: Icons.playlist_add,
-        title: 'Add to playlist',
+        title: context.isArabic ? 'إضافة لقائمة التشغيل' : 'Add to playlist',
         onTap: () {
           Navigator.pop(context);
+          _showAddToPlaylistDialog(talent);
         },
       ),
       OptionItem(
@@ -2271,6 +2274,20 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
         },
       ),
     ]);
+  }
+
+  void _showAddToPlaylistDialog(StarEntity talent) {
+    final playlistCubit = serviceLocator<PlaylistCubit>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => BlocProvider<PlaylistCubit>(
+        create: (context) => playlistCubit..getMyPlaylists(refresh: true),
+        child: AddToPlaylistDialog(videoId: talent.id),
+      ),
+    );
   }
 
   @override

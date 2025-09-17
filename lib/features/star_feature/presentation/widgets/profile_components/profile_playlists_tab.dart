@@ -132,8 +132,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
                       playlist: playlist,
                       onTap: () => _handlePlaylistTap(context, playlist),
                       showMenu: widget.isCurrentUser,
-                      overrideVideoCount:
-                          playlist.videosCount, // أو العدد الصحيح من الـ API
+                      overrideVideoCount: playlist.videosCount,
                       onEdit: widget.isCurrentUser
                           ? () => _showEditPlaylistDialog(context, playlist)
                           : null,

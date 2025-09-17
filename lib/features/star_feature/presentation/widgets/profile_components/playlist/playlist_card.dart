@@ -43,11 +43,16 @@ class PlaylistCard extends StatelessWidget {
               BorderRadius.circular(_getResponsiveBorderRadius(context, 12)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: Offset(0, 2),
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+              spreadRadius: 0,
             ),
           ],
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         child: Row(
           children: [
@@ -75,7 +80,7 @@ class PlaylistCard extends StatelessWidget {
   Widget _buildPlaylistThumbnail(BuildContext context) {
     final thumbnailSize = _getResponsivePadding(context, 80);
     // استخدم العدد المخصص أو العدد من الـ playlist
-    final videoCount = overrideVideoCount ?? playlist.videos.length;
+    final videoCount = overrideVideoCount ?? playlist.videosCount ?? playlist.videos.length;
 
     return Container(
       width: thumbnailSize * 1.5,
@@ -130,7 +135,7 @@ class PlaylistCard extends StatelessWidget {
   }
 
   Widget _buildPlaylistInfo(BuildContext context) {
-    final videoCount = overrideVideoCount ?? playlist.videosCount;
+    final videoCount = overrideVideoCount ?? playlist.videosCount ?? playlist.videos.length;
 
     return Padding(
       padding:
@@ -151,7 +156,7 @@ class PlaylistCard extends StatelessWidget {
           ),
           SizedBox(height: _getResponsiveSpacing(context, 4)),
 
-          // Video count and creation date - فك التعليق وحدث العدد
+          // Video count and creation date
           Text(
             context.isArabic
                 ? '${videoCount.toString().toArabicNumbers(context)} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}'

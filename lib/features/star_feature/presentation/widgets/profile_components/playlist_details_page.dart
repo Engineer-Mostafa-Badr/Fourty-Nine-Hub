@@ -20,6 +20,7 @@ import '../../../domain/entity/user_star_entity.dart';
 import '../../controller/comment_cubit/comment_cubit.dart';
 import '../../helper/youtube_style_video_player.dart';
 import 'playlist_playback_manager.dart';
+import 'playlist_video_player_page.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
   final PlaylistEntity playlist;
@@ -93,9 +94,10 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
               create: (context) => serviceLocator<CommentCubit>(),
             ),
           ],
-          child: TalentVideoPlayer(
-            videoUrl: _getVideoUrl(video),
-            talent: video,
+          child: PlaylistVideoPlayerPage(
+            playlist: widget.playlist,
+            initialVideo: video,
+            playbackManager: _playbackManager,
           ),
         ),
       ),
@@ -959,51 +961,82 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   void _removeVideoFromPlaylist(StarEntity video, PlaylistEntity playlist) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'إزالة الفيديو' : 'Remove Video',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          context.isArabic
-              ? 'هل تريد إزالة هذا الفيديو من قائمة التشغيل؟'
-              : 'Remove this video from the playlist?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
+      builder: (context) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: AlertDialog(
+          title: Text(
+            context.isArabic ? 'إزالة الفيديو' : 'Remove Video',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            context.isArabic
+                ? 'هل تريد إزالة هذا الفيديو من قائمة التشغيل؟'
+                : 'Remove this video from the playlist?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                context.isArabic ? 'إلغاء' : 'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-
-              final success = await _playlistCubit.removeVideoFromPlaylist(
-                playlist.id,
-                video.id,
-              );
-
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم إزالة الفيديو من قائمة التشغيل'
-                          : 'Video removed from playlist',
+            BlocConsumer<PlaylistCubit, PlaylistState>(
+              listener: (context, state) {
+                if (state.isSuccess) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'تم إزالة الفيديو من قائمة التشغيل'
+                            : 'Video removed from playlist',
+                      ),
+                      backgroundColor: Colors.green,
                     ),
-                    backgroundColor: Colors.green,
-                  ),
+                  );
+                  // Refresh the main playlist
+                  _loadPlaylistDetails();
+                } else if (state.isError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        state.failure?.toString() ??
+                            (context.isArabic
+                                ? 'فشل في إزالة الفيديو'
+                                : 'Failed to remove video'),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return TextButton(
+                  onPressed: state.isLoading
+                      ? null
+                      : () async {
+                          await context.read<PlaylistCubit>().removeVideoFromPlaylist(
+                            playlist.id,
+                            video.id,
+                          );
+                        },
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: state.isLoading
+                      ? SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.red,
+                          ),
+                        )
+                      : Text(context.isArabic ? 'إزالة' : 'Remove'),
                 );
-                // The cubit will automatically refresh the playlist
-              }
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(context.isArabic ? 'إزالة' : 'Remove'),
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

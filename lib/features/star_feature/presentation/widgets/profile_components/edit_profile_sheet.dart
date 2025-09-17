@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
@@ -82,6 +83,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
 
     try {
       // Mock upload - replace with actual implementation
+      //todo: upload image to server and get image id
       final uploadedImageId = "66993df106144734b59b0a5c";
 
       setState(() {
@@ -99,12 +101,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
   }
 
   void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
+    showErrorMessage(context, message);
   }
 
   Future<void> _saveProfile() async {
@@ -122,17 +119,17 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
           channelPicture: _channelPictureId,
         );
 
-    if (success && mounted) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.isArabic
-              ? 'تم حفظ التغييرات بنجاح'
-              : 'Profile updated successfully'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
+    // if (success && mounted) {
+    //   Navigator.pop(context);
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(context.isArabic
+    //           ? 'تم حفظ التغييرات بنجاح'
+    //           : 'Profile updated successfully'),
+    //       backgroundColor: Colors.green,
+    //     ),
+    //   );
+    // }
   }
 
   @override

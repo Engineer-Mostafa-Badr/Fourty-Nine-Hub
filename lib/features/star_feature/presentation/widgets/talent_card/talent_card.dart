@@ -744,21 +744,33 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   void _videoListener() {
     if (!mounted || _isDisposed || _controller == null) return;
 
-    final isPlaying = _controller!.value.isPlaying;
-    if (isPlaying != _isPlaying) {
-      setState(() {
-        _isPlaying = isPlaying;
-      });
+    try {
+      final isPlaying = _controller!.value.isPlaying;
+      if (isPlaying != _isPlaying) {
+        if (mounted && !_isDisposed) {
+          setState(() {
+            _isPlaying = isPlaying;
+          });
 
-      if (isPlaying && !_hasTrackedView) {
-        _trackVideoStart();
+          if (isPlaying && !_hasTrackedView) {
+            _trackVideoStart();
+          }
+        }
       }
-    }
 
-    // Check if video has ended and handle auto-next
-    if (_controller!.value.position >= _controller!.value.duration &&
-        _controller!.value.duration.inMilliseconds > 0) {
-      _handleVideoEnd();
+      // Check if video has ended and handle auto-next
+      if (_controller!.value.position >= _controller!.value.duration &&
+          _controller!.value.duration.inMilliseconds > 0) {
+        _handleVideoEnd();
+      }
+    } catch (e) {
+      // Handle any errors gracefully
+      print('Error in video listener: $e');
+      if (mounted && !_isDisposed) {
+        setState(() {
+          _isPlaying = false;
+        });
+      }
     }
   }
 
@@ -779,16 +791,21 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   }
 
   void _togglePlayPause() {
-    if (_controller == null || !_isInitialized || _isDisposed) return;
+    if (_controller == null || !_isInitialized || _isDisposed || !mounted)
+      return;
     if (!_controller!.value.isInitialized) return;
 
-    if (_controller!.value.isPlaying) {
-      _controller!.pause();
-    } else {
-      _controller!.play();
-      if (!_hasTrackedView) {
-        _trackVideoStart();
+    try {
+      if (_controller!.value.isPlaying) {
+        _controller!.pause();
+      } else {
+        _controller!.play();
+        if (!_hasTrackedView) {
+          _trackVideoStart();
+        }
       }
+    } catch (e) {
+      print('Error toggling play/pause: $e');
     }
   }
 
@@ -856,12 +873,19 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   }
 
   Future<void> _disposeController() async {
-    if (_controller != null) {
-      _controller!.removeListener(_videoListener);
+    if (_controller != null && !_isDisposed) {
+      try {
+        _controller!.removeListener(_videoListener);
+      } catch (e) {
+        // Ignore errors if already disposed
+        print('Error removing video listener: $e');
+      }
+
       // Don't dispose from manager yet, let it handle resource management
       // Just remove our reference
       _controller = null;
-      if (mounted) {
+
+      if (mounted && !_isDisposed) {
         setState(() {
           _isInitialized = false;
           _isPlaying = false;
@@ -926,19 +950,26 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
               if (!_isPlaying) Positioned.fill(child: _buildThumbnail()),
 
               // Video Player (only when initialized)
-              if (_isInitialized && _controller != null && !_isDisposed)
+              if (_isInitialized &&
+                  _controller != null &&
+                  !_isDisposed &&
+                  mounted)
                 AnimatedOpacity(
                   opacity: _isPlaying ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 300),
                   child: Center(
-                    child: AspectRatio(
-                      aspectRatio: _controller!.value.isInitialized
-                          ? _controller!.value.aspectRatio
-                          : 16 / 9,
-                      child: _controller!.value.isInitialized
-                          ? VideoPlayer(_controller!)
-                          : Container(color: Colors.black),
-                    ),
+                    child: _controller != null &&
+                            _controller!.value.isInitialized &&
+                            !_isDisposed
+                        ? AspectRatio(
+                            aspectRatio: _controller!.value.aspectRatio,
+                            child: VideoPlayer(_controller!),
+                          )
+                        : Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.black,
+                          ),
                   ),
                 ),
 
@@ -1021,7 +1052,14 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
     _isDisposed = true;
     _playDelayTimer?.cancel();
     _initTimer?.cancel();
-    _disposeController();
+
+    // Cancel any pending async operations
+    try {
+      _disposeController();
+    } catch (e) {
+      print('Error during controller disposal: $e');
+    }
+
     super.dispose();
   }
 }

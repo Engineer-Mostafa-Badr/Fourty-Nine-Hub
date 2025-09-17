@@ -177,16 +177,28 @@ class PlaylistPlaybackManager extends ChangeNotifier {
     return currentVideo?.id == videoId;
   }
 
+  // Check if there's a next video
+  bool hasNext() {
+    return _currentPlaylist.isNotEmpty &&
+        _currentIndex < _currentPlaylist.length - 1;
+  }
+
+  // Check if there's a previous video
+  bool hasPrevious() {
+    return _currentPlaylist.isNotEmpty && _currentIndex > 0;
+  }
+
   // Save state to SharedPreferences
   Future<void> _saveState() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final key = 'playlist_${playlistId}';
+      final key = 'playlist_$playlistId';
 
       if (currentVideo != null) {
         await prefs.setString('${key}_current_video_id', currentVideo!.id);
         await prefs.setInt('${key}_current_index', _currentIndex);
-        await prefs.setInt('${key}_position_ms', _currentPosition.inMilliseconds);
+        await prefs.setInt(
+            '${key}_position_ms', _currentPosition.inMilliseconds);
         await prefs.setBool('${key}_is_playing', _isPlaying);
         await prefs.setBool('${key}_has_auto_started', _hasAutoStarted);
         await prefs.setString('${key}_playback_mode', _playbackMode.toString());
@@ -204,13 +216,14 @@ class PlaylistPlaybackManager extends ChangeNotifier {
   Future<void> _loadSavedState() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final key = 'playlist_${playlistId}';
+      final key = 'playlist_$playlistId';
 
       final savedVideoId = prefs.getString('${key}_current_video_id');
       final savedIndex = prefs.getInt('${key}_current_index') ?? 0;
       final savedPositionMs = prefs.getInt('${key}_position_ms') ?? 0;
       final savedIsPlaying = prefs.getBool('${key}_is_playing') ?? false;
-      final savedHasAutoStarted = prefs.getBool('${key}_has_auto_started') ?? false;
+      final savedHasAutoStarted =
+          prefs.getBool('${key}_has_auto_started') ?? false;
       final savedPlaybackModeStr = prefs.getString('${key}_playback_mode');
       final savedPlaylistOrder = prefs.getStringList('${key}_playlist_order');
 
@@ -277,7 +290,7 @@ class PlaylistPlaybackManager extends ChangeNotifier {
   Future<void> clearSavedState() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final key = 'playlist_${playlistId}';
+      final key = 'playlist_$playlistId';
 
       await prefs.remove('${key}_current_video_id');
       await prefs.remove('${key}_current_index');
