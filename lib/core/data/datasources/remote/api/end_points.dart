@@ -1771,6 +1771,8 @@ class EndPoints {
   static getSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations?page=$page&limit=$limit';
 
+  static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";
+
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>
       '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';

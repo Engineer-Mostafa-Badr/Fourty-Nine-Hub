@@ -20,6 +20,7 @@ abstract class ConversationsRemoteDataSource {
   void listenToStartTyping(Function(String) params);
   Future<Either<Failure, bool>> stopTyping({required String conversationId});
   void listenToStopTyping(Function(String) params);
+  Future<Either<Failure, void>> toggleArchivedConversation({required String conversationId});
 }
 
 class ConversationsRemoteDataSourceImpl
@@ -135,4 +136,13 @@ class ConversationsRemoteDataSourceImpl
       CliLogger.error("Listen to Stop Typing Error :  $e");
     }
   }
+
+  @override
+  Future<Either<Failure, void>> toggleArchivedConversation({required String conversationId}) async {
+    final response = await _apiConsumer.put(EndPoints.toggleArchiveConversation(conversationId: conversationId));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(null));
+  }
+
 }
