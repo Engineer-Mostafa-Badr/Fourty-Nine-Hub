@@ -96,7 +96,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       await _performLogoutCleanup();
     }
     
-    context.go(Routes.HOME);
+    context.pop();
   }
 
   Future<void> _performLogoutCleanup() async {

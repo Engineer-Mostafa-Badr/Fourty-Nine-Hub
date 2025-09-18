@@ -1650,6 +1650,7 @@ class EndPoints {
   }
 
   static const getBookingCurrent = '/health/bookings';
+  static const getHistoryBooking = '/health/history-patient-booking';
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
   static const getMostBooking = '/health/doctors';
@@ -1885,6 +1886,6 @@ static String getExchangeRates(String code) => '/exchange-currency/$code';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String auctionBanner = '/auctions/banner';
 
-
+  static String getDriverRatings(String driverId) => '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

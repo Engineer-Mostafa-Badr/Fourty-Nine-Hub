@@ -63,6 +63,7 @@ import '../entities/client/driver_all_rating_entity.dart';
 import '../entities/create_no_track_trip_entity.dart';
 import '../entities/dashboards/create_non_track_offer_entity.dart';
 import '../entities/dashboards/update_driver_settings_entity.dart';
+import '../entities/driver_ratings_entity.dart';
 import '../entities/get_client_accepted_trips_entity.dart';
 import '../entities/get_client_offer_trips_entity.dart';
 import '../entities/get_client_past_trips_entity.dart';
@@ -171,5 +172,5 @@ abstract class RideRepository {
   Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params);
   Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
   Future<Either<Failure, ClientAllRatingEntity >> getClientAllRating(DriverAllRatingParams params);
-
+  Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId});
 }

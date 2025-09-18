@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
+import '../../../domain/entities/driver_ratings_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
@@ -45,6 +46,7 @@ extension RideStatex on RideState {
 class RideState {
   final RideStates status;
   final Failure? failure;
+  final DriverRatingsEntity? driverRatings;
   final XFile? personalPicture;
   final XFile? driverLicensePicture;
   final XFile? backOfDriverLicensePicture;
@@ -114,6 +116,7 @@ class RideState {
   RideState({
     this.status = RideStates.initState,
     this.failure,
+    this.driverRatings,
     this.personalPicture,
     this.driverLicensePicture,
     this.backOfDriverLicensePicture,
@@ -184,6 +187,7 @@ class RideState {
   RideState copyWith({
     RideStates? status,
     Failure? failure,
+    DriverRatingsEntity? driverRatings,
     XFile? personalPicture,
     XFile? driverLicensePicture,
     XFile? backOfDriverLicensePicture,
@@ -254,6 +258,7 @@ class RideState {
     return RideState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
+      driverRatings: driverRatings ?? this.driverRatings,
       registerType: registerType ?? this.registerType,
       personalPicture: personalPicture ?? this.personalPicture,
       color: color ?? this.color,
