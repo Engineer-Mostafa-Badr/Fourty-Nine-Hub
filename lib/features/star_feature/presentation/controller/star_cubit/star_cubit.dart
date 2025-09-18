@@ -750,50 +750,107 @@ class StarCubit extends Cubit<StarState> {
   //   );
   // }
 
+  // Future<void> likeTubeVideo(String videoId) async {
+  //   // التحديث المتفائل
+  //   final video = _findVideoById(videoId);
+  //   final wasLiked = video != null && _isVideoLikedByCurrentUser(videoId);
+
+  //   if (wasLiked) {
+  //     _updateVideoInteraction(videoId, 'unlike');
+  //   } else {
+  //     if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+  //       _updateVideoInteraction(videoId, 'undislike');
+  //     }
+  //     _updateVideoInteraction(videoId, 'like');
+  //   }
+
+  //   // استدعاء الـ API
+  //   final response = await _likeTubeVideoUseCase(videoId);
+
+  //   response.fold(
+  //     (failure) {
+  //       // إذا فشل الـ API، نعكس التحديث
+  //       if (wasLiked) {
+  //         _updateVideoInteraction(videoId, 'like');
+  //       } else {
+  //         _updateVideoInteraction(videoId, 'unlike');
+  //         if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+  //           _updateVideoInteraction(videoId, 'dislike');
+  //         }
+  //       }
+  //       _showErrorMessage(failure);
+  //     },
+  //     (success) {
+  //       if (success) {
+  //         // نجح التحديث - البيانات محفوظة بالفعل
+  //         print('Like operation successful');
+  //       } else {
+  //         // إذا فشل الـ API، نعكس التحديث
+  //         if (wasLiked) {
+  //           _updateVideoInteraction(videoId, 'like');
+  //         } else {
+  //           _updateVideoInteraction(videoId, 'unlike');
+  //         }
+  //       }
+  //     },
+  //   );
+  // }
+
+  // في star_cubit.dart
   Future<void> likeTubeVideo(String videoId) async {
-    // التحديث المتفائل
-    final video = _findVideoById(videoId);
-    final wasLiked = video != null && _isVideoLikedByCurrentUser(videoId);
+    print("👍 Like operation starting for video: $videoId");
 
-    if (wasLiked) {
-      _updateVideoInteraction(videoId, 'unlike');
-    } else {
-      if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
-        _updateVideoInteraction(videoId, 'undislike');
-      }
-      _updateVideoInteraction(videoId, 'like');
-    }
-
-    // استدعاء الـ API
     final response = await _likeTubeVideoUseCase(videoId);
 
     response.fold(
-      (failure) {
-        // إذا فشل الـ API، نعكس التحديث
-        if (wasLiked) {
-          _updateVideoInteraction(videoId, 'like');
-        } else {
-          _updateVideoInteraction(videoId, 'unlike');
-          if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
-            _updateVideoInteraction(videoId, 'dislike');
-          }
-        }
-        _showErrorMessage(failure);
-      },
+      (failure) => print("❌ Like failed: $failure"),
       (success) {
-        if (success) {
-          // نجح التحديث - البيانات محفوظة بالفعل
-          print('Like operation successful');
-        } else {
-          // إذا فشل الـ API، نعكس التحديث
-          if (wasLiked) {
-            _updateVideoInteraction(videoId, 'like');
-          } else {
-            _updateVideoInteraction(videoId, 'unlike');
-          }
-        }
+        print("✅ Like operation successful");
+        // تحديث مباشر للحالة بناء على العملية
+        _updateVideoLikeStatus(videoId,
+            isLike: true, isDislike: false, incrementLikes: true);
+
+        // refresh اختياري بعد تأخير
+        Future.delayed(Duration(seconds: 1), () => _refreshVideoData(videoId));
       },
     );
+  }
+
+  void _updateVideoLikeStatus(
+    String videoId, {
+    required bool isLike,
+    required bool isDislike,
+    bool incrementLikes = false,
+    bool decrementLikes = false,
+  }) {
+    final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+
+    for (final category in TalentCategory.values) {
+      final categoryTalents = talents[category];
+      if (categoryTalents != null) {
+        final updatedTalents = categoryTalents.map((talent) {
+          if (talent.id == videoId && talent is TubeVideoModel) {
+            int newLikes = talent.likes;
+            int newDislikes = talent.dislikes;
+
+            if (incrementLikes) newLikes++;
+            if (decrementLikes) newLikes--;
+
+            return talent.copyWith(
+              isLike: isLike,
+              isDislike: isDislike,
+              likes: newLikes,
+              dislikes: newDislikes,
+            );
+          }
+          return talent;
+        }).toList();
+        talents[category] = updatedTalents;
+      }
+    }
+
+    emit(state.copyWith(talents: talents));
+    _videoUpdatesController.add(videoId);
   }
 
 // Enhanced dislike functionality with optimistic updates and toggle behavior
