@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -323,6 +325,7 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
           r'\+\d{10,}');
 
   final FocusNode focusNode = FocusNode();
+  bool? isChecked;
 
   @override
   void initState() {
@@ -349,7 +352,7 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
         // height: 400.h,
         padding: const EdgeInsets.symmetric(
           vertical: 16,
-          horizontal: 10,
+          horizontal: 16,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -362,30 +365,69 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
             // Sizer(
             //   height: 30.h,
             // ),
-
-            InkWell(
-              onTap: () {
-                ManageVibration.vibrate();
-                focusNode.unfocus();
-                context.pop();
-              },
-              child: Container(
-                height: 24,
-                width: 24,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFFD9D9D9),
-                ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.black,
-                  size: 20,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: InkWell(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  focusNode.unfocus();
+                  context.pop();
+                },
+                child: Container(
+                  height: 24,
+                  width: 24,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFD9D9D9),
+                  ),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.black,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
             const SizedBox(
               height: 8,
             ),
+
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: Checkbox(
+                      checkColor: Colors.white,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      value: isChecked ?? false,
+                      activeColor: AppColors.PRIMARY_COLOR,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = value ?? true;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                Label(
+                  text: context.isArabic
+                      ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                      : "Please enter a direct contact number for the service provider.",
+                  style: Styles.mediumText(
+                    color: AppColors.c717171,
+                    fontSize: 40.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            Sizer(
+              height: 16.h,
+            ),
+
             // Container(
             //   constraints: BoxConstraints(maxHeight: 180.h),
             //   child: Form(
@@ -431,6 +473,20 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
                   // controller: controller,
                 ),
               ),
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
+            Label(
+              text: context.isArabic
+                  ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                  : "Entering another customer's number is at your own risk and may subject you to legal liability.",
+              style: Styles.mediumText(
+                color: AppColors.c717171,
+                fontSize: 40.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 2,
             ),
             const SizedBox(
               height: 24,

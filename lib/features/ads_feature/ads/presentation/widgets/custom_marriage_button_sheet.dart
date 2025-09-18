@@ -27,7 +27,8 @@ class CustomMarriageButtonSheet extends StatelessWidget {
           InkWell(
             onTap: () {
               ManageVibration.vibrate();
-               Navigator.pop(context);},
+              Navigator.pop(context);
+            },
             child: Container(
               height: 24,
               width: 24,
