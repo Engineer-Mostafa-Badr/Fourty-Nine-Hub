@@ -84,7 +84,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                         color: Colors.red),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.read<HealthCubit>().toggleFavoriteSubcategory(widget.subCategory.id);
+                      context.read<HealthCubit>().toggleFavoriteMedicalService(widget.subCategory.id);
                       // setState(() {
                       //   widget.subCategory.isFavorite = !(widget.subCategory.isFavorite??false);
                       // });

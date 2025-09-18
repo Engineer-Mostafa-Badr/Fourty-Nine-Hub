@@ -132,6 +132,23 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
+                      const Sizer(),
+
+                      /// Current Booking
+                      CurrentHistoryBooking(
+                        title: context.isArabic
+                            ? 'حجوزاتي'
+                            : 'My Booking',
+                        isSelected: _showCurrent,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            // _toggleView('current');
+                          }
+                        },
+                      ),
                       const SizedBox(
                         width: 16,
                       ),
