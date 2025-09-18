@@ -83,4 +83,9 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params}) {
     return _remoteDataSource.getMostBooking(params:params);
   }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> getUserBooking({required GetMostBookingParams params}) {
+    return _remoteDataSource.getUserBooking(params:params);
+  }
 }

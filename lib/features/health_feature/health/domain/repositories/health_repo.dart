@@ -30,4 +30,5 @@ abstract class HealthRepo {
   Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params});
   Future<Either<Failure, List<BookingEntity>>> getHistoryBooking({required GetBookingParams params});
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params});
+  Future<Either<Failure, List<MostBookingEntity>>> getUserBooking({required GetMostBookingParams params});
 }
