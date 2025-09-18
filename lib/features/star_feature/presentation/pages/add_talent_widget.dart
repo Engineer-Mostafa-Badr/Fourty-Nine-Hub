@@ -998,8 +998,8 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           SnackBar(
             content: Text(
               context.isArabic
-                ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
-                : 'Error loading video. Please try again.',
+                  ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
+                  : 'Error loading video. Please try again.',
             ),
             backgroundColor: Colors.red,
           ),
@@ -1099,11 +1099,13 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       return;
     }
 
-    // // Check subscription first
-    // serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-    //   onSubscribed: () => _performUpload(),
-    //   subCategoryId: Constants.tubeSubCategory,
-    // );
+    // Check subscription first
+    // make it not subscribed
+       
+    serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+      onSubscribed: () => _performUpload(),
+      subCategoryId: Constants.tubeSubCategory,
+    );
 
     _performUpload();
   }
@@ -1238,9 +1240,11 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         },
         (success) {
           print("✅ Upload successful!");
-          _showSuccess(context.isArabic
-              ? 'تم رفع الفيديو بنجاح!'
-              : 'Video uploaded successfully!');
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تم رفع الفيديو بنجاح!'
+                  : 'Video uploaded successfully!');
 
           // Clear form and navigate back
           _clearForm();
