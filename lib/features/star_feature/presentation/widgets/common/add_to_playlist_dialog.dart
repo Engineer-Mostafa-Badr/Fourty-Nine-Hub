@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -56,7 +57,9 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
             child: Row(
               children: [
                 Text(
-                  context.isArabic ? 'إضافة إلى قائمة التشغيل' : 'Add to playlist',
+                  context.isArabic
+                      ? 'إضافة إلى قائمة التشغيل'
+                      : 'Add to playlist',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -79,7 +82,9 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
               onPressed: () => _showCreatePlaylistDialog(),
               icon: Icon(Icons.add, color: Colors.white),
               label: Text(
-                context.isArabic ? 'إنشاء قائمة تشغيل جديدة' : 'Create new playlist',
+                context.isArabic
+                    ? 'إنشاء قائمة تشغيل جديدة'
+                    : 'Create new playlist',
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
@@ -113,7 +118,9 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
                           (context.isArabic
                               ? 'خطأ في تحميل قوائم التشغيل'
                               : 'Failed to load playlists'),
-                      onRetry: () => context.read<PlaylistCubit>().getMyPlaylists(refresh: true),
+                      onRetry: () => context
+                          .read<PlaylistCubit>()
+                          .getMyPlaylists(refresh: true),
                     ),
                   );
                 }
@@ -245,7 +252,8 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
     });
 
     final playlistCubit = context.read<PlaylistCubit>();
-    final success = await playlistCubit.addVideoToPlaylist(playlist.id, widget.videoId);
+    final success =
+        await playlistCubit.addVideoToPlaylist(playlist.id, widget.videoId);
 
     setState(() {
       addingToPlaylists.remove(playlist.id);
@@ -276,9 +284,7 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.isArabic
-                ? 'فشل في إضافة الفيديو'
-                : 'Failed to add video',
+            context.isArabic ? 'فشل في إضافة الفيديو' : 'Failed to add video',
           ),
           backgroundColor: Colors.red,
         ),
@@ -390,9 +396,9 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
                           }
 
                           await context.read<PlaylistCubit>().createPlaylist(
-                            name: nameController.text.trim(),
-                            description: descriptionController.text.trim(),
-                          );
+                                name: nameController.text.trim(),
+                                description: descriptionController.text.trim(),
+                              );
                         },
                   child: state.isCreating
                       ? SizedBox(

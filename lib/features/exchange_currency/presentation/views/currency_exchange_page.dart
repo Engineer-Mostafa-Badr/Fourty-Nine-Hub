@@ -62,7 +62,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     WidgetsBinding.instance.addObserver(this);
 
     // Initialize controllers
-    _amountController.text = '1000.00';
+    _amountController.text = '00.00';
 
     // Animation controllers
     _refreshAnimationController = AnimationController(
@@ -159,7 +159,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateControllerTextForLocale();
     });
-    
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: PreferredSize(
@@ -569,7 +569,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                         controller: _amountController,
                                         keyboardType: const TextInputType
                                             .numberWithOptions(decimal: true),
-                                        inputFormatters: context.isArabic 
+                                        inputFormatters: context.isArabic
                                             ? [ArabicNumberInputFormatter()]
                                             : null,
                                         textAlign: TextAlign.right,
@@ -602,7 +602,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(12)),
                                           ),
-                                          hintText: context.isArabic ? '٠.٠٠' : '0.00',
+                                          hintText: context.isArabic
+                                              ? '٠.٠٠'
+                                              : '0.00',
                                           hintStyle: TextStyle(
                                             color: Colors.grey.shade400,
                                           ),
@@ -622,7 +624,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                               .replaceAll('٧', '7')
                                               .replaceAll('٨', '8')
                                               .replaceAll('٩', '9');
-                                          final amount = double.tryParse(englishValue) ?? 0.0;
+                                          final amount =
+                                              double.tryParse(englishValue) ??
+                                                  0.0;
                                           cubit.setAmount(amount);
                                         },
                                       ),
@@ -830,8 +834,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                     .replaceAll('٨', '8')
                                     .replaceAll('٩', '9');
                                 final amount =
-                                    double.tryParse(englishText) ??
-                                        0.0;
+                                    double.tryParse(englishText) ?? 0.0;
                                 cubit.setAmount(amount);
                                 cubit.convertCurrency();
                               },
@@ -1094,14 +1097,19 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     final cubit = context.read<CurrencyCubit>();
 
     if (state is CurrencyConverted) {
-      final formattedRate = _formatNumberForLocale(state.exchangeRate.conversionRate, decimalPlaces: 4);
+      final formattedRate = _formatNumberForLocale(
+          state.exchangeRate.conversionRate,
+          decimalPlaces: 4);
       return '1 ${state.exchangeRate.baseCode} = $formattedRate ${state.exchangeRate.targetCode}';
     } else if (state is CurrencyUpdatedSilently) {
-      final formattedRate = _formatNumberForLocale(state.exchangeRate.conversionRate, decimalPlaces: 4);
+      final formattedRate = _formatNumberForLocale(
+          state.exchangeRate.conversionRate,
+          decimalPlaces: 4);
       return '1 ${state.exchangeRate.baseCode} = $formattedRate ${state.exchangeRate.targetCode}';
     } else if (cubit.lastExchangeRate != null) {
       final rate = cubit.lastExchangeRate!;
-      final formattedRate = _formatNumberForLocale(rate.conversionRate, decimalPlaces: 4);
+      final formattedRate =
+          _formatNumberForLocale(rate.conversionRate, decimalPlaces: 4);
       return '1 ${rate.baseCode} = $formattedRate ${rate.targetCode}';
     }
     return '';
