@@ -393,7 +393,7 @@ class HealthCubit extends Cubit<HealthState> {
     }
 
     if(type != 'current') await getHistoryBookings(type);
-    if(type != 'current') await getBookings(type);
+    if(type == 'current') await getBookings(type);
     emit(state.copyWith(status: HealthStates.success));
   }
 

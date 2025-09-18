@@ -41,6 +41,7 @@ class _HealthViewState extends State<HealthView> {
   bool _showMost = false;
   bool _showHistory = false;
   bool _showCurrent = false;
+  bool _showMyBookings = false;
 
   bool _showFavoriteAds = false;
 
@@ -139,14 +140,14 @@ class _HealthViewState extends State<HealthView> {
                         title: context.isArabic
                             ? 'حجوزاتي'
                             : 'My Booking',
-                        isSelected: _showCurrent,
+                        isSelected: _showMyBookings,
                         onTap: () {
                           ManageVibration.vibrate();
-                          if (!context.read<UserCubit>().isLoggedIn) {
-                            return pleaseLoginDialog(context);
-                          } else {
-                            // _toggleView('current');
-                          }
+                          // if (!context.read<UserCubit>().isLoggedIn) {
+                          //   return pleaseLoginDialog(context);
+                          // } else {
+                          //   // _toggleView('current');
+                          // }
                         },
                       ),
                       const SizedBox(
