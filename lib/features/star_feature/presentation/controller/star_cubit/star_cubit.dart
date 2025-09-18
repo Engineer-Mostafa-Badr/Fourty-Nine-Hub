@@ -939,6 +939,7 @@ class StarCubit extends Cubit<StarState> {
     if (existingVideo == null) {
       print('📹 Adding video to state: ${video.id}');
       _updateVideoInState(video.id, video);
+      _videoUpdatesController.add(video.id);
     }
   }
 

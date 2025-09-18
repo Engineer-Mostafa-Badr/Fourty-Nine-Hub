@@ -644,6 +644,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
           serviceLocator<DislikeCommentUseCase>(),
         );
     _starCubit = widget.starCubit ?? serviceLocator<StarCubit>();
+    _starCubit.ensureVideoInState(widget.talent);
     _initializeVideo();
     // Load comments for this video
     _commentCubit.getVideoComments(widget.talent.id, refresh: true);
@@ -1932,8 +1933,8 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                 MaterialPageRoute(
                   builder: (context) => MultiBlocProvider(
                     providers: [
-                      BlocProvider<StarCubit>(
-                        create: (context) => serviceLocator<StarCubit>(),
+                      BlocProvider.value(
+                        value: context.read<StarCubit>(),
                       ),
                       BlocProvider<CommentCubit>(
                         create: (context) => serviceLocator<CommentCubit>(),
