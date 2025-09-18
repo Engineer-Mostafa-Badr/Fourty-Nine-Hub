@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_setting_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/most_booking_entity.dart';
@@ -43,7 +44,7 @@ class HealthRepoImpl implements HealthRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> isDoctor() {
+  Future<Either<Failure, DoctorSettingEntity>> isDoctor() {
     return _remoteDataSource.isDoctor();
   }
 
@@ -71,6 +72,11 @@ class HealthRepoImpl implements HealthRepo {
   @override
   Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params}) {
     return _remoteDataSource.getBooking(params:params);
+  }
+
+  @override
+  Future<Either<Failure, List<BookingEntity>>> getHistoryBooking({required GetBookingParams params}) {
+    return _remoteDataSource.getHistoryBooking(params:params);
   }
 
   @override

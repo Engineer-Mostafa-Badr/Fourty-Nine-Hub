@@ -7,9 +7,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class DoctorModeBanner extends StatelessWidget {
   const DoctorModeBanner({
     super.key,
-    required this.isWaitingApproval,
+    required this.isApproval,
   });
-  final bool isWaitingApproval;
+  final bool isApproval;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -27,8 +27,8 @@ class DoctorModeBanner extends StatelessWidget {
                 blurRadius: 6,
               ),
             ],
-            gradient: const LinearGradient(
-              colors: [AppColors.SECONDARY_COLOR_DARK2, AppColors.c90242B],
+            gradient: LinearGradient(
+              colors: [isApproval?AppColors.SECONDARY_COLOR_DARK2:AppColors.GREY_DARK_COLOR, AppColors.c90242B],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -44,15 +44,7 @@ class DoctorModeBanner extends StatelessWidget {
             ),
           ),
         ),
-        if (isWaitingApproval)
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3), // تغميق بسيط
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
+
       ],
     );
   }

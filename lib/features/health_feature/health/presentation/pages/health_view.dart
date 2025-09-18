@@ -48,7 +48,6 @@ class _HealthViewState extends State<HealthView> {
   bool _showMyAds = false;
   @override
   Widget build(BuildContext context) {
-    bool isWaitingApproval = false;
     return SharedScaffold(
       mainCategoryId: 1,
       body: BlocBuilder<HealthCubit, HealthState>(
@@ -69,9 +68,9 @@ class _HealthViewState extends State<HealthView> {
                 state.isDoctor == false
                     ? const RegistrationBanner()
                     : DoctorModeBanner(
-                        isWaitingApproval: isWaitingApproval,
+                  isApproval: state.isApproved??false,
                       ),
-                if (isWaitingApproval) WaitingAprovalText(),
+                if (state.isApproved==false) WaitingAprovalText(),
                 Sizer(),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -130,6 +129,23 @@ class _HealthViewState extends State<HealthView> {
                             return pleaseLoginDialog(context);
                           } else {
                             _toggleView('current');
+                          }
+                        },
+                      ),
+                      const Sizer(),
+
+                      /// Current Booking
+                      CurrentHistoryBooking(
+                        title: context.isArabic
+                            ? 'حجوزاتي'
+                            : 'My Booking',
+                        isSelected: _showCurrent,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            // _toggleView('current');
                           }
                         },
                       ),

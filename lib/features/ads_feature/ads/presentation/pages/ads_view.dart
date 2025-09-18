@@ -108,10 +108,11 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     print('userType index ${_tabController.index}');
     print('userType hasAuction ${widget.params.subCategory.hasAuction}');
     return CustomScaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(30),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
         child: HomeAppbar(
           isWithBackArrow: true,
+          onBackPressed: ()=>context.pop(),
         ),
       ),
 
