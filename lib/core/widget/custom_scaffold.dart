@@ -191,7 +191,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                     color: context.isDarkMode ? AppColors.whiteColor : null,
                   ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 15.h),
           SizedBox(
             width: 100.w,
             child: Label(

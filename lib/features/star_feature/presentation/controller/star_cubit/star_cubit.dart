@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -62,6 +64,9 @@ class StarCubit extends Cubit<StarState> {
   final IncrementTubeVideoViewUseCase _incrementTubeVideoViewUseCase;
   final RateTubeVideoUseCase _rateTubeVideoUseCase;
   final DeleteTubeVideoUseCase _deleteTubeVideoUseCase;
+
+  final _videoUpdatesController = StreamController<String>.broadcast();
+  Stream<String> get videoUpdates => _videoUpdatesController.stream;
 
   StarCubit(
     this._allStarUseCase,
@@ -190,7 +195,8 @@ class StarCubit extends Cubit<StarState> {
     }
 
     print("🔄 Updated favorites count: ${updatedFavorites.length}");
-    emit(state.copyWith(favoriteIds: updatedFavorites, status: StarStates.success));
+    emit(state.copyWith(
+        favoriteIds: updatedFavorites, status: StarStates.success));
 
     // API call
     final response = isFavorite
@@ -724,7 +730,7 @@ class StarCubit extends Cubit<StarState> {
         }
         _showErrorMessage(failure);
       },
-      (success) {
+      (success) async {
         if (!success) {
           // Revert optimistic update if API returned false
           if (wasLiked) {
@@ -735,6 +741,10 @@ class StarCubit extends Cubit<StarState> {
               _updateVideoInteraction(videoId, 'dislike');
             }
           }
+        } else {
+          // Refresh video data after successful like/unlike
+          print('👍 Like operation successful, refreshing video data...');
+          await _refreshVideoData(videoId);
         }
       },
     );
@@ -772,7 +782,7 @@ class StarCubit extends Cubit<StarState> {
         }
         _showErrorMessage(failure);
       },
-      (success) {
+      (success) async {
         if (!success) {
           // Revert optimistic update if API returned false
           if (wasDisliked) {
@@ -783,6 +793,10 @@ class StarCubit extends Cubit<StarState> {
               _updateVideoInteraction(videoId, 'like');
             }
           }
+        } else {
+          // Refresh video data after successful dislike/undislike
+          print('👎 Dislike operation successful, refreshing video data...');
+          await _refreshVideoData(videoId);
         }
       },
     );
@@ -856,6 +870,78 @@ class StarCubit extends Cubit<StarState> {
     );
   }
 
+  // Helper method to refresh video data after like/dislike
+  Future<void> _refreshVideoData(String videoId) async {
+    print('🔄 Starting refresh video data for: $videoId');
+
+    final response = await _fetchTubeVideoDetailsByIdUseCase(videoId);
+
+    response.fold(
+      (failure) {
+        // Silently handle refresh failures - don't show error messages
+        print('❌ Failed to refresh video data for $videoId: $failure');
+      },
+      (updatedVideo) {
+        print('✅ Successfully fetched updated video data');
+        print(
+            '📊 New video data - Likes: ${updatedVideo.likes}, Dislikes: ${updatedVideo.dislikes}');
+        // Update the video in all relevant categories
+        _updateVideoInState(videoId, updatedVideo);
+      },
+    );
+  }
+
+  // Helper method to update video data in state
+  void _updateVideoInState(String videoId, dynamic updatedVideo) {
+    print('🔄 Updating video in state - ID: $videoId');
+
+    final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+    bool videoFound = false;
+
+    for (final category in TalentCategory.values) {
+      final categoryTalents = talents[category];
+      if (categoryTalents != null) {
+        final updatedTalents = categoryTalents.map((talent) {
+          if (talent.id == videoId) {
+            videoFound = true;
+            print(
+                '📹 Found video in $category - Old likes: ${talent.likes}, New likes: ${updatedVideo.likes}');
+            print(
+                '📹 Found video in $category - Old dislikes: ${talent.dislikes}, New dislikes: ${updatedVideo.dislikes}');
+            // Replace the existing video with updated data
+            return updatedVideo as StarEntity;
+          }
+          return talent;
+        }).toList();
+
+        talents[category] = updatedTalents;
+      }
+    }
+
+    if (videoFound) {
+      print('✅ Video updated successfully, emitting new state');
+      emit(state.copyWith(talents: talents));
+    } else {
+      print('❌ Video not found in any category, adding to available category');
+      // Add video to available category if not found anywhere
+      if (talents[TalentCategory.available] == null) {
+        talents[TalentCategory.available] = [];
+      }
+      talents[TalentCategory.available]!.add(updatedVideo as StarEntity);
+      print('✅ Video added to available category, emitting new state');
+      emit(state.copyWith(talents: talents));
+    }
+  }
+
+  // Public method to ensure video is in state (can be called from UI)
+  void ensureVideoInState(StarEntity video) {
+    final existingVideo = getVideoByIdGeneric(video.id);
+    if (existingVideo == null) {
+      print('📹 Adding video to state: ${video.id}');
+      _updateVideoInState(video.id, video);
+    }
+  }
+
   Future<void> rateVideo(String videoId, double rating) async {
     emit(state.copyWith(status: StarStates.loading));
 
@@ -887,12 +973,14 @@ class StarCubit extends Cubit<StarState> {
   // Helper methods for updating local state
   void _updateVideoInteraction(String videoId, String action) {
     final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+    bool videoUpdated = false;
 
     for (final category in TalentCategory.values) {
       final categoryTalents = talents[category];
       if (categoryTalents != null) {
         final updatedTalents = categoryTalents.map((talent) {
           if (talent.id == videoId && talent is TubeVideoModel) {
+            videoUpdated = true;
             switch (action) {
               case 'like':
                 return talent.copyWith(
@@ -901,13 +989,11 @@ class StarCubit extends Cubit<StarState> {
                   dislikes: talent.isDislike
                       ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
                       : talent.dislikes,
-                  isDislike: false, // إزالة الـ dislike لو موجود
+                  isDislike: false,
                 );
               case 'unlike':
                 return talent.copyWith(
-                  likes: talent.isLike
-                      ? (talent.likes - 1).clamp(0, double.infinity).toInt()
-                      : talent.likes,
+                  likes: (talent.likes - 1).clamp(0, double.infinity).toInt(),
                   isLike: false,
                 );
               case 'dislike':
@@ -918,13 +1004,12 @@ class StarCubit extends Cubit<StarState> {
                   likes: talent.isLike
                       ? (talent.likes - 1).clamp(0, double.infinity).toInt()
                       : talent.likes,
-                  isLike: false, // إزالة الـ like لو موجود
+                  isLike: false,
                 );
               case 'undislike':
                 return talent.copyWith(
-                  dislikes: talent.isDislike
-                      ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
-                      : talent.dislikes,
+                  dislikes:
+                      (talent.dislikes - 1).clamp(0, double.infinity).toInt(),
                   isDislike: false,
                 );
               default:
@@ -938,7 +1023,21 @@ class StarCubit extends Cubit<StarState> {
       }
     }
 
-    emit(state.copyWith(talents: talents));
+    // Emit with update counter to force UI rebuild
+    emit(state.copyWith(
+      talents: talents,
+      lastUpdatedVideoId: videoId,
+      updateCounter: state.updateCounter + 1,
+    ));
+
+    // Also emit to stream
+    _videoUpdatesController.add(videoId);
+  }
+
+  @override
+  Future<void> close() {
+    _videoUpdatesController.close();
+    return super.close();
   }
 
   void _updateVideoViews(String videoId) {
@@ -1087,7 +1186,8 @@ class StarCubit extends Cubit<StarState> {
 
   bool isFavorite(String talentId) {
     final result = state.favoriteIds.contains(talentId);
-    print("💖 Check if $talentId is favorite: $result (total favorites: ${state.favoriteIds.length})");
+    print(
+        "💖 Check if $talentId is favorite: $result (total favorites: ${state.favoriteIds.length})");
     return result;
   }
 
@@ -1240,11 +1340,39 @@ class StarCubit extends Cubit<StarState> {
 
   // Method to get video by ID from current state
   TubeVideoModel? getVideoById(String videoId) {
+    print('🔍 Looking for video with ID: $videoId');
+    for (final category in TalentCategory.values) {
+      final categoryTalents = state.talents[category];
+      if (categoryTalents != null) {
+        print(
+            '📂 Checking category $category with ${categoryTalents.length} videos');
+        for (final talent in categoryTalents) {
+          print(
+              '🎥 Checking talent ID: ${talent.id}, Type: ${talent.runtimeType}');
+          if (talent.id == videoId) {
+            if (talent is TubeVideoModel) {
+              print(
+                  '✅ Found TubeVideoModel in $category - Likes: ${talent.likes}, Dislikes: ${talent.dislikes}');
+              return talent;
+            } else {
+              print(
+                  '⚠️ Found talent but not TubeVideoModel, type: ${talent.runtimeType}');
+            }
+          }
+        }
+      }
+    }
+    print('❌ Video not found in any category');
+    return null;
+  }
+
+  // Generic method to get video by ID (any type)
+  StarEntity? getVideoByIdGeneric(String videoId) {
     for (final category in TalentCategory.values) {
       final categoryTalents = state.talents[category];
       if (categoryTalents != null) {
         for (final talent in categoryTalents) {
-          if (talent.id == videoId && talent is TubeVideoModel) {
+          if (talent.id == videoId) {
             return talent;
           }
         }

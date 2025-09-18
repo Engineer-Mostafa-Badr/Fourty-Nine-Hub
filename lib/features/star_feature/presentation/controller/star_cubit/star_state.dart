@@ -16,7 +16,7 @@ class StarState {
   final BannerTalentEntity? banner;
   final Set<String> favoriteIds;
   final Set<String> watchLaterIds;
-  final Set<String> ratedVideos; // Track videos that have been rated by user
+  final Set<String> ratedVideos;
 
   // Search and filter state
   final String searchQuery;
@@ -26,6 +26,10 @@ class StarState {
 
   // Messages
   final String? successMessage;
+
+  // Add this for force UI updates
+  final int updateCounter;
+  final String? lastUpdatedVideoId;
 
   StarState({
     this.status = StarStates.initial,
@@ -45,6 +49,8 @@ class StarState {
     List<ProfileEntity>? searchProfileResults,
     this.isSearchingProfiles = false,
     this.successMessage,
+    this.updateCounter = 0,
+    this.lastUpdatedVideoId,
   })  : searchProfileResults = searchProfileResults ?? [],
         ratedVideos = ratedVideos ?? {},
         talents = talents ??
@@ -84,7 +90,7 @@ class StarState {
         watchLaterIds = watchLaterIds ?? {},
         searchResults = searchResults ?? [];
 
-  // Helper getters for easy access
+  // Helper getters
   List<StarEntity> get availableTalents =>
       talents[TalentCategory.available] ?? [];
   List<StarEntity> get favoriteTalents =>
@@ -116,6 +122,8 @@ class StarState {
     List<ProfileEntity>? searchProfileResults,
     bool? isSearchingProfiles,
     String? successMessage,
+    int? updateCounter,
+    String? lastUpdatedVideoId,
   }) {
     return StarState(
       status: status ?? this.status,
@@ -135,6 +143,8 @@ class StarState {
       searchProfileResults: searchProfileResults ?? this.searchProfileResults,
       isSearchingProfiles: isSearchingProfiles ?? this.isSearchingProfiles,
       successMessage: successMessage ?? this.successMessage,
+      updateCounter: updateCounter ?? (this.updateCounter + 1),
+      lastUpdatedVideoId: lastUpdatedVideoId ?? this.lastUpdatedVideoId,
     );
   }
 }

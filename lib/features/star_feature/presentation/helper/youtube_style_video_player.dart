@@ -1596,150 +1596,103 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
                     const SizedBox(height: 16),
 
-                    // Action buttons - اربطها بالـ APIs الحقيقية
+                    // Action buttons
                     Row(
                       children: [
-                        // Like button
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              // Like button
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    BlocBuilder<StarCubit, StarState>(
-                                      builder: (context, starState) {
-                                        final isLiked = _isLiked(starCubit);
-                                        return IconButton(
-                                          icon: Icon(
-                                            isLiked
-                                                ? Icons.thumb_up
-                                                : Icons.thumb_up_outlined,
-                                            size: 20,
-                                            color: isLiked
-                                                ? Colors.blue
-                                                : Colors.grey[700],
-                                          ),
-                                          onPressed: () {
-                                            ManageVibration.vibrate();
-                                            // اعمل API call - الـ cubit هيتولى تحديث الحالة
-                                            starCubit.likeTubeVideo(
-                                                widget.talent.id);
-                                          },
-                                        );
-                                      },
-                                    ),
+                        // Like/Dislike button container
+                        StreamBuilder<String>(
+                          stream: starCubit.videoUpdates,
+                          builder: (context, snapshot) {
+                            // Get fresh data on stream update
+                            final video =
+                                starCubit.getVideoById(widget.talent.id);
+                            final isLiked = video?.isLike ?? false;
+                            final isDisliked = video?.isDislike ?? false;
+                            final likes = video?.likes ?? widget.talent.likes;
+                            final dislikes =
+                                video?.dislikes ?? widget.talent.dislikes;
 
-                                    // عرض عدد الـ likes
-                                    BlocBuilder<StarCubit, StarState>(
-                                      builder: (context, starState) {
-                                        // استخدم العدد المحدث من الـ cubit
-                                        final updatedVideo = starCubit
-                                            .getVideoById(widget.talent.id);
-                                        int likes = updatedVideo?.likes ??
-                                            widget.talent.likes;
-
-                                        // make it arabic numbers
-                                        return Text(
-                                          likes
-                                              .toString()
-                                              .toArabicNumbers(context),
-                                          style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 14,
-                                          ),
-                                        );
-                                      },
-                                    ),
-
-                                    Container(
-                                      width: 1,
-                                      height: 24,
-                                      color: Colors.grey[400],
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                    ),
-
-                                    BlocBuilder<StarCubit, StarState>(
-                                      builder: (context, starState) {
-                                        final isDisliked =
-                                            _isDisliked(starCubit);
-                                        return IconButton(
-                                          icon: Icon(
-                                            isDisliked
-                                                ? Icons.thumb_down
-                                                : Icons.thumb_down_outlined,
-                                            size: 20,
-                                            color: isDisliked
-                                                ? Colors.red
-                                                : Colors.grey[700],
-                                          ),
-                                          onPressed: () {
-                                            ManageVibration.vibrate();
-                                            // اعمل API call - الـ cubit هيتولى تحديث الحالة
-                                            starCubit.dislikeTubeVideo(
-                                                widget.talent.id);
-                                          },
-                                        );
-                                      },
-                                    ),
-
-                                    // عرض عدد الـ dislikes
-                                    BlocBuilder<StarCubit, StarState>(
-                                      builder: (context, starState) {
-                                        // استخدم العدد المحدث من الـ cubit
-                                        final updatedVideo = starCubit
-                                            .getVideoById(widget.talent.id);
-                                        int dislikes = updatedVideo?.dislikes ??
-                                            widget.talent.dislikes;
-
-                                        return Text(
-                                          dislikes
-                                              .toString()
-                                              .toArabicNumbers(context),
-                                          style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 14,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Like button
+                                  IconButton(
+                                    icon: Icon(
+                                      isLiked
+                                          ? Icons.thumb_up
+                                          : Icons.thumb_up_outlined,
+                                      size: 20,
+                                      color: isLiked
+                                          ? Colors.blue
+                                          : Colors.grey[700],
+                                    ),
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                      starCubit
+                                          .ensureVideoInState(widget.talent);
+                                      starCubit.likeTubeVideo(widget.talent.id);
+                                    },
+                                  ),
+
+                                  // Likes count
+                                  Text(
+                                    likes.toString().toArabicNumbers(context),
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+
+                                  // Divider
+                                  Container(
+                                    width: 1,
+                                    height: 24,
+                                    color: Colors.grey[400],
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                  ),
+
+                                  // Dislike button
+                                  IconButton(
+                                    icon: Icon(
+                                      isDisliked
+                                          ? Icons.thumb_down
+                                          : Icons.thumb_down_outlined,
+                                      size: 20,
+                                      color: isDisliked
+                                          ? Colors.red
+                                          : Colors.grey[700],
+                                    ),
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                      starCubit
+                                          .ensureVideoInState(widget.talent);
+                                      starCubit
+                                          .dislikeTubeVideo(widget.talent.id);
+                                    },
+                                  ),
+
+                                  // Dislikes count
+                                  Text(
+                                    dislikes
+                                        .toString()
+                                        .toArabicNumbers(context),
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-
-                        // const SizedBox(width: 12),
-
-                        // // Favorite button
-                        // Container(
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.grey[200],
-                        //     borderRadius: BorderRadius.circular(20),
-                        //   ),
-                        //   child: IconButton(
-                        //     icon: Icon(
-                        //       isFavorite ? Icons.favorite : Icons.favorite_border,
-                        //       size: 20,
-                        //       color: isFavorite ? Colors.red : Colors.grey[700],
-                        //     ),
-                        //     onPressed: () {
-                        //       starCubit.toggleFavorite(widget.talent.id);
-                        //     },
-                        //   ),
-                        // ),
                       ],
                     ),
                     const SizedBox(height: 16),
