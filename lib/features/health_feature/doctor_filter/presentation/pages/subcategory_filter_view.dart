@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/subcategories_list.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -41,6 +42,7 @@ class _DoctorSubcategoryFilterViewState extends State<DoctorSubcategoryFilterVie
         child: HomeAppbar(
           color: AppColors.whiteColor,
           isWithBackArrow: true,
+          onBackPressed: ()=>context.pop(),
         ),
       ),
       body: Padding(

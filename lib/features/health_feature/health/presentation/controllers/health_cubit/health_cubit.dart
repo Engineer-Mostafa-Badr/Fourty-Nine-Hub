@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/health_feature/health/data/models/filter_
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/cancel_appointment_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_history_booking_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
@@ -48,6 +49,7 @@ class HealthCubit extends Cubit<HealthState> {
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetBookingUseCase _getBookingUseCase;
+  final GetHistoryBookingUseCase _getHistoryBookingUseCase;
   final GetMostBookingUseCase _getMostBookingUseCase;
 
   final List<HealthBookingFilterModel> services = [
@@ -110,6 +112,7 @@ class HealthCubit extends Cubit<HealthState> {
       this._deleteFavoriteCategoryUseCase,
       this._cancelAppointmentUseCase,
       this._getBookingUseCase,
+      this._getHistoryBookingUseCase,
       this._getMostBookingUseCase)
       : super(const HealthState());
 
@@ -152,6 +155,53 @@ class HealthCubit extends Cubit<HealthState> {
     return result;
   }
 
+  Future<void> getHistoryBookings(String type) async {
+    final isCurrent = type == 'current';
+
+    // Check if we should load more
+    if ((isCurrent && (!hasMoreCurrent || isLoading)) ||
+        (!isCurrent && (!hasMoreHistory || isLoading))) {
+      return;
+    }
+
+    isLoading = true;
+    emit(state.copyWith(isLoadingMoreBooking: true));
+
+    final page = isCurrent ? currentPage : historyPage;
+    final response = await _getHistoryBookingUseCase(
+      GetBookingParams(page: page, limit: 5, type: type),
+    );
+
+    response.fold(
+      (failure) {
+        isLoading = false;
+        emit(state.copyWith(
+          failure: failure,
+          isLoadingMoreBooking: false,
+          status: HealthStates.error,
+        ));
+      },
+      (data) {
+        if (isCurrent) {
+          currentBookings.addAll(data);
+          currentPage++;
+          hasMoreCurrent = data.length >= 5;
+        } else {
+          historyBookings.addAll(data);
+          historyPage++;
+          hasMoreHistory = data.length >= 5;
+        }
+
+        isLoading = false;
+        emit(state.copyWith(
+          currentBookings: currentBookings,
+          historyBookings: historyBookings,
+          isLoadingMoreBooking: false,
+          activeBookingType: type,
+        ));
+      },
+    );
+  }
   Future<void> getBookings(String type) async {
     final isCurrent = type == 'current';
 
@@ -320,7 +370,7 @@ class HealthCubit extends Cubit<HealthState> {
     emit(state.copyWith(status: HealthStates.loading));
     await _getMainCategoryDetails();
     await _isDoctor();
-    await _isDoctorApproval();
+    // await _isDoctorApproval();
     await getSubCategories();
     await getServices();
     await getMyBookings();
@@ -342,7 +392,8 @@ class HealthCubit extends Cubit<HealthState> {
       hasMoreHistory = true;
     }
 
-    await getBookings(type);
+    if(type != 'current') await getHistoryBookings(type);
+    if(type != 'current') await getBookings(type);
     emit(state.copyWith(status: HealthStates.success));
   }
 
@@ -470,7 +521,7 @@ class HealthCubit extends Cubit<HealthState> {
       showErrorMessage(
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: HealthStates.error));
-    }, (data) => emit(state.copyWith(isDoctor: data)));
+    }, (data) => emit(state.copyWith(isDoctor: data.isDoctor,isApproved: data.isApproved)));
   }
 
   Future<void> _isDoctorApproval() async {

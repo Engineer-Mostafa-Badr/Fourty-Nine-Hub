@@ -48,7 +48,6 @@ class _HealthViewState extends State<HealthView> {
   bool _showMyAds = false;
   @override
   Widget build(BuildContext context) {
-    bool isWaitingApproval = false;
     return SharedScaffold(
       mainCategoryId: 1,
       body: BlocBuilder<HealthCubit, HealthState>(
@@ -69,9 +68,9 @@ class _HealthViewState extends State<HealthView> {
                 state.isDoctor == false
                     ? const RegistrationBanner()
                     : DoctorModeBanner(
-                        isWaitingApproval: isWaitingApproval,
+                  isApproval: state.isApproved??false,
                       ),
-                if (isWaitingApproval) WaitingAprovalText(),
+                if (state.isApproved==false) WaitingAprovalText(),
                 Sizer(),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,

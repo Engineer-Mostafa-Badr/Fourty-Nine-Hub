@@ -78,15 +78,16 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                   right: 8,
                   child: IconButton(
                     icon: Icon(
-                        isFavorite
+                        widget.subCategory.isFavorite==true
                             ? Icons.favorite_outlined
                             : Icons.favorite_border,
                         color: Colors.red),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
+                      context.read<HealthCubit>().toggleFavoriteSubcategory(widget.subCategory.id);
+                      // setState(() {
+                      //   widget.subCategory.isFavorite = !(widget.subCategory.isFavorite??false);
+                      // });
                     },
                     visualDensity:
                         const VisualDensity(horizontal: -4, vertical: -4),
@@ -123,6 +124,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                     backColor: AppColors.getButtonPrimaryWhiteColor(context),
                     onPressed: () {
                       ManageVibration.vibrate();
+                      print("widget.subCategory.id111 ${widget.subCategory.id}");
                       if (context.read<HealthCubit>().state.mainCategory !=
                               null &&
                           UserCubit.to.isLoggedIn) {

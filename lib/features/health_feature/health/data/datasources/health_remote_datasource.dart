@@ -6,10 +6,12 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/appointment_booking_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/category_favorite_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/doctor_info_model.dart';
+import 'package:fourtyninehub/features/health_feature/health/data/models/doctor_setting_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/health_subcategory_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_setting_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 
@@ -30,12 +32,15 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getFavoriteCategory();
 
-  Future<Either<Failure, bool>> isDoctor();
+  Future<Either<Failure, DoctorSettingEntity>> isDoctor();
   Future<Either<Failure, bool>> isDoctorApproval();
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
   Future<Either<Failure, bool>> cancelAppointment(String id);
 
   Future<Either<Failure, List<BookingEntity>>> getBooking(
+      {required GetBookingParams params});
+
+  Future<Either<Failure, List<BookingEntity>>> getHistoryBooking(
       {required GetBookingParams params});
 
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking(
@@ -93,10 +98,10 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> isDoctor() async {
+  Future<Either<Failure, DoctorSettingEntity>> isDoctor() async {
     final response = await _apiConsumer.get(EndPoints.isDoctor);
     return response.fold(
-        (l) => Left(l), (data) => Right(data['data']['isDoctor'] as bool));
+        (l) => Left(l), (data) => Right(DoctorSettingModel.fromJson(data['data'])));
   }
 
   @override
@@ -143,6 +148,25 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
       (l) => Left(l),
       (data) {
         final restaurantList = (data['data']['bookings'] as List)
+            .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(restaurantList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<BookingEntity>>> getHistoryBooking(
+      {required GetBookingParams params}) async {
+    final url =
+        "${EndPoints.getHistoryBooking}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+      (l) => Left(l),
+      (data) {
+        final restaurantList = (data['data']['data'] as List)
             .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(restaurantList);

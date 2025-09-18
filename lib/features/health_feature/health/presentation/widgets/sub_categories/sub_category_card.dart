@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -6,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -25,7 +27,6 @@ class HealthSubCategoryCard extends StatefulWidget {
 }
 
 class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
-  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +79,16 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
                     right: 8,
                     child: IconButton(
                       icon: Icon(
-                          isFavorite
+                          (widget.subCategory.isFavorite??false)
                               ? Icons.favorite_outlined
                               : Icons.favorite_border,
                           color: Colors.red),
                       onPressed: () {
                         ManageVibration.vibrate();
-                        setState(() {
-                          isFavorite = !isFavorite;
-                        });
+                        context.read<HealthCubit>().toggleFavoriteSubcategory(widget.subCategory.id);
+                        // setState(() {
+                        //   isFavorite = !isFavorite;
+                        // });
                       },
                       visualDensity:
                           const VisualDensity(horizontal: -4, vertical: -4),
