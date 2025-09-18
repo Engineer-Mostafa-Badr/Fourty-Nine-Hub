@@ -461,6 +461,7 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
@@ -2105,7 +2106,15 @@ class AppPages {
                       path: Paths.CREATEPOST,
                       name: Routes.CREATEPOST,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const CreatePostView()),
+                          context, state, const CreatePostView(
+
+                      )),
+                    ),
+                    GoRoute(
+                      path: Paths.CREATEPOSTTWITTER,
+                      name: Routes.CREATEPOSTTWITTER,
+                      pageBuilder: (context, state) => customTransition(
+                          context, state, const CreatePostTwitter()),
                     ),
                     GoRoute(
                       path: Paths.LIFEEVENT,

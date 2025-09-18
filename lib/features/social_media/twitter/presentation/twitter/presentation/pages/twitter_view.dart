@@ -1,20 +1,19 @@
-// lib/features/social_media/twitter/presentation/pages/twitter_view.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/twitter/presentation/pages/twitter_personal_profile.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import '../../../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../../core/enums/base_status_enum.dart';
 import '../../../../../../../core/error/failure.dart';
 import '../../../../../../../core/extensions/string_extension.dart';
-import '../../../../../../../core/loading/custom_loading.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../core/messages/messages.dart';
+import '../../../../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../../../../helpers/manage_vibration.dart';
 import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
@@ -23,6 +22,7 @@ import '../../../../../../../routes/routes.dart';
 import '../../../../../../../service_locator/service_locator.dart';
 import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../custom_page/presentation/page/widget/edit_page.dart';
+import '../../../../data/models/profile_model.dart';
 import '../../../../data/models/twitter_user_model.dart';
 import '../../../../domain/entities/twitter_post_comment_entity.dart';
 import '../../../../domain/entities/twitter_post_entity.dart';
@@ -34,11 +34,17 @@ import '../../../../domain/usecases/twitter_report_usecase.dart';
 import '../../../bloc/twitter_bloc.dart';
 import '../../../pages/twitter_post_details.dart';
 import '../../../widgets/build_twitter_document_card.dart';
-import '../../../widgets/twitter_post_card.dart';
+import '../../../widgets/post_meta_panal.dart';
+import '../../../widgets/report_view.dart';
 import '../../../widgets/twitter_post_comments.dart';
+ import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+  import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-/// ===== User model helpers =====
-extension TwitterUserCompat on TwitterUserModel {
+ extension TwitterUserCompat on TwitterUserModel {
   String get handle {
     final u = (userName ?? '').trim();
     if (u.isNotEmpty) return u;
@@ -56,9 +62,9 @@ extension TwitterUserCompat on TwitterUserModel {
     try {
       final self = this as dynamic;
       final dynamic profile =
-      (self.USER_PROFILE != null) ? self.USER_PROFILE : self.userProfile;
+          (self.USER_PROFILE != null) ? self.USER_PROFILE : self.userProfile;
       final String? rawKey =
-      (profile?.profilePictureKey?.mediaKey as String?)?.trim();
+          (profile?.profilePictureKey?.mediaKey as String?)?.trim();
       if (rawKey == null || rawKey.isEmpty) return null;
       return rawKey.startsWith('http')
           ? rawKey
@@ -69,8 +75,7 @@ extension TwitterUserCompat on TwitterUserModel {
   }
 }
 
-/// ===== Safe image with fallback =====
-class SafeNetImage extends StatelessWidget {
+ class SafeNetImage extends StatelessWidget {
   final String url;
   final BoxFit fit;
   final double? height;
@@ -110,10 +115,7 @@ class SafeNetImage extends StatelessWidget {
   }
 }
 
-/// =======================================================
-/// Entry – use this when Cubit already exists up the tree
-/// =======================================================
-class Twitter11Hosted extends StatelessWidget {
+ class Twitter11Hosted extends StatelessWidget {
   const Twitter11Hosted({super.key});
   @override
   Widget build(BuildContext context) {
@@ -121,10 +123,7 @@ class Twitter11Hosted extends StatelessWidget {
   }
 }
 
-/// =======================================================
-/// Entry – screen creates the Cubit itself (via DI)
-/// =======================================================
-class Twitter11 extends StatelessWidget {
+ class Twitter11 extends StatelessWidget {
   const Twitter11({super.key});
   @override
   Widget build(BuildContext context) {
@@ -135,10 +134,7 @@ class Twitter11 extends StatelessWidget {
   }
 }
 
-/// =======================================================
-/// Scaffold (no tabs) – picks feed by login status
-/// =======================================================
-class _TwitterScaffold extends StatefulWidget {
+ class _TwitterScaffold extends StatefulWidget {
   const _TwitterScaffold();
   @override
   State<_TwitterScaffold> createState() => _TwitterScaffoldState();
@@ -148,96 +144,21 @@ class _TwitterScaffoldState extends State<_TwitterScaffold> {
   @override
   void initState() {
     super.initState();
-    // trigger loading after first build to ensure providers are available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<TwitterCubit>();
-      final isLoggedIn = context.read<UserCubit>().isLoggedIn;
-      if (isLoggedIn) {
-        cubit.loadData();        // personalized
-      } else {
-        cubit.loadGlobalData();  // public/global
-      }
+      cubit.loadGlobalData();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<TwitterCubit>();
-    final bool isLoggedIn = context.watch<UserCubit>().isLoggedIn;
 
-    final PagingController<int, TwitterPostEntity> controller = isLoggedIn
-        ? cubit.postsPagingController
-        : cubit.globalPostsPagingController;
+    final PagingController<int, TwitterPostEntity> controller =
+        cubit.globalPostsPagingController;
 
-    Future<void> _onRefresh() async {
-      if (isLoggedIn) {
-        cubit.onRefresh();
-      } else {
-        cubit.onGlobalRefresh();
-      }
-      // give the refresh indicator time to stop gracefully
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-    }
-
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                const BuildTwitterDocumentCard(),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: _onRefresh,
-                    child: _PagedFeed(
-                      controller: controller,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            PositionedDirectional(
-              bottom: 10,
-              end: 10,
-              child: CustomElevatedButton(
-                onPressed: () {
-                  ManageVibration.vibrate();
-                  if (context.read<UserCubit>().isLoggedIn) {
-                    context.push(Routes.CREATEPOST, extra: 'twitter');
-                  } else {
-                    pleaseLoginDialog(context);
-                  }
-                },
-                backgoundColor: AppColors.getButtonPrimaryColor(context),
-                child: Text(
-                  LocaleKeys.createPost.localize,
-                  style: Styles.smallText(
-                    color: AppColors.getReversedTextColor(context),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// =======================================================
-/// Paged feed (uses provided controller, no nested providers)
-/// =======================================================
-class _PagedFeed extends StatelessWidget {
-  final PagingController<int, TwitterPostEntity> controller;
-  final ScrollPhysics? physics;
-  const _PagedFeed({required this.controller, this.physics});
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<TwitterCubit>();
     final shareSuccess =
-    context.select<TwitterCubit, bool?>((c) => c.state.shareSuccess);
+        context.select<TwitterCubit, bool?>((c) => c.state.shareSuccess);
 
     return BlocListener<TwitterCubit, TwitterState>(
       listenWhen: (prev, next) => prev.status != next.status,
@@ -249,136 +170,206 @@ class _PagedFeed extends StatelessWidget {
           );
         }
       },
-      child: PagedListView<int, TwitterPostEntity>(
-        pagingController: controller,
-        physics: physics ?? const AlwaysScrollableScrollPhysics(),
-        builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
-          firstPageProgressIndicatorBuilder: (_) => const Padding(
-            padding: EdgeInsets.all(24),
-            child: Center(child: CustomLoading()),
-          ),
-          newPageProgressIndicatorBuilder: (_) => const Padding(
-            padding: EdgeInsets.all(16),
-            child: Center(child: CustomLoading()),
-          ),
-          firstPageErrorIndicatorBuilder: (_) =>
-          const Center(child: Text('Failed to load feed')),
-          newPageErrorIndicatorBuilder: (_) =>
-          const Center(child: Text('Failed to load more')),
-          noItemsFoundIndicatorBuilder: (_) => Center(
-            child: Text(LocaleKeys.noPosts.localize, style: Styles.mediumText()),
-          ),
-          itemBuilder: (context, post, index) {
-            final user = context.read<UserCubit>().state.data;
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        TwitterPostDetails(post: post, postId: post.id),
-                  ),
-                );
-              },
-              child: TwitterPostCard(
-                post: post,
-                shareSuccess: shareSuccess,
-                onReact: () async {
-                  final ok = await cubit.onReact(
-                    params:
-                    TwitterPostReactParams(postId: post.id, react: 'love'),
-                  );
-                  if (ok == true) {
-                    // optimistic toggle for smoother UX
-                    final list = controller.itemList;
-                    if (list != null && index < list.length) {
-                      final p = list[index];
-                      p.isReact = !(p.isReact ?? false);
-                      final loved = (p.isReact ?? false);
-                      final current = p.loveCount ?? 0;
-                      p.loveCount = loved ? current + 1 : (current > 0 ? current - 1 : 0);
-                      controller.notifyListeners();
-                    }
-                  }
-                },
-                onShare: () {
-                  final idToShare =
-                  (post.isShared == true && post.mainPost != null)
-                      ? post.mainPost!.id
-                      : post.id;
-                  cubit.onShare(postId: idToShare);
-                  if (cubit.state.shareSuccess == true) {
-                    showSuccessMessage(
-                      context,
-                      LocaleKeys.postSharedSuccessfully.localize,
-                    );
-                  }
-                },
-                showPostComments: (String _) {
-                  bottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    widget: BlocProvider.value(
-                      value: serviceLocator<TwitterCubit>()
-                        ..loadComments(context, post.id),
-                      child: TwitterPostComments(
-                        comments: const [],
-                        postId: post.id,
-                        user: user,
-                        onAddComment: (TwitterPostCommentParams params) =>
-                            cubit.onPostComment(params: params),
-                        onAddReply: (TwitterCommentReplyParams params) async =>
-                            cubit.onCommentReply(params: params),
-                        onCommentReact: (TwitterCommentReactParams params) =>
-                            cubit.onCommentReact(params: params),
-                        onGetReplies: (String id,
-                            TwitterPostCommentEntity comment) async {},
-                        newCommentId: '',
-                        state: cubit.state,
-                        onReport: (TwitterReportParams params) =>
-                            cubit.onReport(params),
-                        onEditComment:
-                            (TwitterPostCommentParams params) async =>
-                            cubit.editComment(params: params),
-                        onDeleteComment: (id) async => cubit.deleteComment(
-                          context: context,
-                          commentId: id,
-                          postId: post.id,
-                          from: 'posts',
-                        ),
-                      ),
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  const BuildTwitterDocumentCard(),
+                  Expanded(
+                    child: RefreshIndicator(
+                       onRefresh: () async =>
+                          cubit.globalPostsPagingController.refresh(),
+                      child: PagedListView<int, TwitterPostEntity>(
+                          padding: const EdgeInsets.only(top: 8, bottom: 24),
+                          pagingController: cubit.globalPostsPagingController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          builderDelegate: PagedChildBuilderDelegate<
+                                  TwitterPostEntity>(
+                              noMoreItemsIndicatorBuilder: (context) =>
+                                  Container(),
+                              firstPageProgressIndicatorBuilder: (context) =>
+                                  Center(
+                                      child: CustomCircularProgressIndicator()),
+                              newPageProgressIndicatorBuilder: (context) =>
+                                  Center(
+                                      child: CustomCircularProgressIndicator()),
+                              noItemsFoundIndicatorBuilder: (context) {
+                                return Center(
+                                  child: Text(
+                                    LocaleKeys.noPosts.localize,
+                                    style: Styles.mediumText(),
+                                  ),
+                                );
+                              },
+                              itemBuilder: (context, post, index) {
+                                final user =
+                                    context.read<UserCubit>().state.data;
+
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TwitterPostDetails(
+                                                  postId: post.thread!.id,
+                                                )));
+                                  },
+                                  child: TwitterPostCard(
+
+                                    onRepost: () => cubit.onRepost(postId: post.id),   // 👈 Repost هنا
+
+                                    isDetailed: false,
+                                    post: post,
+                                    shareSuccess: shareSuccess,
+                                    onReact: () async {
+                                      final ok = await cubit.onReact(
+                                        params: TwitterPostReactParams(
+                                            postId: post.id, react: 'love'),
+                                      );
+                                      if (ok == true) {
+                                        final list = controller.itemList;
+                                        if (list != null &&
+                                            index < list.length) {
+                                          final p = list[index];
+
+                                           final wasLiked = p.isLiked ?? false;
+                                          p.isLiked = !wasLiked;
+
+                                           final current = p.loveCount ?? 0;
+                                          p.loveCount = wasLiked
+                                              ? (current > 0 ? current - 1 : 0)
+                                              : current + 1;
+
+                                          controller.notifyListeners();
+                                        }
+                                      }
+                                    },
+                                    onShare: () {
+                                      final idToShare =
+                                          (post.isShared == true &&
+                                                  post.mainPost != null)
+                                              ? post.mainPost!.id
+                                              : post.id;
+                                      cubit.onShare(postId: idToShare);
+                                      if (cubit.state.shareSuccess == true) {
+                                        showSuccessMessage(
+                                          context,
+                                          LocaleKeys
+                                              .postSharedSuccessfully.localize,
+                                        );
+                                      }
+                                    },
+                                    showPostComments: (String _) {
+                                      bottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        widget: BlocProvider.value(
+                                          value: serviceLocator<TwitterCubit>()
+                                            ..loadComments(context, post.id),
+                                          child: TwitterPostComments(
+                                            comments: const [],
+                                            postId: post.id,
+                                            user: user,
+                                            onAddComment:
+                                                (TwitterPostCommentParams
+                                                        params) =>
+                                                    cubit.onPostComment(
+                                                        params: params),
+                                            onAddReply:
+                                                (TwitterCommentReplyParams
+                                                        params) async =>
+                                                    cubit.onCommentReply(
+                                                        params: params),
+                                            onCommentReact:
+                                                (TwitterCommentReactParams
+                                                        params) =>
+                                                    cubit.onCommentReact(
+                                                        params: params),
+                                            onGetReplies: (String id,
+                                                TwitterPostCommentEntity
+                                                    comment) async {},
+                                            newCommentId: '',
+                                            state: cubit.state,
+                                            onReport:
+                                                (TwitterReportParams params) =>
+                                                    cubit.onReport(params),
+                                            onEditComment:
+                                                (TwitterPostCommentParams
+                                                        params) async =>
+                                                    cubit.editComment(
+                                                        params: params),
+                                            onDeleteComment: (id) async =>
+                                                cubit.deleteComment(
+                                              context: context,
+                                              commentId: id,
+                                              postId: post.id,
+                                              from: 'posts',
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    getPost: () {},
+                                    onReport: (TwitterReportParams params) =>
+                                        cubit.onReport(params),
+                                    deletePost: (String id) => cubit.deletePost(
+                                        context: context, postId: id),
+                                    hidePost: (String id) => cubit.hidePost(
+                                        context: context, postId: id),
+                                    onDeleteComment: (String id) async =>
+                                        cubit.deleteComment(
+                                      context: context,
+                                      commentId: id,
+                                      postId: post.id,
+                                      from: 'details',
+                                    ),
+                                    onEditComment: (params) async =>
+                                        cubit.editComment(params: params),
+                                  ),
+                                );
+                              })),
                     ),
-                  );
-                },
-                getPost: () {},
-                onReport: (TwitterReportParams params) => cubit.onReport(params),
-                deletePost: (String id) =>
-                    cubit.deletePost(context: context, postId: id),
-                hidePost: (String id) =>
-                    cubit.hidePost(context: context, postId: id),
-                onDeleteComment: (String id) async => cubit.deleteComment(
-                  context: context,
-                  commentId: id,
-                  postId: post.id,
-                  from: 'details',
-                ),
-                onEditComment: (params) async => cubit.editComment(params: params),
+                  ),
+                ],
               ),
-            );
-          },
+              PositionedDirectional(
+                bottom: 10,
+                end: 10,
+                child: CustomElevatedButton(
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    if (context.read<UserCubit>().isLoggedIn) {
+                      context.push(Routes.CREATEPOSTTWITTER, extra: 'twitter');
+                    } else {
+                     // return pleaseLoginDialog(context);
+
+                       context.push(Routes.LOGIN);
+                    }
+                  },
+                  backgoundColor: AppColors.getButtonPrimaryColor(context),
+                  child: Text(
+                    LocaleKeys.createPost.localize,
+                    style: Styles.smallText(color: AppColors.getReversedTextColor(context)),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// =======================================================
-/// Post Card – uses the entity given by the feed
-/// =======================================================
-class TwitterPostCard extends StatefulWidget {
+ class TwitterPostCard extends StatefulWidget {
   bool isLiked;
+  bool isDetailed;
   bool? fromProfile;
   final TwitterPostEntity post;
+  final Future<bool> Function(String)? onDeleteAsync;
 
   final Function onReact;
   final Function getPost;
@@ -389,6 +380,8 @@ class TwitterPostCard extends StatefulWidget {
   final Function(String) onDeleteComment;
   final Function(TwitterPostCommentParams) onEditComment;
   final Function(TwitterReportParams) onReport;
+  final Function onRepost;
+
   bool? shareSuccess;
 
   TwitterPostCard({
@@ -397,6 +390,8 @@ class TwitterPostCard extends StatefulWidget {
     this.shareSuccess = false,
     this.fromProfile = false,
     required this.post,
+    this.onDeleteAsync,
+
     required this.onReact,
     required this.showPostComments,
     required this.onShare,
@@ -406,6 +401,8 @@ class TwitterPostCard extends StatefulWidget {
     required this.hidePost,
     required this.onDeleteComment,
     required this.onEditComment,
+    required this.isDetailed,
+    required this.onRepost,
   });
 
   @override
@@ -423,15 +420,67 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       ),
     );
   }
+  Future<void> _optimisticDelete(TwitterPostEntity entity) async {
+    final cubit = context.read<TwitterCubit>();
+    final controller = cubit.globalPostsPagingController;
+
+    final list = controller.itemList;
+    if (list == null) return;
+
+    final index = list.indexWhere((e) => e.id == entity.id);
+    if (index < 0) return;
+
+    // Keep a copy for rollback
+    final removed = list.removeAt(index);
+    controller.notifyListeners();
+
+    bool ok = true;
+    try {
+      if (widget.onDeleteAsync != null) {
+        ok = await widget.onDeleteAsync!(entity.id);
+      } else {
+        // Fallback to existing void callback (no status) + assume success
+        // If you want rollback on failure, wire onDeleteAsync from the parent.
+        widget.deletePost(entity.id);
+        ok = true;
+      }
+    } catch (_) {
+      ok = false;
+    }
+
+    if (!ok) {
+      // Roll back
+      list.insert(index, removed);
+      controller.notifyListeners();
+
+      // Optional: toast/snackbar
+      showErrorMessage(
+        context,
+        (context.mounted && context.isArabic)
+            ? 'فشل حذف المنشور. تمت إعادة العرض.'
+            : 'Failed to delete post. Restored.',
+      );
+    } else {
+      // Optional: success toast
+      showSuccessMessage(
+        context,
+        (context.mounted && context.isArabic)
+            ? 'تم حذف المنشور بنجاح'
+            : 'Post deleted successfully',
+      );
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     final post = widget.post;
     final isShared = post.isShared ?? false;
     final TwitterPostEntity show =
-    (isShared && post.mainPost is TwitterPostEntity)
-        ? post.mainPost as TwitterPostEntity
-        : post;
+        (isShared && post.mainPost is TwitterPostEntity)
+            ? post.mainPost as TwitterPostEntity
+            : post;
 
     final createdAt = show.createdAt;
     final since = DateFormat('d MMM').format(createdAt);
@@ -445,25 +494,29 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.15), blurRadius: 6)],
+        boxShadow: [
+          BoxShadow(color: Colors.grey.withOpacity(0.15), blurRadius: 6)
+        ],
       ),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      padding: EdgeInsets.all(isShared ? 10 : 0),
+      padding: EdgeInsets.all(isShared ? 10 : 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (isShared) _accountRow(post, since, sharedHeader: true),
+          SizedBox(height: 8  ,),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             decoration: BoxDecoration(
               border: isShared ? Border.all(color: Colors.grey.shade300) : null,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(12),
+
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _accountRow(show, since),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 _content(show, images),
                 const SizedBox(height: 6),
                 if (!isShared) _stats(show),
@@ -471,13 +524,121 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             ),
           ),
           if (isShared) _stats(post),
-        ],
+
+            const SizedBox(height: 8),
+            widget.isDetailed
+               ? PostMetaPanel(
+             createdAt: show.createdAt,
+             views: show.comments.length,
+             retweets: (show.love?.length ?? 0).toInt(),
+             quotes: 10,
+             likes: (show.loveCount ?? 0).toInt(),
+             bookmarks: (show.comments.length).toInt(),
+             isArabic: Directionality.of(context) == TextDirection.RTL,
+           )
+               : Container(),
+          ],
+
       ),
     );
   }
 
+  bool isVerified(dynamic u) {
+    if (u is TwitterUserModel) return u.isDocumented ?? false;
+    if (u is Map) {
+      return u['twitter_documentation'] == true ||
+          u['isAccountVerified'] == true;
+    }
+    return false;
+  }
+  TwitterProfileEntity _profileFromAnyUser(dynamic u) {
+    String id = '';
+    String first = '';
+    String last  = '';
+    String userName = '';
+    String? avatar;
+    String? cover;
+    bool isVerified = false;
+    DateTime joinedAt = DateTime.now();
+
+    String? gender;
+    int? profileViews;
+
+    try {
+      if (u is TwitterUserModel) {
+        id        = (u.id ?? '').toString();
+        first     = u.firstName ?? '';
+        last      = u.lastName ?? '';
+        userName  = (u.handle).toString();
+        avatar    = u.image ?? u.avatarUrl;
+        cover     = u.image;
+        isVerified = (u.isDocumented ?? false);
+        joinedAt  = u.createdAt ?? DateTime.now();
+        gender    = u.gender;
+        profileViews = u.profileViews;
+      } else if (u is Map) {
+         final src = (u['originalPost']?['owner'] is Map)
+            ? u['originalPost']['owner'] as Map
+            : (u['owner'] is Map ? u['owner'] as Map : u);
+
+        id       = (src['_id'] ?? src['id'] ?? '').toString();
+        first    = (src['firstName'] ?? '').toString();
+        last     = (src['lastName'] ?? '').toString();
+
+        final un = (src['userName'] ?? src['username'] ?? '').toString();
+        if (un.isNotEmpty) {
+          userName = un;
+        } else {
+          final email = (src['email'] ?? '').toString();
+          userName = email.contains('@') ? email.split('@').first : id;
+        }
+
+        avatar = (src['image'] ?? src['profilePictureUrl'] ?? '').toString();
+        cover  = (src['coverUrl'] ?? src['coverImage'] ?? '').toString();
+
+        isVerified = (src['twitter_documentation'] == true) ||
+            (src['isAccountVerified'] == true) ||
+            (src['verifiedBadge'] == true);
+
+        final createdRaw = (src['joinedAt'] ?? src['createdAt'] ?? '').toString();
+        final parsed = DateTime.tryParse(createdRaw);
+        if (parsed != null) joinedAt = parsed;
+
+        gender = (src['gender'] ?? '').toString().trim().isEmpty
+            ? null
+            : src['gender'].toString();
+
+        final pv = src['profileViews'];
+        if (pv is int) profileViews = pv;
+        else if (pv is String) profileViews = int.tryParse(pv);
+        else if (pv is num) profileViews = pv.toInt();
+      }
+    } catch (e, st) {
+      debugPrint('⚠️ _profileFromAnyUser error: $e\n$st');
+    }
+
+    return TwitterProfileEntity(
+      id: id,
+      firstName: first,
+      lastName: last,
+      userName: userName,
+      bio: null,
+      avatarUrl: avatar,
+      coverUrl: cover,
+      joinedAt: joinedAt,
+      isVerified: isVerified,
+      isMe: false,
+      isFollowing: false,
+      followersCount: 0,
+      followingCount: 0,
+      gender: gender,
+      profileViews: profileViews,
+    );
+  }
+
   Widget _accountRow(TwitterPostEntity entity, String date,
-      {bool sharedHeader = false}) {
+      {bool sharedHeader = false})
+  {
     final u = entity.user;
     String handle = '';
     String displayName = '';
@@ -506,7 +667,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           avatar = imageUrl;
         } else {
           final up = (u['USER_PROFILE'] ?? {}) as Map?;
-          final ppk = (up?['profilePictureKey'] ?? {}) as Map?;
+          final ppk = (up?['profilePictureUrl'] ?? {}) as Map?;
           final mediaKey = (ppk?['mediaKey'] ?? '').toString();
           if (mediaKey.isNotEmpty) {
             avatar = mediaKey.startsWith('http')
@@ -522,10 +683,17 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       children: [
         InkWell(
           onTap: () {
+            final snapshot = _profileFromAnyUser(entity.user);
+
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) =>   TwitterPersonalProfile(isPersonal: true),
+                builder: (_) => BlocProvider<TwitterCubit>(
+                  create: (_) => serviceLocator<TwitterCubit>(),
+                  child: TwitterPersonalProfile(
+                     initialProfile: snapshot,
+                  ),
+                ),
               ),
             );
           },
@@ -534,53 +702,171 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               width: 40,
               height: 40,
               child: (avatar ?? '').isEmpty
-                  ? Image.asset(Assets.addImage, fit: BoxFit.cover)
+                  ? Image.asset(Assets.avatarRemovebackground,
+                      fit: BoxFit.cover)
                   : Image.network(
-                avatar!,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    Image.asset(Assets.addImage, fit: BoxFit.cover),
-              ),
+                      avatar!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          Image.asset(Assets.addImage, fit: BoxFit.cover),
+                    ),
             ),
           ),
         ),
         const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(children: const []),
-              Row(
-                children: [
-                  Flexible(
-                    child: Text(
-                      displayName.isNotEmpty ? displayName : handle,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 15),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  if ((u is TwitterUserModel && (u.isDocumented ?? false)) ||
-                      (u is Map && (u['twitter_documentation'] == true)))
-                    const Icon(Icons.verified, color: Colors.blue, size: 16),
-                ],
-              ),
-              if (handle.isNotEmpty)
-                Text('@$handle', style: const TextStyle(color: Colors.grey)),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+             Row(
+              children: [
+                Text(
+                  displayName.isNotEmpty ? displayName : handle,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 15),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(width: 6),
+                if (isVerified(u))
+                  const Icon(Icons.verified, color: Colors.blue, size: 16),
+              ],
+            ),
+            if (handle.isNotEmpty)
+              Text('@$handle', style: const TextStyle(color: Colors.grey)),
+          ],
         ),
-        const SizedBox(width: 8),
-        Text(date, style: const TextStyle(color: Colors.grey)),
-        const SizedBox(width: 5),
-        const Icon(Icons.more_vert, color: Colors.grey, size: 18),
+Spacer(),
+
+        IconAppButton(
+          icon: Icons.more_vert,
+          size: 40.w,
+          onPressed: () {
+            ManageVibration.vibrate();
+            _showPostOptions(context, entity);
+          },
+        ),
+
       ],
     );
   }
 
+  bool _isMine(TwitterPostEntity entity) {
+    try {
+      final me = context.read<UserCubit>().state.data;
+      if (me == null) return false;
+
+      final u = entity.user;
+      if (u is TwitterUserModel) {
+        return (u.id?.toString() ?? '') == (me.id?.toString() ?? '');
+      } else if (u is Map) {
+        final src = (u['originalPost']?['owner'] is Map)
+            ? u['originalPost']['owner'] as Map
+            : (u['owner'] is Map ? u['owner'] as Map : u);
+
+        final ownerId = (src['_id'] ?? src['id'] ?? '').toString();
+        final myId    = (me.id ?? '').toString();
+        return ownerId.isNotEmpty && ownerId == myId;
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  void _showPostOptions(BuildContext context, TwitterPostEntity entity) async {
+    final isMine = _isMine(entity);
+
+    await showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: Theme.of(context).cardColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        final bool isArabic = context.isArabic;
+
+        return SafeArea(
+
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Hide
+            ListTile(
+              leading: const Icon(Icons.visibility_off_outlined),
+              title: Text(isArabic ? 'إخفاء المنشور' : 'Hide post'),
+              onTap: () {
+                Navigator.pop(ctx);
+                ManageVibration.vibrate();
+
+                widget.hidePost(entity.id);
+              },
+            ),
+
+            // Delete (only for owner)
+            if (isMine)
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: Colors.red),
+                title: Text(
+                  isArabic ? 'حذف المنشور' : 'Delete post',
+                  style: const TextStyle(color: Colors.red),
+                ),
+                onTap: () async {
+                  ManageVibration.vibrate();
+                  Navigator.pop(ctx);
+
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (dCtx) => AlertDialog(
+                      title: Text(isArabic ? 'هل تريد حذف المنشور؟' : 'Delete post?'),
+                      content: Text(isArabic
+                          ? 'لا يمكن التراجع عن هذه العملية.'
+                          : 'This action cannot be undone.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dCtx, false),
+                          child: Text(isArabic ? 'إلغاء' : 'Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(dCtx, true),
+                          child: Text(isArabic ? 'حذف' : 'Delete',
+                              style: const TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirm == true) {
+                    await _optimisticDelete(entity);
+                  }
+                },
+              ),
+
+            // Report
+            ListTile(
+              leading: const Icon(Icons.flag_outlined),
+              title: Text(isArabic ? 'الإبلاغ' : 'Report'),
+              onTap: () {
+                ManageVibration.vibrate();
+
+                Navigator.pop(ctx);
+                bottomSheet(
+                    context: context,
+                    widget: ReportView(
+                      id: entity.mainPost.id,
+                      categoryId: "66a3583454e6e337915514db",
+                    ));
+
+               },
+            ),
+          ],
+        )
+        );
+      },
+    );
+  }
+
+
   Widget _content(TwitterPostEntity show, List<String> images) {
     final text = show.content ?? '';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -599,9 +885,10 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
 
   Widget _stats(TwitterPostEntity t) {
     final replies = (t.commentsCount ?? 0);
-    final shares = (t.sharesCount ?? 0);
-    final likes = (t.loveCount ?? t.love?.length ?? 0);
-    final isReact = t.isReact ?? false;
+    final reposts = (t.repostCount ?? 0);
+    final likes   = (t.loveCount ?? t.love?.length ?? 0);
+    final shares  = (t.sharesCount ?? 0);
+    final isReact = t.isLiked ?? false;
 
     return Padding(
       padding: const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 2),
@@ -631,17 +918,18 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           Expanded(
             child: _statItem(
               icon: FontAwesomeIcons.retweet,
-              label: '$shares',
+              iconColor: t.isReposted == true ? Colors.green : Colors.grey,
+              label: '${reposts ?? 0}',
               onTap: () {
                 if (!canInteract) return;
-                widget.onShare();
+                widget.onRepost();
               },
             ),
           ),
           Expanded(
             child: _statItem(
               icon: Icons.share_outlined,
-              label: '',
+              label: '$shares',
               onTap: () {
                 if (!canInteract) return;
                 widget.onShare();
@@ -673,140 +961,99 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }
 }
 
-/// =======================================================
-/// Image grid (+N overlay for 5+)
-/// =======================================================
-class _PostImageGrid extends StatelessWidget {
-  final List<String> images;
-  final void Function(int index) onTap;
-  final double gap;
-  final double twoHeight;
-
+  class _PostImageGrid extends StatelessWidget {
   const _PostImageGrid({
     required this.images,
     required this.onTap,
-    this.gap = 4,
-    this.twoHeight = 180,
   });
+
+  final List<String> images;
+  final void Function(int index) onTap;
 
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) return const SizedBox.shrink();
 
-    if (images.length == 1) {
-      return GestureDetector(
+     if (images.length == 1) {
+      return _ImageTile(
+        url: images.first,
+        borderRadius: BorderRadius.circular(10),
+        fit: BoxFit.cover,
         onTap: () => onTap(0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            images[0],
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Image.asset(Assets.twitterAppBarIcon),
-          ),
-        ),
+        aspectRatio: 16 / 9,
       );
     }
 
-    if (images.length == 2) {
-      return Row(
-        children: images.asMap().entries.map((e) {
-          final i = e.key, url = e.value;
-          return Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(gap / 2),
-              child: GestureDetector(
-                onTap: () => onTap(i),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    url,
-                    height: twoHeight,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) =>
-                        Image.asset(Assets.twitterAppBarIcon),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      );
-    }
-
-    final showPlus = images.length >= 5;
-    final count = showPlus ? 4 : images.length.clamp(0, 4);
-
+     final count = images.length.clamp(2, 4);
     return GridView.builder(
+      itemCount: count,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: count,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
+        mainAxisSpacing: 6,
+        crossAxisSpacing: 6,
+        childAspectRatio: 1,
       ),
-      itemBuilder: (_, index) {
-        final url = images[index];
-        final isLast = showPlus && index == 3;
-        final remain = images.length - 4;
-
-        if (!isLast) {
-          return GestureDetector(
-            onTap: () => onTap(index),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                url,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    Image.asset(Assets.twitterAppBarIcon),
-              ),
-            ),
-          );
-        }
-
-        return GestureDetector(
-          onTap: () => onTap(index),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  url,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      Image.asset(Assets.twitterAppBarIcon),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black45,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              Center(
-                child: Text(
-                  '+$remain',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          ),
+      itemBuilder: (context, i) {
+        return _ImageTile(
+          url: images[i],
+          borderRadius: BorderRadius.circular(10),
+          fit: BoxFit.cover,
+          onTap: () => onTap(i),
         );
       },
     );
   }
 }
 
-/// =======================================================
-/// Full-screen gallery
-/// =======================================================
-class GalleryViewer extends StatefulWidget {
+class _ImageTile extends StatelessWidget {
+  const _ImageTile({
+    required this.url,
+    this.onTap,
+    this.borderRadius,
+    this.fit,
+    this.aspectRatio,
+  });
+
+  final String url;
+  final VoidCallback? onTap;
+  final BorderRadius? borderRadius;
+  final BoxFit? fit;
+  final double? aspectRatio;
+
+  @override
+  Widget build(BuildContext context) {
+    final child = ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.circular(0),
+      child: aspectRatio != null
+          ? AspectRatio(
+              aspectRatio: aspectRatio!,
+              child: _netImage(url, fit: fit ?? BoxFit.cover),
+            )
+          : _netImage(url, fit: fit ?? BoxFit.cover),
+    );
+
+    if (onTap == null) return child;
+    return InkWell(onTap: onTap, child: child);
+  }
+
+  Widget _netImage(String url, {BoxFit fit = BoxFit.cover}) {
+    return Image.network(
+      url,
+      fit: fit,
+       loadingBuilder: (ctx, child, progress) {
+        if (progress == null) return child;
+        return const ColoredBox(color: Color(0x11000000));
+      },
+       errorBuilder: (ctx, error, stack) {
+        return Container();
+      },
+    );
+  }
+}
+
+ class GalleryViewer extends StatefulWidget {
   final List<String> images;
   final int initialIndex;
 

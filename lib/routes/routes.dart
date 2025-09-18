@@ -72,6 +72,7 @@ abstract class Routes {
   static const TWITTER = '/Social/Twitter';
   static const TWITTERPOSTDETAILS = '/Social/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
+  static const CREATEPOSTTWITTER = '/Social/CreatePostTwitter';
   static const POSTDETAILS = '/PostDetails';
   static const SEARCHFRIENDS = '/Social/CreatePost/SearchFriend';
   static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
@@ -404,6 +405,7 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const CREATEPOSTTWITTER = 'CreatePostTwitter';
   static const POSTDETAILS = 'PostDetails';
   static const EDITPROFILE = 'EditProfile';
   static const SEARCHFRIENDS = 'SearchFriend';

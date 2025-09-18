@@ -33,7 +33,7 @@ part 'create_post_state.dart';
 
 class CreatePostCubit extends Cubit<CreatePostState> {
   final CreatePostUseCase _createPostUseCase;
-  final CreateTwitterPostUseCase _createTwitterPostUseCase;
+  final CreateTwitterThreadUseCase _createTwitterPostUseCase;
   final GetActivitiesUseCase _getActivitiesUseCase;
   final GetSubActivitiesUseCase _getSubActivitiesUseCase;
   final GetFeelingsUseCase _getFeelingsUseCase;
@@ -254,6 +254,46 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         context.go(Routes.SOCIAL,
             extra: SocialParams(
                 userId: UserCubit.to.state.data?.id ?? '', index: 0));
+      });
+      // }
+    }
+  }
+
+  void createTwitterPost({
+    required BuildContext context,
+  }) async {
+    emit(state.copyWith(status: CreatePostStates.loadingCreatePost));
+
+    if (postContentTextController.text.isNotEmpty ||
+        selectedImages != null ||
+        selectedImages!.isNotEmpty) {
+      List<UploadFileEntity> images = [];
+      images = state.images ?? [];
+      print(state.selectedLifeEvent);
+      print(state.selectedLifeEvent?.id);
+      final response =
+          await _createTwitterPostUseCase(CreateTwitterThreadParams(
+        isPublished: true,
+        posts: [
+          TwitterPostItem(
+            content: postContentTextController.text,
+            media: images.map((e) => e.mediaId).toList(),
+          ),
+          TwitterPostItem(
+            content: postContentTextController.text,
+          ),
+        ],
+      ));
+      print("fewhdkaifukjednirjfkdsiuedsjs");
+      response.fold(
+          (l) =>
+              emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+          (r) async {
+        emit(state.copyWith(status: CreatePostStates.success));
+        onDiscardPost();
+        context.go(Routes.SOCIAL,
+            extra: SocialParams(
+                userId: UserCubit.to.state.data?.id ?? '', index: 2));
       });
       // }
     }

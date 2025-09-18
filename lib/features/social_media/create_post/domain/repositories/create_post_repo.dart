@@ -23,5 +23,5 @@ abstract class CreatePostRepo {
   Future<Either<Failure, List<PlaceEntity>>> getPlaces(
       {required FriendsFollowersParams params});
   Future<Either<Failure, bool>> createTwitterPost(
-      {required CreateTwitterPostParams params});
+      {required CreateTwitterThreadParams params});
 }
