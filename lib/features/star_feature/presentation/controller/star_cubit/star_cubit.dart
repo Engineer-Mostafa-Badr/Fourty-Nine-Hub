@@ -699,27 +699,77 @@ class StarCubit extends Cubit<StarState> {
 
   // New Tube Video specific methods
   // Enhanced like functionality with optimistic updates and toggle behavior
+  // Future<void> likeTubeVideo(String videoId) async {
+  //   // Check current like status for toggle behavior
+  //   final video = _findVideoById(videoId);
+  //   final wasLiked = video != null && _isVideoLikedByCurrentUser(videoId);
+
+  //   // Optimistic update - toggle behavior
+  //   if (wasLiked) {
+  //     _updateVideoInteraction(videoId, 'unlike');
+  //   } else {
+  //     // If disliked, remove dislike first, then add like
+  //     if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+  //       _updateVideoInteraction(videoId, 'undislike');
+  //     }
+  //     _updateVideoInteraction(videoId, 'like');
+  //   }
+
+  //   final response = await _likeTubeVideoUseCase(videoId);
+
+  //   response.fold(
+  //     (failure) {
+  //       // Revert optimistic update on failure
+  //       if (wasLiked) {
+  //         _updateVideoInteraction(videoId, 'like');
+  //       } else {
+  //         _updateVideoInteraction(videoId, 'unlike');
+  //         if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+  //           _updateVideoInteraction(videoId, 'dislike');
+  //         }
+  //       }
+  //       _showErrorMessage(failure);
+  //     },
+  //     (success) async {
+  //       if (!success) {
+  //         // Revert optimistic update if API returned false
+  //         if (wasLiked) {
+  //           _updateVideoInteraction(videoId, 'like');
+  //         } else {
+  //           _updateVideoInteraction(videoId, 'unlike');
+  //           if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
+  //             _updateVideoInteraction(videoId, 'dislike');
+  //           }
+  //         }
+  //       } else {
+  //         // Refresh video data after successful like/unlike
+  //         print('👍 Like operation successful, refreshing video data...');
+  //         await _refreshVideoData(videoId);
+  //       }
+  //     },
+  //   );
+  // }
+
   Future<void> likeTubeVideo(String videoId) async {
-    // Check current like status for toggle behavior
+    // التحديث المتفائل
     final video = _findVideoById(videoId);
     final wasLiked = video != null && _isVideoLikedByCurrentUser(videoId);
 
-    // Optimistic update - toggle behavior
     if (wasLiked) {
       _updateVideoInteraction(videoId, 'unlike');
     } else {
-      // If disliked, remove dislike first, then add like
       if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
         _updateVideoInteraction(videoId, 'undislike');
       }
       _updateVideoInteraction(videoId, 'like');
     }
 
+    // استدعاء الـ API
     final response = await _likeTubeVideoUseCase(videoId);
 
     response.fold(
       (failure) {
-        // Revert optimistic update on failure
+        // إذا فشل الـ API، نعكس التحديث
         if (wasLiked) {
           _updateVideoInteraction(videoId, 'like');
         } else {
@@ -730,21 +780,17 @@ class StarCubit extends Cubit<StarState> {
         }
         _showErrorMessage(failure);
       },
-      (success) async {
-        if (!success) {
-          // Revert optimistic update if API returned false
+      (success) {
+        if (success) {
+          // نجح التحديث - البيانات محفوظة بالفعل
+          print('Like operation successful');
+        } else {
+          // إذا فشل الـ API، نعكس التحديث
           if (wasLiked) {
             _updateVideoInteraction(videoId, 'like');
           } else {
             _updateVideoInteraction(videoId, 'unlike');
-            if (video != null && _isVideoDislikedByCurrentUser(videoId)) {
-              _updateVideoInteraction(videoId, 'dislike');
-            }
           }
-        } else {
-          // Refresh video data after successful like/unlike
-          print('👍 Like operation successful, refreshing video data...');
-          await _refreshVideoData(videoId);
         }
       },
     );
@@ -972,24 +1018,144 @@ class StarCubit extends Cubit<StarState> {
   }
 
   // Helper methods for updating local state
+  // void _updateVideoInteraction(String videoId, String action) {
+  //   final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+  //   bool videoUpdated = false;
+
+  //   for (final category in TalentCategory.values) {
+  //     final categoryTalents = talents[category];
+  //     if (categoryTalents != null) {
+  //       final updatedTalents = categoryTalents.map((talent) {
+  //         if (talent.id == videoId && talent is TubeVideoModel) {
+  //           videoUpdated = true;
+  //           switch (action) {
+  //             case 'like':
+  //               return talent.copyWith(
+  //                 likes: talent.isLike ? talent.likes : talent.likes + 1,
+  //                 isLike: true,
+  //                 dislikes: talent.isDislike
+  //                     ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
+  //                     : talent.dislikes,
+  //                 isDislike: false,
+  //               );
+  //             case 'unlike':
+  //               return talent.copyWith(
+  //                 likes: (talent.likes - 1).clamp(0, double.infinity).toInt(),
+  //                 isLike: false,
+  //               );
+  //             case 'dislike':
+  //               return talent.copyWith(
+  //                 dislikes:
+  //                     talent.isDislike ? talent.dislikes : talent.dislikes + 1,
+  //                 isDislike: true,
+  //                 likes: talent.isLike
+  //                     ? (talent.likes - 1).clamp(0, double.infinity).toInt()
+  //                     : talent.likes,
+  //                 isLike: false,
+  //               );
+  //             case 'undislike':
+  //               return talent.copyWith(
+  //                 dislikes:
+  //                     (talent.dislikes - 1).clamp(0, double.infinity).toInt(),
+  //                 isDislike: false,
+  //               );
+  //             default:
+  //               return talent;
+  //           }
+  //         }
+  //         return talent;
+  //       }).toList();
+
+  //       talents[category] = updatedTalents;
+  //     }
+  //   }
+
+  //   // Emit with update counter to force UI rebuild
+  //   emit(state.copyWith(
+  //     talents: talents,
+  //     lastUpdatedVideoId: videoId,
+  //     updateCounter: state.updateCounter + 1,
+  //   ));
+
+  //   // Also emit to stream
+  //   _videoUpdatesController.add(videoId);
+  // }
+  // void _updateVideoInteraction(String videoId, String action) {
+  //   final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
+  //   bool videoUpdated = false;
+
+  //   for (final category in TalentCategory.values) {
+  //     final categoryTalents = talents[category];
+  //     if (categoryTalents != null) {
+  //       final updatedTalents = categoryTalents.map((talent) {
+  //         if (talent.id == videoId && talent is TubeVideoModel) {
+  //           videoUpdated = true;
+  //           // نسخ الفيديو مع التحديثات الجديدة
+  //           final updatedVideo = talent.copyWith(
+  //             likes: action == 'like'
+  //                 ? (talent.isLike ? talent.likes : talent.likes + 1)
+  //                 : action == 'unlike'
+  //                     ? (talent.likes - 1).clamp(0, double.infinity).toInt()
+  //                     : talent.likes,
+  //             dislikes: action == 'dislike'
+  //                 ? (talent.isDislike ? talent.dislikes : talent.dislikes + 1)
+  //                 : action == 'undislike'
+  //                     ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
+  //                     : talent.dislikes,
+  //             isLike: action == 'like'
+  //                 ? true
+  //                 : action == 'unlike'
+  //                     ? false
+  //                     : talent.isLike,
+  //             isDislike: action == 'dislike'
+  //                 ? true
+  //                 : action == 'undislike'
+  //                     ? false
+  //                     : talent.isDislike,
+  //           );
+
+  //           // تأكد من حفظ التحديث في جميع الفئات
+  //           return updatedVideo;
+  //         }
+  //         return talent;
+  //       }).toList();
+  //       talents[category] = updatedTalents;
+  //     }
+  //   }
+
+  //   if (videoUpdated) {
+  //     // حفظ البيانات الجديدة مع إجبار إعادة البناء
+  //     emit(state.copyWith(
+  //       talents: talents,
+  //       lastUpdatedVideoId: videoId,
+  //       updateCounter: state.updateCounter + 1,
+  //     ));
+
+  //     // إرسال تحديث للـ stream
+  //     _videoUpdatesController.add(videoId);
+  //   }
+  // }
+
   void _updateVideoInteraction(String videoId, String action) {
     final talents = Map<TalentCategory, List<StarEntity>>.from(state.talents);
     bool videoUpdated = false;
 
+    // تحديث الفيديو في جميع الفئات
     for (final category in TalentCategory.values) {
       final categoryTalents = talents[category];
       if (categoryTalents != null) {
         final updatedTalents = categoryTalents.map((talent) {
           if (talent.id == videoId && talent is TubeVideoModel) {
             videoUpdated = true;
+
+            // تحديث البيانات حسب العملية
             switch (action) {
               case 'like':
                 return talent.copyWith(
                   likes: talent.isLike ? talent.likes : talent.likes + 1,
                   isLike: true,
-                  dislikes: talent.isDislike
-                      ? (talent.dislikes - 1).clamp(0, double.infinity).toInt()
-                      : talent.dislikes,
+                  dislikes:
+                      talent.isDislike ? talent.dislikes - 1 : talent.dislikes,
                   isDislike: false,
                 );
               case 'unlike':
@@ -1002,9 +1168,7 @@ class StarCubit extends Cubit<StarState> {
                   dislikes:
                       talent.isDislike ? talent.dislikes : talent.dislikes + 1,
                   isDislike: true,
-                  likes: talent.isLike
-                      ? (talent.likes - 1).clamp(0, double.infinity).toInt()
-                      : talent.likes,
+                  likes: talent.isLike ? talent.likes - 1 : talent.likes,
                   isLike: false,
                 );
               case 'undislike':
@@ -1019,20 +1183,21 @@ class StarCubit extends Cubit<StarState> {
           }
           return talent;
         }).toList();
-
         talents[category] = updatedTalents;
       }
     }
 
-    // Emit with update counter to force UI rebuild
-    emit(state.copyWith(
-      talents: talents,
-      lastUpdatedVideoId: videoId,
-      updateCounter: state.updateCounter + 1,
-    ));
+    if (videoUpdated) {
+      // حفظ البيانات مع إجبار التحديث
+      emit(state.copyWith(
+        talents: talents,
+        lastUpdatedVideoId: videoId,
+        updateCounter: state.updateCounter + 1,
+      ));
 
-    // Also emit to stream
-    _videoUpdatesController.add(videoId);
+      // إرسال تحديث للـ stream
+      _videoUpdatesController.add(videoId);
+    }
   }
 
   @override
