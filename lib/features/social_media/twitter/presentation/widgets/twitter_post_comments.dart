@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -68,12 +71,10 @@ class TwitterPostComments extends StatefulWidget {
 class _TwitterPostCommentsState extends State<TwitterPostComments> {
   final commentTextController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TwitterCubit, TwitterState>(
       builder: (context, state) {
-
         final user = context.read<UserCubit>().state.data;
         final cubit = context.read<TwitterCubit>();
         final paging = cubit.commentsPagingController;
@@ -96,15 +97,19 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
             children: [
               Expanded(
                 child: PagedListView<int, TwitterPostCommentEntity>(
-                  padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
                   pagingController: paging,
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  builderDelegate: PagedChildBuilderDelegate<TwitterPostCommentEntity>(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  builderDelegate:
+                      PagedChildBuilderDelegate<TwitterPostCommentEntity>(
                     firstPageProgressIndicatorBuilder: (_) => Container(
                       margin: const EdgeInsets.only(top: 150),
                       child: const CupertinoActivityIndicator(),
                     ),
-                    newPageProgressIndicatorBuilder: (_) => const CupertinoActivityIndicator(),
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const CupertinoActivityIndicator(),
                     noItemsFoundIndicatorBuilder: (_) => Padding(
                       padding: const EdgeInsets.only(top: 120),
                       child: Center(
@@ -118,8 +123,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                       return CommentCard(
                         comment: comment,
                         onReact: () {
-                          // ✅ react using the comment id
-                          widget.onCommentReact(
+                           widget.onCommentReact(
                             TwitterCommentReactParams(
                               commentId: comment.post,
                               react: 'love',
@@ -129,7 +133,9 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                           comment.isReact = !(comment.isReact ?? false);
                           // optionally bump loveCount
                           final current = comment.loveCount ?? 0;
-                          comment.loveCount = (comment.isReact ?? false) ? current + 1 : (current > 0 ? current - 1 : 0);
+                          comment.loveCount = (comment.isReact ?? false)
+                              ? current + 1
+                              : (current > 0 ? current - 1 : 0);
                           setState(() {});
                         },
                         onReply: () {
@@ -139,18 +145,23 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (_) => BlocProvider.value(
-                              value: serviceLocator<TwitterCubit>()..loadReplies(context, comment.id),
+                              value: serviceLocator<TwitterCubit>()
+                                ..loadReplies(context, comment.id),
                               child: TwitterCommentReplies(
                                 replies: const [],
-                                commentId: comment.id,       // parent comment id
-                                postId: comment.post,        // parent post id
-                                onAddReply: (params) async => await widget.onAddReply(params),
+                                commentId: comment.id, // parent comment id
+                                postId: comment.post, // parent post id
+                                onAddReply: (params) async =>
+                                    await widget.onAddReply(params),
                                 onReplyReact: (id) => cubit.onCommentReact(
-                                  params: TwitterCommentReactParams(commentId: id, react: 'love'),
+                                  params: TwitterCommentReactParams(
+                                      commentId: id, react: 'love'),
                                 ),
                                 onReport: (p) => widget.onReport(p),
-                                onEditReply: (params) => widget.onEditComment(params),
-                                onDeleteReply: (id) => widget.onDeleteComment(id),
+                                onEditReply: (params) =>
+                                    widget.onEditComment(params),
+                                onDeleteReply: (id) =>
+                                    widget.onDeleteComment(id),
                               ),
                             ),
                           );
@@ -160,9 +171,11 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                         onDelete: () async {
                           final ok = await widget.onDeleteComment(comment.id);
                           if (ok) {
-                            cubit.commentsPagingController.itemList?.removeWhere((e) => e.id == comment.id);
+                            cubit.commentsPagingController.itemList
+                                ?.removeWhere((e) => e.id == comment.id);
                             setState(() {});
-                            showSuccessMessage(context, LocaleKeys.deleteReply.localize);
+                            showSuccessMessage(
+                                context, LocaleKeys.deleteReply.localize);
                           }
                         },
                       );
@@ -177,7 +190,8 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                  border: Border(
+                      top: BorderSide(color: Colors.grey.withOpacity(0.2))),
                 ),
                 child: Row(
                   children: [
@@ -271,8 +285,6 @@ class CommentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final createdAt = comment.createdAt;
 
-
-
     String formatSince(DateTime? createdAt, {String locale = 'en'}) {
       if (createdAt == null) return '';
 
@@ -281,9 +293,11 @@ class CommentCard extends StatelessWidget {
 
       return formatter.format(createdAt);
     }
-    final sinceEn = createdAt != null ? formatSince(createdAt, locale: 'en') : '';
-    final sinceAr = createdAt != null ? formatSince(createdAt, locale: 'ar') : '';
 
+    final sinceEn =
+        createdAt != null ? formatSince(createdAt, locale: 'en') : '';
+    final sinceAr =
+        createdAt != null ? formatSince(createdAt, locale: 'ar') : '';
 
     final u = comment.user;
     String displayName = '';
@@ -306,9 +320,12 @@ class CommentCard extends StatelessWidget {
           handle = userName;
         } else {
           final email = (u['email'] ?? '').toString();
-          handle = email.contains('@') ? email.split('@').first : (u['_id'] ?? '').toString();
+          handle = email.contains('@')
+              ? email.split('@').first
+              : (u['_id'] ?? '').toString();
         }
-        final imageUrl = (u['image'] ?? u['profilePictureUrl'] ?? '').toString();
+        final imageUrl =
+            (u['image'] ?? u['profilePictureUrl'] ?? '').toString();
         if (imageUrl.isNotEmpty) {
           avatar = imageUrl;
         } else {
@@ -321,19 +338,45 @@ class CommentCard extends StatelessWidget {
                 : 'https://d3j5umpuujp1ej.cloudfront.net/$mediaKey';
           }
         }
-        verified = u['twitter_documentation'] == true || u['isAccountVerified'] == true;
+        verified = u['twitter_documentation'] == true ||
+            u['isAccountVerified'] == true;
       }
     } catch (_) {}
 
     final isReact = comment.isReact ?? false;
     final loveCount = comment.loveCount ?? (comment.love.length ?? 0);
+    final cubit = context.read<TwitterCubit>();
+    final bool isArabic = context.isArabic;
+    bool _isMyComment(BuildContext context, TwitterPostCommentEntity c) {
+      final meId = context.read<UserCubit>().state.data?.id?.toString() ?? '';
+      if (meId.isEmpty) return false;
 
+      // Prefer typed ownerData if present
+      final ownerIdFromOwnerData = c.ownerData?.id?.toString();
+      if (ownerIdFromOwnerData != null && ownerIdFromOwnerData.isNotEmpty) {
+        return ownerIdFromOwnerData == meId;
+      }
+
+      // Fallback to `user` dynamic
+      final u = c.user;
+      if (u is TwitterUserModel) {
+        return (u.id ?? '').toString() == meId;
+      } else if (u is Map) {
+        final ownerId = (u['userId'] ?? u['_id'] ?? u['id'] ?? '').toString();
+        return ownerId == meId;
+      }
+
+      return false;
+    }
+     final bool mine = _isMyComment(context, comment);
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.12), blurRadius: 6)],
+        boxShadow: [
+          BoxShadow(color: Colors.grey.withOpacity(0.12), blurRadius: 6)
+        ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: Column(
@@ -352,36 +395,151 @@ class CommentCard extends StatelessWidget {
                     children: [
                       Text(
                         displayName.isNotEmpty ? displayName : handle,
-                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                       ),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
                       const SizedBox(width: 6),
-                      if (verified) const Icon(Icons.verified, color: Colors.blue, size: 16),
+                      if (verified)
+                        const Icon(Icons.verified,
+                            color: Colors.blue, size: 16),
                     ],
                   ),
                   if (handle.isNotEmpty)
-                    Text('@$handle', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text('@$handle',
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 12)),
                 ],
               ),
-Spacer(),
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
-                onSelected: (v) async {
-                  if (v == 'edit') {
-                    onEdit(TwitterPostCommentParams(
-                      postId: comment.post,
-                      content: comment.content ?? '',
-                     ));
-                  } else if (v == 'delete') {
-                    await onDelete();
-                  } else if (v == 'report') {
-                   }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(value: 'edit', child: Text(LocaleKeys.edit.localize)),
-                  PopupMenuItem(value: 'delete', child: Text(LocaleKeys.delete.localize)),
-                  PopupMenuItem(value: 'report', child: Text(LocaleKeys.report.localize)),
-                ],
+              Spacer(),
+
+    PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
+      onSelected: (v) async {
+        // block edit/delete for non-owners
+        if ((v == 'edit' || v == 'delete') && !mine) {
+          showErrorMessage(
+            context,
+            isArabic
+                ? 'لا يمكنك تعديل أو حذف تعليق ليس لك'
+                : 'You can only edit or delete your own comment',
+          );
+          return;
+        }
+
+        if (v == 'edit') {
+          final edited = await _showEditCommentDialog(
+            context,
+            initial: comment.content ?? '',
+          );
+          if (edited != null && edited.trim().isNotEmpty) {
+            await onEdit(
+              TwitterPostCommentParams(
+                postId: comment.post,
+                // commentId: comment.id, // add if your API needs it
+                content: edited.trim(),
               ),
+            );
+            comment.content = edited.trim(); // optimistic
+            (context as Element).markNeedsBuild();
+            showSuccessMessage(
+              context,
+              isArabic ? 'تم تعديل التعليق بنجاح' : 'Comment edited successfully',
+            );
+          }
+        } else if (v == 'delete') {
+          // optional confirm
+          final confirm = await showDialog<bool>(
+            context: context,
+            builder: (dCtx) => AlertDialog(
+              title: Text(isArabic ? 'حذف التعليق؟' : 'Delete comment?'),
+              content: Text(isArabic
+                  ? 'لا يمكن التراجع عن هذه العملية.'
+                  : 'This action cannot be undone.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dCtx, false),
+                  child: Text(isArabic ? 'إلغاء' : 'Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(dCtx, true),
+                  child: Text(isArabic ? 'حذف' : 'Delete',
+                      style: const TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          );
+
+          if (confirm == true) {
+            // optimistic remove from the paging list
+            final cubit = context.read<TwitterCubit>();
+            final list = cubit.commentsPagingController.itemList;
+            final idx = list?.indexWhere((e) => e.id == comment.id) ?? -1;
+            TwitterPostCommentEntity? backup;
+            if (idx >= 0 && list != null) {
+              backup = list[idx];
+              list.removeAt(idx);
+              cubit.commentsPagingController.notifyListeners();
+            }
+print(comment.id);
+print("==========");
+print(comment.post);
+            final ok = await cubit.deleteComment( context: context,
+              commentId: comment.post,
+              postId: comment.post,
+              from: 'details',);
+            if (ok) {
+              showSuccessMessage(
+                context,
+                isArabic ? 'تم حذف التعليق' : 'Comment deleted',
+              );
+            } else {
+               if (idx >= 0 && backup != null && list != null) {
+                list.insert(idx, backup);
+                cubit.commentsPagingController.notifyListeners();
+              }
+              showErrorMessage(
+                context,
+                isArabic ? 'فشل حذف التعليق' : 'Failed to delete comment',
+              );
+            }
+          }
+        } else if (v == 'report') {
+          ManageVibration.vibrate();
+          bottomSheet(
+            context: context,
+            widget: ReportView(
+              id: comment.id,
+              categoryId: "66a3583454e6e337915514db",
+            ),
+          );
+        }
+      },
+      itemBuilder: (context) {
+        final items = <PopupMenuEntry<String>>[];
+
+        if (mine) {
+          items.addAll([
+            PopupMenuItem(
+              value: 'edit',
+              child: Text(LocaleKeys.edit.localize),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              child: Text(LocaleKeys.deleteReply.localize),
+            ),
+          ]);
+        }
+
+        items.add(
+          PopupMenuItem(
+            value: 'report',
+            child: Text(LocaleKeys.report.localize),
+          ),
+        );
+
+        return items;
+      },
+    ),
             ],
           ),
 
@@ -393,18 +551,21 @@ Spacer(),
 
           const SizedBox(height: 8),
           Text(
-            Localizations.localeOf(context).languageCode == 'ar' ? sinceAr : sinceEn,
+            Localizations.localeOf(context).languageCode == 'ar'
+                ? sinceAr
+                : sinceEn,
             style: const TextStyle(color: Colors.grey, fontSize: 16),
           ),
-           Padding(
-            padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 2),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 2),
             child: Row(
               children: [
                 Expanded(
                   child: _miniStatItem(
                     icon: Icons.mode_comment_outlined,
                     label: LocaleKeys.reply.localize,
-                    onTap: (){},
+                    onTap: () {},
                   ),
                 ),
                 Expanded(
@@ -415,12 +576,14 @@ Spacer(),
                     onTap: onReact,
                   ),
                 ),
-                // Keep the grid feel with two empty slots (like retweet/share on posts)
+
                 Expanded(
                   child: _miniStatItem(
                     icon: FontAwesomeIcons.retweet,
-                    label: '',
+                    label: '', // keep compact
                     onTap: () {
+                      ManageVibration.vibrate();
+                       cubit.onRepost(postId: comment.post);
 
                     },
                   ),
@@ -430,18 +593,130 @@ Spacer(),
                     icon: Icons.share_outlined,
                     label: '',
                     onTap: () {
-
+                      ManageVibration.vibrate();
+                      final idToShare = comment.post; // share the parent post
+                      cubit.onShare(postId: idToShare);
+                      if (cubit.state.shareSuccess == true) {
+                        showSuccessMessage(
+                          context,
+                          LocaleKeys.postSharedSuccessfully.localize,
+                        );
+                      }
                     },
                   ),
                 ),
-               ],
+              ],
             ),
           )
-
         ],
       ),
     );
   }
+  Future<String?> _showEditCommentDialog(
+      BuildContext context, {
+        required String initial,
+      }) async {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final ctrl = TextEditingController(text: initial);
+    String current = initial;
+
+    return showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Theme.of(context).cardColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom, // keyboard safe
+          ),
+          child: StatefulBuilder(
+            builder: (ctx, setState) {
+              final changed = ctrl.text.trim() != initial.trim();
+              final canSave = changed && ctrl.text.trim().isNotEmpty;
+              final maxLen = 500; // tweak if you need
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // drag handle
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Text(
+                          LocaleKeys.editComment.localize,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Spacer(),
+                        // Cancel
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: Text(LocaleKeys.cancel.localize),
+                        ),
+                        // Save
+                        TextButton(
+                          onPressed: canSave
+                              ? () => Navigator.pop(ctx, ctrl.text.trim())
+                              : null,
+                          child: Text(LocaleKeys.save.localize),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Input
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextField(
+                      controller: ctrl,
+                      autofocus: true,
+                      maxLines: null,
+                      maxLength: maxLen,
+                      decoration: InputDecoration(
+                        hintText: LocaleKeys.typeYourComment.localize,
+                        counterText:
+                        '${ctrl.text.characters.length}/$maxLen', // manual counter
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                      ),
+                      onChanged: (v) => setState(() => current = v),
+                      textInputAction: TextInputAction.newline,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   Widget _miniStatItem({
     required IconData icon,
     required String label,
@@ -462,7 +737,20 @@ Spacer(),
   }
 
   String _month(int m) {
-    const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const names = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
     return (m >= 1 && m <= 12) ? names[m - 1] : '';
   }
 }
@@ -477,16 +765,17 @@ class _SmallAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
       child: SizedBox(
-        width: 36, height: 36,
+        width: 36,
+        height: 36,
         child: url.trim().isEmpty
             ? const Icon(Icons.person_outline, size: 22, color: Colors.grey)
             : Image.network(
-          url,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.person_outline, size: 22, color: Colors.grey),
-        ),
+                url,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(Icons.person_outline,
+                    size: 22, color: Colors.grey),
+              ),
       ),
     );
   }
 }
-

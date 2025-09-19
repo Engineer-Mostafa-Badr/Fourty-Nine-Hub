@@ -1045,11 +1045,11 @@ class EndPoints {
   }
 
   static String deleteTwitterComment(String commentId) {
-    return '/twitter/comment/delete-comment/$commentId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$commentId';
   }
 
   static String editTwitterComment(String commentId) {
-    return '/twitter/comment/update-comment/$commentId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$commentId';
   }
 
   static String friendRequest(String userId) {

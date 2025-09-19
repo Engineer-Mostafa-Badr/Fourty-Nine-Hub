@@ -446,3 +446,31 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
     );
   }
 }
+/// Response model from backend create-thread
+class CreateThreadResult {
+  final bool status;
+  final String message;
+  final String? threadId;
+  final String? postId;
+  final Map<String, dynamic>? postJson; // optional: full post from backend
+
+  const CreateThreadResult({
+    required this.status,
+    required this.message,
+    this.threadId,
+    this.postId,
+    this.postJson,
+  });
+
+  factory CreateThreadResult.fromJson(Map<String, dynamic> json) {
+    // Common shapes: {status, message, data: {threadId, postId, post:{...}}}
+    final data = (json['data'] as Map?)?.cast<String, dynamic>();
+    return CreateThreadResult(
+      status: (json['status'] == true),
+      message: (json['message'] ?? '').toString(),
+      threadId: (data?['threadId'] ?? json['threadId'])?.toString(),
+      postId: (data?['postId'] ?? json['postId'])?.toString(),
+      postJson: (data?['post'] is Map) ? (data!['post'] as Map).cast<String, dynamic>() : null,
+    );
+  }
+}

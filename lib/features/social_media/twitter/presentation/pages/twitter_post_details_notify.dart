@@ -195,7 +195,8 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
               cubit.hidePost(context: context, postId: id);
               context.pop();
             },
-            onDeleteComment: (String id) async {
+            onDeleteComment: (String id)
+            async {
               final res = await cubit.deleteComment(
                 context: context,
                 commentId: id,
