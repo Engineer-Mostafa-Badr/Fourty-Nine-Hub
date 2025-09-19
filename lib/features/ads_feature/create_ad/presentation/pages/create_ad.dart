@@ -24,6 +24,7 @@ import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -73,10 +74,11 @@ class _CreateAdViewState extends State<CreateAdView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: const PreferredSize(
+        appBar: PreferredSize(
           preferredSize: Size.fromHeight(30),
           child: HomeAppbar(
             isWithBackArrow: true,
+            onBackPressed: ()=>context.pop(),
           ),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
@@ -780,9 +782,10 @@ class _CreateAdViewState extends State<CreateAdView> {
 
   @override
   void initState() {
+    print("/v1/ads/PropsByMainCategoryId/62c8bafb8e28a58a3edf589b");
     context.read<CreateAdCubit>().loadData(
         subCategoryId: widget.categorization.fromMarriage == false
-            ? widget.categorization.mainCategory.id
+            ? widget.categorization.subCategory.id
             : widget.categorization.subCategory.id,
         fromMarriage: widget.categorization.fromMarriage ?? false);
     WidgetsBinding.instance.addPostFrameCallback((_) {

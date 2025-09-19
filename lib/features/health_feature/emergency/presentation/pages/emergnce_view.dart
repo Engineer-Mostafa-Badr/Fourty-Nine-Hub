@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/health_feature/emergency/presentation/cub
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/widgets/subcategories_dropdown.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -57,6 +58,7 @@ class _HealthEmergencyViewState extends State<HealthEmergencyView> {
         }
       },
       child: SharedScaffold(
+        onBackPressed: ()=>context.pop(),
         // appBar: PreferredSize(
         //   preferredSize: const Size.fromHeight(30),
         //   child: AppBar(

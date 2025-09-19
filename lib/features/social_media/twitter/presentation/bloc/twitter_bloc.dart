@@ -1,10 +1,16 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_posts/domain/usecases/get_post_comments_usecase.dart';
+import '../../data/models/profile_model.dart';
+import '../../data/models/twitter_post_model.dart';
 import '../../domain/entities/twitter_comment_reply_entity.dart';
 import '../../domain/entities/twitter_post_comment_entity.dart';
 import '../../domain/entities/twitter_post_entity.dart';
@@ -13,6 +19,7 @@ import '../../domain/usecases/comment_reply_usecase.dart';
 import '../../domain/usecases/delete_twitter_comment_usecase.dart';
 import '../../domain/usecases/delete_twitter_post_usecase.dart';
 import '../../domain/usecases/edit_twitter_comment_usecase.dart';
+import '../../domain/usecases/follow_twitter_usecase.dart';
 import '../../domain/usecases/get_feed_usecase.dart';
 import '../../domain/usecases/get_global_feed_usecase.dart';
 import '../../domain/usecases/get_post_comment_reply_usecase.dart';
@@ -22,6 +29,7 @@ import '../../domain/usecases/get_user_posts_usecase.dart';
 import '../../domain/usecases/hide_twitter_post_usecase.dart';
 import '../../domain/usecases/post_comment_usecase.dart';
 import '../../domain/usecases/post_react_usecase.dart';
+import '../../domain/usecases/repost_usecase.dart';
 import '../../domain/usecases/request_document_usecase.dart';
 import '../../domain/usecases/share_twitter_post_usecase.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
@@ -30,6 +38,17 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
 part 'twitter_state.dart';
+class TwitterPage<T> {
+  final List<T> items;
+  final bool hasNextPage;
+  final int? nextPage;
+
+  const TwitterPage({
+    required this.items,
+    required this.hasNextPage,
+    required this.nextPage,
+  });
+}
 
 class TwitterCubit extends Cubit<TwitterState> {
   final GetTwitterFeedUseCase _getFeedUseCase;
@@ -49,7 +68,13 @@ class TwitterCubit extends Cubit<TwitterState> {
   final DeleteTwitterCommentUseCase _deleteTwitterCommentUseCase;
   final EditTwitterCommentUseCase _editTwitterCommentUseCase;
   final HideTwitterPostUseCase _hideTwitterPostUseCase;
-
+  final GetThreadPostsPageUseCase _getThreadPostsPageUseCase;
+  final GetThreadRepliesPageUseCase _getThreadRepliesPageUseCase;
+  final GetFollowersCountUseCase _getFollowersCountUseCase;
+  final GetFollowingCountUseCase _getFollowingCountUseCase;
+  final GetMyThreadsPageUseCase _getMyThreadsPageUseCase;
+  final GetUserThreadsPageUseCase _getUserThreadsPageUseCase;
+  final TwitterRepostUseCase _repostUseCase;
   TwitterCubit(
     this._getFeedUseCase,
     this._twitterPostReactUseCase,
@@ -68,16 +93,15 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._deleteTwitterCommentUseCase,
     this._editTwitterCommentUseCase,
     this._getTwitterGlobalFeedUseCase,
-  ) : super(const TwitterState());
+      this._getThreadPostsPageUseCase,
+      this._getThreadRepliesPageUseCase,
+       this._getFollowersCountUseCase,
+      this._getFollowingCountUseCase,
+      this._getMyThreadsPageUseCase,
+      this._getUserThreadsPageUseCase,
+      this._repostUseCase,
+      ) : super(const TwitterState());
 
-  void loadData() async {
-    //   await getFeed(1);
-    getFeed(1);
-    postsPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getFeed(pageKey);
-    });
-  }
 
   void loadGlobalData() async {
     //   await getFeed(1);
@@ -142,66 +166,90 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   final PagingController<int, TwitterPostEntity> userTweetsPagingController =
       PagingController(firstPageKey: 1);
-// get feed posts
-  Future<void> getFeed(int page) async {
-    final response =
-        await _getFeedUseCase(TwitterFeedParams(limit: pageSize, page: page));
-    response.fold(
-        (l) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-        (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        postsPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        postsPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        postsPagingController.appendPage(data, nextPageKey);
-      }
-      emit(state.copyWith(posts: data, status: StateStatus.success));
-    });
-  }
+
 
   // get global feed posts
   Future<void> getGlobalFeed(int page) async {
     final response = await _getTwitterGlobalFeedUseCase(
-        TwitterFeedParams(limit: pageSize, page: page));
+      TwitterFeedParams(limit: pageSize, page: page),
+    );
     response.fold(
-        (l) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-        (data) {
-      final isLastPage = data.length < pageSize;
+          (l) {
+        final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(ctx, getFailureMessage(l, ctx));
+        emit(state.copyWith(failure: l, status: StateStatus.error));
+      },
+          (pageData) {
+        final items = pageData.items;
+        final hasNext = pageData.hasNextPage;
+        final next = pageData.nextPage;
+
+        if (page == 1) {
+          globalPostsPagingController.itemList = [];
+        }
+
+        if (!hasNext || next == null) {
+          globalPostsPagingController.appendLastPage(items);
+        } else {
+          globalPostsPagingController.appendPage(items, next);
+        }
+
+        emit(state.copyWith(posts: items, status: StateStatus.success));
+      },
+    );
+  }
+
+
+   Future<void> loadMyPosts(int page) async {
+    final res = await _getMyThreadsPageUseCase(
+      MyThreadsPageParams(page: page, limit: pageSize),
+    );
+
+    res.fold((l) {
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (pageData) {
+      debugPrint("🟢 API returned items: ${pageData.items.length}");
+
       if (page == 1) {
-        print("page == 1 $page");
-        globalPostsPagingController.itemList = [];
+        postsPagingController.itemList = [];
       }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        globalPostsPagingController.appendLastPage(data);
+
+      if (!pageData.hasNextPage || pageData.nextPage == null) {
+        postsPagingController.appendLastPage(pageData.items);
       } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        globalPostsPagingController.appendPage(data, nextPageKey);
+        postsPagingController.appendPage(pageData.items, pageData.nextPage!);
       }
-      emit(state.copyWith(posts: data, status: StateStatus.success));
+
+      debugPrint("📌 postsPagingController now has: ${postsPagingController.itemList?.length}");
+      postsPagingController.notifyListeners();
+
+      emit(state.copyWith(myPosts: pageData.items, status: StateStatus.success));
     });
   }
-  //
+
+  Future<void> loadUserPostsPage(String userId, int page) async {
+    final res = await _getUserThreadsPageUseCase(
+      UserThreadsPageParams(userId: userId, page: page, limit: pageSize),
+    );
+
+    res.fold((l) {
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (pageData) {
+      if (page == 1) {
+        userTweetsPagingController.itemList = [];
+        userTweetsPagingController.notifyListeners(); // 👈 مهم
+      }
+      if (!pageData.hasNextPage || pageData.nextPage == null) {
+        userTweetsPagingController.appendLastPage(pageData.items);
+      } else {
+        userTweetsPagingController.appendPage(pageData.items, pageData.nextPage);
+      }
+      emit(state.copyWith(userTweets: pageData.items, status: StateStatus.success));
+    });
+  }
+
+
+
   // // get global feed posts
   // getGlobalFeed(int page) async {
   //   final response =
@@ -255,21 +303,120 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
   }
 
-  Future<void> getTwitterPost(
-      BuildContext context, String postId, String newCommentId) async {
+// TwitterCubit
+  Future<void> getTwitterPost(BuildContext context, String postId, String newCommentId,
+      ) async
+  {
+    emit(state.copyWith(status: StateStatus.loading, failure: null));
+
     final response = await _getTwitterPostUseCase(postId);
     response.fold(
-        (l) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-        (data) {
-      emit(state.copyWith(postDetails: data, status: StateStatus.success));
+          (l) {
+        final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(ctx, getFailureMessage(l, ctx));
+        emit(state.copyWith(failure: l, status: StateStatus.error));
+      },
+          (data) {
+        // data is TwitterPostEntity; if it’s our model, pull the extras
+        List<TwitterPostEntity> others = const [];
+        List<TwitterPostCommentEntity> replies = const [];
+        if (data is TwitterPostModel) {
+          others  = List<TwitterPostEntity>.from(data.threadExtraPosts);
+          replies = List<TwitterPostCommentEntity>.from(data.threadExtraReplies);
+        }
+
+        emit(state.copyWith(
+          postDetails: data,        // main post
+          threadPosts: others,      // other posts in the thread
+          threadReplies: replies,   // replies to main
+          status: StateStatus.success,
+        ));
+      },
+    );
+  }
+
+  final PagingController<int, TwitterPostEntity> threadPostsPagingController =
+  PagingController(firstPageKey: 1);
+
+  final PagingController<int, TwitterPostCommentEntity> threadRepliesPagingController =
+  PagingController(firstPageKey: 1);
+
+  void loadThread(String threadId) async {
+    // header details (main post) — optional, keep your existing call
+    await getTwitterPost(AppPages.router.configuration.navigatorKey.currentContext!, threadId, '');
+
+    // page 1 for both lists
+    getThreadPostsPage(threadId, 1);
+    getThreadRepliesPage(threadId, 1);
+
+    threadPostsPagingController.addPageRequestListener((pageKey) {
+      getThreadPostsPage(threadId, pageKey);
+    });
+
+    threadRepliesPagingController.addPageRequestListener((pageKey) {
+      getThreadRepliesPage(threadId, pageKey);
     });
   }
+
+  Future<void> getThreadPostsPage(String threadId, int page) async {
+    final res = await _getThreadPostsPageUseCase(
+      ThreadPageParams(threadId: threadId, page: page, limit: pageSize),
+    );
+    res.fold((l) {
+      final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(ctx, getFailureMessage(l, ctx));
+      threadPostsPagingController.error = l;
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (pageData) {
+      final items  = pageData.items;
+      final hasNext = pageData.hasNextPage;
+      final next    = pageData.nextPage;
+
+      if (page == 1) threadPostsPagingController.itemList = [];
+
+      if (!hasNext || next == null) {
+        threadPostsPagingController.appendLastPage(items);
+      } else {
+        threadPostsPagingController.appendPage(items, next);
+      }
+
+      emit(state.copyWith(threadPosts: [
+        ...(state.threadPosts ?? const []),
+        ...items,
+      ], status: StateStatus.success));
+    });
+  }
+
+  Future<void> getThreadRepliesPage(String threadId, int page) async {
+    final res = await _getThreadRepliesPageUseCase(
+      ThreadPageParams(threadId: threadId, page: page, limit: pageSize),
+    );
+    res.fold((l) {
+      final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(ctx, getFailureMessage(l, ctx));
+      threadRepliesPagingController.error = l;
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (pageData) {
+      final items  = pageData.items;
+      final hasNext = pageData.hasNextPage;
+      final next    = pageData.nextPage;
+
+      if (page == 1) threadRepliesPagingController.itemList = [];
+
+      if (!hasNext || next == null) {
+        threadRepliesPagingController.appendLastPage(items);
+      } else {
+        threadRepliesPagingController.appendPage(items, next);
+      }
+
+      emit(state.copyWith(threadReplies: [
+        ...(state.threadReplies ?? const []),
+        ...items,
+      ], status: StateStatus.success));
+    });
+  }
+
+
 
   // react on a post
   Future<bool> onReact({required TwitterPostReactParams params}) async {
@@ -577,7 +724,8 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
   void deletePost(
-      {required BuildContext context, required String postId}) async {
+      {required BuildContext context, required String postId}) async
+  {
     final response = await _deleteTwitterPostUseCase(postId);
     response.fold((l) {
       var currentContext =
@@ -590,6 +738,14 @@ class TwitterCubit extends Cubit<TwitterState> {
       emit(state.copyWith(posts: postsPagingController.itemList));
       showSuccessMessage(context, "Post delete successfully");
     });
+  }
+// In TwitterCubit
+  Future<bool> deletePostAsync(String postId, BuildContext ctx) async {
+    final res = await _deleteTwitterPostUseCase(postId);
+    return res.fold((l) {
+      showErrorMessage(ctx, getFailureMessage(l, ctx));
+      return false;
+    }, (r) => r == true);
   }
 
   void hidePost({required BuildContext context, required String postId}) async {
@@ -658,4 +814,175 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
     return result;
   }
+
+  // follow
+
+  Future<void> loadMyProfileFromUserCubit(
+      BuildContext context, {
+        required String subCategoryId,
+      }) async
+  {
+    emit(state.copyWith(profileStatus: StateStatus.loading));
+
+    final user = context.read<UserCubit>().state.data;
+    if (user == null) {
+      emit(state.copyWith(profileStatus: StateStatus.error));
+      return;
+    }
+
+    // fire both requests in parallel
+    final followersF = _getFollowersCountUseCase(subCategoryId);
+    final followingF = _getFollowingCountUseCase(subCategoryId);
+
+    final results = await Future.wait([followersF, followingF]);
+
+    int followers = 0;
+    int following = 0;
+
+    final followersEither = results[0] as Either<Failure, int>;
+    final followingEither = results[1] as Either<Failure, int>;
+
+    followersEither.fold(
+          (l) {
+        final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(ctx, getFailureMessage(l, ctx));
+      },
+          (r) => followers = r,
+    );
+
+    followingEither.fold(
+          (l) {
+        final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(ctx, getFailureMessage(l, ctx));
+      },
+          (r) => following = r,
+    );
+
+    // Compose profile from UserCubit + counts
+    final profile = TwitterProfileEntity(
+      id: user.id ?? '',
+      firstName: user.firstName ?? '',
+      lastName: user.lastName ?? '',
+      userName: (user.username ?? user.username ?? user.email?.split('@').first ?? '').toString(),
+      bio: user.bio,
+      avatarUrl: user.profilePicture,
+      coverUrl: user.profileCover,
+      joinedAt: user.birthday ?? DateTime.now(),
+      isVerified: (user.isDocument == true) || (user.isAccountVerified == true),
+      isMe: true,
+      isFollowing: false, // self
+      followersCount: followers,
+      followingCount: following,
+    );
+
+    emit(state.copyWith(
+      profile: profile,
+      followersCount: followers,
+      followingCount: following,
+      profileStatus: StateStatus.success,
+    ));
+  }
+
+  void bootstrapProfile(TwitterProfileEntity p) {
+    emit(state.copyWith(
+      profile: p,
+      profileStatus: StateStatus.success,
+    ));
+  }
+
+  // loads only counts for a given user (followers/following)
+  Future<void> loadCountsForUser({
+    required String userId,
+    required String subCategoryId,
+  }) async {
+    emit(state.copyWith(profileStatus: StateStatus.loading));
+
+    final followersEither = await _getFollowersCountUseCase(subCategoryId);
+    final followingEither = await _getFollowingCountUseCase(subCategoryId);
+
+    int followers = 0;
+    int following = 0;
+
+    followersEither.fold((l) {}, (r) => followers = r);
+    followingEither.fold((l) {}, (r) => following = r);
+
+    emit(state.copyWith(
+      followersCount: followers,
+      followingCount: following,
+      profileStatus: StateStatus.success,
+    ));
+  }
+
+// twitter_cubit.dart  (your onRepost)
+
+  Future<void> onRepost({required String postId}) async {
+    final result = await _repostUseCase(postId);
+
+    result.fold((failure) {
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (repostId) {
+      // 1) update lists held in state (feed, myPosts, userTweets)
+      List<TwitterPostEntity> _bump(List<TwitterPostEntity> src) => src.map((p) {
+        if (p.id != postId) return p;
+        final already = p.isReposted ?? false;
+        return TwitterPostEntity(
+          id: p.id,
+          content: p.content,
+          isLiked: p.isLiked,
+          postShare: p.postShare,
+          images: p.images,
+          shares: p.shares,
+          love: p.love,
+          isReact: p.isReact,
+          user: p.user,
+          commentPrivacy: p.commentPrivacy,
+          isShared: p.isShared,
+          commentsCount: p.commentsCount,
+          sharesCount: p.sharesCount,
+          loveCount: p.loveCount,
+          mainPost: p.mainPost,
+          photo: p.photo,
+          thread: p.thread,
+          createdAt: p.createdAt,
+          comments: p.comments,
+          repostCount: (p.repostCount ?? 0) + (already ? -1 : 1),
+          isReposted: !already,
+        );
+      }).toList();
+
+      final newPosts     = _bump(state.posts);
+      final newMyPosts   = _bump(state.myPosts);
+      final newUserPosts = _bump(state.userTweets);
+
+      emit(state.copyWith(
+        status: StateStatus.success,
+        posts: newPosts,
+        myPosts: newMyPosts,
+        userTweets: newUserPosts,
+        // optional: a boolean like repostSuccess if you track it
+      ));
+
+      // 2) also update the PagingControllers currently on screen
+      void _touch(PagingController<int, TwitterPostEntity> pc) {
+        final list = pc.itemList;
+        if (list == null) return;
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].id == postId) {
+            final p = list[i];
+            final already = p.isReposted ?? false;
+            p.isReposted  = !already;
+            p.repostCount = (p.repostCount ?? 0) + (already ? -1 : 1);
+            break;
+          }
+        }
+        pc.notifyListeners();
+      }
+
+      _touch(globalPostsPagingController);
+      _touch(postsPagingController);
+      _touch(userTweetsPagingController);
+    });
+  }
+
+
 }

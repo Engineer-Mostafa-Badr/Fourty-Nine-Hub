@@ -24,6 +24,7 @@ import '../../domain/usecases/post_comment_usecase.dart';
 import '../../domain/usecases/post_react_usecase.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
+import '../twitter/presentation/pages/twitter_view.dart';
 import '../widgets/twitter_comment_replied.dart';
 import '../widgets/twitter_post_card.dart';
 import '../widgets/twitter_post_comments.dart';
@@ -149,6 +150,9 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
           }
 
           return TwitterPostCard(
+            onRepost: () => cubit.onRepost(postId: post.id),   // 👈 Repost هنا
+
+            isDetailed: false,
             post: post,
             onReact: () async {
               if (!context.read<UserCubit>().isLoggedIn) {

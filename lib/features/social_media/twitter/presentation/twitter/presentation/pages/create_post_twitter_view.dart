@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../core/extensions/context_extension.dart';
-import '../../../../../core/messages/messages.dart';
-import '../../../../../core/widget/clickable_widget.dart';
-import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../domain/entities/activity_entity.dart';
-import '../../domain/entities/feeling_entity.dart';
-import '../../domain/entities/life_event_entity.dart';
-import '../../domain/entities/place_entity.dart';
-import 'build_life_event_view.dart';
-import 'select_activity_view.dart';
-import 'select_feeling_view.dart';
-import '../widgets/build_colors_ballet.dart';
-import '../widgets/build_create_post.dart';
-import '../widgets/build_create_post_app_bar.dart';
-import '../widgets/build_create_post_header.dart';
-import '../widgets/build_media_card.dart';
-import '../widgets/build_search_friends.dart';
-import '../widgets/build_sheet_item.dart';
-import '../../../social_posts/presentation/pages/Social_home.dart';
-import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../routes/routes.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../core/widget/clickable_widget.dart';
+import '../../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../../helpers/manage_vibration.dart';
+import '../../../../../../../res/assets/assets.dart';
+import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../routes/routes.dart';
+import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+ import '../../../../../create_post/domain/entities/activity_entity.dart';
+import '../../../../../create_post/domain/entities/feeling_entity.dart';
+import '../../../../../create_post/domain/entities/life_event_entity.dart';
+import '../../../../../create_post/domain/entities/place_entity.dart';
+import '../../../../../create_post/presentation/cubit/create_post_cubit.dart';
+import '../../../../../create_post/presentation/pages/build_life_event_view.dart';
+import '../../../../../create_post/presentation/pages/select_activity_view.dart';
+import '../../../../../create_post/presentation/pages/select_feeling_view.dart';
+import '../../../../../create_post/presentation/widgets/build_colors_ballet.dart';
+import '../../../../../create_post/presentation/widgets/build_create_post.dart';
+import '../../../../../create_post/presentation/widgets/build_create_post_app_bar.dart';
+import '../../../../../create_post/presentation/widgets/build_create_post_header.dart';
+import '../../../../../create_post/presentation/widgets/build_media_card.dart';
+import '../../../../../create_post/presentation/widgets/build_search_friends.dart';
+import '../../../../../create_post/presentation/widgets/build_sheet_item.dart';
+import '../../../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:giphy_get/giphy_get.dart';
@@ -32,20 +35,15 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
-import '../cubit/create_post_cubit.dart';
-import '../../../../../helpers/manage_vibration.dart';
-
-class CreatePostView extends StatefulWidget {
-  const CreatePostView({super.key, this.lifeEvent});
+class CreatePostTwitter extends StatefulWidget {
+  const CreatePostTwitter({super.key, this.lifeEvent});
   final LifeEventEntity? lifeEvent;
 
   @override
-  State<CreatePostView> createState() => _CreatePostViewState();
+  State<CreatePostTwitter> createState() => _CreatePostTwitterState();
 }
 
-class _CreatePostViewState extends State<CreatePostView> {
+class _CreatePostTwitterState extends State<CreatePostTwitter> {
   FocusNode focusNode = FocusNode();
   late SheetController sheetController;
   @override
@@ -71,94 +69,9 @@ class _CreatePostViewState extends State<CreatePostView> {
     super.dispose();
   }
 
-  Future<PlaceEntity> getLocationAddress() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled
-    // serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    // if (!serviceEnabled) {
-    //   return Future.error('Location services are disabled.');
-    // }
-
-    PermissionStatus status = await Permission.location.request();
-
-    if (status.isGranted) {
-      print("✅ Location permission granted.");
-    } else if (status.isDenied) {
-      print("❌ Location permission denied.");
-    } else if (status.isPermanentlyDenied) {
-      print("⚠️ Location permission permanently denied. Open settings.");
-      await openAppSettings();
-    }
-    // Check location permission status
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      // Request permission if denied
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied');
-    }
-
-    // When permissions are granted, fetch the current position
-    Position position = await Geolocator.getCurrentPosition();
-
-    // Get address from latitude and longitude
-    String address = await getAddress(position.latitude, position.longitude);
-    PlaceEntity selectedPlace = PlaceEntity(
-        formattedAddress: address,
-        name: address,
-        lat: position.latitude,
-        lng: position.longitude);
-    return selectedPlace;
-  }
-
-  Future<String> getAddress(double latitude, double longitude) async {
-    try {
-      // Get the placemark (address) from coordinates
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
-      // context.pop();
-
-      // If there are placemarks (addresses) available
-      if (placemarks.isNotEmpty) {
-        Placemark place = placemarks.first;
-        print("place.street${place.street}");
-        print("place.locality${place.locality}");
-        print("place.country${place.country}");
-        print("place.street${place.street}");
-        return "${place.locality}, ${place.administrativeArea}, ${place.country}";
-        // context.pop();
-      } else {
-        // context.pop();
-        return "No address found";
-      }
-    } catch (e) {
-      // context.pop();
-      return "Error: $e";
-    }
-  }
-
-  Future<PlaceEntity> fetchLocationAndAddress() async {
-    try {
-      showLoadingDialog(context);
-      PlaceEntity address = await getLocationAddress();
-      print("Location Address: ${address.toMap()}");
-      context.pop();
-      return address;
-    } catch (e) {
-      print(e);
-      context.pop();
-      return PlaceEntity(formattedAddress: '', name: '', lat: 0, lng: 0);
-    }
-  }
-
+ 
+ 
+ 
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
@@ -193,13 +106,13 @@ class _CreatePostViewState extends State<CreatePostView> {
                       BuildCreatePostAppBar(
                         onTap: () {
                           ManageVibration.vibrate();
-                          controller.createPost(
+                          controller.createTwitterPost(
                             context: context,
                           );
                         },
                       ),
                       BuildCreatePostHeader(
-                        isTwitter: false,
+                          isTwitter: true,
                           sheetController: sheetController,
                           controller: controller,
                           state: state),
@@ -271,15 +184,6 @@ class _CreatePostViewState extends State<CreatePostView> {
                           if (state.images != null && state.images!.isNotEmpty)
                             BuildMediaCard(),
                           const Sizer(),
-                          if (state.selectedLifeEvent != null &&
-                              state.selectedLifeEvent!.id.isNotEmpty)
-                            const BuildLifeEventView(),
-                          if ((state.selectedLifeEvent == null ||
-                                  state.selectedLifeEvent!.id.isEmpty) &&
-                              (state.gifImage == null ||
-                                  (state.gifImage?.isEmpty ?? false)) &&
-                              (state.images == null || state.images!.isEmpty))
-                            const BuildColorsBallet(),
                         ],
                       )
                       // const Sizer(),
@@ -288,7 +192,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                   ),
                   IgnorePointer(
                     ignoring:
-                        (sheetController.state?.currentScrollOffset ?? 0) > 0,
+                    (sheetController.state?.currentScrollOffset ?? 0) > 0,
                     child: SnappingBottomSheet(
                       controller: sheetController,
                       duration: const Duration(milliseconds: 500),
@@ -325,7 +229,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                               )),
                           const Divider(),
                           if ((state.gifImage == null ||
-                                  (state.gifImage?.isEmpty ?? false)) &&
+                              (state.gifImage?.isEmpty ?? false)) &&
                               (state.selectedLifeEvent == null ||
                                   (state.selectedLifeEvent?.id.isEmpty ??
                                       false)))
@@ -341,7 +245,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                   sheetController.collapse();
                                 },
                                 hasDivider: true),
-                          BuildSheetItem(
+                   /*       BuildSheetItem(
                               icon: Assets.tagIcon,
                               title: context.isArabic
                                   ? 'اشارة لأشخاص'
@@ -354,7 +258,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                     context: context,
                                     widget: BuildSearchFriends(
                                       controller:
-                                          context.read<CreatePostCubit>(),
+                                      context.read<CreatePostCubit>(),
                                       onSelectUser: (user) => context
                                           .read<CreatePostCubit>()
                                           .selectUsers(user),
@@ -372,9 +276,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                                     context: context,
                                     widget: SelectFeelingView(
                                       feelings: context
-                                              .read<CreatePostCubit>()
-                                              .state
-                                              .feelings ??
+                                          .read<CreatePostCubit>()
+                                          .state
+                                          .feelings ??
                                           [],
                                       onSelected: (FeelingEntity item) =>
                                           context
@@ -394,9 +298,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                                     context: context,
                                     widget: SelectActivity(
                                       activities: context
-                                              .read<CreatePostCubit>()
-                                              .state
-                                              .activities ??
+                                          .read<CreatePostCubit>()
+                                          .state
+                                          .activities ??
                                           [],
                                       onSelected: (ActivityEntity item) =>
                                           context
@@ -408,36 +312,36 @@ class _CreatePostViewState extends State<CreatePostView> {
                           BuildSheetItem(
                               icon: Assets.locationIcon,
                               title: state.place != null ||
-                                      (state.place?.name.isEmpty ?? false)
+                                  (state.place?.name.isEmpty ?? false)
                                   ? context.isArabic
-                                      ? 'ازالة الموقع'
-                                      : "Remove Location"
+                                  ? 'ازالة الموقع'
+                                  : "Remove Location"
                                   : context.isArabic
-                                      ? 'موقع'
-                                      : "Check in",
+                                  ? 'موقع'
+                                  : "Check in",
                               onTap: () async {
                                 ManageVibration.vibrate();
                                 // if(state.place!=null||(state.place?.name.isEmpty??false)){
                                 //   context.read<CreatePostCubit>().removeAddress();
                                 // }else{
-                                PlaceEntity address =
-                                    await fetchLocationAndAddress();
-                                if (address.name.isNotEmpty) {
+                               // PlaceEntity address =
+                              //  await fetchLocationAndAddress();
+                                *//*if (address.name.isNotEmpty) {
                                   context
                                       .read<CreatePostCubit>()
                                       .setAddress(address);
                                   sheetController.collapse();
-                                }
+                                }*//*
                                 // }
                               },
-                              hasDivider: true),
+                              hasDivider: true),*/
                           // BuildSheetItem(
                           //     icon: Assets.liveVideoIcon,
                           //     title: "Live video",
                           //     onTap: () {},
                           //     hasDivider: true),
-                          if ((state.gifImage == null &&
-                                  (state.gifImage?.isEmpty ?? false)) &&
+                       /*   if ((state.gifImage == null &&
+                              (state.gifImage?.isEmpty ?? false)) &&
                               state.selectedLifeEvent == null &&
                               (state.selectedLifeEvent?.id.isEmpty ?? false))
                             BuildSheetItem(
@@ -450,9 +354,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                                   controller.showRemoveBalletColors();
                                   sheetController.collapse();
                                 },
-                                hasDivider: true),
+                                hasDivider: true),*/
                           if ((state.gifImage == null ||
-                                  (state.gifImage?.isEmpty ?? false)) &&
+                              (state.gifImage?.isEmpty ?? false)) &&
                               (state.selectedLifeEvent == null ||
                                   (state.selectedLifeEvent?.id.isEmpty ??
                                       false)))
@@ -468,7 +372,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                 },
                                 hasDivider: true),
                           if ((state.images == null ||
-                                  (state.images?.isEmpty ?? false)) &&
+                              (state.images?.isEmpty ?? false)) &&
                               (state.selectedLifeEvent == null ||
                                   (state.selectedLifeEvent?.id.isEmpty ??
                                       false)))
@@ -485,7 +389,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                   final gif = await GiphyGet.getGif(
                                     context: context,
                                     apiKey:
-                                        "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
+                                    "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
                                     lang: context.isArabic
                                         ? GiphyLanguage.arabic
                                         : GiphyLanguage.english,
@@ -505,8 +409,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                                   }
                                 },
                                 hasDivider: true),
-                          if ((state.images == null ||
-                                  (state.images?.isEmpty ?? false)) &&
+                    /*      if ((state.images == null ||
+                              (state.images?.isEmpty ?? false)) &&
                               (state.gifImage == null ||
                                   (state.gifImage?.isEmpty ?? false)))
                             BuildSheetItem(
@@ -517,7 +421,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                   sheetController.collapse();
                                   context.push(Routes.LIFEEVENT);
                                 },
-                                hasDivider: true),
+                                hasDivider: true),*/
                           // BuildSheetItem(
                           //     icon: Assets.musicIcon,
                           //     title: "Music",

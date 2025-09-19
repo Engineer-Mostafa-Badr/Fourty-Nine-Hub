@@ -47,7 +47,7 @@ class CreatePostRepoImpl implements CreatePostRepo {
 
   @override
   Future<Either<Failure, bool>> createTwitterPost(
-      {required CreateTwitterPostParams params}) {
+      {required CreateTwitterThreadParams params}) {
     return _remoteDataSource.createTwitterPost(params: params);
   }
 
