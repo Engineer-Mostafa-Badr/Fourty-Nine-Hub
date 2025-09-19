@@ -23,6 +23,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/ads_cubit.dart';
+import '../../../../subcategories/presentation/widgets/build_tag_ads_widget.dart';
 
 class MarriageAdsListViewItem extends StatelessWidget {
   const MarriageAdsListViewItem({
@@ -55,42 +56,10 @@ class MarriageAdsListViewItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // eye icon, views and premium
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Row(
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        Assets.eyeIcon,
-                        colorFilter: ColorFilter.mode(
-                          AppColors.c6C6C6C,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Label(
-                          text: "437K views",
-                          style: Styles.mediumText(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.c6C6C6C,
-                          )),
-                    ],
-                  ),
-                  Spacer(),
-                  Label(
-                    text: "Premuim",
-                    style: Styles.mediumText(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.cF33D49,
-                    ),
-                  ),
-                ],
-              ),
+            BuildTagAdsWidget(
+              // change status to premium
+              status: marriageAds.ownerSubscriptionStatus ?? '',
+              views: marriageAds.views ?? 0,
             ),
             Divider(
               color: AppColors.getTextColor(context),
@@ -103,7 +72,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // user image and title
+                  // user image , title and favourite
                   Row(
                     children: [
                       ImageFromInternet(

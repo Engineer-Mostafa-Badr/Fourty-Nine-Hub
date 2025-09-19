@@ -57,6 +57,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
   bool _isSyncing = false;
   Timer? _autoRefreshTimer;
+  bool _isManualRefreshing = false;
 
   @override
   void initState() {
@@ -318,19 +319,62 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
           return RefreshIndicator(
             onRefresh: () async {
-              if (_isSearching) {
-                if (_isSearchingProfiles) {
-                  _cubit.searchProfiles(_searchController.text);
+              print(
+                  "🔄 RefreshIndicator triggered for tab: $_selectedTabIndex");
+
+              // Prevent multiple simultaneous refreshes
+              if (_isManualRefreshing) {
+                print("⚠️ Refresh already in progress, ignoring");
+                return;
+              }
+
+              setState(() {
+                _isManualRefreshing = true;
+              });
+
+              try {
+                if (_isSearching) {
+                  if (_isSearchingProfiles) {
+                    print(
+                        "🔍 Refreshing profile search: ${_searchController.text}");
+                    _cubit.searchProfiles(_searchController.text);
+                  } else {
+                    print(
+                        "🔍 Refreshing talent search: ${_searchController.text}");
+                    _cubit.searchTalents(_searchController.text);
+                  }
+                  // Add a small delay for search to complete
+                  await Future.delayed(Duration(milliseconds: 500));
                 } else {
-                  _cubit.searchTalents(_searchController.text);
+                  final category = _getTabCategory(_selectedTabIndex);
+                  if (category != null) {
+                    print("📱 Refreshing category: $category");
+                    await _cubit.loadTalents(category, refresh: true);
+
+                    // Add a small delay to ensure refresh completes
+                    await Future.delayed(Duration(milliseconds: 300));
+                  } else {
+                    print(
+                        "⚠️ No category found for tab index: $_selectedTabIndex");
+                  }
                 }
-              } else {
-                final category = _getTabCategory(_selectedTabIndex);
-                if (category != null) {
-                  await _cubit.loadTalents(category, refresh: true);
+                print("✅ Refresh completed successfully");
+              } catch (e) {
+                print("❌ Refresh failed: $e");
+                rethrow;
+              } finally {
+                if (mounted) {
+                  setState(() {
+                    _isManualRefreshing = false;
+                  });
                 }
               }
             },
+            displacement: 40.0, // Move indicator down a bit
+            strokeWidth: 2.5,
+            backgroundColor:
+                context.isDarkMode ? Colors.grey[800] : Colors.white,
+            color: context.isDarkMode ? Colors.white : Colors.black,
             child: NotificationListener<ScrollNotification>(
               onNotification: (scrollInfo) {
                 _onScrollNotification(scrollInfo);
@@ -338,6 +382,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
               },
               child: NestedScrollView(
                 controller: _mainScrollController,
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return [
@@ -444,6 +491,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                   builder: (context) {
                     if (_isSearching && _isSearchingProfiles) {
                       return CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
                         slivers: [
                           ProfileSearchResults(
                             profiles: state.searchProfileResults,
@@ -468,6 +518,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
   Widget _buildSynchronizedTabContent(StarState state) {
     return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
       slivers: [
         // Your existing tab content as slivers
         _getTabContentSliver(state),
@@ -562,15 +615,24 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
       );
     }
 
-    return ListView.builder(
-      itemCount: state.searchResults.length,
-      itemBuilder: (context, index) {
-        final talent = state.searchResults[index];
-        return TalentCard(
-          talent: talent,
-          cubit: _cubit,
-        );
-      },
+    return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final talent = state.searchResults[index];
+              return TalentCard(
+                talent: talent,
+                cubit: _cubit,
+              );
+            },
+            childCount: state.searchResults.length,
+          ),
+        ),
+      ],
     );
   }
 

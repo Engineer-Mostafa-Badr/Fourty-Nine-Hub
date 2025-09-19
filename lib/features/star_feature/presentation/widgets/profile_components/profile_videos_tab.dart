@@ -520,6 +520,23 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
   }
 
   void _handleVideoTap(StarEntity video) {
+    // Check if video is approved/available
+    if (!video.isApproved) {
+      // Show message that video is not available yet
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+          ),
+          duration: Duration(seconds: 4),
+          backgroundColor: Colors.orange[700],
+        ),
+      );
+      return;
+    }
+
     // Navigate to video player with enhanced options
     final mediaUrl =
         video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';

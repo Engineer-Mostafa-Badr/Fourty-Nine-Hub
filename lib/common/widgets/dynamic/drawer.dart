@@ -268,7 +268,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     padding: EdgeInsetsDirectional.only(
                       end: 12.h,
                       start: 0,
-                      top: 15.h,
+                      top: 20.h,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

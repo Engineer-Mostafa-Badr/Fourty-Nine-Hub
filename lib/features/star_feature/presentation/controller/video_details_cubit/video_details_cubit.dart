@@ -4,6 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../routes/pages.dart';
 import '../../../domain/entity/comment_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/viewer_entity.dart';
@@ -82,7 +85,6 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
       // Load comments in background
       await _loadComments();
       print('🎬 Full initialization completed');
-
     } catch (e) {
       print('💥 Initialization failed: $e');
       emit(VideoDetailsError(message: 'Failed to initialize video: $e'));
@@ -103,7 +105,8 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
       await _videoController.initialize().timeout(
         Duration(seconds: 15),
         onTimeout: () {
-          throw TimeoutException('Video initialization timeout', Duration(seconds: 15));
+          throw TimeoutException(
+              'Video initialization timeout', Duration(seconds: 15));
         },
       );
 
@@ -130,7 +133,8 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
   }
 
   Future<void> _handleVideoCodecError() async {
-    print('🔧 VideoDetailsCubit: Handling codec error with intelligent fallback strategies...');
+    print(
+        '🔧 VideoDetailsCubit: Handling codec error with intelligent fallback strategies...');
     print('📱 Device info: ${VideoUtils.getDeviceInfo()}');
 
     final strategies = VideoUtils.getFallbackStrategies('codec error');
@@ -167,7 +171,8 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
     // All codec strategies failed
     print('💥 VideoDetailsCubit: All codec fallback strategies failed');
     final deviceInfo = VideoUtils.getDeviceInfo();
-    throw Exception('Video format not supported on ${deviceInfo['platform']} device');
+    throw Exception(
+        'Video format not supported on ${deviceInfo['platform']} device');
   }
 
   Future<void> _tryAlternativeVideoLoading() async {
@@ -209,6 +214,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(currentState.copyWith(
             isLoadingComments: false,
             commentsError: failure.toString(),
@@ -313,6 +322,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           // Remove optimistic comment on failure
           final revertedComments = currentState.comments
               .where((comment) => comment.id != optimisticComment.id)
@@ -371,6 +384,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
         result.fold(
           (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
             // Remove optimistic reply on failure
             final revertedComments = currentState.comments
                 .where((comment) => comment.id != optimisticReply.id)
@@ -418,6 +435,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
         result.fold(
           (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
             // Revert optimistic update on failure
             final revertedComments =
                 List<CommentEntity>.from(currentState.comments);
@@ -465,6 +486,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
         result.fold(
           (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
             // Revert optimistic update on failure
             final revertedComments =
                 List<CommentEntity>.from(currentState.comments);
@@ -491,6 +516,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         if (state is VideoDetailsLoaded) {
           final currentState = state as VideoDetailsLoaded;
           emit(currentState.copyWith(
@@ -521,6 +550,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           // Reload comments on failure to restore state
           _loadComments(refresh: true);
           emit(currentState.copyWith(

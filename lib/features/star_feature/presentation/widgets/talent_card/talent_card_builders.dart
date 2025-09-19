@@ -95,6 +95,23 @@ class TalentCardBuilders {
                   talent: talentsToShow[index],
                   cubit: cubit,
                   onVideoTap: (talent, mediaUrl) {
+                    // Check if video is approved/available
+                    if (!talent.isApproved) {
+                      // Show message that video is not available yet
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.isArabic
+                                ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                                : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+                          ),
+                          duration: Duration(seconds: 4),
+                          backgroundColor: Colors.orange[700],
+                        ),
+                      );
+                      return;
+                    }
+
                     // Fetch video details using videoId before navigation
                     cubit.fetchVideoDetails(talent.id);
                     Navigator.push(
@@ -194,6 +211,23 @@ class TalentCardBuilders {
                 talent: talent,
                 cubit: cubit,
                 onVideoTap: (talent, mediaUrl) {
+                  // Check if video is approved/available
+                  if (!talent.isApproved) {
+                    // Show message that video is not available yet
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          context.isArabic
+                              ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                              : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+                        ),
+                        duration: Duration(seconds: 4),
+                        backgroundColor: Colors.orange[700],
+                      ),
+                    );
+                    return;
+                  }
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -379,6 +413,23 @@ class TalentCardBuilders {
                   index: index,
                   onVideoTap: onVideoTap ??
                       (talent, mediaUrl) {
+                        // Check if video is approved/available
+                        if (!talent.isApproved) {
+                          // Show message that video is not available yet
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                context.isArabic
+                                    ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                                    : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+                              ),
+                              duration: Duration(seconds: 4),
+                              backgroundColor: Colors.orange[700],
+                            ),
+                          );
+                          return;
+                        }
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(

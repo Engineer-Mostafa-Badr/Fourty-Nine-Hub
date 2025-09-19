@@ -70,6 +70,8 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   bool _isUploading = false;
   String _uploadStatus = '';
   double _uploadProgress = 0.0;
+  bool _preventDoubleSubmit = false;
+  String? _currentUploadId;
 
   // Create instance of Bunny uploader
   final BunnyVideoUploader _bunnyUploader = BunnyVideoUploader();
@@ -92,8 +94,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _titleController,
-                enabled:
-                    !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
+                enabled: !_isUploading &&
+                    !_isLoadingVideo &&
+                    !_isLoadingThumbnail &&
+                    !_preventDoubleSubmit,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -142,8 +146,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _descriptionController,
-                enabled:
-                    !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
+                enabled: !_isUploading &&
+                    !_isLoadingVideo &&
+                    !_isLoadingThumbnail &&
+                    !_preventDoubleSubmit,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -261,7 +267,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
               // Publish button
               ElevatedButton(
-                onPressed: _isUploading
+                onPressed: (_isUploading || _preventDoubleSubmit)
                     ? null
                     : () async {
                         ManageVibration.vibrate();
@@ -426,7 +432,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
   Widget _buildVideoSection() {
     return GestureDetector(
-      onTap: _isUploading
+      onTap: (_isUploading || _preventDoubleSubmit)
           ? null
           : () {
               ManageVibration.vibrate();
@@ -871,7 +877,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
   Widget _buildThumbnailSection() {
     return GestureDetector(
-      onTap: _isUploading
+      onTap: (_isUploading || _preventDoubleSubmit)
           ? null
           : () {
               ManageVibration.vibrate();
@@ -906,7 +912,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                     top: 8,
                     right: 8,
                     child: GestureDetector(
-                      onTap: _isUploading
+                      onTap: (_isUploading || _preventDoubleSubmit)
                           ? null
                           : () {
                               ManageVibration.vibrate();
@@ -1048,7 +1054,16 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   // }
 
   Future<void> _handleSubmit() async {
+    // Prevent double submission
+    if (_isUploading || _preventDoubleSubmit) {
+      print("⚠️ Upload already in progress, ignoring duplicate request");
+      return;
+    }
+
     if (!_formKey.currentState!.validate()) return;
+
+    // Set prevention flag immediately
+    _preventDoubleSubmit = true;
 
     // تحقق إضافي من الوصف
     final description = _descriptionController.text.trim();
@@ -1061,6 +1076,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
@@ -1072,6 +1088,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
@@ -1084,6 +1101,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
@@ -1096,21 +1114,32 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
-    // Check subscription first
-    // make it not subscribed
-       
-    serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-      onSubscribed: () => _performUpload(),
-      subCategoryId: Constants.tubeSubCategory,
-    );
+    // Check subscription first - for now skip subscription check
+    // serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+    //   onSubscribed: () => _performUpload(),
+    //   subCategoryId: Constants.tubeSubCategory,
+    // );
 
+    // Direct upload for testing
     _performUpload();
   }
 
   Future<void> _performUpload() async {
+    // Double check to prevent multiple uploads
+    if (_isUploading) {
+      print("⚠️ Upload already in progress in _performUpload, aborting");
+      return;
+    }
+
+    // Generate unique upload ID for tracking
+    final uploadId = DateTime.now().millisecondsSinceEpoch.toString();
+    _currentUploadId = uploadId;
+    print("🆔 Starting new upload with ID: $uploadId");
+
     setState(() {
       _isUploading = true;
       _uploadProgress = 0.0;
@@ -1198,7 +1227,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
       result.fold(
         (failure) {
-          print("❌ Upload failed: ${failure.toString()}");
+          print("❌ Upload failed for ID $uploadId: ${failure.toString()}");
 
           var currentContext =
               AppPages.router.configuration.navigatorKey.currentContext!;
@@ -1239,16 +1268,18 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           // _showError(errorMessage);
         },
         (success) {
-          print("✅ Upload successful!");
+          print("✅ Upload successful for ID $uploadId!");
+
+          // Show success message with processing note
           showSuccessMessage(
               context,
               context.isArabic
-                  ? 'تم رفع الفيديو بنجاح!'
-                  : 'Video uploaded successfully!');
+                  ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                  : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.');
 
           // Clear form and navigate back
           _clearForm();
-          Future.delayed(Duration(seconds: 2), () {
+          Future.delayed(Duration(seconds: 4), () {
             if (mounted) {
               Navigator.of(context).pop();
             }
@@ -1261,11 +1292,14 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           ? 'حدث خطأ غير متوقع: $e'
           : 'An unexpected error occurred: $e');
     } finally {
+      print("🔄 Cleaning up upload ID: $uploadId");
       if (mounted) {
         setState(() {
           _isUploading = false;
           _uploadProgress = 0.0;
           _uploadStatus = '';
+          _preventDoubleSubmit = false; // Reset double submission prevention
+          _currentUploadId = null; // Clear upload ID
         });
       }
     }
@@ -1274,38 +1308,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   void _showError(String message) {
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 8),
-        action: SnackBarAction(
-          label: context.isArabic ? 'إغلاق' : 'Close',
-          textColor: Colors.white,
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-      ),
-    );
-  }
-
-  void _showSuccess(String message) {
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: 8),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 3),
-      ),
-    );
+    showErrorMessage(context, message);
   }
 
   // Dialog لإدخال مدة الفيديو يدوياً

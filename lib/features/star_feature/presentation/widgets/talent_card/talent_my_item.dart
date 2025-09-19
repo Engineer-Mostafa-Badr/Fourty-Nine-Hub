@@ -358,35 +358,33 @@ class TalentMyItem extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
+            // Only show delete option
             ListTile(
-              leading: Icon(Icons.edit),
-              title: Text(LocaleKeys.edit.localize),
+              leading: Icon(
+                Icons.delete_outline,
+                color: Colors.red[600],
+                size: 24,
+              ),
+              title: Text(
+                context.isArabic ? 'حذف الفيديو' : 'Delete Video',
+                style: TextStyle(
+                  color: Colors.red[600],
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              subtitle: Text(
+                context.isArabic
+                    ? 'لا يمكن التراجع عن هذا الإجراء'
+                    : 'This action cannot be undone',
+                style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 12,
+                ),
+              ),
               onTap: () {
                 ManageVibration.vibrate();
                 Navigator.pop(context);
-                //Todo
-                // Add edit functionality
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.share),
-              title: Text(LocaleKeys.share.localize),
-              onTap: () {
-                ManageVibration.vibrate();
-
-                Navigator.pop(context);
-                //Todo
-                // Add share functionality
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.delete, color: Colors.red),
-              title: Text(context.isArabic ? 'حذف الفيديو' : 'Delete Video',
-                  style: TextStyle(color: Colors.red)),
-              onTap: () {
-                ManageVibration.vibrate();
-                Navigator.pop(context);
-                //Todo
                 _showDeleteDialog(context);
               },
             ),
@@ -400,11 +398,15 @@ class TalentMyItem extends StatelessWidget {
     showConfirmDialog(
       context,
       context.isArabic
-          ? 'هل أنت متأكد من حذف هذا الفيديو؟ لا يمكن التراجع عن هذا الإجراء.'
-          : 'Are you sure you want to delete this video? This action cannot be undone.',
+          ? 'هل أنت متأكد من حذف "${talent.title}"؟\n\nسيتم حذف الفيديو نهائياً ولا يمكن التراجع عن هذا الإجراء.'
+          : 'Are you sure you want to delete "${talent.title}"?\n\nThis video will be permanently deleted and this action cannot be undone.',
       () => cubit.deleteMyTubeVideo(talent.id),
       confirmText: context.isArabic ? 'حذف الفيديو' : 'Delete Video',
       cancelText: LocaleKeys.cancel.localize,
+      confirmTextStyle: TextStyle(
+        color: Colors.red[600],
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 }

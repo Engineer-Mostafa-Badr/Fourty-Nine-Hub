@@ -27,6 +27,8 @@ import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../filter_ads/presentation/pages/filter_ads.dart';
+import '../../../../subcategories/presentation/widgets/search_bar_widget.dart';
+import '../../../../subcategories/presentation/pages/ads_search_view.dart';
 
 class MarriageAdsViewBody extends StatefulWidget {
   final SubcategoriesCubit controller;
@@ -49,6 +51,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+  late FocusNode _searchFocusNode;
 
   void animateTaps() {
     _tabController = TabController(
@@ -89,10 +92,21 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              Icon(
-                Icons.search,
-                color:
-                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              InkWell(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  context
+                      .read<SubcategoriesCubit>()
+                      .toggleMyAds('isSearchAdsOpen');
+                },
+                child: Icon(
+                  Icons.search,
+                  color: context.read<SubcategoriesCubit>().isSearchAdsOpen
+                      ? AppColors.SECONDARY_COLOR
+                      : (context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR),
+                ),
               ),
               const SizedBox(
                 width: 8,
@@ -173,6 +187,20 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           ),
         ),
         const Sizer(),
+        if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SearchBarWidget(
+              focusNode: _searchFocusNode,
+              onChanged: (value) {
+                context.read<SubcategoriesCubit>().searchAds(
+                      value: value,
+                      mainCategoryId: widget.state.mainCategory?.id ?? '',
+                    );
+              },
+            ),
+          ),
+        if (context.read<SubcategoriesCubit>().isSearchAdsOpen) const Sizer(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -570,6 +598,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     _tabController = TabController(
         length: widget.state.subCategories?.length ?? 0, vsync: this);
     _scrollController = ScrollController();
+    _searchFocusNode = FocusNode();
 
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
@@ -577,6 +606,14 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 
   void _scrollToSelectedTab(int index) {
@@ -596,6 +633,17 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
     if (widget.state.status == SubcategoriesStates.loadingAds) {
       return const CustomLoadingSearchWidget();
+    }
+
+    // Search Ads
+    if (context.read<SubcategoriesCubit>().isSearchAdsOpen) {
+      return AdsSearchView(
+        mainCategoryNameAr: widget.state.mainCategory?.name ?? '',
+        mainCategoryNameEn: widget.state.mainCategory?.nameEn ?? '',
+        isFloatingButtonVisible: (bool isVisible) {
+          // Handle floating button visibility if needed
+        },
+      );
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
