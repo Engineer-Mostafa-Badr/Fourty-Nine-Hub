@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 
 import '../entities/forget_password_questions_entity.dart';
 import '../entities/register_by_phone_entity.dart';
+import '../entities/session_entity.dart';
 import '../entities/verify_otp_entity.dart';
 import '../use_cases/change_password_use_case.dart';
 import '../use_cases/register_use_case.dart';
@@ -94,7 +95,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, UserTokensEntity>> signInWithGoogle();
 
-  Future<Either<Failure, void>> signOut();
+  Future<Either<Failure, void>> signOut({String? deviceId, String? refreshToken});
 
   Future<Either<Failure, bool>> updateProfileView(
       UpdateProfileViewParams params);
@@ -109,4 +110,6 @@ abstract class AuthRepository {
   Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params);
 
   Future<Either<Failure, void>> signOutFromAllDevices();
+
+  Future<Either<Failure, List<SessionEntity>>> getAllSessions();
 }

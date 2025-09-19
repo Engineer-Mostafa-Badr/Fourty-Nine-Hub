@@ -615,6 +615,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             return null;
           },
         ),
+        const Sizer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -626,11 +627,11 @@ class _LoginWidgetState extends State<LoginWidget> {
           ],
         ),
         const Sizer(),
-        Label(
-          text: LocaleKeys.orContinueWith.localize,
-          style: Styles.mediumText(color: Colors.grey),
-        ),
-        const Sizer(),
+        // Label(
+        //   text: LocaleKeys.orContinueWith.localize,
+        //   style: Styles.mediumText(color: Colors.grey),
+        // ),
+        // const Sizer(),
         // Row(
         //   children: [
         //     Expanded(
@@ -701,55 +702,55 @@ class _LoginWidgetState extends State<LoginWidget> {
         //     ],
         //   ],
         // ),
-        Row(
-          children: [
-            Expanded(
-              child: AppButton(
-                label: LocaleKeys.google.localize,
-                backColor: AppColors.LIGHT_GRAY_COLOR,
-                textColor: Colors.black,
-                color: AppColors.PRIMARY_COLOR,
-                icon: FontAwesomeIcons.google,
-                onPressed: () async {
-                  ManageVibration.vibrate();
-                  print('Google sign in pressed');
-                  await loginCubit.signInWithGoogle();
-                },
-              ),
-            ),
-            const Sizer(),
-            Expanded(
-              child: AppButton(
-                label: LocaleKeys.facebook.localize,
-                backColor: AppColors.LIGHT_GRAY_COLOR,
-                textColor: Colors.black,
-                icon: FontAwesomeIcons.facebook,
-                color: AppColors.PRIMARY_COLOR,
-                onPressed: () async {
-                  ManageVibration.vibrate();
-                  print('Facebook sign in pressed');
-                  await loginCubit.signInWithFacebook();
-                },
-              ),
-            ),
-            if (Platform.isIOS) ...[
-              const Sizer(),
-              Expanded(
-                child: AppButton(
-                  label: 'Apple',
-                  backColor: AppColors.LIGHT_GRAY_COLOR,
-                  textColor: Colors.black,
-                  icon: FontAwesomeIcons.apple,
-                  onPressed: () async {
-                    ManageVibration.vibrate();
-                    print('Apple sign in pressed');
-                    await loginCubit.signInWithApple();
-                  },
-                ),
-              ),
-            ],
-          ],
-        ),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.google.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         icon: FontAwesomeIcons.google,
+        //         onPressed: () async {
+        //           ManageVibration.vibrate();
+        //           print('Google sign in pressed');
+        //           await loginCubit.signInWithGoogle();
+        //         },
+        //       ),
+        //     ),
+        //     const Sizer(),
+        //     Expanded(
+        //       child: AppButton(
+        //         label: LocaleKeys.facebook.localize,
+        //         backColor: AppColors.LIGHT_GRAY_COLOR,
+        //         textColor: Colors.black,
+        //         icon: FontAwesomeIcons.facebook,
+        //         color: AppColors.PRIMARY_COLOR,
+        //         onPressed: () async {
+        //           ManageVibration.vibrate();
+        //           print('Facebook sign in pressed');
+        //           await loginCubit.signInWithFacebook();
+        //         },
+        //       ),
+        //     ),
+        //     if (Platform.isIOS) ...[
+        //       const Sizer(),
+        //       Expanded(
+        //         child: AppButton(
+        //           label: 'Apple',
+        //           backColor: AppColors.LIGHT_GRAY_COLOR,
+        //           textColor: Colors.black,
+        //           icon: FontAwesomeIcons.apple,
+        //           onPressed: () async {
+        //             ManageVibration.vibrate();
+        //             print('Apple sign in pressed');
+        //             await loginCubit.signInWithApple();
+        //           },
+        //         ),
+        //       ),
+        //     ],
+        //   ],
+        // ),
       ],
     );
   }

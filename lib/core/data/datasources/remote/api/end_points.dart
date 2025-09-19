@@ -58,6 +58,7 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
   static const logoutFromAllDevices = '/auth/logout/all';
+  static const getAllSessions = '/auth/sessions';
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';

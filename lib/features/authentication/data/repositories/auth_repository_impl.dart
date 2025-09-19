@@ -33,6 +33,7 @@ import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_noti
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../domain/entities/register_by_phone_entity.dart';
+import '../../domain/entities/session_entity.dart';
 import '../../domain/entities/verify_otp_entity.dart';
 import '../../domain/use_cases/change_password_use_case.dart';
 import '../models/forget_password_questions_model.dart';
@@ -329,7 +330,7 @@ class AuthRepositoryImpl extends AuthRepository {
   //   return _remoteDataSource.logout();
   // }
   @override
-  Future<Either<Failure, void>> signOut() async {
+  Future<Either<Failure, void>> signOut({String? deviceId, String? refreshToken}) async {
     // إلغاء الـ notification listeners قبل الـ logout
     try {
       if (serviceLocator.isRegistered<FcmNotificationHelper>()) {
@@ -342,7 +343,7 @@ class AuthRepositoryImpl extends AuthRepository {
       log('Error disposing FCM helper during logout: $e');
     }
 
-    return _remoteDataSource.logout();
+    return _remoteDataSource.logout(deviceId: deviceId, refreshToken: refreshToken);
   }
 
   @override
@@ -407,5 +408,10 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, void>> signOutFromAllDevices() async {
     return _remoteDataSource.signOutFromAllDevices();
+  }
+
+  @override
+  Future<Either<Failure, List<SessionEntity>>> getAllSessions()async {
+    return _remoteDataSource.getAllSessions();
   }
 }

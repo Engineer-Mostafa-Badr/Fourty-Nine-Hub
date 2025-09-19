@@ -16,6 +16,8 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../domain/entities/session_entity.dart';
+
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});
 
@@ -99,8 +101,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
 
 
 class LogoutFromSpecificDeviceWidget extends StatefulWidget {
-  const LogoutFromSpecificDeviceWidget({super.key, required this.deviceName});
-  final String deviceName;
+  const LogoutFromSpecificDeviceWidget({super.key, required this.session});
+  final SessionEntity session;
 
   @override
   State<LogoutFromSpecificDeviceWidget> createState() => _LogoutFromSpecificDeviceWidgetState();
@@ -123,7 +125,7 @@ class _LogoutFromSpecificDeviceWidgetState extends State<LogoutFromSpecificDevic
           ),
         ),
         Text(
-           context.isArabic? "هل انت متأكد من تسجيل الخروج من جهاز ${widget.deviceName}" : "Are you sure to logout from device ${widget.deviceName}",
+           context.isArabic? "هل انت متأكد من تسجيل الخروج من جهاز ${widget.session.deviceName}" : "Are you sure to logout from device ${widget.session.deviceName}",
           textAlign: TextAlign.center,
           style: Styles.mediumText(
             color: context.isDarkMode ? Colors.white : Colors.black,
@@ -148,7 +150,7 @@ class _LogoutFromSpecificDeviceWidgetState extends State<LogoutFromSpecificDevic
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () async {
                   ManageVibration.vibrate();
-                  context.pop();
+                  await controller.logOutFromSpecificDevice(deviceId: widget.session.deviceId ?? '', refreshToken: widget.session.refreshToken ?? '');
                 },
               ),
             ),

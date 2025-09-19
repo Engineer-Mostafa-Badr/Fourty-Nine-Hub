@@ -144,5 +144,4 @@ class ConversationsRemoteDataSourceImpl
             (failure) => Left(failure),
             (data) => Right(null));
   }
-
 }

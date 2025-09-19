@@ -33,11 +33,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../domain/entities/register_by_phone_entity.dart';
+import '../../../domain/entities/session_entity.dart';
 import '../../../domain/entities/verify_otp_entity.dart';
 import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/verify_questions_use_case.dart';
 import '../../models/forget_password_questions_model.dart';
 import '../../models/register_by_phone_model.dart';
+import '../../models/session_model.dart';
 import '../../models/verify_otp_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -73,7 +75,7 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, UserTokensEntity>> loginWithPhone(
       LoginWithPhoneParams params);
 
-  Future<Either<Failure, void>> logout();
+  Future<Either<Failure, void>> logout({String? deviceId, String? refreshToken});
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
@@ -123,6 +125,8 @@ abstract class AuthRemoteDataSource {
   );
 
   Future<Either<Failure, void>> signOutFromAllDevices();
+
+  Future<Either<Failure, List<SessionEntity>>> getAllSessions();
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -313,10 +317,12 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> logout() async {
-    String? refreshToken = await Storage.getRefreshToken();
+  Future<Either<Failure, void>> logout({String? deviceId, String? refreshToken}) async {
+    log("refreshToken $refreshToken");
+    log("deviceId $deviceId");
+    String? reToken = refreshToken ?? await Storage.getRefreshToken();
     print("refreshToken $refreshToken");
-    String? deviceId = await getDeviceId();
+    String? dId = deviceId ?? await getDeviceId();
     //
     // // إذا لم يكن هناك refresh token، قم بمسح البيانات المحلية فقط
     // if (refreshToken == null || refreshToken.isEmpty) {
@@ -327,13 +333,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     // }
     
     var params = {
-      "refreshToken": refreshToken,
-      "deviceId": deviceId
+      "refreshToken": reToken,
+      "deviceId": dId
     };
     var result = await _apiConsumer.post(EndPoints.logout, data: params);
     return result.fold((l) => Left(l), (r) async {
-      await CacheManager.deleteAllTokens();
-      _apiConsumer.removeTokenFromHeader();
+      if(refreshToken == null && deviceId == null){
+        await CacheManager.deleteAllTokens();
+        _apiConsumer.removeTokenFromHeader();
+      }
       // await registerSocket();
 
       return Right(r);
@@ -702,6 +710,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       // await registerSocket();
 
       return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<SessionEntity>>> getAllSessions() async {
+    var result = await _apiConsumer.get(EndPoints.getAllSessions);
+    return result.fold((l) => Left(l), (r) {
+      return Right((r['data']?['sessions'] as List)
+          .map((e) => SessionModel.fromJson(e)).toList());
     });
   }
 }

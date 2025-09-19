@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -6,6 +8,7 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_token
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
 import '../../../../core/utils/device_id.dart';
+import '../../presentation/services/get_loaction_for_login.dart';
 
 class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
   final AuthRepository _repository;
@@ -35,7 +38,10 @@ class LoginParams extends Equatable {
         'fcmToken': token,
         'deviceId': await getDeviceId(),
         'deviceName': await getDeviceName(),
-        // 'fcmToken': 'fcmToken',
+        'loginLng': await getLng(),
+        'loginLat' : await getLat(),
+        'loginAddress' : await getAddress(),
+        'platform' : Platform.operatingSystem,
       };
 
   @override
