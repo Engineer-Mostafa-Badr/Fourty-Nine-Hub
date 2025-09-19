@@ -37,8 +37,11 @@ import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../trip_join/helpers/print_helper.dart';
+import '../../../domain/entities/session_entity.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
+import '../../../domain/use_cases/get_all_sessions_use_case.dart';
 import '../../../domain/use_cases/get_user_use_case.dart';
+import '../../../domain/use_cases/sign_out_from_all_devicec_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -54,6 +57,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final UpdateUserBioUseCase _updateUserBioUseCase;
   final UpdateUserNameUseCase _updateUserNameUseCase;
   final SignOutUseCase _signOutUseCase;
+  final GetAllSessionsUseCase _getAllSessionsUseCase;
+  final SignOutFromAllDevicesUseCase _signOutFromAllDevices;
   final CacheService cacheService;
   final CreateNormalChatUseCase _createNormalChatUseCase;
   final CreateAnonymousChatUseCase _createAnonymousChatUseCase;
@@ -74,6 +79,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final ConvertGuestToUserUseCase _convertGuestToUserUseCase;
 
   String? token;
+  List<SessionEntity> sessions = [];
 
   UserCubit(
     this._getUserUseCase,
@@ -81,6 +87,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._attachTokenUseCase,
     this._saveTokensUseCase,
     this._signOutUseCase,
+    this._getAllSessionsUseCase,
     this.cacheService,
     this._updateUserBioUseCase,
     this._updateUserNameUseCase,
@@ -94,6 +101,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._signInAsGuestUseCase,
     this._checkGuestStateUseCase,
     this._convertGuestToUserUseCase,
+    this._signOutFromAllDevices,
   ) : super(const BasicState());
   bool get isAuthenticated => state.data != null && !isGuestMode;
   bool get isGuestMode => state.data?.isGuest == true;
@@ -416,6 +424,32 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   //   // }
   // }
 
+  Future<void> logOutFromSpecificDevice({required String deviceId, required String refreshToken}) async {
+    showLoadingDialog(AppPages.router.configuration.navigatorKey.currentContext!);
+    final result = await _signOutUseCase(deviceId: deviceId, refreshToken: refreshToken);
+    result.fold(
+          (l) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
+        currentContext.pop();
+        showErrorMessage(currentContext,getFailureMessage( l, currentContext));
+        emit(state.copyWith(status: StateStatus.error));
+      },
+          (r) async {
+            var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+            currentContext.pop();
+            currentContext.pop();
+            currentContext.pop();
+            showSuccessMessage( currentContext, currentContext.isArabic ? 'تم تسجيل الخروج بنجاح' : 'Logout successfully');
+        emit(state.copyWith(
+          status: StateStatus.success,
+        ));
+      },
+    );
+  }
+
   Future<void> logout(BuildContext context) async {
     emit(state.copyWith(status: StateStatus.loading));
     print("isGuestMode $isGuestMode");
@@ -435,7 +469,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       );
     } else {
       // تسجيل خروج عادي
-      final result = await _signOutUseCase(const NoParams());
+      final result = await _signOutUseCase();
       result.fold(
         (l) {
           var currentContext =
@@ -459,6 +493,30 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     }
   }
 
+  Future<void> signOutFromAllDevices() async {
+    final result = await _signOutFromAllDevices(const NoParams());
+    result.fold(
+          (l) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
+        currentContext.pop();
+        showErrorMessage(currentContext,
+            currentContext.isArabic ? 'حدث خطأ' : 'Something went wrong');
+        emit(state.copyWith(status: StateStatus.error));
+      },
+          (r) async {
+        setLogOut();
+        emit(state.copyWith(
+          status: StateStatus.success,
+          token: null,
+          data: null,
+        ));
+        SharedWebSocket.disconnect();
+      },
+    );
+  }
+
   Future<void> setLogOut() async {
     var currentContext =
         AppPages.router.configuration.navigatorKey.currentContext!;
@@ -467,6 +525,34 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     currentContext.pop();
     currentContext.pop();
     currentContext.pushReplacement(Routes.HOME);
+  }
+
+  Future<void> getAllSessions()async {
+
+    showLoadingDialog(AppPages.router.configuration.navigatorKey.currentContext!);
+
+    final result = await _getAllSessionsUseCase();
+    result.fold((l){
+      AppPages.router.configuration.navigatorKey.currentContext!.pop();
+      showErrorMessage( AppPages.router.configuration.navigatorKey.currentContext!, getFailureMessage(l, AppPages.router.configuration.navigatorKey.currentContext!));
+      emit(state.copyWith(status: StateStatus.error));
+    }, (r) {
+      final List<SessionEntity> remoteSessions = r;
+
+      final remoteIds = remoteSessions.map((s) => s.deviceId).toSet();
+
+      sessions.removeWhere((local) => !remoteIds.contains(local.deviceId));
+
+      for (final remote in remoteSessions) {
+        final exists = sessions.any((local) => local.deviceId == remote.deviceId);
+        if (!exists) {
+          sessions.add(remote);
+        }
+      }
+
+      AppPages.router.configuration.navigatorKey.currentContext!.pop();
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
   // Future<void> getUnreadedChatsCounter() async {

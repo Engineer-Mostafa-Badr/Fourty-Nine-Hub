@@ -552,6 +552,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             state.requestedTrip?.driverProfilePicture,
                         driverRating: state.requestedTrip?.driverRating,
                         driverName: state.requestedTrip?.driverFirstName ?? "",
+                        onDriverImageClick: () {
+                          if (state.requestedTrip?.driverUserId != null) {
+                            showDriverProfileSheet(context, driverId: state
+                                .requestedTrip?.driverUserId ?? "");
+                          }
+                        },
                         onContactDriver: () {
                           ManageVibration.vibrate();
                           // context.push(Routes.ratingClientScreen);
@@ -1859,7 +1865,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // showDriverProfileSheet(context, driverId: "688a530b143e1a7ef09e8206");
+                              showDriverProfileSheet(context, driverId: "688a530b143e1a7ef09e8206");
                             },
                             child: Container(
                               height: 30,

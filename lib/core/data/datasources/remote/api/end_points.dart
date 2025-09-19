@@ -57,6 +57,8 @@ import '../../../../../features/subcategories/domain/usecases/get_custom_page_su
 class EndPoints {
   //logout
   static const logout = '/auth/logout';
+  static const logoutFromAllDevices = '/auth/logout/all';
+  static const getAllSessions = '/auth/sessions';
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
@@ -1770,6 +1772,8 @@ class EndPoints {
   // Chat Endpoints
   static getSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations?page=$page&limit=$limit';
+
+  static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";
 
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>
