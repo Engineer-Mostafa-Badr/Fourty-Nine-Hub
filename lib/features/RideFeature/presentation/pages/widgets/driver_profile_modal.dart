@@ -28,6 +28,7 @@ class DriverProfileModal extends StatelessWidget {
               return BlocBuilder<RideCubit, RideState>(
                 builder: (context, state) {
                   if(state.driverRatings == null){return Center(child: Text(context.isArabic? "لا يوجد تقييمات": "No Ratings"),);}
+                  state.driverRatings?.driverDetailsEntity.currentRank = DriverRank.silver;
                   Color rankColor = (state.driverRatings?.driverDetailsEntity.currentRank.toColor()) ?? Color(0xFFFFD700);
 
                   return Container(
@@ -97,7 +98,16 @@ class DriverProfileModal extends StatelessWidget {
                               children:  [
                                 _InfoBox(title: formatNumber(state.driverRatings?.driverDetailsEntity.totalCompletedTrips ?? 0, isArabic: context.isArabic), subtitle: context.isArabic? "رحلات" : "Rides"),
                                 _InfoBox(title: formatKM(state.driverRatings?.driverDetailsEntity.totalKM ?? 0, isArabic: context.isArabic), subtitle: context.isArabic? "المسافة الكلية" : "Total Distance"),
-                                _InfoBox(title: (state.driverRatings?.driverDetailsEntity.rating ?? 0) == 0? context.isArabic?"لا يوجد تقييمات" : "No Ratings" :  "${formatRating(state.driverRatings?.driverDetailsEntity.rating ?? 0, isArabic: context.isArabic)} ★", subtitle: context.isArabic? "التقييم" :"Rating"),
+                                Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    _InfoBox(title: (state.driverRatings?.driverDetailsEntity.rating ?? 0) == 0? context.isArabic?"لا يوجد تقييمات" : "No Ratings" :  formatRating(state.driverRatings?.driverDetailsEntity.rating ?? 0, isArabic: context.isArabic), subtitle: context.isArabic? "التقييم" :"Rating"),
+                                    Positioned(
+                                        top: 0,
+                                        right: -24,
+                                        child: Icon(Icons.star, color: Colors.yellow, size: 24,))
+                                  ],
+                                ),
                               ],
                             ),
 
@@ -371,7 +381,7 @@ String formatKM(num value, {bool isArabic = false}) {
       if (RegExp(r'[0-9]').hasMatch(ch)) {
         return arabicDigits[int.parse(ch)];
       }
-      if (ch == ".") return "٫"; // النقطة العربية
+      if (ch == ".") return ".";
       return ch;
     }).join();
   }
@@ -393,18 +403,26 @@ String formatRegisteredDuration(DateTime registeredAt, {required bool isArabic})
 
   String duration;
   if (years > 0) {
-    duration = isArabic ? "$years سنة" : "$years year${years > 1 ? 's' : ''}";
+    duration = isArabic
+        ? "${formatNumber(years,isArabic:  true)} سنة"
+        : "${formatNumber(years,isArabic:  false)} year${years > 1 ? 's' : ''}";
   } else if (months > 0) {
-    duration = isArabic ? "$months شهر" : "$months month${months > 1 ? 's' : ''}";
+    duration = isArabic
+        ? "${formatNumber(months,isArabic:  true)} شهر"
+        : "${formatNumber(months,isArabic:  false)} month${months > 1 ? 's' : ''}";
   } else if (days > 0) {
-    duration = isArabic ? "$days يوم" : "$days day${days > 1 ? 's' : ''}";
+    duration = isArabic
+        ? "${formatNumber(days,isArabic:  true)} يوم"
+        : "${formatNumber(days, isArabic:  false)} day${days > 1 ? 's' : ''}";
   } else {
     duration = isArabic ? "اليوم" : "today";
   }
 
+  final hubNumber = formatNumber(49,isArabic:  isArabic);
+
   return isArabic
-      ? "مسجل منذ $duration في 49Hub"
-      : "Registered for $duration in 49Hub";
+      ? "مسجل منذ $duration في $hubNumber هاب"
+      : "Registered for $duration in $hubNumber Hub";
 }
 
 
@@ -417,32 +435,32 @@ String formatTimeAgo(DateTime createdAt, bool isArabic) {
   } else if (diff.inMinutes < 60) {
     final m = diff.inMinutes;
     return isArabic
-        ? "منذ $m دقيقة"
-        : "$m minute${m > 1 ? 's' : ''} ago";
+        ? "منذ ${formatNumber(m,isArabic:  true)} دقيقة"
+        : "${formatNumber(m,isArabic:  false)} minute${m > 1 ? 's' : ''} ago";
   } else if (diff.inHours < 24) {
     final h = diff.inHours;
     return isArabic
-        ? "منذ $h ساعة"
-        : "$h hour${h > 1 ? 's' : ''} ago";
+        ? "منذ ${formatNumber(h,isArabic:  true)} ساعة"
+        : "${formatNumber(h, isArabic: false)} hour${h > 1 ? 's' : ''} ago";
   } else if (diff.inDays < 7) {
     final d = diff.inDays;
     return isArabic
-        ? "منذ $d يوم"
-        : "$d day${d > 1 ? 's' : ''} ago";
+        ? "منذ ${formatNumber(d,isArabic:  true)} يوم"
+        : "${formatNumber(d,isArabic:  false)} day${d > 1 ? 's' : ''} ago";
   } else if (diff.inDays < 30) {
     final w = diff.inDays ~/ 7;
     return isArabic
-        ? "منذ $w أسبوع"
-        : "$w week${w > 1 ? 's' : ''} ago";
+        ? "منذ ${formatNumber(w, isArabic: true)} أسبوع"
+        : "${formatNumber(w,isArabic:  false)} week${w > 1 ? 's' : ''} ago";
   } else if (diff.inDays < 365) {
     final m = diff.inDays ~/ 30;
     return isArabic
-        ? "منذ $m شهر"
-        : "$m month${m > 1 ? 's' : ''} ago";
+        ? "منذ ${formatNumber(m,isArabic:  true)} شهر"
+        : "${formatNumber(m, isArabic: false)} month${m > 1 ? 's' : ''} ago";
   } else {
     final y = diff.inDays ~/ 365;
     return isArabic
-        ? "منذ $y سنة"
-        : "$y year${y > 1 ? 's' : ''} ago";
+        ? "منذ ${formatNumber(y, isArabic: true)} سنة"
+        : "${formatNumber(y, isArabic: false)} year${y > 1 ? 's' : ''} ago";
   }
 }

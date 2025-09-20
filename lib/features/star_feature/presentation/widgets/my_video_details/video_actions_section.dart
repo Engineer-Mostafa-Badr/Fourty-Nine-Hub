@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart'; // إضافة import للـ cubit
 
@@ -35,7 +36,7 @@ class VideoActionsSection extends StatelessWidget {
             context: context,
             icon: Icons.visibility,
             label:
-                '${_formatViews(talent.totalViews.toInt())} ${context.isArabic ? 'مشاهدات' : 'views'}',
+                '${_formatViews(talent.totalViews.toInt(), context)} ${context.isArabic ? 'مشاهدات' : 'views'}',
             onTap: onViewersPressed,
           ),
           _buildActionButton(
@@ -242,13 +243,13 @@ class VideoActionsSection extends StatelessWidget {
     );
   }
 
-  String _formatViews(int views) {
+  String _formatViews(int views, BuildContext context) {
     if (views >= 1000000) {
       return '${(views / 1000000).toStringAsFixed(1)}M';
     } else if (views >= 1000) {
       return '${(views / 1000).toStringAsFixed(1)}K';
     }
-    return views.toString();
+    return views.toString().toArabicNumbers(context);
   }
 
   // Responsive helper methods

@@ -51,6 +51,10 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         if (!isClosed) {
           emit(state.copyWith(
             status: ProfileStatus.error,
@@ -86,6 +90,10 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         if (!isClosed) {
           emit(state.copyWith(
             status: ProfileStatus.error,
@@ -117,6 +125,10 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     return result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         print('❌ Subscription failed: $failure');
         _showErrorMessage(failure);
         return false;
@@ -155,6 +167,10 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     return result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         print('❌ Unsubscription failed: $failure');
         _showErrorMessage(failure);
         return false;
@@ -232,6 +248,10 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     return result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         print('❌ Profile update failed: $failure');
         emit(state.copyWith(
           status: ProfileStatus.error,

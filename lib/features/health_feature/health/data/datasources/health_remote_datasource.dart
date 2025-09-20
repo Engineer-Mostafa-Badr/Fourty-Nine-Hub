@@ -45,6 +45,9 @@ abstract class HealthRemoteDataSource {
 
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking(
       {required GetMostBookingParams params});
+
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUserBooking(
+      {required GetMostBookingParams params});
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -187,6 +190,25 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
       (data) {
         final restaurantList = (data['data']["doctors"] as List)
             .map((e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(restaurantList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUserBooking(
+      {required GetMostBookingParams params}) async {
+    final url =
+        "${EndPoints.getUserBooking}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+      (l) => Left(l),
+      (data) {
+        final restaurantList = (data['data']["bookings"] as List)
+            .map((e) => BookedUserAppointmentModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(restaurantList);
       },

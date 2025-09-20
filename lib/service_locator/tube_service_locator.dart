@@ -12,9 +12,11 @@ import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
+import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/subscribe_to_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
+import '../features/star_feature/domain/use_case/tube_watch_later_use_cases.dart';
 import '../features/star_feature/domain/use_case/unsubscribe_from_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
 
@@ -87,6 +89,25 @@ class TubeServiceLocator {
     if (!serviceLocator.isRegistered<GetFavoriteVideosUseCase>()) {
       serviceLocator.registerLazySingleton<GetFavoriteVideosUseCase>(
         () => GetFavoriteVideosUseCase(serviceLocator()),
+      );
+    }
+
+    // Watch Later Use Cases
+    if (!serviceLocator.isRegistered<AddVideoToWatchLaterUseCase>()) {
+      serviceLocator.registerLazySingleton<AddVideoToWatchLaterUseCase>(
+        () => AddVideoToWatchLaterUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<RemoveVideoFromWatchLaterUseCase>()) {
+      serviceLocator.registerLazySingleton<RemoveVideoFromWatchLaterUseCase>(
+        () => RemoveVideoFromWatchLaterUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetWatchLaterVideosUseCase>()) {
+      serviceLocator.registerLazySingleton<GetWatchLaterVideosUseCase>(
+        () => GetWatchLaterVideosUseCase(serviceLocator()),
       );
     }
 
@@ -287,6 +308,10 @@ class TubeServiceLocator {
         serviceLocator<AddVideoToFavoriteUseCase>(),
         serviceLocator<RemoveVideoFromFavoriteUseCase>(),
         serviceLocator<GetFavoriteVideosUseCase>(),
+        // Watch Later dependencies
+        serviceLocator<AddVideoToWatchLaterUseCase>(),
+        serviceLocator<RemoveVideoFromWatchLaterUseCase>(),
+        serviceLocator<GetWatchLaterVideosUseCase>(),
         // New Tube Video dependencies
         serviceLocator<FetchAllTubeVideosUseCase>(),
         serviceLocator<FetchMyTubeVideosUseCase>(),
@@ -294,6 +319,7 @@ class TubeServiceLocator {
         serviceLocator<LikeTubeVideoUseCase>(),
         serviceLocator<DislikeTubeVideoUseCase>(),
         serviceLocator<IncrementTubeVideoViewUseCase>(),
+        serviceLocator<RateTubeVideoUseCase>(),
         serviceLocator<DeleteTubeVideoUseCase>(),
       ),
     );

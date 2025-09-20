@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 
 class ThumbnailWidget extends StatelessWidget {
   final String? imageUrl;
@@ -97,7 +98,7 @@ class ThumbnailWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    duration!,
+                    duration!.toArabicNumbers(context),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,

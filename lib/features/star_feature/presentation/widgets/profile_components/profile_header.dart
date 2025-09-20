@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/helper/bunny_video_uploader.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
@@ -105,10 +106,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 )
               : Center(
-                  child: Icon(
-                    Icons.image,
-                    size: 48,
-                    color: Colors.grey[400],
+                  child: Image.asset(
+                    Assets.logo,
+                    fit: BoxFit.contain,
                   ),
                 ),
         ),
@@ -155,6 +155,20 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     );
   }
 
+  bool _isAccountVerified() {
+    // للمستخدم الحالي
+    if (widget.isCurrentUser) {
+      return widget.profile?.user?.isAccountVerified ?? false;
+    }
+
+    // للمستخدمين الآخرين - نحتاج للتحقق من نوع UserStarEntity
+    // إذا كان UserStarEntity يحتوي على isAccountVerified
+    // return widget.user?.isAccountVerified ?? false;
+
+    // مؤقتاً حتى نتأكد من بنية UserStarEntity
+    return false;
+  }
+
   Widget _buildProfileInfoSection(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final profileSize = screenWidth < 360 ? 60.0 : 80.0;
@@ -194,31 +208,27 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         ? CachedNetworkImage(
                             imageUrl: profileImageUrl,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey[300],
-                              child: Icon(
-                                Icons.person,
-                                size: profileSize * 0.5,
-                                color: Colors.grey[600],
-                              ),
-                            ),
                             errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[300],
-                              child: Icon(
-                                Icons.person,
-                                size: profileSize * 0.5,
-                                color: Colors.grey[600],
-                              ),
-                            ),
+                                color: Colors.grey[300],
+                                child: Image.asset(
+                                  Assets.logo,
+                                  fit: BoxFit.contain,
+                                )),
                           )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: Icon(
-                              Icons.person,
-                              size: profileSize * 0.5,
-                              color: Colors.grey[600],
-                            ),
-                          ),
+                        : widget.profile!.user!.gender == 'male'
+                            ? Container(
+                                color: Colors.grey[300],
+                                child: Image.asset(
+                                  Assets.manIcon,
+                                  fit: BoxFit.cover,
+                                ))
+                            : Container(
+                                color: Colors.grey[300],
+                                child: Image.asset(
+                                  Assets.womanIcon,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                   ),
                 ),
 
@@ -271,18 +281,32 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    displayName,
-                    style: TextStyle(
-                      fontSize: _getResponsiveFontSize(context, 24),
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          displayName,
+                          style: TextStyle(
+                            fontSize: _getResponsiveFontSize(context, 24),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      if (!_isAccountVerified()) ...[
+                        SizedBox(width: 6),
+                        const Icon(
+                          Icons.verified,
+                          color: Colors.blue,
+                          size: 16,
+                        ),
+                      ],
+                    ],
                   ),
                   SizedBox(height: _getResponsiveSpacing(context, 4)),
                   Text(
                     context.isArabic
-                        ? "${displayName.toLowerCase().replaceAll(' ', '')}@ • ${_getArabicVideosText(widget.videosCount)}"
+                        ? "${displayName.toLowerCase().replaceAll(' ', '')}@ • ${_getArabicVideosText(widget.videosCount).toArabicNumbers(context)}"
                         : "@${displayName.toLowerCase().replaceAll(' ', '')} • ${widget.videosCount} videos",
                     style: TextStyle(
                       fontSize: _getResponsiveFontSize(context, 16),
@@ -377,33 +401,33 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               ),
             ),
           ),
-          if (!_isSubscribed) ...[
-            SizedBox(width: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: IconButton(
-                icon: Icon(
-                  Icons.notifications_none,
-                  color: Colors.grey[700],
-                  size: 24,
-                ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'اشترك أولاً لتفعيل الإشعارات'
-                            : 'Subscribe first to enable notifications',
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+          // if (!_isSubscribed) ...[
+          //   SizedBox(width: 12),
+          //   Container(
+          //     decoration: BoxDecoration(
+          //       color: Colors.grey[200],
+          //       borderRadius: BorderRadius.circular(25),
+          //     ),
+          //     child: IconButton(
+          //       icon: Icon(
+          //         Icons.notifications_none,
+          //         color: Colors.grey[700],
+          //         size: 24,
+          //       ),
+          //       onPressed: () {
+          //         ScaffoldMessenger.of(context).showSnackBar(
+          //           SnackBar(
+          //             content: Text(
+          //               context.isArabic
+          //                   ? 'اشترك أولاً لتفعيل الإشعارات'
+          //                   : 'Subscribe first to enable notifications',
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ],
         ],
       ),
     );

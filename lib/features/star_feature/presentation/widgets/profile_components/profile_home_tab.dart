@@ -5,11 +5,13 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
 import '../../controller/playlist_cubit/playlist_cubit.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../utils/enums.dart';
 import '../common/loading_indicator.dart';
 import '../talent_card/talent_card.dart';
+import '../../helper/youtube_style_video_player.dart';
 import 'playlist_bottom_sheet.dart';
 import 'video/video_card_widget.dart';
 
@@ -186,6 +188,7 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
               video: video,
               index: index,
               isHorizontal: true,
+              starCubit: _starCubit,
               onTap: () => _navigateToVideo(context, video),
             ),
           );
@@ -271,15 +274,43 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
   }
 
   void _navigateToVideo(BuildContext context, StarEntity video) {
+    // Check if video is approved/available
+    if (!video.isApproved) {
+      // Show message that video is not available yet
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+          ),
+          duration: Duration(seconds: 4),
+          backgroundColor: Colors.orange[700],
+        ),
+      );
+      return;
+    }
+
     final mediaUrl =
         video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
-    Navigator.pushNamed(
+    Navigator.push(
       context,
-      '/video-player',
-      arguments: {
-        'video': video,
-        'mediaUrl': mediaUrl,
-      },
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StarCubit>.value(
+              value: _starCubit, // استخدام نفس ال cubit instance
+            ),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: TalentVideoPlayer(
+            videoUrl: mediaUrl,
+            talent: video,
+          ),
+        ),
+      ),
     );
   }
 

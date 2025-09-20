@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
@@ -27,22 +28,67 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(
-      Uri.parse(widget.url),
+    _initializeVideo();
+  }
 
-      // closedCaptionFile: _loadCaptions(),
-      videoPlayerOptions: VideoPlayerOptions(
-        mixWithOthers: true,
-      ),
-    );
+  void _initializeVideo() async {
+    try {
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.url),
+        formatHint: VideoFormat.hls, // Try HLS format first for better compatibility
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+        ),
+      );
 
-    _controller.addListener(() {
-      setState(() {});
-    });
+      _controller.addListener(() {
+        setState(() {});
+      });
 
-    _controller.setLooping(true);
-    _controller.initialize();
-    // _controller.play();
+      _controller.setLooping(true);
+
+      await _controller.initialize().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          throw TimeoutException('Video initialization timeout', Duration(seconds: 15));
+        },
+      );
+    } catch (error) {
+      print('❌ VideoPlayerWidget: Video initialization error: $error');
+
+      // Try fallback initialization
+      try {
+        _controller = VideoPlayerController.networkUrl(
+          Uri.parse(widget.url),
+          videoPlayerOptions: VideoPlayerOptions(
+            mixWithOthers: false,
+            allowBackgroundPlayback: false,
+          ),
+        );
+
+        _controller.addListener(() {
+          setState(() {});
+        });
+
+        _controller.setLooping(true);
+        await _controller.initialize();
+      } catch (fallbackError) {
+        print('❌ VideoPlayerWidget: Fallback initialization failed: $fallbackError');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to load video. Please try again.'),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'Retry',
+                textColor: Colors.white,
+                onPressed: () => _initializeVideo(),
+              ),
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override

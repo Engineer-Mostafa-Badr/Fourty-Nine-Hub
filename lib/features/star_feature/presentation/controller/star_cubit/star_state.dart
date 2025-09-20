@@ -1,4 +1,5 @@
 part of 'star_cubit.dart';
+
 class StarState {
   final StarStates status;
   final Failure? failure;
@@ -14,12 +15,21 @@ class StarState {
   final List<UploadFileEntity>? videos;
   final BannerTalentEntity? banner;
   final Set<String> favoriteIds;
+  final Set<String> watchLaterIds;
+  final Set<String> ratedVideos;
 
   // Search and filter state
   final String searchQuery;
   final List<StarEntity> searchResults;
   final List<ProfileEntity> searchProfileResults;
   final bool isSearchingProfiles;
+
+  // Messages
+  final String? successMessage;
+
+  // Add this for force UI updates
+  final int updateCounter;
+  final String? lastUpdatedVideoId;
 
   StarState({
     this.status = StarStates.initial,
@@ -32,15 +42,22 @@ class StarState {
     this.videos,
     this.banner,
     Set<String>? favoriteIds,
+    Set<String>? watchLaterIds,
+    Set<String>? ratedVideos,
     this.searchQuery = '',
     List<StarEntity>? searchResults,
     List<ProfileEntity>? searchProfileResults,
     this.isSearchingProfiles = false,
+    this.successMessage,
+    this.updateCounter = 0,
+    this.lastUpdatedVideoId,
   })  : searchProfileResults = searchProfileResults ?? [],
+        ratedVideos = ratedVideos ?? {},
         talents = talents ??
             {
               TalentCategory.available: [],
               TalentCategory.favorites: [],
+              TalentCategory.watchLater: [],
               TalentCategory.history: [],
               TalentCategory.myTalents: [],
             },
@@ -48,6 +65,7 @@ class StarState {
             {
               TalentCategory.available: false,
               TalentCategory.favorites: false,
+              TalentCategory.watchLater: false,
               TalentCategory.history: false,
               TalentCategory.myTalents: false,
             },
@@ -55,6 +73,7 @@ class StarState {
             {
               TalentCategory.available: true,
               TalentCategory.favorites: true,
+              TalentCategory.watchLater: true,
               TalentCategory.history: true,
               TalentCategory.myTalents: true,
             },
@@ -62,18 +81,22 @@ class StarState {
             {
               TalentCategory.available: 1,
               TalentCategory.favorites: 1,
+              TalentCategory.watchLater: 1,
               TalentCategory.history: 1,
               TalentCategory.myTalents: 1,
             },
         winners = winners ?? [],
         favoriteIds = favoriteIds ?? {},
+        watchLaterIds = watchLaterIds ?? {},
         searchResults = searchResults ?? [];
 
-  // Helper getters for easy access
+  // Helper getters
   List<StarEntity> get availableTalents =>
       talents[TalentCategory.available] ?? [];
   List<StarEntity> get favoriteTalents =>
       talents[TalentCategory.favorites] ?? [];
+  List<StarEntity> get watchLaterTalents =>
+      talents[TalentCategory.watchLater] ?? [];
   List<StarEntity> get historyTalents => talents[TalentCategory.history] ?? [];
   List<StarEntity> get myTalents => talents[TalentCategory.myTalents] ?? [];
 
@@ -92,10 +115,15 @@ class StarState {
     List<UploadFileEntity>? videos,
     BannerTalentEntity? banner,
     Set<String>? favoriteIds,
+    Set<String>? watchLaterIds,
+    Set<String>? ratedVideos,
     String? searchQuery,
     List<StarEntity>? searchResults,
     List<ProfileEntity>? searchProfileResults,
     bool? isSearchingProfiles,
+    String? successMessage,
+    int? updateCounter,
+    String? lastUpdatedVideoId,
   }) {
     return StarState(
       status: status ?? this.status,
@@ -108,10 +136,15 @@ class StarState {
       videos: videos ?? this.videos,
       banner: banner ?? this.banner,
       favoriteIds: favoriteIds ?? this.favoriteIds,
+      watchLaterIds: watchLaterIds ?? this.watchLaterIds,
+      ratedVideos: ratedVideos ?? this.ratedVideos,
       searchQuery: searchQuery ?? this.searchQuery,
       searchResults: searchResults ?? this.searchResults,
       searchProfileResults: searchProfileResults ?? this.searchProfileResults,
       isSearchingProfiles: isSearchingProfiles ?? this.isSearchingProfiles,
+      successMessage: successMessage ?? this.successMessage,
+      updateCounter: updateCounter ?? (this.updateCounter + 1),
+      lastUpdatedVideoId: lastUpdatedVideoId ?? this.lastUpdatedVideoId,
     );
   }
 }

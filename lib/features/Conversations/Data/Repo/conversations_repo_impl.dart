@@ -40,4 +40,9 @@ class ConversationsRepoImpl extends ConversationsRepo {
   void listenToStopTyping(Function(String) params) {
     return conversationsRemoteDataSource.listenToStopTyping(params);
   }
+
+  @override
+  Future<Either<Failure, void>> toggleArchivedConversation({required String conversationId}) {
+    return conversationsRemoteDataSource.toggleArchivedConversation(conversationId: conversationId);
+  }
 }

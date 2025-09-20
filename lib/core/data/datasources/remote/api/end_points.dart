@@ -57,6 +57,8 @@ import '../../../../../features/subcategories/domain/usecases/get_custom_page_su
 class EndPoints {
   //logout
   static const logout = '/auth/logout';
+  static const logoutFromAllDevices = '/auth/logout/all';
+  static const getAllSessions = '/auth/sessions';
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
@@ -84,7 +86,6 @@ class EndPoints {
   static const addRateRestaurant = '/restaurant/rating-restaurant/';
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
-
 
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
@@ -1654,6 +1655,7 @@ class EndPoints {
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
   static const getMostBooking = '/health/doctors';
+  static const getUserBooking = '/health/my-booking';
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
@@ -1725,8 +1727,6 @@ class EndPoints {
   static String createTripJoinOffer = '/trip-join/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
-
-
   static const updateDriverLoadingRatingNonSocket =
       '/loading/trip/rating/driver';
   static const addRateToClientWithDriverLoadingNonSocket =
@@ -1771,6 +1771,8 @@ class EndPoints {
   static getSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations?page=$page&limit=$limit';
 
+  static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";
+
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>
       '/tube-profile/search?query=${params.query}&page=${params.page}&limit=${params.limit}';
@@ -1780,10 +1782,12 @@ class EndPoints {
       '/tube-profile/channel/$profileId';
   static const String getMyProfile = '/tube-profile';
   static const String updateProfile = '/tube-profile';
-  static const String getAllTubeVideos = '/tube-video';
-  static const String getMyTubeVideos = '/tube-video/me';
-  static String subscribeToChannel(String profileId) => '/tube-profile/subscribe/$profileId';
-  static String unsubscribeFromChannel(String profileId) => '/tube-profile/unsubscribe/$profileId';
+  // static const String getAllTubeVideos = '/tube-video';
+  // static const String getMyTubeVideos = '/tube-video/me';
+  static String subscribeToChannel(String profileId) =>
+      '/tube-profile/subscribe/$profileId';
+  static String unsubscribeFromChannel(String profileId) =>
+      '/tube-profile/unsubscribe/$profileId';
   static String addVideoToFavorite(String videoId) =>
       '/tube-favorite/video/$videoId';
   static String removeVideoFromFavorite(String videoId) =>
@@ -1797,10 +1801,11 @@ class EndPoints {
       '/tube-video/$videoId/dislike';
   static String incrementTubeVideoView(String videoId) =>
       '/tube-video/$videoId/view';
+  static String rateTubeVideo = '/tube-rate';
 
   // Tube Video with pagination
   static String getAllTubeVideosWithPagination(
-          {int page = 1, int limit = 10}) =>
+          {int page = 1, int limit = 5}) =>
       '/tube-video?page=$page&limit=$limit';
 
   static String getMyTubeVideosWithPagination({int page = 1, int limit = 10}) =>
@@ -1863,6 +1868,15 @@ class EndPoints {
   static String updatePlaylist(String playlistId) =>
       '/tube-playlist/$playlistId';
 
+  // Watch Later Endpoints
+  static String addVideoToWatchLater(String videoId) =>
+      '/tube-watch-later/video/$videoId';
+
+  static const String getWatchLaterVideos = '/tube-watch-later';
+
+  static String removeVideoFromWatchLater(String videoId) =>
+      '/tube-watch-later/video/$videoId';
+
   //! Exchange Currency Endpoints
   static String convertCurrency({
     required String from,
@@ -1871,7 +1885,7 @@ class EndPoints {
   }) =>
       '/exchange-currency/pair/$from/$to/$amount';
 
-static String getExchangeRates(String code) => '/exchange-currency/$code';
+  static String getExchangeRates(String code) => '/exchange-currency/$code';
 
   static String fetchAvailableAuction = '/auctions/available';
   static String fetchExpiredAuction = '/auctions/expired';

@@ -191,7 +191,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                     color: context.isDarkMode ? AppColors.whiteColor : null,
                   ),
           ),
-          SizedBox(height: 4.h),
+          SizedBox(height: 15.h),
           SizedBox(
             width: 100.w,
             child: Label(
@@ -256,7 +256,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 32, horizontal: 16),
+                            vertical: 12, horizontal: 16),
                         child: Column(
                           spacing: 32.h,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -629,6 +629,8 @@ class MainScaffold extends StatelessWidget {
                 floatingActionButtonLocation: floatingActionButtonLocation,
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
+                drawerEnableOpenDragGesture:
+                    true, // Enable swipe to open drawer
                 onDrawerChanged: (value) {
                   choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
 
@@ -677,6 +679,8 @@ class MainScaffold extends StatelessWidget {
                     floatingActionButtonLocation: floatingActionButtonLocation,
                     floatingActionButton: floatingActionButton,
                     drawer: drawer,
+                    drawerEnableOpenDragGesture:
+                        true, // Enable swipe to open drawer
                     onDrawerChanged: (value) {
                       choiceRulerCubit.changeChoiceRulerStatus(
                           forceValue: !value);
