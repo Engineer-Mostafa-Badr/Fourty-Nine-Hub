@@ -4,9 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
@@ -184,358 +188,365 @@ class _DoctorListCardState extends State<DoctorListCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 10.h,
-        horizontal: 10.w,
-      ),
-      child: Container(
-        // padding:const EdgeInsets.all(10) ,
-        decoration: BoxDecoration(
-            border: Border.all(
-                color: context.isDarkMode
-                    ? AppColors.whiteColor
-                    : AppColors.black.withOpacity(0.7),
-                width: 1),
-            borderRadius: BorderRadius.circular(15)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  vertical: 8, horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    spacing: 2,
-                    children: [
-                      SvgPicture.asset(
-                        Assets.eyeIcon,
-                        color: context.isDarkMode
-                            ? AppColors.whiteColor
-                            : Colors.grey,
-                      ),
-                      const Sizer(
-                        width: 8,
-                      ),
-                      if ((widget.data.viewCount ?? 0) == 0) ...[
-                        Label(
-                          text: LocaleKeys.noViews.localize,
-                          style: Styles.mediumText(
-                              // fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.c6C6C6C),
+    return ClickableWidget(
+      onTap: (){
+        context.push(Routes.VISITADOCTORDETAILS,
+            extra: DoctorDetailsParams(
+                doctorId: widget.data.id??'', fromSearch: false));
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 10.h,
+          horizontal: 10.w,
+        ),
+        child: Container(
+          // padding:const EdgeInsets.all(10) ,
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: context.isDarkMode
+                      ? AppColors.whiteColor
+                      : AppColors.black.withOpacity(0.7),
+                  width: 1),
+              borderRadius: BorderRadius.circular(15)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    vertical: 8, horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      spacing: 2,
+                      children: [
+                        SvgPicture.asset(
+                          Assets.eyeIcon,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : Colors.grey,
                         ),
-                      ] else if (widget.data.viewCount == 1) ...[
-                        // Label(
-                        //     text:
-                        //         ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
-                        //     style: Styles.mediumText(
-                        //       color: context.isDarkMode
-                        //           ? Colors.white
-                        //           : AppColors.c6C6C6C,
-                        //       // fontSize: 12
-                        //     )),
-                        Label(
-                          text: LocaleKeys.oneView.localize,
-                          style: Styles.mediumText(
-                              // fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.c6C6C6C),
+                        const Sizer(
+                          width: 8,
                         ),
-                      ] else if (widget.data.viewCount == 2) ...[
-                        // Label(
-                        //     text:
-                        //         ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
-                        //     style: Styles.mediumText(
-                        //       color: context.isDarkMode
-                        //           ? Colors.white
-                        //           : AppColors.c6C6C6C,
-                        //       // fontSize: 12
-                        //     )),
-                        Label(
-                          text: LocaleKeys.twoViews.localize,
-                          style: Styles.mediumText(
-                              // fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.c6C6C6C),
-                        ),
-                      ] else if (widget.data.viewCount! >= 3 &&
-                          widget.data.viewCount! <= 10) ...[
-                        Label(
-                            text:
-                                ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} '
-                                    .toArabicNumbers(context),
-                            // ' ${formatViews(widget.data.viewCount ?? 0)} ',
+                        if ((widget.data.viewCount ?? 0) == 0) ...[
+                          Label(
+                            text: LocaleKeys.noViews.localize,
                             style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.c6C6C6C,
-                              // fontSize: 12
-                            )),
-                        Label(
-                          text: LocaleKeys.views.localize,
-                          style: Styles.mediumText(
-                              // fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.c6C6C6C),
-                        ),
-                      ] else ...[
-                        Label(
-                            text:
-                                ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} '
-                                    .toArabicNumbers(context),
-                            // ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
-                            style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.c6C6C6C,
-                              // fontSize: 12
-                            )),
-                        Label(
-                          text: context.isArabic ? 'مشاهدة' : 'Views',
-                          style: Styles.mediumText(
-                              // fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.c6C6C6C),
-                        ),
-                      ],
-                      // Label(
-                      //     text:
-                      //         formatViews(widget.data.viewCount?.toInt() ?? 0),
-                      //     style: Styles.mediumText(
-                      //         fontWeight: FontWeight.w400,
-                      //         color: context.isDarkMode
-                      //             ? AppColors.whiteColor
-                      //             : AppColors.c6C6C6C)),
-                      // Label(
-                      //   text: LocaleKeys.views.localize,
-                      //   style: Styles.mediumText(
-                      //       // fontSize: 12,
-                      //       fontWeight: FontWeight.w400,
-                      //       color: context.isDarkMode
-                      //           ? AppColors.whiteColor
-                      //           : AppColors.c6C6C6C),
-                      // ),
-                    ],
-                  ),
-                  Label(
-                    text:
-                        getSubscriptionType(widget.data.subscriptionRank ?? 0),
-                    textAlign: TextAlign.right,
-                    style: Styles.mediumText(
-                      color: AppColors.getRedColor(context),
-                      fontWeight: FontWeight.w700,
-                      // fontSize: 16
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              height: 1,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                spacing: 8,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: ImageFromInternet(
-                              image: widget.data.profilePicture ?? '',
-                              width: 56,
-                              height: 56,
-                            ),
+                                // fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.c6C6C6C),
                           ),
-                          Positioned(
-                            top: 0,
-                            right: -6,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.cF5F5F5,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.star,
-                                      color: Colors.amber, size: 12),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    "${widget.data.averageRating ?? 0}"
-                                        .toArabicNumbers(context),
-                                    style: Styles.smallText(
-                                      color: Colors.black,
-                                      // fontSize: 10,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                        ] else if (widget.data.viewCount == 1) ...[
+                          // Label(
+                          //     text:
+                          //         ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
+                          //     style: Styles.mediumText(
+                          //       color: context.isDarkMode
+                          //           ? Colors.white
+                          //           : AppColors.c6C6C6C,
+                          //       // fontSize: 12
+                          //     )),
+                          Label(
+                            text: LocaleKeys.oneView.localize,
+                            style: Styles.mediumText(
+                                // fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.c6C6C6C),
+                          ),
+                        ] else if (widget.data.viewCount == 2) ...[
+                          // Label(
+                          //     text:
+                          //         ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
+                          //     style: Styles.mediumText(
+                          //       color: context.isDarkMode
+                          //           ? Colors.white
+                          //           : AppColors.c6C6C6C,
+                          //       // fontSize: 12
+                          //     )),
+                          Label(
+                            text: LocaleKeys.twoViews.localize,
+                            style: Styles.mediumText(
+                                // fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.c6C6C6C),
+                          ),
+                        ] else if (widget.data.viewCount! >= 3 &&
+                            widget.data.viewCount! <= 10) ...[
+                          Label(
+                              text:
+                                  ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} '
+                                      .toArabicNumbers(context),
+                              // ' ${formatViews(widget.data.viewCount ?? 0)} ',
+                              style: Styles.mediumText(
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.c6C6C6C,
+                                // fontSize: 12
+                              )),
+                          Label(
+                            text: LocaleKeys.views.localize,
+                            style: Styles.mediumText(
+                                // fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.c6C6C6C),
+                          ),
+                        ] else ...[
+                          Label(
+                              text:
+                                  ' ${FormatNumbers().formatNumber(widget.data.viewCount ?? 0, useArabicNumerals: context.isArabic)} '
+                                      .toArabicNumbers(context),
+                              // ' ${formatViews(widget.data.viewCount?.toInt() ?? 0)} ',
+                              style: Styles.mediumText(
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.c6C6C6C,
+                                // fontSize: 12
+                              )),
+                          Label(
+                            text: context.isArabic ? 'مشاهدة' : 'Views',
+                            style: Styles.mediumText(
+                                // fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.c6C6C6C),
                           ),
                         ],
+                        // Label(
+                        //     text:
+                        //         formatViews(widget.data.viewCount?.toInt() ?? 0),
+                        //     style: Styles.mediumText(
+                        //         fontWeight: FontWeight.w400,
+                        //         color: context.isDarkMode
+                        //             ? AppColors.whiteColor
+                        //             : AppColors.c6C6C6C)),
+                        // Label(
+                        //   text: LocaleKeys.views.localize,
+                        //   style: Styles.mediumText(
+                        //       // fontSize: 12,
+                        //       fontWeight: FontWeight.w400,
+                        //       color: context.isDarkMode
+                        //           ? AppColors.whiteColor
+                        //           : AppColors.c6C6C6C),
+                        // ),
+                      ],
+                    ),
+                    Label(
+                      text:
+                          getSubscriptionType(widget.data.subscriptionRank ?? 0),
+                      textAlign: TextAlign.right,
+                      style: Styles.mediumText(
+                        color: AppColors.getRedColor(context),
+                        fontWeight: FontWeight.w700,
+                        // fontSize: 16
                       ),
-                      const SizedBox(
-                          width: 16), // spacing between image and text
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                height: 1,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  spacing: 8,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          clipBehavior: Clip.none,
                           children: [
-                            Text(
-                              "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
-                              style: Styles.mediumText(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.getTextColor(context)
-                                  // fontSize: 16,
-                                  ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: ImageFromInternet(
+                                image: widget.data.profilePicture ?? '',
+                                width: 56,
+                                height: 56,
+                              ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              context.isArabic
-                                  ? widget.data.subCategory?.first.nameAr ??
-                                      "N/A"
-                                  : widget.data.subCategory?.first.nameEn ??
-                                      "N/A",
-                              style: Styles.mediumText(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.getTextColor(context)
-                                  // fontSize: 14,
-                                  ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+                            Positioned(
+                              top: 0,
+                              right: -6,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: AppColors.cF5F5F5,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.star,
+                                        color: Colors.amber, size: 12),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      "${widget.data.averageRating ?? 0}"
+                                          .toArabicNumbers(context),
+                                      style: Styles.smallText(
+                                        color: Colors.black,
+                                        // fontSize: 10,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    spacing: 8,
-                    children: [
-                      Icon(
-                        Icons.location_on_rounded,
-                        color: AppColors.getButtonPrimaryWhiteColor(context),
-                      ),
-                      Expanded(
-                        child: Label(
-                          style: Styles.mediumText(
-                              fontSize: 32,
-                              color: AppColors.getTextColor(context)),
-                          text: context.isArabic
-                              ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
-                              : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
+                        const SizedBox(
+                            width: 16), // spacing between image and text
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
+                                style: Styles.mediumText(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.getTextColor(context)
+                                    // fontSize: 16,
+                                    ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                context.isArabic
+                                    ? widget.data.subCategory?.first.nameAr ??
+                                        "N/A"
+                                    : widget.data.subCategory?.first.nameEn ??
+                                        "N/A",
+                                style: Styles.mediumText(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.getTextColor(context)
+                                    // fontSize: 14,
+                                    ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        Assets.cash,
-                        fit: BoxFit.cover,
-                        height: 48.h,
-                        width: 48.h,
-                      ),
-                      const Sizer(),
-                      Expanded(
-                        child: Label(
-                          text: context.isArabic ? 'خدمة' : 'Fees',
-                          style: Styles.mediumText(
-                              fontSize: 32,
-                              color: AppColors.getTextColor(context),
-                              fontWeight: FontWeight.w500),
+                      ],
+                    ),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Icon(
+                          Icons.location_on_rounded,
+                          color: AppColors.getButtonPrimaryWhiteColor(context),
                         ),
-                      ),
-                      Label(
-                        text:
-                            '${FormatNumbers().formatNumberByComma(widget.data.price.toString()).toArabicNumbers(context)} ${context.isArabic ? widget.data.currencyAr ?? '' : widget.data.currencyEn ?? ''}',
-                        style: Styles.mediumText(
-                            fontSize: 32,
-                            color: AppColors.getTextColor(context),
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                  // if(widget.data.isPremium == true)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.watch_later_outlined,
-                              color: AppColors.getTextColor(context),
-                              size: 48.h),
-                          const Sizer(),
-                          Label(
-                            text:
-                                '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}'
-                                    .toArabicNumbers(context),
+                        Expanded(
+                          child: Label(
+                            style: Styles.mediumText(
+                                fontSize: 32,
+                                color: AppColors.getTextColor(context)),
+                            text: context.isArabic
+                                ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
+                                : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          Assets.cash,
+                          fit: BoxFit.cover,
+                          height: 48.h,
+                          width: 48.h,
+                        ),
+                        const Sizer(),
+                        Expanded(
+                          child: Label(
+                            text: context.isArabic ? 'خدمة' : 'Fees',
                             style: Styles.mediumText(
                                 fontSize: 32,
                                 color: AppColors.getTextColor(context),
                                 fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                      Label(
-                        text:
-                            '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}'
-                                .toArabicNumbers(context),
-                        style: Styles.mediumText(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.getRedColor(context)),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 5,
-                          child: PremiumAndRequestButtons(item: widget.data)),
-                      CallMessageReportButtons(item: widget.data),
-                    ],
-                  ),
-                  // HealthCardButtonsSection(
-                  //   isButton: true,
-                  //   isSubscribed: widget.data.isPremium == true,
-                  //   buttonTitle: '${LocaleKeys.book.localize}',
-                  //   onTap: () {},
-                  // ),
-                ],
+                          ),
+                        ),
+                        Label(
+                          text:
+                              '${FormatNumbers().formatNumberByComma(widget.data.price.toString()).toArabicNumbers(context)} ${context.isArabic ? widget.data.currencyAr ?? '' : widget.data.currencyEn ?? ''}',
+                          style: Styles.mediumText(
+                              fontSize: 32,
+                              color: AppColors.getTextColor(context),
+                              fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                    // if(widget.data.isPremium == true)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.watch_later_outlined,
+                                color: AppColors.getTextColor(context),
+                                size: 48.h),
+                            const Sizer(),
+                            Label(
+                              text:
+                                  '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${context.isArabic ? widget.data.waitingTimeAr : widget.data.waitingTimeEn}'
+                                      .toArabicNumbers(context),
+                              style: Styles.mediumText(
+                                  fontSize: 32,
+                                  color: AppColors.getTextColor(context),
+                                  fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        Label(
+                          text:
+                              '${FormatNumbers().formatNumber(widget.data.bookingCount ?? 0, useArabicNumerals: context.isArabic)}/${LocaleKeys.book.localize}'
+                                  .toArabicNumbers(context),
+                          style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.getRedColor(context)),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            flex: 5,
+                            child: PremiumAndRequestButtons(item: widget.data)),
+                        CallMessageReportButtons(item: widget.data),
+                      ],
+                    ),
+                    // HealthCardButtonsSection(
+                    //   isButton: true,
+                    //   isSubscribed: widget.data.isPremium == true,
+                    //   buttonTitle: '${LocaleKeys.book.localize}',
+                    //   onTap: () {},
+                    // ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -559,7 +570,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
             color: AppColors.getRedColor(context),
             onPressed: () {
               ManageVibration.vibrate();
-              // context.push(Routes.RESTAURANTDETAILS, extra: item);
+              _showBookingBottomSheet(context, item);
             },
           ),
         ],
@@ -588,6 +599,593 @@ class PremiumAndRequestButtons extends StatelessWidget {
         onPressed: onPressed,
       ),
     );
+  }
+
+  void _showBookingBottomSheet(BuildContext context, MostBookingEntity item) {
+    final TextEditingController patientNameController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
+    final TextEditingController noteController = TextEditingController();
+    String selectedGender = 'Male'; // Default gender
+    bool hasNameError = false;
+    bool hasPhoneError = false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.getFindFillColor(context),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            // Clear errors when user starts typing
+            patientNameController.addListener(() {
+              if (hasNameError && patientNameController.text.isNotEmpty) {
+                setState(() {
+                  hasNameError = false;
+                });
+              }
+            });
+
+            phoneController.addListener(() {
+              if (hasPhoneError && phoneController.text.isNotEmpty) {
+                setState(() {
+                  hasPhoneError = false;
+                });
+              }
+            });
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                top: 16,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Header
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // Title
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.calendar_today,
+                            color: AppColors.getButtonPrimaryColor(context),
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            LocaleKeys.book.localize,
+                            style: Styles.headerText(
+                              fontSize: 48,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.getTextColor(context),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Patient Name Field
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: patientNameController,
+                      style: TextStyle(
+                        color: AppColors.getTextColor(context),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      decoration: InputDecoration(
+                        prefixIcon: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.person_outline,
+                            color: AppColors.getButtonPrimaryColor(context),
+                            size: 20,
+                          ),
+                        ),
+                        hintText: context.isArabic?'اسم المريض':'Patient Name',
+                        hintStyle: TextStyle(
+                          color: AppColors.getTextColor(context).withOpacity(0.6),
+                          fontSize: 16,
+                        ),
+                        errorText: hasNameError
+                            ? context.isArabic?'ادخل اسم المريض':'Enter Patient Name'
+                            : null,
+                        errorStyle: TextStyle(
+                          color: AppColors.getRedColor(context),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        filled: true,
+                        fillColor: AppColors.getFillColor(context),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getTextColor(context).withOpacity(0.1),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getButtonPrimaryColor(context),
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getRedColor(context),
+                            width: 1,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getRedColor(context),
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Phone Number Field
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      style: TextStyle(
+                        color: AppColors.getTextColor(context),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      decoration: InputDecoration(
+                        prefixIcon: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SvgPicture.asset(
+                            Assets.phoneIconRed,
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.contain,
+                            color: AppColors.getButtonPrimaryColor(context),
+                          ),
+                        ),
+                        hintText: LocaleKeys.phone.localize,
+                        hintStyle: TextStyle(
+                          color: AppColors.getTextColor(context).withOpacity(0.6),
+                          fontSize: 16,
+                        ),
+                        errorText: hasPhoneError
+                            ? LocaleKeys.enterPhoneNumber.localize
+                            : null,
+                        errorStyle: TextStyle(
+                          color: AppColors.getRedColor(context),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        filled: true,
+                        fillColor: AppColors.getFillColor(context),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getTextColor(context).withOpacity(0.1),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getButtonPrimaryColor(context),
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getRedColor(context),
+                            width: 1,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getRedColor(context),
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Gender Selection
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.getFillColor(context),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.getTextColor(context).withOpacity(0.1),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.person_outline,
+                              color: AppColors.getButtonPrimaryColor(context),
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            LocaleKeys.gender.localize,
+                            style: TextStyle(
+                              color: AppColors.getTextColor(context),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButton<String>(
+                              value: selectedGender,
+                              underline: Container(),
+                              dropdownColor: AppColors.getFillColor(context),
+                              style: TextStyle(
+                                color: AppColors.getTextColor(context),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: AppColors.getButtonPrimaryColor(context),
+                              ),
+                              items: [
+                                DropdownMenuItem(
+                                  value: 'Male',
+                                  child: Text(LocaleKeys.maleUser.localize),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'Female',
+                                  child: Text(LocaleKeys.femaleUser.localize),
+                                ),
+                              ],
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    selectedGender = newValue;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Note Field
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: noteController,
+                      maxLines: 3,
+                      minLines: 3,
+                      style: TextStyle(
+                        color: AppColors.getTextColor(context),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      decoration: InputDecoration(
+                        prefixIcon: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.note_outlined,
+                            color: AppColors.getButtonPrimaryColor(context),
+                            size: 20,
+                          ),
+                        ),
+                        hintText: LocaleKeys.notes.localize,
+                        hintStyle: TextStyle(
+                          color: AppColors.getTextColor(context).withOpacity(0.6),
+                          fontSize: 16,
+                        ),
+                        filled: true,
+                        fillColor: AppColors.getFillColor(context),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getTextColor(context).withOpacity(0.1),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: AppColors.getButtonPrimaryColor(context),
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        alignLabelWithHint: true,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Action Buttons
+                  Row(
+                    children: [
+                      // Book Button
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.getButtonPrimaryColor(context).withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: AppButton(
+                            radius: 16,
+                            height: 50,
+                            backColor: AppColors.getButtonPrimaryColor(context),
+                            color: AppColors.getReversedTextColor(context),
+                            label: LocaleKeys.book.localize,
+                            style: Styles.mediumText(
+                              color: AppColors.getReversedTextColor(context),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            onPressed: () {
+                              ManageVibration.vibrate();
+                              _handleBooking(
+                                context,
+                                patientNameController.text.trim(),
+                                phoneController.text.trim(),
+                                noteController.text.trim(),
+                                selectedGender,
+                                false, // isPremium = false
+                                setState,
+                                hasNameError,
+                                hasPhoneError,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      
+                      // Premium Book Button
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.getRedColor(context).withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: AppButton(
+                            radius: 16,
+                            height: 50,
+                            backColor: AppColors.getRedColor(context),
+                            color: AppColors.getReversedTextColor(context),
+                            label: LocaleKeys.premiumBook.localize,
+                            style: Styles.mediumText(
+                              color: AppColors.getReversedTextColor(context),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            onPressed: () {
+                              ManageVibration.vibrate();
+                              if(item.isPremium==false){
+                                SubscriptionMethod().subscribe(
+                                  subscribeId: item.subCategory?.first.id ?? '',
+                                  title: item.firstName ?? '',
+                                );
+                              }else{
+                                _handleBooking(
+                                  context,
+                                  patientNameController.text.trim(),
+                                  phoneController.text.trim(),
+                                  noteController.text.trim(),
+                                  selectedGender,
+                                  true, // isPremium = true
+                                  setState,
+                                  hasNameError,
+                                  hasPhoneError,
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _handleBooking(
+    BuildContext context,
+    String patientName,
+    String phone,
+    String note,
+    String gender,
+    bool isPremium,
+    StateSetter setState,
+    bool hasNameError,
+    bool hasPhoneError,
+  ) {
+    // Validation
+    if (patientName.isEmpty) {
+      setState(() {
+        hasNameError = true;
+      });
+      return;
+    }
+
+    if (phone.isEmpty) {
+      setState(() {
+        hasPhoneError = true;
+      });
+      return;
+    }
+
+    // Here you can implement the actual booking logic
+    // For now, we'll just show a success message and close the sheet
+    Navigator.pop(context);
+    
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          isPremium 
+            ? context.isArabic?"تم الحجز المميز بنجاح":"Booking premium successful"
+            : context.isArabic?"تم الحجز بنجاح":"Booking successful",
+        ),
+        backgroundColor: AppColors.getButtonPrimaryColor(context),
+      ),
+    );
+
+    // TODO: Implement actual booking API call
+    print('Booking Details:');
+    print('Patient Name: $patientName');
+    print('Phone: $phone');
+    print('Gender: $gender');
+    print('Note: $note');
+    print('Is Premium: $isPremium');
   }
 }
 

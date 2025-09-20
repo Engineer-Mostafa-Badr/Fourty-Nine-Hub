@@ -370,17 +370,17 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> getMyBookings() async {
-    final response =
-        await _getUserUpcomingAppointmentsUseCase.call(userId ?? '');
-    response.fold((failure) {
-      var currentContext =
-          AppPages.router.configuration.navigatorKey.currentContext!;
-      showErrorMessage(
-          currentContext, getFailureMessage(failure, currentContext));
-      emit(state.copyWith(failure: failure, status: HealthStates.error));
-    },
-        (data) => emit(
-            state.copyWith(status: HealthStates.initState, myBookings: data)));
+    // final response =
+    //     await _getUserUpcomingAppointmentsUseCase.call(userId ?? '');
+    // response.fold((failure) {
+    //   var currentContext =
+    //       AppPages.router.configuration.navigatorKey.currentContext!;
+    //   showErrorMessage(
+    //       currentContext, getFailureMessage(failure, currentContext));
+    //   emit(state.copyWith(failure: failure, status: HealthStates.error));
+    // },
+    //     (data) => emit(
+    //         state.copyWith(status: HealthStates.initState, myBookings: data)));
   }
 
   Future<void> getServices() async {
