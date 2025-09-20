@@ -900,7 +900,7 @@ Spacer(),
           Expanded(
             child: _statItem(
               icon: FontAwesomeIcons.retweet,
-              iconColor: t.isReposted == true ? Colors.green : Colors.grey,
+              iconColor: t.yourReposted == true ? Colors.green : Colors.grey,
               label: '${reposts ?? 0}',
               onTap: () {
                 if (!canInteract) return;

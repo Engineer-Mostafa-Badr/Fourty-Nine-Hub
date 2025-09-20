@@ -15,6 +15,7 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
     required super.adminIgnore,
     required super.love,
     required super.isReact,
+    required super.yourReposted,
     super.replies,
     super.edit,
   });
@@ -81,6 +82,7 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
         love        : const <String>[],
         adminIgnore : false,
         isReact     : _asBool(post['youLiked']),
+        yourReposted     : _asBool(post['yourReposted']),
       );
 
       // ✅ Attach extra data for later access
@@ -106,7 +108,8 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
       repliesCount: _asInt(json['repliesCount']),
       love        : (json['love'] is List) ? List<String>.from(json['love']) : const <String>[],
       adminIgnore : _asBool(json['adminIgnore']),
-      isReact     : _asBool(json['isReact']),
+      isReact     : _asBool(json['youLiked']),
+      yourReposted     : _asBool(json['yourReposted']),
     );
   }
 }

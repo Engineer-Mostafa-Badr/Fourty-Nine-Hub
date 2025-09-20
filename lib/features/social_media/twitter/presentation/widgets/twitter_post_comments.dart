@@ -243,7 +243,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                                 isDocumented: false,
                                 createdAt: DateTime.now(),
                                 hasStory: false,
-                              ),
+                               ), yourReposted: false,
                             ),
                           );
                           commentTextController.clear();
