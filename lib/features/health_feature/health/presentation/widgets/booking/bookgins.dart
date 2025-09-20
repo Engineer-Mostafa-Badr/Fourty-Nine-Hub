@@ -6,7 +6,8 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/booking_card.dart';
 
 class HealthBookings extends StatelessWidget {
-  const HealthBookings({super.key});
+  const HealthBookings({super.key, this.onClose});
+  final VoidCallback? onClose;
 
 
   @override
