@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
@@ -87,9 +88,9 @@ class ShippingDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> sendOffer(
-      {required String id, required double price}) {
+      {required String id, required double price}) async{
     return api
-        .post(EndPoints.sendOffer, data: {"loadingTripId": id, "price": price});
+        .post(EndPoints.sendOffer, data: {"loadingTripId": id, "price": price,"driverDeviceId":await getDeviceId()});
   }
 
   Future<Either<Failure, Map<String, dynamic>>> report({
@@ -157,7 +158,7 @@ class ShippingDataSource {
   Future<Either<Failure, Map<String, dynamic>>> acceptTrip(
       {required String loadingRequestId}) async {
     return api.post(EndPoints.acceptLoadingTripOffer,
-        data: {"loadingRequestId": loadingRequestId});
+        data: {"loadingRequestId": loadingRequestId,"clientDeviceId":await getDeviceId()});
   }
 
   Future<Either<Failure, Map<String, dynamic>>> declineTrip(

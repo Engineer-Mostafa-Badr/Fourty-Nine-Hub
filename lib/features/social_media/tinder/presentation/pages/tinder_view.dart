@@ -5,11 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/clickable_widget.dart';
+import '../../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../cubit/tinder_cubit.dart';
+import '../cubit/tinder_state.dart';
+import '../widgets/subcategory_card_tinder.dart';
 import '../widgets/tinder_card_stack.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -26,23 +32,23 @@ class TinderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('TinderView built');
-    return TinderScreen1(
+    return /*TinderScreen1(
       isMaleSelected:
           context.read<UserCubit>().state.data?.gender == 'male' ? false : true,
+    );*/
+      MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
+       // BlocProvider(create: (_) => serviceLocator<ChatRoomCubit>()),
+        BlocProvider(create: (_) => serviceLocator<UserCubit>()),
+      //  BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
+      ],
+      child: TinderScreen1(
+        isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
+            ? false
+            : true,
+      ),
     );
-    //   MultiBlocProvider(
-    //   providers: [
-    //     BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
-    //     BlocProvider(create: (_) => serviceLocator<ChatRoomCubit>()),
-    //     BlocProvider(create: (_) => serviceLocator<UserCubit>()),
-    //     BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
-    //   ],
-    //   child: TinderScreen1(
-    //     isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
-    //         ? false
-    //         : true,
-    //   ),
-    // );
   }
 }
 
@@ -69,7 +75,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
 
   @override
   void didChangeDependencies() {
-    // _initializeTinderData();
+     _initializeTinderData();
     super.didChangeDependencies();
   }
 
@@ -79,15 +85,15 @@ class _TinderScreen1State extends State<TinderScreen1> {
     super.dispose();
   }
 
-  //
-  // void _initializeTinderData() {
-  //   final tinderCubit = context.read<TinderViewCubit>();
-  //   tinderCubit
-  //     ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-  //     // ..fetchSubCategoryData()
-  //     ..fetchFavorites();
-  //   // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
-  // }
+
+  void _initializeTinderData() {
+    final tinderCubit = context.read<TinderViewCubit>();
+    tinderCubit
+      ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
+       ..fetchSubCategoryData()
+      ..fetchFavorites();
+    // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,14 +144,14 @@ class _TinderScreen1State extends State<TinderScreen1> {
               IconButton(
                 onPressed: () {
                   ManageVibration.vibrate();
-                  // setState(() {
-                  //   isMaleSelected = !isMaleSelected!; // Toggle the state
-                  //   final tinderCubit = context.read<TinderViewCubit>();
-                  //   tinderCubit
-                  //     ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-                  //     // ..fetchSubCategoryData()
-                  //     ..fetchFavorites();
-                  // });
+                  setState(() {
+                    isMaleSelected = !isMaleSelected!; // Toggle the state
+                    final tinderCubit = context.read<TinderViewCubit>();
+                    tinderCubit
+                      ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
+                      // ..fetchSubCategoryData()
+                      ..fetchFavorites();
+                  });
                 },
                 icon: Icon(
                   isMaleSelected!
@@ -162,89 +168,86 @@ class _TinderScreen1State extends State<TinderScreen1> {
             ],
           ),
         ),
-        body: _buildLoggedInContent(
-          context,
-        )
-        // BlocBuilder<TinderViewCubit, TinderViewState>(
-        //   builder: (context, state) {
-        //     if (state.status == TinderStates.success) {
-        //       return _buildLoggedInContent(context, state);
-        //     }
-        //     return const Center(child: CustomCircularProgressIndicator());
-        //   },
-        // ),
+        body:
+        BlocBuilder<TinderViewCubit, TinderViewState>(
+          builder: (context, state) {
+            if (state.status == TinderStates.success) {
+              return _buildLoggedInContent(context, state);
+            }
+            return const Center(child: CustomCircularProgressIndicator());
+          },
+        ),
         );
   }
 
   Widget _buildLoggedInContent(
     BuildContext context,
+      state
   ) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         controller: _scrollController,
-        child: const Column(
+        child:   Column(
           children: [
-            Sizer(),
-            TinderCardStack()
-            // if (state.userData0 != null && state.userData0!.isNotEmpty)
-            //   const TinderCardStack()
-            // else
-            //   SizedBox(
-            //     height: 1.sh,
-            //     child: Shimmer.fromColors(
-            //       baseColor: Colors.grey[100]!,
-            //       highlightColor: Colors.white24,
-            //       child: Container(
-            //         decoration: BoxDecoration(
-            //           color: AppColors.AUTH_CONTAINER_COLOR,
-            //           borderRadius: BorderRadius.circular(5),
-            //           border: Border.all(color: Colors.grey),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // if (state.userData0 != null && state.userData0!.isNotEmpty)
-            //   Padding(
-            //     padding: const EdgeInsets.only(top: 8.0, bottom: 2),
-            //     child: Divider(
-            //       color: Colors.grey,
-            //       height: 1.h,
-            //       thickness: 1.h,
-            //     ),
-            //   ),
-            // BlocBuilder<TinderViewCubit, TinderViewState>(
-            //   builder: (context, state) {
-            //     final controller = context.read<TinderViewCubit>();
-            //     if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
-            //       return Padding(
-            //       padding: EdgeInsets.all(8.0.w),
-            //       child: GridView.builder(
-            //         physics: const NeverScrollableScrollPhysics(),
-            //         shrinkWrap: true,
-            //         itemCount: state.subCategoryData?.length ?? 0,
-            //         controller: _scrollController,
-            //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //           crossAxisCount: 3,
-            //           childAspectRatio: 1,
-            //         ),
-            //         itemBuilder: (context, index) => SubcategoryCardTinder(
-            //           mainCategory: state.mainCategoryResponse!,
-            //           item: state.subCategoryData![index],
-            //           onFav: () async {
-            //             var result = await controller.toggleSubCategoryToFavorites(
-            //               state.subCategoryData![index].id,
-            //             );
-            //             return result;
-            //           },
-            //         ),
-            //       ),
-            //     );
-            //     }
-            //     return const Center(child: CustomCircularProgressIndicator());
-            //   },
-            // ),
-            // SizedBox(height: 50.h),
+              if (state.userData0 != null && state.userData0!.isNotEmpty)
+              const TinderCardStack()
+            else
+              SizedBox(
+                height: 1.sh,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[100]!,
+                  highlightColor: Colors.white24,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ),
+            if (state.userData0 != null && state.userData0!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 2),
+                child: Divider(
+                  color: Colors.grey,
+                  height: 1.h,
+                  thickness: 1.h,
+                ),
+              ),
+            BlocBuilder<TinderViewCubit, TinderViewState>(
+              builder: (context, state) {
+                final controller = context.read<TinderViewCubit>();
+                if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
+                  return Padding(
+                  padding: EdgeInsets.all(8.0.w),
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: state.subCategoryData?.length ?? 0,
+                    controller: _scrollController,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1,
+                    ),
+                    itemBuilder: (context, index) => SubcategoryCardTinder(
+                      mainCategory: state.mainCategoryResponse!,
+                      item: state.subCategoryData![index],
+                      onFav: () async {
+                        var result = await controller.toggleSubCategoryToFavorites(
+                          state.subCategoryData![index].id,
+                        );
+                        return result;
+                      },
+                    ),
+                  ),
+                );
+                }
+                return const Center(child: CustomCircularProgressIndicator());
+              },
+            ),
+            SizedBox(height: 50.h),
           ],
         ),
       ),

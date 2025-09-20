@@ -3,28 +3,43 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/auction/auction_helper.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/functions/global/upload_image.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
+import '../../../../core/messages/messages.dart';
+import '../../../../shared_web_socket.dart';
 import '../../domain/entities/add_favorite_auction_entity.dart';
+import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
+import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
+import '../../domain/entities/listen_winner_bid_entity.dart';
+import '../../domain/entities/my_bidders_entity.dart';
 import '../../domain/usecases/add_favorite_auction_use_case.dart';
+import '../../domain/usecases/banner_auction_use_case.dart';
 import '../../domain/usecases/bid_auction_use_case.dart';
+import '../../domain/usecases/bid_winner_auction_use_case.dart';
+import '../../domain/usecases/create_auction_use_case.dart';
+import '../../domain/usecases/error_bid_auction_use_case.dart';
 import '../../domain/usecases/fetch_available_auction_use_case.dart';
 import '../../domain/usecases/fetch_expired_auction_use_case.dart';
 import '../../domain/usecases/fetch_favorite_auction_use_case.dart';
 import '../../domain/usecases/fetch_main_category_auction_use_case.dart';
+import '../../domain/usecases/fetch_my_bidder_auction_use_case.dart';
+import '../../domain/usecases/fetch_myauction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
 import '../../domain/usecases/join_auction_use_case.dart';
+import '../../domain/usecases/leave_auction_use_case.dart';
 import '../../domain/usecases/listen_to_new_auction_use_case.dart';
 import '../../domain/usecases/listen_to_new_bid_auction_use_case.dart';
 
@@ -32,7 +47,7 @@ import '../../domain/usecases/listen_to_new_bid_auction_use_case.dart';
 part 'auction_state.dart';
 
 class AuctionCubit extends Cubit<AuctionState> {
-  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase)  : super(AuctionState());
+  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase, this.getMyAuctionUseCase, this.errorBidAuctionUseCase, this.bidWinnerAuctionUseCase, this.leaveToAuctionUseCase, this.createAuctionUseCase, this.getMyBiddersAuctionUseCase, this.bannerAuctionUseCase)  : super(AuctionState());
 
   final GetAvailableAuctionUseCase getAvailableAuctionUseCase;
   final ListenToNewAuctionUseCase listenToNewAuctionUseCase;
@@ -46,6 +61,63 @@ class AuctionCubit extends Cubit<AuctionState> {
   final GetExpiredAuctionUseCase getExpiredAuctionUseCase;
   final GetFavoriteAuctionUseCase getFavoriteAuctionUseCase;
   final AddFavoriteAuctionUseCase addFavoriteAuctionUseCase;
+  final GetMyAuctionUseCase getMyAuctionUseCase;
+  final ErrorBidAuctionUseCase errorBidAuctionUseCase;
+  final BidWinnerAuctionUseCase bidWinnerAuctionUseCase;
+  final LeaveToAuctionUseCase leaveToAuctionUseCase;
+  final CreateAuctionUseCase createAuctionUseCase;
+  final GetMyBiddersAuctionUseCase getMyBiddersAuctionUseCase;
+  final BannerAuctionUseCase bannerAuctionUseCase;
+
+
+  Future<void> fetchAuctionBanner() async {
+    emit(state.copyWith(status: StateStatus.loading, isLoading: true));
+    final response = await bannerAuctionUseCase(NoParams());
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: StateStatus.error,
+          isLoading: false,
+        ));
+      },
+          (updatedRestaurant) {
+        emit(state.copyWith(
+          auctionBanner: updatedRestaurant,
+          status: StateStatus.success,
+          isLoading: false,
+        ));
+      },
+    );
+  }
+
+  Future<void> createAuction({required CreateAuctionParams params}) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await createAuctionUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+          (updatedRestaurant) {
+        emit(state.copyWith(
+            createAuction: updatedRestaurant,
+            status: StateStatus.success,
+            // showSnackbar: true
+        ));
+      },
+    );
+  }
+
+  void leaveAuction(String auctionId) {
+    try {
+      CliLogger.info("Cubit: leaving auction $auctionId");
+      leaveToAuctionUseCase(auctionId); // 🔥 just send ID
+    } catch (e) {
+      CliLogger.info("Cubit: error leaving auction: $e");
+    }
+  }
+
 
   Future<void> toggleFavoriteAuction(String auctionId) async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -116,7 +188,37 @@ class AuctionCubit extends Cubit<AuctionState> {
       },
     );
   }
+  void listenToBidWinner() {
+    CliLogger.info('👑 Listening for auction winners...');
 
+    bidWinnerAuctionUseCase((winner) {
+      CliLogger.info("👑 Winner announced: ${winner.username} won ${winner.auctionTitle} at ${winner.price}");
+
+      if (isClosed) {
+        CliLogger.info("⚠️ Tried to emit after cubit closed. Ignoring winner event.");
+        return;
+      }
+
+      emit(state.copyWith(
+        status: StateStatus.success,
+        bidWinner: winner,
+      ));
+    });
+  }
+
+
+  void listenToBidErrors() {
+    CliLogger.info('🎧 Listening to bid errors...');
+
+    errorBidAuctionUseCase((error) {
+      CliLogger.info("❌ Bid error received: ${error.error}");
+
+      emit(state.copyWith(
+        status: StateStatus.error,
+        bidError: error, // 👈 add a field for bid errors in AuctionState
+      ));
+    });
+  }
 
 
   /*
@@ -259,6 +361,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     isInitialLoadingParticipants = false;
     emit(state.copyWith(status: StateStatus.success));
   }
+/*
   void listenToNewBids() {
     CliLogger.info('🎧 Listening to new bids...');
 
@@ -276,6 +379,35 @@ class AuctionCubit extends Cubit<AuctionState> {
         status: StateStatus.success,
       ));
     });
+  }
+*/
+  void listenToNewBids() {
+    CliLogger.info('🎧 Listening to new bids...');
+
+    listenToNewBidAuctionUseCase((newParticipant) {
+      CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
+
+      if (isClosed) {
+        CliLogger.info("⚠️ Cubit closed, skipping emit...");
+        return;
+      }
+
+      participants.removeWhere((p) => p.userId == newParticipant.userId);
+      participants.insert(0, newParticipant);
+
+      emit(state.copyWith(
+        auctionParticipants: List.from(participants),
+        status: StateStatus.success,
+      ));
+    });
+  }
+
+  @override
+  Future<void> close() {
+    CliLogger.info("🛑 Closing AuctionCubit, removing socket listeners...");
+    SharedWebSocket.socket?.off("auction:new-amount-bid");
+    SharedWebSocket.socket?.off("auction:bid-error");
+    return super.close();
   }
 
 
@@ -730,6 +862,181 @@ class AuctionCubit extends Cubit<AuctionState> {
       },
     );
   }
+
+
+
+
+  List<GetAvailableAuctionEntity> myAuctionNonSocketData = [];
+  bool hasMoreMyAuction = true;
+  int currentPageMyAuction = 1;
+  bool isAuctionMoreMyAuction = false;
+  bool isAuctionMyAuction = false;
+
+  void loadInitialMyAuction() async {
+    print("🚀🚀🚀 CUBIT: loadInitialMyAuction() called");
+    emit(state.copyWith(status: StateStatus.loading)); // emit loading state
+    isAuctionMyAuction = true;
+    myAuctionNonSocketData.clear();
+    currentPageMyAuction = 1;
+    hasMoreMyAuction = true;
+    await getMyAuction();
+    isAuctionMyAuction = false;
+    emit(state.copyWith(status: StateStatus.success));
+  }
+
+  Future<void> getMyAuction() async {
+    print("🚀🚀🚀 CUBIT: getMyAuction() called");
+    print("📊 Current state: hasMore=$hasMoreMyAuction, isLoading=$isAuctionMoreMyAuction");
+    print("📊 Current data length: ${myAuctionNonSocketData.length}");
+    print("📊 Current page: $currentPageMyAuction");
+
+    if (!hasMoreMyAuction || isAuctionMoreMyAuction) {
+      print("⚠️ CUBIT: Skipping call - no more data or already loading");
+      return;
+    }
+
+    isAuctionMoreMyAuction = true;
+
+    // Only emit loading if it's the first page (initial load)
+    if (currentPageMyAuction == 1) {
+      print("⏳ CUBIT: Emitting loading state for initial load");
+      emit(state.copyWith(status: StateStatus.loading));
+    }
+
+    print("📡 CUBIT: Making API call for page $currentPageMyAuction");
+    final response = await getMyAuctionUseCase(
+        GetAuctionParams(
+            page: currentPageMyAuction, limit: 5));
+
+    response.fold(
+          (failure) {
+        print("❌ CUBIT: API call failed: $failure");
+        isAuctionMoreMyAuction = false;
+        emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error));
+      },
+          (data) {
+        print("✅ CUBIT: API call successful, received ${data.length} items");
+        print("📦 CUBIT: Data received: $data");
+
+        // If it's the first page, replace the data, otherwise add to it
+        if (currentPageMyAuction == 1) {
+          myAuctionNonSocketData = List.from(data);
+          print("🔄 CUBIT: Replaced data for first page");
+        } else {
+          myAuctionNonSocketData.addAll(data);
+          print("➕ CUBIT: Added data to existing list");
+        }
+
+        print("📊 CUBIT: Total items now: ${myAuctionNonSocketData.length}");
+
+        if (data.isEmpty || data.length < 5) {
+          hasMoreMyAuction = false;
+          print("🛑 CUBIT: No more pages my");
+        } else {
+          currentPageMyAuction++;
+          print("➡️ CUBIT: Moving to next page: $currentPageMyAuction");
+        }
+
+        isAuctionMoreMyAuction = false;
+
+        // Emit success state with the data
+        print("✅ CUBIT: Emitting success state");
+        emit(state.copyWith(
+          status: StateStatus.success,
+           getMyAuction: myAuctionNonSocketData, // Use the full list, not just the new data
+        ));
+      },
+    );
+  }
+
+
+  List<MyBiddersEntity> myBiddersData = [];
+  bool hasMoreMyBidders = true;
+  int currentPageMyBidders = 1;
+  bool isAuctionMoreMyBidders = false;
+  bool isAuctionMyBidders = false;
+
+  void loadInitialMyBidders() async {
+    print("🚀🚀🚀 CUBIT: loadInitialMyBidders() called");
+    emit(state.copyWith(status: StateStatus.loading)); // emit loading state
+    isAuctionMyBidders = true;
+    myBiddersData.clear();
+    currentPageMyBidders = 1;
+    hasMoreMyBidders = true;
+    await getMyBidders();
+    isAuctionMyBidders = false;
+    emit(state.copyWith(status: StateStatus.success));
+  }
+
+  Future<void> getMyBidders() async {
+    print("🚀🚀🚀 CUBIT: getMyBidders() called");
+    print("📊 Current state: hasMore=$hasMoreMyBidders, isLoading=$isAuctionMoreMyBidders");
+    print("📊 Current data length: ${myBiddersData.length}");
+    print("📊 Current page: $currentPageMyBidders");
+
+    if (!hasMoreMyBidders || isAuctionMoreMyBidders) {
+      print("⚠️ CUBIT: Skipping call - no more data or already loading");
+      return;
+    }
+
+    isAuctionMoreMyBidders = true;
+
+    // Only emit loading if it's the first page (initial load)
+    if (currentPageMyBidders == 1) {
+      print("⏳ CUBIT: Emitting loading state for initial load");
+      emit(state.copyWith(status: StateStatus.loading));
+    }
+
+    print("📡 CUBIT: Making API call for page $currentPageMyBidders");
+    final response = await getMyBiddersAuctionUseCase(
+        GetAuctionParams(
+            page: currentPageMyBidders, limit: 5));
+
+    response.fold(
+          (failure) {
+        print("❌ CUBIT: API call failed: $failure");
+        isAuctionMoreMyBidders = false;
+        emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error));
+      },
+          (data) {
+        print("✅ CUBIT: API call successful, received ${data.length} items");
+        print("📦 CUBIT: Data received: $data");
+
+        // If it's the first page, replace the data, otherwise add to it
+        if (currentPageMyBidders == 1) {
+          myBiddersData = List.from(data);
+          print("🔄 CUBIT: Replaced data for first page");
+        } else {
+          myBiddersData.addAll(data);
+          print("➕ CUBIT: Added data to existing list");
+        }
+
+        print("📊 CUBIT: Total items now: ${myBiddersData.length}");
+
+        if (data.isEmpty || data.length < 5) {
+          hasMoreMyBidders = false;
+          print("🛑 CUBIT: No more pages my");
+        } else {
+          currentPageMyBidders++;
+          print("➡️ CUBIT: Moving to next page: $currentPageMyBidders");
+        }
+
+        isAuctionMoreMyBidders = false;
+
+        // Emit success state with the data
+        print("✅ CUBIT: Emitting success state");
+        emit(state.copyWith(
+          status: StateStatus.success,
+          myBiddersData: myBiddersData, // Use the full list, not just the new data
+        ));
+      },
+    );
+  }
+
 
 /*
   List<AuctionMainCategoryEntity> mainCategories = [];

@@ -7,6 +7,7 @@ import '../features/social_media/twitter/domain/usecases/comment_reply_usecase.d
 import '../features/social_media/twitter/domain/usecases/delete_twitter_comment_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/delete_twitter_post_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/edit_twitter_comment_usecase.dart';
+import '../features/social_media/twitter/domain/usecases/follow_twitter_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/get_global_feed_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/get_post_comment_reply_usecase.dart';
@@ -16,6 +17,7 @@ import '../features/social_media/twitter/domain/usecases/get_user_posts_usecase.
 import '../features/social_media/twitter/domain/usecases/hide_twitter_post_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/post_react_usecase.dart';
+import '../features/social_media/twitter/domain/usecases/repost_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
 import '../features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
@@ -47,8 +49,8 @@ class TwitterServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator.registerLazySingleton<CreateTwitterPostUseCase>(
-        () => CreateTwitterPostUseCase(
+    serviceLocator.registerLazySingleton<CreateTwitterThreadUseCase>(
+        () => CreateTwitterThreadUseCase(
               serviceLocator(),
             ));
 
@@ -111,6 +113,13 @@ class TwitterServiceLocator {
         () => EditTwitterCommentUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetThreadPostsPageUseCase>(
+        () => GetThreadPostsPageUseCase(
+              serviceLocator(),
+            ));  serviceLocator.registerLazySingleton<GetThreadRepliesPageUseCase>(
+        () => GetThreadRepliesPageUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<DeleteTwitterCommentUseCase>(
         () => DeleteTwitterCommentUseCase(
@@ -121,6 +130,11 @@ class TwitterServiceLocator {
         () => GetTwitterGlobalFeedUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerFactory(() => GetFollowersCountUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GetFollowingCountUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GetUserThreadsPageUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => GetMyThreadsPageUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => TwitterRepostUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
           serviceLocator(),
@@ -140,6 +154,13 @@ class TwitterServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+           serviceLocator(),
+           serviceLocator(),
+           serviceLocator(),
+           serviceLocator(),
+           serviceLocator(),
+           serviceLocator(),
         ));
   }
 }

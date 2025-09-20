@@ -57,6 +57,8 @@ import '../../../../../features/subcategories/domain/usecases/get_custom_page_su
 class EndPoints {
   //logout
   static const logout = '/auth/logout';
+  static const logoutFromAllDevices = '/auth/logout/all';
+  static const getAllSessions = '/auth/sessions';
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
@@ -750,7 +752,7 @@ class EndPoints {
 
   static const createFacebookPost = '/facebook/post';
   static String createTwitterPost =
-      '/twitter/post?subCategory=${Constants.twitterSubCategory}';
+      '/twitter/threads';
 
   // static const getFeedPosts = '/facebook/feed';
   static activities(PaginationParams params) =>
@@ -963,7 +965,7 @@ class EndPoints {
       '/user-follow/unfollow/$userId';
 
   static String reactOnTwitterPost(String postId) {
-    return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$postId/toggle-like';
   }
 
   static String reactOnTwitterComment(String commentId) {
@@ -1004,23 +1006,23 @@ class EndPoints {
   }
 
   static String commentOnTwitterPost(String postId) {
-    return '/twitter/comment/create-comment/$postId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$postId/reply';
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
-    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/${params.postId}/replies?limit=${params.limit}&page=${params.page}';
   }
 
   static String getTwitterCommentReplies(PostCommentsParams params) {
-    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/${params.postId}/replies?limit=${params.limit}&page=${params.page}';
   }
 
   static String deletePost(String postId) {
@@ -1036,7 +1038,7 @@ class EndPoints {
   }
 
   static String deleteTwitterPost(String postId) {
-    return '/twitter/post/$postId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$postId';
   }
 
   static String hideTwitterPost(String postId) {
@@ -1649,6 +1651,7 @@ class EndPoints {
   }
 
   static const getBookingCurrent = '/health/bookings';
+  static const getHistoryBooking = '/health/history-patient-booking';
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
   static const getMostBooking = '/health/doctors';
@@ -1766,6 +1769,8 @@ class EndPoints {
   // Chat Endpoints
   static getSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations?page=$page&limit=$limit';
+
+  static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";
 
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>
@@ -1889,6 +1894,11 @@ class EndPoints {
   static String fetchAuctionSubCategory = '/auctions/sub-categories/';
   static String fetchAuctionMainCategory = '/auctions/main-categories';
   static String addFavoriteAuction = '/auction-fav/';
+  static String fetchMyAuction = '/auctions/my';
+  static String createAuction2 = '/auctions';
+  static String fetchMyBidders = '/auctions/my-bidders-winner';
+  static String auctionBanner = '/auctions/banner';
 
+  static String getDriverRatings(String driverId) => '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

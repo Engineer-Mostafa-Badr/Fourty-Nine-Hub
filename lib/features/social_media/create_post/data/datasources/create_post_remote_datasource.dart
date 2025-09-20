@@ -31,7 +31,7 @@ abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<PlaceEntity>>> getPlaces(
       {required FriendsFollowersParams params});
   Future<Either<Failure, bool>> createTwitterPost(
-      {required CreateTwitterPostParams params});
+      {required CreateTwitterThreadParams params});
 }
 
 class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
@@ -126,17 +126,41 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
     return response.fold(
         (l) => Left(l), (data) => Right(data['status'] as bool));
   }
-
   @override
-  Future<Either<Failure, bool>> createTwitterPost(
-      {required CreateTwitterPostParams params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.createTwitterPost, data: {
-      'content': params.content,
-      'mediaIds': params.mediaIds.isEmpty ? [] : params.mediaIds
-    });
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  Future<Either<Failure, bool>> createTwitterPost({
+    required CreateTwitterThreadParams params,
+  }) async {
+    // Build payload exactly as backend expects:
+    // {
+    //   "isPublished": true,
+    //   "posts": [
+    //     {"content": "...", "media": ["id1","id2"]},
+    //     {"content": "..."}
+    //   ]
+    // }
+    print('say hi twitter');
+
+    final payload = <String, dynamic>{
+      'isPublished': params.isPublished,
+      'posts': params.posts
+          .map((p) => {
+        'content': p.content,
+        'media': (p.media ?? const <String>[]),
+      })
+          .toList(),
+    };
+
+    final response = await _apiConsumer.post(
+      EndPoints.createTwitterPost, // or EndPoints.createTwitterThread if you have it
+      data: payload,
+    );
+
+    return response.fold(
+          (l) => Left(l),
+          (data) => Right(data['status'] == true),
+    );
   }
+
 
   @override
   Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(

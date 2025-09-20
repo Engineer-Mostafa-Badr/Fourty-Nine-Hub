@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,11 +17,14 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/session_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
@@ -65,6 +69,7 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   var widgejsonData;
   bool hasVibration = false;
+  bool activeCustomPage = false;
   @override
   void initState() {
     initVibrationValue();
@@ -74,8 +79,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   initVibrationValue() async {
     bool vibration = await Storage.getVibrationValue();
+    bool activation = await CacheManager.getActivation() ?? false;
     setState(() {
       hasVibration = vibration;
+      activeCustomPage = activation;
     });
   }
 
@@ -222,8 +229,31 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   context.pop();
                                   context.push(Routes.CONTACTUS);
                                 }),
+                            // drawerListTile(
+                            //     // icon: Icons.logout,
+                            //     image: Assets.sign_out_icon,
+                            //     requireLogin: true,
+                            //     label: LocaleKeys.logout.localize,
+                            //     onTap: () async {
+                            //       ManageVibration.vibrate();
+                            //       String? refreshToken = await Storage.getRefreshToken();
+                            //       print("refreshToken $refreshToken");
+                            //       // context.push(Routes.LOGIN);
+                            //       showAnimatedDialog(
+                            //         context,
+                            //         AlertDialog(
+                            //           backgroundColor: Theme.of(context)
+                            //               .drawerTheme
+                            //               .backgroundColor,
+                            //           shape: RoundedRectangleBorder(
+                            //             borderRadius: BorderRadius.circular(20),
+                            //           ),
+                            //           content: const LogoutWidget(),
+                            //         ),
+                            //       );
+                            //     }),
                             drawerListTile(
-                                // icon: Icons.logout,
+                              // icon: Icons.logout,
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
@@ -232,20 +262,197 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   String? refreshToken =
                                       await Storage.getRefreshToken();
                                   print("refreshToken $refreshToken");
-                                  // context.push(Routes.LOGIN);
-                                  showAnimatedDialog(
-                                    context,
-                                    AlertDialog(
-                                      backgroundColor: Theme.of(context)
-                                          .drawerTheme
-                                          .backgroundColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      content: const LogoutWidget(),
+
+
+
+                                  await context.read<UserCubit>().getAllSessions();
+
+                                  if(serviceLocator<UserCubit>().sessions.isEmpty) {
+                                    return;
+                                  }
+
+                                  String? deviceId = await getDeviceId();
+                                  context.pop();
+
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                                     ),
+                                    builder: (context) {
+                                      SessionEntity currentSession = context.read<UserCubit>().sessions.firstWhere((s) => s.deviceId == deviceId);
+                                      return Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Center(
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 5,
+                                                  margin: const EdgeInsets.only(bottom: 12),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[400],
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                ),
+                                              ),
+                                               Text(
+                                               context.isArabic?  "هذا الجهاز" : "This device",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+
+                                              ListTile(
+                                                leading: Icon(currentSession.platform == "ios" ? Icons.apple : Icons.android, color: Colors.green),
+
+                                                title:  Text(currentSession.deviceName ?? "", style: TextStyle(fontSize: 16)),
+                                                subtitle:  Text(
+                                                  "${currentSession.loginAddress ?? ''} | "
+                                                      "${DateFormat("hh:mm").format(currentSession.createdAt!)} "
+                                                      "${context.isArabic ? (currentSession.createdAt!.hour < 12 ? "ص" : "م") : (currentSession.createdAt!.hour < 12 ? "AM" : "PM")}",
+                                                ),
+                                                // subtitle: ,
+                                                trailing:  Text(context.isArabic ? "متصل" : "Connected", style: TextStyle(color: Colors.green)),
+                                              ),
+
+                                              const Divider(),
+
+                                              ListTile(
+                                                leading: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
+                                                title:  Text( context.isArabic ? "انهاء جميع الجلسات" : "End all sessions", style: TextStyle(color: AppColors.PRIMARY_COLOR_DARK, fontSize: 18)),
+                                                onTap: () {
+                                                  ManageVibration.vibrate();
+                                                  showAnimatedDialog(
+                                                    context,
+                                                    AlertDialog(
+                                                      backgroundColor: Theme.of(context)
+                                                          .drawerTheme
+                                                          .backgroundColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      content: const LogoutFromAllDevicesWidget(),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                child: Text( context.isArabic ? "تسجيل الخروج من جميع الأجهزة" : "Logout from all devices", style: TextStyle(color: AppColors.grey, fontSize: 16)),
+                                              ),
+
+                                              // const Divider(),
+
+                                              const SizedBox(height: 24),
+
+                                               Text(
+                                                context.isArabic?   "الجلسات النشطة" : "Active sessions",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              context.read<UserCubit>().sessions
+                                                  .where((s) => s.deviceId != deviceId).isEmpty?
+                                              Padding(
+                                                padding: EdgeInsets.only(top:8.0, bottom: 20),
+                                                child: Center(child: Text(context.isArabic ? "لا يوجد جلسات نشطة أخرى" : "No other active sessions",style: TextStyle(color: AppColors.grey, fontSize: 16)),),
+                                              ):
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                itemCount: context.read<UserCubit>().sessions
+                                                    .where((s) => s.deviceId != deviceId)
+                                                    .length,
+                                                itemBuilder: (context, index) {
+                                                  final otherSessions = context.read<UserCubit>().sessions
+                                                      .where((s) => s.deviceId != deviceId)
+                                                      .toList();
+
+                                                  final session = otherSessions[index];
+                                                  final isIOS = session.platform?.toLowerCase() == "ios";
+
+                                                  return ListTile(
+                                                    leading: Icon(
+                                                      isIOS ? Icons.apple : Icons.android,
+                                                      color: Colors.green,
+                                                    ),
+                                                    title: Text(
+                                                      session.deviceName ?? "",
+                                                      style: const TextStyle(fontSize: 16),
+                                                    ),
+                                                    subtitle: Text(
+                                                      "${session.loginAddress ?? ''} | "
+                                                          "${DateFormat("hh:mm").format(session.createdAt!)} "
+                                                          "${context.isArabic
+                                                          ? (session.createdAt!.hour < 12 ? "ص" : "م")
+                                                          : (session.createdAt!.hour < 12 ? "AM" : "PM")}",
+                                                    ),
+                                                    isThreeLine: true,
+                                                    trailing: IconButton(
+                                                      icon: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
+                                                      onPressed: () {
+                                                        ManageVibration.vibrate();
+                                                        showAnimatedDialog(
+                                                          context,
+                                                          AlertDialog(
+                                                            backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(20),
+                                                            ),
+                                                            content: LogoutFromSpecificDeviceWidget(
+                                                              session: session,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+
+
+                                              AppButton(
+                                                height: 70.h,
+                                                label: context.isArabic ? "تسجيل الخروج من هذا الجهاز" : "Logout from this device",
+                                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                                onPressed: () async {
+                                                  ManageVibration.vibrate();
+                                                  String? refreshToken = await Storage.getRefreshToken();
+                                                  print("refreshToken $refreshToken");
+                                                  // context.push(Routes.LOGIN);
+                                                  showAnimatedDialog(
+                                                    context,
+                                                    AlertDialog(
+                                                      backgroundColor: Theme.of(context)
+                                                          .drawerTheme
+                                                          .backgroundColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      content: const LogoutWidget(),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   );
-                                }),
+                                }
+                            ),
                             drawerListTile(
                                 // icon: Icons.logout,
                                 image: Assets.deleteAccount,
@@ -1376,61 +1583,65 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CustomSwitchButton(
-                      value: context
-                              .read<CustomPageCubit>()
-                              .state
-                              .activate
-                              ?.customPage ??
-                          false,
+                      value: activeCustomPage,
                       onChanged: (value) async {
-                        showAnimatedDialog(
-                          context,
-                          AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Label(
-                                    text: LocaleKeys.restartToApply.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w400)),
-                                const Sizer(),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AppButton(
-                                        onPressed: () {
-                                          var currentContext = AppPages
-                                              .router
-                                              .configuration
-                                              .navigatorKey
-                                              .currentContext!;
-                                          currentContext.pop();
-                                        },
-                                        label: LocaleKeys.cancel.localize,
-                                      ),
-                                    ),
-                                    const Sizer(
-                                      width: 16,
-                                    ),
-                                    Expanded(
-                                      child: AppButton(
-                                        backColor: AppColors.PRIMARY_COLOR,
-                                        onPressed: () {
-                                          context
-                                              .read<CustomPageCubit>()
-                                              .updateActivate(value);
-                                          Restart.restartApp();
-                                        },
-                                        label: LocaleKeys.restart.localize,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        CacheManager.updateActive(value);
+                        context.pop();
+
+                        // showAnimatedDialog(
+                        //   context,
+                        //   AlertDialog(
+                        //     content: Column(
+                        //       mainAxisSize: MainAxisSize.min,
+                        //       crossAxisAlignment: CrossAxisAlignment.center,
+                        //       children: [
+                        //         Label(
+                        //             text: LocaleKeys.restartToApply.localize,
+                        //             style: Styles.headerText(
+                        //                 fontWeight: FontWeight.w400)),
+                        //         const Sizer(),
+                        //         Row(
+                        //           children: [
+                        //             Expanded(
+                        //               child: AppButton(
+                        //                 onPressed: () {
+                        //                   var currentContext = AppPages
+                        //                       .router
+                        //                       .configuration
+                        //                       .navigatorKey
+                        //                       .currentContext!;
+                        //                   currentContext.pop();
+                        //                 },
+                        //                 label: LocaleKeys.cancel.localize,
+                        //               ),
+                        //             ),
+                        //             const Sizer(
+                        //               width: 16,
+                        //             ),
+                        //             Expanded(
+                        //               child: AppButton(
+                        //                 backColor: AppColors.PRIMARY_COLOR,
+                        //                 onPressed: () {
+                        //                   setState(() {
+                        //                     activeCustomPage= value;
+                        //                   });
+                        //                   var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                        //                   context.pop();
+                        //                   context.pop();
+                        //                   // context.pop();
+                        //                   Future.delayed(Duration(seconds: 1));
+                        //                   currentContext.go(Routes.HOME);
+                        //                   // Restart.restartApp();
+                        //                 },
+                        //                 label: LocaleKeys.restart.localize,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // );
                       },
                     ),
                     SizedBox(

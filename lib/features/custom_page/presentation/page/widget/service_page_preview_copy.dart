@@ -564,7 +564,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                                       context
                                           .read<CustomPageCubit>()
                                           .updateActivate(false);
-                                      Restart.restartApp();
+                                      context.go(Routes.HOME);
                                     },
                                     label: LocaleKeys.restart.localize,
                                   ),

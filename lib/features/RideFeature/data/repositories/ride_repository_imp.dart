@@ -79,6 +79,7 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 
 import '../../domain/entities/client/driver_all_rating_entity.dart';
+import '../../domain/entities/driver_ratings_entity.dart';
 import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 
@@ -551,5 +552,9 @@ class RideRepositoryImplementation extends RideRepository {
     return rideRemoteDataSource.getClientAllRating(params);
   }
 
+  @override
+  Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId}) async {
+    return await rideRemoteDataSource.getDriverRatings(driverId: driverId);
+  }
 
 }

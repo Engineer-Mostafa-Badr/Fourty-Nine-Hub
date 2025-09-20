@@ -199,6 +199,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         },
                       ),
                       BuildCreatePostHeader(
+                        isTwitter: false,
                           sheetController: sheetController,
                           controller: controller,
                           state: state),

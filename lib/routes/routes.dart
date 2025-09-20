@@ -25,7 +25,7 @@ abstract class Routes {
   static const RIDEHISTORYTRIPS = '/RIDEHISTORYTRIPS';
   static const RIDEDETAILSTRIPS = '/RIDEDETAILSTRIPS';
   static const TripReceiptScreen = '/TripReceiptScreen';
-  static const PAGEPREVIEW = '/CustomPage/PagePreview';
+  // static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
   static const UploadRiderImages = '/UploadRiderImages';
@@ -72,6 +72,7 @@ abstract class Routes {
   static const TWITTER = '/Social/Twitter';
   static const TWITTERPOSTDETAILS = '/Social/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
+  static const CREATEPOSTTWITTER = '/Social/CreatePostTwitter';
   static const POSTDETAILS = '/PostDetails';
   static const SEARCHFRIENDS = '/Social/CreatePost/SearchFriend';
   static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
@@ -317,6 +318,7 @@ abstract class Routes {
   static const tubeProfile =  '/BeAStar/TubeProfile';
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
   static const createAuctionScreen =  '/CreateAuctionScreen';
+  static const myAuctionScreen =  '/MyAuctionScreen';
 
 }
 
@@ -335,7 +337,7 @@ abstract class Paths {
   static const MY_TALENT = 'MyTalent';
   static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
-  static const PAGEPREVIEW = 'PagePreview';
+  // static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDEOPENSTREETMAPSEARCHANDPICK =
       'RIDEOPENSTREETMAPSEARCHANDPICK';
@@ -403,6 +405,7 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const CREATEPOSTTWITTER = 'CreatePostTwitter';
   static const POSTDETAILS = 'PostDetails';
   static const EDITPROFILE = 'EditProfile';
   static const SEARCHFRIENDS = 'SearchFriend';
@@ -621,5 +624,6 @@ abstract class Paths {
 
   static const availableAuctionScreen =  'AvailableAuctionScreen';
   static const createAuctionScreen =  'CreateAuctionScreen';
+  static const myAuctionScreen =  'MyAuctionScreen';
 
 }

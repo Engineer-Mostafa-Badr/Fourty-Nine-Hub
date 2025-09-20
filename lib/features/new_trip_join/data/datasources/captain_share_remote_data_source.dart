@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/create_price_per_seat_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/my_booking_model.dart';
 import 'package:fourtyninehub/features/new_trip_join/data/models/pickup_model.dart';
@@ -73,7 +74,7 @@ class CaptainShareRemoteDataSourceImplementation
     try {
       final result = await _apiConsumer.post(
         EndPoints.captainShareCreateRoute,
-        data: params.toJson(),
+        data: await params.toJson(),
       );
 
       return result.fold(
@@ -263,6 +264,9 @@ class CaptainShareRemoteDataSourceImplementation
     try {
       final result = await _apiConsumer.put(
         EndPoints.acceptRoute(id),
+        data: {
+          "driverDeviceId":await getDeviceId(),
+        }
       );
       return result.fold(
             (failure) => Left(failure),
@@ -369,7 +373,7 @@ class CaptainShareRemoteDataSourceImplementation
     try {
       final result = await _apiConsumer.post(
         EndPoints.joinToRoute(params.routeId),
-        data: params.toJson(),
+        data: await params.toJson(),
       );
       return result.fold(
             (failure) => Left(failure),

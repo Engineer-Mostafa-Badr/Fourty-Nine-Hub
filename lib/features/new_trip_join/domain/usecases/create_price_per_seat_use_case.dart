@@ -1,5 +1,6 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/entities/create_price_per_seat_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/repositories/captain_share_repository.dart';
 
@@ -27,7 +28,8 @@ class CreatePricePerSeatParams {
   CreatePricePerSeatParams( {
     required this.fromLocation,required this.phoneNumber, required this.toLocation, this.isLadiesDriver,this.isPremium, this.isLadiesPassenger, this.isComfort,
   });
-  toJson() => {
+  toJson() async => {
+    "clientDeviceId":await getDeviceId(),
     if(isPremium!=null)"isPremium" : isPremium,
     if(phoneNumber.isNotEmpty)"phoneNumber":phoneNumber,
     "startLocation": {
@@ -42,6 +44,6 @@ class CreatePricePerSeatParams {
       if(isLadiesDriver==true) "LADY_DRIVER",
       if(isLadiesPassenger==true) "LADY_PASSENGER",
       if(isComfort==true) "COMFORT"
-    ]
+    ],
   };
 }

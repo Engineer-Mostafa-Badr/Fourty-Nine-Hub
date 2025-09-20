@@ -12,6 +12,8 @@ import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/car_mar
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../res/style/app_colors.dart';
+
 class CustomGoogleMap extends StatefulWidget {
   final LatLng? startLocation;
   final LatLng? targetLocation;
@@ -542,12 +544,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     if (widget.polylinePoints.isNotEmpty) {
       final clientsCount = widget.clientLocations.length;
       List<Color> gradientColors;
-      if (clientsCount == 0) {
-        gradientColors = [Colors.green, Colors.blue];
-      } else if (clientsCount == 1) {
-        gradientColors = [Colors.green, Colors.red, Colors.blue];
-      } else {
-        gradientColors = [Colors.green, Colors.red, Colors.red, Colors.blue];
+      // if (clientsCount == 0) {
+      //   gradientColors = [Colors.green, Colors.blue];
+      // } else if (clientsCount == 1) {
+      //   gradientColors = [Colors.green, Colors.red, Colors.blue];
+      // } else {
+      //   gradientColors = [Colors.green, Colors.red, Colors.red, Colors.blue];
+      // }
+      if(context.isDarkMode){
+        gradientColors = [AppColors.PRIMARY_COLOR_DARK, AppColors.blueColor];
+      }else{
+        gradientColors = [AppColors.PRIMARY_COLOR_DARK, AppColors.PRIMARY_COLOR_DARK];
       }
       _polylines.addAll(_buildOptimizedGradientPolyline(widget.polylinePoints, gradientColors));
     }
