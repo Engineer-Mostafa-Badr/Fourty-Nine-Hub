@@ -647,7 +647,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
               ),
             ),
 
-
+            SizedBox(height: 10,),
 
             // ---------------- Publish Button ----------------
             // ---------------- Publish Button ----------------
