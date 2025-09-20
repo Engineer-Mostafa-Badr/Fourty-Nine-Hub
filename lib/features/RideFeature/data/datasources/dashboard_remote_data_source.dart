@@ -239,7 +239,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params) async {
     try {
-      final response = await _apiConsumer.post(EndPoints.createNewOffer(params.tripId), data: params.toJson());
+      final response = await _apiConsumer.post(EndPoints.createNewOffer(params.tripId), data: await params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);
@@ -252,7 +252,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params) async {
     try {
-      final response = await _apiConsumer.post(EndPoints.createNewOfferNonSocket(params.tripId), data: params.toJson());
+      final response = await _apiConsumer.post(EndPoints.createNewOfferNonSocket(params.tripId), data: await params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

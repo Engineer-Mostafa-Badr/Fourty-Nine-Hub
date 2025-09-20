@@ -22,7 +22,9 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -93,6 +95,7 @@ class _PagePreviewState extends State<PagePreview>
               isWithBackArrow: false,
               toolbarHeight: kTextTabBarHeight * 4.h,
               language: true,
+              isMenu: true,
               leading: IconButton(
                 icon: const Icon(Icons.menu), // The menu icon
                 onPressed: () {
@@ -235,72 +238,78 @@ class _PagePreviewState extends State<PagePreview>
                                 child: CustomElevatedButton(
                                   onPressed: () async {
                                     ManageVibration.vibrate();
-                                    showAnimatedDialog(
-                                      context,
-                                      AlertDialog(
-                                        backgroundColor:
-                                            AppColors.getFindFillColor(context),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Label(
-                                                text: context.isArabic
-                                                    ? LocaleKeys
-                                                        .restartToApply.localize
-                                                    : 'Restart to Apply',
-                                                style: Styles.headerText(
-                                                    fontWeight:
-                                                        FontWeight.w400)),
-                                            const Sizer(),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: AppButton(
-                                                    onPressed: () {
-                                                      ManageVibration.vibrate();
-                                                      Navigator.pop(context);
-                                                    },
-                                                    label: LocaleKeys
-                                                        .cancel.localize,
-                                                    backColor:
-                                                        AppColors.getRedColor(
-                                                            context),
-                                                    color: AppColors
-                                                        .getReversedTextColor(
-                                                            context),
-                                                  ),
-                                                ),
-                                                const Sizer(
-                                                  width: 16,
-                                                ),
-                                                Expanded(
-                                                  child: AppButton(
-                                                    onPressed: () {
-                                                      ManageVibration.vibrate();
-                                                      context
-                                                          .read<
-                                                              CustomPageCubit>()
-                                                          .updateActivate(true);
-                                                      Restart.restartApp();
-                                                    },
-                                                    label: LocaleKeys
-                                                        .restart.localize,
-                                                    backColor: AppColors
-                                                        .getButtonPrimaryColor(
-                                                            context),
-                                                    color: AppColors
-                                                        .getReversedTextColor(
-                                                            context),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    context
+                                        .read<
+                                        CustomPageCubit>()
+                                        .updateActivate(true);
+                                    GoRouter.of(context).push(Routes.HOME);
+
+                                    // showAnimatedDialog(
+                                    //   context,
+                                    //   AlertDialog(
+                                    //     backgroundColor:
+                                    //         AppColors.getFindFillColor(context),
+                                    //     content: Column(
+                                    //       mainAxisSize: MainAxisSize.min,
+                                    //       crossAxisAlignment:
+                                    //           CrossAxisAlignment.center,
+                                    //       children: [
+                                    //         Label(
+                                    //             text: context.isArabic
+                                    //                 ? LocaleKeys
+                                    //                     .restartToApply.localize
+                                    //                 : 'Restart to Apply',
+                                    //             style: Styles.headerText(
+                                    //                 fontWeight:
+                                    //                     FontWeight.w400)),
+                                    //         const Sizer(),
+                                    //         Row(
+                                    //           children: [
+                                    //             Expanded(
+                                    //               child: AppButton(
+                                    //                 onPressed: () {
+                                    //                   ManageVibration.vibrate();
+                                    //                   Navigator.pop(context);
+                                    //                 },
+                                    //                 label: LocaleKeys
+                                    //                     .cancel.localize,
+                                    //                 backColor:
+                                    //                     AppColors.getRedColor(
+                                    //                         context),
+                                    //                 color: AppColors
+                                    //                     .getReversedTextColor(
+                                    //                         context),
+                                    //               ),
+                                    //             ),
+                                    //             const Sizer(
+                                    //               width: 16,
+                                    //             ),
+                                    //             Expanded(
+                                    //               child: AppButton(
+                                    //                 onPressed: () {
+                                    //                   ManageVibration.vibrate();
+                                    //                   context
+                                    //                       .read<
+                                    //                           CustomPageCubit>()
+                                    //                       .updateActivate(true);
+                                    //                   context.go(Routes.HOME);
+                                    //                 },
+                                    //                 label: LocaleKeys
+                                    //                     .restart.localize,
+                                    //                 backColor: AppColors
+                                    //                     .getButtonPrimaryColor(
+                                    //                         context),
+                                    //                 color: AppColors
+                                    //                     .getReversedTextColor(
+                                    //                         context),
+                                    //               ),
+                                    //             ),
+                                    //           ],
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // );
                                   },
                                   backgoundColor:
                                       AppColors.getButtonPrimaryColor(context),
@@ -321,72 +330,77 @@ class _PagePreviewState extends State<PagePreview>
                                 child: CustomElevatedButton(
                                   onPressed: () async {
                                     ManageVibration.vibrate();
-                                    showAnimatedDialog(
-                                      context,
-                                      AlertDialog(
-                                        backgroundColor:
-                                            AppColors.getFindFillColor(context),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Label(
-                                                text: context.isArabic
-                                                    ? LocaleKeys
-                                                        .restartToApply.localize
-                                                    : 'Restart to Apply',
-                                                style: Styles.headerText(
-                                                    fontWeight:
-                                                        FontWeight.w400)),
-                                            const Sizer(),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: AppButton(
-                                                    onPressed: () {
-                                                      ManageVibration.vibrate();
-                                                      Navigator.pop(context);
-                                                    },
-                                                    label: LocaleKeys
-                                                        .cancel.localize,
-                                                    color: AppColors
-                                                        .getReversedTextColor(
-                                                            context),
-                                                    backColor:
-                                                        AppColors.getRedColor(
-                                                            context),
-                                                  ),
-                                                ),
-                                                const Sizer(
-                                                  width: 16,
-                                                ),
-                                                Expanded(
-                                                  child: AppButton(
-                                                    backColor: AppColors
-                                                        .getButtonPrimaryColor(
-                                                            context),
-                                                    onPressed: () {
-                                                      ManageVibration.vibrate();
-                                                      context
-                                                          .read<
-                                                              CustomPageCubit>()
-                                                          .updateActivate(true);
-                                                      Restart.restartApp();
-                                                    },
-                                                    color: AppColors
-                                                        .getReversedTextColor(
-                                                            context),
-                                                    label: LocaleKeys
-                                                        .restart.localize,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    context
+                                        .read<
+                                        CustomPageCubit>()
+                                        .updateActivate(true);
+                                    GoRouter.of(context).push(Routes.HOME);
+                                    // showAnimatedDialog(
+                                    //   context,
+                                    //   AlertDialog(
+                                    //     backgroundColor:
+                                    //         AppColors.getFindFillColor(context),
+                                    //     content: Column(
+                                    //       mainAxisSize: MainAxisSize.min,
+                                    //       crossAxisAlignment:
+                                    //           CrossAxisAlignment.center,
+                                    //       children: [
+                                    //         Label(
+                                    //             text: context.isArabic
+                                    //                 ? LocaleKeys
+                                    //                     .restartToApply.localize
+                                    //                 : 'Restart to Apply',
+                                    //             style: Styles.headerText(
+                                    //                 fontWeight:
+                                    //                     FontWeight.w400)),
+                                    //         const Sizer(),
+                                    //         Row(
+                                    //           children: [
+                                    //             Expanded(
+                                    //               child: AppButton(
+                                    //                 onPressed: () {
+                                    //                   ManageVibration.vibrate();
+                                    //                   Navigator.pop(context);
+                                    //                 },
+                                    //                 label: LocaleKeys
+                                    //                     .cancel.localize,
+                                    //                 color: AppColors
+                                    //                     .getReversedTextColor(
+                                    //                         context),
+                                    //                 backColor:
+                                    //                     AppColors.getRedColor(
+                                    //                         context),
+                                    //               ),
+                                    //             ),
+                                    //             const Sizer(
+                                    //               width: 16,
+                                    //             ),
+                                    //             Expanded(
+                                    //               child: AppButton(
+                                    //                 backColor: AppColors
+                                    //                     .getButtonPrimaryColor(
+                                    //                         context),
+                                    //                 onPressed: () {
+                                    //                   ManageVibration.vibrate();
+                                    //                   context
+                                    //                       .read<
+                                    //                           CustomPageCubit>()
+                                    //                       .updateActivate(true);
+                                    //                   context.go(Routes.HOME);
+                                    //                 },
+                                    //                 color: AppColors
+                                    //                     .getReversedTextColor(
+                                    //                         context),
+                                    //                 label: LocaleKeys
+                                    //                     .restart.localize,
+                                    //               ),
+                                    //             ),
+                                    //           ],
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // );
                                   },
                                   backgoundColor:
                                       AppColors.getButtonPrimaryColor(context),

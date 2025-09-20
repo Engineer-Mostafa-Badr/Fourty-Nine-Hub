@@ -71,8 +71,8 @@ class _MainCategoriesFlipCardsViewState
     // print('data is ${widget.data}');
     if (widget.mainCategoriesCardsParams.data != null) {
       labelName = context.isArabic
-          ? widget.mainCategoriesCardsParams.data![0].name.toString()
-          : widget.mainCategoriesCardsParams.data![0].nameEn.toString();
+          ? (widget.mainCategoriesCardsParams.data != null&&widget.mainCategoriesCardsParams.data!.isNotEmpty)?widget.mainCategoriesCardsParams.data![0].name??'':''
+          :(widget.mainCategoriesCardsParams.data != null&&widget.mainCategoriesCardsParams.data!.isNotEmpty)? widget.mainCategoriesCardsParams.data![0].nameEn??'':'';
     }
     if (mainCategoriesCubit.state.customPage != null) {
       labelName = context.isArabic

@@ -57,7 +57,7 @@ class FloatingButton extends StatelessWidget {
                       await CacheManager.getActivation() ?? false;
                   if (isCustomPage) {
                     context.go(
-                      Routes.PAGEPREVIEW,
+                      Routes.HOME,
                     );
                   } else {
                     context.push(Routes.HOME);
