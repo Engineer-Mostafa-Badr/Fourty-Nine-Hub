@@ -300,6 +300,8 @@ class AuctionCubit extends Cubit<AuctionState> {
     );
   }
 */
+
+
   Future<void> uploadMedia({required bool isImage}) async {
     emit(state.copyWith(isUploading: true, status: StateStatus.loading));
 
