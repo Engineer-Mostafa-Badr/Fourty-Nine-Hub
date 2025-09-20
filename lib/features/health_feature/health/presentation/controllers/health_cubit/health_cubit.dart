@@ -93,7 +93,7 @@ class HealthCubit extends Cubit<HealthState> {
   String currentType = 'current'; // Track current active type
 
   List<MostBookingEntity> mostBooking = [];
-  List<MostBookingEntity> myBooking = [];
+  List<BookedAppointmentEntity> myBooking = [];
 
   int mostBookingPage = 1;
   int myBookingPage = 1;
@@ -353,7 +353,7 @@ class HealthCubit extends Cubit<HealthState> {
         ));
       },
       (data) {
-        mostBooking.addAll(data);
+        myBooking.addAll(data);
 
         if ((data.length ?? 0) < 5) {
           hasMoreMyBooking = false;
@@ -364,7 +364,7 @@ class HealthCubit extends Cubit<HealthState> {
 
         isLoadingMyBooking = false;
         emit(
-            state.copyWith(mostBooking: data, isLoadingMoreMostBooking: false));
+            state.copyWith(myBookings: data, isLoadingMoreMostBooking: false));
       },
     );
   }

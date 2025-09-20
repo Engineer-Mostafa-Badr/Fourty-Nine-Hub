@@ -96,13 +96,13 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
               cubit.myBooking.length,
               (index) {
                 final booking = cubit.myBooking[index];
-                return Container();
-                // return Padding(
-                //   padding: const EdgeInsets.all(4.0),
-                //   child: HealthBookingCard(
-                //     appointment: booking,
-                //   ),
-                // );
+                // return Container();
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: HealthBookingCard(
+                    appointment: booking,
+                  ),
+                );
               },
             ),
           ),
