@@ -467,6 +467,99 @@ class AuctionCubit extends Cubit<AuctionState> {
     }
   }
 
+  // 📌 Auction Cubit Pagination Properties
+  List<GetAvailableAuctionEntity> availableAuctionNonSocketData = [];
+  bool hasMoreAvailableNonSocketAuction = true;
+  int currentPageAvailableNonSocketAuction = 1;
+  bool isAuctionMoreAvailableNonSocketAuction = false;
+  bool isAuctionInitialLoading = false;
+  final int auctionPageSize = 5;
+
+// 📌 Initial load (refreshes and loads first page)
+  void loadInitialAvailableNonSocketAuction(BuildContext context) async {
+    print("🚀 CUBIT: loadInitialAvailableNonSocketAuction() called");
+
+    isAuctionInitialLoading = true;
+    availableAuctionNonSocketData.clear();
+    currentPageAvailableNonSocketAuction = 1;
+    hasMoreAvailableNonSocketAuction = true;
+
+    emit(state.copyWith(
+      status: StateStatus.loading,
+      getAvailableAuction: [],
+    ));
+
+    await getAvailableNonSocketAuction(context);
+
+    isAuctionInitialLoading = false;
+  }
+
+// 📌 Pagination call (next pages)
+  Future<void> getAvailableNonSocketAuction(BuildContext context) async {
+    print("🚀 CUBIT: getAvailableNonSocketAuction() called");
+    print("📊 State: hasMore=$hasMoreAvailableNonSocketAuction, isLoading=$isAuctionMoreAvailableNonSocketAuction, page=$currentPageAvailableNonSocketAuction");
+
+    if (!hasMoreAvailableNonSocketAuction || isAuctionMoreAvailableNonSocketAuction) {
+      print("⚠️ Skipping API call - no more data or already loading");
+      return;
+    }
+
+    isAuctionMoreAvailableNonSocketAuction = true;
+
+    // 🔄 Only emit loading if it's the first page
+    if (currentPageAvailableNonSocketAuction == 1) {
+      emit(state.copyWith(status: StateStatus.loading));
+    }
+
+    final response = await getAvailableAuctionUseCase(
+      GetAuctionParams(
+        page: currentPageAvailableNonSocketAuction,
+        limit: auctionPageSize,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        print("❌ API call failed: $failure");
+        isAuctionMoreAvailableNonSocketAuction = false;
+
+        emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ));
+      },
+          (data) {
+        print("✅ API call success, received ${data.length} items");
+
+        // ➕ Append or reset list depending on page
+        if (currentPageAvailableNonSocketAuction == 1) {
+          availableAuctionNonSocketData = List.from(data);
+        } else {
+          availableAuctionNonSocketData.addAll(data);
+        }
+
+        print("📊 Total Auction items now: ${availableAuctionNonSocketData.length}");
+
+        // 🔄 Check for more data
+        if (data.length < auctionPageSize) {
+          hasMoreAvailableNonSocketAuction = false;
+          print("🛑 No more auction pages");
+        } else {
+          currentPageAvailableNonSocketAuction++;
+          print("➡️ Next auction page: $currentPageAvailableNonSocketAuction");
+        }
+
+        isAuctionMoreAvailableNonSocketAuction = false;
+
+        emit(state.copyWith(
+          status: StateStatus.success,
+          getAvailableAuction: availableAuctionNonSocketData,
+        ));
+      },
+    );
+  }
+
+/*
   List<GetAvailableAuctionEntity> availableAuctionNonSocketData = [];
   bool hasMoreAvailableNonSocketAuction = true;
   int currentPageAvailableNonSocketAuction = 1;
@@ -551,7 +644,7 @@ class AuctionCubit extends Cubit<AuctionState> {
       },
     );
   }
-
+*/
 
 
   void joinAuction(String auctionId) {
