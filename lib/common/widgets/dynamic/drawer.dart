@@ -361,6 +361,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                 ),
                                               ),
                                               const SizedBox(height: 8),
+                                              context.read<UserCubit>().sessions
+                                                  .where((s) => s.deviceId != deviceId).isEmpty?
+                                              Padding(
+                                                padding: EdgeInsets.only(top:8.0, bottom: 20),
+                                                child: Center(child: Text(context.isArabic ? "لا يوجد جلسات نشطة أخرى" : "No other active sessions",style: TextStyle(color: AppColors.grey, fontSize: 16)),),
+                                              ):
                                               ListView.builder(
                                                 shrinkWrap: true,
                                                 physics: const NeverScrollableScrollPhysics(),
